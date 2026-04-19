@@ -5,4 +5,3 @@ plugins {
 android {
     namespace = "sk.styk.martin.apkanalyzer.feature.statistics.api"
 }
-

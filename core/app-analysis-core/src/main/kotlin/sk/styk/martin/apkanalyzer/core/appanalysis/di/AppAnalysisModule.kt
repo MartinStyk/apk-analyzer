@@ -11,9 +11,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 class AppAnalysisModule {
-
     @Provides
     @Singleton
     fun providePackageManager(application: Application): PackageManager = application.packageManager
-
 }

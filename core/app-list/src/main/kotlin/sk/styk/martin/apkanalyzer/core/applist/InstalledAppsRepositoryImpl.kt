@@ -7,11 +7,9 @@ import sk.styk.martin.apkanalyzer.core.applist.model.LazyAppListData
 import java.text.Collator
 import javax.inject.Inject
 
-class InstalledAppsRepositoryImpl @Inject constructor(
-    private val packageManager: PackageManager,
-    private val appInstallSourceManager: AppInstallSourceManager,
-) : InstalledAppsRepository {
-
+class InstalledAppsRepositoryImpl
+@Inject
+constructor(private val packageManager: PackageManager, private val appInstallSourceManager: AppInstallSourceManager) : InstalledAppsRepository {
     override fun getAll(): List<LazyAppListData> {
         val applications = packageManager.getInstalledPackages(0)
         val packages = ArrayList<LazyAppListData>(applications.size)
@@ -52,7 +50,7 @@ class InstalledAppsRepositoryImpl @Inject constructor(
     private fun PackageInfo.toAppListData() = LazyAppListData(
         packageName = packageName,
         isSystemApp = appInstallSourceManager.isSystemInstalledApp(this),
-        version = versionCode,
+        version = longVersionCode,
         source = appInstallSourceManager.getAppInstallSource(this),
         packageManager = packageManager,
         packageInfo = this,
@@ -61,10 +59,8 @@ class InstalledAppsRepositoryImpl @Inject constructor(
     private val comparator by lazy {
         object : Comparator<LazyAppListData> {
             private val sCollator = Collator.getInstance()
-            override fun compare(object1: LazyAppListData, object2: LazyAppListData): Int {
-                return sCollator.compare(object1.applicationName, object2.applicationName)
-            }
+
+            override fun compare(object1: LazyAppListData, object2: LazyAppListData): Int = sCollator.compare(object1.applicationName, object2.applicationName)
         }
     }
-
 }

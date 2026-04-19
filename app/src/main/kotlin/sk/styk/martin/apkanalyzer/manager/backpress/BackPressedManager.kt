@@ -4,8 +4,9 @@ import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
 
 @ActivityScoped
-class BackPressedManager @Inject constructor() {
-
+class BackPressedManager
+@Inject
+constructor() {
     private val backPressedListeners = mutableMapOf<BackPressedListener, RegistrationData>()
 
     fun onBackPressed(): Boolean {

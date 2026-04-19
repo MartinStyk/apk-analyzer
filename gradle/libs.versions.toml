@@ -1,85 +1,108 @@
 [versions]
+# Kotlin
 kotlin = "2.3.20"
-ksp = "2.3.4"
-gradle-plugin = "9.1.0"
-compose = "2026.03.01"
-hilt = "2.59.2"
-coreKtx = "1.18.0"
-appcompat = "1.7.0"
-activityCompose = "1.13.0"
-lifecycleRuntimeKtx = "2.10.0"
-spotless = "8.4.0"
-nav3Core = "1.0.1"
-lifecycleViewmodelNav3 = "2.11.0-alpha03"
-kotlinSerialization = "2.3.20"
-kotlinxSerializationCore = "1.10.0"
-kotlinxCollectionsImmutable = "0.4.0"
-hiltNavigationCompose = "1.3.0"
-googlePlayReview = "2.0.2"
+ksp = "2.3.6"
+kotlinx-collections-immutable = "0.4.0"
+
+# Android
+agp = "9.1.1"
+core-ktx = "1.18.0"
+appcompat = "1.7.1"
+activity = "1.13.0"
+lifecycle = "2.10.0"
 datastore = "1.2.1"
-firebaseCrashlyticsKtx = "20.0.4"
-foundationLayout = "1.10.6"
-foundation = "1.10.6"
+
+# Compose
+compose-bom = "2026.03.01"
+compose-foundation = "1.10.6"
 material3 = "1.4.0"
 
+# Navigation
+navigation3 = "1.1.0"
+lifecycle-viewmodel-nav3 = "2.11.0-alpha03"
+hilt-navigation-compose = "1.3.0"
+
+# DI
+hilt = "2.59.2"
+
+# Firebase
+firebase-bom = "34.12.0"
+firebase-crashlytics-plugin = "3.0.7"
+firebase-perf-plugin = "2.0.2"
+google-services = "4.4.4"
+
+# Third-party
+timber = "5.0.1"
+leakcanary = "2.14"
+spotless = "8.4.0"
+compose-rules-ktlint = "0.4.22"
+
 [libraries]
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
-androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleRuntimeKtx" }
-androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtx" }
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose" }
-androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
-androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
-androidx-compose-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts" }
-androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "foundationLayout" }
-androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
-androidx-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
+# AndroidX Core
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 
-androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
-androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
-androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
-androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "lifecycleViewmodelNav3" }
-kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerializationCore" }
-kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
-android-play-review = { module = "com.google.android.play:review-ktx", version.ref = "googlePlayReview" }
+# AndroidX Lifecycle
+androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
+androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 
-timber = "com.jakewharton.timber:timber:5.0.1"
-androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+# Compose (BOM-managed)
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
+androidx-compose-ui = { module = "androidx.compose.ui:ui" }
+androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+androidx-compose-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
+androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 
+# Compose (version-pinned)
+androidx-compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose-foundation" }
+androidx-compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout", version.ref = "compose-foundation" }
+
+# Navigation 3
+androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3" }
+androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
+androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "lifecycle-viewmodel-nav3" }
+
+# Hilt
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 
-firebase-bom = "com.google.firebase:firebase-bom:34.11.0"
-firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
-firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
-firebase-performance = { group = "com.google.firebase", name = "firebase-perf" }
+# Firebase (BOM-managed)
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+firebase-performance = { module = "com.google.firebase:firebase-perf" }
 
-leakcannary = "com.squareup.leakcanary:leakcanary-android:2.14"
+# Kotlin
+kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
 
-# Dependencies of the included build-logic
-android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "gradle-plugin" }
-kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
-ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
-spotless-gradle-plugin = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotless" }
-firebase-crashlytics-ktx = { group = "com.google.firebase", name = "firebase-crashlytics-ktx", version.ref = "firebaseCrashlyticsKtx" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+# Third-party
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanary" }
 
+# Build-logic
+android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+ksp-gradle-plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+spotless-gradle-plugin = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless" }
+compose-rules-ktlint = { module = "io.nlopez.compose.rules:ktlint", version.ref = "compose-rules-ktlint" }
 
 [plugins]
-android-application = { id = "com.android.application", version.ref = "gradle-plugin" }
-android-library = { id = "com.android.library", version.ref = "gradle-plugin" }
-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-crashlytics = "com.google.firebase.crashlytics:3.0.6"
-firebase-perf = "com.google.firebase.firebase-perf:2.0.2"
-google-services = "com.google.gms.google-services:4.4.4"
-spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerialization" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
+crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics-plugin" }
+firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "firebase-perf-plugin" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 apkanalyzer-library = { id = "apkanalyzer.library" }
 apkanalyzer-application = { id = "apkanalyzer.application" }
 apkanalyzer-feature-api = { id = "apkanalyzer.feature.api" }

@@ -6,8 +6,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
 import javax.inject.Inject
 
-class MediaManager @Inject constructor(@ApplicationContext private val context: Context) {
-
+class MediaManager
+@Inject
+constructor(@ApplicationContext private val context: Context) {
     fun addMediaRecord(vararg files: File) {
         MediaScannerConnection.scanFile(context, files.map { it.absolutePath }.toTypedArray(), null, null)
     }

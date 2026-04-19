@@ -17,8 +17,9 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class ResourcesManager @Inject constructor(@ApplicationContext val context: Context) {
-
+class ResourcesManager
+@Inject
+constructor(@ApplicationContext val context: Context) {
     fun getString(@StringRes stringRes: Int, vararg args: Any): CharSequence = context.getString(stringRes, *args)
 
     fun getStringArray(@ArrayRes stringArrayRes: Int): Array<String> = context.resources.getStringArray(stringArrayRes)

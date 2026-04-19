@@ -14,20 +14,10 @@ import androidx.navigation3.runtime.NavKey
 import kotlinx.collections.immutable.ImmutableList
 
 @Stable
-data class NavigationBarItem(
-    val navKey: NavKey,
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
-    @StringRes val title: Int,
-)
+data class NavigationBarItem(val navKey: NavKey, val selectedIcon: ImageVector, val unselectedIcon: ImageVector, @StringRes val title: Int)
 
 @Composable
-fun NavigationBar(
-    items: ImmutableList<NavigationBarItem>,
-    selectedKey: NavKey,
-    onSelectKey: (NavKey) -> Unit,
-    modifier: Modifier = Modifier,
-) {
+fun NavigationBar(items: ImmutableList<NavigationBarItem>, selectedKey: NavKey, onSelectKey: (NavKey) -> Unit, modifier: Modifier = Modifier) {
     BottomAppBar(
         modifier = modifier,
     ) {
@@ -49,4 +39,3 @@ fun NavigationBar(
         }
     }
 }
-

@@ -6,8 +6,9 @@ import java.security.NoSuchAlgorithmException
 import java.util.Locale
 import javax.inject.Inject
 
-class DigestManager @Inject constructor() {
-
+class DigestManager
+@Inject
+constructor() {
     fun md5Digest(input: ByteArray): String = computeHash(algorithm = "Md5", input)
 
     fun md5Digest(input: String): String = md5Digest(input.toByteArray())

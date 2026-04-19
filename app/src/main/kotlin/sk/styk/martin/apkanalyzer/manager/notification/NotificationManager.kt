@@ -6,7 +6,6 @@ import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import androidx.annotation.IntRange
 import androidx.core.app.NotificationCompat
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -26,15 +25,12 @@ private const val MANIFEST_EXPORT_CHANNEL_ID = "Manifest export channel"
 private const val MANIFEST_EXPORT_NOTIFICATION_ID = 1_03
 
 @Singleton
-class NotificationManager @Inject constructor(
-    @ApplicationContext private val context: Context,
-    private val resourcesManager: ResourcesManager,
-    private val androidNotificationManager: AndroidNotificationManager,
-) {
-
-    private val flagImmutable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+class NotificationManager
+@Inject
+constructor(@ApplicationContext private val context: Context, private val resourcesManager: ResourcesManager, private val androidNotificationManager: AndroidNotificationManager) {
+    private val flagImmutable = PendingIntent.FLAG_IMMUTABLE
     private val shouldShowNotification: Boolean
-        get() = Build.VERSION.SDK_INT < Build.VERSION_CODES.N || androidNotificationManager.areNotificationsEnabled()
+        get() = androidNotificationManager.areNotificationsEnabled()
 
     fun showImageExportedNotification(appName: String, drawableFileUri: Uri) {
 //        if (!shouldShowNotification) {
@@ -71,11 +67,12 @@ class NotificationManager @Inject constructor(
             return null
         }
 
-        val notification = notificationBuilder(APP_EXPORT_CHANNEL_ID)
+        val notification =
+            notificationBuilder(APP_EXPORT_CHANNEL_ID)
 //            .setContentTitle(resourcesManager.getString(R.string.saving_app, appName))
-            .setSmallIcon(R.drawable.ic_apkanalyzer_notification)
-            .setOngoing(true)
-            .setProgress(100, 0, false)
+                .setSmallIcon(R.drawable.ic_apkanalyzer_notification)
+                .setOngoing(true)
+                .setProgress(100, 0, false)
 
         androidNotificationManager.notify(APP_EXPORT_NOTIFICATION_ID, notification.build())
         return notification
@@ -145,17 +142,11 @@ class NotificationManager @Inject constructor(
 //        androidNotificationManager.notify(MANIFEST_EXPORT_NOTIFICATION_ID, notification)
     }
 
-    private fun notificationBuilder(channelId: String) = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        NotificationCompat.Builder(context, channelId)
-    } else {
-        NotificationCompat.Builder(context)
-    }
+    private fun notificationBuilder(channelId: String) = NotificationCompat.Builder(context, channelId)
 
     private fun createChannel(channelId: String, channelName: CharSequence) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId, channelName, AndroidNotificationManager.IMPORTANCE_DEFAULT)
-            androidNotificationManager.createNotificationChannel(channel)
-        }
+        val channel = NotificationChannel(channelId, channelName, AndroidNotificationManager.IMPORTANCE_DEFAULT)
+        androidNotificationManager.createNotificationChannel(channel)
     }
 
     private fun cancelNotification(notificationId: Int) {

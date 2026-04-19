@@ -7,13 +7,7 @@ import android.graphics.drawable.Drawable
 import sk.styk.martin.apkanalyzer.core.appanalysis.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 
-data class LazyAppListData(
-    val packageName: String,
-    val isSystemApp: Boolean,
-    val version: Int,
-    val source: AppSource,
-)  {
-
+data class LazyAppListData(val packageName: String, val isSystemApp: Boolean, val version: Long, val source: AppSource) {
     private var packageManager: PackageManager? = null
 
     private var applicationInfo: ApplicationInfo? = null
@@ -23,7 +17,8 @@ data class LazyAppListData(
     }
 
     val icon: Drawable? by lazy {
-        kotlin.runCatching { applicationInfo?.loadIcon(packageManager) }
+        kotlin
+            .runCatching { applicationInfo?.loadIcon(packageManager) }
             .onFailure { Logger.e("AppList", it, "Icon not available for $packageName") }
             .getOrNull()
     }
@@ -31,15 +26,17 @@ data class LazyAppListData(
     constructor(
         packageName: String,
         isSystemApp: Boolean,
-        version: Int,
+        version: Long,
         source: AppSource,
         packageManager: PackageManager,
         packageInfo: PackageInfo,
     ) : this(
-        packageName, isSystemApp, version, source
+        packageName,
+        isSystemApp,
+        version,
+        source,
     ) {
         this.packageManager = packageManager
         this.applicationInfo = packageInfo.applicationInfo
     }
-
 }

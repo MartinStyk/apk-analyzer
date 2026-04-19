@@ -20,19 +20,14 @@ data class GeneralData(
     val dataDirectory: String? = null,
     val installLocation: InstallLocation,
     val appInstaller: String? = null,
-
     val apkSize: Long = 0, // bytes
-
     val firstInstallTime: Long? = null, // timestamp
     val lastUpdateTime: Long? = null, // timestamp
-
     val minSdkVersion: Int? = null,
     val minSdkLabel: String? = null,
-
     val targetSdkVersion: Int? = null,
     val targetSdkLabel: String? = null,
 ) : Parcelable {
-
     @IgnoredOnParcel
     var icon: Drawable? = null
         private set

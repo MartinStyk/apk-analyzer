@@ -5,7 +5,4 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class PermissionDataAggregate(
-    val definesPermissions: List<PermissionData>,
-    val usesPermissions: List<UsedPermissionData>,
-) : Parcelable
+data class PermissionDataAggregate(val definesPermissions: List<PermissionData>, val usesPermissions: List<UsedPermissionData>) : Parcelable

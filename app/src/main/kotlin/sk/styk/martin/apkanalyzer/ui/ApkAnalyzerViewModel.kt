@@ -12,21 +12,19 @@ import sk.styk.martin.apkanalyzer.core.common.settings.PersistenceRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class ApkAnalyzerViewModel @Inject constructor(
-    persistenceRepository: PersistenceRepository,
-) : ViewModel() {
-
-    val state: StateFlow<ApkAnalyzerState> = persistenceRepository
-        .observe(Key.ColorScheme)
-        .map { scheme ->
-            ApkAnalyzerState.Data(
-                colorAppScheme = scheme
+class ApkAnalyzerViewModel
+@Inject
+constructor(persistenceRepository: PersistenceRepository) : ViewModel() {
+    val state: StateFlow<ApkAnalyzerState> =
+        persistenceRepository
+            .observe(Key.ColorScheme)
+            .map { scheme ->
+                ApkAnalyzerState.Data(
+                    colorAppScheme = scheme,
+                )
+            }.stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = ApkAnalyzerState.Loading,
             )
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = ApkAnalyzerState.Loading,
-        )
 }
-

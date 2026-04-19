@@ -5,7 +5,8 @@ import android.content.pm.PackageInfo
 enum class InstallLocation {
     AUTO,
     INTERNAL,
-    EXTERNAL;
+    EXTERNAL,
+    ;
 
     companion object {
         fun from(installLocation: Int): InstallLocation = when (installLocation) {

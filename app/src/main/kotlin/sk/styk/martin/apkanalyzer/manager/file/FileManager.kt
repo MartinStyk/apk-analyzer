@@ -15,12 +15,9 @@ import java.io.InputStream
 import java.io.PrintWriter
 import javax.inject.Inject
 
-class FileManager @Inject constructor(
-    @ApplicationContext private val context: Context,
-    private val contentResolver: ContentResolver,
-    private val dispatcherProvider: DispatcherProvider,
-) {
-
+class FileManager
+@Inject
+constructor(@ApplicationContext private val context: Context, private val contentResolver: ContentResolver, private val dispatcherProvider: DispatcherProvider) {
     private val cacheDirectory by lazy { context.cacheDir }
 
     @Throws(IOException::class)

@@ -6,7 +6,3 @@ plugins {
 android {
     namespace = "sk.styk.martin.apkanalyzer.core.navigation"
 }
-
-dependencies {
-    implementation(libs.bundles.navigation3)
-}

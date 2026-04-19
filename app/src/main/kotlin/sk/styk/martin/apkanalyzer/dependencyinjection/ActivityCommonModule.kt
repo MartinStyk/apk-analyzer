@@ -17,7 +17,6 @@ import sk.styk.martin.apkanalyzer.manager.permission.PermissionsManagerImpl
 @InstallIn(ActivityComponent::class)
 @Module
 class ActivityCommonModule {
-
     @Provides
     @ActivityScoped
     fun provideActivityContext(activity: Activity): Context = activity.baseContext
@@ -29,17 +28,17 @@ class ActivityCommonModule {
     @Provides
     @ActivityScoped
     fun providePermissionsManager(activity: AppCompatActivity): PermissionManager {
-        val permissionsManager: PermissionsManagerImpl = ViewModelProvider(
-            activity,
-            object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    @Suppress("UNCHECKED_CAST")
-                    return PermissionsManagerImpl(activity.application) as T
-                }
-            },
-        )[PermissionsManagerImpl::class.java]
+        val permissionsManager: PermissionsManagerImpl =
+            ViewModelProvider(
+                activity,
+                object : ViewModelProvider.Factory {
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        @Suppress("UNCHECKED_CAST")
+                        return PermissionsManagerImpl(activity.application) as T
+                    }
+                },
+            )[PermissionsManagerImpl::class.java]
         permissionsManager.bind(activity)
         return permissionsManager
     }
-
 }

@@ -1,23 +1,22 @@
-package sk.styk.martin.apkanalyzer.core.apppermissions;
+package sk.styk.martin.apkanalyzer.core.apppermissions
 
 import kotlinx.coroutines.flow.flow
 import sk.styk.martin.apkanalyzer.core.appanalysis.AppPermissionManager
-import sk.styk.martin.apkanalyzer.core.apppermissions.model.LocalPermissionStatus
 import sk.styk.martin.apkanalyzer.core.appanalysis.model.PermissionData
 import sk.styk.martin.apkanalyzer.core.appanalysis.model.UsedPermissionData
 import sk.styk.martin.apkanalyzer.core.applist.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.applist.model.LazyAppListData
 import sk.styk.martin.apkanalyzer.core.apppermissions.model.LocalPermissionData
+import sk.styk.martin.apkanalyzer.core.apppermissions.model.LocalPermissionStatus
 import java.util.TreeSet
 import javax.inject.Inject
 
-class LocalPermissionManager @Inject constructor(
-    private val appPermissionManager: AppPermissionManager,
-    private val installedAppsRepository: InstalledAppsRepository,
-) {
-
+class LocalPermissionManager
+@Inject
+constructor(private val appPermissionManager: AppPermissionManager, private val installedAppsRepository: InstalledAppsRepository) {
     sealed class PermissionLoadingStatus {
         data class Loading(val currentProgress: Int, val totalProgress: Int) : PermissionLoadingStatus()
+
         data class Data(val localPermissionData: List<LocalPermissionData>) : PermissionLoadingStatus()
     }
 
@@ -36,7 +35,6 @@ class LocalPermissionManager @Inject constructor(
     }
 
     private inner class LocalPermissionDataBuilder {
-
         private val data = HashMap<PermissionData, MutableList<LocalPermissionStatus>>()
 
         operator fun plusAssign(lazyAppListData: LazyAppListData) {
@@ -59,5 +57,4 @@ class LocalPermissionManager @Inject constructor(
             return sortedSet.mapTo(ArrayList(sortedSet.size)) { LocalPermissionData(it.key, it.value) }
         }
     }
-
 }

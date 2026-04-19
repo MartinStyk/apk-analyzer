@@ -21,14 +21,15 @@ import sk.styk.martin.apkanalyzer.ui.navigation.TOP_LEVEL_KEYS
 
 @Composable
 internal fun ApkAnalyzerApp() {
-
-    val navigationState = rememberNavigationState(
-        startKey = AppsNavKey,
-        topLevelKeys = TOP_LEVEL_KEYS,
-    )
-    val navigator = remember {
-        Navigator(navigationState)
-    }
+    val navigationState =
+        rememberNavigationState(
+            startKey = AppsNavKey,
+            topLevelKeys = TOP_LEVEL_KEYS,
+        )
+    val navigator =
+        remember {
+            Navigator(navigationState)
+        }
 
     Scaffold(
         bottomBar = {
@@ -37,15 +38,17 @@ internal fun ApkAnalyzerApp() {
                 selectedKey = navigationState.topLevelKey,
                 onSelectKey = navigator::navigate,
             )
-        }
+        },
     ) { paddings ->
-        val entryProvider = entryProvider {
-            appEntries()
-            permissionEntries()
-            statisticsEntries()
-        }
+        val entryProvider =
+            entryProvider {
+                appEntries()
+                permissionEntries()
+                statisticsEntries()
+            }
         NavDisplay(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .padding(paddings),
             entries = navigationState.toEntries(entryProvider),

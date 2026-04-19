@@ -6,20 +6,13 @@ import sk.styk.martin.apkanalyzer.core.appstatistics.util.BigDecimalFormatter
 import java.math.BigDecimal
 
 @Parcelize
-data class PercentagePair(
-    val count: Number,
-    val percentage: BigDecimal
-) : Parcelable {
-
-    override fun toString(): String {
-        return count.toString() + "  (" + BigDecimalFormatter.getCommonFormat().format(percentage) + "%)"
-    }
+data class PercentagePair(val count: Number, val percentage: BigDecimal) : Parcelable {
+    override fun toString(): String = count.toString() + "  (" + BigDecimalFormatter.getCommonFormat().format(percentage) + "%)"
 
     companion object {
-
         fun from(count: Int, total: Int) = PercentagePair(
             count = count,
-            percentage = BigDecimal(count + 100 / total)
+            percentage = BigDecimal(count + 100 / total),
         )
     }
 }

@@ -12,6 +12,7 @@ class LibraryPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         with(pluginManager) {
             apply("com.android.library")
+            apply("apkanalyzer.spotless")
         }
 
         extensions.configure<LibraryExtension> {

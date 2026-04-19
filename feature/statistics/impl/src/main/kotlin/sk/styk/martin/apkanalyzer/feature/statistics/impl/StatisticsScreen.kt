@@ -8,11 +8,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun StatisticsScreen() {
+fun StatisticsScreen(modifier: Modifier = Modifier) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .background(Color.Red)
+            .background(Color.Red),
     ) { }
 }
-

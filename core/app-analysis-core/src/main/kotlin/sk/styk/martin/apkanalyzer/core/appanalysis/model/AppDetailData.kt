@@ -19,7 +19,6 @@ data class AppDetailData(
     var permissionData: PermissionDataAggregate,
     var featureData: List<FeatureData>,
 ) : Parcelable {
-
     enum class AnalysisMode {
         INSTALLED_PACKAGE,
         APK_FILE,

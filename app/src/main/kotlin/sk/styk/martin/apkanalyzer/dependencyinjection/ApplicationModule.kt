@@ -17,7 +17,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 class ApplicationModule {
-
     @Provides
     @Singleton
     fun provideApplicationScope(): CoroutineScope = CoroutineScope(SupervisorJob())
@@ -27,10 +26,8 @@ class ApplicationModule {
     fun provideContentResolver(application: Application): ContentResolver = application.contentResolver
 
     @Provides
-    fun provideNotificationManager(@ApplicationContext context: Context): NotificationManager =
-        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    fun provideNotificationManager(@ApplicationContext context: Context): NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     @Provides
-    fun provideFirebaseAnalytics(@ApplicationContext context: Context): FirebaseAnalytics =
-        FirebaseAnalytics.getInstance(context)
+    fun provideFirebaseAnalytics(@ApplicationContext context: Context): FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
 }

@@ -23,7 +23,6 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 
 @AndroidEntryPoint
 class ApkAnalyzerActivity : ComponentActivity() {
-
     private val viewModel: ApkAnalyzerViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,23 +31,35 @@ class ApkAnalyzerActivity : ComponentActivity() {
         setContent {
             val state by viewModel.state.collectAsStateWithLifecycle()
 
-            val isDarkTheme = when (val s = state) {
-                is ApkAnalyzerState.Loading -> isSystemInDarkTheme()
-                is ApkAnalyzerState.Data -> when (s.colorAppScheme) {
-                    ColorAppScheme.Day -> false
-                    ColorAppScheme.Night -> true
-                    ColorAppScheme.FollowSystem -> isSystemInDarkTheme()
-                }
-            }
+            val isDarkTheme =
+                when (val s = state) {
+                    is ApkAnalyzerState.Loading -> {
+                        isSystemInDarkTheme()
+                    }
 
-            val nightMode = when (val s = state) {
-                is ApkAnalyzerState.Loading -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-                is ApkAnalyzerState.Data -> when (s.colorAppScheme) {
-                    ColorAppScheme.Day -> AppCompatDelegate.MODE_NIGHT_NO
-                    ColorAppScheme.Night -> AppCompatDelegate.MODE_NIGHT_YES
-                    ColorAppScheme.FollowSystem -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                    is ApkAnalyzerState.Data -> {
+                        when (s.colorAppScheme) {
+                            ColorAppScheme.Day -> false
+                            ColorAppScheme.Night -> true
+                            ColorAppScheme.FollowSystem -> isSystemInDarkTheme()
+                        }
+                    }
                 }
-            }
+
+            val nightMode =
+                when (val s = state) {
+                    is ApkAnalyzerState.Loading -> {
+                        AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                    }
+
+                    is ApkAnalyzerState.Data -> {
+                        when (s.colorAppScheme) {
+                            ColorAppScheme.Day -> AppCompatDelegate.MODE_NIGHT_NO
+                            ColorAppScheme.Night -> AppCompatDelegate.MODE_NIGHT_YES
+                            ColorAppScheme.FollowSystem -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                        }
+                    }
+                }
             LaunchedEffect(nightMode) {
                 AppCompatDelegate.setDefaultNightMode(nightMode)
             }

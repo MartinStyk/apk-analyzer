@@ -8,8 +8,9 @@ import sk.styk.martin.apkanalyzer.core.appanalysis.model.UsedPermissionData
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import javax.inject.Inject
 
-class AppPermissionManager @Inject internal constructor(private val packageManager: PackageManager) {
-
+class AppPermissionManager
+@Inject
+internal constructor(private val packageManager: PackageManager) {
     fun getPermissions(packageInfo: PackageInfo): PermissionDataAggregate {
         val definedPermissions = getDefinedPermissions(packageInfo)
         val requestedPermissions = getUsedPermissions(packageInfo)
@@ -25,15 +26,13 @@ class AppPermissionManager @Inject internal constructor(private val packageManag
         null
     }
 
-    private fun getDefinedPermissions(packageInfo: PackageInfo): List<PermissionData> {
-        return packageInfo.permissions.orEmpty().map {
-            PermissionData(
-                name = it.name,
-                simpleName = createSimpleName(it.name),
-                groupName = it.group,
-                protectionLevel = it.protectionLevel,
-            )
-        }
+    private fun getDefinedPermissions(packageInfo: PackageInfo): List<PermissionData> = packageInfo.permissions.orEmpty().map {
+        PermissionData(
+            name = it.name,
+            simpleName = createSimpleName(it.name),
+            groupName = it.group,
+            protectionLevel = it.protectionLevel,
+        )
     }
 
     private fun getUsedPermissions(packageInfo: PackageInfo): List<UsedPermissionData> {
@@ -51,7 +50,7 @@ class AppPermissionManager @Inject internal constructor(private val packageManag
                         name = name,
                         simpleName = createSimpleName(name),
                         groupName = permissionInfo.group,
-                        protectionLevel = permissionInfo.protectionLevel
+                        protectionLevel = permissionInfo.protectionLevel,
                     )
                 } catch (e: Exception) {
                     // we failed to get permission data from package manager. Try to use things we know

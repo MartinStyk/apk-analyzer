@@ -13,8 +13,11 @@ import javax.inject.Inject
 
 private const val PERMISSIONS_REQUEST_CODE = 777
 
-class PermissionsManagerImpl @Inject constructor(application: Application) : AndroidViewModel(application), PermissionManager {
-
+class PermissionsManagerImpl
+@Inject
+constructor(application: Application) :
+    AndroidViewModel(application),
+    PermissionManager {
     private var activityWeakReference: WeakReference<Activity>? = null
     private val activity: Activity?
         get() = activityWeakReference?.get()
@@ -22,9 +25,7 @@ class PermissionsManagerImpl @Inject constructor(application: Application) : And
     @Volatile
     private var permissionsCallback: PermissionManager.PermissionsCallback? = null
 
-    override fun hasPermissionGranted(permission: String): Boolean {
-        return ContextCompat.checkSelfPermission(getApplication(), permission) == PackageManager.PERMISSION_GRANTED
-    }
+    override fun hasPermissionGranted(permission: String): Boolean = ContextCompat.checkSelfPermission(getApplication(), permission) == PackageManager.PERMISSION_GRANTED
 
     override fun shouldShowRationaleForPermission(permission: String): Boolean {
         val activity = activity
@@ -81,4 +82,5 @@ class PermissionsManagerImpl @Inject constructor(application: Application) : And
 }
 
 fun hasScopedStorage() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+
 fun needsNotificationPermission() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU

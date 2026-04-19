@@ -3,7 +3,7 @@ package sk.styk.martin.apkanalyzer
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
-import sk.styk.martin.apkanalyzer.utils.implementation
+import sk.styk.martin.apkanalyzer.utils.api
 import sk.styk.martin.apkanalyzer.utils.libs
 
 class FeatureApiPlugin : Plugin<Project> {
@@ -14,7 +14,7 @@ class FeatureApiPlugin : Plugin<Project> {
         }
 
         dependencies {
-            implementation(libs.findLibrary("androidx-navigation3-runtime").get())
+            api(libs.findLibrary("androidx-navigation3-runtime").get())
         }
     }
 }

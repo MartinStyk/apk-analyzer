@@ -3,7 +3,6 @@ package sk.styk.martin.apkanalyzer.core.navigation
 import androidx.navigation3.runtime.NavKey
 
 class Navigator(val navigationState: NavigationState) {
-
     fun navigate(key: NavKey) {
         when (key) {
             in navigationState.backStacks.keys -> navigationState.topLevelKey = key

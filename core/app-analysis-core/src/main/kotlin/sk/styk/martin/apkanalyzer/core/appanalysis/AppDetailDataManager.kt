@@ -6,7 +6,9 @@ import sk.styk.martin.apkanalyzer.core.appanalysis.model.AppDetailData
 import java.io.File
 import javax.inject.Inject
 
-class AppDetailDataManager @Inject internal constructor(
+class AppDetailDataManager
+@Inject
+internal constructor(
     private val packageManager: PackageManager,
     private val appPermissionManager: AppPermissionManager,
     private val featuresManager: FeaturesManager,
@@ -14,8 +16,8 @@ class AppDetailDataManager @Inject internal constructor(
     private val certificateManager: CertificateManager,
     private val appComponentsManager: AppComponentsManager,
 ) {
-
-    private val analysisFlags = PackageManager.GET_SIGNATURES or
+    private val analysisFlags =
+        PackageManager.GET_SIGNING_CERTIFICATES or
             PackageManager.GET_ACTIVITIES or
             PackageManager.GET_SERVICES or
             PackageManager.GET_PROVIDERS or
@@ -28,17 +30,16 @@ class AppDetailDataManager @Inject internal constructor(
         packageInfo = packageManager.getPackageInfo(packageName, analysisFlags),
     )
 
-    fun apkFilePackageDetails(accessibleFile: File): AppDetailData {
-        return getPackageDetails(
-            analysisMode = AppDetailData.AnalysisMode.APK_FILE,
-            packageInfo = packageManager.getPackageArchiveInfoWithCorrectPath(accessibleFile.absolutePath, analysisFlags)
-                ?: throw IllegalArgumentException(),
-        )
-    }
+    fun apkFilePackageDetails(accessibleFile: File): AppDetailData = getPackageDetails(
+        analysisMode = AppDetailData.AnalysisMode.APK_FILE,
+        packageInfo =
+        packageManager.getPackageArchiveInfoWithCorrectPath(accessibleFile.absolutePath, analysisFlags)
+            ?: throw IllegalArgumentException(),
+    )
 
     private fun getPackageDetails(analysisMode: AppDetailData.AnalysisMode, packageInfo: PackageInfo) = AppDetailData(
         analysisMode = analysisMode,
-        generalData = appGeneralDataManager.get(packageInfo, analysisMode.toAnalysisMode()),
+        generalData = appGeneralDataManager.get(packageInfo),
         certificateData = certificateManager.getCertificateData(packageInfo),
         activityData = appComponentsManager.getActivities(packageInfo),
         serviceData = appComponentsManager.getServices(packageInfo),
@@ -53,10 +54,5 @@ class AppDetailDataManager @Inject internal constructor(
         packageInfo?.applicationInfo?.sourceDir = pathToPackage
 
         return packageInfo
-    }
-
-    private fun AppDetailData.AnalysisMode.toAnalysisMode(): AppGeneralDataManager.AnalysisMode = when (this) {
-        AppDetailData.AnalysisMode.APK_FILE -> AppGeneralDataManager.AnalysisMode.ApkFile
-        AppDetailData.AnalysisMode.INSTALLED_PACKAGE -> AppGeneralDataManager.AnalysisMode.InstalledPackage
     }
 }

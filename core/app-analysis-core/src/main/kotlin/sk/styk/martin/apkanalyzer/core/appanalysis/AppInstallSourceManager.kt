@@ -7,8 +7,9 @@ import android.os.Build
 import sk.styk.martin.apkanalyzer.core.appanalysis.model.AppSource
 import javax.inject.Inject
 
-class AppInstallSourceManager @Inject constructor(private val packageManager: PackageManager) {
-
+class AppInstallSourceManager
+@Inject
+constructor(private val packageManager: PackageManager) {
     fun getAppInstallSource(packageInfo: PackageInfo): AppSource {
         val installer = appInstallingPackage(packageInfo)
 
@@ -23,19 +24,15 @@ class AppInstallSourceManager @Inject constructor(private val packageManager: Pa
         }
     }
 
-    fun appInstallingPackage(packageInfo: PackageInfo): String? {
-        return try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                packageManager.getInstallSourceInfo(packageInfo.packageName).installingPackageName
-            } else {
-                packageManager.getInstallerPackageName(packageInfo.packageName)
-            }
-        } catch (e: Exception) {
-            null // this means package is not installed
+    fun appInstallingPackage(packageInfo: PackageInfo): String? = try {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            packageManager.getInstallSourceInfo(packageInfo.packageName).installingPackageName
+        } else {
+            packageManager.getInstallerPackageName(packageInfo.packageName)
         }
+    } catch (e: Exception) {
+        null // this means package is not installed
     }
 
-    fun isSystemInstalledApp(packageInfo: PackageInfo): Boolean {
-        return packageInfo.applicationInfo?.let { it.flags and ApplicationInfo.FLAG_SYSTEM != 0 } ?: false
-    }
+    fun isSystemInstalledApp(packageInfo: PackageInfo): Boolean = packageInfo.applicationInfo?.let { it.flags and ApplicationInfo.FLAG_SYSTEM != 0 } ?: false
 }

@@ -1,11 +1,9 @@
 package sk.styk.martin.apkanalyzer.core.appstatistics
 
-import android.annotation.SuppressLint
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import androidx.annotation.WorkerThread
 import kotlinx.coroutines.flow.flow
-import sk.styk.martin.apkanalyzer.core.appanalysis.AndroidManifestManager
 import sk.styk.martin.apkanalyzer.core.appanalysis.AppGeneralDataManager
 import sk.styk.martin.apkanalyzer.core.appanalysis.AppInstallSourceManager
 import sk.styk.martin.apkanalyzer.core.appanalysis.CertificateManager
@@ -19,8 +17,8 @@ import sk.styk.martin.apkanalyzer.core.appstatistics.model.toMathStats
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import javax.inject.Inject
 
-@SuppressLint("PackageManagerGetSignatures")
-private const val ANALYSIS_FLAGS = PackageManager.GET_SIGNATURES or
+private const val ANALYSIS_FLAGS =
+    PackageManager.GET_SIGNING_CERTIFICATES or
         PackageManager.GET_ACTIVITIES or
         PackageManager.GET_SERVICES or
         PackageManager.GET_PROVIDERS or
@@ -28,17 +26,18 @@ private const val ANALYSIS_FLAGS = PackageManager.GET_SIGNATURES or
         PackageManager.GET_PERMISSIONS
 
 @WorkerThread
-class LocalApplicationStatisticManager @Inject internal constructor(
+class LocalApplicationStatisticManager
+@Inject
+internal constructor(
     private val packageManager: PackageManager,
     private val installedAppsRepository: InstalledAppsRepository,
     private val generalDataService: AppGeneralDataManager,
     private val certificateService: CertificateManager,
-    private val androidManifestManager: AndroidManifestManager,
     private val appInstallSourceManager: AppInstallSourceManager,
 ) {
-
     sealed class StatisticsLoadingStatus {
         data class Loading(val currentProgress: Int, val totalProgress: Int) : StatisticsLoadingStatus()
+
         data class Data(val data: StatisticsData) : StatisticsLoadingStatus()
     }
 
@@ -57,12 +56,13 @@ class LocalApplicationStatisticManager @Inject internal constructor(
     }
 
     private fun singleAppStatisticsData(packageName: String): StatisticsAppData? {
-        val packageInfo = try {
-            packageManager.getPackageInfo(packageName, ANALYSIS_FLAGS)
-        } catch (e: Exception) {
-            Logger.w("AppStatistics", e, "Package info for statistics failed. Package name= $packageName")
-            return null
-        }
+        val packageInfo =
+            try {
+                packageManager.getPackageInfo(packageName, ANALYSIS_FLAGS)
+            } catch (e: Exception) {
+                Logger.w("AppStatistics", e, "Package info for statistics failed. Package name= $packageName")
+                return null
+            }
 
         val applicationInfo = packageInfo.applicationInfo ?: return null
 
@@ -73,7 +73,7 @@ class LocalApplicationStatisticManager @Inject internal constructor(
             isSystemApp = isSystemApp,
             installLocation = packageInfo.installLocation,
             targetSdk = applicationInfo.targetSdkVersion,
-            minSdk = androidManifestManager.getMinSdkVersion(applicationInfo) ?: 0,
+            minSdk = applicationInfo.minSdkVersion,
             apkSize = if (applicationInfo.sourceDir != null) generalDataService.computeApkSize(applicationInfo.sourceDir) else 0,
             appSource = appInstallSourceManager.getAppInstallSource(packageInfo),
             signAlgorithm = certificateService.getSignAlgorithm(packageInfo) ?: "Unknown",
@@ -104,8 +104,6 @@ class LocalApplicationStatisticManager @Inject internal constructor(
     )
 
     private class StatisticsDataBuilder(datasetSize: Int) {
-
-
         private val arraySize = datasetSize + 1
 
         private var analyzeSuccess = 0
@@ -129,27 +127,23 @@ class LocalApplicationStatisticManager @Inject internal constructor(
         private val usedPermissions = FloatArray(arraySize)
         private val definedPermissions = FloatArray(arraySize)
 
-        fun build(): StatisticsData {
-            return StatisticsData(
-                analyzeSuccess = PercentagePair.from(analyzeSuccess, analyzeSuccess + analyzeFailed),
-                analyzeFailed = PercentagePair.from(analyzeFailed, analyzeSuccess + analyzeFailed),
-                systemApps = PercentagePair.from(systemApps, analyzeSuccess),
-                installLocation = installLocation,
-                targetSdk = targetSdk,
-                minSdk = minSdk,
-                appSource = appSource,
-                apkSize = apkSize.toMathStats(),
-                signAlgorithm = signAlgorithm,
-
-                activities = activities.toMathStats(),
-                services = services.toMathStats(),
-                receivers = receivers.toMathStats(),
-                providers = providers.toMathStats(),
-
-                usedPermissions = usedPermissions.toMathStats(),
-                definedPermissions = definedPermissions.toMathStats(),
-            )
-        }
+        fun build(): StatisticsData = StatisticsData(
+            analyzeSuccess = PercentagePair.from(analyzeSuccess, analyzeSuccess + analyzeFailed),
+            analyzeFailed = PercentagePair.from(analyzeFailed, analyzeSuccess + analyzeFailed),
+            systemApps = PercentagePair.from(systemApps, analyzeSuccess),
+            installLocation = installLocation,
+            targetSdk = targetSdk,
+            minSdk = minSdk,
+            appSource = appSource,
+            apkSize = apkSize.toMathStats(),
+            signAlgorithm = signAlgorithm,
+            activities = activities.toMathStats(),
+            services = services.toMathStats(),
+            receivers = receivers.toMathStats(),
+            providers = providers.toMathStats(),
+            usedPermissions = usedPermissions.toMathStats(),
+            definedPermissions = definedPermissions.toMathStats(),
+        )
 
         fun add(appData: StatisticsAppData?) {
             if (appData == null) {
@@ -187,5 +181,4 @@ class LocalApplicationStatisticManager @Inject internal constructor(
             map[key] = apps
         }
     }
-
 }

@@ -4,7 +4,4 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class LocalPermissionStatus(
-    val packageName: String,
-    val isGranted: Boolean = false,
-) : Parcelable
+data class LocalPermissionStatus(val packageName: String, val isGranted: Boolean = false) : Parcelable

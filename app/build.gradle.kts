@@ -3,14 +3,12 @@ import com.android.build.api.dsl.ApplicationExtension
 plugins {
     alias(libs.plugins.apkanalyzer.application)
     alias(libs.plugins.apkanalyzer.hilt)
+    alias(libs.plugins.apkanalyzer.compose)
     alias(libs.plugins.apkanalyzer.spotless)
-    alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.parcelize)
 }
 
-extensions.configure<ApplicationExtension> {
+android {
     namespace = "sk.styk.martin.apkanalyzer"
 
     defaultConfig {
@@ -52,14 +50,8 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.bundles.compose)
-    implementation(libs.bundles.navigation3)
+    implementation(libs.androidx.compose.material3)
     implementation(libs.kotlinx.collections.immutable)
 
-    implementation(libs.androidx.compose.foundation.layout)
-    implementation(libs.androidx.compose.foundation)
-    implementation(libs.androidx.material3)
-
-    debugImplementation(libs.leakcannary)
+    debugImplementation(libs.leakcanary)
 }

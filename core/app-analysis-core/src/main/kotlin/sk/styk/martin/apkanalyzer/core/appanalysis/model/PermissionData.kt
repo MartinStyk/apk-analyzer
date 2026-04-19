@@ -5,9 +5,4 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class PermissionData(
-    val name: String,
-    val simpleName: String,
-    val groupName: String? = null,
-    val protectionLevel: Int = PermissionInfo.PROTECTION_NORMAL,
-) : Parcelable
+data class PermissionData(val name: String, val simpleName: String, val groupName: String? = null, val protectionLevel: Int = PermissionInfo.PROTECTION_NORMAL) : Parcelable

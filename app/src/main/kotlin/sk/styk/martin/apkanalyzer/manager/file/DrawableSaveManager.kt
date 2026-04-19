@@ -20,46 +20,39 @@ import javax.inject.Inject
 
 private const val SUBDIRECTORY = "ApkAnalyzer"
 
-class DrawableSaveManager @Inject constructor(
-    private val contentResolver: ContentResolver,
-    private val mediaManager: MediaManager,
-    private val dispatcherProvider: DispatcherProvider,
-) {
+class DrawableSaveManager
+@Inject
+constructor(private val contentResolver: ContentResolver, private val mediaManager: MediaManager, private val dispatcherProvider: DispatcherProvider) {
+    suspend fun saveDrawable(drawable: Drawable, fileName: String, mimeType: String, directory: String = Environment.DIRECTORY_PICTURES, mediaContentUri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI): Uri =
+        withContext(dispatcherProvider.io()) {
+            val bitmap = drawable.toBitmap()
 
-    suspend fun saveDrawable(
-        drawable: Drawable,
-        fileName: String,
-        mimeType: String,
-        directory: String = Environment.DIRECTORY_PICTURES,
-        mediaContentUri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-    ): Uri = withContext(dispatcherProvider.io()) {
-        val bitmap = drawable.toBitmap()
+            return@withContext if (hasScopedStorage()) {
+                val values =
+                    ContentValues().apply {
+                        put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
+                        put(MediaStore.Images.Media.MIME_TYPE, mimeType)
+                        put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+                    }
 
-        return@withContext if (hasScopedStorage()) {
-            val values = ContentValues().apply {
-                put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
-                put(MediaStore.Images.Media.MIME_TYPE, mimeType)
-                put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+                contentResolver.run {
+                    val uri = contentResolver.insert(mediaContentUri, values)!!
+                    val outputStream = openOutputStream(uri)!!
+                    save(outputStream, bitmap)
+                    return@run uri
+                }
+            } else {
+                val imagePath = Environment.getExternalStoragePublicDirectory(directory).absolutePath
+                val subdirectory = File(imagePath, SUBDIRECTORY)
+                if (!subdirectory.exists()) {
+                    subdirectory.mkdirs()
+                }
+                val imageFile = File(imagePath, "$SUBDIRECTORY/$fileName")
+                save(FileOutputStream(imageFile), bitmap)
+                mediaManager.addMediaRecord(imageFile)
+                imageFile.toUri()
             }
-
-            contentResolver.run {
-                val uri = contentResolver.insert(mediaContentUri, values)!!
-                val outputStream = openOutputStream(uri)!!
-                save(outputStream, bitmap)
-                return@run uri
-            }
-        } else {
-            val imagePath = Environment.getExternalStoragePublicDirectory(directory).absolutePath
-            val subdirectory = File(imagePath, SUBDIRECTORY)
-            if (!subdirectory.exists()) {
-                subdirectory.mkdirs()
-            }
-            val imageFile = File(imagePath, "$SUBDIRECTORY/$fileName")
-            save(FileOutputStream(imageFile), bitmap)
-            mediaManager.addMediaRecord(imageFile)
-            imageFile.toUri()
         }
-    }
 
     private fun save(stream: OutputStream, bitmap: Bitmap) = stream.use {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)

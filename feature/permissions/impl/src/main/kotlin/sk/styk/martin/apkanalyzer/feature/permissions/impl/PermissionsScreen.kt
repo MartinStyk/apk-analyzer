@@ -8,11 +8,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun PermissionsScreen() {
+fun PermissionsScreen(modifier: Modifier = Modifier) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .background(Color.Blue)
+            .background(Color.Blue),
     ) { }
 }
-

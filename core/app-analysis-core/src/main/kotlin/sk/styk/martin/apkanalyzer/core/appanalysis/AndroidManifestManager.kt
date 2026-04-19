@@ -1,6 +1,5 @@
 package sk.styk.martin.apkanalyzer.core.appanalysis
 
-import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.content.res.XmlResourceParser
@@ -14,8 +13,9 @@ import javax.xml.transform.TransformerFactory
 import javax.xml.transform.stream.StreamResult
 import javax.xml.transform.stream.StreamSource
 
-class AndroidManifestManager @Inject constructor(private val packageManager: PackageManager) {
-
+class AndroidManifestManager
+@Inject
+constructor(private val packageManager: PackageManager) {
     fun loadAndroidManifest(packageName: String, packagePath: String?): String {
         val manifest = readManifest(packageManager, packageName, packagePath)
         return formatManifest(manifest)
@@ -24,15 +24,16 @@ class AndroidManifestManager @Inject constructor(private val packageManager: Pac
     private fun readManifest(packageManager: PackageManager, packageName: String, packagePath: String?): String {
         val stringBuilder = StringBuilder()
         try {
-            val apkResources = try {
-                packageManager.getResourcesForApplication(packageName)
-            } catch (exception: PackageManager.NameNotFoundException) {
-                packagePath?.let {
-                    packageManager.getPackageArchiveInfo(it, 0)?.applicationInfo?.let {
-                        packageManager.getResourcesForApplication(it)
+            val apkResources =
+                try {
+                    packageManager.getResourcesForApplication(packageName)
+                } catch (exception: PackageManager.NameNotFoundException) {
+                    packagePath?.let {
+                        packageManager.getPackageArchiveInfo(it, 0)?.applicationInfo?.let {
+                            packageManager.getResourcesForApplication(it)
+                        }
                     }
                 }
-            }
 
             if (apkResources == null) {
                 Logger.w(TAG_APP_ANALYSIS, "Resources for package $packageName not found")
@@ -54,7 +55,12 @@ class AndroidManifestManager @Inject constructor(private val packageManager: Pac
                         val attributeName = parser.getAttributeName(attribute)
                         val attributeValue = getAttributeValue(attributeName, parser.getAttributeValue(attribute), apkResources)
 
-                        stringBuilder.append(" ").append(attributeName).append("=\"").append(attributeValue).append("\"")
+                        stringBuilder
+                            .append(" ")
+                            .append(attributeName)
+                            .append("=\"")
+                            .append(attributeValue)
+                            .append("\"")
                     }
 
                     stringBuilder.append(">")
@@ -76,19 +82,17 @@ class AndroidManifestManager @Inject constructor(private val packageManager: Pac
         return stringBuilder.toString()
     }
 
-    private fun formatManifest(manifest: String): String {
-        return try {
-            val transformer = TransformerFactory.newInstance().newTransformer()
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes")
-            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2")
-            val result = StreamResult(StringWriter())
-            val source = StreamSource(ByteArrayInputStream(manifest.toByteArray(charset("UTF-8"))))
-            transformer.transform(source, result)
-            result.writer.toString()
-        } catch (e: Exception) {
-            Logger.e(TAG_APP_ANALYSIS, e, "Error formatting manifest $manifest")
-            ""
-        }
+    private fun formatManifest(manifest: String): String = try {
+        val transformer = TransformerFactory.newInstance().newTransformer()
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes")
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2")
+        val result = StreamResult(StringWriter())
+        val source = StreamSource(ByteArrayInputStream(manifest.toByteArray(charset("UTF-8"))))
+        transformer.transform(source, result)
+        result.writer.toString()
+    } catch (e: Exception) {
+        Logger.e(TAG_APP_ANALYSIS, e, "Error formatting manifest $manifest")
+        ""
     }
 
     private fun getAttributeValue(attributeName: String, attributeValue: String, resources: Resources): String {
@@ -96,10 +100,11 @@ class AndroidManifestManager @Inject constructor(private val packageManager: Pac
             try {
                 val id = Integer.valueOf(attributeValue.substring(1))
 
-                val value: String = when (attributeName) {
-                    "theme", "resource" -> resources.getResourceEntryName(id)
-                    else -> resources.getString(id)
-                }
+                val value: String =
+                    when (attributeName) {
+                        "theme", "resource" -> resources.getResourceEntryName(id)
+                        else -> resources.getString(id)
+                    }
 
                 return TextUtils.htmlEncode(value)
             } catch (e: Exception) {
@@ -108,29 +113,4 @@ class AndroidManifestManager @Inject constructor(private val packageManager: Pac
         }
         return attributeValue
     }
-
-    /**
-     * It is not possible to get minSdkVersions using Android PackageManager - parse AndroidManifest of app
-     */
-    fun getMinSdkVersion(applicationInfo: ApplicationInfo): Int? {
-        try {
-            val apkResources = packageManager.getResourcesForApplication(applicationInfo)
-            val parser = apkResources.assets.openXmlResourceParser("AndroidManifest.xml")
-            var eventType = -1
-
-            while (eventType != XmlResourceParser.END_DOCUMENT) {
-                if (eventType == XmlResourceParser.START_TAG) {
-                    if ("uses-sdk" == parser.name) {
-                        return parser.getAttributeIntValue("http://schemas.android.com/apk/res/android", "minSdkVersion", 0)
-                    }
-                }
-                eventType = parser.next()
-            }
-        } catch (e: Exception) {
-            Logger.e(TAG_APP_ANALYSIS, e, "Error reading minSdkValue for $applicationInfo")
-        }
-
-        return null
-    }
-
 }

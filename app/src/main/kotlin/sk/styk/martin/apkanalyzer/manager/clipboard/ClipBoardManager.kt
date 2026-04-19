@@ -7,8 +7,9 @@ import android.view.textservice.TextInfo
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class ClipBoardManager @Inject constructor(@field:ApplicationContext private val context: Context) {
-
+class ClipBoardManager
+@Inject
+constructor(@field:ApplicationContext private val context: Context) {
     fun copyToClipBoard(text: TextInfo, label: TextInfo = text) {
         copyToClipBoard(text.text, label.text)
     }

@@ -6,12 +6,11 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
+import androidx.core.net.toUri
 import sk.styk.martin.apkanalyzer.R
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
-import androidx.core.net.toUri
 
 object AppOperations {
-
     fun openAppSystemPage(context: Context, packageName: String) {
         try {
             context.startActivity(
@@ -38,10 +37,11 @@ object AppOperations {
 
     @JvmStatic
     fun startForeignActivity(context: Context, packageName: String, activityName: String) {
-        val intent = Intent().apply {
-            component = ComponentName(packageName, activityName)
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        }
+        val intent =
+            Intent().apply {
+                component = ComponentName(packageName, activityName)
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }
         try {
             context.startActivity(intent)
         } catch (e: Exception) {

@@ -10,7 +10,6 @@ class ComposePlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         with(pluginManager) {
             apply("org.jetbrains.kotlin.plugin.compose")
-            apply("com.google.devtools.ksp")
             apply("org.jetbrains.kotlin.plugin.serialization")
         }
 

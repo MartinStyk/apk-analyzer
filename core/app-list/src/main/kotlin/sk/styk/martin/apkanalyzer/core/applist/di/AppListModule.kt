@@ -11,13 +11,10 @@ import sk.styk.martin.apkanalyzer.core.applist.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.applist.InstalledAppsRepositoryImpl
 import javax.inject.Singleton
 
-
 @InstallIn(SingletonComponent::class)
 @Module
 interface AppListModule {
-
     @Binds
     @Singleton
     fun bindInstalledAppsRepository(installedAppsRepositoryImpl: InstalledAppsRepositoryImpl): InstalledAppsRepository
-
 }
