@@ -35,7 +35,7 @@ android {
 
 dependencies {
     implementation(projects.core.appAnalysisCore)
-    implementation(projects.core.appList)
+    implementation(projects.core.apps)
     implementation(projects.core.appPermissions)
     implementation(projects.core.appStatistics)
     implementation(projects.core.common)
@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.compose.material3)
     implementation(libs.kotlinx.collections.immutable)
+    implementation(libs.coil.compose)
 
     debugImplementation(libs.leakcanary)
 }

@@ -10,6 +10,6 @@ android {
 
 dependencies {
     implementation(projects.core.appAnalysisCore)
-    implementation(projects.core.appList)
+    implementation(projects.core.apps)
     implementation(projects.core.common)
 }

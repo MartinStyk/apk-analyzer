@@ -34,8 +34,9 @@ google-services = "4.4.4"
 # Third-party
 timber = "5.0.1"
 leakcanary = "2.14"
+coil = "3.4.0"
 spotless = "8.4.0"
-compose-rules-ktlint = "0.4.22"
+compose-rules-ktlint = "0.5.7"
 
 [libraries]
 # AndroidX Core
@@ -83,6 +84,8 @@ kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collec
 # Third-party
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanary" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-core = { module = "io.coil-kt.coil3:coil-core", version.ref = "coil" }
 
 # Build-logic
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }

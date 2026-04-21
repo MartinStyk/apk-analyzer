@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sort_name">Name</string>
+    <string name="sort_size">Size</string>
+    <string name="sort_install_date">Date</string>
+    <string name="sort_target_sdk">SDK</string>
+    <string name="search_apps_hint">Search installed apps</string>
+    <string name="search_apps_matches">%d matches found</string>
+    <string name="filter">Filter</string>
+    <string name="source_google_play">GP</string>
+    <string name="source_amazon_store">AM</string>
+    <string name="source_system">SYS</string>
+    <string name="source_unknown">?</string>
+    <string name="installed_apps">Installed apps</string>
+    <string name="recently_viewed">Recently viewed</string>
+</resources>
+

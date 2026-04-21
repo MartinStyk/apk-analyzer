@@ -22,7 +22,7 @@ rootProject.name = "ApkAnalyzer"
 include(
     ":app",
     ":core:app-analysis-core",
-    ":core:app-list",
+    ":core:apps",
     ":core:app-permissions",
     ":core:app-statistics",
     ":core:common",

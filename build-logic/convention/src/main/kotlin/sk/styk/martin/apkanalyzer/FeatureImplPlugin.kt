@@ -15,6 +15,7 @@ class FeatureImplPlugin : Plugin<Project> {
 
         dependencies {
             implementation(project(":core:ui-library"))
+            implementation(project(":core:navigation"))
         }
 
     }

@@ -89,16 +89,32 @@ When creating new modules, use these convention plugins in `build.gradle.kts`:
 #### Data Layer
 * **Repository** - Responsible for data retrieval, persistence, and source abstraction.
 * **Manager** - Responsible for complex business logic operations and implementation details.
+* Define public **interfaces** for repositories and managers. Place implementations in the same module (e.g., `InstalledAppsRepository` + `InstalledAppsRepositoryImpl`). Bind via Hilt `@Binds`.
+* Use **data classes** for domain models.
 
 #### File Structure
 Keep feature-related components together in a single package:
 `Feature.kt`, `FeatureViewModel.kt`, `FeatureState.kt`, `FeatureAction.kt`, `FeatureEvent.kt`.
+
+### UI Library & Material Usage
+
+* All reusable UI components (buttons, cards, scaffolds, etc.) must be wrapped in `:core:ui-library` and re-exported from there.
+* Feature and app modules must **not** import `androidx.compose.material3` directly. Use only plain Compose foundation APIs (`androidx.compose.foundation`, `androidx.compose.ui`) and components from `:core:ui-library`.
+* Theme access (`AppTheme`, `AppColors`, `AppText`) is provided exclusively by `:core:ui-library`.
 
 ### Compose Stability
 
 * Use `kotlinx.collections.immutable` (`ImmutableList`, `persistentListOf`) for list properties in State classes and Composable parameters.
 * Use `@Stable` annotation on non-data classes used as Composable parameters.
 * Use `@Immutable` on State data classes.
+
+### Compose Previews
+
+* Every file containing `@Composable` functions must include `@Preview` functions for key composables.
+* Wrap previews in `ApkAnalyzerTheme { }` to ensure correct theming.
+* Preview functions must be `private` and suffixed with `Preview` (e.g., `AppListItemRowPreview`).
+* Use realistic sample data in previews. Avoid empty states unless explicitly previewing them.
+* Do not preview top-level screen composables that depend on `ViewModel` — preview the stateless content composable instead.
 
 ### Standard Libraries
 

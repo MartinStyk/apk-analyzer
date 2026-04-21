@@ -4,7 +4,7 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
-import sk.styk.martin.apkanalyzer.core.appanalysis.model.AppSource
+import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import javax.inject.Inject
 
 class AppInstallSourceManager
@@ -13,14 +13,10 @@ constructor(private val packageManager: PackageManager) {
     fun getAppInstallSource(packageInfo: PackageInfo): AppSource {
         val installer = appInstallingPackage(packageInfo)
 
-        return if (installer == AppSource.GOOGLE_PLAY.installerPackageName) {
-            AppSource.GOOGLE_PLAY
-        } else if (installer == AppSource.AMAZON_STORE.installerPackageName) {
-            AppSource.AMAZON_STORE
-        } else if (installer == AppSource.SYSTEM_PREINSTALED.installerPackageName || isSystemInstalledApp(packageInfo)) {
-            AppSource.SYSTEM_PREINSTALED
-        } else {
-            AppSource.UNKNOWN
+        return when (installer) {
+            GOOGLE_PLAY_INSTALLER -> AppSource.GooglePlay
+            AMAZON_STORE_INSTALLER -> AppSource.AmazonStore
+            else -> if (isSystemInstalledApp(packageInfo)) AppSource.SystemPreinstalled else AppSource.Unknown
         }
     }
 
@@ -30,9 +26,15 @@ constructor(private val packageManager: PackageManager) {
         } else {
             packageManager.getInstallerPackageName(packageInfo.packageName)
         }
-    } catch (e: Exception) {
-        null // this means package is not installed
+    } catch (_: Exception) {
+        null
     }
 
-    fun isSystemInstalledApp(packageInfo: PackageInfo): Boolean = packageInfo.applicationInfo?.let { it.flags and ApplicationInfo.FLAG_SYSTEM != 0 } ?: false
+    fun isSystemInstalledApp(packageInfo: PackageInfo): Boolean =
+        packageInfo.applicationInfo?.let { it.flags and ApplicationInfo.FLAG_SYSTEM != 0 } ?: false
+
+    private companion object {
+        const val GOOGLE_PLAY_INSTALLER = "com.android.vending"
+        const val AMAZON_STORE_INSTALLER = "com.amazon.venezia"
+    }
 }

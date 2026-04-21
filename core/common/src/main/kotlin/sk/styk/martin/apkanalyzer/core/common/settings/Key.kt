@@ -6,6 +6,8 @@ sealed class Key<T> {
     data object OnboardingRequired : Key<Boolean>()
 
     data object AppStartNumber : Key<Int>()
+
+    data object RecentlyViewedApps : Key<List<String>>()
 }
 
 enum class ColorAppScheme {

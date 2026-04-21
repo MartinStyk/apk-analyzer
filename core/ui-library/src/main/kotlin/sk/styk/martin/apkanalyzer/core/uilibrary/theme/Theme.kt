@@ -15,7 +15,10 @@ fun ApkAnalyzerTheme(isDarkTheme: Boolean = isSystemInDarkTheme(), content: @Com
             if (isDarkTheme) darkColorScheme(apkAnalyzerColors) else lightColorScheme(apkAnalyzerColors)
         }
 
-    CompositionLocalProvider(LocalApkAnalyzerColors provides apkAnalyzerColors) {
+    CompositionLocalProvider(
+        LocalApkAnalyzerColors provides apkAnalyzerColors,
+        LocalApkAnalyzerTypography provides ApkAnalyzerTypography.toApkAnalyzerTypographyStyles(),
+    ) {
         MaterialTheme(
             colorScheme = materialColorScheme,
             typography = ApkAnalyzerTypography,
@@ -30,28 +33,8 @@ object AppTheme {
         @ReadOnlyComposable
         get() = LocalApkAnalyzerColors.current
 
-    val text: ApkAnalyzerTextStyles
+    val typography: ApkAnalyzerTypographyStyles
         @Composable
         @ReadOnlyComposable
-        get() {
-            val typography = MaterialTheme.typography
-            val c = colors
-            return ApkAnalyzerTextStyles(
-                displayLarge = typography.displayLarge.copy(color = c.textPrimary),
-                displayMedium = typography.displayMedium.copy(color = c.textPrimary),
-                displaySmall = typography.displaySmall.copy(color = c.textPrimary),
-                headlineLarge = typography.headlineLarge.copy(color = c.textPrimary),
-                headlineMedium = typography.headlineMedium.copy(color = c.textPrimary),
-                headlineSmall = typography.headlineSmall.copy(color = c.textPrimary),
-                titleLarge = typography.titleLarge.copy(color = c.textPrimary),
-                titleMedium = typography.titleMedium.copy(color = c.textPrimary),
-                titleSmall = typography.titleSmall.copy(color = c.textSecondary),
-                bodyLarge = typography.bodyLarge.copy(color = c.textPrimary),
-                bodyMedium = typography.bodyMedium.copy(color = c.textSecondary),
-                bodySmall = typography.bodySmall.copy(color = c.textSecondary),
-                labelLarge = typography.labelLarge.copy(color = c.textSecondary),
-                labelMedium = typography.labelMedium.copy(color = c.textSecondary),
-                labelSmall = typography.labelSmall.copy(color = c.textDisabled),
-            )
-        }
+        get() = LocalApkAnalyzerTypography.current
 }

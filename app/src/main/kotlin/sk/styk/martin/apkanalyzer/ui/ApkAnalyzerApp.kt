@@ -42,7 +42,7 @@ internal fun ApkAnalyzerApp() {
     ) { paddings ->
         val entryProvider =
             entryProvider {
-                appEntries()
+                appEntries(navigator)
                 permissionEntries()
                 statisticsEntries()
             }

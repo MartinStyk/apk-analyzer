@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable
 import android.os.Parcelable
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
+import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 
 @Parcelize
 data class GeneralData(
@@ -15,7 +16,7 @@ data class GeneralData(
     val isSystemApp: Boolean = false,
     val uid: Int? = null,
     val description: String? = null,
-    val source: AppSource = AppSource.UNKNOWN,
+    val source: AppSource = AppSource.Unknown,
     val apkDirectory: String? = null,
     val dataDirectory: String? = null,
     val installLocation: InstallLocation,

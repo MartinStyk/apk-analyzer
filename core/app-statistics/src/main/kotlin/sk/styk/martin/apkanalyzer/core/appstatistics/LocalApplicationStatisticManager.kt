@@ -3,12 +3,15 @@ package sk.styk.martin.apkanalyzer.core.appstatistics
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import androidx.annotation.WorkerThread
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import sk.styk.martin.apkanalyzer.core.appanalysis.AppGeneralDataManager
 import sk.styk.martin.apkanalyzer.core.appanalysis.AppInstallSourceManager
 import sk.styk.martin.apkanalyzer.core.appanalysis.CertificateManager
 import sk.styk.martin.apkanalyzer.core.appanalysis.MAX_SDK_VERSION
-import sk.styk.martin.apkanalyzer.core.appanalysis.model.AppSource
+import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.appanalysis.model.InstallLocation
 import sk.styk.martin.apkanalyzer.core.applist.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.appstatistics.model.PercentagePair
@@ -41,18 +44,19 @@ internal constructor(
         data class Data(val data: StatisticsData) : StatisticsLoadingStatus()
     }
 
-    suspend fun loadStatisticsData() = flow {
-        val allApps = installedAppsRepository.getAll()
-        emit(StatisticsLoadingStatus.Loading(0, allApps.size))
+    fun loadStatisticsData(): Flow<StatisticsLoadingStatus> = installedAppsRepository.apps().flatMapLatest { allApps ->
+        flow {
+            emit(StatisticsLoadingStatus.Loading(0, allApps.size))
 
-        val statsBuilder = StatisticsDataBuilder(allApps.size)
+            val statsBuilder = StatisticsDataBuilder(allApps.size)
 
-        allApps.forEachIndexed { index, appListData ->
-            statsBuilder.add(singleAppStatisticsData(appListData.packageName))
-            emit(StatisticsLoadingStatus.Loading(index, allApps.size))
+            allApps.forEachIndexed { index, appListData ->
+                statsBuilder.add(singleAppStatisticsData(appListData.packageName))
+                emit(StatisticsLoadingStatus.Loading(index, allApps.size))
+            }
+
+            emit(StatisticsLoadingStatus.Data(statsBuilder.build()))
         }
-
-        emit(StatisticsLoadingStatus.Data(statsBuilder.build()))
     }
 
     private fun singleAppStatisticsData(packageName: String): StatisticsAppData? {
@@ -93,7 +97,7 @@ internal constructor(
         var targetSdk: Int = 0,
         var minSdk: Int = 0,
         var apkSize: Long = 0,
-        var appSource: AppSource = AppSource.UNKNOWN,
+        var appSource: AppSource = AppSource.Unknown,
         var signAlgorithm: String,
         var activities: Int = 0,
         var services: Int = 0,
@@ -113,7 +117,7 @@ internal constructor(
         private val installLocation = HashMap<InstallLocation, MutableList<String>>(3)
         private val targetSdk = HashMap<Int, MutableList<String>>(MAX_SDK_VERSION)
         private val minSdk = HashMap<Int, MutableList<String>>(MAX_SDK_VERSION)
-        private val appSource = HashMap<AppSource, MutableList<String>>(AppSource.values().size)
+        private val appSource = HashMap<AppSource, MutableList<String>>(AppSource.entries.size)
 
         private val apkSize = FloatArray(arraySize)
 
