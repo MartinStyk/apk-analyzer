@@ -8,6 +8,8 @@ sealed class Key<T> {
     data object AppStartNumber : Key<Int>()
 
     data object RecentlyViewedApps : Key<List<String>>()
+
+    data object SearchHistory : Key<List<String>>()
 }
 
 enum class ColorAppScheme {

@@ -9,7 +9,9 @@ import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import javax.inject.Inject
 
 @HiltAndroidApp
-class ApkAnalyzer : Application(), SingletonImageLoader.Factory {
+class ApkAnalyzer :
+    Application(),
+    SingletonImageLoader.Factory {
 
     @Inject
     lateinit var imageLoader: ImageLoader

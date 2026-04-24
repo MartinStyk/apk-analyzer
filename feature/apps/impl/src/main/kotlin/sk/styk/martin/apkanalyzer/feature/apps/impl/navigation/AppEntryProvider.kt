@@ -4,15 +4,28 @@ import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import sk.styk.martin.apkanalyzer.core.navigation.Navigator
 import sk.styk.martin.apkanalyzer.feature.apps.api.AppsNavKey
-import sk.styk.martin.apkanalyzer.feature.apps.impl.AppsScreen
+import sk.styk.martin.apkanalyzer.feature.apps.impl.list.AppsScreen
+import sk.styk.martin.apkanalyzer.feature.apps.impl.search.AppSearchScreen
 
-fun EntryProviderScope<NavKey>.appEntries(
-    navigator: Navigator,
-) {
+fun EntryProviderScope<NavKey>.appEntries(navigator: Navigator) {
     entry<AppsNavKey> {
         AppsScreen(
-            onAppClicked = {
+            onAppClick = {
                 // navigator
+            },
+            onSearchClick = {
+                navigator.navigate(AppSearchNavKey)
+            },
+        )
+    }
+
+    entry<AppSearchNavKey> {
+        AppSearchScreen(
+            onAppClick = {
+                // navigator
+            },
+            onBack = {
+                navigator.goBack()
             },
         )
     }

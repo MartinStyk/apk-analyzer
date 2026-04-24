@@ -21,7 +21,11 @@ constructor(private val packageManager: PackageManager) {
         return formatManifest(manifest)
     }
 
-    private fun readManifest(packageManager: PackageManager, packageName: String, packagePath: String?): String {
+    private fun readManifest(
+        packageManager: PackageManager,
+        packageName: String,
+        packagePath: String?,
+    ): String {
         val stringBuilder = StringBuilder()
         try {
             val apkResources =
@@ -95,7 +99,11 @@ constructor(private val packageManager: PackageManager) {
         ""
     }
 
-    private fun getAttributeValue(attributeName: String, attributeValue: String, resources: Resources): String {
+    private fun getAttributeValue(
+        attributeName: String,
+        attributeValue: String,
+        resources: Resources,
+    ): String {
         if (attributeValue.startsWith("@")) {
             try {
                 val id = Integer.valueOf(attributeValue.substring(1))

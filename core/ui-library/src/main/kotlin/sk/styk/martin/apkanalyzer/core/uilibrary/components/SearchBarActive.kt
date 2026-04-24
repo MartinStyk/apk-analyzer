@@ -1,7 +1,9 @@
 package sk.styk.martin.apkanalyzer.core.uilibrary.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,37 +16,40 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
+import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.sharedElement
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 
 @Composable
-fun SearchBar(
+fun SearchBarActive(
     query: String,
-    onQueryChanged: (String) -> Unit,
     placeholder: String,
     modifier: Modifier = Modifier,
+    onQueryChange: (String) -> Unit = {},
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
+            .sharedElement(key = "search_bar")
             .fillMaxWidth()
             .heightIn(min = 48.dp)
             .background(
-                color = AppTheme.colors.surfaceVariant,
+                color = AppTheme.colors.surface,
                 shape = RoundedCornerShape(24.dp),
             )
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+            .padding(vertical = 8.dp),
     ) {
         Icon(
             imageVector = ApkAnalyzerIcons.Search,
             contentDescription = null,
             tint = if (query.isEmpty()) AppTheme.colors.onSurfaceVariant else AppTheme.colors.onBackground,
-            modifier = Modifier.size(24.dp),
+            modifier = Modifier
+                .padding(start = 16.dp)
+                .size(24.dp),
         )
         Box(
             modifier = Modifier
@@ -61,7 +66,7 @@ fun SearchBar(
             }
             BasicTextField(
                 value = query,
-                onValueChange = onQueryChanged,
+                onValueChange = onQueryChange,
                 textStyle = textStyle,
                 singleLine = true,
                 cursorBrush = SolidColor(AppTheme.colors.onBackground),
@@ -69,14 +74,11 @@ fun SearchBar(
             )
         }
         if (query.isNotEmpty()) {
-            Icon(
+            IconButton(
                 imageVector = ApkAnalyzerIcons.Clear,
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(start = 8.dp)
-                    .size(20.dp)
-                    .clickable { onQueryChanged("") },
-                tint = AppTheme.colors.onSurfaceVariant,
+                onClick = { onQueryChange("") },
+                style = IconButtonStyle.Standard,
+                modifier = Modifier.padding(end = 8.dp).size(32.dp),
             )
         }
     }
@@ -84,11 +86,11 @@ fun SearchBar(
 
 @Preview
 @Composable
-private fun SearchBarEmptyPreview() {
+private fun SearchBarActiveEmptyPreview() {
     ApkAnalyzerTheme {
-        SearchBar(
+        SearchBarActive(
             query = "",
-            onQueryChanged = {},
+            onQueryChange = {},
             placeholder = "Search 342 apps…",
         )
     }
@@ -96,11 +98,11 @@ private fun SearchBarEmptyPreview() {
 
 @Preview
 @Composable
-private fun SearchBarWithQueryPreview() {
+private fun SearchBarActiveWithQueryPreview() {
     ApkAnalyzerTheme {
-        SearchBar(
+        SearchBarActive(
             query = "instagram",
-            onQueryChanged = {},
+            onQueryChange = {},
             placeholder = "Search apps",
         )
     }

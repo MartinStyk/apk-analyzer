@@ -4,7 +4,7 @@
     <string name="sort_size">Size</string>
     <string name="sort_install_date">Date</string>
     <string name="sort_target_sdk">SDK</string>
-    <string name="search_apps_hint">Search installed apps</string>
+    <string name="search_apps_hint">Search apps</string>
     <string name="search_apps_matches">%d matches found</string>
     <string name="filter">Filter</string>
     <string name="source_google_play">GP</string>
@@ -13,5 +13,9 @@
     <string name="source_unknown">?</string>
     <string name="installed_apps">Installed apps</string>
     <string name="recently_viewed">Recently viewed</string>
+    <string name="search_apps_empty">Search %1$d installed apps</string>
+    <string name="search_apps_no_results">No results for \"%1$s\"</string>
+    <string name="search_history_title">Recent searches</string>
+    <string name="search_history_clear">Clear</string>
 </resources>
 

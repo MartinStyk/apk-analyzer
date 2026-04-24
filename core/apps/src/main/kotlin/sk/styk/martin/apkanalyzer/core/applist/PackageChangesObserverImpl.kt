@@ -10,9 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
-class PackageChangesObserverImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
-) : PackageChangesObserver {
+class PackageChangesObserverImpl @Inject constructor(@ApplicationContext private val context: Context) : PackageChangesObserver {
 
     override fun observe(): Flow<Unit> = callbackFlow {
         val receiver = object : BroadcastReceiver() {
@@ -32,4 +30,3 @@ class PackageChangesObserverImpl @Inject constructor(
         awaitClose { context.unregisterReceiver(receiver) }
     }
 }
-

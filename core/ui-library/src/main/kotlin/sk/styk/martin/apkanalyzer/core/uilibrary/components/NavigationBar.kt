@@ -17,7 +17,12 @@ import kotlinx.collections.immutable.ImmutableList
 data class NavigationBarItem(val navKey: NavKey, val selectedIcon: ImageVector, val unselectedIcon: ImageVector, @StringRes val title: Int)
 
 @Composable
-fun NavigationBar(items: ImmutableList<NavigationBarItem>, selectedKey: NavKey, onSelectKey: (NavKey) -> Unit, modifier: Modifier = Modifier) {
+fun NavigationBar(
+    items: ImmutableList<NavigationBarItem>,
+    selectedKey: NavKey,
+    onSelectKey: (NavKey) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     BottomAppBar(
         modifier = modifier,
     ) {

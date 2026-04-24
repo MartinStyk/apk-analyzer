@@ -28,7 +28,11 @@ constructor(private val contentResolver: ContentResolver, private val notificati
         data class Done(override val outputUri: Uri) : AppSaveStatus(outputUri)
     }
 
-    fun saveApk(appName: String, sourceFile: File, targetUri: Uri): Flow<AppSaveStatus> = saveApkInternal(sourceFile, targetUri)
+    fun saveApk(
+        appName: String,
+        sourceFile: File,
+        targetUri: Uri,
+    ): Flow<AppSaveStatus> = saveApkInternal(sourceFile, targetUri)
         .distinctUntilChanged()
         .debounce(1500)
         .catch { Logger.e("Export", it, "Saving apk failed failed. Appname=$appName, sourceFile=$sourceFile, targetUri=$targetUri") }

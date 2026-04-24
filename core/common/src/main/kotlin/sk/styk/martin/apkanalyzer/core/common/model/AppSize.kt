@@ -36,4 +36,3 @@ val Int.kilobytes: AppSize get() = this.toLong().kilobytes
 val Int.megabytes: AppSize get() = this.toLong().megabytes
 
 val Int.gigabytes: AppSize get() = this.toLong().gigabytes
-

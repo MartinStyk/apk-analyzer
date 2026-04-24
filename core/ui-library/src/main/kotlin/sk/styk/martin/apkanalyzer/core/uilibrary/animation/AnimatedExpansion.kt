@@ -22,4 +22,3 @@ fun AnimatedExpansion(
         content()
     }
 }
-

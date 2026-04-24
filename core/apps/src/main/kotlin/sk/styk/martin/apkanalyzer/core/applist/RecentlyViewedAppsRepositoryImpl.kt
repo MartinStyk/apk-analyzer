@@ -9,10 +9,7 @@ import sk.styk.martin.apkanalyzer.core.common.settings.Key
 import sk.styk.martin.apkanalyzer.core.common.settings.PersistenceRepository
 import javax.inject.Inject
 
-internal class RecentlyViewedAppsRepositoryImpl @Inject constructor(
-    private val persistenceRepository: PersistenceRepository,
-    private val installedAppsRepository: InstalledAppsRepository,
-) : RecentlyViewedAppsRepository {
+internal class RecentlyViewedAppsRepositoryImpl @Inject constructor(private val persistenceRepository: PersistenceRepository, private val installedAppsRepository: InstalledAppsRepository) : RecentlyViewedAppsRepository {
 
     override fun recents(): Flow<List<InstalledApp>> = combine(
         persistenceRepository.observe(Key.RecentlyViewedApps),
@@ -27,8 +24,9 @@ internal class RecentlyViewedAppsRepositoryImpl @Inject constructor(
         persistenceRepository.save(Key.RecentlyViewedApps, updated)
     }
 
+    override suspend fun hasRecents(): Boolean = persistenceRepository.observe(Key.RecentlyViewedApps).first().isNotEmpty()
+
     private companion object {
         const val MAX_RECENTS = 8
     }
 }
-

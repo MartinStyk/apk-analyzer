@@ -11,13 +11,13 @@ import sk.styk.martin.apkanalyzer.core.appanalysis.AppGeneralDataManager
 import sk.styk.martin.apkanalyzer.core.appanalysis.AppInstallSourceManager
 import sk.styk.martin.apkanalyzer.core.appanalysis.CertificateManager
 import sk.styk.martin.apkanalyzer.core.appanalysis.MAX_SDK_VERSION
-import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.appanalysis.model.InstallLocation
 import sk.styk.martin.apkanalyzer.core.applist.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.appstatistics.model.PercentagePair
 import sk.styk.martin.apkanalyzer.core.appstatistics.model.StatisticsData
 import sk.styk.martin.apkanalyzer.core.appstatistics.model.toMathStats
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
+import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import javax.inject.Inject
 
 private const val ANALYSIS_FLAGS =
@@ -173,7 +173,11 @@ internal constructor(
             definedPermissions[analyzeSuccess] = appData.definedPermissions.toFloat()
         }
 
-        private fun <T> addToMap(map: MutableMap<T, MutableList<String>>, key: T, packageName: String) {
+        private fun <T> addToMap(
+            map: MutableMap<T, MutableList<String>>,
+            key: T,
+            packageName: String,
+        ) {
             var apps: MutableList<String>? = map[key]
 
             if (apps != null) {

@@ -15,5 +15,6 @@ dependencies {
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.coil.core)
     implementation(libs.coil.compose)
+    implementation(libs.androidx.navigation3.ui)
     implementation(projects.core.common)
 }

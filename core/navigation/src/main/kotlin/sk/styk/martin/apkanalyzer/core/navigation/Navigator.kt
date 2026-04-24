@@ -5,19 +5,48 @@ import androidx.navigation3.runtime.NavKey
 class Navigator(val navigationState: NavigationState) {
     fun navigate(key: NavKey) {
         when (key) {
-            in navigationState.backStacks.keys -> navigationState.topLevelKey = key
-            else -> navigationState.backStacks[navigationState.topLevelKey]?.add(key)
+            navigationState.currentTopLevelKey -> clearSubStack()
+            in navigationState.topLevelKeys -> goToTopLevel(key)
+            else -> goToKey(key)
         }
     }
 
     fun goBack() {
-        val currentStack = navigationState.backStacks[navigationState.topLevelKey] ?: error("Backstack for ${navigationState.topLevelKey} not found")
-        val currentRoute = currentStack.last()
+        when (navigationState.currentKey) {
+            navigationState.startKey -> error("You cannot go back from the start route")
 
-        if (currentRoute == navigationState.topLevelKey) {
-            navigationState.topLevelKey = navigationState.startKey
-        } else {
-            currentStack.removeLastOrNull()
+            navigationState.currentTopLevelKey -> {
+                // We're at the base of the current sub stack, go back to the previous top level stack.
+                navigationState.topLevelStack.removeLastOrNull()
+            }
+
+            else -> navigationState.currentSubStack.removeLastOrNull()
+        }
+    }
+
+    private fun goToKey(key: NavKey) {
+        navigationState.currentSubStack.apply {
+            remove(key)
+            add(key)
+        }
+    }
+
+    private fun goToTopLevel(key: NavKey) {
+        navigationState.topLevelStack.apply {
+            if (key == navigationState.startKey) {
+                // This is the start key. Clear the stack so it's added as the only key.
+                clear()
+            } else {
+                // Remove it if it's already in the stack so it's added at the end.
+                remove(key)
+            }
+            add(key)
+        }
+    }
+
+    private fun clearSubStack() {
+        navigationState.currentSubStack.run {
+            if (size > 1) subList(1, size).clear()
         }
     }
 }

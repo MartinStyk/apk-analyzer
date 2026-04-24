@@ -36,7 +36,11 @@ object AppOperations {
     }
 
     @JvmStatic
-    fun startForeignActivity(context: Context, packageName: String, activityName: String) {
+    fun startForeignActivity(
+        context: Context,
+        packageName: String,
+        activityName: String,
+    ) {
         val intent =
             Intent().apply {
                 component = ComponentName(packageName, activityName)

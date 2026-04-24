@@ -16,14 +16,10 @@ internal class PackageIconModule {
 
     @Provides
     @Singleton
-    fun provideImageLoader(
-        @ApplicationContext context: Context,
-        packageManager: PackageManager,
-    ): ImageLoader = ImageLoader.Builder(context)
+    fun provideImageLoader(@ApplicationContext context: Context, packageManager: PackageManager): ImageLoader = ImageLoader.Builder(context)
         .components {
             add(PackageIconKeyer())
             add(PackageIconFetcher.Factory(packageManager))
         }
         .build()
 }
-

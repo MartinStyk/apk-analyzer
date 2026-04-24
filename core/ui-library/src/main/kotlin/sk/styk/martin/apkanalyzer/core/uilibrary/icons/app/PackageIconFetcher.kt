@@ -17,10 +17,7 @@ internal class PackageIconKeyer : Keyer<PackageIcon> {
     override fun key(data: PackageIcon, options: Options): String = "package_icon:${data.packageName}"
 }
 
-internal class PackageIconFetcher(
-    private val data: PackageIcon,
-    private val packageManager: PackageManager,
-) : Fetcher {
+internal class PackageIconFetcher(private val data: PackageIcon, private val packageManager: PackageManager) : Fetcher {
 
     override suspend fun fetch(): FetchResult? {
         val drawable = runCatching {
@@ -37,11 +34,11 @@ internal class PackageIconFetcher(
         )
     }
 
-    class Factory(
-        private val packageManager: PackageManager,
-    ) : Fetcher.Factory<PackageIcon> {
-        override fun create(data: PackageIcon, options: Options, imageLoader: ImageLoader): Fetcher =
-            PackageIconFetcher(data, packageManager)
+    class Factory(private val packageManager: PackageManager) : Fetcher.Factory<PackageIcon> {
+        override fun create(
+            data: PackageIcon,
+            options: Options,
+            imageLoader: ImageLoader,
+        ): Fetcher = PackageIconFetcher(data, packageManager)
     }
 }
-

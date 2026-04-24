@@ -30,8 +30,7 @@ constructor(private val packageManager: PackageManager) {
         null
     }
 
-    fun isSystemInstalledApp(packageInfo: PackageInfo): Boolean =
-        packageInfo.applicationInfo?.let { it.flags and ApplicationInfo.FLAG_SYSTEM != 0 } ?: false
+    fun isSystemInstalledApp(packageInfo: PackageInfo): Boolean = packageInfo.applicationInfo?.let { it.flags and ApplicationInfo.FLAG_SYSTEM != 0 } ?: false
 
     private companion object {
         const val GOOGLE_PLAY_INSTALLER = "com.android.vending"

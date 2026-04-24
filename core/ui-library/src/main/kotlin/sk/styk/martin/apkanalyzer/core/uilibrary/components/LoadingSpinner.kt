@@ -35,4 +35,3 @@ private fun LoadingSpinnerPreview() {
         LoadingSpinner()
     }
 }
-

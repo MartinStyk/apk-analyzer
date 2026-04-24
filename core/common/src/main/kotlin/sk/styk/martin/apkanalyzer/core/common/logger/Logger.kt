@@ -22,14 +22,27 @@ object Logger {
 
     fun w(tag: String, message: String) = Timber.tag(tag).w(message)
 
-    fun w(tag: String, t: Throwable, message: String) = Timber.tag(tag).w(t, message)
+    fun w(
+        tag: String,
+        t: Throwable,
+        message: String,
+    ) = Timber.tag(tag).w(t, message)
 
     fun e(tag: String, message: String) = Timber.tag(tag).e(message)
 
-    fun e(tag: String, t: Throwable, message: String) = Timber.tag(tag).e(t, message)
+    fun e(
+        tag: String,
+        t: Throwable,
+        message: String,
+    ) = Timber.tag(tag).e(t, message)
 
     private class FirebaseTree : Timber.DebugTree() {
-        override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+        override fun log(
+            priority: Int,
+            tag: String?,
+            message: String,
+            t: Throwable?,
+        ) {
             FirebaseCrashlytics.getInstance().log("${priority.toPriorityChar()}/$tag: $message")
             if (priority >= Log.WARN && t != null) {
                 FirebaseCrashlytics.getInstance().recordException(t)

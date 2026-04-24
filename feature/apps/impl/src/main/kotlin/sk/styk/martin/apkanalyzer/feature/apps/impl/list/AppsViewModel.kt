@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.feature.apps.impl
+package sk.styk.martin.apkanalyzer.feature.apps.impl.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,57 +12,55 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.text.Collator
-import java.util.Locale
 import sk.styk.martin.apkanalyzer.core.applist.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.applist.RecentlyViewedAppsRepository
 import sk.styk.martin.apkanalyzer.core.applist.model.InstalledApp
+import java.text.Collator
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
-class AppsViewModel @Inject constructor(
-    installedAppsRepository: InstalledAppsRepository,
-    private val recentlyViewedAppsRepository: RecentlyViewedAppsRepository,
-) : ViewModel() {
+class AppsViewModel @Inject constructor(installedAppsRepository: InstalledAppsRepository, private val recentlyViewedAppsRepository: RecentlyViewedAppsRepository) : ViewModel() {
 
-    private val searchQuery = MutableStateFlow("")
     private val sortType = MutableStateFlow(SortType.Name)
     private val sortAscending = MutableStateFlow(true)
 
     private val eventChannel = Channel<AppsEvent>(Channel.BUFFERED)
     val events = eventChannel.receiveAsFlow()
 
-    private val allApps = installedAppsRepository.apps()
-        .map { apps -> apps.map { it.toListItem() } }
+    private val appsFlow = installedAppsRepository.apps()
+        .map { apps ->
+            AppListState.Content(apps = apps.map { it.toListItem() }.toImmutableList())
+        }
 
-    private val recentApps = recentlyViewedAppsRepository.recents()
-        .map { apps -> apps.map { it.toListItem() }.toImmutableList() }
+    private val recentsFlow = recentlyViewedAppsRepository.recents()
+        .map { apps ->
+            if (apps.isEmpty()) {
+                RecentsState.NoRecents
+            } else {
+                RecentsState.Content(apps.map { it.toListItem() }.toImmutableList())
+            }
+        }
 
     val state = combine(
-        allApps,
-        recentApps,
-        searchQuery,
+        appsFlow,
+        recentsFlow,
         sortType,
         sortAscending,
-    ) { apps, recents, query, sort, ascending ->
-        val filtered = apps
-            .filter { it.matchesQuery(query) }
-            .sortedWith(sort.comparator(ascending))
-            .toImmutableList()
-
-        AppsState.Ready(
-            apps = filtered,
-            recentApps = recents,
-            searchQuery = query,
+    ) { apps, recents, sort, ascending ->
+        val sortedApps = apps.copy(
+            apps = apps.apps.sortedWith(sort.comparator(ascending)).toImmutableList(),
+        )
+        AppsState(
+            apps = sortedApps,
+            recents = recents,
             sortType = sort,
             sortAscending = ascending,
-            totalAppCount = apps.size,
         )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AppsState.Loading)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AppsState())
 
     fun onAction(action: AppsAction) {
         when (action) {
-            is AppsAction.SearchQueryChanged -> searchQuery.value = action.query
             is AppsAction.SortTypeSelected -> {
                 if (sortType.value == action.sortType) {
                     sortAscending.value = !sortAscending.value
@@ -76,12 +74,11 @@ class AppsViewModel @Inject constructor(
                 viewModelScope.launch { recentlyViewedAppsRepository.addRecent(action.packageName) }
                 eventChannel.trySend(AppsEvent.NavigateToAppDetail(action.packageName))
             }
-        }
-    }
 
-    private fun AppListItem.matchesQuery(query: String): Boolean {
-        if (query.isBlank()) return true
-        return applicationName.contains(query, ignoreCase = true) || packageName.contains(query, ignoreCase = true)
+            is AppsAction.SearchClicked -> {
+                eventChannel.trySend(AppsEvent.NavigateToSearch)
+            }
+        }
     }
 
     private fun SortType.comparator(ascending: Boolean): Comparator<AppListItem> {
@@ -90,8 +87,11 @@ class AppsViewModel @Inject constructor(
                 val collator = Collator.getInstance(Locale.getDefault()).apply { strength = Collator.SECONDARY }
                 Comparator { a, b -> collator.compare(a.applicationName, b.applicationName) }
             }
+
             SortType.Size -> compareBy { it.apkSize }
+
             SortType.InstallDate -> compareBy { it.installTime }
+
             SortType.TargetSdk -> compareBy { it.targetSdk }
         }
         return if (ascending) base else base.reversed()
@@ -102,8 +102,6 @@ class AppsViewModel @Inject constructor(
         applicationName = applicationName,
         targetSdk = targetSdk,
         apkSize = apkSize,
-        source = source,
-        versionName = versionName,
         installTime = installTime,
     )
 }

@@ -41,9 +41,6 @@ class CollapsingHeaderState {
 @Composable
 fun rememberCollapsingHeaderState(): CollapsingHeaderState = remember { CollapsingHeaderState() }
 
-fun Modifier.collapsingHeaderContainer(state: CollapsingHeaderState): Modifier =
-    this.nestedScroll(state.nestedScrollConnection)
+fun Modifier.collapsingHeaderContainer(state: CollapsingHeaderState): Modifier = this.nestedScroll(state.nestedScrollConnection)
 
-fun Modifier.collapsingHeader(state: CollapsingHeaderState): Modifier =
-    this.onGloballyPositioned { state.headerHeightPx = it.size.height.toFloat() }
-
+fun Modifier.collapsingHeader(state: CollapsingHeaderState): Modifier = this.onGloballyPositioned { state.headerHeightPx = it.size.height.toFloat() }
