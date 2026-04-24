@@ -9,6 +9,8 @@ sealed class Key<T> {
 
     data object RecentlyViewedApps : Key<List<String>>()
 
+    data object RecentlyViewedAppsEnabled : Key<Boolean>()
+
     data object SearchHistory : Key<List<String>>()
 }
 

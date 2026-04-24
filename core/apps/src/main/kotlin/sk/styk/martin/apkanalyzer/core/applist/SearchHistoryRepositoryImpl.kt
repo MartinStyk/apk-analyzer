@@ -11,13 +11,13 @@ internal class SearchHistoryRepositoryImpl @Inject constructor(private val persi
     override fun queries(): Flow<List<String>> = persistenceRepository.observe(Key.SearchHistory)
 
     override suspend fun addQuery(query: String) {
-        val current = persistenceRepository.observe(Key.SearchHistory).first()
+        val current = persistenceRepository.get(Key.SearchHistory)
         val updated = (listOf(query) + current.filter { it != query }).take(MAX_HISTORY)
         persistenceRepository.save(Key.SearchHistory, updated)
     }
 
     override suspend fun removeQuery(query: String) {
-        val current = persistenceRepository.observe(Key.SearchHistory).first()
+        val current = persistenceRepository.get(Key.SearchHistory)
         persistenceRepository.save(Key.SearchHistory, current.filter { it != query })
     }
 

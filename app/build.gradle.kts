@@ -45,6 +45,7 @@ dependencies {
     implementation(projects.feature.apps.impl)
     implementation(projects.feature.permissions.impl)
     implementation(projects.feature.statistics.impl)
+    implementation(projects.feature.settings.impl)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)

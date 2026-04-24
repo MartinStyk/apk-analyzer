@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">Settings</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_color_scheme">Color scheme</string>
+    <string name="settings_color_scheme_day">Day</string>
+    <string name="settings_color_scheme_night">Night</string>
+    <string name="settings_color_scheme_follow_system">Follow system</string>
+    <string name="settings_apps_section">Apps</string>
+    <string name="settings_recently_viewed_toggle">Recently viewed apps</string>
+</resources>
+

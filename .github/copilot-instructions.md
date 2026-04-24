@@ -73,7 +73,7 @@ When creating new modules, use these convention plugins in `build.gradle.kts`:
 ### MVVM Architecture
 
 #### Component Responsibilities
-* **Composable** - Presenter layer. Reacts to `state`, collects `event` via `LaunchedEffect`, and delegates user interaction to VM. Callback naming: `on<Action>` or `goTo<Destination>`.
+* **Composable** - Presenter layer. Reacts to `state`, collects `event` via `LaunchedEffect`, and delegates user interaction to VM. Callback naming: `on<Action>`. Parameter names should always be in present tense. Never use past tense like `on<Button>Clicked`.
 * **ViewModel** - Extends `ViewModel()` directly (no custom BaseViewModel). Combines internal flows into a single `state`. Communicates with Core layer (Managers/Repositories).
 
 #### ViewModel Pattern

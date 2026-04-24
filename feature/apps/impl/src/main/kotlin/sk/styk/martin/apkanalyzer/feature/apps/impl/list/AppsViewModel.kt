@@ -78,6 +78,14 @@ class AppsViewModel @Inject constructor(installedAppsRepository: InstalledAppsRe
             is AppsAction.SearchClicked -> {
                 eventChannel.trySend(AppsEvent.NavigateToSearch)
             }
+
+            is AppsAction.OpenSettings -> {
+                eventChannel.trySend(AppsEvent.NavigateToSettings)
+            }
+
+            is AppsAction.OpenApkDetails -> {
+                eventChannel.trySend(AppsEvent.NavigateToShowApkDetails)
+            }
         }
     }
 

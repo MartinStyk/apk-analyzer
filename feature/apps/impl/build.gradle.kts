@@ -8,6 +8,7 @@ android {
 
 dependencies {
     api(projects.feature.apps.api)
+    implementation(projects.feature.settings.api)
     implementation(projects.core.apps)
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.coil.compose)

@@ -26,7 +26,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.lazylist.ListItemPosition
 import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.card
 import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.shimmer
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
-import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shape
+import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 
 private val SKELETON_ICON_SIZE = 44.dp
 private val SKELETON_RECENT_ICON_SIZE = 56.dp
@@ -34,7 +34,7 @@ private val SKELETON_RECENT_ICON_SIZE = 56.dp
 @Composable
 internal fun AppListItemRowSkeleton(position: ListItemPosition, modifier: Modifier = Modifier) {
     val shape = when (position) {
-        ListItemPosition.Single -> Shape.CardShape
+        ListItemPosition.Single -> Shapes.CardShape
         ListItemPosition.First -> RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
         ListItemPosition.Middle -> RectangleShape
         ListItemPosition.Last -> RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)
@@ -50,7 +50,7 @@ internal fun AppListItemRowSkeleton(position: ListItemPosition, modifier: Modifi
         Box(
             modifier = Modifier
                 .size(SKELETON_ICON_SIZE)
-                .clip(Shape.CardShape)
+                .clip(Shapes.CardShape)
                 .background(AppTheme.colors.surfaceVariant)
                 .shimmer(),
         )

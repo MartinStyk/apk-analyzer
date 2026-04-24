@@ -12,6 +12,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -20,6 +21,7 @@ private val KEY_COLOR_SCHEME = stringPreferencesKey("dayNightPref")
 private val KEY_ONBOARDING = booleanPreferencesKey("first_app_start")
 private val KEY_APP_START_NUMBER = intPreferencesKey("app_start_number")
 private val KEY_RECENTLY_VIEWED = stringPreferencesKey("recently_viewed_apps")
+private val KEY_RECENTLY_VIEWED_ENABLED = booleanPreferencesKey("recently_viewed_apps_enabled")
 private val KEY_SEARCH_HISTORY = stringPreferencesKey("search_history")
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
@@ -45,7 +47,9 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
 class DataStorePersistenceRepository
 @Inject
 constructor(@param:ApplicationContext private val context: Context) : PersistenceRepository {
-    override fun <T> observe(key: Key<T>): Flow<T> = context.dataStore.data.map { prefs -> key.read(prefs) }
+    override fun <T> observe(key: Key<T>): Flow<T> = context.dataStore.data.map { key.read(it) }
+
+    override suspend fun <T> get(key: Key<T>): T = context.dataStore.data.first().let { key.read(it) }
 
     override suspend fun <T> save(key: Key<T>, value: T) {
         context.dataStore.edit { prefs -> key.write(prefs, value) }
@@ -71,6 +75,10 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
         Key.RecentlyViewedApps -> {
             val raw = prefs[KEY_RECENTLY_VIEWED] ?: ""
             if (raw.isEmpty()) emptyList() else raw.split("|")
+        }
+
+        Key.RecentlyViewedAppsEnabled -> {
+            prefs[KEY_RECENTLY_VIEWED_ENABLED] ?: true
         }
 
         Key.SearchHistory -> {
@@ -100,6 +108,10 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
         Key.RecentlyViewedApps -> {
             @Suppress("UNCHECKED_CAST")
             prefs[KEY_RECENTLY_VIEWED] = (value as List<String>).joinToString("|")
+        }
+
+        Key.RecentlyViewedAppsEnabled -> {
+            prefs[KEY_RECENTLY_VIEWED_ENABLED] = value as Boolean
         }
 
         Key.SearchHistory -> {

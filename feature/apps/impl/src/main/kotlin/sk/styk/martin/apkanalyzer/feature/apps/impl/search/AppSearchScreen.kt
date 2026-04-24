@@ -40,7 +40,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.uilibrary.lazylist.itemsPositioned
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
-import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shape
+import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.apps.impl.R
 import sk.styk.martin.apkanalyzer.feature.apps.impl.appitem.AppListItemRow
 import sk.styk.martin.apkanalyzer.feature.apps.impl.list.AppListItem
@@ -212,7 +212,7 @@ fun SearchHistoryRow(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
-            .clip(Shape.CardShape)
+            .clip(Shapes.CardShape)
             .clickable(onClick = onClick)
             .padding(horizontal = 16.dp, vertical = 8.dp),
     ) {

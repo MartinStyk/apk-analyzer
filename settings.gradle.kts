@@ -34,4 +34,6 @@ include(
     ":feature:statistics:impl",
     ":feature:permissions:api",
     ":feature:permissions:impl",
+    ":feature:settings:api",
+    ":feature:settings:impl",
 )

@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
-import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shape
+import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 
 @Composable
 fun Chip(
@@ -43,7 +43,7 @@ fun Chip(
         } else {
             null
         },
-        shape = Shape.CardShape,
+        shape = Shapes.CardShape,
         colors = FilterChipDefaults.filterChipColors(
             containerColor = AppTheme.colors.surfaceVariant,
             labelColor = AppTheme.colors.onSurfaceVariant,

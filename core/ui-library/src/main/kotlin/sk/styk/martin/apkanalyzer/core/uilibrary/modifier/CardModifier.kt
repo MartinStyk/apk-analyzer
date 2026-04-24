@@ -6,9 +6,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
-import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shape
+import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes as AppShape
 
 @Composable
-fun Modifier.card(shape: Shape = Shape.CardShape): Modifier = this
+fun Modifier.card(shape: Shape = AppShape.CardShape): Modifier = this
     .clip(shape)
     .background(AppTheme.colors.surface, shape)

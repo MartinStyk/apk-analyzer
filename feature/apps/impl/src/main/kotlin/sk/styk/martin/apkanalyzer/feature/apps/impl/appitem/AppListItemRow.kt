@@ -26,7 +26,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.uilibrary.lazylist.ListItemPosition
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
-import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shape
+import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.apps.impl.list.AppListItem
 import sk.styk.martin.apkanalyzer.feature.apps.impl.list.SortType
 import java.text.DateFormat
@@ -43,7 +43,7 @@ internal fun AppListItemRow(
 ) {
     val shape: Shape =
         when (position) {
-            ListItemPosition.Single -> Shape.CardShape
+            ListItemPosition.Single -> Shapes.CardShape
             ListItemPosition.First -> RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
             ListItemPosition.Middle -> RectangleShape
             ListItemPosition.Last -> RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)
@@ -55,7 +55,7 @@ internal fun AppListItemRow(
             .fillMaxWidth()
             .background(AppTheme.colors.surface, shape)
             .padding(2.dp)
-            .clip(Shape.CardShape)
+            .clip(Shapes.CardShape)
             .clickable(onClick = onClick)
             .padding(horizontal = 12.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,

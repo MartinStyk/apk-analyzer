@@ -54,14 +54,16 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.collapsingHeaderContai
 import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.rememberCollapsingHeaderState
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
-import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shape
+import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.apps.impl.R
 import sk.styk.martin.apkanalyzer.feature.apps.impl.appitem.AppListItemRow
 
 @Composable
 fun AppsScreen(
-    onAppClick: (String) -> Unit,
-    onSearchClick: () -> Unit,
+    onAppDetails: (String) -> Unit,
+    onSearch: () -> Unit,
+    onSettings: () -> Unit,
+    onApkDetails: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AppsViewModel = hiltViewModel(),
 ) {
@@ -70,8 +72,10 @@ fun AppsScreen(
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
-                is AppsEvent.NavigateToAppDetail -> onAppClick(event.packageName)
-                is AppsEvent.NavigateToSearch -> onSearchClick()
+                is AppsEvent.NavigateToAppDetail -> onAppDetails(event.packageName)
+                is AppsEvent.NavigateToSearch -> onSearch()
+                is AppsEvent.NavigateToSettings -> onSettings()
+                is AppsEvent.NavigateToShowApkDetails -> onApkDetails()
             }
         }
     }
@@ -116,12 +120,12 @@ private fun AppsContent(
                 IconButton(
                     imageVector = ApkAnalyzerIcons.Settings,
                     style = IconButtonStyle.Filled,
-                    onClick = {},
+                    onClick = { onAction(AppsAction.OpenSettings) },
                 )
                 IconButton(
                     imageVector = ApkAnalyzerIcons.FileUpload,
                     style = IconButtonStyle.Filled,
-                    onClick = {},
+                    onClick = { onAction(AppsAction.OpenApkDetails) },
                 )
             }
             ControlRow(
@@ -295,7 +299,7 @@ private fun RecentAppItem(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .width(80.dp)
-            .clip(Shape.CardShape)
+            .clip(Shapes.CardShape)
             .clickable(onClick = onClick)
             .padding(vertical = 12.dp),
     ) {
