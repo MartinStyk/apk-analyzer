@@ -1,7 +1,6 @@
 package sk.styk.martin.apkanalyzer.core.applist
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import sk.styk.martin.apkanalyzer.core.common.settings.Key
 import sk.styk.martin.apkanalyzer.core.common.settings.PersistenceRepository
 import javax.inject.Inject

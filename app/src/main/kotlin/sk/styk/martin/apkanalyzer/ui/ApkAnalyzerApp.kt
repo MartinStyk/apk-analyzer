@@ -18,7 +18,6 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.LocalSharedTransitionS
 import sk.styk.martin.apkanalyzer.feature.apps.api.AppsNavKey
 import sk.styk.martin.apkanalyzer.feature.apps.impl.navigation.appEntries
 import sk.styk.martin.apkanalyzer.feature.permissions.impl.navigation.permissionEntries
-import sk.styk.martin.apkanalyzer.feature.settings.api.SettingsNavKey
 import sk.styk.martin.apkanalyzer.feature.settings.impl.navigation.settingsEntries
 import sk.styk.martin.apkanalyzer.feature.statistics.impl.navigation.statisticsEntries
 import sk.styk.martin.apkanalyzer.ui.navigation.TOP_LEVEL_DESTINATIONS
@@ -39,19 +38,19 @@ internal fun ApkAnalyzerApp() {
             NavigationBar(
                 items = TOP_LEVEL_DESTINATIONS,
                 selectedKey = navigationState.currentTopLevelKey,
+                isVisible = navigationState.currentKey in navigationState.topLevelKeys,
                 onSelectKey = navigator::navigate,
             )
         },
     ) { paddings ->
         SharedTransitionLayout {
             CompositionLocalProvider(LocalSharedTransitionScope provides this) {
-                val entryProvider =
-                    entryProvider {
-                        appEntries(navigator)
-                        permissionEntries()
-                        statisticsEntries()
-                        settingsEntries(navigator)
-                    }
+                val entryProvider = entryProvider {
+                    appEntries(navigator)
+                    permissionEntries()
+                    statisticsEntries()
+                    settingsEntries(navigator)
+                }
                 NavDisplay(
                     modifier = Modifier
                         .fillMaxWidth()

@@ -8,6 +8,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -15,12 +16,21 @@ import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.applist.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.applist.RecentlyViewedAppsRepository
 import sk.styk.martin.apkanalyzer.core.applist.model.InstalledApp
+import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppFilterRepository
+import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.FilterAppsUseCase
 import java.text.Collator
 import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
-class AppsViewModel @Inject constructor(installedAppsRepository: InstalledAppsRepository, private val recentlyViewedAppsRepository: RecentlyViewedAppsRepository) : ViewModel() {
+class AppsViewModel @Inject constructor(
+    installedAppsRepository: InstalledAppsRepository,
+    private val recentlyViewedAppsRepository: RecentlyViewedAppsRepository,
+    private val appFilterRepository: AppFilterRepository,
+    private val filterApps: FilterAppsUseCase,
+    dispatcherProvider: DispatcherProvider,
+) : ViewModel() {
 
     private val sortType = MutableStateFlow(SortType.Name)
     private val sortAscending = MutableStateFlow(true)
@@ -28,10 +38,7 @@ class AppsViewModel @Inject constructor(installedAppsRepository: InstalledAppsRe
     private val eventChannel = Channel<AppsEvent>(Channel.BUFFERED)
     val events = eventChannel.receiveAsFlow()
 
-    private val appsFlow = installedAppsRepository.apps()
-        .map { apps ->
-            AppListState.Content(apps = apps.map { it.toListItem() }.toImmutableList())
-        }
+    private val rawAppsFlow = installedAppsRepository.apps()
 
     private val recentsFlow = recentlyViewedAppsRepository.recents()
         .map { apps ->
@@ -42,22 +49,33 @@ class AppsViewModel @Inject constructor(installedAppsRepository: InstalledAppsRe
             }
         }
 
-    val state = combine(
-        appsFlow,
-        recentsFlow,
-        sortType,
-        sortAscending,
-    ) { apps, recents, sort, ascending ->
-        val sortedApps = apps.copy(
-            apps = apps.apps.sortedWith(sort.comparator(ascending)).toImmutableList(),
-        )
+    private val filteredItemsFlow = combine(rawAppsFlow, appFilterRepository.filter) { rawApps, filter ->
+        filterApps(rawApps, filter).map { it.toListItem() }.toImmutableList() to filter
+    }.flowOn(dispatcherProvider.default())
+
+    val state = combine(filteredItemsFlow, recentsFlow, sortType, sortAscending) { (filteredApps, filter), recents, sortType, sortAscending ->
+        val (effectiveSortType, effectiveAscending) = when {
+            filter.isRecentInstallActive -> SortType.InstallDate to false
+            filter.isRecentUpdateActive -> SortType.LastUpdated to false
+            else -> sortType to sortAscending
+        }
+
+        val sortedItems = filteredApps
+            .sortedWith(effectiveSortType.comparator(effectiveAscending))
+            .toImmutableList()
+
+        val showRecents = !filter.isActive
+
         AppsState(
-            apps = sortedApps,
-            recents = recents,
-            sortType = sort,
-            sortAscending = ascending,
+            apps = AppListState.Content(apps = sortedItems),
+            recents = if (showRecents) recents else RecentsState.NoRecents,
+            sortType = effectiveSortType,
+            sortAscending = effectiveAscending,
+            activeFilter = filter,
         )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AppsState())
+    }
+        .flowOn(dispatcherProvider.default())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AppsState())
 
     fun onAction(action: AppsAction) {
         when (action) {
@@ -75,17 +93,15 @@ class AppsViewModel @Inject constructor(installedAppsRepository: InstalledAppsRe
                 eventChannel.trySend(AppsEvent.NavigateToAppDetail(action.packageName))
             }
 
-            is AppsAction.SearchClicked -> {
-                eventChannel.trySend(AppsEvent.NavigateToSearch)
-            }
+            is AppsAction.SearchClicked -> eventChannel.trySend(AppsEvent.NavigateToSearch)
 
-            is AppsAction.OpenSettings -> {
-                eventChannel.trySend(AppsEvent.NavigateToSettings)
-            }
+            is AppsAction.OpenSettings -> eventChannel.trySend(AppsEvent.NavigateToSettings)
 
-            is AppsAction.OpenApkDetails -> {
-                eventChannel.trySend(AppsEvent.NavigateToShowApkDetails)
-            }
+            is AppsAction.OpenApkDetails -> eventChannel.trySend(AppsEvent.NavigateToShowApkDetails)
+
+            is AppsAction.FilterClicked -> eventChannel.trySend(AppsEvent.NavigateToFilter)
+
+            is AppsAction.ClearAllFilters -> appFilterRepository.clear()
         }
     }
 
@@ -101,6 +117,8 @@ class AppsViewModel @Inject constructor(installedAppsRepository: InstalledAppsRe
             SortType.InstallDate -> compareBy { it.installTime }
 
             SortType.TargetSdk -> compareBy { it.targetSdk }
+
+            SortType.LastUpdated -> compareBy { it.lastUpdateTime }
         }
         return if (ascending) base else base.reversed()
     }
@@ -111,5 +129,7 @@ class AppsViewModel @Inject constructor(installedAppsRepository: InstalledAppsRe
         targetSdk = targetSdk,
         apkSize = apkSize,
         installTime = installTime,
+        lastUpdateTime = lastUpdateTime,
+        source = source,
     )
 }

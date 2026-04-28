@@ -31,6 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
+import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.IconButton
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.IconButtonStyle
@@ -42,13 +43,15 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.apps.impl.R
-import sk.styk.martin.apkanalyzer.feature.apps.impl.appitem.AppListItemRow
+import sk.styk.martin.apkanalyzer.feature.apps.impl.components.appitem.AppListItemRow
+import sk.styk.martin.apkanalyzer.feature.apps.impl.components.quickfilter.QuickFilterRow
 import sk.styk.martin.apkanalyzer.feature.apps.impl.list.AppListItem
 
 @Composable
 fun AppSearchScreen(
     onAppClick: (String) -> Unit,
     onBack: () -> Unit,
+    onFilter: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AppSearchViewModel = hiltViewModel(),
 ) {
@@ -58,6 +61,7 @@ fun AppSearchScreen(
         viewModel.events.collect { event ->
             when (event) {
                 is AppSearchEvent.NavigateToAppDetail -> onAppClick(event.packageName)
+                is AppSearchEvent.NavigateToFilter -> onFilter()
             }
         }
     }
@@ -93,7 +97,7 @@ private fun AppSearchContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(AppTheme.colors.background)
-                .padding(start = 4.dp, end = 16.dp, top = 12.dp, bottom = 12.dp),
+                .padding(start = 4.dp, end = 16.dp, top = 12.dp, bottom = 8.dp),
         ) {
             IconButton(
                 imageVector = ApkAnalyzerIcons.Back,
@@ -109,6 +113,10 @@ private fun AppSearchContent(
                     .focusRequester(focusRequester),
             )
         }
+
+        QuickFilterRow(
+            onFilter = { onAction(AppSearchAction.FilterClicked) },
+        )
 
         when {
             state.query.isNotBlank() && state.results.isEmpty() -> NoResultsContent(query = state.query)
@@ -131,7 +139,7 @@ private fun AppSearchContent(
 }
 
 @Composable
-private fun SearchResults(results: ImmutableList<AppListItem>, onAppClick: (String) -> Unit) {
+private fun SearchResults(results: ImmutableList<AppListItem>, onAppClick: (AppListItem) -> Unit) {
     val resultsListState = rememberLazyListState()
     LaunchedEffect(results) {
         resultsListState.scrollToItem(0)
@@ -147,7 +155,7 @@ private fun SearchResults(results: ImmutableList<AppListItem>, onAppClick: (Stri
         ) { position, app ->
             AppListItemRow(
                 app = app,
-                onClick = { onAppClick(app.packageName) },
+                onClick = { onAppClick(app) },
                 position = position,
             )
         }
@@ -171,7 +179,7 @@ private fun RecentSearchesContent(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 4.dp),
+                    .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 4.dp),
             ) {
                 Text(
                     text = stringResource(R.string.search_history_title),
@@ -285,16 +293,11 @@ private fun AppSearchContentEmptyPreview() {
 
 @Preview
 @Composable
-private fun AppSearchContentHistoryPreview() {
+private fun AppSearchContentWithActiveFiltersPreview() {
     ApkAnalyzerTheme {
         AppSearchContent(
             state = AppSearchState(
                 totalAppCount = 342,
-                searchHistory = persistentListOf(
-                    "com.google.android.sdk",
-                    "Firebase",
-                    "Target SDK 34",
-                ),
             ),
             onAction = {},
             onBack = {},
@@ -316,6 +319,8 @@ private fun AppSearchContentResultsPreview() {
                         targetSdk = 34,
                         apkSize = AppSize(67_108_864),
                         installTime = 0L,
+                        lastUpdateTime = 0L,
+                        source = AppSource.GooglePlay,
                     ),
                 ),
                 totalAppCount = 342,

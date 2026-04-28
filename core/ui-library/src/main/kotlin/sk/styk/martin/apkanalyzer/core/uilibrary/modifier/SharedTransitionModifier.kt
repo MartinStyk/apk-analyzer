@@ -19,3 +19,15 @@ fun Modifier.sharedElement(key: Any): Modifier {
         )
     }
 }
+
+@Composable
+fun Modifier.sharedBounds(key: Any): Modifier {
+    val sharedTransitionScope = LocalSharedTransitionScope.current ?: return this
+    val animatedVisibilityScope = LocalNavAnimatedContentScope.current
+    return with(sharedTransitionScope) {
+        sharedBounds(
+            sharedContentState = rememberSharedContentState(key = key),
+            animatedVisibilityScope = animatedVisibilityScope,
+        )
+    }
+}

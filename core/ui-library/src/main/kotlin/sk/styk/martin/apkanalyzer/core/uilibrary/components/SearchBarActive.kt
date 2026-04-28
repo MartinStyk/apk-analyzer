@@ -1,8 +1,5 @@
 package sk.styk.martin.apkanalyzer.core.uilibrary.components
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -34,7 +31,7 @@ fun SearchBarActive(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-            .sharedElement(key = "search_bar")
+            .sharedElement(key = "search-bar")
             .fillMaxWidth()
             .heightIn(min = 48.dp)
             .background(

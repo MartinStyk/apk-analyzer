@@ -2,7 +2,6 @@ package sk.styk.martin.apkanalyzer.feature.apps.impl.list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,7 +20,6 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -40,8 +38,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
+import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.AppIcon
+import sk.styk.martin.apkanalyzer.core.uilibrary.components.BottomSheet
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Chip
+import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.IconButton
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.IconButtonStyle
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.InactiveSearchBar
@@ -52,11 +53,15 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.card
 import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.collapsingHeader
 import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.collapsingHeaderContainer
 import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.rememberCollapsingHeaderState
+import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.sharedBounds
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.apps.impl.R
-import sk.styk.martin.apkanalyzer.feature.apps.impl.appitem.AppListItemRow
+import sk.styk.martin.apkanalyzer.feature.apps.impl.components.AppListItemRowSkeleton
+import sk.styk.martin.apkanalyzer.feature.apps.impl.components.RecentAppsRowSkeleton
+import sk.styk.martin.apkanalyzer.feature.apps.impl.components.appitem.AppListItemRow
+import sk.styk.martin.apkanalyzer.feature.apps.impl.components.quickfilter.QuickFilterRow
 
 @Composable
 fun AppsScreen(
@@ -64,6 +69,7 @@ fun AppsScreen(
     onSearch: () -> Unit,
     onSettings: () -> Unit,
     onApkDetails: () -> Unit,
+    onFilter: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AppsViewModel = hiltViewModel(),
 ) {
@@ -76,6 +82,7 @@ fun AppsScreen(
                 is AppsEvent.NavigateToSearch -> onSearch()
                 is AppsEvent.NavigateToSettings -> onSettings()
                 is AppsEvent.NavigateToShowApkDetails -> onApkDetails()
+                is AppsEvent.NavigateToFilter -> onFilter()
             }
         }
     }
@@ -93,6 +100,7 @@ private fun AppsContent(
     onAction: (AppsAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var showSortSheet by remember { mutableStateOf(false) }
     val collapsingState = rememberCollapsingHeaderState()
 
     Box(
@@ -109,7 +117,7 @@ private fun AppsContent(
                 .collapsingHeader(collapsingState),
         ) {
             Row(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 InactiveSearchBar(
@@ -121,6 +129,7 @@ private fun AppsContent(
                     imageVector = ApkAnalyzerIcons.Settings,
                     style = IconButtonStyle.Filled,
                     onClick = { onAction(AppsAction.OpenSettings) },
+                    modifier = Modifier.sharedBounds("settings"),
                 )
                 IconButton(
                     imageVector = ApkAnalyzerIcons.FileUpload,
@@ -128,11 +137,8 @@ private fun AppsContent(
                     onClick = { onAction(AppsAction.OpenApkDetails) },
                 )
             }
-            ControlRow(
-                selectedSort = state.sortType,
-                ascending = state.sortAscending,
-                onSortSelect = { onAction(AppsAction.SortTypeSelected(it)) },
-                onFilterClick = {},
+            QuickFilterRow(
+                onFilter = { onAction(AppsAction.FilterClicked) },
             )
         }
 
@@ -159,12 +165,25 @@ private fun AppsContent(
                 sortType = state.sortType,
                 onAppClicked = { onAction(AppsAction.AppClicked(it)) },
             )
+
             appsSectionItems(
                 apps = state.apps,
+                isFiltering = state.activeFilter.isActive,
                 sortType = state.sortType,
                 onAppClicked = { onAction(AppsAction.AppClicked(it)) },
+                onClearFilters = { onAction(AppsAction.ClearAllFilters) },
+                onShowSort = { showSortSheet = true },
             )
         }
+    }
+
+    if (showSortSheet) {
+        SortBottomSheet(
+            sortType = state.sortType,
+            sortAscending = state.sortAscending,
+            onSortSelect = { onAction(AppsAction.SortTypeSelected(it)) },
+            onDismiss = { showSortSheet = false },
+        )
     }
 }
 
@@ -194,17 +213,30 @@ private fun LazyListScope.recentsSectionItems(
 
 private fun LazyListScope.appsSectionItems(
     apps: AppListState,
+    isFiltering: Boolean,
     sortType: SortType,
     onAppClicked: (String) -> Unit,
+    onClearFilters: () -> Unit,
+    onShowSort: () -> Unit,
 ) {
     item(key = "installed_apps_header") {
         Column {
             Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = stringResource(R.string.installed_apps),
-                style = AppTheme.typography.titleMedium,
-                color = AppTheme.colors.onBackground,
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = stringResource(R.string.installed_apps),
+                    style = AppTheme.typography.titleMedium,
+                    color = AppTheme.colors.onBackground,
+                    modifier = Modifier.weight(1f),
+                )
+                IconButton(
+                    imageVector = ApkAnalyzerIcons.Sort,
+                    style = if (sortType == SortType.Name) IconButtonStyle.Standard else IconButtonStyle.Highlighted,
+                    onClick = onShowSort,
+                    modifier = Modifier.size(22.dp),
+                )
+            }
+
             Spacer(modifier = Modifier.height(8.dp))
         }
     }
@@ -220,15 +252,116 @@ private fun LazyListScope.appsSectionItems(
             )
         }
 
-        is AppListState.Content -> itemsPositioned(
-            items = apps.apps,
-            key = { _, app -> app.packageName },
-        ) { position, app ->
-            AppListItemRow(
-                app = app,
-                onClick = { onAppClicked(app.packageName) },
-                position = position,
-                sortType = sortType,
+        is AppListState.Content -> {
+            if (apps.apps.isEmpty() && isFiltering) {
+                item(key = "empty_filtered") {
+                    EmptyFilteredState(
+                        onClearFilters = onClearFilters,
+                        modifier = Modifier.animateItem(),
+                    )
+                }
+            } else {
+                itemsPositioned(
+                    items = apps.apps,
+                    key = { _, app -> app.packageName },
+                ) { position, app ->
+                    AppListItemRow(
+                        app = app,
+                        onClick = { onAppClicked(app.packageName) },
+                        position = position,
+                        sortType = sortType,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun EmptyFilteredState(onClearFilters: () -> Unit, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Icon(
+            imageVector = ApkAnalyzerIcons.Search,
+            tint = AppTheme.colors.onSurfaceVariant,
+            modifier = Modifier.size(48.dp),
+        )
+        Text(
+            text = stringResource(R.string.apps_empty_filtered),
+            style = AppTheme.typography.bodyLarge,
+            color = AppTheme.colors.onSurfaceVariant,
+        )
+        Chip(
+            label = stringResource(R.string.apps_clear_filters),
+            onClick = onClearFilters,
+        )
+    }
+}
+
+@Composable
+private fun SortBottomSheet(
+    sortType: SortType,
+    sortAscending: Boolean,
+    onSortSelect: (SortType) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    BottomSheet(onDismiss = onDismiss) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+        ) {
+            Text(
+                text = stringResource(R.string.sort_bottom_sheet_title),
+                style = AppTheme.typography.titleMedium,
+                color = AppTheme.colors.onSurface,
+                modifier = Modifier.padding(bottom = 8.dp),
+            )
+            SortType.entries.filter { it != SortType.LastUpdated }.forEach { type ->
+                SortOptionRow(
+                    type = type,
+                    isSelected = sortType == type,
+                    ascending = sortAscending,
+                    onClick = { onSortSelect(type) },
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+}
+
+@Composable
+private fun SortOptionRow(
+    type: SortType,
+    isSelected: Boolean,
+    ascending: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(Shapes.CardShape)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 8.dp, vertical = 12.dp),
+    ) {
+        Text(
+            text = type.displayName(),
+            style = AppTheme.typography.bodyLarge,
+            color = if (isSelected) AppTheme.colors.primary else AppTheme.colors.onSurface,
+            modifier = Modifier.weight(1f),
+        )
+        if (isSelected) {
+            Icon(
+                imageVector = if (ascending) ApkAnalyzerIcons.SortAscending else ApkAnalyzerIcons.SortDescending,
+                tint = AppTheme.colors.primary,
+                modifier = Modifier.size(20.dp),
             )
         }
     }
@@ -263,10 +396,7 @@ private fun RecentsContent(
 ) {
     RecentsSection(modifier = modifier) {
         val listState = rememberLazyListState()
-
-        LaunchedEffect(recentApps) {
-            listState.animateScrollToItem(0)
-        }
+        LaunchedEffect(recentApps) { listState.animateScrollToItem(0) }
 
         LazyRow(
             state = listState,
@@ -304,9 +434,7 @@ private fun RecentAppItem(
             .padding(vertical = 12.dp),
     ) {
         AppIcon(packageName = app.packageName, size = 56.dp)
-
         Spacer(modifier = Modifier.height(4.dp))
-
         Text(
             text = app.applicationName,
             style = AppTheme.typography.labelSmall,
@@ -318,61 +446,12 @@ private fun RecentAppItem(
 }
 
 @Composable
-private fun ControlRow(
-    selectedSort: SortType,
-    ascending: Boolean,
-    onSortSelect: (SortType) -> Unit,
-    onFilterClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp, bottom = 4.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Chip(
-            label = stringResource(R.string.filter),
-            onClick = onFilterClick,
-            trailingIcon = ApkAnalyzerIcons.Lock,
-        )
-
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .size(width = 1.dp, height = 24.dp)
-                .background(AppTheme.colors.surfaceVariant),
-        )
-
-        Row(
-            modifier = Modifier
-                .weight(1f)
-                .horizontalScroll(rememberScrollState()),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            SortType.entries.forEach { sortType ->
-                val isSelected = sortType == selectedSort
-                Chip(
-                    label = sortType.displayName(),
-                    selected = isSelected,
-                    trailingIcon = if (isSelected) {
-                        if (ascending) ApkAnalyzerIcons.SortAscending else ApkAnalyzerIcons.SortDescending
-                    } else {
-                        null
-                    },
-                    onClick = { onSortSelect(sortType) },
-                )
-            }
-        }
-    }
-}
-
-@Composable
 private fun SortType.displayName(): String = when (this) {
     SortType.Name -> stringResource(R.string.sort_name)
     SortType.Size -> stringResource(R.string.sort_size)
     SortType.InstallDate -> stringResource(R.string.sort_install_date)
     SortType.TargetSdk -> stringResource(R.string.sort_target_sdk)
+    SortType.LastUpdated -> stringResource(R.string.sort_last_updated)
 }
 
 @Preview
@@ -389,6 +468,8 @@ private fun AppsContentReadyPreview() {
                             targetSdk = 34,
                             apkSize = AppSize(67_108_864),
                             installTime = 0L,
+                            lastUpdateTime = 0L,
+                            source = AppSource.GooglePlay,
                         ),
                         AppListItem(
                             packageName = "com.whatsapp",
@@ -396,34 +477,26 @@ private fun AppsContentReadyPreview() {
                             targetSdk = 33,
                             apkSize = AppSize(33_554_432),
                             installTime = 0L,
-                        ),
-                        AppListItem(
-                            packageName = "com.shadowy.apk",
-                            applicationName = "Unknown App",
-                            targetSdk = 21,
-                            apkSize = AppSize(12_582_912),
-                            installTime = 0L,
+                            lastUpdateTime = 0L,
+                            source = AppSource.GooglePlay,
                         ),
                     ),
                 ),
-                recents = RecentsState.Content(
-                    apps = persistentListOf(
-                        AppListItem(
-                            packageName = "com.instagram.android",
-                            applicationName = "Instagram",
-                            targetSdk = 34,
-                            apkSize = AppSize(67_108_864),
-                            installTime = 0L,
-                        ),
-                        AppListItem(
-                            packageName = "com.whatsapp",
-                            applicationName = "WhatsApp",
-                            targetSdk = 33,
-                            apkSize = AppSize(33_554_432),
-                            installTime = 0L,
-                        ),
-                    ),
-                ),
+                recents = RecentsState.NoRecents,
+            ),
+            onAction = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun AppsContentEmptyFilteredPreview() {
+    ApkAnalyzerTheme {
+        AppsContent(
+            state = AppsState(
+                apps = AppListState.Content(apps = persistentListOf()),
+                recents = RecentsState.NoRecents,
             ),
             onAction = {},
         )
@@ -436,6 +509,20 @@ private fun AppsContentLoadingPreview() {
     ApkAnalyzerTheme {
         AppsContent(
             state = AppsState(),
+            onAction = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun AppsContentActiveFiltersPreview() {
+    ApkAnalyzerTheme {
+        AppsContent(
+            state = AppsState(
+                apps = AppListState.Content(apps = persistentListOf()),
+                recents = RecentsState.NoRecents,
+            ),
             onAction = {},
         )
     }

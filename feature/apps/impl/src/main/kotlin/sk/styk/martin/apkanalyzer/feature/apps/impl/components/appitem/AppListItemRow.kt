@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.feature.apps.impl.appitem
+package sk.styk.martin.apkanalyzer.feature.apps.impl.components.appitem
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -97,17 +97,16 @@ private fun SortValueBadge(
     sortType: SortType,
     modifier: Modifier = Modifier,
 ) {
-    val (icon, value) =
-        when (sortType) {
-            SortType.Size -> ApkAnalyzerIcons.FileUpload to app.apkSize.formatted()
-            SortType.InstallDate -> ApkAnalyzerIcons.Calendar to app.installTime.toShortDate()
-            SortType.TargetSdk -> ApkAnalyzerIcons.Android to app.targetSdk.toString()
-            SortType.Name -> return
-        }
+    val (icon, value) = when (sortType) {
+        SortType.Size -> ApkAnalyzerIcons.FileUpload to app.apkSize.formatted()
+        SortType.InstallDate -> ApkAnalyzerIcons.Calendar to app.installTime.toShortDate()
+        SortType.TargetSdk -> ApkAnalyzerIcons.Android to app.targetSdk.toString()
+        SortType.LastUpdated -> ApkAnalyzerIcons.Calendar to app.installTime.toShortDate()
+        SortType.Name -> return
+    }
 
     Row(
-        modifier =
-        modifier
+        modifier = modifier
             .background(AppTheme.colors.secondaryContainer, RoundedCornerShape(8.dp))
             .padding(6.dp),
         verticalAlignment = Alignment.CenterVertically,

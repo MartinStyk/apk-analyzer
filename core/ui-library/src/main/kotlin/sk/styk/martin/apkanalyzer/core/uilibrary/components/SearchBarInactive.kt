@@ -28,7 +28,7 @@ fun InactiveSearchBar(
 ) {
     Box(
         modifier = modifier
-            .sharedElement(key = "search_bar")
+            .sharedElement(key = "search-bar")
             .fillMaxWidth()
             .heightIn(min = 48.dp)
             .background(

@@ -19,6 +19,7 @@ enum class IconButtonStyle {
     StandardMuted,
     Filled,
     Outlined,
+    Highlighted,
 }
 
 @Composable
@@ -65,10 +66,23 @@ fun IconButton(
                 Icon(imageVector = imageVector, contentDescription = null)
             }
         }
+
+        IconButtonStyle.Highlighted -> {
+            FilledIconButton(
+                onClick = onClick,
+                modifier = modifier,
+                colors = IconButtonDefaults.filledIconButtonColors(
+                    containerColor = AppTheme.colors.secondaryContainer,
+                    contentColor = AppTheme.colors.onSecondaryContainer,
+                ),
+            ) {
+                Icon(imageVector = imageVector, contentDescription = null)
+            }
+        }
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun IconButtonStandardPreview() {
     ApkAnalyzerTheme {
@@ -76,7 +90,15 @@ private fun IconButtonStandardPreview() {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
+@Composable
+private fun IconButtonStandardMutedPreview() {
+    ApkAnalyzerTheme {
+        IconButton(imageVector = Icons.Filled.Star, onClick = {}, style = IconButtonStyle.StandardMuted)
+    }
+}
+
+@Preview(showBackground = true)
 @Composable
 private fun IconButtonFilledPreview() {
     ApkAnalyzerTheme {
@@ -84,10 +106,18 @@ private fun IconButtonFilledPreview() {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun IconButtonOutlinedPreview() {
     ApkAnalyzerTheme {
         IconButton(imageVector = Icons.Filled.Star, onClick = {}, style = IconButtonStyle.Outlined)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun IconButtonHighlightedPreview() {
+    ApkAnalyzerTheme {
+        IconButton(imageVector = Icons.Filled.Star, onClick = {}, style = IconButtonStyle.Highlighted)
     }
 }

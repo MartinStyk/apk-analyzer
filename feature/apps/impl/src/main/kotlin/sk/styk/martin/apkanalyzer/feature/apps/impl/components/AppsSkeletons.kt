@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.feature.apps.impl.list
+package sk.styk.martin.apkanalyzer.feature.apps.impl.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

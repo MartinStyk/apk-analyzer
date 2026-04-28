@@ -27,6 +27,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.components.Switch
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.card
+import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.sharedBounds
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 
@@ -61,6 +62,7 @@ private fun SettingsContent(
 ) {
     Column(
         modifier = modifier
+            .sharedBounds("settings")
             .fillMaxSize()
             .background(AppTheme.colors.background),
     ) {

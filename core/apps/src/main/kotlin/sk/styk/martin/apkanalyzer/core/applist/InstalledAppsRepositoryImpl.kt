@@ -62,6 +62,7 @@ class InstalledAppsRepositoryImpl @Inject constructor(
             apkSize = AppSize(appInfo?.sourceDir?.let { File(it).length() } ?: 0L),
             versionName = versionName,
             installTime = firstInstallTime,
+            lastUpdateTime = lastUpdateTime,
         )
     }
 }
