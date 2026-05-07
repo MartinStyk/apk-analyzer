@@ -5,7 +5,7 @@ ksp = "2.3.6"
 kotlinx-collections-immutable = "0.4.0"
 
 # Android
-agp = "9.1.1"
+agp = "9.2.1"
 core-ktx = "1.18.0"
 appcompat = "1.7.1"
 activity = "1.13.0"
@@ -48,6 +48,7 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
 
 # Compose (BOM-managed)
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }

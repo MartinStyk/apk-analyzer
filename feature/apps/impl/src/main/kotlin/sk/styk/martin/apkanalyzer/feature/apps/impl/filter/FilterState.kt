@@ -13,4 +13,5 @@ data class FilterState(
     val availableSdkVersions: ImmutableList<Int> = persistentListOf(),
     val hasUnsavedChanges: Boolean = false,
     val showUnsavedChangesSheet: Boolean = false,
+    val isUsagePermissionGranted: Boolean = false,
 )

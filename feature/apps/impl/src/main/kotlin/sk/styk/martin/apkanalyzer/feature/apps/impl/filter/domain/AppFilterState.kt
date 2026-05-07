@@ -18,19 +18,22 @@ data class AppFilterState(
     val apkSizeRange: AppSizeRange? = null,
     val installTimeRange: DateRange? = null,
     val updateTimeRange: DateRange? = null,
+    val unusedPeriod: UnusedAppsPeriod? = null,
 ) {
     val isActive: Boolean
         get() = selectedSources.isNotEmpty() ||
             selectedSdkVersions.isNotEmpty() ||
             apkSizeRange != null ||
             installTimeRange != null ||
-            updateTimeRange != null
+            updateTimeRange != null ||
+            unusedPeriod != null
 
     val isLargeFilterActive: Boolean get() = apkSizeRange?.min != null && apkSizeRange.min >= LARGE_APP_THRESHOLD
     val isSystemFilterActive: Boolean get() = selectedSources == SYSTEM_ONLY_SOURCES
     val isSideloadedFilterActive: Boolean get() = selectedSources == SIDELOADED_ONLY_SOURCES
     val isRecentInstallActive: Boolean get() = installTimeRange?.start != null && installTimeRange.start > Instant.now() - TWO_MONTHS
     val isRecentUpdateActive: Boolean get() = updateTimeRange?.start != null && updateTimeRange.start > Instant.now() - TWO_MONTHS
+    val isUnusedFilterActive: Boolean get() = unusedPeriod != null
 
     companion object {
         val LARGE_APP_THRESHOLD = 100.megabytes

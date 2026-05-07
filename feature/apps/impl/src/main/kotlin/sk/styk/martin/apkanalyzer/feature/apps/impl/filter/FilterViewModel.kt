@@ -14,16 +14,18 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import sk.styk.martin.apkanalyzer.core.applist.InstalledAppsRepository
+import sk.styk.martin.apkanalyzer.core.applist.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppFilterRepository
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppFilterState
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppSizeRange
 import javax.inject.Inject
 
 @HiltViewModel
-class FilterViewModel @Inject constructor(private val appFilterRepository: AppFilterRepository, installedAppsRepository: InstalledAppsRepository) : ViewModel() {
+class FilterViewModel @Inject constructor(private val appFilterRepository: AppFilterRepository, private val usageStatsRepository: UsageStatsRepository, installedAppsRepository: InstalledAppsRepository) : ViewModel() {
 
     private val localFilter = MutableStateFlow(appFilterRepository.filter.value)
     private val showUnsavedChangesSheet = MutableStateFlow(false)
+    private val isUsagePermissionGranted = MutableStateFlow(usageStatsRepository.isPermissionGranted())
 
     private val eventChannel = Channel<FilterEvent>(Channel.BUFFERED)
     val events = eventChannel.receiveAsFlow()
@@ -39,7 +41,13 @@ class FilterViewModel @Inject constructor(private val appFilterRepository: AppFi
             Pair(sdkVersions, sizeRange)
         }
 
-    val state = combine(localFilter, appsMetadata, showUnsavedChangesSheet, appFilterRepository.filter) { filter, (sdkVersions, sizeRange), showSheet, savedFilter ->
+    val state = combine(
+        localFilter,
+        appsMetadata,
+        showUnsavedChangesSheet,
+        appFilterRepository.filter,
+        isUsagePermissionGranted,
+    ) { filter, (sdkVersions, sizeRange), showSheet, savedFilter, permissionGranted ->
         val effectiveFilter = if (sizeRange != null && filter.apkSizeRange != null && filter.apkSizeRange.max > sizeRange.max) {
             filter.copy(apkSizeRange = filter.apkSizeRange.copy(max = sizeRange.max))
         } else {
@@ -51,6 +59,7 @@ class FilterViewModel @Inject constructor(private val appFilterRepository: AppFi
             availableSdkVersions = sdkVersions,
             showUnsavedChangesSheet = showSheet,
             hasUnsavedChanges = effectiveFilter != savedFilter,
+            isUsagePermissionGranted = permissionGranted,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), FilterState())
 
@@ -75,8 +84,8 @@ class FilterViewModel @Inject constructor(private val appFilterRepository: AppFi
             }
 
             is FilterAction.ApkSizeRangeChanged -> localFilter.update { current ->
-                val isFullRange = state.value.sizeFullRange == current.apkSizeRange
-                current.copy(apkSizeRange = if (isFullRange) null else action.range)
+                val fullRange = state.value.sizeFullRange
+                current.copy(apkSizeRange = if (fullRange == action.range) null else action.range)
             }
 
             is FilterAction.InstallTimeRangeChanged -> localFilter.update { current ->
@@ -85,6 +94,18 @@ class FilterViewModel @Inject constructor(private val appFilterRepository: AppFi
 
             is FilterAction.InstallTimeRangeCleared -> localFilter.update { current ->
                 current.copy(installTimeRange = null)
+            }
+
+            is FilterAction.UnusedPeriodSelected -> localFilter.update { current ->
+                current.copy(unusedPeriod = if (current.unusedPeriod == action.period) null else action.period)
+            }
+
+            FilterAction.RecheckUsagePermission -> {
+                isUsagePermissionGranted.value = usageStatsRepository.isPermissionGranted()
+            }
+
+            FilterAction.OpenUsagePermissionSettings -> {
+                eventChannel.trySend(FilterEvent.OpenUsagePermissionSettings)
             }
 
             FilterAction.Apply -> {

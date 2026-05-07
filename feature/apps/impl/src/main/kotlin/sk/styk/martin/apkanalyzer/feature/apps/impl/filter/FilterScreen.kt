@@ -1,5 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.apps.impl.filter
 
+import android.content.Intent
+import android.provider.Settings
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -24,10 +27,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
@@ -40,6 +46,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.components.BottomSheet
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Button
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Chip
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.DateRangePickerDialog
+import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.IconButton
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.RangeSlider
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
@@ -52,6 +59,7 @@ import sk.styk.martin.apkanalyzer.feature.apps.impl.R
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppFilterState
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppSizeRange
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.DateRange
+import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.UnusedAppsPeriod
 import java.text.DateFormat
 import java.time.Instant
 import java.util.Date
@@ -64,13 +72,22 @@ fun FilterScreen(
     viewModel: FilterViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
                 FilterEvent.NavigateBack -> onBack()
+
+                FilterEvent.OpenUsagePermissionSettings -> {
+                    context.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
+                }
             }
         }
+    }
+
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+        viewModel.onAction(FilterAction.RecheckUsagePermission)
     }
 
     BackHandler(enabled = state.hasUnsavedChanges) {
@@ -117,6 +134,19 @@ private fun FilterContent(
                 onSourceToggle = { source, selected -> onAction(FilterAction.SourceToggled(source, selected)) },
             )
 
+            UnusedAppsSection(
+                selectedPeriod = state.filter.unusedPeriod,
+                isPermissionGranted = state.isUsagePermissionGranted,
+                onPeriodSelect = { onAction(FilterAction.UnusedPeriodSelected(it)) },
+                onGrantAccess = { onAction(FilterAction.OpenUsagePermissionSettings) },
+            )
+
+            InstallTimeSection(
+                installTimeRange = state.filter.installTimeRange,
+                onSelectDateRange = { showDatePicker = true },
+                onClearDateRange = { onAction(FilterAction.InstallTimeRangeCleared) },
+            )
+
             SdkVersionSection(
                 availableSdkVersions = state.availableSdkVersions,
                 selectedSdkVersions = state.filter.selectedSdkVersions,
@@ -130,12 +160,6 @@ private fun FilterContent(
                     onRangeChange = { onAction(FilterAction.ApkSizeRangeChanged(it)) },
                 )
             }
-
-            InstallTimeSection(
-                installTimeRange = state.filter.installTimeRange,
-                onSelectDateRange = { showDatePicker = true },
-                onClearDateRange = { onAction(FilterAction.InstallTimeRangeCleared) },
-            )
 
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -343,6 +367,66 @@ private fun InstallTimeSection(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun UnusedAppsSection(
+    selectedPeriod: UnusedAppsPeriod?,
+    isPermissionGranted: Boolean,
+    onPeriodSelect: (UnusedAppsPeriod) -> Unit,
+    onGrantAccess: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    FilterSection(
+        title = stringResource(R.string.filter_unused_section),
+        modifier = modifier,
+    ) {
+        if (!isPermissionGranted) {
+            UnusedAppsLockedContent(onGrantAccess = onGrantAccess)
+        } else {
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                UnusedAppsPeriod.entries.forEach { period ->
+                    Chip(
+                        label = period.label(),
+                        selected = selectedPeriod == period,
+                        onClick = { onPeriodSelect(period) },
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun UnusedAppsLockedContent(onGrantAccess: () -> Unit, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Row(
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Icon(
+                imageVector = ApkAnalyzerIcons.Lock,
+                tint = AppTheme.colors.onSurfaceVariant,
+                modifier = Modifier.size(20.dp),
+            )
+            Text(
+                text = stringResource(R.string.filter_unused_locked_description),
+                style = AppTheme.typography.bodyMedium,
+                color = AppTheme.colors.onSurfaceVariant,
+            )
+        }
+        Chip(
+            label = stringResource(R.string.filter_unused_grant_access),
+            onClick = onGrantAccess,
+        )
+    }
+}
+
 @Composable
 private fun FilterSection(
     title: String,
@@ -414,6 +498,15 @@ private fun AppSource.displayName(): String = when (this) {
     AppSource.Unknown -> stringResource(R.string.filter_source_unknown)
 }
 
+@Composable
+private fun UnusedAppsPeriod.label(): String = when (this) {
+    UnusedAppsPeriod.ONE_MONTH -> stringResource(R.string.filter_unused_months_count, 1)
+    UnusedAppsPeriod.TWO_MONTHS -> stringResource(R.string.filter_unused_months_count, 2)
+    UnusedAppsPeriod.THREE_MONTHS -> stringResource(R.string.filter_unused_months_count, 3)
+    UnusedAppsPeriod.SIX_MONTHS -> stringResource(R.string.filter_unused_months_count, 6)
+    UnusedAppsPeriod.ONE_YEAR -> stringResource(R.string.filter_unused_year)
+}
+
 private fun Int.toAndroidVersionLabel(): String {
     val name = when (this) {
         21 -> "Android 5"
@@ -448,6 +541,7 @@ private fun FilterContentDefaultPreview() {
                 filter = AppFilterState(),
                 sizeFullRange = AppSizeRange(1.megabytes, 512.megabytes),
                 availableSdkVersions = persistentListOf(35, 34, 33, 31, 30, 29, 28),
+                isUsagePermissionGranted = false,
             ),
             onAction = {},
         )
@@ -471,6 +565,7 @@ private fun FilterContentPreview() {
                 ),
                 sizeFullRange = AppSizeRange(1.megabytes, 512.megabytes),
                 availableSdkVersions = persistentListOf(35, 34, 33, 31, 30, 29, 28),
+                isUsagePermissionGranted = true,
             ),
             onAction = {},
         )

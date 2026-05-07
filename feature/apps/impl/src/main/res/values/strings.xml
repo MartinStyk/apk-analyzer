@@ -41,5 +41,11 @@
     <string name="filter_source_amazon_store">Amazon</string>
     <string name="filter_source_system">System</string>
     <string name="filter_source_unknown">Unknown</string>
+    <string name="filter_unused_section">Unused Apps</string>
+    <string name="filter_unused_locked_description">Find apps gathering dust. Grant usage access to see which apps you haven\'t opened recently.</string>
+    <string name="filter_unused_grant_access">Grant access</string>
+    <string name="filter_unused_days_count">%d days</string>
+    <string name="filter_unused_months_count">%d months</string>
+    <string name="filter_unused_year">1 year</string>
 </resources>
 
