@@ -32,8 +32,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
@@ -48,6 +46,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.components.Chip
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.DateRangePickerDialog
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.IconButton
+import sk.styk.martin.apkanalyzer.core.uilibrary.components.LoadingSpinner
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.RangeSlider
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.TextButton
@@ -66,7 +65,7 @@ import java.util.Date
 import java.util.Locale
 
 @Composable
-fun FilterScreen(
+internal fun FilterScreen(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: FilterViewModel = hiltViewModel(),
@@ -84,10 +83,6 @@ fun FilterScreen(
                 }
             }
         }
-    }
-
-    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-        viewModel.onAction(FilterAction.RecheckUsagePermission)
     }
 
     BackHandler(enabled = state.hasUnsavedChanges) {
@@ -135,8 +130,8 @@ private fun FilterContent(
             )
 
             UnusedAppsSection(
+                sectionState = state.unusedAppsSectionState,
                 selectedPeriod = state.filter.unusedPeriod,
-                isPermissionGranted = state.isUsagePermissionGranted,
                 onPeriodSelect = { onAction(FilterAction.UnusedPeriodSelected(it)) },
                 onGrantAccess = { onAction(FilterAction.OpenUsagePermissionSettings) },
             )
@@ -147,19 +142,24 @@ private fun FilterContent(
                 onClearDateRange = { onAction(FilterAction.InstallTimeRangeCleared) },
             )
 
+            ApkSizeSection(
+                sectionState = state.apkSizeSectionState,
+                selectedRange = state.filter.apkSizeRange,
+                onRangeChange = { onAction(FilterAction.ApkSizeRangeChanged(it)) },
+            )
+
+            TotalSizeSection(
+                sectionState = state.totalSizeSectionState,
+                selectedRange = state.filter.totalSizeRange,
+                onRangeChange = { onAction(FilterAction.TotalSizeRangeChanged(it)) },
+                onGrantAccess = { onAction(FilterAction.OpenUsagePermissionSettings) },
+            )
+
             SdkVersionSection(
                 availableSdkVersions = state.availableSdkVersions,
                 selectedSdkVersions = state.filter.selectedSdkVersions,
                 onSdkVersionToggle = { onAction(FilterAction.SdkVersionToggled(it)) },
             )
-
-            if (state.sizeFullRange != null) {
-                ApkSizeSection(
-                    sizeRange = state.filter.apkSizeRange ?: state.sizeFullRange,
-                    bounds = state.sizeFullRange,
-                    onRangeChange = { onAction(FilterAction.ApkSizeRangeChanged(it)) },
-                )
-            }
 
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -283,8 +283,8 @@ private fun SdkVersionSection(
 
 @Composable
 private fun ApkSizeSection(
-    sizeRange: AppSizeRange,
-    bounds: AppSizeRange,
+    sectionState: ApkSizeSectionState,
+    selectedRange: AppSizeRange?,
     onRangeChange: (AppSizeRange) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -292,35 +292,116 @@ private fun ApkSizeSection(
         title = stringResource(R.string.filter_apk_size_section),
         modifier = modifier,
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text(
-                text = sizeRange.min.formatted(),
-                style = AppTheme.typography.bodySmall,
-                color = AppTheme.colors.onSurfaceVariant,
+        Text(
+            text = stringResource(R.string.filter_apk_size_description),
+            style = AppTheme.typography.bodySmall,
+            color = AppTheme.colors.onSurfaceVariant,
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        when (sectionState) {
+            ApkSizeSectionState.Loading -> LoadingSpinner(
+                size = 24.dp,
+                strokeWidth = 2.dp,
+                modifier = Modifier.fillMaxWidth(),
             )
-            Spacer(modifier = Modifier.width(8.dp))
-            RangeSlider(
-                value = sizeRange.min.megabytes.toFloat()..sizeRange.max.megabytes.toFloat(),
-                onValueChange = { floatRange ->
-                    onRangeChange(
-                        AppSizeRange(
-                            min = AppSize((floatRange.start * 1024 * 1024).toLong()),
-                            max = AppSize((floatRange.endInclusive * 1024 * 1024).toLong()),
-                        ),
+
+            is ApkSizeSectionState.RangeAvailable -> {
+                val effectiveRange = selectedRange ?: sectionState.bounds
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(
+                        text = effectiveRange.min.formatted(),
+                        style = AppTheme.typography.bodySmall,
+                        color = AppTheme.colors.onSurfaceVariant,
                     )
-                },
-                valueRange = bounds.min.megabytes.toFloat()..bounds.max.megabytes.toFloat(),
-                modifier = Modifier.weight(1f),
+                    Spacer(modifier = Modifier.width(8.dp))
+                    RangeSlider(
+                        value = effectiveRange.min.megabytes.toFloat()..effectiveRange.max.megabytes.toFloat(),
+                        onValueChange = { floatRange ->
+                            onRangeChange(
+                                AppSizeRange(
+                                    min = AppSize((floatRange.start * 1024 * 1024).toLong()),
+                                    max = AppSize((floatRange.endInclusive * 1024 * 1024).toLong()),
+                                ),
+                            )
+                        },
+                        valueRange = sectionState.bounds.min.megabytes.toFloat()..sectionState.bounds.max.megabytes.toFloat(),
+                        modifier = Modifier.weight(1f),
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = effectiveRange.max.formatted(),
+                        style = AppTheme.typography.bodySmall,
+                        color = AppTheme.colors.onSurfaceVariant,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun TotalSizeSection(
+    sectionState: TotalSizeSectionState,
+    selectedRange: AppSizeRange?,
+    onRangeChange: (AppSizeRange) -> Unit,
+    onGrantAccess: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    FilterSection(
+        title = stringResource(R.string.filter_total_size_section),
+        modifier = modifier,
+    ) {
+        when (sectionState) {
+            TotalSizeSectionState.PermissionMissing -> TotalSizeLockedContent(onGrantAccess = onGrantAccess)
+
+            TotalSizeSectionState.Loading -> LoadingSpinner(
+                size = 24.dp,
+                strokeWidth = 2.dp,
+                modifier = Modifier.fillMaxWidth(),
             )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = sizeRange.max.formatted(),
-                style = AppTheme.typography.bodySmall,
-                color = AppTheme.colors.onSurfaceVariant,
-            )
+
+            is TotalSizeSectionState.RangeAvailable -> {
+                Text(
+                    text = stringResource(R.string.filter_total_size_description),
+                    style = AppTheme.typography.bodySmall,
+                    color = AppTheme.colors.onSurfaceVariant,
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                val effectiveRange = selectedRange ?: sectionState.bounds
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(
+                        text = effectiveRange.min.formatted(),
+                        style = AppTheme.typography.bodySmall,
+                        color = AppTheme.colors.onSurfaceVariant,
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    RangeSlider(
+                        value = effectiveRange.min.megabytes.toFloat()..effectiveRange.max.megabytes.toFloat(),
+                        onValueChange = { floatRange ->
+                            onRangeChange(
+                                AppSizeRange(
+                                    min = AppSize((floatRange.start * 1024 * 1024).toLong()),
+                                    max = AppSize((floatRange.endInclusive * 1024 * 1024).toLong()),
+                                ),
+                            )
+                        },
+                        valueRange = sectionState.bounds.min.megabytes.toFloat()..sectionState.bounds.max.megabytes.toFloat(),
+                        modifier = Modifier.weight(1f),
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = effectiveRange.max.formatted(),
+                        style = AppTheme.typography.bodySmall,
+                        color = AppTheme.colors.onSurfaceVariant,
+                    )
+                }
+            }
         }
     }
 }
@@ -370,8 +451,8 @@ private fun InstallTimeSection(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun UnusedAppsSection(
+    sectionState: UnusedAppsSectionState,
     selectedPeriod: UnusedAppsPeriod?,
-    isPermissionGranted: Boolean,
     onPeriodSelect: (UnusedAppsPeriod) -> Unit,
     onGrantAccess: () -> Unit,
     modifier: Modifier = Modifier,
@@ -380,10 +461,16 @@ private fun UnusedAppsSection(
         title = stringResource(R.string.filter_unused_section),
         modifier = modifier,
     ) {
-        if (!isPermissionGranted) {
-            UnusedAppsLockedContent(onGrantAccess = onGrantAccess)
-        } else {
-            FlowRow(
+        when (sectionState) {
+            UnusedAppsSectionState.PermissionMissing -> UnusedAppsLockedContent(onGrantAccess = onGrantAccess)
+
+            UnusedAppsSectionState.Loading -> LoadingSpinner(
+                size = 24.dp,
+                strokeWidth = 2.dp,
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            UnusedAppsSectionState.Available -> FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
@@ -401,6 +488,31 @@ private fun UnusedAppsSection(
 
 @Composable
 private fun UnusedAppsLockedContent(onGrantAccess: () -> Unit, modifier: Modifier = Modifier) {
+    LockedContent(
+        description = stringResource(R.string.filter_unused_locked_description),
+        grantAccessLabel = stringResource(R.string.filter_unused_grant_access),
+        onGrantAccess = onGrantAccess,
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun TotalSizeLockedContent(onGrantAccess: () -> Unit, modifier: Modifier = Modifier) {
+    LockedContent(
+        description = stringResource(R.string.filter_total_size_locked_description),
+        grantAccessLabel = stringResource(R.string.filter_total_size_grant_access),
+        onGrantAccess = onGrantAccess,
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun LockedContent(
+    description: String,
+    grantAccessLabel: String,
+    onGrantAccess: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -415,13 +527,13 @@ private fun UnusedAppsLockedContent(onGrantAccess: () -> Unit, modifier: Modifie
                 modifier = Modifier.size(20.dp),
             )
             Text(
-                text = stringResource(R.string.filter_unused_locked_description),
+                text = description,
                 style = AppTheme.typography.bodyMedium,
                 color = AppTheme.colors.onSurfaceVariant,
             )
         }
         Chip(
-            label = stringResource(R.string.filter_unused_grant_access),
+            label = grantAccessLabel,
             onClick = onGrantAccess,
         )
     }
@@ -539,9 +651,10 @@ private fun FilterContentDefaultPreview() {
         FilterContent(
             state = FilterState(
                 filter = AppFilterState(),
-                sizeFullRange = AppSizeRange(1.megabytes, 512.megabytes),
+                apkSizeSectionState = ApkSizeSectionState.Loading,
+                totalSizeSectionState = TotalSizeSectionState.PermissionMissing,
+                unusedAppsSectionState = UnusedAppsSectionState.PermissionMissing,
                 availableSdkVersions = persistentListOf(35, 34, 33, 31, 30, 29, 28),
-                isUsagePermissionGranted = false,
             ),
             onAction = {},
         )
@@ -563,9 +676,10 @@ private fun FilterContentPreview() {
                         end = Instant.ofEpochMilli(1_720_000_000_000L),
                     ),
                 ),
-                sizeFullRange = AppSizeRange(1.megabytes, 512.megabytes),
+                apkSizeSectionState = ApkSizeSectionState.RangeAvailable(AppSizeRange(1.megabytes, 512.megabytes)),
+                totalSizeSectionState = TotalSizeSectionState.RangeAvailable(AppSizeRange(1.megabytes, 2048.megabytes)),
+                unusedAppsSectionState = UnusedAppsSectionState.Available,
                 availableSdkVersions = persistentListOf(35, 34, 33, 31, 30, 29, 28),
-                isUsagePermissionGranted = true,
             ),
             onAction = {},
         )

@@ -159,3 +159,16 @@ Keep feature-related components together in a single package:
 * Use **Turbine** for Flow testing.
 * Use **kotlinx-coroutines-test** (`runTest`) for coroutine testing.
 * Place tests in `src/test/kotlin/` mirroring the main source package structure.
+
+## String Resources & Copywriting
+
+When writing or reviewing string resources (`strings.xml`), act as a **technical copywriter** — someone who understands Android internals precisely but writes for a general audience.
+
+### Tone & Audience
+
+* Write for a **non-technical user** who knows what an app is or what permission is, but is an expert in the field.
+* Be **concise but complete** — one or two short sentences is ideal.
+* Use **plain English**. Avoid jargon unless it is immediately explained (e.g., "APK — the installer file").
+* Use **active voice** and **present tense**.
+* Avoid vague phrases like "some data", "certain features", or "this option". Be specific.
+* Reflect Android concepts correctly. Be technically accurate.

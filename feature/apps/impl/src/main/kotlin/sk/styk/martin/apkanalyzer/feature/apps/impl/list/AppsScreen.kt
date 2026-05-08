@@ -1,5 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.apps.impl.list
 
+import android.content.Intent
+import android.provider.Settings
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -58,13 +61,16 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.apps.impl.R
+import sk.styk.martin.apkanalyzer.feature.apps.impl.components.AppDataPermission
 import sk.styk.martin.apkanalyzer.feature.apps.impl.components.AppListItemRowSkeleton
+import sk.styk.martin.apkanalyzer.feature.apps.impl.components.PermissionRationaleBottomSheet
 import sk.styk.martin.apkanalyzer.feature.apps.impl.components.RecentAppsRowSkeleton
 import sk.styk.martin.apkanalyzer.feature.apps.impl.components.appitem.AppListItemRow
 import sk.styk.martin.apkanalyzer.feature.apps.impl.components.quickfilter.QuickFilterRow
+import java.time.Instant
 
 @Composable
-fun AppsScreen(
+internal fun AppsScreen(
     onAppDetails: (String) -> Unit,
     onSearch: () -> Unit,
     onSettings: () -> Unit,
@@ -74,6 +80,7 @@ fun AppsScreen(
     viewModel: AppsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
@@ -83,6 +90,7 @@ fun AppsScreen(
                 is AppsEvent.NavigateToSettings -> onSettings()
                 is AppsEvent.NavigateToShowApkDetails -> onApkDetails()
                 is AppsEvent.NavigateToFilter -> onFilter()
+                is AppsEvent.OpenUsageAccessSettings -> context.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
             }
         }
     }
@@ -102,6 +110,10 @@ private fun AppsContent(
 ) {
     var showSortSheet by remember { mutableStateOf(false) }
     val collapsingState = rememberCollapsingHeaderState()
+
+    LaunchedEffect(state.sortPermissionRationale) {
+        if (state.sortPermissionRationale != null) showSortSheet = false
+    }
 
     Box(
         modifier = modifier
@@ -183,6 +195,16 @@ private fun AppsContent(
             sortAscending = state.sortAscending,
             onSortSelect = { onAction(AppsAction.SortTypeSelected(it)) },
             onDismiss = { showSortSheet = false },
+        )
+    }
+
+    state.sortPermissionRationale?.let { rationale ->
+        PermissionRationaleBottomSheet(
+            title = stringResource(rationale.sortTitleRes()),
+            description = stringResource(rationale.sortDescriptionRes()),
+            openSettingsLabel = stringResource(R.string.quick_filter_permission_open_settings),
+            onOpenSettings = { onAction(AppsAction.OpenSortPermissionSettings(rationale)) },
+            onDismiss = { onAction(AppsAction.DismissSortPermissionRationale) },
         )
     }
 }
@@ -322,7 +344,7 @@ private fun SortBottomSheet(
                 color = AppTheme.colors.onSurface,
                 modifier = Modifier.padding(bottom = 8.dp),
             )
-            SortType.entries.filter { it != SortType.LastUpdated }.forEach { type ->
+            SortType.entries.forEach { type ->
                 SortOptionRow(
                     type = type,
                     isSelected = sortType == type,
@@ -448,10 +470,22 @@ private fun RecentAppItem(
 @Composable
 private fun SortType.displayName(): String = when (this) {
     SortType.Name -> stringResource(R.string.sort_name)
-    SortType.Size -> stringResource(R.string.sort_size)
+    SortType.ApkSize -> stringResource(R.string.sort_size)
+    SortType.TotalSize -> stringResource(R.string.sort_total_size)
     SortType.InstallDate -> stringResource(R.string.sort_install_date)
     SortType.TargetSdk -> stringResource(R.string.sort_target_sdk)
     SortType.LastUpdated -> stringResource(R.string.sort_last_updated)
+    SortType.LastUsed -> stringResource(R.string.sort_last_used)
+}
+
+private fun AppDataPermission.sortTitleRes(): Int = when (this) {
+    AppDataPermission.UsageAccess -> R.string.sort_permission_usage_title
+    AppDataPermission.StorageAccess -> R.string.sort_permission_storage_title
+}
+
+private fun AppDataPermission.sortDescriptionRes(): Int = when (this) {
+    AppDataPermission.UsageAccess -> R.string.sort_permission_usage_description
+    AppDataPermission.StorageAccess -> R.string.sort_permission_storage_description
 }
 
 @Preview
@@ -467,8 +501,10 @@ private fun AppsContentReadyPreview() {
                             applicationName = "Instagram",
                             targetSdk = 34,
                             apkSize = AppSize(67_108_864),
-                            installTime = 0L,
-                            lastUpdateTime = 0L,
+                            totalSize = AppSize(534_773_760),
+                            installTime = Instant.EPOCH,
+                            lastUpdateTime = Instant.EPOCH,
+                            lastUsedTime = Instant.EPOCH,
                             source = AppSource.GooglePlay,
                         ),
                         AppListItem(
@@ -476,8 +512,10 @@ private fun AppsContentReadyPreview() {
                             applicationName = "WhatsApp",
                             targetSdk = 33,
                             apkSize = AppSize(33_554_432),
-                            installTime = 0L,
-                            lastUpdateTime = 0L,
+                            totalSize = null,
+                            installTime = Instant.EPOCH,
+                            lastUpdateTime = Instant.EPOCH,
+                            lastUsedTime = Instant.EPOCH,
                             source = AppSource.GooglePlay,
                         ),
                     ),

@@ -18,6 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalLocale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.AppIcon
@@ -27,11 +29,12 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.uilibrary.lazylist.ListItemPosition
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
+import sk.styk.martin.apkanalyzer.feature.apps.impl.R
 import sk.styk.martin.apkanalyzer.feature.apps.impl.list.AppListItem
 import sk.styk.martin.apkanalyzer.feature.apps.impl.list.SortType
 import java.text.DateFormat
+import java.time.Instant
 import java.util.Date
-import java.util.Locale
 
 @Composable
 internal fun AppListItemRow(
@@ -98,10 +101,12 @@ private fun SortValueBadge(
     modifier: Modifier = Modifier,
 ) {
     val (icon, value) = when (sortType) {
-        SortType.Size -> ApkAnalyzerIcons.FileUpload to app.apkSize.formatted()
-        SortType.InstallDate -> ApkAnalyzerIcons.Calendar to app.installTime.toShortDate()
+        SortType.ApkSize -> ApkAnalyzerIcons.FileUpload to app.apkSize.formatted()
+        SortType.TotalSize -> ApkAnalyzerIcons.Storage to (app.totalSize?.formatted() ?: "—")
+        SortType.InstallDate -> ApkAnalyzerIcons.Calendar to app.installTime.toShortDate(stringResource(R.string.preinstalled))
         SortType.TargetSdk -> ApkAnalyzerIcons.Android to app.targetSdk.toString()
-        SortType.LastUpdated -> ApkAnalyzerIcons.Calendar to app.installTime.toShortDate()
+        SortType.LastUpdated -> ApkAnalyzerIcons.Calendar to app.lastUpdateTime.toShortDate(stringResource(R.string.preinstalled))
+        SortType.LastUsed -> ApkAnalyzerIcons.Calendar to (app.lastUsedTime?.toShortDate(stringResource(R.string.never)) ?: "—")
         SortType.Name -> return
     }
 
@@ -125,4 +130,9 @@ private fun SortValueBadge(
     }
 }
 
-private fun Long.toShortDate(): String = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault()).format(Date(this))
+@Composable
+private fun Instant.toShortDate(ifEmpty: String): String = if (this < Instant.ofEpochMilli(631152000000L)) {
+    ifEmpty
+} else {
+    DateFormat.getDateInstance(DateFormat.SHORT, LocalLocale.current.platformLocale).format(Date(this.toEpochMilli()))
+}

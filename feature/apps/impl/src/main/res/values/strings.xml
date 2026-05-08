@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="sort_name">Name</string>
-    <string name="sort_size">Size</string>
+    <string name="sort_size">APK File Size</string>
+    <string name="sort_total_size">Total App Size</string>
     <string name="sort_install_date">Install Date</string>
     <string name="sort_target_sdk">Target Android SDK</string>
     <string name="sort_last_updated">Last Updated</string>
+    <string name="sort_last_used">Last Used</string>
     <string name="sort_bottom_sheet_title">Sort by</string>
     <string name="search_apps_hint">Search apps</string>
     <string name="search_apps_placeholder">Search %1$d apps…</string>
     <string name="search_apps_matches">%d matches found</string>
     <string name="filter">Filter</string>
-    <string name="quick_filter_large">Large</string>
+    <string name="preinstalled">Preinstalled</string>
+    <string name="never">Never</string>
+    <string name="quick_filter_large_total">Large</string>
+    <string name="quick_filter_recently_used">Recently Used</string>
+    <string name="quick_filter_unused">Unused</string>
     <string name="quick_filter_system">System</string>
+    <string name="quick_filter_google_play">Google Play</string>
     <string name="quick_filter_sideloaded">Sideloaded</string>
-    <string name="quick_filter_recently_installed">Recent Install</string>
-    <string name="quick_filter_recently_updated">Recent Update</string>
+    <string name="quick_filter_recently_installed">Recently Installed</string>
+    <string name="quick_filter_recently_updated">Recently Updated</string>
     <string name="apps_empty_filtered">No apps found</string>
     <string name="apps_clear_filters">Clear filters</string>
     <string name="installed_apps">Installed apps</string>
@@ -26,7 +33,12 @@
     <string name="search_history_clear">Clear</string>
     <string name="filter_source_section">Install Source</string>
     <string name="filter_sdk_section">Target SDK</string>
-    <string name="filter_apk_size_section">APK Size</string>
+    <string name="filter_apk_size_section">APK File Size</string>
+    <string name="filter_apk_size_description">Size of the installer package (.apk) only — excludes user data and cache.</string>
+    <string name="filter_total_size_section">Total App Size</string>
+    <string name="filter_total_size_description">Combined size of the installer, stored app data, and cached files.</string>
+    <string name="filter_total_size_locked_description">Filter by total app footprint. Grant storage access to measure each app\'s full size — including its data and cache, not just the installer.</string>
+    <string name="filter_total_size_grant_access">Grant storage access</string>
     <string name="filter_install_time_section">Install Date</string>
     <string name="filter_apply">Apply</string>
     <string name="filter_reset">Reset</string>
@@ -47,5 +59,13 @@
     <string name="filter_unused_days_count">%d days</string>
     <string name="filter_unused_months_count">%d months</string>
     <string name="filter_unused_year">1 year</string>
+    <string name="quick_filter_permission_usage_title">Usage access needed</string>
+    <string name="quick_filter_permission_usage_description">To filter by how recently apps were used, allow usage access in Settings. This lets the app see which apps are active and which have been sitting idle.</string>
+    <string name="quick_filter_permission_storage_title">Usage access needed</string>
+    <string name="quick_filter_permission_storage_description">This filter measures each app\'s full size — installer, stored data, and cache combined. Grant usage access in Settings to see how much space each app really takes.</string>
+    <string name="quick_filter_permission_open_settings">Open settings</string>
+    <string name="sort_permission_usage_title">Allow usage access</string>
+    <string name="sort_permission_usage_description">Sorting by Last Used needs to know when you last opened each app. Grant usage access in Settings to enable this sort option.</string>
+    <string name="sort_permission_storage_title">Allow usage access</string>
+    <string name="sort_permission_storage_description">Sorting by Total Size measures each app\'s full footprint — installer, stored data, and cache combined. Grant usage access in Settings to enable this sort option.</string>
 </resources>
-

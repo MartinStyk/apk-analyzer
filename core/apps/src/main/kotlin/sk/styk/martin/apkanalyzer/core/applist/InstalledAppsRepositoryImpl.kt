@@ -5,49 +5,67 @@ import android.content.pm.PackageManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import sk.styk.martin.apkanalyzer.core.appanalysis.AppInstallSourceManager
 import sk.styk.martin.apkanalyzer.core.applist.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import java.io.File
+import java.time.Instant
 import javax.inject.Inject
 
-class InstalledAppsRepositoryImpl @Inject constructor(
+internal const val INSTALLED_APPS = "InstalledApps"
+
+internal class InstalledAppsRepositoryImpl @Inject constructor(
     private val packageManager: PackageManager,
     private val appInstallSourceManager: AppInstallSourceManager,
     private val packageChangesObserver: PackageChangesObserver,
     private val dispatcherProvider: DispatcherProvider,
+    private val storageStatsRepository: StorageStatsRepository,
+    private val usageStatsRepository: UsageStatsRepository,
     appScope: CoroutineScope,
 ) : InstalledAppsRepository {
 
     private val cachedApps = packageChangesObserver.observe()
         .onStart { emit(Unit) }
-        .map { loadAllApps() }
+        .onEach { Logger.i(INSTALLED_APPS, "Load apps") }
+        .mapLatest { loadAllApps() }
+        .onEach { Logger.i(INSTALLED_APPS, "Apps loaded: ${it.size}") }
+        .onEach { apps -> storageStatsRepository.requestTotalSizes(apps.map { it.packageName }) }
+        .flatMapLatest { apps ->
+            combine(
+                storageStatsRepository.totalSizes,
+                usageStatsRepository.lastUsedTimes,
+            ) { storageResult, usageResult ->
+                val totalSizes = (storageResult as? StorageStatsRepository.DataResult.Available)?.data ?: emptyMap()
+                val lastUsedTimes = (usageResult as? UsageStatsRepository.DataResult.Available)?.data ?: emptyMap()
+
+                if (totalSizes.isNotEmpty() || lastUsedTimes.isNotEmpty()) {
+                    apps.map { app ->
+                        app.copy(
+                            totalSize = totalSizes[app.packageName],
+                            lastUsedTime = lastUsedTimes[app.packageName],
+                        )
+                    }.also { Logger.i(INSTALLED_APPS, "Enriched ${it.size} apps") }
+                } else {
+                    apps
+                }
+            }
+        }
         .flowOn(dispatcherProvider.io())
         .shareIn(appScope, SharingStarted.Eagerly, replay = 1)
 
     override fun apps(): Flow<List<InstalledApp>> = cachedApps
 
-    override fun apps(packageNames: List<String>): Flow<List<InstalledApp>> = packageChangesObserver.observe()
-        .onStart { emit(Unit) }
-        .map { loadApps(packageNames) }
-        .flowOn(dispatcherProvider.io())
-
     private fun loadAllApps(): List<InstalledApp> = packageManager.getInstalledPackages(0).mapNotNull { packageInfo ->
         packageInfo.applicationInfo?.let { packageInfo.toInstalledApp() }
-    }
-
-    private fun loadApps(packageNames: List<String>): List<InstalledApp> = packageNames.mapNotNull { name ->
-        try {
-            val packageInfo = packageManager.getPackageInfo(name, 0)
-            packageInfo?.applicationInfo?.let { packageInfo.toInstalledApp() }
-        } catch (_: PackageManager.NameNotFoundException) {
-            null
-        }
     }
 
     private fun PackageInfo.toInstalledApp(): InstalledApp {
@@ -61,8 +79,8 @@ class InstalledAppsRepositoryImpl @Inject constructor(
             targetSdk = appInfo?.targetSdkVersion ?: 0,
             apkSize = AppSize(appInfo?.sourceDir?.let { File(it).length() } ?: 0L),
             versionName = versionName,
-            installTime = firstInstallTime,
-            lastUpdateTime = lastUpdateTime,
+            installTime = Instant.ofEpochMilli(firstInstallTime),
+            lastUpdateTime = Instant.ofEpochMilli(lastUpdateTime),
         )
     }
 }

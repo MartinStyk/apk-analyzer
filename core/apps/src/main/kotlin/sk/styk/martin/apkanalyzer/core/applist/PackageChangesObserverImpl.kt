@@ -8,6 +8,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import javax.inject.Inject
 
 class PackageChangesObserverImpl @Inject constructor(@ApplicationContext private val context: Context) : PackageChangesObserver {
@@ -15,6 +16,7 @@ class PackageChangesObserverImpl @Inject constructor(@ApplicationContext private
     override fun observe(): Flow<Unit> = callbackFlow {
         val receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
+                Logger.i(INSTALLED_APPS, "Package change detected")
                 trySend(Unit)
             }
         }

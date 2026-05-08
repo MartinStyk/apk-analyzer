@@ -110,8 +110,10 @@ class AppSearchViewModel @Inject constructor(
         applicationName = applicationName,
         targetSdk = targetSdk,
         apkSize = apkSize,
+        totalSize = totalSize,
         installTime = installTime,
         lastUpdateTime = lastUpdateTime,
+        lastUsedTime = lastUsedTime,
         source = source,
     )
 

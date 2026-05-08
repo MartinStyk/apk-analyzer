@@ -38,7 +38,7 @@ internal fun ApkAnalyzerApp() {
             NavigationBar(
                 items = TOP_LEVEL_DESTINATIONS,
                 selectedKey = navigationState.currentTopLevelKey,
-                isVisible = navigationState.currentKey in navigationState.topLevelKeys,
+                isVisible = true, // navigationState.currentKey in navigationState.topLevelKeys,
                 onSelectKey = navigator::navigate,
             )
         },

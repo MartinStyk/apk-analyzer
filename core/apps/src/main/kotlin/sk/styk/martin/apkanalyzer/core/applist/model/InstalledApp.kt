@@ -2,6 +2,7 @@ package sk.styk.martin.apkanalyzer.core.applist.model
 
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
+import java.time.Instant
 
 data class InstalledApp(
     val packageName: String,
@@ -12,6 +13,8 @@ data class InstalledApp(
     val targetSdk: Int,
     val apkSize: AppSize,
     val versionName: String?,
-    val installTime: Long,
-    val lastUpdateTime: Long,
+    val installTime: Instant,
+    val lastUpdateTime: Instant,
+    val totalSize: AppSize? = null,
+    val lastUsedTime: Instant? = null,
 )

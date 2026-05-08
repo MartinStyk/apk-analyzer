@@ -19,6 +19,7 @@ import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Security
 import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.rounded.Storage
 import androidx.compose.material.icons.rounded.SwapVert
 import androidx.compose.material.icons.rounded.UploadFile
 
@@ -43,4 +44,5 @@ data object ApkAnalyzerIcons {
     val Sort = Icons.Rounded.SwapVert
     val FileUpload = Icons.Rounded.UploadFile
     val File = Icons.AutoMirrored.Rounded.InsertDriveFile
+    val Storage = Icons.Rounded.Storage
 }

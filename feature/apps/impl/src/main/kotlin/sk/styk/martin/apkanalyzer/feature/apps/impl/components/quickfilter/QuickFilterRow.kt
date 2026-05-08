@@ -1,5 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.apps.impl.components.quickfilter
 
+import android.content.Intent
+import android.provider.Settings
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -10,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -21,6 +24,8 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.sharedElement
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.feature.apps.impl.R
+import sk.styk.martin.apkanalyzer.feature.apps.impl.components.AppDataPermission
+import sk.styk.martin.apkanalyzer.feature.apps.impl.components.PermissionRationaleBottomSheet
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.QuickFilter
 
 @Composable
@@ -30,11 +35,16 @@ internal fun QuickFilterRow(
     viewModel: QuickFilterRowViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
                 is QuickFilterRowEvent.NavigateToFilter -> onFilter()
+
+                is QuickFilterRowEvent.OpenUsageAccessSettings -> {
+                    context.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
+                }
             }
         }
     }
@@ -75,15 +85,38 @@ private fun QuickFilterRowContent(
             )
         }
     }
+
+    state.permissionRationale?.let { rationale ->
+        PermissionRationaleBottomSheet(
+            title = stringResource(rationale.titleRes()),
+            description = stringResource(rationale.descriptionRes()),
+            openSettingsLabel = stringResource(R.string.quick_filter_permission_open_settings),
+            onOpenSettings = { onAction(QuickFilterRowAction.OpenPermissionSettings(rationale)) },
+            onDismiss = { onAction(QuickFilterRowAction.DismissPermissionRationale) },
+        )
+    }
 }
 
 @Composable
 private fun QuickFilter.displayName(): String = when (this) {
-    QuickFilter.LargeApps -> stringResource(R.string.quick_filter_large)
-    QuickFilter.SystemApps -> stringResource(R.string.quick_filter_system)
+    QuickFilter.Large -> stringResource(R.string.quick_filter_large_total)
+    QuickFilter.RecentlyUsed -> stringResource(R.string.quick_filter_recently_used)
+    QuickFilter.Unused -> stringResource(R.string.quick_filter_unused)
+    QuickFilter.System -> stringResource(R.string.quick_filter_system)
+    QuickFilter.GooglePlay -> stringResource(R.string.quick_filter_google_play)
     QuickFilter.Sideloaded -> stringResource(R.string.quick_filter_sideloaded)
     QuickFilter.RecentlyInstalled -> stringResource(R.string.quick_filter_recently_installed)
     QuickFilter.RecentlyUpdated -> stringResource(R.string.quick_filter_recently_updated)
+}
+
+private fun AppDataPermission.titleRes(): Int = when (this) {
+    AppDataPermission.UsageAccess -> R.string.quick_filter_permission_usage_title
+    AppDataPermission.StorageAccess -> R.string.quick_filter_permission_storage_title
+}
+
+private fun AppDataPermission.descriptionRes(): Int = when (this) {
+    AppDataPermission.UsageAccess -> R.string.quick_filter_permission_usage_description
+    AppDataPermission.StorageAccess -> R.string.quick_filter_permission_storage_description
 }
 
 @Preview
@@ -103,7 +136,7 @@ private fun QuickFilterRowActivePreview() {
     ApkAnalyzerTheme {
         QuickFilterRowContent(
             state = QuickFilterRowState(
-                activeQuickFilters = persistentSetOf(QuickFilter.LargeApps, QuickFilter.SystemApps),
+                activeQuickFilters = persistentSetOf(QuickFilter.Large, QuickFilter.System),
                 isDeepFilterActive = true,
             ),
             onAction = {},

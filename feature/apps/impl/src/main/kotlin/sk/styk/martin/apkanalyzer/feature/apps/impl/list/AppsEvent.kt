@@ -6,4 +6,5 @@ sealed interface AppsEvent {
     data object NavigateToSettings : AppsEvent
     data object NavigateToShowApkDetails : AppsEvent
     data object NavigateToFilter : AppsEvent
+    data object OpenUsageAccessSettings : AppsEvent
 }

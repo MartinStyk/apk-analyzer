@@ -16,30 +16,34 @@ data class AppFilterState(
     val selectedSources: ImmutableSet<AppSource> = persistentSetOf(),
     val selectedSdkVersions: ImmutableSet<Int> = persistentSetOf(),
     val apkSizeRange: AppSizeRange? = null,
+    val totalSizeRange: AppSizeRange? = null,
     val installTimeRange: DateRange? = null,
     val updateTimeRange: DateRange? = null,
     val unusedPeriod: UnusedAppsPeriod? = null,
+    val recentlyUsedDays: Int? = null,
 ) {
     val isActive: Boolean
         get() = selectedSources.isNotEmpty() ||
             selectedSdkVersions.isNotEmpty() ||
             apkSizeRange != null ||
+            totalSizeRange != null ||
             installTimeRange != null ||
             updateTimeRange != null ||
-            unusedPeriod != null
+            unusedPeriod != null ||
+            recentlyUsedDays != null
 
-    val isLargeFilterActive: Boolean get() = apkSizeRange?.min != null && apkSizeRange.min >= LARGE_APP_THRESHOLD
-    val isSystemFilterActive: Boolean get() = selectedSources == SYSTEM_ONLY_SOURCES
-    val isSideloadedFilterActive: Boolean get() = selectedSources == SIDELOADED_ONLY_SOURCES
-    val isRecentInstallActive: Boolean get() = installTimeRange?.start != null && installTimeRange.start > Instant.now() - TWO_MONTHS
-    val isRecentUpdateActive: Boolean get() = updateTimeRange?.start != null && updateTimeRange.start > Instant.now() - TWO_MONTHS
+    val isLargeTotalFilterActive: Boolean get() = totalSizeRange?.min != null && totalSizeRange.min >= LARGE_TOTAL_SIZE_THRESHOLD
+    val isSystemFilterActive: Boolean get() = AppSource.SystemPreinstalled in selectedSources
+    val isGooglePlayFilterActive: Boolean get() = AppSource.GooglePlay in selectedSources
+    val isSideloadedFilterActive: Boolean get() = AppSource.Unknown in selectedSources
+    val isRecentInstallActive: Boolean get() = installTimeRange?.start != null && installTimeRange.start > Instant.now() - ONE_MONTH - 1.days.toJavaDuration()
+    val isRecentUpdateActive: Boolean get() = updateTimeRange?.start != null && updateTimeRange.start > Instant.now() - ONE_MONTH - 1.days.toJavaDuration()
     val isUnusedFilterActive: Boolean get() = unusedPeriod != null
+    val isRecentlyUsedActive: Boolean get() = recentlyUsedDays != null
 
     companion object {
-        val LARGE_APP_THRESHOLD = 100.megabytes
-        val TWO_MONTHS: Duration = 60.days.toJavaDuration()
-        private val SYSTEM_ONLY_SOURCES = persistentSetOf(AppSource.SystemPreinstalled)
-        private val SIDELOADED_ONLY_SOURCES = persistentSetOf(AppSource.Unknown)
+        val LARGE_TOTAL_SIZE_THRESHOLD = 500.megabytes
+        val ONE_MONTH: Duration = 30.days.toJavaDuration()
     }
 }
 

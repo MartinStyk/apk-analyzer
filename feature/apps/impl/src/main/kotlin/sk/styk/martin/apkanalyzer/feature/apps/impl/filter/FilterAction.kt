@@ -9,6 +9,7 @@ sealed interface FilterAction {
     data class SourceToggled(val source: AppSource, val selected: Boolean) : FilterAction
     data class SdkVersionToggled(val sdkVersion: Int) : FilterAction
     data class ApkSizeRangeChanged(val range: AppSizeRange) : FilterAction
+    data class TotalSizeRangeChanged(val range: AppSizeRange) : FilterAction
     data class InstallTimeRangeChanged(val range: DateRange) : FilterAction
     data object InstallTimeRangeCleared : FilterAction
     data object Apply : FilterAction
@@ -18,6 +19,5 @@ sealed interface FilterAction {
     data object DiscardChanges : FilterAction
     data object DismissUnsavedChangesSheet : FilterAction
     data class UnusedPeriodSelected(val period: UnusedAppsPeriod) : FilterAction
-    data object RecheckUsagePermission : FilterAction
     data object OpenUsagePermissionSettings : FilterAction
 }

@@ -4,7 +4,9 @@ import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
+import sk.styk.martin.apkanalyzer.feature.apps.impl.components.AppDataPermission
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppFilterState
+import java.time.Instant
 
 @Immutable
 data class AppsState(
@@ -13,6 +15,7 @@ data class AppsState(
     val sortType: SortType = SortType.Name,
     val sortAscending: Boolean = true,
     val activeFilter: AppFilterState = AppFilterState(),
+    val sortPermissionRationale: AppDataPermission? = null,
 )
 
 sealed interface AppListState {
@@ -31,12 +34,24 @@ sealed interface RecentsState {
 }
 
 @Immutable
-data class AppListItem(val packageName: String, val applicationName: String, val targetSdk: Int, val apkSize: AppSize, val installTime: Long, val lastUpdateTime: Long, val source: AppSource)
+data class AppListItem(
+    val packageName: String,
+    val applicationName: String,
+    val targetSdk: Int,
+    val apkSize: AppSize,
+    val totalSize: AppSize?,
+    val lastUsedTime: Instant?,
+    val installTime: Instant,
+    val lastUpdateTime: Instant,
+    val source: AppSource,
+)
 
 enum class SortType {
     Name,
-    Size,
+    TotalSize,
+    ApkSize,
     InstallDate,
-    TargetSdk,
     LastUpdated,
+    LastUsed,
+    TargetSdk,
 }

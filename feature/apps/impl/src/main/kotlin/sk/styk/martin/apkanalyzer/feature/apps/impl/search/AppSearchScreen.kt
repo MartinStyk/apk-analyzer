@@ -46,9 +46,10 @@ import sk.styk.martin.apkanalyzer.feature.apps.impl.R
 import sk.styk.martin.apkanalyzer.feature.apps.impl.components.appitem.AppListItemRow
 import sk.styk.martin.apkanalyzer.feature.apps.impl.components.quickfilter.QuickFilterRow
 import sk.styk.martin.apkanalyzer.feature.apps.impl.list.AppListItem
+import java.time.Instant
 
 @Composable
-fun AppSearchScreen(
+internal fun AppSearchScreen(
     onAppClick: (String) -> Unit,
     onBack: () -> Unit,
     onFilter: () -> Unit,
@@ -318,8 +319,10 @@ private fun AppSearchContentResultsPreview() {
                         applicationName = "Instagram",
                         targetSdk = 34,
                         apkSize = AppSize(67_108_864),
-                        installTime = 0L,
-                        lastUpdateTime = 0L,
+                        totalSize = null,
+                        installTime = Instant.EPOCH,
+                        lastUpdateTime = Instant.EPOCH,
+                        lastUsedTime = Instant.EPOCH,
                         source = AppSource.GooglePlay,
                     ),
                 ),

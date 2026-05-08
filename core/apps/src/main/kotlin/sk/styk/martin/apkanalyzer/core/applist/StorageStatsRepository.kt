@@ -1,15 +1,15 @@
 package sk.styk.martin.apkanalyzer.core.applist
 
 import kotlinx.coroutines.flow.StateFlow
-import java.time.Instant
+import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 
-interface UsageStatsRepository {
-
+interface StorageStatsRepository {
     sealed interface DataResult<out T> {
         data object Loading : DataResult<Nothing>
         data class Available<T>(val data: T) : DataResult<T>
     }
 
     val isPermissionGranted: StateFlow<Boolean>
-    val lastUsedTimes: StateFlow<DataResult<Map<String, Instant>>>
+    val totalSizes: StateFlow<DataResult<Map<String, AppSize>>>
+    fun requestTotalSizes(packageNames: List<String>)
 }
