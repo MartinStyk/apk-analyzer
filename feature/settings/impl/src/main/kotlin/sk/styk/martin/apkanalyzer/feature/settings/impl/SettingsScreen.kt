@@ -21,11 +21,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import sk.styk.martin.apkanalyzer.core.common.settings.ColorAppScheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Chip
-import sk.styk.martin.apkanalyzer.core.uilibrary.components.IconButton
-import sk.styk.martin.apkanalyzer.core.uilibrary.components.IconButtonStyle
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Switch
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
-import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
+import sk.styk.martin.apkanalyzer.core.uilibrary.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.card
 import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.sharedBounds
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
@@ -66,24 +64,10 @@ private fun SettingsContent(
             .fillMaxSize()
             .background(AppTheme.colors.background),
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(AppTheme.colors.background)
-                .padding(start = 4.dp, end = 16.dp, top = 12.dp, bottom = 12.dp),
-        ) {
-            IconButton(
-                imageVector = ApkAnalyzerIcons.Back,
-                style = IconButtonStyle.Standard,
-                onClick = { onAction(SettingsAction.NavigateBack) },
-            )
-            Text(
-                text = stringResource(R.string.settings_title),
-                style = AppTheme.typography.titleLarge,
-                color = AppTheme.colors.onBackground,
-            )
-        }
+        Toolbar(
+            title = stringResource(R.string.settings_title),
+            onBack = { onAction(SettingsAction.NavigateBack) },
+        )
 
         Column(
             modifier = Modifier

@@ -34,6 +34,7 @@ class AppFilterRepository @Inject constructor() {
     fun toggleQuickFilter(filter: QuickFilter) {
         _filter.update { current ->
             when (filter) {
+                QuickFilter.SensitivePermissions -> toggleSensitivePermissions(current)
                 QuickFilter.Large -> toggleLargeTotal(current)
                 QuickFilter.RecentlyUsed -> toggleRecentlyUsed(current)
                 QuickFilter.Unused -> toggleUnused(current)
@@ -45,6 +46,15 @@ class AppFilterRepository @Inject constructor() {
             }
         }
     }
+
+    private fun toggleSensitivePermissions(current: AppFilterState): AppFilterState = current.copy(
+        selectedPermissions = if (current.isSensitivePermissionsFilterActive) {
+            persistentSetOf()
+        } else {
+            PermissionPreset.Sensitive.permissions.toPersistentSet()
+        },
+        permissionMatchAll = false,
+    )
 
     private fun toggleSource(current: AppFilterState, source: AppSource): AppFilterState = current.copy(
         selectedSources = if (source in current.selectedSources) persistentSetOf() else persistentSetOf(source),
@@ -91,6 +101,7 @@ class AppFilterRepository @Inject constructor() {
     }
 
     private fun deriveActiveQuickFilters(state: AppFilterState): ImmutableSet<QuickFilter> = buildList {
+        if (state.isSensitivePermissionsFilterActive) add(QuickFilter.SensitivePermissions)
         if (state.isLargeTotalFilterActive) add(QuickFilter.Large)
         if (state.isRecentlyUsedActive) add(QuickFilter.RecentlyUsed)
         if (state.isUnusedFilterActive) add(QuickFilter.Unused)

@@ -9,8 +9,10 @@ import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.rounded.Android
 import androidx.compose.material.icons.rounded.Apps
 import androidx.compose.material.icons.rounded.ArrowDownward
+import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.ArrowUpward
 import androidx.compose.material.icons.rounded.CalendarToday
+import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.FilterList
 import androidx.compose.material.icons.rounded.History
@@ -28,7 +30,9 @@ data object ApkAnalyzerIcons {
     val AppsBorder = Icons.Outlined.Apps
     val Back = Icons.AutoMirrored.Rounded.ArrowBack
     val Android = Icons.Rounded.Android
+    val ArrowDropDown = Icons.Rounded.ArrowDropDown
     val Calendar = Icons.Rounded.CalendarToday
+    val ChevronRight = Icons.Rounded.ChevronRight
     val Permissions = Icons.Rounded.Security
     val PermissionsBorder = Icons.Outlined.Security
     val Statistics = Icons.Rounded.InsertChart

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.provider.Settings
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -37,6 +38,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
+import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
@@ -45,11 +47,11 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.components.Button
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Chip
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.DateRangePickerDialog
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
-import sk.styk.martin.apkanalyzer.core.uilibrary.components.IconButton
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.LoadingSpinner
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.RangeSlider
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.TextButton
+import sk.styk.martin.apkanalyzer.core.uilibrary.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.card
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
@@ -58,6 +60,7 @@ import sk.styk.martin.apkanalyzer.feature.apps.impl.R
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppFilterState
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppSizeRange
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.DateRange
+import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.PermissionPreset
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.UnusedAppsPeriod
 import java.text.DateFormat
 import java.time.Instant
@@ -67,6 +70,7 @@ import java.util.Locale
 @Composable
 internal fun FilterScreen(
     onBack: () -> Unit,
+    onPermissionFilter: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: FilterViewModel = hiltViewModel(),
 ) {
@@ -81,6 +85,8 @@ internal fun FilterScreen(
                 FilterEvent.OpenUsagePermissionSettings -> {
                     context.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
                 }
+
+                FilterEvent.NavigateToPermissionFilter -> onPermissionFilter()
             }
         }
     }
@@ -109,9 +115,15 @@ private fun FilterContent(
             .fillMaxSize()
             .background(AppTheme.colors.background),
     ) {
-        FilterToolbar(
+        Toolbar(
+            title = stringResource(R.string.filter),
             onBack = { onAction(FilterAction.NavigateBack) },
-            onReset = { onAction(FilterAction.Reset) },
+            actions = {
+                TextButton(
+                    text = stringResource(R.string.filter_reset),
+                    onClick = { onAction(FilterAction.Reset) },
+                )
+            },
         )
 
         Column(
@@ -127,6 +139,13 @@ private fun FilterContent(
             SourceSection(
                 selectedSources = state.filter.selectedSources,
                 onSourceToggle = { source, selected -> onAction(FilterAction.SourceToggled(source, selected)) },
+            )
+
+            PermissionsSection(
+                activePermissionPresets = state.activePermissionPresets,
+                extraPermissionCount = state.extraPermissionCount,
+                onPresetToggle = { onAction(FilterAction.PermissionPresetToggled(it)) },
+                onOpenPermissionFilter = { onAction(FilterAction.OpenPermissionFilter) },
             )
 
             UnusedAppsSection(
@@ -195,36 +214,6 @@ private fun FilterContent(
     }
 }
 
-@Composable
-private fun FilterToolbar(
-    onBack: () -> Unit,
-    onReset: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .fillMaxWidth()
-            .background(AppTheme.colors.background)
-            .padding(start = 4.dp, end = 8.dp, top = 12.dp, bottom = 12.dp),
-    ) {
-        IconButton(
-            imageVector = ApkAnalyzerIcons.Back,
-            onClick = onBack,
-        )
-        Text(
-            text = stringResource(R.string.filter),
-            style = AppTheme.typography.titleLarge,
-            color = AppTheme.colors.onBackground,
-            modifier = Modifier.weight(1f),
-        )
-        TextButton(
-            text = stringResource(R.string.filter_reset),
-            onClick = onReset,
-        )
-    }
-}
-
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun SourceSection(
@@ -238,7 +227,6 @@ private fun SourceSection(
     ) {
         FlowRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             AppSource.entries.forEach { source ->
                 val isSelected = source in selectedSources
@@ -268,7 +256,6 @@ private fun SdkVersionSection(
     ) {
         FlowRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             availableSdkVersions.forEach { sdk ->
                 Chip(
@@ -433,14 +420,14 @@ private fun InstallTimeSection(
             Chip(
                 label = label,
                 selected = installTimeRange != null,
-                trailingIcon = ApkAnalyzerIcons.Calendar,
+                leadingIcon = ApkAnalyzerIcons.Calendar,
                 onClick = onSelectDateRange,
             )
 
             if (installTimeRange != null) {
                 Chip(
                     label = "",
-                    trailingIcon = ApkAnalyzerIcons.Clear,
+                    leadingIcon = ApkAnalyzerIcons.Clear,
                     onClick = onClearDateRange,
                 )
             }
@@ -472,7 +459,6 @@ private fun UnusedAppsSection(
 
             UnusedAppsSectionState.Available -> FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 UnusedAppsPeriod.entries.forEach { period ->
                     Chip(
@@ -539,6 +525,67 @@ private fun LockedContent(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun PermissionsSection(
+    activePermissionPresets: ImmutableList<PermissionPreset>,
+    extraPermissionCount: Int,
+    onPresetToggle: (PermissionPreset) -> Unit,
+    onOpenPermissionFilter: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        Text(
+            text = stringResource(R.string.filter_permissions_section),
+            style = AppTheme.typography.titleMedium,
+            color = AppTheme.colors.onBackground,
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .card()
+                .clickable(onClick = onOpenPermissionFilter)
+                .padding(16.dp),
+        ) {
+            PermissionPreset.all.forEach { preset ->
+                val isSelected = preset in activePermissionPresets
+                Logger.e("XXX", "preset $preset")
+                Chip(
+                    label = preset.displayLabel(),
+                    selected = isSelected,
+                    onClick = { onPresetToggle(preset) },
+                )
+            }
+            if (extraPermissionCount > 0) {
+                Chip(
+                    label = stringResource(R.string.filter_permissions_count, extraPermissionCount),
+                    selected = true,
+                    onClick = onOpenPermissionFilter,
+                )
+            } else {
+                Chip(
+                    label = stringResource(R.string.filter_permissions_more),
+                    leadingIcon = ApkAnalyzerIcons.Search,
+                    onClick = onOpenPermissionFilter,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun PermissionPreset.displayLabel(): String = when (this) {
+    PermissionPreset.Sensitive -> stringResource(R.string.filter_permissions_preset_sensitive)
+    PermissionPreset.Camera -> stringResource(R.string.filter_permissions_preset_camera)
+    PermissionPreset.Microphone -> stringResource(R.string.filter_permissions_preset_microphone)
+    PermissionPreset.Location -> stringResource(R.string.filter_permissions_preset_location)
+    PermissionPreset.Contacts -> stringResource(R.string.filter_permissions_preset_contacts)
+    PermissionPreset.Sms -> stringResource(R.string.filter_permissions_preset_sms)
+    PermissionPreset.Storage -> stringResource(R.string.filter_permissions_preset_storage)
+}
+
 @Composable
 private fun FilterSection(
     title: String,
@@ -575,7 +622,7 @@ private fun UnsavedChangesBottomSheet(
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)
                 .padding(bottom = 24.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             Text(
                 text = stringResource(R.string.filter_unsaved_title),
@@ -605,7 +652,6 @@ private fun UnsavedChangesBottomSheet(
 @Composable
 private fun AppSource.displayName(): String = when (this) {
     AppSource.GooglePlay -> stringResource(R.string.filter_source_google_play)
-    AppSource.AmazonStore -> stringResource(R.string.filter_source_amazon_store)
     AppSource.SystemPreinstalled -> stringResource(R.string.filter_source_system)
     AppSource.Unknown -> stringResource(R.string.filter_source_unknown)
 }
@@ -680,6 +726,28 @@ private fun FilterContentPreview() {
                 totalSizeSectionState = TotalSizeSectionState.RangeAvailable(AppSizeRange(1.megabytes, 2048.megabytes)),
                 unusedAppsSectionState = UnusedAppsSectionState.Available,
                 availableSdkVersions = persistentListOf(35, 34, 33, 31, 30, 29, 28),
+            ),
+            onAction = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun FilterContentWithPermissionsPreview() {
+    ApkAnalyzerTheme {
+        FilterContent(
+            state = FilterState(
+                filter = AppFilterState(),
+                apkSizeSectionState = ApkSizeSectionState.Loading,
+                totalSizeSectionState = TotalSizeSectionState.PermissionMissing,
+                unusedAppsSectionState = UnusedAppsSectionState.PermissionMissing,
+                availableSdkVersions = persistentListOf(35, 34),
+                activePermissionPresets = persistentListOf(
+                    PermissionPreset.Camera,
+                    PermissionPreset.Location,
+                ),
+                extraPermissionCount = 2,
             ),
             onAction = {},
         )

@@ -9,8 +9,10 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.ui.NavDisplay
 import sk.styk.martin.apkanalyzer.core.navigation.Navigator
 import sk.styk.martin.apkanalyzer.core.uilibrary.animation.bottomEntryMetadata
+import sk.styk.martin.apkanalyzer.core.uilibrary.animation.slideFromEndEntryMetadata
 import sk.styk.martin.apkanalyzer.feature.apps.api.AppsNavKey
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.FilterScreen
+import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.permission.PermissionFilterScreen
 import sk.styk.martin.apkanalyzer.feature.apps.impl.list.AppsScreen
 import sk.styk.martin.apkanalyzer.feature.apps.impl.search.AppSearchScreen
 import sk.styk.martin.apkanalyzer.feature.settings.api.SettingsNavKey
@@ -57,6 +59,19 @@ fun EntryProviderScope<NavKey>.appEntries(navigator: Navigator) {
         metadata = bottomEntryMetadata(),
     ) {
         FilterScreen(
+            onBack = {
+                navigator.goBack()
+            },
+            onPermissionFilter = {
+                navigator.navigate(PermissionFilterNavKey)
+            },
+        )
+    }
+
+    entry<PermissionFilterNavKey>(
+        metadata = slideFromEndEntryMetadata(),
+    ) {
+        PermissionFilterScreen(
             onBack = {
                 navigator.goBack()
             },

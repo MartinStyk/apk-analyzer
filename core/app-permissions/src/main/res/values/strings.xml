@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="permission_label_camera">Camera</string>
+    <string name="permission_label_microphone">Microphone</string>
+    <string name="permission_label_location_precise">Precise Location</string>
+    <string name="permission_label_location_approximate">Approximate Location</string>
+    <string name="permission_label_location_background">Background Location</string>
+    <string name="permission_label_contacts_read">Read Contacts</string>
+    <string name="permission_label_contacts_write">Write Contacts</string>
+    <string name="permission_label_accounts">Get Accounts</string>
+    <string name="permission_label_sms_read">Read SMS</string>
+    <string name="permission_label_sms_send">Send SMS</string>
+    <string name="permission_label_sms_receive">Receive SMS</string>
+    <string name="permission_label_mms_receive">Receive MMS</string>
+    <string name="permission_label_wap_push">Receive WAP Push</string>
+    <string name="permission_label_call_log_read">Read Call Log</string>
+    <string name="permission_label_call_log_write">Write Call Log</string>
+    <string name="permission_label_call_phone">Make Phone Calls</string>
+    <string name="permission_label_phone_state">Phone State</string>
+    <string name="permission_label_phone_numbers">Phone Numbers</string>
+    <string name="permission_label_outgoing_calls">Outgoing Calls</string>
+    <string name="permission_label_storage_read">Read Storage</string>
+    <string name="permission_label_storage_write">Write Storage</string>
+    <string name="permission_label_media_images">Read Photos</string>
+    <string name="permission_label_media_video">Read Videos</string>
+    <string name="permission_label_media_audio">Read Music</string>
+    <string name="permission_label_media_selected">Read Selected Photos</string>
+    <string name="permission_label_biometric">Biometrics</string>
+    <string name="permission_label_fingerprint">Fingerprint</string>
+    <string name="permission_label_body_sensors">Body Sensors</string>
+    <string name="permission_label_body_sensors_background">Body Sensors in Background</string>
+    <string name="permission_label_activity_recognition">Physical Activity</string>
+    <string name="permission_label_bluetooth_scan">Scan for Nearby Devices</string>
+    <string name="permission_label_bluetooth_connect">Bluetooth Connect</string>
+    <string name="permission_label_bluetooth_advertise">Bluetooth Advertise</string>
+    <string name="permission_label_bluetooth">Bluetooth</string>
+    <string name="permission_label_uwb">UWB Ranging</string>
+    <string name="permission_label_notifications">Post Notifications</string>
+    <string name="permission_label_internet">Internet</string>
+    <string name="permission_label_nfc">NFC</string>
+    <string name="permission_label_vibrate">Vibrate</string>
+    <string name="permission_label_flashlight">Flashlight</string>
+    <string name="permission_label_wifi_change">Change Wi-Fi</string>
+    <string name="permission_label_wifi_state">Wi-Fi State</string>
+    <string name="permission_label_network_state">Network State</string>
+    <string name="permission_label_wake_lock">Keep Device Awake</string>
+    <string name="permission_label_boot">Run at Startup</string>
+    <string name="permission_label_foreground_service">Foreground Service</string>
+    <string name="permission_label_install_packages">Install Packages</string>
+    <string name="permission_label_overlay">Draw over Other Apps</string>
+    <string name="permission_label_manage_storage">Manage All Files</string>
+    <string name="permission_label_schedule_alarm">Exact Alarms</string>
+</resources>
+

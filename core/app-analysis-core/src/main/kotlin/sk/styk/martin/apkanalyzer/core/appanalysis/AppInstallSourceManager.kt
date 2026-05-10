@@ -15,7 +15,6 @@ constructor(private val packageManager: PackageManager) {
 
         return when (installer) {
             GOOGLE_PLAY_INSTALLER -> AppSource.GooglePlay
-            AMAZON_STORE_INSTALLER -> AppSource.AmazonStore
             else -> if (isSystemInstalledApp(packageInfo)) AppSource.SystemPreinstalled else AppSource.Unknown
         }
     }
@@ -34,6 +33,5 @@ constructor(private val packageManager: PackageManager) {
 
     private companion object {
         const val GOOGLE_PLAY_INSTALLER = "com.android.vending"
-        const val AMAZON_STORE_INSTALLER = "com.amazon.venezia"
     }
 }

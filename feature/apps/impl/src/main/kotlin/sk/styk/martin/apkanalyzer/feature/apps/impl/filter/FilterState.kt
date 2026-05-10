@@ -5,6 +5,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppFilterState
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppSizeRange
+import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.PermissionPreset
 
 sealed interface ApkSizeSectionState {
     data object Loading : ApkSizeSectionState
@@ -30,6 +31,8 @@ data class FilterState(
     val totalSizeSectionState: TotalSizeSectionState = TotalSizeSectionState.Loading,
     val unusedAppsSectionState: UnusedAppsSectionState = UnusedAppsSectionState.Loading,
     val availableSdkVersions: ImmutableList<Int> = persistentListOf(),
+    val activePermissionPresets: ImmutableList<PermissionPreset> = persistentListOf(),
+    val extraPermissionCount: Int = 0,
     val hasUnsavedChanges: Boolean = false,
     val showUnsavedChangesSheet: Boolean = false,
 )

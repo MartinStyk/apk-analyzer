@@ -11,7 +11,6 @@ import java.time.Instant
 import kotlin.time.Duration.Companion.days
 import kotlin.time.toJavaDuration
 
-@Immutable
 data class AppFilterState(
     val selectedSources: ImmutableSet<AppSource> = persistentSetOf(),
     val selectedSdkVersions: ImmutableSet<Int> = persistentSetOf(),
@@ -21,6 +20,8 @@ data class AppFilterState(
     val updateTimeRange: DateRange? = null,
     val unusedPeriod: UnusedAppsPeriod? = null,
     val recentlyUsedDays: Int? = null,
+    val selectedPermissions: ImmutableSet<String> = persistentSetOf(),
+    val permissionMatchAll: Boolean = false,
 ) {
     val isActive: Boolean
         get() = selectedSources.isNotEmpty() ||
@@ -30,7 +31,8 @@ data class AppFilterState(
             installTimeRange != null ||
             updateTimeRange != null ||
             unusedPeriod != null ||
-            recentlyUsedDays != null
+            recentlyUsedDays != null ||
+            selectedPermissions.isNotEmpty()
 
     val isLargeTotalFilterActive: Boolean get() = totalSizeRange?.min != null && totalSizeRange.min >= LARGE_TOTAL_SIZE_THRESHOLD
     val isSystemFilterActive: Boolean get() = AppSource.SystemPreinstalled in selectedSources
@@ -40,6 +42,7 @@ data class AppFilterState(
     val isRecentUpdateActive: Boolean get() = updateTimeRange?.start != null && updateTimeRange.start > Instant.now() - ONE_MONTH - 1.days.toJavaDuration()
     val isUnusedFilterActive: Boolean get() = unusedPeriod != null
     val isRecentlyUsedActive: Boolean get() = recentlyUsedDays != null
+    val isSensitivePermissionsFilterActive: Boolean get() = PermissionPreset.Sensitive.permissions.all { it in selectedPermissions }
 
     companion object {
         val LARGE_TOTAL_SIZE_THRESHOLD = 500.megabytes

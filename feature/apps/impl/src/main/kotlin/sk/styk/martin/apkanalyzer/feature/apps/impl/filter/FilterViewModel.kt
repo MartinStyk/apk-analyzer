@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.applist.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.applist.StorageStatsRepository
 import sk.styk.martin.apkanalyzer.core.applist.UsageStatsRepository
@@ -19,11 +21,15 @@ import sk.styk.martin.apkanalyzer.core.common.coroutines.combine
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppFilterRepository
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppFilterState
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppSizeRange
+import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.PermissionFilterCoordinator
+import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.PermissionFilterDraft
+import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.PermissionPreset
 import javax.inject.Inject
 
 @HiltViewModel
 class FilterViewModel @Inject constructor(
     private val appFilterRepository: AppFilterRepository,
+    private val permissionFilterCoordinator: PermissionFilterCoordinator,
     private val installedAppsRepository: InstalledAppsRepository,
     private val usageStatsRepository: UsageStatsRepository,
     private val storageStatsRepository: StorageStatsRepository,
@@ -34,6 +40,19 @@ class FilterViewModel @Inject constructor(
 
     private val eventChannel = Channel<FilterEvent>(Channel.BUFFERED)
     val events = eventChannel.receiveAsFlow()
+
+    init {
+        viewModelScope.launch {
+            permissionFilterCoordinator.results.collect { draft ->
+                localFilter.update { current ->
+                    current.copy(
+                        selectedPermissions = draft.selectedPermissions.toImmutableSet(),
+                        permissionMatchAll = draft.matchAll,
+                    )
+                }
+            }
+        }
+    }
 
     private val appsMetadata = installedAppsRepository.apps()
         .map { apps ->
@@ -64,6 +83,12 @@ class FilterViewModel @Inject constructor(
             filter
         }
 
+        val activePresets = PermissionPreset.all
+            .filter { preset -> preset.permissions.all { it in effectiveFilter.selectedPermissions } }
+            .toImmutableList()
+        val coveredByPresets = activePresets.flatMapTo(mutableSetOf()) { it.permissions }
+        val extraPermissionCount = effectiveFilter.selectedPermissions.count { it !in coveredByPresets }
+
         FilterState(
             filter = effectiveFilter,
             apkSizeSectionState = when {
@@ -80,6 +105,8 @@ class FilterViewModel @Inject constructor(
                 else -> UnusedAppsSectionState.Available
             },
             availableSdkVersions = metadata.sdkVersions.toImmutableList(),
+            activePermissionPresets = activePresets,
+            extraPermissionCount = extraPermissionCount,
             showUnsavedChangesSheet = showSheet,
             hasUnsavedChanges = effectiveFilter != savedFilter,
         )
@@ -129,6 +156,27 @@ class FilterViewModel @Inject constructor(
 
             FilterAction.OpenUsagePermissionSettings -> {
                 eventChannel.trySend(FilterEvent.OpenUsagePermissionSettings)
+            }
+
+            FilterAction.OpenPermissionFilter -> {
+                permissionFilterCoordinator.setInput(
+                    PermissionFilterDraft(
+                        selectedPermissions = localFilter.value.selectedPermissions,
+                        matchAll = localFilter.value.permissionMatchAll,
+                    ),
+                )
+                eventChannel.trySend(FilterEvent.NavigateToPermissionFilter)
+            }
+
+            is FilterAction.PermissionPresetToggled -> localFilter.update { current ->
+                val preset = action.preset
+                val allSelected = preset.permissions.all { it in current.selectedPermissions }
+                val newPermissions = if (allSelected) {
+                    (current.selectedPermissions - preset.permissions).toPersistentSet()
+                } else {
+                    (current.selectedPermissions + preset.permissions).toPersistentSet()
+                }
+                current.copy(selectedPermissions = newPermissions)
             }
 
             FilterAction.Apply -> {

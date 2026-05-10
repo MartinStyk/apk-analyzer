@@ -99,6 +99,7 @@ private fun QuickFilterRowContent(
 
 @Composable
 private fun QuickFilter.displayName(): String = when (this) {
+    QuickFilter.SensitivePermissions -> stringResource(R.string.quick_filter_sensitive_permissions)
     QuickFilter.Large -> stringResource(R.string.quick_filter_large_total)
     QuickFilter.RecentlyUsed -> stringResource(R.string.quick_filter_recently_used)
     QuickFilter.Unused -> stringResource(R.string.quick_filter_unused)

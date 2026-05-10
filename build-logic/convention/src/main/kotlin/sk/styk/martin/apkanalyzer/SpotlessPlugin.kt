@@ -28,7 +28,7 @@ class SpotlessPlugin : Plugin<Project> {
                             "ktlint_compose_compositionlocal-allowlist" to "disabled",
                             "ktlint_compose_lambda-param-in-effect" to "disabled",
                             "ktlint_function_naming_ignore_when_annotated_with" to "Composable",
-                            )
+                        )
                     )
             }
             kotlinGradle {

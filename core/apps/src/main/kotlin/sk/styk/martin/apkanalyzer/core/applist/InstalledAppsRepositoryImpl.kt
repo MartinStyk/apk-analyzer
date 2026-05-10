@@ -64,7 +64,7 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
 
     override fun apps(): Flow<List<InstalledApp>> = cachedApps
 
-    private fun loadAllApps(): List<InstalledApp> = packageManager.getInstalledPackages(0).mapNotNull { packageInfo ->
+    private fun loadAllApps(): List<InstalledApp> = packageManager.getInstalledPackages(PackageManager.GET_PERMISSIONS).mapNotNull { packageInfo ->
         packageInfo.applicationInfo?.let { packageInfo.toInstalledApp() }
     }
 
@@ -81,6 +81,7 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
             versionName = versionName,
             installTime = Instant.ofEpochMilli(firstInstallTime),
             lastUpdateTime = Instant.ofEpochMilli(lastUpdateTime),
+            requestedPermissions = requestedPermissions?.toList() ?: emptyList(),
         )
     }
 }

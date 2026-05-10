@@ -47,5 +47,12 @@ class FilterAppsUseCase @Inject constructor() {
                 lastUsed.isAfter(threshold)
             }
         }
+        if (selectedPermissions.isNotEmpty()) {
+            if (permissionMatchAll) {
+                add { app -> selectedPermissions.all { it in app.requestedPermissions } }
+            } else {
+                add { app -> app.requestedPermissions.any { it in selectedPermissions } }
+            }
+        }
     }
 }

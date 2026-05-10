@@ -3,6 +3,7 @@ package sk.styk.martin.apkanalyzer.feature.apps.impl.filter
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppSizeRange
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.DateRange
+import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.PermissionPreset
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.UnusedAppsPeriod
 
 sealed interface FilterAction {
@@ -20,4 +21,6 @@ sealed interface FilterAction {
     data object DismissUnsavedChangesSheet : FilterAction
     data class UnusedPeriodSelected(val period: UnusedAppsPeriod) : FilterAction
     data object OpenUsagePermissionSettings : FilterAction
+    data object OpenPermissionFilter : FilterAction
+    data class PermissionPresetToggled(val preset: PermissionPreset) : FilterAction
 }

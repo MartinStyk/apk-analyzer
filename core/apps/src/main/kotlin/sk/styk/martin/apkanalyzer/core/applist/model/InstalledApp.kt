@@ -15,6 +15,7 @@ data class InstalledApp(
     val versionName: String?,
     val installTime: Instant,
     val lastUpdateTime: Instant,
+    val requestedPermissions: List<String> = emptyList(),
     val totalSize: AppSize? = null,
     val lastUsedTime: Instant? = null,
 )
