@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetailData
 
+@Immutable
 sealed interface AppDetailState {
     data object Loading : AppDetailState
 
@@ -38,6 +39,5 @@ sealed interface AppDetailState {
         val usedPermissions: ImmutableList<String>,
     ) : AppDetailState
 
-    @Immutable
-    data class Error(val message: String) : AppDetailState
+    data object Error : AppDetailState
 }

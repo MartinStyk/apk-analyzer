@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -25,7 +24,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetailData
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.AppIcon
@@ -36,15 +34,19 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
+import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 @Composable
 internal fun AppDetailScreen(
+    appDetailInput: AppDetailInput,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: AppDetailViewModel = hiltViewModel(),
+    viewModel: AppDetailViewModel = hiltViewModel { factory: AppDetailViewModel.Factory ->
+        factory.create(appDetailInput)
+    },
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -79,7 +81,7 @@ private fun AppDetailContent(
         when (state) {
             is AppDetailState.Loading -> LoadingContent()
             is AppDetailState.Loaded -> LoadedContent(state = state)
-            is AppDetailState.Error -> ErrorContent(state = state, onAction = onAction)
+            is AppDetailState.Error -> ErrorContent(onAction = onAction)
         }
     }
 }
@@ -95,11 +97,7 @@ private fun LoadingContent(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun ErrorContent(
-    state: AppDetailState.Error,
-    onAction: (AppDetailAction) -> Unit,
-    modifier: Modifier = Modifier,
-) {
+private fun ErrorContent(onAction: (AppDetailAction) -> Unit, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -388,7 +386,7 @@ private fun AppDetailLoadingPreview() {
 private fun AppDetailErrorPreview() {
     ApkAnalyzerTheme {
         AppDetailContent(
-            state = AppDetailState.Error("Package not found"),
+            state = AppDetailState.Error,
             onAction = {},
             onBack = {},
         )

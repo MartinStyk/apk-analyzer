@@ -80,6 +80,12 @@ When creating new modules, use these convention plugins in `build.gradle.kts`:
 * Expose `val state: StateFlow<FeatureState>` built with `.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue)`.
 * In Activity/Composable: collect state with `collectAsStateWithLifecycle()`.
 * Events (one-shot): use `SharedFlow` or `Channel`.
+* Always use a **private backing field** for mutable flows, exposing only the immutable type publicly:
+  ```kotlin
+  private val _state = MutableStateFlow<FeatureState>(FeatureState.Loading)
+  val state: StateFlow<FeatureState> = _state
+  ```
+* For interface-defined flows, the same rule applies — the interface declares `val data: StateFlow<T>`, the implementation declares `private val _data = MutableStateFlow<T>(…)` and overrides with `override val data: StateFlow<T> = _data`.
 
 #### State, Event, Action
 * **State** - Current component status. Use `sealed interface/class` + `StateFlow`. Mark data classes `@Immutable`. **No lambdas in State**; use `Action` instead.
@@ -91,6 +97,11 @@ When creating new modules, use these convention plugins in `build.gradle.kts`:
 * **Manager** - Responsible for complex business logic operations and implementation details.
 * Define public **interfaces** for repositories and managers. Place implementations in the same module (e.g., `InstalledAppsRepository` + `InstalledAppsRepositoryImpl`). Bind via Hilt `@Binds`.
 * Use **data classes** for domain models.
+* **No exceptions across interfaces.** Public interface methods must never throw — use Kotlin `Result<T>`, nullable return types, or empty collections to express failure:
+  * Recoverable operations with meaningful error info → `Result<T>` (use `runCatching` in the implementation)
+  * Optional/missing value with no error context needed → nullable `T?`
+  * Collection results that may be empty → `List<T>` (empty = none found)
+  * Implementations may use exceptions internally but must catch them before returning.
 
 #### File Structure
 Keep feature-related components together in a single package:

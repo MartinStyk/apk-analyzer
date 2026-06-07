@@ -16,10 +16,12 @@ internal class InstallSourceResolverImpl @Inject constructor(private val package
         else -> AppSource.Unknown
     }
 
-    override fun appInstallingPackage(packageInfo: PackageInfo): String? = when {
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> packageManager.getInstallSourceInfo(packageInfo.packageName).installingPackageName
-        else -> packageManager.getInstallerPackageName(packageInfo.packageName)
-    }
+    override fun appInstallingPackage(packageInfo: PackageInfo): String? = runCatching {
+        when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> packageManager.getInstallSourceInfo(packageInfo.packageName).installingPackageName
+            else -> packageManager.getInstallerPackageName(packageInfo.packageName)
+        }
+    }.getOrNull()
 
     override fun isSystemInstalledApp(packageInfo: PackageInfo): Boolean = packageInfo.applicationInfo?.let { it.flags and ApplicationInfo.FLAG_SYSTEM != 0 } ?: false
 }

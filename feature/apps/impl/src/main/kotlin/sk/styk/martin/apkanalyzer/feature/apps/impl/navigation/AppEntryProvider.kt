@@ -14,7 +14,7 @@ import sk.styk.martin.apkanalyzer.core.common.util.FileUtil
 import sk.styk.martin.apkanalyzer.core.navigation.Navigator
 import sk.styk.martin.apkanalyzer.core.uilibrary.animation.bottomEntryMetadata
 import sk.styk.martin.apkanalyzer.core.uilibrary.animation.slideFromEndEntryMetadata
-import sk.styk.martin.apkanalyzer.feature.appdetail.api.ApkFileDetailNavKey
+import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailNavKey
 import sk.styk.martin.apkanalyzer.feature.apps.api.AppsNavKey
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.FilterScreen
@@ -32,14 +32,14 @@ fun EntryProviderScope<NavKey>.appEntries(navigator: Navigator) {
             if (uri != null) {
                 val cachedFile = FileUtil.copyUriToCache(context, uri)
                 if (cachedFile != null) {
-                    navigator.navigate(ApkFileDetailNavKey(cachedFile.absolutePath))
+                    navigator.navigate(AppDetailNavKey(AppDetailInput.ApkFile(cachedFile.absolutePath)))
                 }
             }
         }
 
         AppsScreen(
             onAppDetails = { packageName ->
-                navigator.navigate(AppDetailNavKey(packageName))
+                navigator.navigate(AppDetailNavKey(AppDetailInput.InstalledPackage(packageName)))
             },
             onSearch = {
                 navigator.navigate(AppSearchNavKey)
@@ -63,7 +63,7 @@ fun EntryProviderScope<NavKey>.appEntries(navigator: Navigator) {
     ) {
         AppSearchScreen(
             onAppClick = { packageName ->
-                navigator.navigate(AppDetailNavKey(packageName))
+                navigator.navigate(AppDetailNavKey(AppDetailInput.InstalledPackage(packageName)))
             },
             onBack = {
                 navigator.goBack()
