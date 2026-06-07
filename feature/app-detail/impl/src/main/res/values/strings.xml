@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_detail_title">App Detail</string>
+    <string name="app_detail_general_section">General</string>
+    <string name="app_detail_package_name">Package name</string>
+    <string name="app_detail_version_name">Version name</string>
+    <string name="app_detail_version_code">Version code</string>
+    <string name="app_detail_system_app">System app</string>
+    <string name="app_detail_install_source">Install source</string>
+    <string name="app_detail_apk_directory">APK directory</string>
+    <string name="app_detail_data_directory">Data directory</string>
+    <string name="app_detail_apk_size">APK size</string>
+    <string name="app_detail_install_location">Install location</string>
+    <string name="app_detail_app_installer">Installer package</string>
+    <string name="app_detail_first_install">First installed</string>
+    <string name="app_detail_last_update">Last updated</string>
+    <string name="app_detail_sdk_section">SDK</string>
+    <string name="app_detail_min_sdk">Min SDK</string>
+    <string name="app_detail_target_sdk">Target SDK</string>
+    <string name="app_detail_certificate_section">Certificate</string>
+    <string name="app_detail_sign_algorithm">Sign algorithm</string>
+    <string name="app_detail_components_section">Components</string>
+    <string name="app_detail_activities">Activities</string>
+    <string name="app_detail_services">Services</string>
+    <string name="app_detail_content_providers">Content Providers</string>
+    <string name="app_detail_broadcast_receivers">Broadcast Receivers</string>
+    <string name="app_detail_permissions_section">Permissions</string>
+    <string name="app_detail_defined_permissions">Defined permissions</string>
+    <string name="app_detail_used_permissions">Used permissions</string>
+    <string name="app_detail_features">Features</string>
+    <string name="app_detail_yes">Yes</string>
+    <string name="app_detail_no">No</string>
+    <string name="app_detail_error">Failed to load app details</string>
+    <string name="app_detail_retry">Retry</string>
+    <string name="app_detail_unknown">Unknown</string>
+</resources>
+

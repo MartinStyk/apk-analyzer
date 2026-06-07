@@ -1,6 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain
 
-import sk.styk.martin.apkanalyzer.core.applist.model.InstalledApp
+import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
 import java.time.Instant
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.days

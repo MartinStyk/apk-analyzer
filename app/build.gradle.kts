@@ -34,11 +34,11 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.appAnalysisCore)
     implementation(projects.core.apps)
     implementation(projects.core.appPermissions)
     implementation(projects.core.appStatistics)
     implementation(projects.core.common)
+    implementation(projects.core.userPreferences)
     implementation(projects.core.navigation)
     implementation(projects.core.uiLibrary)
 
@@ -46,6 +46,7 @@ dependencies {
     implementation(projects.feature.permissions.impl)
     implementation(projects.feature.statistics.impl)
     implementation(projects.feature.settings.impl)
+    implementation(projects.feature.appDetail.impl)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)

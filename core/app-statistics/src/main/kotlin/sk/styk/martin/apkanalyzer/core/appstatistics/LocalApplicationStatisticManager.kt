@@ -6,12 +6,12 @@ import androidx.annotation.WorkerThread
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
-import sk.styk.martin.apkanalyzer.core.appanalysis.AppGeneralDataManager
-import sk.styk.martin.apkanalyzer.core.appanalysis.AppInstallSourceManager
-import sk.styk.martin.apkanalyzer.core.appanalysis.CertificateManager
-import sk.styk.martin.apkanalyzer.core.appanalysis.MAX_SDK_VERSION
-import sk.styk.martin.apkanalyzer.core.appanalysis.model.InstallLocation
-import sk.styk.martin.apkanalyzer.core.applist.InstalledAppsRepository
+import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
+import sk.styk.martin.apkanalyzer.core.apps.analysis.CertificateExtractor
+import sk.styk.martin.apkanalyzer.core.apps.analysis.InstallSourceResolver
+import sk.styk.martin.apkanalyzer.core.apps.analysis.MAX_SDK_VERSION
+import sk.styk.martin.apkanalyzer.core.apps.analysis.computeApkSize
+import sk.styk.martin.apkanalyzer.core.apps.model.InstallLocation
 import sk.styk.martin.apkanalyzer.core.appstatistics.model.PercentagePair
 import sk.styk.martin.apkanalyzer.core.appstatistics.model.StatisticsData
 import sk.styk.martin.apkanalyzer.core.appstatistics.model.toMathStats
@@ -33,9 +33,8 @@ class LocalApplicationStatisticManager
 internal constructor(
     private val packageManager: PackageManager,
     private val installedAppsRepository: InstalledAppsRepository,
-    private val generalDataService: AppGeneralDataManager,
-    private val certificateService: CertificateManager,
-    private val appInstallSourceManager: AppInstallSourceManager,
+    private val certificateExtractor: CertificateExtractor,
+    private val installSourceResolver: InstallSourceResolver,
 ) {
     sealed class StatisticsLoadingStatus {
         data class Loading(val currentProgress: Int, val totalProgress: Int) : StatisticsLoadingStatus()
@@ -77,9 +76,9 @@ internal constructor(
             installLocation = packageInfo.installLocation,
             targetSdk = applicationInfo.targetSdkVersion,
             minSdk = applicationInfo.minSdkVersion,
-            apkSize = if (applicationInfo.sourceDir != null) generalDataService.computeApkSize(applicationInfo.sourceDir) else 0,
-            appSource = appInstallSourceManager.getAppInstallSource(packageInfo),
-            signAlgorithm = certificateService.getSignAlgorithm(packageInfo) ?: "Unknown",
+            apkSize = if (applicationInfo.sourceDir != null) computeApkSize(applicationInfo.sourceDir) else 0,
+            appSource = installSourceResolver.getAppInstallSource(packageInfo),
+            signAlgorithm = certificateExtractor.getCertificateData(packageInfo).firstOrNull()?.signAlgorithm ?: "Unknown",
             activities = packageInfo.activities?.size ?: 0,
             services = packageInfo.services?.size ?: 0,
             providers = packageInfo.providers?.size ?: 0,

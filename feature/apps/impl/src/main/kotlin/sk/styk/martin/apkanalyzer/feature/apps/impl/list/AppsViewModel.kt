@@ -13,12 +13,12 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import sk.styk.martin.apkanalyzer.core.applist.InstalledAppsRepository
-import sk.styk.martin.apkanalyzer.core.applist.RecentlyViewedAppsRepository
-import sk.styk.martin.apkanalyzer.core.applist.StorageStatsRepository
-import sk.styk.martin.apkanalyzer.core.applist.UsageStatsRepository
-import sk.styk.martin.apkanalyzer.core.applist.model.InstalledApp
+import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
+import sk.styk.martin.apkanalyzer.core.apps.StorageStatsRepository
+import sk.styk.martin.apkanalyzer.core.apps.UsageStatsRepository
+import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.userpreferences.RecentlyViewedAppsRepository
 import sk.styk.martin.apkanalyzer.feature.apps.impl.components.AppDataPermission
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppFilterRepository
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.FilterAppsUseCase

@@ -5,10 +5,9 @@ plugins {
 }
 
 android {
-    namespace = "sk.styk.martin.apkanalyzer.core.applist"
+    namespace = "sk.styk.martin.apkanalyzer.core.apps"
 }
 
 dependencies {
-    implementation(projects.core.appAnalysisCore)
     api(projects.core.common)
 }

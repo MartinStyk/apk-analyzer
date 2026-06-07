@@ -2,7 +2,7 @@ package sk.styk.martin.apkanalyzer.core.appstatistics.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import sk.styk.martin.apkanalyzer.core.appanalysis.model.InstallLocation
+import sk.styk.martin.apkanalyzer.core.apps.model.InstallLocation
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 
 @Parcelize

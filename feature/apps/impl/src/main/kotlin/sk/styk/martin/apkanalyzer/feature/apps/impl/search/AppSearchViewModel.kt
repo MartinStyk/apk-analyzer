@@ -15,11 +15,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import sk.styk.martin.apkanalyzer.core.applist.InstalledAppsRepository
-import sk.styk.martin.apkanalyzer.core.applist.RecentlyViewedAppsRepository
-import sk.styk.martin.apkanalyzer.core.applist.SearchHistoryRepository
-import sk.styk.martin.apkanalyzer.core.applist.model.InstalledApp
+import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
+import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.userpreferences.RecentlyViewedAppsRepository
+import sk.styk.martin.apkanalyzer.core.userpreferences.SearchHistoryRepository
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppFilterRepository
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.FilterAppsUseCase
 import sk.styk.martin.apkanalyzer.feature.apps.impl.list.AppListItem

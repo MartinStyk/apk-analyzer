@@ -15,6 +15,7 @@ import sk.styk.martin.apkanalyzer.core.navigation.rememberNavigationState
 import sk.styk.martin.apkanalyzer.core.navigation.toEntries
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.NavigationBar
 import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.LocalSharedTransitionScope
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.navigation.appDetailEntries
 import sk.styk.martin.apkanalyzer.feature.apps.api.AppsNavKey
 import sk.styk.martin.apkanalyzer.feature.apps.impl.navigation.appEntries
 import sk.styk.martin.apkanalyzer.feature.permissions.impl.navigation.permissionEntries
@@ -47,6 +48,7 @@ internal fun ApkAnalyzerApp() {
             CompositionLocalProvider(LocalSharedTransitionScope provides this) {
                 val entryProvider = entryProvider {
                     appEntries(navigator)
+                    appDetailEntries(navigator)
                     permissionEntries()
                     statisticsEntries()
                     settingsEntries(navigator)

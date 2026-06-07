@@ -21,15 +21,17 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "ApkAnalyzer"
 include(
     ":app",
-    ":core:app-analysis-core",
     ":core:apps",
     ":core:app-permissions",
     ":core:app-statistics",
     ":core:common",
+    ":core:user-preferences",
     ":core:ui-library",
     ":core:navigation",
     ":feature:apps:api",
     ":feature:apps:impl",
+    ":feature:app-detail:api",
+    ":feature:app-detail:impl",
     ":feature:statistics:api",
     ":feature:statistics:impl",
     ":feature:permissions:api",

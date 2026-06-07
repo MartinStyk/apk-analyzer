@@ -21,7 +21,7 @@ Project uses a multi-module architecture divided into following modules:
     * `impl` - implementation of the UI layer
 * **`core`** (multiple modules) - Domain logic, reusable components, utilities that can be shared across multiple features or other libraries.
   * `common` - `DispatcherProvider`, `PersistenceRepository` (DataStore), `ResourcesManager`, `Logger` (Timber + Firebase Crashlytics wrapper). Base dependency for most modules.
-  * `app-analysis-core` - Android `PackageManager`-based app analysis: `AppGeneralDataManager`, `AppPermissionManager`, `CertificateManager`, `AndroidManifestManager`. Data models like `GeneralData`, `PermissionData`, `AppSource`.
+  * `app-analysis-core` - Android `PackageManager`-based app analysis: `AppGeneralDataManager`, `AppPermissionManager`, `CertificateExtractor`, `ManifestParser`. Data models like `GeneralData`, `PermissionData`, `AppSource`.
   * `app-list` - `InstalledAppsRepository` for querying installed apps. Returns `LazyAppListData`.
   * `app-permissions` - `LocalPermissionManager` for aggregating permission usage across all installed apps.
   * `app-statistics` - `LocalApplicationStatisticManager` for computing device-wide app statistics.
