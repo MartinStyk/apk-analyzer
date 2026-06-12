@@ -22,6 +22,9 @@ class CollapsingHeaderState {
     var headerOffsetPx by mutableFloatStateOf(0f)
         internal set
 
+    val progress: Float
+        get() = if (headerHeightPx > 0f) (-headerOffsetPx / headerHeightPx).coerceIn(0f, 1f) else 0f
+
     val headerOffset: IntOffset
         get() = IntOffset(0, headerOffsetPx.roundToInt())
 

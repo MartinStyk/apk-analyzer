@@ -1,11 +1,8 @@
 package sk.styk.martin.apkanalyzer.core.apps.model
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
 import java.util.Date
 
-@Parcelize
-data class CertificateData(
+data class Certificate(
     val signAlgorithm: String,
     val certificateHashMd5: String,
     val certificateHashSha1: String,
@@ -22,4 +19,4 @@ data class CertificateData(
     val subjectName: String? = null,
     val subjectOrganization: String? = null,
     val subjectCountry: String? = null,
-) : Parcelable
+)

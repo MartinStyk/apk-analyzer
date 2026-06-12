@@ -13,17 +13,17 @@ import sk.styk.martin.apkanalyzer.core.apps.analysis.InstallSourceResolver
 import sk.styk.martin.apkanalyzer.core.apps.analysis.SdkVersionResolver
 import sk.styk.martin.apkanalyzer.core.apps.analysis.computeApkSize
 import sk.styk.martin.apkanalyzer.core.apps.analysis.createSimpleName
-import sk.styk.martin.apkanalyzer.core.apps.model.ActivityData
-import sk.styk.martin.apkanalyzer.core.apps.model.AppDetailData
-import sk.styk.martin.apkanalyzer.core.apps.model.BroadcastReceiverData
-import sk.styk.martin.apkanalyzer.core.apps.model.ContentProviderData
-import sk.styk.martin.apkanalyzer.core.apps.model.FeatureData
-import sk.styk.martin.apkanalyzer.core.apps.model.GeneralData
+import sk.styk.martin.apkanalyzer.core.apps.model.Activity
+import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
+import sk.styk.martin.apkanalyzer.core.apps.model.AppInfo
+import sk.styk.martin.apkanalyzer.core.apps.model.ContentProvider
+import sk.styk.martin.apkanalyzer.core.apps.model.BroadcastReceiver
+import sk.styk.martin.apkanalyzer.core.apps.model.Service
+import sk.styk.martin.apkanalyzer.core.apps.model.Feature
 import sk.styk.martin.apkanalyzer.core.apps.model.InstallLocation
-import sk.styk.martin.apkanalyzer.core.apps.model.PermissionData
-import sk.styk.martin.apkanalyzer.core.apps.model.PermissionDataAggregate
-import sk.styk.martin.apkanalyzer.core.apps.model.ServiceData
-import sk.styk.martin.apkanalyzer.core.apps.model.UsedPermissionData
+import sk.styk.martin.apkanalyzer.core.apps.model.Permission
+import sk.styk.martin.apkanalyzer.core.apps.model.Permissions
+import sk.styk.martin.apkanalyzer.core.apps.model.UsedPermission
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import java.io.File
@@ -42,7 +42,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     dispatcherProvider: DispatcherProvider,
 ) : AppDetailRepository {
 
-    private val cache = ConcurrentHashMap<String, AppDetailData>()
+    private val cache = ConcurrentHashMap<String, AppDetail>()
 
     private val analysisFlags = PackageManager.GET_SIGNING_CERTIFICATES or
         PackageManager.GET_ACTIVITIES or
@@ -61,42 +61,42 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             .launchIn(appScope + dispatcherProvider.default())
     }
 
-    override fun installedPackageDetails(packageName: String): Result<AppDetailData> {
+    override fun installedPackageDetails(packageName: String): Result<AppDetail> {
         cache[packageName]?.let { return Result.success(it) }
         Logger.d(TAG, "Loading details of $packageName")
         return runCatching {
             getPackageDetails(
-                analysisMode = AppDetailData.AnalysisMode.INSTALLED_PACKAGE,
+                analysisMode = AppDetail.AnalysisMode.InstalledPackage,
                 packageInfo = packageManager.getPackageInfo(packageName, analysisFlags),
             )
         }.onSuccess { cache[packageName] = it }
     }
 
-    override fun apkFilePackageDetails(accessibleFile: File): Result<AppDetailData> = runCatching {
+    override fun apkFilePackageDetails(accessibleFile: File): Result<AppDetail> = runCatching {
         getPackageDetails(
-            analysisMode = AppDetailData.AnalysisMode.APK_FILE,
+            analysisMode = AppDetail.AnalysisMode.ApkFile,
             packageInfo = packageManager.getPackageArchiveInfoWithCorrectPath(accessibleFile.absolutePath, analysisFlags)
                 ?: error("Cannot parse APK file: ${accessibleFile.absolutePath}"),
         )
     }
 
-    private fun getPackageDetails(analysisMode: AppDetailData.AnalysisMode, packageInfo: PackageInfo) = AppDetailData(
+    private fun getPackageDetails(analysisMode: AppDetail.AnalysisMode, packageInfo: PackageInfo) = AppDetail(
         analysisMode = analysisMode,
-        generalData = getGeneralData(packageInfo),
-        certificateData = certificateExtractor.getCertificateData(packageInfo),
-        activityData = getActivities(packageInfo),
-        serviceData = getServices(packageInfo),
-        contentProviderData = getContentProviders(packageInfo),
-        broadcastReceiverData = getBroadcastReceivers(packageInfo),
-        permissionData = getPermissions(packageInfo),
-        featureData = getFeatures(packageInfo),
+        info = getGeneralData(packageInfo),
+        certificates = certificateExtractor.getCertificateData(packageInfo),
+        activities = getActivities(packageInfo),
+        services = getServices(packageInfo),
+        contentProviders = getContentProviders(packageInfo),
+        receivers = getBroadcastReceivers(packageInfo),
+        permissions = getPermissions(packageInfo),
+        features = getFeatures(packageInfo),
     )
 
-    private fun getGeneralData(packageInfo: PackageInfo): GeneralData {
+    private fun getGeneralData(packageInfo: PackageInfo): AppInfo {
         val applicationInfo = packageInfo.applicationInfo
         val minSdk = applicationInfo?.minSdkVersion
 
-        return GeneralData(
+        return AppInfo(
             packageName = packageInfo.packageName,
             applicationName = applicationInfo?.loadLabel(packageManager).toString(),
             processName = applicationInfo?.processName,
@@ -117,12 +117,11 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             minSdkLabel = sdkVersionResolver.resolveVersion(minSdk),
             targetSdkVersion = applicationInfo?.targetSdkVersion,
             targetSdkLabel = sdkVersionResolver.resolveVersion(applicationInfo?.targetSdkVersion),
-            icon = applicationInfo?.loadIcon(packageManager),
         )
     }
 
-    private fun getActivities(packageInfo: PackageInfo): List<ActivityData> = packageInfo.activities.orEmpty().map {
-        ActivityData(
+    private fun getActivities(packageInfo: PackageInfo): List<Activity> = packageInfo.activities.orEmpty().map {
+        Activity(
             name = it.name,
             packageName = it.packageName,
             label = it.loadLabel(packageManager).toString(),
@@ -133,8 +132,8 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         )
     }
 
-    private fun getServices(packageInfo: PackageInfo): List<ServiceData> = packageInfo.services.orEmpty().map {
-        ServiceData(
+    private fun getServices(packageInfo: PackageInfo): List<Service> = packageInfo.services.orEmpty().map {
+        Service(
             name = it.name,
             permission = it.permission,
             isExported = it.exported,
@@ -145,8 +144,8 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         )
     }
 
-    private fun getContentProviders(packageInfo: PackageInfo): List<ContentProviderData> = packageInfo.providers.orEmpty().map {
-        ContentProviderData(
+    private fun getContentProviders(packageInfo: PackageInfo): List<ContentProvider> = packageInfo.providers.orEmpty().map {
+        ContentProvider(
             name = it.name,
             authority = it.authority,
             readPermission = it.readPermission,
@@ -155,22 +154,22 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         )
     }
 
-    private fun getBroadcastReceivers(packageInfo: PackageInfo): List<BroadcastReceiverData> = packageInfo.receivers.orEmpty().map {
-        BroadcastReceiverData(
+    private fun getBroadcastReceivers(packageInfo: PackageInfo): List<BroadcastReceiver> = packageInfo.receivers.orEmpty().map {
+        BroadcastReceiver(
             name = it.name,
             permission = it.permission,
             isExported = it.exported,
         )
     }
 
-    private fun getPermissions(packageInfo: PackageInfo): PermissionDataAggregate {
+    private fun getPermissions(packageInfo: PackageInfo): Permissions {
         val definedPermissions = getDefinedPermissions(packageInfo)
         val requestedPermissions = getUsedPermissions(packageInfo)
-        return PermissionDataAggregate(definedPermissions, requestedPermissions)
+        return Permissions(definedPermissions, requestedPermissions)
     }
 
-    private fun getDefinedPermissions(packageInfo: PackageInfo): List<PermissionData> = packageInfo.permissions.orEmpty().map {
-        PermissionData(
+    private fun getDefinedPermissions(packageInfo: PackageInfo): List<Permission> = packageInfo.permissions.orEmpty().map {
+        Permission(
             name = it.name,
             simpleName = createSimpleName(it.name),
             groupName = it.group,
@@ -178,10 +177,10 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         )
     }
 
-    private fun getUsedPermissions(packageInfo: PackageInfo): List<UsedPermissionData> {
+    private fun getUsedPermissions(packageInfo: PackageInfo): List<UsedPermission> {
         val requestedPermissionNames = packageInfo.requestedPermissions.orEmpty()
         val requestedPermissionFlags = packageInfo.requestedPermissionsFlags
-        val requestedPermissions = ArrayList<UsedPermissionData>(requestedPermissionNames.size)
+        val requestedPermissions = ArrayList<UsedPermission>(requestedPermissionNames.size)
 
         requestedPermissionNames.forEachIndexed { index, name ->
             val isGranted = ((requestedPermissionFlags?.getOrNull(index) ?: 0) and PackageInfo.REQUESTED_PERMISSION_GRANTED != 0)
@@ -189,26 +188,26 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             val permissionData =
                 try {
                     val permissionInfo = packageManager.getPermissionInfo(name, PackageManager.GET_META_DATA)
-                    PermissionData(
+                    Permission(
                         name = name,
                         simpleName = createSimpleName(name),
                         groupName = permissionInfo.group,
                         protectionLevel = permissionInfo.protectionLevel,
                     )
                 } catch (_: Exception) {
-                    PermissionData(
+                    Permission(
                         name = name,
                         simpleName = createSimpleName(name),
                     )
                 }
 
-            requestedPermissions.add(UsedPermissionData(permissionData, isGranted))
+            requestedPermissions.add(UsedPermission(permissionData, isGranted))
         }
         return requestedPermissions
     }
 
-    private fun getFeatures(packageInfo: PackageInfo): List<FeatureData> = packageInfo.reqFeatures.orEmpty().map {
-        FeatureData(
+    private fun getFeatures(packageInfo: PackageInfo): List<Feature> = packageInfo.reqFeatures.orEmpty().map {
+        Feature(
             name = it.name ?: it.glEsVersion,
             isRequired = (it.flags and FeatureInfo.FLAG_REQUIRED) > 0,
         )

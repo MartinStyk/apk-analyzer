@@ -2,7 +2,7 @@ package sk.styk.martin.apkanalyzer.core.apps.analysis
 
 import android.content.pm.PackageInfo
 import android.content.pm.Signature
-import sk.styk.martin.apkanalyzer.core.apps.model.CertificateData
+import sk.styk.martin.apkanalyzer.core.apps.model.Certificate
 import sk.styk.martin.apkanalyzer.core.common.digest.DigestManager
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import java.io.ByteArrayInputStream
@@ -16,19 +16,19 @@ private const val TAG = "CertificateExtractorImpl"
 
 internal class CertificateExtractorImpl @Inject constructor(private val digestManager: DigestManager) : CertificateExtractor {
 
-    override fun getCertificateData(packageInfo: PackageInfo): List<CertificateData> = packageInfo.signingInfo?.apkContentsSigners.orEmpty()
+    override fun getCertificateData(packageInfo: PackageInfo): List<Certificate> = packageInfo.signingInfo?.apkContentsSigners.orEmpty()
         .mapNotNull { signature ->
             runCatching { signature.toCertificateData() }
                 .onFailure { Logger.e(TAG, it, "Could not parse certificate for ${packageInfo.packageName}") }
                 .getOrNull()
         }
 
-    private fun Signature.toCertificateData(): CertificateData {
+    private fun Signature.toCertificateData(): Certificate {
         val certificate = ByteArrayInputStream(toByteArray()).use { stream ->
             CertificateFactory.getInstance("X509").generateCertificate(stream) as X509Certificate
         }
         val publicKeyHex = digestManager.byteToHexString(certificate.publicKey.encoded)
-        return CertificateData(
+        return Certificate(
             signAlgorithm = certificate.sigAlgName,
             certificateHashMd5 = digestManager.md5Digest(certificate.encoded),
             certificateHashSha1 = digestManager.sha1Digest(certificate.encoded),
