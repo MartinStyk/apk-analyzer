@@ -13,10 +13,13 @@ data class Certificate(
     val startDate: Date,
     val endDate: Date,
     val serialNumber: Int = 0,
-    val issuerName: String? = null,
-    val issuerOrganization: String? = null,
-    val issuerCountry: String? = null,
-    val subjectName: String? = null,
-    val subjectOrganization: String? = null,
-    val subjectCountry: String? = null,
-)
+    val issuer: CertificatePrincipal = CertificatePrincipal(),
+    val subject: CertificatePrincipal = CertificatePrincipal(),
+    val trustLevel: CertificateTrustLevel = CertificateTrustLevel.Valid,
+) {
+    val formattedSha256Fingerprint: String
+        get() = certificateHashSha256.uppercase().chunked(2).joinToString(":")
+
+    val formattedSha1Fingerprint: String
+        get() = certificateHashSha1.uppercase().chunked(2).joinToString(":")
+}

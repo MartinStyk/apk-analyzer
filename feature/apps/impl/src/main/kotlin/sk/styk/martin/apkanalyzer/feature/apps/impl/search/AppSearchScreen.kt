@@ -30,8 +30,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
+import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.IconButton
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.IconButtonStyle
@@ -318,7 +318,7 @@ private fun AppSearchContentResultsPreview() {
                         packageName = "com.instagram.android",
                         applicationName = "Instagram",
                         targetSdk = 34,
-                        apkSize = AppSize(67_108_864),
+                        apkSize = 64.megabytes,
                         totalSize = null,
                         installTime = Instant.EPOCH,
                         lastUpdateTime = Instant.EPOCH,

@@ -14,10 +14,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import sk.styk.martin.apkanalyzer.core.apps.StorageStatsRepository.DataResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
+import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -37,8 +37,8 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
     final override val isPermissionGranted: StateFlow<Boolean>
         field = MutableStateFlow(checkPermission())
 
-    final override val totalSizes: StateFlow<DataResult<Map<String, AppSize>>>
-        field = MutableStateFlow<DataResult<Map<String, AppSize>>>(DataResult.Loading)
+    final override val totalSizes: StateFlow<Map<String, AppSize>>
+        field = MutableStateFlow<Map<String, AppSize>>(emptyMap())
 
     override fun onStart(owner: LifecycleOwner) {
         applicationScope.launch(dispatcherProvider.io()) {
@@ -62,31 +62,35 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun queryTotalSize(packageName: String): AppSize? {
+        totalSizes.value[packageName]?.let { return it }
+        if (!checkPermission()) return null
+        return queryPackageSize(UserHandle.getUserHandleForUid(Process.myUid()), packageName)
+    }
+
     private fun fetchTotalSizes(packageNames: List<String>) {
         val hasPermission = checkPermission()
         isPermissionGranted.value = hasPermission
-        if (!hasPermission) {
-            return
-        }
+        if (!hasPermission) return
 
         Logger.d(INSTALLED_APPS, "Load apps total size")
         val user = UserHandle.getUserHandleForUid(Process.myUid())
-        totalSizes.value = DataResult.Available(
-            packageNames.mapNotNull { packageName ->
-                try {
-                    val stats = storageStatsManager.queryStatsForPackage(StorageManager.UUID_DEFAULT, packageName, user)
-                    packageName to AppSize(stats.appBytes + stats.dataBytes + stats.cacheBytes)
-                } catch (_: PackageManager.NameNotFoundException) {
-                    null
-                } catch (_: IOException) {
-                    Logger.w(TAG, "Failed to query storage stats for $packageName")
-                    null
-                } catch (_: SecurityException) {
-                    null
-                }
-            }.toMap(),
-        )
+        totalSizes.value = packageNames.mapNotNull { packageName ->
+            queryPackageSize(user, packageName)?.let { packageName to it }
+        }.toMap()
         Logger.d(INSTALLED_APPS, "Apps total size loaded")
+    }
+
+    private fun queryPackageSize(user: UserHandle, packageName: String): AppSize? = try {
+        val stats = storageStatsManager.queryStatsForPackage(StorageManager.UUID_DEFAULT, packageName, user)
+        stats.appBytes.bytes + stats.dataBytes.bytes + stats.cacheBytes.bytes
+    } catch (_: PackageManager.NameNotFoundException) {
+        null
+    } catch (_: IOException) {
+        Logger.w(TAG, "Failed to query storage stats for $packageName")
+        null
+    } catch (_: SecurityException) {
+        null
     }
 
     private companion object {

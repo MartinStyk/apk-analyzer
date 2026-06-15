@@ -7,17 +7,20 @@ import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppFilterState
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppSizeRange
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.PermissionPreset
 
+@Immutable
 sealed interface ApkSizeSectionState {
     data object Loading : ApkSizeSectionState
     data class RangeAvailable(val bounds: AppSizeRange) : ApkSizeSectionState
 }
 
+@Immutable
 sealed interface TotalSizeSectionState {
     data object PermissionMissing : TotalSizeSectionState
     data object Loading : TotalSizeSectionState
     data class RangeAvailable(val bounds: AppSizeRange) : TotalSizeSectionState
 }
 
+@Immutable
 sealed interface UnusedAppsSectionState {
     data object PermissionMissing : UnusedAppsSectionState
     data object Loading : UnusedAppsSectionState

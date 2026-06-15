@@ -55,5 +55,4 @@ class CollapsingToolbarState {
 @Composable
 fun rememberCollapsingToolbarState(): CollapsingToolbarState = remember { CollapsingToolbarState() }
 
-fun Modifier.collapsingToolbarScroll(state: CollapsingToolbarState): Modifier =
-    this.nestedScroll(state.nestedScrollConnection)
+fun Modifier.collapsingToolbarScroll(state: CollapsingToolbarState): Modifier = this.nestedScroll(state.nestedScrollConnection)

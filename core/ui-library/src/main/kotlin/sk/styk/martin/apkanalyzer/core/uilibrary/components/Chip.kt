@@ -1,11 +1,17 @@
 package sk.styk.martin.apkanalyzer.core.uilibrary.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -15,6 +21,13 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
+
+@Immutable
+sealed interface ChipVariant {
+    data object Default : ChipVariant
+    data object Tonal : ChipVariant
+    data object Warning : ChipVariant
+}
 
 @Composable
 fun Chip(
@@ -58,9 +71,48 @@ fun Chip(
             containerColor = AppTheme.colors.surfaceVariant,
             labelColor = AppTheme.colors.onSurfaceVariant,
             iconColor = AppTheme.colors.onSurfaceVariant,
+            selectedContainerColor = AppTheme.colors.secondaryContainer,
+            selectedLabelColor = AppTheme.colors.onSecondaryContainer,
+            selectedLeadingIconColor = AppTheme.colors.onSecondaryContainer,
+            selectedTrailingIconColor = AppTheme.colors.onSecondaryContainer,
         ),
         border = null,
     )
+}
+
+@Composable
+fun Chip(
+    label: String,
+    variant: ChipVariant,
+    modifier: Modifier = Modifier,
+    leadingIcon: ImageVector? = null,
+) {
+    val (containerColor, contentColor) = when (variant) {
+        ChipVariant.Default -> AppTheme.colors.surfaceVariant to AppTheme.colors.onSurfaceVariant
+        ChipVariant.Tonal -> AppTheme.colors.secondaryContainer to AppTheme.colors.onSecondaryContainer
+        ChipVariant.Warning -> AppTheme.colors.warningContainer to AppTheme.colors.warning
+    }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        modifier = modifier
+            .background(color = containerColor, shape = Shapes.CardShape)
+            .padding(horizontal = 10.dp, vertical = 6.dp),
+    ) {
+        if (leadingIcon != null) {
+            Icon(
+                imageVector = leadingIcon,
+                contentDescription = null,
+                tint = contentColor,
+                modifier = Modifier.size(14.dp),
+            )
+        }
+        Text(
+            text = label,
+            style = AppTheme.typography.labelMedium,
+            color = contentColor,
+        )
+    }
 }
 
 @Composable
@@ -119,7 +171,31 @@ fun OutlinedChip(
 
 @Preview
 @Composable
-private fun ChipUnselectedPreview() {
+private fun ChipSurfacePreview() {
+    ApkAnalyzerTheme {
+        Chip(label = "Size", variant = ChipVariant.Default)
+    }
+}
+
+@Preview
+@Composable
+private fun ChipTonalPreview() {
+    ApkAnalyzerTheme {
+        Chip(label = "v2.1.0 (210)", variant = ChipVariant.Tonal)
+    }
+}
+
+@Preview
+@Composable
+private fun ChipWarningPreview() {
+    ApkAnalyzerTheme {
+        Chip(label = "SDK 28", variant = ChipVariant.Warning)
+    }
+}
+
+@Preview
+@Composable
+private fun ChipClickableUnselectedPreview() {
     ApkAnalyzerTheme {
         Chip(label = "Size", onClick = {})
     }
@@ -127,7 +203,7 @@ private fun ChipUnselectedPreview() {
 
 @Preview
 @Composable
-private fun ChipSelectedPreview() {
+private fun ChipClickableSelectedPreview() {
     ApkAnalyzerTheme {
         Chip(
             label = "Name",

@@ -39,7 +39,6 @@ import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
-import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.BottomSheet
@@ -309,8 +308,8 @@ private fun ApkSizeSection(
                         onValueChange = { floatRange ->
                             onRangeChange(
                                 AppSizeRange(
-                                    min = AppSize((floatRange.start * 1024 * 1024).toLong()),
-                                    max = AppSize((floatRange.endInclusive * 1024 * 1024).toLong()),
+                                    min = floatRange.start.megabytes,
+                                    max = floatRange.endInclusive.megabytes,
                                 ),
                             )
                         },
@@ -373,8 +372,8 @@ private fun TotalSizeSection(
                         onValueChange = { floatRange ->
                             onRangeChange(
                                 AppSizeRange(
-                                    min = AppSize((floatRange.start * 1024 * 1024).toLong()),
-                                    max = AppSize((floatRange.endInclusive * 1024 * 1024).toLong()),
+                                    min = floatRange.start.megabytes,
+                                    max = floatRange.endInclusive.megabytes,
                                 ),
                             )
                         },

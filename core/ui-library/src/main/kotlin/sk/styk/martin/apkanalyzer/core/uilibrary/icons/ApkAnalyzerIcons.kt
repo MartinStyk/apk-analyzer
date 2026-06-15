@@ -14,16 +14,24 @@ import androidx.compose.material.icons.rounded.ArrowUpward
 import androidx.compose.material.icons.rounded.CalendarToday
 import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.Clear
+import androidx.compose.material.icons.rounded.DataUsage
 import androidx.compose.material.icons.rounded.FilterList
+import androidx.compose.material.icons.rounded.GppBad
 import androidx.compose.material.icons.rounded.History
+import androidx.compose.material.icons.rounded.HourglassEmpty
 import androidx.compose.material.icons.rounded.InsertChart
 import androidx.compose.material.icons.rounded.Lock
+import androidx.compose.material.icons.rounded.NewReleases
+import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Security
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Storage
 import androidx.compose.material.icons.rounded.SwapVert
+import androidx.compose.material.icons.rounded.Sync
 import androidx.compose.material.icons.rounded.UploadFile
+import androidx.compose.material.icons.rounded.VerifiedUser
+import androidx.compose.material.icons.rounded.Warning
 
 data object ApkAnalyzerIcons {
     val Apps = Icons.Rounded.Apps
@@ -33,8 +41,13 @@ data object ApkAnalyzerIcons {
     val ArrowDropDown = Icons.Rounded.ArrowDropDown
     val Calendar = Icons.Rounded.CalendarToday
     val ChevronRight = Icons.Rounded.ChevronRight
+    val DataUsage = Icons.Rounded.DataUsage
+    val DangerousPermissions = Icons.Rounded.GppBad
+    val HourglassEmpty = Icons.Rounded.HourglassEmpty
+    val NewReleases = Icons.Rounded.NewReleases
     val Permissions = Icons.Rounded.Security
     val PermissionsBorder = Icons.Outlined.Security
+    val PlayArrow = Icons.Rounded.PlayArrow
     val Statistics = Icons.Rounded.InsertChart
     val StatisticsBorder = Icons.Outlined.InsertChart
     val SortAscending = Icons.Rounded.ArrowUpward
@@ -46,7 +59,10 @@ data object ApkAnalyzerIcons {
     val Search = Icons.Rounded.Search
     val Settings = Icons.Rounded.Settings
     val Sort = Icons.Rounded.SwapVert
+    val Sync = Icons.Rounded.Sync
     val FileUpload = Icons.Rounded.UploadFile
     val File = Icons.AutoMirrored.Rounded.InsertDriveFile
     val Storage = Icons.Rounded.Storage
+    val Verified = Icons.Rounded.VerifiedUser
+    val Warning = Icons.Rounded.Warning
 }

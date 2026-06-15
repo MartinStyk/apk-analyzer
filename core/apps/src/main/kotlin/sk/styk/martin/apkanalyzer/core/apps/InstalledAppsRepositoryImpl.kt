@@ -16,7 +16,7 @@ import sk.styk.martin.apkanalyzer.core.apps.analysis.InstallSourceResolver
 import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
-import sk.styk.martin.apkanalyzer.core.common.model.AppSize
+import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import java.io.File
 import java.time.Instant
 import javax.inject.Inject
@@ -43,10 +43,7 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
             combine(
                 storageStatsRepository.totalSizes,
                 usageStatsRepository.lastUsedTimes,
-            ) { storageResult, usageResult ->
-                val totalSizes = (storageResult as? StorageStatsRepository.DataResult.Available)?.data ?: emptyMap()
-                val lastUsedTimes = (usageResult as? UsageStatsRepository.DataResult.Available)?.data ?: emptyMap()
-
+            ) { totalSizes, lastUsedTimes ->
                 if (totalSizes.isNotEmpty() || lastUsedTimes.isNotEmpty()) {
                     apps.map { app ->
                         app.copy(
@@ -77,7 +74,7 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
             version = longVersionCode,
             source = installSourceResolver.getAppInstallSource(this),
             targetSdk = appInfo?.targetSdkVersion ?: 0,
-            apkSize = AppSize(appInfo?.sourceDir?.let { File(it).length() } ?: 0L),
+            apkSize = (appInfo?.sourceDir?.let { File(it).length() } ?: 0L).bytes,
             versionName = versionName,
             installTime = Instant.ofEpochMilli(firstInstallTime),
             lastUpdateTime = Instant.ofEpochMilli(lastUpdateTime),

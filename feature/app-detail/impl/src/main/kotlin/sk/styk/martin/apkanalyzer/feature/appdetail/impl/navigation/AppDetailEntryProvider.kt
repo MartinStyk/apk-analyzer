@@ -10,6 +10,7 @@ import sk.styk.martin.apkanalyzer.core.navigation.Navigator
 import sk.styk.martin.apkanalyzer.core.uilibrary.animation.slideFromEndEntryMetadata
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailNavKey
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.AppDetailScreen
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.generalinfo.GeneralInfoScreen
 
 private const val TAG = "AppDetailNavigation"
 
@@ -26,7 +27,7 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
             onExportApk = { Logger.d(TAG, "Export APK not yet implemented") },
             onSaveIcon = { Logger.d(TAG, "Save icon not yet implemented") },
             onNavigateToManifest = { Logger.d(TAG, "Navigate to manifest not yet implemented") },
-            onNavigateToGeneralDetails = { Logger.d(TAG, "Navigate to general details not yet implemented") },
+            onNavigateToGeneralDetails = { navigator.navigate(GeneralInfoNavKey(key.detailInput)) },
             onNavigateToPermissions = { Logger.d(TAG, "Navigate to permissions not yet implemented") },
             onNavigateToActivities = { Logger.d(TAG, "Navigate to activities not yet implemented") },
             onNavigateToServices = { Logger.d(TAG, "Navigate to services not yet implemented") },
@@ -34,6 +35,15 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
             onNavigateToProviders = { Logger.d(TAG, "Navigate to providers not yet implemented") },
             onNavigateToCertificates = { Logger.d(TAG, "Navigate to certificates not yet implemented") },
             onNavigateToFeatures = { Logger.d(TAG, "Navigate to features not yet implemented") },
+        )
+    }
+
+    entry<GeneralInfoNavKey>(
+        metadata = slideFromEndEntryMetadata(),
+    ) { key ->
+        GeneralInfoScreen(
+            appDetailInput = key.detailInput,
+            onBack = { navigator.goBack() },
         )
     }
 }

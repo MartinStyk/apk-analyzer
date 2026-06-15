@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_detail_title">App Detail</string>
+    <string name="app_detail_system_app">System Application</string>
     <string name="app_detail_overview_section">Overview</string>
-    <string name="app_detail_actions_section">Actions</string>
+    <string name="app_detail_actions_section">Quick Actions</string>
     <string name="app_detail_version">Version</string>
     <string name="app_detail_apk_size">APK Size</string>
     <string name="app_detail_total_size">Total Size</string>
     <string name="app_detail_target_sdk">Target SDK</string>
+    <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
+    <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_updated">Updated</string>
     <string name="app_detail_yes">Yes</string>
     <string name="app_detail_no">No</string>
@@ -32,5 +35,77 @@
     <string name="app_detail_view_details">View Details</string>
     <string name="app_detail_features_section">Features</string>
     <string name="app_detail_features_count">Features</string>
+    <string name="app_detail_certificate_signature_section">Certificate Signature</string>
+    <string name="app_detail_certificate_signed_by">Signed by %1$s</string>
+    <string name="app_detail_certificate_unknown_signer">Unknown signer</string>
+    <string name="app_detail_certificate_sha256_fingerprint">SHA-256 Fingerprint</string>
+    <string name="app_detail_certificate_debug">Debug certificate</string>
+    <string name="app_detail_badge_sideloaded">Sideloaded</string>
+    <string name="app_detail_badge_dangerous_permissions">Risky Permissions</string>
+    <string name="app_detail_badge_unused">Unused</string>
+    <string name="app_detail_badge_large">Large App</string>
+    <string name="app_detail_badge_system">System</string>
+    <string name="app_detail_badge_google_play">Google Play</string>
+    <string name="app_detail_badge_recently_installed">New</string>
+    <string name="app_detail_badge_recently_updated">Updated</string>
+    <string name="app_detail_badge_recently_used">Recently Used</string>
+
+    <!-- General Info Screen -->
+    <string name="general_info_title">General Information</string>
+    <string name="general_info_error">Failed to load general information</string>
+    <string name="general_info_copied">Copied to clipboard</string>
+
+    <!-- General Info: Section Headers -->
+    <string name="general_info_section_identification">Identification</string>
+    <string name="general_info_section_versioning">Versioning</string>
+    <string name="general_info_section_api_targets">API Targets</string>
+    <string name="general_info_section_installation">Installation &amp; Source</string>
+    <string name="general_info_section_storage">Storage &amp; Paths</string>
+
+    <!-- General Info: Row Labels -->
+    <string name="general_info_application_name">Application Name</string>
+    <string name="general_info_package_name">Package Name</string>
+    <string name="general_info_process_name">Process Name</string>
+    <string name="general_info_uid">UID</string>
+    <string name="general_info_description">Description</string>
+    <string name="general_info_version_name">Version Name</string>
+    <string name="general_info_version_code">Version Code</string>
+    <string name="general_info_min_sdk">Min SDK</string>
+    <string name="general_info_target_sdk">Target SDK</string>
+    <string name="general_info_app_type">App Type</string>
+    <string name="general_info_app_type_system">System</string>
+    <string name="general_info_app_type_user">User</string>
+    <string name="general_info_install_source">Install Source</string>
+    <string name="general_info_installer_package">Installer Package</string>
+    <string name="general_info_first_installed">First Installed</string>
+    <string name="general_info_last_updated">Last Updated</string>
+    <string name="general_info_last_used">Last Used</string>
+    <string name="general_info_apk_directory">APK Directory</string>
+    <string name="general_info_data_directory">Data Directory</string>
+    <string name="general_info_install_location">Install Location</string>
+    <string name="general_info_apk_size">APK Size</string>
+    <string name="general_info_total_size">Total Size</string>
+
+    <!-- General Info: Rationale Descriptions -->
+    <string name="general_info_rationale_application_name">The user-visible label of the app, as shown on the home screen and in the app drawer.</string>
+    <string name="general_info_rationale_package_name">The unique identifier for this app on the device. No two apps can share the same package name.</string>
+    <string name="general_info_rationale_process_name">The name of the operating system process the app runs in. By default, it matches the package name.</string>
+    <string name="general_info_rationale_uid">The unique identifier assigned to this app by the Android system. It determines the app\'s access to system resources and file permissions.</string>
+    <string name="general_info_rationale_description">An optional summary provided by the app developer in the manifest.</string>
+    <string name="general_info_rationale_version_name">The human-readable version string displayed to users, such as \"2.5.1\" or \"Beta 3\".</string>
+    <string name="general_info_rationale_version_code">An internal integer that increases with every release. The system uses it to determine whether one version is newer than another.</string>
+    <string name="general_info_rationale_min_sdk">The lowest Android API level this app supports. Devices running an older version cannot install it.</string>
+    <string name="general_info_rationale_target_sdk">The API level the app was designed and tested for. It tells the system which compatibility behaviors to apply.</string>
+    <string name="general_info_rationale_app_type">Whether the app is a pre-installed system app or a user-installed app. System apps have elevated privileges and cannot be fully uninstalled.</string>
+    <string name="general_info_rationale_install_source">Where the app was installed from — Google Play, another store, or sideloaded manually.</string>
+    <string name="general_info_rationale_installer_package">The package name of the app that performed the installation, such as \"com.android.vending\" for Google Play.</string>
+    <string name="general_info_rationale_first_installed">The date and time this app was first installed on the device.</string>
+    <string name="general_info_rationale_last_updated">The date and time of the most recent update to this app.</string>
+    <string name="general_info_rationale_last_used">The approximate date and time this app was last opened by the user.</string>
+    <string name="general_info_rationale_apk_directory">The file system path where the APK file is stored on the device.</string>
+    <string name="general_info_rationale_data_directory">The file system path where the app stores its private data, databases, and shared preferences.</string>
+    <string name="general_info_rationale_install_location">The preferred storage location declared by the developer — internal storage, external storage, or automatic.</string>
+    <string name="general_info_rationale_apk_size">The size of the APK file on disk, excluding app data, caches, and runtime-generated files.</string>
+    <string name="general_info_rationale_total_size">The combined size of the APK, app data, and cached files. Requires usage access permission.</string>
 </resources>
 

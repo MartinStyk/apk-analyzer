@@ -40,8 +40,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
+import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.AppIcon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.BottomSheet
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Chip
@@ -500,8 +500,8 @@ private fun AppsContentReadyPreview() {
                             packageName = "com.instagram.android",
                             applicationName = "Instagram",
                             targetSdk = 34,
-                            apkSize = AppSize(67_108_864),
-                            totalSize = AppSize(534_773_760),
+                            apkSize = 64.megabytes,
+                            totalSize = 510.megabytes,
                             installTime = Instant.EPOCH,
                             lastUpdateTime = Instant.EPOCH,
                             lastUsedTime = Instant.EPOCH,
@@ -511,7 +511,7 @@ private fun AppsContentReadyPreview() {
                             packageName = "com.whatsapp",
                             applicationName = "WhatsApp",
                             targetSdk = 33,
-                            apkSize = AppSize(33_554_432),
+                            apkSize = 32.megabytes,
                             totalSize = null,
                             installTime = Instant.EPOCH,
                             lastUpdateTime = Instant.EPOCH,

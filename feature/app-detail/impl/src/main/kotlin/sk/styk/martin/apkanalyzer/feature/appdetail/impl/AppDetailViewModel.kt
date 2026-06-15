@@ -7,30 +7,31 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import sk.styk.martin.apkanalyzer.core.apps.AppClassificationThresholds
 import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
-import sk.styk.martin.apkanalyzer.core.apps.StorageStatsRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
+import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.AppDetailBadge
 import java.io.File
+import java.time.Instant
+import kotlin.time.Duration.Companion.days
+import kotlin.time.toJavaDuration
 
 private const val TAG = "AppDetailViewModel"
 
 @HiltViewModel(assistedFactory = AppDetailViewModel.Factory::class)
-internal class AppDetailViewModel @AssistedInject constructor(
-    @Assisted private val appDetailInput: AppDetailInput,
-    private val appDetailRepository: AppDetailRepository,
-    private val storageStatsRepository: StorageStatsRepository,
-    private val dispatcherProvider: DispatcherProvider,
-) : ViewModel() {
+internal class AppDetailViewModel @AssistedInject constructor(@Assisted private val appDetailInput: AppDetailInput, private val appDetailRepository: AppDetailRepository, private val dispatcherProvider: DispatcherProvider) : ViewModel() {
 
     @AssistedFactory
     interface Factory {
@@ -77,7 +78,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
     private fun loadDetail() {
         _state.value = AppDetailState.Loading
         viewModelScope.launch {
-            val loaded = withContext(dispatcherProvider.default()) {
+            _state.value = withContext(dispatcherProvider.default()) {
                 when (appDetailInput) {
                     is AppDetailInput.InstalledPackage -> appDetailRepository.installedPackageDetails(appDetailInput.packageName)
                     is AppDetailInput.ApkFile -> appDetailRepository.apkFilePackageDetails(File(appDetailInput.apkFilePath))
@@ -85,22 +86,42 @@ internal class AppDetailViewModel @AssistedInject constructor(
             }.onFailure {
                 Logger.e(TAG, it, "Can not load app detail for $appDetailInput")
             }.fold(
-                onSuccess = { it.toLoadedState() },
+                onSuccess = { detail ->
+                    detail.toLoadedState().let { state ->
+                        state.copy(badges = computeBadges(state))
+                    }
+                },
                 onFailure = { AppDetailState.Error },
             )
-            _state.value = loaded
-
-            if (loaded is AppDetailState.Loaded && appDetailInput is AppDetailInput.InstalledPackage) {
-                storageStatsRepository.requestTotalSizes(listOf(appDetailInput.packageName))
-                storageStatsRepository.totalSizes.collect { dataResult ->
-                    val totalSize = (dataResult as? StorageStatsRepository.DataResult.Available)
-                        ?.data?.get(appDetailInput.packageName)?.bytes
-                    _state.update { current ->
-                        (current as? AppDetailState.Loaded)?.copy(totalSize = totalSize) ?: current
-                    }
-                }
-            }
         }
+    }
+
+    private fun computeBadges(state: AppDetailState.Loaded): ImmutableList<AppDetailBadge> {
+        val now = Instant.now()
+        return buildList {
+            if (state.source == AppSource.Unknown.name) add(AppDetailBadge.Sideloaded)
+            if (state.dangerousPermissionsCount > 0) add(AppDetailBadge.DangerousPermissions)
+            state.lastUsedTime?.let { lastUsed ->
+                if (lastUsed.isBefore(now.minus(AppClassificationThresholds.UNUSED_PERIOD))) add(AppDetailBadge.Unused)
+            }
+            val effectiveSize = state.totalSize ?: state.apkSize
+            if (effectiveSize >= AppClassificationThresholds.LARGE_SIZE) add(AppDetailBadge.Large)
+            if (state.isSystemApp) add(AppDetailBadge.System)
+            state.firstInstallTime?.let { installTime ->
+                if (installTime.isAfter(now.minus(AppClassificationThresholds.RECENT_PERIOD))) add(AppDetailBadge.RecentlyInstalled)
+            }
+            state.lastUpdateTime?.let { updateTime ->
+                if (updateTime.isAfter(now.minus(AppClassificationThresholds.RECENT_PERIOD))) add(AppDetailBadge.RecentlyUpdated)
+            }
+            state.lastUsedTime?.let { lastUsed ->
+                if (lastUsed.isAfter(now.minus(AppClassificationThresholds.RECENTLY_USED_DAYS.days.toJavaDuration()))) add(AppDetailBadge.RecentlyUsed)
+            }
+            if (state.source == AppSource.GooglePlay.name) add(AppDetailBadge.GooglePlay)
+        }.take(MAX_BADGES).toImmutableList()
+    }
+
+    private companion object {
+        const val MAX_BADGES = 3
     }
 }
 
@@ -138,4 +159,14 @@ private fun AppDetail.toLoadedState() = AppDetailState.Loaded(
     broadcastReceiversCount = receivers.size,
     certificatesCount = certificates.size,
     featuresCount = features.size,
+    certificate = certificates.firstOrNull()?.let { cert ->
+        AppDetailState.Loaded.CertificateState(
+            signAlgorithm = cert.signAlgorithm,
+            sha256Fingerprint = cert.formattedSha256Fingerprint,
+            issuer = cert.issuer,
+            trustLevel = cert.trustLevel,
+        )
+    },
+    totalSize = info.totalSize,
+    lastUsedTime = info.lastUsedTime,
 )

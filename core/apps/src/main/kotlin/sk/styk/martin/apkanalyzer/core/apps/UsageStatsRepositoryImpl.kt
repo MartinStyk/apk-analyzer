@@ -11,7 +11,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import sk.styk.martin.apkanalyzer.core.apps.UsageStatsRepository.DataResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import java.time.Instant
@@ -33,8 +32,8 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
     final override val isPermissionGranted: StateFlow<Boolean>
         field = MutableStateFlow(checkPermission())
 
-    final override val lastUsedTimes: StateFlow<DataResult<Map<String, Instant>>>
-        field = MutableStateFlow<DataResult<Map<String, Instant>>>(DataResult.Loading)
+    final override val lastUsedTimes: StateFlow<Map<String, Instant>>
+        field = MutableStateFlow<Map<String, Instant>>(emptyMap())
 
     override fun onStart(owner: LifecycleOwner) {
         applicationScope.launch(dispatcherProvider.default()) {
@@ -42,23 +41,33 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun queryLastUsedTime(packageName: String): Instant? {
+        lastUsedTimes.value[packageName]?.let { return it }
+        if (!checkPermission()) return null
+        return queryRawUsageStats()
+            .filter { it.packageName == packageName }
+            .maxOfOrNull { it.lastTimeUsed }
+            ?.let { Instant.ofEpochMilli(it) }
+    }
+
     private fun fetchUsageTimes() {
         val hasPermission = checkPermission()
         isPermissionGranted.value = hasPermission
-        if (!hasPermission) {
-            return
-        }
+        if (!hasPermission) return
 
         Logger.d(INSTALLED_APPS, "Load apps last used time")
+        lastUsedTimes.value = queryRawUsageStats()
+            .groupBy { it.packageName }
+            .mapValues { (_, usages) -> Instant.ofEpochMilli(usages.maxOf { it.lastTimeUsed }) }
+        Logger.d(INSTALLED_APPS, "Apps last used time loaded")
+    }
+
+    private fun queryRawUsageStats() = try {
         val now = Instant.now()
         val yearAgo = now - 365.days.toJavaDuration()
-        val stats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, yearAgo.toEpochMilli(), now.toEpochMilli())
-        lastUsedTimes.value = DataResult.Available(
-            stats
-                .groupBy { it.packageName }
-                .mapValues { (_, usages) -> Instant.ofEpochMilli(usages.maxOf { it.lastTimeUsed }) },
-        )
-        Logger.d(INSTALLED_APPS, "Apps last used time loaded")
+        usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, yearAgo.toEpochMilli(), now.toEpochMilli())
+    } catch (_: SecurityException) {
+        emptyList()
     }
 
     private fun checkPermission(): Boolean {

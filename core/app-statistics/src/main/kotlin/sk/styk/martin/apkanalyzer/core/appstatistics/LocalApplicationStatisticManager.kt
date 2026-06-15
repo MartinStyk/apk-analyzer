@@ -16,7 +16,9 @@ import sk.styk.martin.apkanalyzer.core.appstatistics.model.PercentagePair
 import sk.styk.martin.apkanalyzer.core.appstatistics.model.StatisticsData
 import sk.styk.martin.apkanalyzer.core.appstatistics.model.toMathStats
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
+import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
+import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import javax.inject.Inject
 
 private const val ANALYSIS_FLAGS =
@@ -76,7 +78,7 @@ internal constructor(
             installLocation = packageInfo.installLocation,
             targetSdk = applicationInfo.targetSdkVersion,
             minSdk = applicationInfo.minSdkVersion,
-            apkSize = if (applicationInfo.sourceDir != null) computeApkSize(applicationInfo.sourceDir) else 0,
+            apkSize = if (applicationInfo.sourceDir != null) computeApkSize(applicationInfo.sourceDir) else 0.bytes,
             appSource = installSourceResolver.getAppInstallSource(packageInfo),
             signAlgorithm = certificateExtractor.getCertificateData(packageInfo).firstOrNull()?.signAlgorithm ?: "Unknown",
             activities = packageInfo.activities?.size ?: 0,
@@ -94,7 +96,7 @@ internal constructor(
         var installLocation: Int = 0,
         var targetSdk: Int = 0,
         var minSdk: Int = 0,
-        var apkSize: Long = 0,
+        var apkSize: AppSize = 0.bytes,
         var appSource: AppSource = AppSource.Unknown,
         var signAlgorithm: String,
         var activities: Int = 0,
@@ -158,7 +160,7 @@ internal constructor(
             addToMap(installLocation, InstallLocation.from(appData.installLocation), appData.packageName)
             addToMap(targetSdk, appData.targetSdk, appData.packageName)
             addToMap(minSdk, appData.minSdk, appData.packageName)
-            apkSize[analyzeSuccess] = appData.apkSize.toFloat()
+            apkSize[analyzeSuccess] = appData.apkSize.bytes.toFloat()
             addToMap(signAlgorithm, appData.signAlgorithm, appData.packageName)
             addToMap(appSource, appData.appSource, appData.packageName)
 

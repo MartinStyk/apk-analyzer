@@ -16,17 +16,19 @@ import sk.styk.martin.apkanalyzer.core.apps.analysis.createSimpleName
 import sk.styk.martin.apkanalyzer.core.apps.model.Activity
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.model.AppInfo
-import sk.styk.martin.apkanalyzer.core.apps.model.ContentProvider
 import sk.styk.martin.apkanalyzer.core.apps.model.BroadcastReceiver
-import sk.styk.martin.apkanalyzer.core.apps.model.Service
+import sk.styk.martin.apkanalyzer.core.apps.model.ContentProvider
 import sk.styk.martin.apkanalyzer.core.apps.model.Feature
 import sk.styk.martin.apkanalyzer.core.apps.model.InstallLocation
 import sk.styk.martin.apkanalyzer.core.apps.model.Permission
 import sk.styk.martin.apkanalyzer.core.apps.model.Permissions
+import sk.styk.martin.apkanalyzer.core.apps.model.Service
 import sk.styk.martin.apkanalyzer.core.apps.model.UsedPermission
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
+import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import java.io.File
+import java.time.Instant
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -37,6 +39,8 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     private val sdkVersionResolver: SdkVersionResolver,
     private val installSourceResolver: InstallSourceResolver,
     private val certificateExtractor: CertificateExtractor,
+    private val storageStatsRepository: StorageStatsRepository,
+    private val usageStatsRepository: UsageStatsRepository,
     packageChangesObserver: PackageChangesObserver,
     appScope: CoroutineScope,
     dispatcherProvider: DispatcherProvider,
@@ -61,18 +65,21 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             .launchIn(appScope + dispatcherProvider.default())
     }
 
-    override fun installedPackageDetails(packageName: String): Result<AppDetail> {
+    override suspend fun installedPackageDetails(packageName: String): Result<AppDetail> {
         cache[packageName]?.let { return Result.success(it) }
         Logger.d(TAG, "Loading details of $packageName")
         return runCatching {
+            val packageInfo = packageManager.getPackageInfo(packageName, analysisFlags)
             getPackageDetails(
                 analysisMode = AppDetail.AnalysisMode.InstalledPackage,
-                packageInfo = packageManager.getPackageInfo(packageName, analysisFlags),
+                packageInfo = packageInfo,
+                totalSize = storageStatsRepository.queryTotalSize(packageName),
+                lastUsedTime = usageStatsRepository.queryLastUsedTime(packageName),
             )
         }.onSuccess { cache[packageName] = it }
     }
 
-    override fun apkFilePackageDetails(accessibleFile: File): Result<AppDetail> = runCatching {
+    override suspend fun apkFilePackageDetails(accessibleFile: File): Result<AppDetail> = runCatching {
         getPackageDetails(
             analysisMode = AppDetail.AnalysisMode.ApkFile,
             packageInfo = packageManager.getPackageArchiveInfoWithCorrectPath(accessibleFile.absolutePath, analysisFlags)
@@ -80,9 +87,14 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         )
     }
 
-    private fun getPackageDetails(analysisMode: AppDetail.AnalysisMode, packageInfo: PackageInfo) = AppDetail(
+    private fun getPackageDetails(
+        analysisMode: AppDetail.AnalysisMode,
+        packageInfo: PackageInfo,
+        totalSize: AppSize? = null,
+        lastUsedTime: Instant? = null,
+    ) = AppDetail(
         analysisMode = analysisMode,
-        info = getGeneralData(packageInfo),
+        info = getGeneralData(packageInfo, totalSize, lastUsedTime),
         certificates = certificateExtractor.getCertificateData(packageInfo),
         activities = getActivities(packageInfo),
         services = getServices(packageInfo),
@@ -92,7 +104,11 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         features = getFeatures(packageInfo),
     )
 
-    private fun getGeneralData(packageInfo: PackageInfo): AppInfo {
+    private fun getGeneralData(
+        packageInfo: PackageInfo,
+        totalSize: AppSize? = null,
+        lastUsedTime: Instant? = null,
+    ): AppInfo {
         val applicationInfo = packageInfo.applicationInfo
         val minSdk = applicationInfo?.minSdkVersion
 
@@ -111,12 +127,14 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             appInstaller = installSourceResolver.appInstallingPackage(packageInfo),
             installLocation = InstallLocation.from(packageInfo.installLocation),
             apkSize = computeApkSize(applicationInfo?.sourceDir),
-            firstInstallTime = if (packageInfo.firstInstallTime > 0) packageInfo.firstInstallTime else null,
-            lastUpdateTime = if (packageInfo.lastUpdateTime > 0) packageInfo.lastUpdateTime else null,
+            firstInstallTime = if (packageInfo.firstInstallTime > 0) Instant.ofEpochMilli(packageInfo.firstInstallTime) else null,
+            lastUpdateTime = if (packageInfo.lastUpdateTime > 0) Instant.ofEpochMilli(packageInfo.lastUpdateTime) else null,
             minSdkVersion = minSdk,
             minSdkLabel = sdkVersionResolver.resolveVersion(minSdk),
             targetSdkVersion = applicationInfo?.targetSdkVersion,
             targetSdkLabel = sdkVersionResolver.resolveVersion(applicationInfo?.targetSdkVersion),
+            totalSize = totalSize,
+            lastUsedTime = lastUsedTime,
         )
     }
 

@@ -9,8 +9,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
-import sk.styk.martin.apkanalyzer.core.common.model.AppSize
+import sk.styk.martin.apkanalyzer.core.apps.AppClassificationThresholds
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
+import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -63,13 +64,13 @@ class AppFilterRepository @Inject constructor() {
     private fun toggleLargeTotal(current: AppFilterState): AppFilterState = if (current.isLargeTotalFilterActive) {
         current.copy(totalSizeRange = null)
     } else {
-        val min = AppFilterState.LARGE_TOTAL_SIZE_THRESHOLD
-        val max = current.totalSizeRange?.max ?: AppSize(Long.MAX_VALUE)
+        val min = AppClassificationThresholds.LARGE_SIZE
+        val max = current.totalSizeRange?.max ?: Long.MAX_VALUE.bytes
         current.copy(totalSizeRange = AppSizeRange(min = min, max = max))
     }
 
     private fun toggleRecentlyUsed(current: AppFilterState): AppFilterState = current.copy(
-        recentlyUsedDays = if (current.isRecentlyUsedActive) null else RECENTLY_USED_DAYS,
+        recentlyUsedDays = if (current.isRecentlyUsedActive) null else AppClassificationThresholds.RECENTLY_USED_DAYS,
         unusedPeriod = null,
     )
 
@@ -84,7 +85,7 @@ class AppFilterRepository @Inject constructor() {
             installTimeRange = if (current.isRecentInstallActive) {
                 null
             } else {
-                DateRange(start = now.minus(AppFilterState.ONE_MONTH), end = now)
+                DateRange(start = now.minus(AppClassificationThresholds.RECENT_PERIOD), end = now)
             },
         )
     }
@@ -95,7 +96,7 @@ class AppFilterRepository @Inject constructor() {
             updateTimeRange = if (current.isRecentUpdateActive) {
                 null
             } else {
-                DateRange(start = now.minus(AppFilterState.ONE_MONTH), end = now)
+                DateRange(start = now.minus(AppClassificationThresholds.RECENT_PERIOD), end = now)
             },
         )
     }
@@ -111,8 +112,4 @@ class AppFilterRepository @Inject constructor() {
         if (state.isRecentInstallActive) add(QuickFilter.RecentlyInstalled)
         if (state.isRecentUpdateActive) add(QuickFilter.RecentlyUpdated)
     }.toPersistentSet()
-
-    private companion object {
-        const val RECENTLY_USED_DAYS = 2
-    }
 }

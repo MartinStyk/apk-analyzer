@@ -1,6 +1,5 @@
 package sk.styk.martin.apkanalyzer.core.common.digest
 
-import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.Locale
@@ -38,10 +37,8 @@ constructor() {
         return sb.toString()
     }
 
-    private fun getHexString(digest: ByteArray): String {
-        val bi = BigInteger(1, digest)
-        return String.format("%032x", bi)
-    }
+    private fun getHexString(digest: ByteArray): String =
+        digest.joinToString("") { "%02x".format(it) }
 
     private fun getDigest(algorithm: String): MessageDigest {
         try {

@@ -3,6 +3,8 @@ package sk.styk.martin.apkanalyzer.core.apps.analysis
 import android.content.pm.PackageInfo
 import android.content.pm.Signature
 import sk.styk.martin.apkanalyzer.core.apps.model.Certificate
+import sk.styk.martin.apkanalyzer.core.apps.model.CertificatePrincipal
+import sk.styk.martin.apkanalyzer.core.apps.model.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.common.digest.DigestManager
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import java.io.ByteArrayInputStream
@@ -28,6 +30,7 @@ internal class CertificateExtractorImpl @Inject constructor(private val digestMa
             CertificateFactory.getInstance("X509").generateCertificate(stream) as X509Certificate
         }
         val publicKeyHex = digestManager.byteToHexString(certificate.publicKey.encoded)
+
         return Certificate(
             signAlgorithm = certificate.sigAlgName,
             certificateHashMd5 = digestManager.md5Digest(certificate.encoded),
@@ -39,14 +42,25 @@ internal class CertificateExtractorImpl @Inject constructor(private val digestMa
             startDate = certificate.notBefore,
             endDate = certificate.notAfter,
             serialNumber = certificate.serialNumber.toInt(),
-            issuerName = certificate.issuerX500Principal?.getField("CN=([^,]*)"),
-            issuerOrganization = certificate.issuerX500Principal?.getField("O=([^,]*)"),
-            issuerCountry = certificate.issuerX500Principal?.getField("C=([^,]*)"),
-            subjectName = certificate.subjectX500Principal?.getField("CN=([^,]*)"),
-            subjectOrganization = certificate.subjectX500Principal?.getField("O=([^,]*)"),
-            subjectCountry = certificate.subjectX500Principal?.getField("C=([^,]*)"),
+            issuer = certificate.issuerX500Principal.toPrincipal(),
+            subject = certificate.subjectX500Principal.toPrincipal(),
+            trustLevel = resolveTrustLevel(certificate),
         )
     }
 
+    private fun X500Principal.toPrincipal() = CertificatePrincipal(
+        name = getField("CN=([^,]*)"),
+        organization = getField("O=([^,]*)"),
+        country = getField("C=([^,]*)"),
+    )
+
     private fun X500Principal.getField(pattern: String): String? = getName(RFC1779).takeUnless { it.isNullOrBlank() }?.let { Regex(pattern).find(it)?.groupValues?.get(1) }
+
+    private fun resolveTrustLevel(certificate: X509Certificate): CertificateTrustLevel {
+        val issuerDn = certificate.issuerDN.name
+        val isDebug = issuerDn.contains("CN=Android Debug") &&
+            issuerDn.contains("O=Android") &&
+            issuerDn.contains("C=US")
+        return if (isDebug) CertificateTrustLevel.Debug else CertificateTrustLevel.Valid
+    }
 }

@@ -3,10 +3,9 @@ package sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
+import sk.styk.martin.apkanalyzer.core.apps.AppClassificationThresholds
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
-import sk.styk.martin.apkanalyzer.core.common.model.megabytes
-import java.time.Duration
 import java.time.Instant
 import kotlin.time.Duration.Companion.days
 import kotlin.time.toJavaDuration
@@ -34,20 +33,15 @@ data class AppFilterState(
             recentlyUsedDays != null ||
             selectedPermissions.isNotEmpty()
 
-    val isLargeTotalFilterActive: Boolean get() = totalSizeRange?.min != null && totalSizeRange.min >= LARGE_TOTAL_SIZE_THRESHOLD
+    val isLargeTotalFilterActive: Boolean get() = totalSizeRange?.min != null && totalSizeRange.min >= AppClassificationThresholds.LARGE_SIZE
     val isSystemFilterActive: Boolean get() = AppSource.SystemPreinstalled in selectedSources
     val isGooglePlayFilterActive: Boolean get() = AppSource.GooglePlay in selectedSources
     val isSideloadedFilterActive: Boolean get() = AppSource.Unknown in selectedSources
-    val isRecentInstallActive: Boolean get() = installTimeRange?.start != null && installTimeRange.start > Instant.now() - ONE_MONTH - 1.days.toJavaDuration()
-    val isRecentUpdateActive: Boolean get() = updateTimeRange?.start != null && updateTimeRange.start > Instant.now() - ONE_MONTH - 1.days.toJavaDuration()
+    val isRecentInstallActive: Boolean get() = installTimeRange?.start != null && installTimeRange.start > Instant.now() - AppClassificationThresholds.RECENT_PERIOD - 1.days.toJavaDuration()
+    val isRecentUpdateActive: Boolean get() = updateTimeRange?.start != null && updateTimeRange.start > Instant.now() - AppClassificationThresholds.RECENT_PERIOD - 1.days.toJavaDuration()
     val isUnusedFilterActive: Boolean get() = unusedPeriod != null
     val isRecentlyUsedActive: Boolean get() = recentlyUsedDays != null
     val isSensitivePermissionsFilterActive: Boolean get() = PermissionPreset.Sensitive.permissions.all { it in selectedPermissions }
-
-    companion object {
-        val LARGE_TOTAL_SIZE_THRESHOLD = 500.megabytes
-        val ONE_MONTH: Duration = 30.days.toJavaDuration()
-    }
 }
 
 @Immutable
