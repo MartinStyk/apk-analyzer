@@ -10,7 +10,6 @@ import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.AppDetailBadge
 import java.time.Instant
 
-
 @Immutable
 sealed interface AppDetailState {
     data object Loading : AppDetailState
@@ -56,12 +55,7 @@ sealed interface AppDetailState {
             get() = targetSdkVersion != null && targetSdkVersion < 29
 
         @Immutable
-        data class CertificateState(
-            val signAlgorithm: String,
-            val sha256Fingerprint: String,
-            val issuer: CertificatePrincipal,
-            val trustLevel: CertificateTrustLevel,
-        ) {
+        data class CertificateState(val signAlgorithm: String, val sha256Fingerprint: String, val issuer: CertificatePrincipal, val trustLevel: CertificateTrustLevel) {
             val signerDisplayName: String?
                 get() = issuer.displayName
         }

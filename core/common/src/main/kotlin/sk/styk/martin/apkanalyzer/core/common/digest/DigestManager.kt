@@ -37,8 +37,7 @@ constructor() {
         return sb.toString()
     }
 
-    private fun getHexString(digest: ByteArray): String =
-        digest.joinToString("") { "%02x".format(it) }
+    private fun getHexString(digest: ByteArray): String = digest.joinToString("") { "%02x".format(it) }
 
     private fun getDigest(algorithm: String): MessageDigest {
         try {

@@ -5,9 +5,7 @@ import android.os.Build
 import javax.inject.Inject
 import android.content.ClipboardManager as AndroidClipboardManager
 
-internal class ClipboardManagerImpl @Inject constructor(
-    private val clipboardManager: AndroidClipboardManager,
-) : ClipboardManager {
+internal class ClipboardManagerImpl @Inject constructor(private val clipboardManager: AndroidClipboardManager) : ClipboardManager {
 
     override fun copy(label: String, value: String): CopyResult {
         clipboardManager.setPrimaryClip(ClipData.newPlainText(label, value))

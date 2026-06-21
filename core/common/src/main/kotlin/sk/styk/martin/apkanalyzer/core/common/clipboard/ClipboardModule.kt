@@ -5,8 +5,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 import android.content.ClipboardManager as AndroidClipboardManager
 
@@ -20,7 +20,6 @@ abstract class ClipboardModule {
 
     companion object {
         @Provides
-        fun provideAndroidClipboardManager(@ApplicationContext context: Context): AndroidClipboardManager =
-            context.getSystemService(Context.CLIPBOARD_SERVICE) as AndroidClipboardManager
+        fun provideAndroidClipboardManager(@ApplicationContext context: Context): AndroidClipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as AndroidClipboardManager
     }
 }

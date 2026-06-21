@@ -473,6 +473,7 @@ private fun CertificateSignatureSection(
             AppTheme.colors.warning,
             stringResource(R.string.app_detail_certificate_debug),
         )
+
         CertificateTrustLevel.Valid -> Triple(
             ApkAnalyzerIcons.Verified,
             AppTheme.colors.primary,
@@ -535,7 +536,6 @@ private fun CertificateSignatureSection(
         )
     }
 }
-
 
 @Composable
 private fun PermissionsSection(
