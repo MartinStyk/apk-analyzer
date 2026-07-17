@@ -178,7 +178,7 @@ feature/<name>/impl/
 * Official Kotlin coding conventions.
 * `data object` instead of plain `object` for sealed interface members (e.g., `data object Loading : State`).
 * No wildcard imports.
-* No comments/KDoc unless explicitly requested.
+* Never write comments or KDoc in generated code — not even when the WHY seems non-obvious. Prefer self-documenting names/structure instead. Only exception: the user explicitly asks for a comment to be added in that specific instance.
 * Prefer `private` visibility; `internal` for module-visible.
 * `public` only for actual public API.
 * Spotless: `./gradlew spotlessApply` before committing.

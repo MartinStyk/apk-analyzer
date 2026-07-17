@@ -10,7 +10,6 @@ fun PermissionManager.withNotificationPermission(showNotification: () -> Unit) {
             Manifest.permission.POST_NOTIFICATIONS,
             object : PermissionManager.PermissionCallback {
                 override fun onPermissionDenied(permission: String) {
-                    // do noting
                 }
 
                 override fun onPermissionGranted(permission: String) {

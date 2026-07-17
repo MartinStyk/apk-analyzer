@@ -24,7 +24,7 @@ manager/
   media/
     MediaManager.kt                     - Thin wrapper over MediaScannerConnection.scanFile (legacy storage media-scan)
   notification/
-    NotificationManager.kt              - Wraps Android's NotificationManager for export notifications — most notification-building bodies are currently commented out/disabled except the app-export progress notification
+    NotificationManager.kt              - Wraps Android's NotificationManager for export notifications — most notification-building methods are currently no-ops except the app-export progress notification
   permission/
     PermissionManager.kt                - Interface: hasPermissionGranted, shouldShowRationaleForPermission, requestPermission(s), onRequestPermissionsResult, + PermissionCallback/PermissionsCallback nested interfaces
     PermissionManagerImpl.kt            - Class is actually named `PermissionsManagerImpl` (plural, note the mismatch with the file/interface name) — AndroidViewModel + PermissionManager impl, binds to an Activity via WeakReference; also hosts top-level fun hasScopedStorage() (SDK >= Q) and needsNotificationPermission() (SDK >= TIRAMISU)

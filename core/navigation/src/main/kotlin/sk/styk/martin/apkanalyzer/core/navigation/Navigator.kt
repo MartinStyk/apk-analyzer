@@ -16,7 +16,6 @@ class Navigator(val navigationState: NavigationState) {
             navigationState.startKey -> error("You cannot go back from the start route")
 
             navigationState.currentTopLevelKey -> {
-                // We're at the base of the current sub stack, go back to the previous top level stack.
                 navigationState.topLevelStack.removeLastOrNull()
             }
 
@@ -34,10 +33,8 @@ class Navigator(val navigationState: NavigationState) {
     private fun goToTopLevel(key: NavKey) {
         navigationState.topLevelStack.apply {
             if (key == navigationState.startKey) {
-                // This is the start key. Clear the stack so it's added as the only key.
                 clear()
             } else {
-                // Remove it if it's already in the stack so it's added at the end.
                 remove(key)
             }
             add(key)

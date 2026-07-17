@@ -93,8 +93,4 @@ class PermissionLabelProvider @Inject constructor(@ApplicationContext private va
         "android.permission.SCHEDULE_EXACT_ALARM" to context.getString(R.string.permission_label_schedule_alarm),
         "android.permission.USE_EXACT_ALARM" to context.getString(R.string.permission_label_schedule_alarm),
     )
-
-    companion object {
-        // kept empty — labels moved to string resources
-    }
 }

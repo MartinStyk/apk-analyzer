@@ -69,12 +69,10 @@ internal fun AppDetailToolbar(
     val backButtonEndX = TOOLBAR_PADDING_START + BACK_BUTTON_SIZE
     val backButtonCenterY = TOOLBAR_PADDING_VERTICAL + BACK_BUTTON_SIZE / 2
 
-    // Vertical positions
     val expandedIconY = TOOLBAR_PADDING_VERTICAL + BACK_BUTTON_SIZE + 16.dp
     val collapsedIconY = backButtonCenterY - ICON_SIZE_COLLAPSED / 2
     val iconY = lerp(expandedIconY, collapsedIconY, progress)
 
-    // App name font size interpolation: headlineMedium → titleLarge
     val expandedAppNameStyle = AppTheme.typography.headlineMedium
     val collapsedAppNameStyle = AppTheme.typography.titleLarge
     val appNameFontSize = lerpFloat(
@@ -109,22 +107,18 @@ internal fun AppDetailToolbar(
     ) {
         val parentWidth = maxWidth
 
-        // Icon X: centered when expanded, next to back button when collapsed
         val expandedIconX = (parentWidth - iconContainerSize) / 2
         val collapsedIconX = backButtonEndX
         val iconX = lerp(expandedIconX, collapsedIconX, progress)
 
-        // App name X: centered when expanded, after icon when collapsed
         val collapsedAppNameX = backButtonEndX + ICON_SIZE_COLLAPSED + 8.dp
 
-        // Back button — always pinned top-left
         IconButton(
             imageVector = ApkAnalyzerIcons.Back,
             onClick = onBack,
             modifier = Modifier.offset(x = TOOLBAR_PADDING_START, y = TOOLBAR_PADDING_VERTICAL),
         )
 
-        // App icon with shadow container
         Box(
             modifier = Modifier
                 .offset(x = iconX, y = iconY)
@@ -144,7 +138,6 @@ internal fun AppDetailToolbar(
             )
         }
 
-        // App name — centered when expanded, left-aligned next to icon when collapsed
         Box(
             modifier = Modifier
                 .align(Alignment.TopCenter)
@@ -169,7 +162,6 @@ internal fun AppDetailToolbar(
             )
         }
 
-        // Package name — centered, expanded only
         Text(
             text = state.packageName,
             style = AppTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
@@ -184,7 +176,6 @@ internal fun AppDetailToolbar(
                 },
         )
 
-        // Badge row — scrollable, expanded only, hidden when no badges
         if (state.badges.isNotEmpty()) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),

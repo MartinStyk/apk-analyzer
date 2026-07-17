@@ -63,9 +63,6 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
         Logger.d(INSTALLED_APPS, "Apps last used time loaded")
     }
 
-    // PACKAGE_USAGE_STATS is a special-access permission granted via AppOpsManager, not the
-    // runtime permission flow Lint's MissingPermission check looks for — checkPermission() is the
-    // real gate, and callers already handle the ungranted case via SecurityException below.
     @SuppressLint("MissingPermission")
     private fun queryRawUsageStats() = try {
         val now = Instant.now()
