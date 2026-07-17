@@ -89,6 +89,10 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 
+# Claude Code local/session state (per-machine, not shared)
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+
 # Android Profiling
 *.hprof
 .gradle
