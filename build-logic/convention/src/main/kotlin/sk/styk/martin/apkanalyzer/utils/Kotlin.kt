@@ -16,8 +16,6 @@ internal fun Project.configureKotlin() {
             freeCompilerArgs.addAll(
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "-opt-in=kotlinx.coroutines.FlowPreview",
-                "-Xannotation-default-target=param-property",
-                "-Xexplicit-backing-fields",
             )
         }
 

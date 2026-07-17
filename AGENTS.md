@@ -4,13 +4,13 @@
 
 Apk Analyzer is an Android multi-module application that lets users inspect installed apps and APK files on their device. It shows app details (permissions, activities, services, certificates), device-wide statistics, and permission usage across all installed apps.
 
-* **Language** - Kotlin 2.3 (kotlin `2.3.21`, ksp `2.3.6`).
+* **Language** - Kotlin 2.4 (kotlin `2.4.10`, ksp `2.3.10`).
 * **UI** - Jetpack Compose only. No XML layouts.
-* **Dependency Injection** - Hilt `2.59.2`. No Dagger/Koin.
+* **Dependency Injection** - Hilt `2.60.1`. No Dagger/Koin.
 * **Libraries** - Use libraries from `gradle/libs.versions.toml`. Do not introduce new libraries unless required.
 * **Concurrency** - Kotlin **coroutines** and **flows** exclusively.
 * **Build System** - Gradle with convention plugins in `build-logic/`.
-* **Android SDK** - compileSdk 36, targetSdk 36, minSdk 28.
+* **Android SDK** - compileSdk 37, targetSdk 37, minSdk 28.
 * **JVM Toolchain** - Java 21.
 
 ## Project Structure
@@ -68,16 +68,16 @@ Apk Analyzer is an Android multi-module application that lets users inspect inst
 
 | Category | Libraries |
 |----------|-----------|
-| Compose | BOM `2026.04.01`, foundation `1.11.0`, material3, material-icons-extended |
-| Navigation 3 | `navigation3-runtime` `1.1.1`, `navigation3-ui`, `lifecycle-viewmodel-navigation3`, `hilt-navigation-compose` |
-| Hilt | `2.59.2` |
-| Firebase | BOM `34.12.0` (analytics, crashlytics, performance) |
-| Lifecycle | `2.10.0` (runtime-ktx, viewmodel-ktx, runtime-compose, process) |
-| Kotlin | `kotlinx-collections-immutable` `0.4.0`, kotlinx-serialization |
-| Image | Coil 3 (`coil-compose` `3.4.0`) |
+| Compose | BOM `2026.06.01`, foundation `1.11.4`, material3, material-icons-extended |
+| Navigation 3 | `navigation3-runtime` `1.1.4`, `navigation3-ui`, `lifecycle-viewmodel-navigation3`, `hilt-navigation-compose` |
+| Hilt | `2.60.1` |
+| Firebase | BOM `34.16.0` (analytics, crashlytics, performance) |
+| Lifecycle | `2.11.0` (runtime-ktx, viewmodel-ktx, runtime-compose, process) |
+| Kotlin | `kotlinx-collections-immutable` `0.5.1`, kotlinx-serialization |
+| Image | Coil 3 (`coil-compose` `3.5.0`) |
 | Logging | Timber `5.0.1` |
 | Debug | LeakCanary `2.14` |
-| Formatting | Spotless `8.4.0` + compose-rules-ktlint `0.5.7` |
+| Formatting | Spotless `8.8.0` + compose-rules-ktlint `0.6.3` |
 
 ## Coding Guidelines
 
@@ -178,6 +178,7 @@ feature/<name>/impl/
 * `public` only for actual public API.
 * Spotless: `./gradlew spotlessApply` before committing.
 * Ktlint config: multiline signatures at 3+ params, compose rules enabled.
+* Git commits: always authored as the human user only. Never add `Co-Authored-By: Claude`, `Claude-Session:`, or any AI co-author trailer. See `.claude/skills/git-commit-author/SKILL.md`.
 
 ### Naming Conventions
 
@@ -213,6 +214,7 @@ feature/<name>/impl/
 | Create Compose Component | `/create-compose-component` | `.claude/skills/create-compose-component/SKILL.md` | Adding a reusable UI component to `:core:ui-library` |
 | Implement Navigation | `/implement-navigation` | `.claude/skills/implement-navigation/SKILL.md` | Adding a screen destination, wiring navigation, entry provider patterns |
 | Spotless Fix | `/spotless-fix` | `.claude/skills/spotless-fix/SKILL.md` | Fixing formatting/ktlint errors, running spotless |
+| Git Commit Author | `/git-commit-author` | `.claude/skills/git-commit-author/SKILL.md` | Any git commit — enforces human-only authorship, no AI trailers |
 
 ## Code Templates
 
