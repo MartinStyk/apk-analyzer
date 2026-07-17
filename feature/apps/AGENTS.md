@@ -25,18 +25,31 @@ list/
   AppsEvent.kt             - Navigation events
 search/
   AppSearchScreen.kt       - Search overlay screen
+  AppSearchState/Action/Event/ViewModel.kt - Own State/Action/Event/ViewModel, same MVI shape as list/
+  domain/
+    SearchAppsUseCase.kt   - Applies search query to app list
 filter/
   FilterScreen.kt          - Filter bottom sheet / screen
+  FilterState/Action/Event/ViewModel.kt - Own State/Action/Event/ViewModel, same MVI shape as list/
   domain/
     AppFilterRepository.kt - In-memory filter state management
     AppFilterState.kt      - Filter criteria data class
     FilterAppsUseCase.kt   - Applies filter to app list
+    PermissionFilterCoordinator.kt, PermissionPreset.kt, QuickFilter.kt, UnusedAppsPeriod.kt - Supporting filter domain types
   permission/
     PermissionFilterScreen.kt - Permission-based filtering
+    PermissionFilterState/Action/Event/ViewModel.kt - Own State/Action/Event/ViewModel
 components/
-  AppDataPermission.kt     - Permission rationale enum (StorageAccess, UsageAccess)
+  PermissionRationaleBottomSheet.kt - Defines AppDataPermission (sealed interface: UsageAccess, StorageAccess — NOT an enum) + the rationale bottom sheet UI
+  AppsSkeletons.kt         - Loading skeleton placeholders
+  appitem/AppListItemRow.kt - Single app row in the list
+  quickfilter/QuickFilterRow*.kt - Quick-filter chip row
   (other shared components)
 ```
+
+Every sub-screen (`list/`, `search/`, `filter/`, `filter/permission/`) follows the same
+State/Action/Event/ViewModel MVI shape as the top-level `AppsViewModel` — not just a single
+screen with helper composables.
 
 ## Key Dependencies
 - `core:apps` (InstalledAppsRepository, StorageStatsRepository, UsageStatsRepository)

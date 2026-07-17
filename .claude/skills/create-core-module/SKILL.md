@@ -119,6 +119,23 @@ Add inside `include(...)`:
 ":core:<name>",
 ```
 
+## Step 6 — Create module docs
+
+Every module carries its own `AGENTS.md` (dense agent-reference notes: purpose, package, annotated
+structure, key interfaces/exports, dependencies — see `core/apps/AGENTS.md` or `core/common/AGENTS.md`
+for the exact format to match) plus a one-line `CLAUDE.md` pointer:
+
+**`core/<name>/CLAUDE.md`**
+```
+@AGENTS.md
+```
+
+**`core/<name>/AGENTS.md`** — write it once the module's real content exists (not before Step 2-4
+produce something to document). Don't leave it as a stub with placeholder text.
+
+Also add a row for the new module to the module table in the root `AGENTS.md`'s `## Project
+Structure` section.
+
 ## Rules
 - Core modules **never** depend on `feature` modules.
 - Always depend on at least `core:common`.

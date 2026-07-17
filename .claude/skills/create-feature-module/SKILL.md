@@ -164,6 +164,26 @@ Add to `app/src/main/kotlin/sk/styk/martin/apkanalyzer/ui/navigation/TopLevelDes
 - Choose icons from `ApkAnalyzerIcons`
 - Add string resource in the api module: `feature/<name>/api/src/main/res/values/strings.xml`
 
+## Step 9 — Create module docs
+
+Every feature carries one `AGENTS.md` at `feature/<name>/AGENTS.md` covering **both** its `api`
+and `impl` submodules (not two separate files — see `feature/settings/AGENTS.md` or
+`feature/app-detail/AGENTS.md` for the exact format: Purpose, Sub-modules, API module key types,
+Impl Structure, Key Patterns, Dependencies), plus a one-line `CLAUDE.md` pointer at the same level:
+
+**`feature/<name>/CLAUDE.md`**
+```
+@AGENTS.md
+```
+
+If the feature starts as a placeholder screen (Step 4's stub), say so explicitly in the `AGENTS.md`
+purpose line — e.g. "Status: stub/placeholder — not yet implemented" (see
+`feature/permissions/AGENTS.md`) — so a future agent doesn't assume real behavior exists. Update it
+once the feature is actually built out.
+
+Also add rows for the new `api`/`impl` modules to the module table in the root `AGENTS.md`'s
+`## Project Structure` section.
+
 ## Naming Reference
 
 | Thing | Convention | Example |

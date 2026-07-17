@@ -15,6 +15,11 @@ Apk Analyzer is an Android multi-module application that lets users inspect inst
 
 ## Project Structure
 
+Every module listed below has its own `AGENTS.md` (dense, agent-oriented reference: purpose,
+package, annotated structure, key interfaces, dependencies, known gotchas — not user
+documentation) plus a one-line `CLAUDE.md` pointer. Read the specific module's `AGENTS.md` before
+working inside it instead of re-deriving its structure from scratch.
+
 ### Modules
 
 | Module | Gradle ID | Purpose |
@@ -32,9 +37,9 @@ Apk Analyzer is an Android multi-module application that lets users inspect inst
 | `feature:app-detail:api` | `:feature:app-detail:api` | `AppDetailNavKey`, `AppDetailInput` |
 | `feature:app-detail:impl` | `:feature:app-detail:impl` | App detail screen, general info sub-screen |
 | `feature:permissions:api` | `:feature:permissions:api` | `PermissionsNavKey` |
-| `feature:permissions:impl` | `:feature:permissions:impl` | Permissions overview screen |
+| `feature:permissions:impl` | `:feature:permissions:impl` | Permissions overview screen — **stub/placeholder, not yet implemented** |
 | `feature:statistics:api` | `:feature:statistics:api` | `StatisticsNavKey` |
-| `feature:statistics:impl` | `:feature:statistics:impl` | Statistics overview screen |
+| `feature:statistics:impl` | `:feature:statistics:impl` | Statistics overview screen — **stub/placeholder, not yet implemented** |
 | `feature:settings:api` | `:feature:settings:api` | `SettingsNavKey` |
 | `feature:settings:impl` | `:feature:settings:impl` | Settings screen |
 
@@ -215,6 +220,9 @@ feature/<name>/impl/
 | Implement Navigation | `/implement-navigation` | `.claude/skills/implement-navigation/SKILL.md` | Adding a screen destination, wiring navigation, entry provider patterns |
 | Spotless Fix | `/spotless-fix` | `.claude/skills/spotless-fix/SKILL.md` | Fixing formatting/ktlint errors, running spotless |
 | Git Commit Author | `/git-commit-author` | `.claude/skills/git-commit-author/SKILL.md` | Any git commit — enforces human-only authorship, no AI trailers |
+| Setup Local Tools | `/setup-local-tools` | `.claude/skills/setup-local-tools/SKILL.md` | Setting up a new machine, checking dev tools (`gh`, JDK, Android SDK, Firebase CLI) |
+| Analyze CI Failure | `/analyze-ci-failure` | `.claude/skills/analyze-ci-failure/SKILL.md` | Diagnosing a failed GitHub Actions run (`android.yml` / `android-publish.yml`) |
+| Run App | `/run-app` | `.claude/skills/run-app/SKILL.md` | Building, installing, and launching the app on a connected device/emulator |
 
 ## Code Templates
 
