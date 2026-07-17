@@ -2,9 +2,7 @@ name: Continuous integration
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches: [ develop ]
 
 jobs:
   build:
@@ -12,16 +10,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up JDK 17
-      uses: actions/setup-java@v2
+    - uses: actions/checkout@v4
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
       with:
-        java-version: '17'
-        distribution: 'zulu'
+        java-version: '21'
+        distribution: 'temurin'
         cache: gradle
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Build with Lint check
-      run: ./gradlew spotlessCheck lintFreeDebug
+    - name: Spotless check
+      run: ./gradlew spotlessCheck
+
+    - name: Build debug APK
+      run: ./gradlew assembleDebug
+
+    - name: Lint check
+      run: ./gradlew lintDebug

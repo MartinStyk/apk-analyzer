@@ -32,7 +32,7 @@ To also verify compilation: `./gradlew assembleDebug`
 
 ### CI pipeline (.github/workflows/android.yml)
 
-Runs on PRs to `master`: `spotlessCheck` then `lintFreeDebug`. Note: `lintFreeDebug` references a removed product flavor — the actual working lint task is `lintDebug`.
+Runs on every push to `develop`: `spotlessCheck`, `assembleDebug`, then `lintDebug` (as separate steps, for clear per-step failure attribution).
 
 ### Critical build requirement
 
