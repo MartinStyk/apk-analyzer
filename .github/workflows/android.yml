@@ -3,6 +3,12 @@ name: Continuous integration
 on:
   push:
     branches: [ develop ]
+    paths-ignore:
+      - '**/*.md'
+      - '.claude/**'
+      - 'LICENSE'
+      - '.editorconfig'
+      - '.gitignore'
   pull_request:
     branches: [ develop ]
 
