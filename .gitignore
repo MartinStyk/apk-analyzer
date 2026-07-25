@@ -50,6 +50,8 @@ captures/
 .idea/.name
 .idea/deploymentTargetDropDown.xml
 .idea/deploymentTargetSelector.xml
+.idea/copilot.data.migration.ask2agent.xml
+.idea/copilotDiffState.xml
 # Android Studio 3 in .gitignore file.
 .idea/caches
 .idea/modules.xml
