@@ -6,7 +6,7 @@ Trust these instructions. Only search the codebase if the information here is in
 
 Android multi-module app (Kotlin 2.4, Jetpack Compose, Hilt, Navigation 3) that inspects installed apps and APK files. ~18 Gradle modules, ~15k LOC Kotlin. No unit tests exist yet.
 
-**Stack:** Kotlin `2.4.10`, AGP `9.3.0`, Gradle `9.6.1` (wrapper), JVM toolchain 21 (JetBrains), compileSdk/targetSdk 37, minSdk 28, Hilt `2.60.1`, Compose BOM `2026.06.01`, Navigation 3 `1.1.4`, Spotless `8.8.0` with ktlint + compose-rules-ktlint.
+**Stack:** Kotlin `2.4.10`, AGP `9.3.0`, Gradle `9.6.1` (wrapper), JVM toolchain 25 (JetBrains), compileSdk/targetSdk 37, minSdk 28, Hilt `2.60.1`, Compose BOM `2026.06.01`, Navigation 3 `1.1.4`, Spotless `8.8.0` with ktlint + compose-rules-ktlint.
 
 ## Build & Validation Commands
 

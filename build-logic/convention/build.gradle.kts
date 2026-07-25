@@ -5,7 +5,7 @@ plugins {
 group = "sk.styk.martin.apkanalyzer.buildlogic"
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(25)
 }
 
 dependencies {

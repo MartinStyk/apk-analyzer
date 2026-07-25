@@ -11,7 +11,7 @@ Apk Analyzer is an Android multi-module application that lets users inspect inst
 * **Concurrency** - Kotlin **coroutines** and **flows** exclusively.
 * **Build System** - Gradle with convention plugins in `build-logic/`.
 * **Android SDK** - compileSdk 37, targetSdk 37, minSdk 28.
-* **JVM Toolchain** - Java 21.
+* **JVM Toolchain** - Java 25.
 
 ## Project Structure
 

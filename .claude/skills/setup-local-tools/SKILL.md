@@ -16,7 +16,7 @@ description: Use when setting up a new machine for this repo, checking whether r
 | Tool | Needed for | Check |
 |---|---|---|
 | `gh` (GitHub CLI), logged in | Inspecting/diagnosing GitHub Actions runs and PRs (`analyze-ci-failure` skill) | `gh auth status` |
-| JDK 21 (only if missing — see Step 1) | Gradle toolchain — `jvmToolchain(21)` in `build-logic/convention` | `java -version` |
+| JDK 25 (only if missing — see Step 1) | Gradle toolchain — `jvmToolchain(25)` in `build-logic/convention` | `java -version` |
 | Android SDK platform 37 + build-tools (only if missing — see Step 1) | `./gradlew assembleDebug`, running the app on a device/emulator | `ANDROID_HOME` set and `%ANDROID_HOME%\platforms\android-37` (or `$ANDROID_HOME/platforms/android-37`) exists |
 | Firebase CLI, logged in (optional) | Only if you need to query Crashlytics/Analytics/App Distribution for the `apkanalyzer` Firebase project from the command line — not needed to build or run the app | `firebase --version` / `firebase login:list` |
 
@@ -27,17 +27,17 @@ in case."
 
 | Thing | Why it's usually already covered |
 |---|---|
-| A standalone JDK 21 | Two independent paths usually already provide it: (1) Android Studio ships its own bundled JetBrains Runtime, and this project's `.idea/misc.xml` already points at it (`project-jdk-name="jbr-21"`). (2) For pure CLI/agent builds with no Android Studio at all, `gradle/gradle-daemon-jvm.properties` pins `toolchainVersion=21` with foojay Disco API URLs, so a plain `./gradlew ...` auto-downloads a matching JDK the first time it's needed. **Only install one manually if `java -version` shows nothing/wrong version AND you're not relying on Gradle's auto-provisioning** (e.g. offline, or you want a standalone `java` on `PATH` outside Gradle/Android Studio) — see Step 1 |
+| A standalone JDK 25 | Two independent paths usually already provide it: (1) Android Studio ships its own bundled JetBrains Runtime, and this project's `.idea/misc.xml` already points at it (`project-jdk-name="jbr-25"`). (2) For pure CLI/agent builds with no Android Studio at all, `gradle/gradle-daemon-jvm.properties` pins `toolchainVersion=25` with foojay Disco API URLs, so a plain `./gradlew ...` auto-downloads a matching JDK the first time it's needed (requires the `org.gradle.toolchains.foojay-resolver-convention` plugin in `settings.gradle.kts`, already applied). **Only install one manually if `java -version` shows nothing/wrong version AND you're not relying on Gradle's auto-provisioning** (e.g. offline, or you want a standalone `java` on `PATH` outside Gradle/Android Studio) — see Step 1 |
 | Android SDK cmdline-tools, done manually | If Android Studio is installed (assume yes — this is an Android app), its SDK Manager already provides platform 37 + build-tools + `adb`. **Only install manually if `ANDROID_HOME` is unset or missing platform 37/build-tools** — e.g. a headless machine that will never run Android Studio (a CI runner, or an agent-only box) — see Step 1 |
 | Node.js | Nothing in this repo needs it — no `package.json` anywhere, and the Firebase CLI ships as a standalone binary (see Step 2) that doesn't need Node. Only install Node if you have some other reason to |
 | An MCP server config (`.mcp.json`) | Deliberately not present. Claude Code can already run `gh ...` / `firebase ...` directly via Bash with the exact same capability an MCP wrapper would expose, with no extra process to keep alive and no session restart needed after config changes |
 
-## Step 1 — JDK 21 and Android SDK (only if Android Studio isn't installed, or the checks fail)
+## Step 1 — JDK 25 and Android SDK (only if Android Studio isn't installed, or the checks fail)
 
 Check first — don't install blindly:
 
 ```bash
-java -version                        # want: 21.x
+java -version                        # want: 25.x
 echo $ANDROID_HOME                   # macOS/Linux — want: a real path
 echo %ANDROID_HOME%                  # Windows cmd
 $env:ANDROID_HOME                    # Windows PowerShell
@@ -51,7 +51,7 @@ if Android Studio is absent or one of the checks above comes back empty/wrong.
 ### Windows (PowerShell, winget)
 
 ```powershell
-winget install EclipseAdoptium.Temurin.21.JDK
+winget install EclipseAdoptium.Temurin.25.JDK
 # Android SDK: install via Android Studio's SDK Manager if at all possible — it's simpler than
 # the cmdline-tools path below. Only use cmdline-tools on a machine that will never run Android
 # Studio (e.g. CI, a headless agent box):
@@ -64,7 +64,7 @@ winget install EclipseAdoptium.Temurin.21.JDK
 ### macOS (Homebrew)
 
 ```bash
-brew install --cask temurin@21
+brew install --cask temurin@25
 # Android SDK — prefer Android Studio's SDK Manager; for a headless box:
 brew install --cask android-commandlinetools
 sdkmanager "platform-tools" "platforms;android-37" "build-tools;37.0.0"
@@ -73,8 +73,8 @@ sdkmanager "platform-tools" "platforms;android-37" "build-tools;37.0.0"
 ### Linux (Debian/Ubuntu — adapt package manager as needed)
 
 ```bash
-sudo apt update && sudo apt install -y openjdk-21-jdk
-# or: sdk install java 21-tem   (via sdkman)
+sudo apt update && sudo apt install -y openjdk-25-jdk
+# or: sdk install java 25-tem   (via sdkman)
 
 # Android SDK — download cmdline-tools from developer.android.com/studio#command-tools, unzip, then:
 sdkmanager "platform-tools" "platforms;android-37" "build-tools;37.0.0"

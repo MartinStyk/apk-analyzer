@@ -21,7 +21,7 @@ Gradle convention plugins that standardize build configuration across all module
 
 - `AndroidSdk.kt` - `CompileSdk = 37`, `TargetSdk = 37`, `MinSdk = 28`
 - `DependenciesExtension.kt` - `implementation()`, `api()` helper extensions
-- `Kotlin.kt` - `configureKotlin()` (JVM toolchain 21)
+- `Kotlin.kt` - `configureKotlin()` (JVM toolchain 25)
 - `ProjectExtensions.kt` - `Project.libs` accessor for version catalog
 
 ## Spotless Configuration

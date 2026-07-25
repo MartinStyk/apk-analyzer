@@ -8,7 +8,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 internal fun Project.configureKotlin() {
     extensions.configure(KotlinAndroidProjectExtension::class.java) {
-        jvmToolchain(21)
+        jvmToolchain(25)
     }
 
     tasks.withType<KotlinCompile>().configureEach {
