@@ -15,8 +15,8 @@ android {
         applicationId = "sk.styk.martin.apkanalyzer"
         proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
-        versionCode = System.getenv("GITHUB_RUN_NUMBER")?.toIntOrNull() ?: 1
-        versionName = "dev"
+        versionCode = (project.findProperty("version.code") as String).toInt()
+        versionName = project.findProperty("version.name") as String
     }
 
     buildFeatures {
