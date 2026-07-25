@@ -152,9 +152,8 @@ firebase login:list            # shows an authenticated account, if installed
 
 ## Firebase config note
 
-Unlike some repos, `app/google-services.json` **is committed** to this repo (see `AGENTS.md` /
-`.github/copilot-instructions.md` — "Critical build requirement") and required for the `:app`
-module's Firebase plugins. It exists immediately after clone — nothing to fetch, don't delete it,
+Unlike some repos, `app/google-services.json` **is committed** to this repo and required for the
+`:app` module's Firebase plugins. It exists immediately after clone — nothing to fetch, don't delete it,
 and don't regenerate it via `firebase apps:sdkconfig` unless intentionally repointing the app at a
 different Firebase project. The Firebase CLI (Step 3) is unrelated to building the app — it's only
 for ad-hoc Crashlytics/Analytics queries.

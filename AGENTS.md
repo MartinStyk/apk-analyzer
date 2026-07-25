@@ -1,4 +1,4 @@
-# Apk Analyzer Copilot Instructions
+# Apk Analyzer Agent Instructions
 
 ## Project Overview
 
