@@ -40,6 +40,7 @@ jobs:
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
           FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
         run: |
+          rm -f app/google-services.json
           npx firebase-tools@latest apps:sdkconfig ANDROID "$FIREBASE_APP_ID" \
             --project "$FIREBASE_PROJECT_ID" \
             -o app/google-services.json
