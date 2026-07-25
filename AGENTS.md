@@ -223,6 +223,7 @@ feature/<name>/impl/
 | Setup Local Tools | `/setup-local-tools` | `.claude/skills/setup-local-tools/SKILL.md` | Setting up a new machine, checking dev tools (`gh`, JDK, Android SDK, Firebase CLI) |
 | Analyze CI Failure | `/analyze-ci-failure` | `.claude/skills/analyze-ci-failure/SKILL.md` | Diagnosing a failed GitHub Actions run (`android.yml` / `android-publish.yml`) |
 | Run App | `/run-app` | `.claude/skills/run-app/SKILL.md` | Building, installing, and launching the app on a connected device/emulator |
+| Sync Design Changes | `/sync-design-changes` | `.claude/skills/sync-design-changes/SKILL.md` | Translating tweaks made in the Claude Design ("Apk Analyzer Design System") project back into Kotlin/Compose code |
 
 ## Code Templates
 
