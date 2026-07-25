@@ -3,29 +3,97 @@ name: Continuous integration
 on:
   push:
     branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    env:
+      APK_PATH: app/build/outputs/apk/debug/apk-analyzer.apk
 
     steps:
-    - uses: actions/checkout@v7
-    - name: Set up JDK 21
-      uses: actions/setup-java@v5
-      with:
-        java-version: '21'
-        distribution: 'temurin'
-        cache: gradle
+      - uses: actions/checkout@v7
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      - name: Set up JDK 21
+        uses: actions/setup-java@v5
+        with:
+          java-version: '21'
+          distribution: 'temurin'
 
-    - name: Spotless check
-      run: ./gradlew spotlessCheck
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
-    - name: Build debug APK
-      run: ./gradlew assembleDebug
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
-    - name: Lint check
-      run: ./gradlew lintDebug
+      - name: Fetch Firebase google-services.json
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+        run: |
+          npx firebase-tools@latest apps:sdkconfig ANDROID "$FIREBASE_APP_ID" \
+            --project "$FIREBASE_PROJECT_ID" \
+            -o app/google-services.json
+
+      - name: Spotless check
+        run: ./gradlew spotlessCheck
+
+      - name: Lint check
+        run: ./gradlew lintDebug
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug
+
+      - name: Rename APK
+        run: mv app/build/outputs/apk/debug/app-debug.apk "$APK_PATH"
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk-analyzer
+          path: ${{ env.APK_PATH }}
+          retention-days: 14
+
+  distribute:
+    needs: build
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+
+    steps:
+      - name: Download APK artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: apk-analyzer
+          path: artifacts
+
+      - name: Write Firebase release notes
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          cat > release-notes.txt <<NOTES
+          $COMMIT_MESSAGE
+
+          Commit: ${{ github.sha }}
+          Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          NOTES
+
+      - name: Distribute APK to Firebase App Distribution
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+        run: |
+          npx firebase-tools@latest appdistribution:distribute artifacts/apk-analyzer.apk \
+            --app "$FIREBASE_APP_ID" \
+            --groups "internal-testers" \
+            --release-notes-file release-notes.txt
