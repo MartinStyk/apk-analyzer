@@ -70,9 +70,8 @@ specific module instead of re-deriving it from scratch.
 
 **Prerequisites:** Android Studio (latest stable). That's genuinely it — this project's Gradle
 setup auto-provisions a matching JDK on first build, and Android Studio's own SDK Manager covers
-the Android SDK. See [`.claude/skills/setup-local-tools/SKILL.md`](.claude/skills/setup-local-tools/SKILL.md)
-if you want the full breakdown (including CLI-only / headless setup, and optional tools like the
-Firebase CLI and GitHub CLI).
+the Android SDK. Run the `/setup-local-tools` skill for the full breakdown (including CLI-only /
+headless setup, and optional tools like the Firebase CLI and GitHub CLI).
 
 ```bash
 git clone https://github.com/MartinStyk/AndroidApkAnalyzer.git
