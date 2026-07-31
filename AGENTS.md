@@ -4,14 +4,14 @@
 
 Apk Analyzer is an Android multi-module application that lets users inspect installed apps and APK files on their device. It shows app details (permissions, activities, services, certificates), device-wide statistics, and permission usage across all installed apps.
 
-* **Language** - Kotlin 2.4 (kotlin `2.4.10`, ksp `2.3.10`).
+* **Language** - Kotlin. Compiler and KSP versions live in [`gradle/libs.versions.toml`](gradle/libs.versions.toml).
 * **UI** - Jetpack Compose only. No XML layouts.
-* **Dependency Injection** - Hilt `2.60.1`. No Dagger/Koin.
+* **Dependency Injection** - Hilt. No Dagger/Koin.
 * **Libraries** - Use libraries from `gradle/libs.versions.toml`. Do not introduce new libraries unless required.
 * **Concurrency** - Kotlin **coroutines** and **flows** exclusively.
 * **Build System** - Gradle with convention plugins in `build-logic/`.
-* **Android SDK** - compileSdk 37, targetSdk 37, minSdk 28.
-* **JVM Toolchain** - Java 25.
+* **Android SDK** - Levels are centralized in [`AndroidSdk.kt`](build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/utils/AndroidSdk.kt).
+* **JVM Toolchain** - Configured in [`Kotlin.kt`](build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/utils/Kotlin.kt) and [`gradle-daemon-jvm.properties`](gradle/gradle-daemon-jvm.properties).
 
 ## Project Structure
 
@@ -19,6 +19,18 @@ Every module listed below has its own `AGENTS.md` (dense, agent-oriented referen
 package, annotated structure, key interfaces, dependencies, known gotchas — not user
 documentation) plus a one-line `CLAUDE.md` pointer. Read the specific module's `AGENTS.md` before
 working inside it instead of re-deriving its structure from scratch.
+
+### Shared AI Context
+
+* `AGENTS.md` files are the canonical repository instructions. Put guidance in the closest relevant
+  `AGENTS.md`; do not copy it into tool-specific files.
+* `CLAUDE.md` files are thin Claude adapters that import their adjacent `AGENTS.md`.
+* `.github/copilot-instructions.md` is the thin Copilot adapter. Copilot also discovers nested
+  `AGENTS.md` files directly.
+* `.claude/skills/` is the shared Agent Skills directory for Claude and Copilot. Do not mirror these
+  skills into `.github/skills/` or `.github/prompts/`.
+* Run `./gradlew validateAgentContext` after changing context files, skills, adapters, or the Gradle
+  module graph. `.github/workflows/agent-context.yml` runs the same check for relevant changes.
 
 ### Modules
 
@@ -59,30 +71,36 @@ working inside it instead of re-deriving its structure from scratch.
 
 ## Convention Plugins (build-logic)
 
-| Plugin ID | Implementation | What it does |
-|-----------|---------------|-------------|
-| `apkanalyzer.library` | `LibraryPlugin` | Android library + spotless + compileSdk/minSdk + Kotlin config |
-| `apkanalyzer.application` | `ApplicationPlugin` | Android app + Firebase (Analytics, Crashlytics, Performance) + release config |
-| `apkanalyzer.feature.api` | `FeatureApiPlugin` | library + serialization + `navigation3-runtime` dependency |
-| `apkanalyzer.feature.impl` | `FeatureImplPlugin` | library + hilt + compose + `:core:ui-library` + `:core:navigation` |
-| `apkanalyzer.hilt` | `HiltPlugin` | Hilt + KSP compiler |
-| `apkanalyzer.compose` | `ComposePlugin` | Compose compiler + BOM + `compose` bundle + `navigation3` bundle + serialization |
-| `apkanalyzer.spotless` | `SpotlessPlugin` | ktlint + compose-rules-ktlint, auto-applied by `apkanalyzer.library` |
+Implementation files and applied plugins are documented in [`build-logic/AGENTS.md`](build-logic/AGENTS.md).
+
+| Plugin ID | Purpose |
+|-----------|---------|
+| `apkanalyzer.agent-context` | Root task that validates shared AI context |
+| `apkanalyzer.library` | Shared Android library, Kotlin, SDK, and formatting configuration |
+| `apkanalyzer.application` | Android application, Firebase, and release configuration |
+| `apkanalyzer.feature.api` | Feature navigation API modules |
+| `apkanalyzer.feature.impl` | Feature implementation modules with Hilt, Compose, UI library, and navigation |
+| `apkanalyzer.hilt` | Hilt and KSP |
+| `apkanalyzer.compose` | Compose, Navigation 3, and serialization |
+| `apkanalyzer.spotless` | Ktlint and Compose formatting rules |
 
 ## Key Dependencies (from libs.versions.toml)
 
+[`gradle/libs.versions.toml`](gradle/libs.versions.toml) is the only source of dependency coordinates
+and versions.
+
 | Category | Libraries |
 |----------|-----------|
-| Compose | BOM `2026.06.01`, foundation `1.11.4`, material3, material-icons-extended |
-| Navigation 3 | `navigation3-runtime` `1.1.4`, `navigation3-ui`, `lifecycle-viewmodel-navigation3`, `hilt-navigation-compose` |
-| Hilt | `2.60.1` |
-| Firebase | BOM `34.16.0` (analytics, crashlytics, performance) |
-| Lifecycle | `2.11.0` (runtime-ktx, viewmodel-ktx, runtime-compose, process) |
-| Kotlin | `kotlinx-collections-immutable` `0.5.1`, kotlinx-serialization |
-| Image | Coil 3 (`coil-compose` `3.5.0`) |
-| Logging | Timber `5.0.1` |
-| Debug | LeakCanary `2.14` |
-| Formatting | Spotless `8.8.0` + compose-rules-ktlint `0.6.3` |
+| Compose | BOM, foundation, Material 3, material icons |
+| Navigation | Navigation 3 runtime/UI, lifecycle integration, Hilt integration |
+| Dependency injection | Hilt |
+| Firebase | Analytics, Crashlytics, Performance |
+| Lifecycle | Runtime, ViewModel, Compose, process lifecycle |
+| Kotlin | Immutable collections, serialization, coroutines |
+| Images | Coil Compose |
+| Logging | Timber behind `core:common`'s `Logger` |
+| Debugging | LeakCanary |
+| Formatting | Spotless, ktlint, compose-rules-ktlint |
 
 ## Coding Guidelines
 
@@ -210,59 +228,27 @@ feature/<name>/impl/
 
 ## Skills
 
-**You MUST read the relevant skill file before performing any of these tasks.** Skills contain step-by-step instructions, templates, and checklists.
+These files follow the Agent Skills standard and are discovered directly by both Claude and Copilot.
+**You MUST read the relevant skill file before performing any of these tasks.** Skills contain
+step-by-step instructions, templates, and checklists. Agents may load them automatically; hosts that
+expose skill commands use the directory name as the slash command.
 
-| Skill | Slash Command | SKILL.md Path | When to Use |
-|-------|--------------|---------------|-------------|
-| Create Feature Module | `/create-feature-module` | `.claude/skills/create-feature-module/SKILL.md` | Creating a new feature (api + impl modules, NavKey, entry provider, wiring) |
-| Create Core Module | `/create-core-module` | `.claude/skills/create-core-module/SKILL.md` | Creating a new core/shared library module (repository, manager, utilities) |
-| Create Compose Component | `/create-compose-component` | `.claude/skills/create-compose-component/SKILL.md` | Adding a reusable UI component to `:core:ui-library` |
-| Implement Navigation | `/implement-navigation` | `.claude/skills/implement-navigation/SKILL.md` | Adding a screen destination, wiring navigation, entry provider patterns |
-| Spotless Fix | `/spotless-fix` | `.claude/skills/spotless-fix/SKILL.md` | Fixing formatting/ktlint errors, running spotless |
-| Git Commit Author | `/git-commit-author` | `.claude/skills/git-commit-author/SKILL.md` | Any git commit — enforces human-only authorship, no AI trailers |
-| Setup Local Tools | `/setup-local-tools` | `.claude/skills/setup-local-tools/SKILL.md` | Setting up a new machine, checking dev tools (`gh`, JDK, Android SDK, Firebase CLI) |
-| Analyze CI Failure | `/analyze-ci-failure` | `.claude/skills/analyze-ci-failure/SKILL.md` | Diagnosing a failed GitHub Actions run (`android.yml` / `android-publish.yml`) |
-| Run App | `/run-app` | `.claude/skills/run-app/SKILL.md` | Building, installing, and launching the app on a connected device/emulator |
-| Sync Design Changes | `/sync-design-changes` | `.claude/skills/sync-design-changes/SKILL.md` | Translating tweaks made in the Claude Design ("Apk Analyzer Design System") project back into Kotlin/Compose code |
+| Skill | Availability | When to Use |
+|-------|--------------|-------------|
+| [`create-feature-module`](.claude/skills/create-feature-module/SKILL.md) | Claude, Copilot | Creating a feature api/impl pair, NavKey, entry provider, and wiring |
+| [`create-core-module`](.claude/skills/create-core-module/SKILL.md) | Claude, Copilot | Creating a shared repository, manager, utility, or data layer |
+| [`create-compose-component`](.claude/skills/create-compose-component/SKILL.md) | Claude, Copilot | Adding a reusable component to `:core:ui-library` |
+| [`implement-navigation`](.claude/skills/implement-navigation/SKILL.md) | Claude, Copilot | Adding destinations, entry providers, or navigation flows |
+| [`spotless-fix`](.claude/skills/spotless-fix/SKILL.md) | Claude, Copilot | Formatting Kotlin or fixing ktlint violations |
+| [`git-commit-author`](.claude/skills/git-commit-author/SKILL.md) | Claude, Copilot | Creating any commit |
+| [`setup-local-tools`](.claude/skills/setup-local-tools/SKILL.md) | Claude, Copilot | Checking or setting up required development tools |
+| [`analyze-ci-failure`](.claude/skills/analyze-ci-failure/SKILL.md) | Claude, Copilot | Inspecting GitHub Actions status or diagnosing a failed run |
+| [`run-app`](.claude/skills/run-app/SKILL.md) | Claude, Copilot | Building, installing, and launching on a device or emulator |
+| [`sync-design-changes`](.claude/skills/sync-design-changes/SKILL.md) | Claude with `DesignSync` | Applying changes from the Claude Design project |
 
-## Code Templates
+## Production References
 
-### ViewModel with Assisted Injection
+Use production code instead of copying templates into new files:
 
-```kotlin
-@HiltViewModel(assistedFactory = MyViewModel.Factory::class)
-class MyViewModel @AssistedInject constructor(
-    @Assisted private val input: InputType,
-    private val repository: MyRepository,
-) : ViewModel() {
-    @AssistedFactory
-    interface Factory {
-        fun create(input: InputType): MyViewModel
-    }
-}
-```
-
-### Standard ViewModel Pattern
-
-```kotlin
-@HiltViewModel
-class MyViewModel @Inject constructor(
-    private val repository: MyRepository,
-    dispatcherProvider: DispatcherProvider,
-) : ViewModel() {
-    private val eventChannel = Channel<MyEvent>(Channel.BUFFERED)
-    val events = eventChannel.receiveAsFlow()
-
-    val state = repository.data()
-        .map { it.toState() }
-        .flowOn(dispatcherProvider.default())
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), MyState.Loading)
-
-    fun onAction(action: MyAction) {
-        when (action) {
-            is MyAction.ItemClicked -> { /* handle */ }
-        }
-    }
-}
-```
-
+* [Assisted-injected ViewModel with `MutableStateFlow`](feature/app-detail/impl/src/main/kotlin/sk/styk/martin/apkanalyzer/feature/appdetail/impl/AppDetailViewModel.kt)
+* [Standard flow-backed ViewModel with state, events, and actions](feature/settings/impl/src/main/kotlin/sk/styk/martin/apkanalyzer/feature/settings/impl/SettingsViewModel.kt)

@@ -5,6 +5,9 @@ description: Use when translating tweaks made in the "Apk Analyzer Design System
 
 # Sync Claude Design Changes Into Compose
 
+> This workflow requires Claude's `DesignSync` tool. In a Copilot session, ask the user to switch to
+> Claude or provide an exported design diff before continuing.
+
 ## Context
 
 "Apk Analyzer Design System" (Claude Design project id `27e93cdf-f571-4833-b11b-6b3a8bd48254`) is a

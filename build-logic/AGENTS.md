@@ -9,6 +9,7 @@ Gradle convention plugins that standardize build configuration across all module
 
 | Plugin | File | Applies |
 |--------|------|---------|
+| `apkanalyzer.agent-context` | `AgentContextPlugin.kt`, `ValidateAgentContextTask.kt` | Root-only `validateAgentContext` task for context pairs, module coverage, skill metadata, links, and duplicate adapters |
 | `apkanalyzer.library` | `LibraryPlugin.kt` | `com.android.library` + `apkanalyzer.spotless` + compileSdk/minSdk + Kotlin JVM toolchain |
 | `apkanalyzer.application` | `ApplicationPlugin.kt` | `com.android.application` + Google Services + Firebase (Crashlytics, Perf) + release config (minify+shrink) |
 | `apkanalyzer.feature.api` | `FeatureApiPlugin.kt` | `apkanalyzer.library` + `kotlin.serialization` + `navigation3-runtime` |
@@ -34,4 +35,3 @@ Gradle convention plugins that standardize build configuration across all module
 1. Create implementation class in `src/main/kotlin/sk/styk/martin/apkanalyzer/`
 2. Register in `build.gradle.kts` `gradlePlugin { plugins { register(...) } }`
 3. Add to `gradle/libs.versions.toml` under `[plugins]` section
-

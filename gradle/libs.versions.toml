@@ -108,6 +108,7 @@ firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "fireb
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 apkanalyzer-library = { id = "apkanalyzer.library" }
 apkanalyzer-application = { id = "apkanalyzer.application" }
+apkanalyzer-agent-context = { id = "apkanalyzer.agent-context" }
 apkanalyzer-feature-api = { id = "apkanalyzer.feature.api" }
 apkanalyzer-feature-impl = { id = "apkanalyzer.feature.impl" }
 apkanalyzer-hilt = { id = "apkanalyzer.hilt" }

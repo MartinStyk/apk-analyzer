@@ -7,9 +7,8 @@ description: Use when setting up a new machine for this repo, checking whether r
 
 > The recommended local setup for building this repo and letting an AI coding agent work in it at
 > full capability. Keep this list short — don't install things this repo already gets for free.
-> There's no MCP server configured here: Claude Code already has Bash access, and both `gh` and
-> the Firebase CLI are fully capable command-line tools on their own — an MCP layer would just be
-> a second interface to the same thing. Call the CLIs directly instead.
+> There's no MCP server configured here: coding agents already have shell access, and both `gh` and
+> the Firebase CLI are fully capable command-line tools on their own. Call the CLIs directly instead.
 
 ## What you actually need to install
 
@@ -27,10 +26,10 @@ in case."
 
 | Thing | Why it's usually already covered |
 |---|---|
-| A standalone JDK 25 | Two independent paths usually already provide it: (1) Android Studio ships its own bundled JetBrains Runtime, and this project's `.idea/misc.xml` already points at it (`project-jdk-name="jbr-25"`). (2) For pure CLI/agent builds with no Android Studio at all, `gradle/gradle-daemon-jvm.properties` pins `toolchainVersion=25` with foojay Disco API URLs, so a plain `./gradlew ...` auto-downloads a matching JDK the first time it's needed (requires the `org.gradle.toolchains.foojay-resolver-convention` plugin in `settings.gradle.kts`, already applied). **Only install one manually if `java -version` shows nothing/wrong version AND you're not relying on Gradle's auto-provisioning** (e.g. offline, or you want a standalone `java` on `PATH` outside Gradle/Android Studio) — see Step 1 |
+| A standalone JDK 25 | Two independent paths usually provide it: (1) Android Studio ships a bundled JetBrains Runtime. (2) For CLI/agent builds, `gradle/gradle-daemon-jvm.properties` pins `toolchainVersion=25` with foojay Disco API URLs, so Gradle can auto-download a matching JDK (requires the resolver plugin already applied in `settings.gradle.kts`). **Only install one manually if the available runtime cannot start Gradle and you're not relying on Android Studio or Gradle auto-provisioning** — for example, an offline machine or a standalone `java` requirement outside Gradle/Android Studio |
 | Android SDK cmdline-tools, done manually | If Android Studio is installed (assume yes — this is an Android app), its SDK Manager already provides platform 37 + build-tools + `adb`. **Only install manually if `ANDROID_HOME` is unset or missing platform 37/build-tools** — e.g. a headless machine that will never run Android Studio (a CI runner, or an agent-only box) — see Step 1 |
 | Node.js | Nothing in this repo needs it — no `package.json` anywhere, and the Firebase CLI ships as a standalone binary (see Step 2) that doesn't need Node. Only install Node if you have some other reason to |
-| An MCP server config (`.mcp.json`) | Deliberately not present. Claude Code can already run `gh ...` / `firebase ...` directly via Bash with the exact same capability an MCP wrapper would expose, with no extra process to keep alive and no session restart needed after config changes |
+| An MCP server config (`.mcp.json`) | Deliberately not present. Agents can run `gh ...` / `firebase ...` directly through the shell with no extra process or duplicate interface |
 
 ## Step 1 — JDK 25 and Android SDK (only if Android Studio isn't installed, or the checks fail)
 

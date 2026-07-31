@@ -105,4 +105,8 @@ Plugins: `apkanalyzer.application`, `apkanalyzer.hilt`, `apkanalyzer.compose`, `
 
 Key libraries: `androidx.activity.compose`, `androidx.appcompat`, `androidx.lifecycle.viewmodel.ktx`/`.runtime.compose`/`.process` (for `ProcessLifecycleOwner`), `androidx.compose.material3`, `kotlinx.collections.immutable`, `coil.compose`, `debugImplementation(libs.leakcanary)`.
 
-`applicationId = "sk.styk.martin.apkanalyzer"`. `versionCode`/`versionName` are hardcoded (`1`/`"dev"`) in this file for local builds — the release workflow (`android-publish.yml`) overwrites them via `chkfung/android-version-actions` before building, see the `release-app`-style notes in `analyze-ci-failure`'s known-issues table for its current state.
+`applicationId = "sk.styk.martin.apkanalyzer"`. `versionCode`/`versionName` come from
+`version.code`/`version.name` Gradle properties. `gradle.properties` supplies local defaults (`1` and
+`dev`); workflows override them with `-Pversion.code=`/`-Pversion.name=`. Continuous integration
+changes only `version.name`, while the release workflow derives both values from the pushed semantic
+version tag.

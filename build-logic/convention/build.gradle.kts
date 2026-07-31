@@ -17,6 +17,10 @@ dependencies {
 
 gradlePlugin {
     plugins {
+        register("apkanalyzer.agent-context") {
+            id = "apkanalyzer.agent-context"
+            implementationClass = "sk.styk.martin.apkanalyzer.AgentContextPlugin"
+        }
         register("apkanalyzer.application") {
             id = "apkanalyzer.application"
             implementationClass = "sk.styk.martin.apkanalyzer.ApplicationPlugin"

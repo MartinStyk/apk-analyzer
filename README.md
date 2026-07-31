@@ -90,15 +90,14 @@ build.
 ./gradlew spotlessApply      # auto-fix formatting — run before every commit
 ./gradlew spotlessCheck      # formatting check (what CI runs)
 ./gradlew lintDebug          # Android lint
+./gradlew validateAgentContext # verify shared Claude/Copilot context
 ```
 
 ## Contributing
 
 Read [`AGENTS.md`](AGENTS.md) first — it documents module boundaries, navigation/DI/MVVM
-conventions, naming rules, and where things belong before you add anything new. This repo is also
-set up for AI-assisted development: `.claude/skills/` has task-specific skills (creating a feature
-module, adding a UI component, wiring navigation, diagnosing a failed CI run, and more), and every
-module carries its own `AGENTS.md`/`CLAUDE.md` for quick orientation.
+conventions, naming rules, where changes belong, and the
+[shared Claude/Copilot context](AGENTS.md#shared-ai-context).
 
 Run `./gradlew spotlessApply spotlessCheck assembleDebug` before opening a PR.
 
