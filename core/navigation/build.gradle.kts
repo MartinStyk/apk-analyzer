@@ -5,4 +5,8 @@ plugins {
 
 android {
     namespace = "sk.styk.martin.apkanalyzer.core.navigation"
+
+    buildFeatures {
+        androidResources = false
+    }
 }

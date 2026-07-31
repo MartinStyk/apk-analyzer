@@ -59,7 +59,7 @@ jobs:
           else
             VERSION_NAME="dev.$GITHUB_RUN_NUMBER"
           fi
-          ./gradlew assembleDebug -Pversion.name=$VERSION_NAME
+          ./gradlew :app:assembleDebug -Pversion.name=$VERSION_NAME
 
       - name: Rename APK
         run: mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/apk-analyzer.apk

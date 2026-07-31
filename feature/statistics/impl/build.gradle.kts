@@ -4,6 +4,10 @@ plugins {
 
 android {
     namespace = "sk.styk.martin.apkanalyzer.feature.statistics.impl"
+
+    buildFeatures {
+        androidResources = false
+    }
 }
 
 dependencies {

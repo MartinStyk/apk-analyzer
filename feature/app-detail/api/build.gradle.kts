@@ -4,4 +4,8 @@ plugins {
 
 android {
     namespace = "sk.styk.martin.apkanalyzer.feature.appdetail.api"
+
+    buildFeatures {
+        androidResources = false
+    }
 }

@@ -6,6 +6,10 @@ plugins {
 
 android {
     namespace = "sk.styk.martin.apkanalyzer.core.appstatistics"
+
+    buildFeatures {
+        androidResources = false
+    }
 }
 
 dependencies {
