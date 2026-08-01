@@ -52,6 +52,28 @@ available for installed apps").
 **Plain name first, raw identifier always present.** Never one or the other. The friendly label is
 what you scan; the raw string is what you paste into a bug report.
 
+### Where the device check lives
+
+The Requirements screen needs to know whether *this device* satisfies what an app declares. That
+answer could plausibly be baked into `AppDetail` — `Feature` gains an `isAvailableOnDevice` flag and
+every consumer gets it for free. It should not be, for one reason that outlives the convenience:
+
+**`AppDetail` describes an app. Device availability describes a pairing of an app and a device.**
+`AppDetailRepositoryImpl` is a `@Singleton` holding a `ConcurrentHashMap<String, AppDetail>`
+invalidated by `PackageChangesObserver` — a cache keyed on the app and invalidated on app change.
+Putting device state inside it makes cached entries silently depend on a second input that the key
+does not mention and the invalidation does not track. It is correct today, because device features
+are fixed until reboot. It is the kind of correct that stops being correct quietly.
+
+The cost of keeping them apart is one extra injection in one ViewModel. The cost of merging them is
+a shared model carrying a field four of its five consumers ignore, and a cache whose key no longer
+describes its contents.
+
+So: `AppDetail` stays a description of the app, `DeviceFeaturesRepository` answers for the device,
+and the ViewModel combines them while mapping to state — which is mapping, not resolving. The same
+rule is why grant state is fine inside `UsedPermission`: that is a property of *this install*, which
+is what `AppDetail` already models in `InstalledPackage` mode.
+
 ### Search — narrowing, not navigation
 
 Both list screens — Permissions and Components — carry search. It is not optional polish; a
@@ -395,9 +417,23 @@ The required/optional split is the entire point of the data. Well-known `android
 `android.software.*` names map to a friendly label and icon; anything unrecognized falls back to
 the raw string rather than being dropped.
 
-**Every requirement is checked against this device**, via `PackageManager.hasSystemFeature(name)` —
-one call per feature, no permission, no cost worth measuring. This is the one screen that can turn
-a list of identifiers into an answer, and the answer is *"will this run here?"*
+**Every requirement is checked against this device.** This is the one screen that can turn a list of
+identifiers into an answer, and the answer is *"will this run here?"*
+
+The check comes from a **`DeviceFeaturesRepository` in `:core:apps`**, not from the ViewModel
+touching `PackageManager`. Interface plus `internal` `Impl`, `@Binds`, `@Singleton`, `suspend`
+accessor switching on `dispatcherProvider.io()`, per the module rules.
+
+- **One call, not one per feature.** `getSystemAvailableFeatures()` returns the device's whole
+  `FeatureInfo[]` in a single binder call; the repository turns it into a `Set<String>` and the
+  per-feature check becomes set membership. `hasSystemFeature(name)` in a loop would be N binder
+  calls to answer a question one call already answered.
+- **Computed once per process.** Device features cannot change without a reboot, so the set is
+  memoized in the `@Singleton` and never invalidated. No flow, no observer, no refresh.
+- **OpenGL ES is not a set member.** The device's `FeatureInfo[]` carries one entry with a null
+  `name` and `reqGlEsVersion` set to the highest supported version, and an app's GL ES requirement
+  arrives the same way. That one is a numeric comparison, not a lookup, and the repository exposes
+  it separately rather than pretending it fits in the set.
 
 - **Only misses are marked.** A column of green ticks is noise; a single "Not on this device" is the
   finding. When there are none, the screen looks exactly as it does today.
@@ -531,10 +567,17 @@ Screen work:
 
 - `FeaturesNavKey`, ViewModel, required/optional split.
 - Curated friendly-name and icon mapping for well-known feature names, raw-string fallback.
-- **Device availability check**: `PackageManager.hasSystemFeature(name)` per feature, resolved in
-  the ViewModel off the main dispatcher with the rest of the mapping. Mark misses only, count them
-  into the summary line, and soften the wording for optional misses. Runs in both analysis modes —
-  see the [screen notes](#requirements-features) for why an installed app can still miss.
+- **`DeviceFeaturesRepository`** in `:core:apps` — interface + `internal` `Impl`, `@Binds`,
+  `@Singleton`. Exposes the device's available feature names as a memoized `Set<String>` built from
+  one `getSystemAvailableFeatures()` call, plus the device's GL ES version separately. Never throws;
+  an unavailable package manager yields an empty set, which reads as "unknown" rather than "missing"
+  at the UI.
+- **Requirements ViewModel injects it alongside `AppDetailRepository`** and combines the two while
+  mapping to state. It does not call `PackageManager` itself, and `AppDetail` does not carry the
+  answer — see [the note on where this belongs](#where-the-device-check-lives).
+- Mark misses only, count them into the summary line, and soften the wording for optional misses.
+  Runs in both analysis modes — see the [screen notes](#requirements-features) for why an installed
+  app can still miss.
 - **Libraries scope**, only if `FR-44` has landed: reuse `ScopeSelectorChip` from Step 1, apply the
   same required/optional split and the same device check to declared `<uses-library>` entries. If
   `FR-44` has not landed, skip this bullet — the chip does not render and nothing else changes.
