@@ -1,7 +1,9 @@
-# App Detail — Full Data Presentation Plan
+# App Detail — Full Data Presentation
 
-Status: **approved design, not yet implemented**
-Scope: surface everything `AppDetail` holds inside `feature:app-detail`.
+**Roadmap:** [FR-10 … FR-18](../roadmap.md#12-app-detail), plus [EX-07](../roadmap.md#18-data-gaps--extraction-that-doesnt-exist-yet) · R0
+**Status:** Approved design, not yet implemented
+**Scope:** surface everything `AppDetail` holds inside `feature:app-detail`. Manifest viewer
+(`FR-16`), APK export (`FR-24`) and icon export (`FR-25`) are out — see [Deferred](#deferred).
 
 ## Why
 
@@ -413,8 +415,8 @@ Screen work:
   Collapsible groups by package prefix would tame 428 items and reveal the app's architecture, but
   search plus the exported filters carry it for now. Revisit after Step 2 ships and the list has
   been used against a real 400-component app.
-- **Manifest viewer**, **Export APK**, **Save icon** — existing stub actions on the hub, out of
-  scope here.
+- **Manifest viewer** (`FR-16`), **Export APK** (`FR-24`), **Save icon** (`FR-25`) — existing stub
+  actions on the hub, still in R0 but out of scope for this doc.
 
 ---
 
