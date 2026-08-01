@@ -1,9 +1,10 @@
 # App Detail — Full Data Presentation
 
-**Roadmap:** [FR-10 … FR-18](../roadmap.md#12-app-detail), plus [EX-07](../roadmap.md#18-data-gaps--extraction-that-doesnt-exist-yet) · R0
+**Roadmap:** [FR-10 … FR-18](../roadmap.md#12-app-detail), [FR-25](../roadmap.md#15-export--share), plus [EX-07](../roadmap.md#18-data-gaps--extraction-that-doesnt-exist-yet) · R0
 **Status:** Approved design, not yet implemented
-**Scope:** surface everything `AppDetail` holds inside `feature:app-detail`. Manifest viewer
-(`FR-16`), APK export (`FR-24`) and icon export (`FR-25`) are out — see [Deferred](#deferred).
+**Scope:** surface everything `AppDetail` holds inside `feature:app-detail`, and finish the icon
+export action on the hub. Manifest viewer (`FR-16`) and APK export (`FR-24`) are out — see
+[Deferred](#deferred).
 
 ## Why
 
@@ -107,7 +108,8 @@ existing fingerprint box adopts it too.
 
 ### Hub (`AppDetailScreen`)
 
-Toolbar, badges, overview card and the actions row stay as they are. Two changes.
+Toolbar, badges and overview card stay as they are. Three changes — two to the cards, one to the
+actions row.
 
 **New — "Worth knowing" card, rendered only when it has something to say:**
 
@@ -150,6 +152,28 @@ render. Attention is spent only where the app is unusual.
 │ 📷 📶 🔵 🎮                                │
 └──────────────────────────────────────────┘
 ```
+
+**Changed — Save icon does something.** The action, the event and the hub button all exist;
+`AppDetailEntryProvider` answers it with `Logger.d("Save icon not yet implemented")`. It is finished
+here rather than deferred, because it is a few hours of work against infrastructure that is already
+in place and it is one of the two actions people came to this app for.
+
+The icon is already loaded and decoded on this screen — `PackageIconFetcher` calls
+`loadIcon(packageManager)` and `toBitmap()`. Saving reuses that path at full resolution instead of
+the list thumbnail size.
+
+- **Destination is chosen through `ACTION_CREATE_DOCUMENT`.** The user picks where it lands, which
+  needs no storage permission on any supported API level. The `WRITE_EXTERNAL_STORAGE`
+  (`maxSdkVersion="28"`) entry in the manifest is legacy and is not what makes this work.
+- **PNG, at the icon's natural resolution.** Adaptive icons rasterise at their full bitmap size, so
+  the output is what the launcher would draw, not a scaled-down copy.
+- **Default filename is the package name** — `com.spotify.music.png`. It is unique, it sorts, and it
+  says what the file is without being opened.
+- **Works in APK-file mode.** The archive's icon resolves once `applicationInfo.sourceDir` and
+  `publicSourceDir` are set to the file path — the one step that is easy to miss and produces a
+  silent null otherwise.
+- **Both outcomes are visible.** Success confirms with the chosen filename; failure says what failed.
+  Never a silent no-op, which is what the button does today.
 
 ### Permissions
 
@@ -400,6 +424,11 @@ Screen work:
 - "Worth knowing" card with its rule set: debug certificate, outdated target SDK, exported
   components without a permission guard, dangerous permissions granted. Each row deep-links.
 - Extend `AppDetailState.Loaded` with the derived values the previews need.
+- **Save icon**: an icon loader in `:core:apps` returning the full-resolution bitmap for a package
+  name or an APK path (setting `sourceDir` / `publicSourceDir` in the archive case), PNG encoding,
+  an `ACTION_CREATE_DOCUMENT` launcher wired to `AppDetailEvent.SaveIcon` in
+  `AppDetailEntryProvider`, and the success/failure messages. Replaces the
+  `Logger.d("not yet implemented")` handler.
 
 ### Step 6 — Polish pass
 
@@ -415,8 +444,8 @@ Screen work:
   Collapsible groups by package prefix would tame 428 items and reveal the app's architecture, but
   search plus the exported filters carry it for now. Revisit after Step 2 ships and the list has
   been used against a real 400-component app.
-- **Manifest viewer** (`FR-16`), **Export APK** (`FR-24`), **Save icon** (`FR-25`) — existing stub
-  actions on the hub, still in R0 but out of scope for this doc.
+- **Manifest viewer** (`FR-16`), **Export APK** (`FR-24`) — existing stub actions on the hub, still
+  in R0 but out of scope for this doc.
 
 ---
 

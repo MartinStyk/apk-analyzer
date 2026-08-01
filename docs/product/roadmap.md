@@ -114,7 +114,7 @@ bottom-nav slot — the natural home for Pillar 1's What Changed tab in R1.
 | ID    | Item                        | Status | Notes                                                    |
 |-------|-----------------------------|--------|-----------------------------------------------------------|
 | FR-24 | APK export / share          | Port   | Action + event exist, handler logs "not yet implemented" |
-| FR-25 | Icon export                 | Port   | Same                                                     |
+| FR-25 | Icon export                 | Port   | Designed in [features/app-detail.md](features/app-detail.md), Step 5 |
 | FR-26 | Copy / share app summary    | Todo   | `ClipboardManager` already in `core:common`              |
 | FR-27 | Launch a component          | Todo   | `startForeignActivity` exists and is unused              |
 
