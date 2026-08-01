@@ -1,4 +1,4 @@
-# App Detail — Full Data Presentation
+    # App Detail — Full Data Presentation
 
 **Roadmap:** [FR-10 … FR-18](../roadmap.md#12-app-detail), [FR-25](../roadmap.md#15-export--share), plus [EX-07](../roadmap.md#18-data-gaps--extraction-that-doesnt-exist-yet) · R0
 **Status:** Approved design, not yet implemented
@@ -310,8 +310,9 @@ Package grouping is **deferred** — see [Deferred](#deferred).
 │ VALIDITY                                 │
 │ 21 Aug 2008 → 12 Sep 2045   ✓ Valid      │
 │                                          │
+│ SCHEME      v2, v3                     ⓘ │
 │ ALGORITHM   SHA256withRSA                │
-│ SERIAL      1234567890                   │
+│ SERIAL      0A:1B:2C:3D:4E:5F:60:71      │
 ├──────────────────────────────────────────┤
 │ CERTIFICATE FINGERPRINTS                 │
 │                                          │
@@ -329,16 +330,36 @@ Package grouping is **deferred** — see [Deferred](#deferred).
 │ │ 25:D6:8E:11:9F:4C:2A:70:B3:5E:C8:D1  │ │
 │ └──────────────────────────────────────┘ │
 ├──────────────────────────────────────────┤
-│ PUBLIC KEY FINGERPRINTS                  │
-│ (same three, same treatment)             │
+│ Public key fingerprints              ›   │  ← collapsed; same three inside
 └──────────────────────────────────────────┘
 ```
 
-All six hashes are visible by default — no expander, no toggle. This is a dedicated screen with
-vertical room to spare, and hiding a fingerprint behind a tap defeats the reason someone opened
-this screen. Each is a labelled grey monospace box with its own copy affordance, following the
-[hash convention](#hashes-and-fingerprints). SHA-256 leads each group because it is the one people
-actually compare.
+**Certificate fingerprints are open, public key fingerprints are one tap down.** Six hash boxes is a
+wall of hex, and the two groups answer different questions: the certificate hash is what you compare
+against a published value, the public key hash is what you pin against. Everyone who opens this
+screen wants the first; a narrower group wants the second. Nothing is hidden that you came for —
+SHA-256 leads the open group, because it is the one people actually compare. Each box follows the
+[hash convention](#hashes-and-fingerprints). MD5 stays for completeness and is last, since it
+survives here as legacy trivia rather than as something anyone should use.
+
+**Serial number renders as uppercase hex**, the way `keytool` and every CA print it, in the same
+monospace style as a fingerprint. It cannot be an `Int`: real serials run to 128 bits, and
+`Certificate.serialNumber` is currently `Int`, filled by `certificate.serialNumber.toInt()` in
+`CertificateExtractorImpl`. `BigInteger.toInt()` keeps only the low 32 bits, so the field is
+plausible-looking and wrong for most real certificates today. This screen is what makes that
+visible, so the fix belongs to this work — see Step 3.
+
+**Scheme states how the APK was signed** — `v1, v2, v3, v4` — because it is the signing fact with
+consequences, and the one readers most often confuse with `ALGORITHM`. v1-only on a modern app is a
+real signal; SHA-1 versus SHA-256 in the algorithm row mostly is not. The ⓘ explains the difference
+between the two rows, which is the entire reason to show them adjacent.
+
+Scheme is **not a field read** — the public `SigningInfo` API does not expose it, so it requires
+parsing the APK signing block and depends on roadmap `FR-36`. What is free from `SigningInfo`
+today, and shows regardless of whether `FR-36` lands: `hasMultipleSigners()` and
+`hasPastSigningCertificates()`, the latter meaning the signing key was rotated. If `FR-36` slips,
+the row shows rotation and multi-signer state and omits the version list rather than blocking the
+screen.
 
 "Self-signed" carries an ⓘ because it looks alarming and is completely normal on Android. Same for
 an expired signing certificate on an already-installed app, which is harmless. Multiple
@@ -350,11 +371,17 @@ certificates render as stacked cards.
 ┌──────────────────────────────────────────┐
 │ ← Device requirements                    │
 ├──────────────────────────────────────────┤
+│ (Hardware ▾)                             │  ← only when the app uses libraries
+├──────────────────────────────────────────┤
+│ ⚠ 1 requirement this device cannot meet  │  ← only when there is a miss
+├──────────────────────────────────────────┤
 │ REQUIRED · 9                             │
 │ The app won't install without these      │
 │                                          │
 │ 📷  Camera                               │
 │     android.hardware.camera              │
+│ 📡  NFC                        Not on    │
+│     android.hardware.nfc     this device │
 │ 📶  Wi-Fi                                │
 │                                          │
 │ OPTIONAL · 3                             │
@@ -367,6 +394,32 @@ certificates render as stacked cards.
 The required/optional split is the entire point of the data. Well-known `android.hardware.*` and
 `android.software.*` names map to a friendly label and icon; anything unrecognized falls back to
 the raw string rather than being dropped.
+
+**Every requirement is checked against this device**, via `PackageManager.hasSystemFeature(name)` —
+one call per feature, no permission, no cost worth measuring. This is the one screen that can turn
+a list of identifiers into an answer, and the answer is *"will this run here?"*
+
+- **Only misses are marked.** A column of green ticks is noise; a single "Not on this device" is the
+  finding. When there are none, the screen looks exactly as it does today.
+- **It matters most in APK-file mode**, which is the inverse of the rule everywhere else in this
+  design. Elsewhere APK mode has less to show. Here it has more, and it is the mode where the answer
+  is actionable: you learn the APK will not install *before* trying it.
+- **A miss on an installed app is a real finding, not a contradiction.** Play filters downloads on
+  `uses-feature`, but the platform does not enforce it at install time — so an app sideloaded past
+  that filter can sit on a device that cannot satisfy its own stated requirements. That is worth
+  surfacing, and it is why the check runs in both modes rather than only for APK files.
+- **Optional requirements that are missing are stated more softly.** Missing an optional feature is
+  by definition fine; it explains why part of the app may do nothing, and nothing more.
+
+**Scope is `Hardware` or `Libraries`** — the same selector Permissions and Components use, rendering
+only when the app declares `<uses-library>` entries. Hardware requirements and platform library
+requirements are the same question one layer apart ("what does this app need that the device
+supplies?"), and `org.apache.http.legacy` on a modern app says something the hardware list never
+will. Libraries carry the same required/optional split, from `android:required`, and the same
+device check — a declared library either resolves on this device or does not.
+
+The library list needs extraction that does not exist yet; it depends on roadmap `FR-44`. If that
+slips, the scope chip does not render and the screen is hardware-only, exactly as it is today.
 
 ---
 
@@ -459,15 +512,32 @@ Screen work:
   (`kotlinx-datetime` is not in the version catalog and adding it needs a separate decision).
   Convert once in `CertificateExtractorImpl` from `X509Certificate.notBefore` / `notAfter` using
   the system zone, which is what `keytool` and `apksigner` print too.
+- **Fix `Certificate.serialNumber`.** It is `Int`, assigned `certificate.serialNumber.toInt()` in
+  `CertificateExtractorImpl`; `BigInteger.toInt()` truncates to the low 32 bits, so the value is
+  wrong for any serial above 32 bits, which is most of them. Change the field to `String` and format
+  it once in the extractor as uppercase colon-separated hex, matching `keytool` and the fingerprint
+  convention. Do this before rendering the row — the display is what exposes the defect.
+- Signing scheme: read `signingInfo.hasMultipleSigners()` and `hasPastSigningCertificates()`, which
+  are available now, and the `v1 … v4` version list from `FR-36` if it has landed. Model the version
+  list as nullable and omit that part of the row when it is absent, so the screen does not block on
+  `FR-36`.
 - `CertificatesNavKey`, ViewModel, state carrying all 13 certificate fields.
 - Self-signed detection (issuer equals subject) and expiry evaluation against today.
-- Debug-certificate banner, signer / validity / algorithm / serial blocks.
-- Certificate and public key fingerprint groups, all three hashes each, fully visible.
+- Debug-certificate banner, signer / validity / scheme / algorithm / serial blocks.
+- Certificate fingerprint group open with all three hashes; public key fingerprint group in an
+  expander, collapsed by default, same three hashes and same treatment inside.
 
 ### Step 4 — Requirements screen
 
 - `FeaturesNavKey`, ViewModel, required/optional split.
 - Curated friendly-name and icon mapping for well-known feature names, raw-string fallback.
+- **Device availability check**: `PackageManager.hasSystemFeature(name)` per feature, resolved in
+  the ViewModel off the main dispatcher with the rest of the mapping. Mark misses only, count them
+  into the summary line, and soften the wording for optional misses. Runs in both analysis modes —
+  see the [screen notes](#requirements-features) for why an installed app can still miss.
+- **Libraries scope**, only if `FR-44` has landed: reuse `ScopeSelectorChip` from Step 1, apply the
+  same required/optional split and the same device check to declared `<uses-library>` entries. If
+  `FR-44` has not landed, skip this bullet — the chip does not render and nothing else changes.
 
 ### Step 5 — Hub rework
 
@@ -498,6 +568,11 @@ Screen work:
   been used against a real 400-component app.
 - **Manifest viewer** (`FR-16`), **Export APK** (`FR-24`) — existing stub actions on the hub, still
   in R0 but out of scope for this doc.
+- **"Also signed with this certificate"** (`CE-06`) — listing the other installed apps that share
+  this signer would turn the fingerprint section from a hex dump into an answer, and the data is
+  already extracted for every app. It needs the device-wide certificate index (`CE-01`), so it is
+  backlogged to be built with the certificate grouping work rather than bolted onto this screen
+  first. Leave room for it below the fingerprint groups.
 
 ---
 

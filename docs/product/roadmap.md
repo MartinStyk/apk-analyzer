@@ -29,6 +29,7 @@ dropped, its ID is retired.
 | **Port**     | Shipped in the legacy Play Store build, **not yet rebuilt** in the rewrite         |
 | **Todo**     | Never existed                                                                      |
 | **Retired**  | Deliberately dropped or absorbed by another item. ID kept so old references resolve |
+| **Backlog**  | Wanted, not scheduled. The Notes column names the trigger to revisit it             |
 
 > **Important:** the previous revision of this document marked several items "Existing". That was
 > true of the *shipped legacy app*, not of the rewrite this roadmap builds on. Eight shipped
@@ -50,6 +51,7 @@ dropped, its ID is retired.
 | FR-05 | Sorting                                  | Done    | Name, APK size, total size, install date, target SDK, last update, last use |
 | FR-06 | Recently viewed apps                     | Done    | `RecentlyViewedAppsRepository`, toggleable in settings                      |
 | FR-07 | Install source filter                    | Done    | Folded into FR-03/FR-04; was listed as "New" before                         |
+
 ### 1.1b Browse by Attribute — *the replacement for the statistics screen*
 
 One index, one screen, N dimensions. Pick a dimension → get its buckets with counts → tap a bucket
@@ -73,6 +75,7 @@ part that was low-value trivia, and it gets dropped.
 | FR-41 | ↳ dimension: install source         | Todo    | Already built in the maps                                                                 |
 | FR-42 | ↳ dimension: shared UID             | Todo    | Needs `FR-35`                                                                             |
 | FR-43 | ↳ dimension: app category           | Todo    | Needs `FR-39`                                                                             |
+| CE-06 | "Also signed with this certificate" | Backlog | The other installed apps sharing this signer, listed on the app detail certificate screen. Data is already extracted; it needs the `CE-01` index. **Revisit when CE-01 / FR-09 certificate grouping is built** — see [features/app-detail.md](features/app-detail.md#deferred) |
 
 **Module consolidation:** `feature:permissions` and `feature:statistics` are both placeholder
 screens and both hold a top-level nav slot. They collapse into one `feature:browse`. That frees a
@@ -149,8 +152,9 @@ doing in R0 rather than later.
 | FR-38 | Full install-source chain         | Todo   | Only `installingPackageName` is read; initiating + originating package are what actually distinguish a sideload from a store install |
 | FR-39 | App category                      | Todo   | One field; unlocks the `FR-43` browse dimension                                                      |
 | EX-07 | Component intent filters          | Todo   | What an exported component actually responds to. Makes `FR-17` meaningful and feeds `RI-03`. Moved here from Pro — it is raw manifest data |
+| FR-44 | Declared `<uses-library>` entries  | Todo   | Name and `android:required`, from the manifest for APK files and `sharedLibraryFiles` for installed apps. The platform-library half of device requirements — `org.apache.http.legacy` on a modern app is a signal the hardware list cannot give |
 
-**R0 scope:** CE-01, CE-05, FR-08 … FR-21, FR-24 … FR-43, EX-07. Excludes the retired FR-22/FR-23.
+**R0 scope:** CE-01, CE-05, FR-08 … FR-21, FR-24 … FR-44, EX-07. Excludes the retired FR-22/FR-23 and the backlogged CE-06.
 **R0 estimate: ~7–8 weeks** (was ~4, which assumed the ported items were already present).
 Retiring the statistics screen roughly pays for the browse screen — one surface instead of two,
 against an index that is already two-thirds built.
@@ -339,7 +343,7 @@ entry points were retired with the statistics screen — see §1.4.)*
 
 | ID | Release         | Contents                                                       | Duration     | Cumulative |
 |----|-----------------|-----------------------------------------------------------------|--------------|------------|
-| R0 | Free Rework     | CE-01, CE-05, FR-08 … FR-21, FR-24 … FR-43, EX-07, plus `EN`    | ~7–8 weeks   | Week 8     |
+| R0 | Free Rework     | CE-01, CE-05, FR-08 … FR-21, FR-24 … FR-44, EX-07, plus `EN`    | ~7–8 weeks   | Week 8     |
 | R1 | Pro Launch      | `HI`, `RI`, `TR`, `RP`, `CP`                                    | ~5.5–6.5 weeks | Week 15  |
 | R2 | Bulk Tools      | `BX`                                                            | ~1.5–2 weeks | Week 17    |
 | R3 | Optional polish | OP-01 … OP-03                                                   | as-needed    | Ongoing    |
