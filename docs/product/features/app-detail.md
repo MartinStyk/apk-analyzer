@@ -63,36 +63,69 @@ results are exit points and `AppSearchNavKey` is a separate destination. Here, s
 *narrowing*: the list **is** the destination. You type `provider` not to jump somewhere but to look
 at the resulting set — how many, which are exported, how they compare — then adjust and look again.
 
-That difference decides the mechanism. A separate search destination strips the tab row and the
-filter chips, so it cannot answer the compound question these screens exist for: *of the things
+That difference decides the mechanism. A separate search destination strips the scope selector and
+the filter chips, so it cannot answer the compound question these screens exist for: *of the things
 matching `provider`, which are exported?* Narrowing happens **in place**, on one screen, because
 the surrounding context is what makes the narrowed set meaningful.
 
 What does transfer from `AppsScreen` is the **layout machinery, not the navigation model**:
 `collapsingHeader` / `collapsingHeaderContainer` from `:core:ui-library/modifier/`. Search and
 filters are on screen when you arrive, scroll away while you read, and come back when you scroll
-up. That is what keeps four layers of chrome from eating a third of the screen.
+up.
+
+### No tab rows — the scope selector
+
+An earlier revision of this design pinned a tab row above the search field: Requested / Defined on
+Permissions, and Activities / Services / Receivers / Providers on Components. That stacked four
+layers of chrome — toolbar, tabs, search, chips — and two of them did the same job. **Tabs and
+filter chips are both mechanisms for narrowing one set.** Tabs narrow by *type*, chips narrow by
+*property*, and putting two different controls for one concept on top of each other is what made
+the screen feel wrong.
+
+So there are no tabs. Type becomes a **scope selector: the first chip in the filter row**, an
+`OutlinedChip` with an `ArrowDropDown` trailing icon that opens a `BottomSheet` of options. The
+design system already has both, and already distinguishes the two shapes — an outlined chip with a
+chevron *selects one of several*, a filled `Chip` *toggles on and off*. The distinction the tab row
+was making is carried by the component shape instead of by an extra row.
+
+```
+  before                          after
+┌──────────────────────┐        ┌──────────────────────┐
+│ ← Components         │ pinned │ ← Components         │ pinned
+│ Act │ Svc │ Rcv │ Pr │ pinned ├──────────────────────┤
+├──────────────────────┤        │ ⌕ Filter 578 …       │ collapsing
+│ ⌕ Filter 428 …       │ collap │ (Activities ▾) [Exp] │ collapsing
+│ [All] [Exported]     │ collap └──────────────────────┘
+└──────────────────────┘
+  2 rows always on screen         1 row always on screen
+```
+
+This also answers the cross-type question the tab row could not. Scope includes **All components**,
+so *"what of this app is reachable from outside?"* is `All` + `Exported` — one view, one tap.
+Under tabs it took four visits and mental addition.
 
 Structure on both screens:
 
-- **Tab row pinned** — it states what you are looking at, so it cannot scroll away.
-- **Search field and filter chips in the collapsing header**, scrolling together.
-- **Steady state while reading: toolbar + tabs only.**
+- **Toolbar pinned**, nothing else.
+- **Search field and filter row in the collapsing header**, scrolling together. The scope chip
+  leads the row, property chips follow.
+- **Steady state while reading: toolbar only.**
 
 Rules shared by both screens:
 
 - **Matches the raw identifier and the friendly label.** Typing `CAMERA`, `camera`, or `Camera` all
   find the camera permission; `HomeActivity` or `features.home` both find the activity.
   Case-insensitive substring, no fuzzy matching.
-- **Composes with tabs and filters rather than replacing them.** Typing inside the Exported filter
-  on the Services tab narrows exported services. The query narrows what is already on screen; it
+- **Composes with scope and filters rather than replacing them.** Typing inside the Exported filter
+  with scope Services narrows exported services. The query narrows what is already on screen; it
   never escapes to the full set.
-- **The query survives tab switches**, so a term carries across component types.
+- **The query survives scope changes**, so a term carries across component types.
 - **Section headers reflect filtered counts**, so a header never claims 23 when 2 rows are visible.
 - **Empty results get a real empty state** naming the query with a clear affordance, never a blank
   list.
 - **The placeholder says "Filter", not "Search"** — "Filter 428 activities". It narrows in place
-  rather than taking you somewhere, and the label should set that expectation.
+  rather than taking you somewhere, and the label should set that expectation. It names the count
+  of the current scope, so it changes with the selector.
 
 ### Hashes and fingerprints
 
@@ -179,11 +212,10 @@ the list thumbnail size.
 
 ```
 ┌──────────────────────────────────────────┐
-│ ← Permissions                            │  ┐ pinned
-│  Requested (32)  │  Defined (1)          │  ┘ (Defined tab hidden when 0)
+│ ← Permissions                            │  ← pinned, nothing else
 ├──────────────────────────────────────────┤
 │ ⌕ Filter 32 permissions                  │  ┐ collapsing header —
-│ [ All ] [ Dangerous ] [ Granted ] [ Denied ] ┘ scrolls away while reading
+│ (Requested ▾) [Dangerous] [Granted] [Denied] ┘ scrolls away while reading
 ├──────────────────────────────────────────┤
 │ DANGEROUS · 6                            │
 │ Needs your explicit approval             │
@@ -206,23 +238,29 @@ Ordering by protection level (Dangerous → Signature → Normal) puts signal on
 boring ones without hiding them. Each section header carries a one-line explanation of what that
 protection level *means* — that is the context layer.
 
+**Scope is `Requested` or `Defined`.** The chip renders only when the app defines permissions of
+its own, which most do not — so the common case is search plus three property chips, and nothing
+announces a distinction that does not exist for this app. Defined permissions are not a section in
+the requested list: the property chips (Dangerous / Granted / Denied) are meaningless for a
+permission this app declares for *others* to hold, and swapping scope swaps the chip set with it.
+
 Grant pills render only for installed packages. Tap a row → sheet with friendly name, full name,
 permission group, protection level with explanation, grant state, and what the permission actually
 allows.
 
-### Components — one screen, four tabs
+### Components — one screen, scoped by type
 
-One tabbed screen rather than four separate ones: the interesting question ("what of this app is
-reachable by other apps?") spans all four types, and tabs let you sweep them without returning to
-the hub. The hub still shows four rows; each opens this screen on the matching tab.
+One screen rather than four, because the interesting question — *what of this app is reachable by
+other apps?* — spans all four types. The scope selector carries the type, so the hub's four
+component rows deep-link to this screen with their scope preselected, and the hub's "12 exported to
+other apps" warning deep-links to `All components` + `Exported`.
 
 ```
 ┌──────────────────────────────────────────┐
-│ ← Components                             │  ┐ pinned
-│ Activities │ Services │ Receivers │ Prov │  ┘
+│ ← Components                             │  ← pinned, nothing else
 ├──────────────────────────────────────────┤
 │ ⌕ Filter 428 activities                  │  ┐ collapsing header —
-│ [ All ] [ Exported ] [ Unprotected ]     │  ┘ scrolls away while reading
+│ (Activities ▾) [Exported] [Unprotected]  │  ┘ scrolls away while reading
 ├──────────────────────────────────────────┤
 │ HomeActivity                           ⚠ │
 │ com.spotify.music.features.home          │
@@ -233,13 +271,17 @@ the hub. The hub still shows four rows; each opens this screen on the matching t
 └──────────────────────────────────────────┘
 ```
 
+Scope options are **All components**, then Activities, Services, Receivers, Providers. Under `All`
+the list is sectioned by type with counts in the headers, so the sweep reads as one list rather
+than four pretending to be one.
+
 Three decisions carry the load on 428 items:
 
 - **Exported / Unprotected filters, with an inline warning marker.** "Exported with no permission
-  guard" is the one fact here with real consequences. Exported items sort first within a tab.
+  guard" is the one fact here with real consequences. Exported items sort first within a scope.
 - **Simple class name bold, package path dimmed below.** You scan `HomeActivity`, not 62 characters
   of namespace.
-- **Narrowing over class name and package path**, composing with the active tab and filter rather
+- **Narrowing over class name and package path**, composing with the active scope and filter rather
   than escaping them — see [search rules](#search--narrowing-not-navigation).
 
 Flag chips appear on a row only when true, so a rare `isolatedProcess` or `externalService` stands
@@ -346,9 +388,15 @@ Shared work this step pulls in:
   `impl/components/`, and repoint `GeneralInfoScreen` at the shared version. This is a genuine
   second consumer, not a prediction — the permission item sheet is the same tap-to-explain /
   long-press-to-copy row.
-- Add a `TabRow` wrapper to `:core:ui-library` for the Requested / Defined tabs — no tab component
-  exists today. Use the `create-compose-component` skill.
+- A `ScopeSelectorChip` in `impl/components/` — `OutlinedChip` with `ArrowDropDown` opening a
+  `BottomSheet` of options. Every piece already exists in `:core:ui-library`; this composes them,
+  so it starts local to the feature and only moves to the library if a third screen wants it. Use
+  the `create-compose-component` skill if it does.
 - Add only the icons this screen needs to `ApkAnalyzerIcons` (permission groups, copy, info).
+
+No `TabRow` is built. An earlier revision of this plan added one to `:core:ui-library`; the
+[scope selector](#no-tab-rows--the-scope-selector) replaced it, and the component that replaced it
+is assembled from parts the design system already ships.
 
 Screen work:
 
@@ -369,9 +417,10 @@ Screen work:
 - `PermissionsNavKey` in `impl/navigation/`, entry wired in `AppDetailEntryProvider`.
 - ViewModel / State / Action / Event following the `GeneralInfoViewModel` shape, with the filter
   query in state and the narrowing done in the ViewModel.
-- Screen: pinned toolbar and tabs; `SearchBarActive` and the filter chips inside a
-  `collapsingHeader` block as `AppsScreen` does it; protection-level sections, grant pills, item
-  sheet. Narrowing matches permission name and friendly label — see
+- Screen: pinned toolbar only; `SearchBarActive` and the filter row — scope chip first, property
+  chips after — inside a `collapsingHeader` block as `AppsScreen` does it; protection-level
+  sections, grant pills, item sheet. The scope chip renders only when `permissions.defined` is
+  non-empty. Narrowing matches permission name and friendly label — see
   [search rules](#search--narrowing-not-navigation).
 
 By the end of this step the Loading / Error / Loaded scaffold exists in two places (General Info and
@@ -383,17 +432,20 @@ Shared work this step pulls in:
 
 - Extract the Loading / Error / Loaded section scaffold into `impl/components/` now that three
   screens share it, and repoint General Info and Permissions at it.
-- Extend `TabRow` only if four tabs expose a gap the two-tab use did not.
+- Promote `ScopeSelectorChip` from Step 1 only if the five-option scope exposes a gap the two-option
+  use did not. A second consumer justifies extracting it to `:core:ui-library`; nothing else does.
 
 Screen work:
 
-- `ComponentsNavKey` carrying the initial tab, so the four hub rows deep-link correctly.
+- `ComponentsNavKey` carrying the initial scope **and** the initial filter, so the four hub rows
+  deep-link to their type and the "exported" warning row deep-links to `All` + `Exported`.
 - One ViewModel producing all four lists, each mapped to a shared row model (name, package, exported,
   permission, type-specific flags).
 - Change the four `Service` flag fields from `var` to `val` while mapping them.
-- Screen: pinned toolbar and tab row; `SearchBarActive` and the filter chips (All / Exported /
-  Unprotected) inside a `collapsingHeader` block; exported-first ordering. Narrowing matches simple
-  class name and package path, composes with the active tab and filter, and survives tab switches —
+- Screen: pinned toolbar only; `SearchBarActive` and the filter row (scope chip, then Exported /
+  Unprotected) inside a `collapsingHeader` block; exported-first ordering. Under scope `All` the
+  list is sectioned by component type with counts in the headers. Narrowing matches simple class
+  name and package path, composes with the active scope and filter, and survives scope changes —
   see [search rules](#search--narrowing-not-navigation).
 - Item sheet per component type with every raw field.
 
