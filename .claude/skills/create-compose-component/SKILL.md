@@ -110,11 +110,11 @@ Annotate with `@Stable` if used as a Composable parameter but is not a data clas
 class <Name>State(...)
 ```
 
-## Existing Components in core:ui-library
+## Before Creating a New Component
 
-Check these before creating a new component — you may be able to extend an existing one:
+Read the component inventory in [`core/ui-library/AGENTS.md`](../../../core/ui-library/AGENTS.md)
+first — you may be able to extend an existing component instead. That table is the single
+maintained list; don't duplicate it here.
 
-`AppIcon`, `BottomSheet`, `Button`, `Checkbox`, `Chip`, `OutlinedChip`, `DateRangePickerDialog`,
-`Icon`, `IconButton`, `LoadingSpinner`, `NavigationBar`, `RangeSlider`,
-`SearchBarActive`, `SearchBarInactive`, `SkeletonBox`, `Switch`, `Text`, `Toolbar`
+If you do add a component, add a row to that table in the same change.
 

@@ -181,8 +181,8 @@ purpose line — e.g. "Status: stub/placeholder — not yet implemented" (see
 `feature/permissions/AGENTS.md`) — so a future agent doesn't assume real behavior exists. Update it
 once the feature is actually built out.
 
-Also add rows for the new `api`/`impl` modules to the module table in the root `AGENTS.md`'s
-`## Project Structure` section.
+The root `AGENTS.md` does not list individual modules, so there is nothing to update there. Run
+`./gradlew validateAgentContext` to confirm the new module has the AGENTS/CLAUDE pair it requires.
 
 ## Naming Reference
 

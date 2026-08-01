@@ -133,8 +133,8 @@ for the exact format to match) plus a one-line `CLAUDE.md` pointer:
 **`core/<name>/AGENTS.md`** — write it once the module's real content exists (not before Step 2-4
 produce something to document). Don't leave it as a stub with placeholder text.
 
-Also add a row for the new module to the module table in the root `AGENTS.md`'s `## Project
-Structure` section.
+The root `AGENTS.md` does not list individual modules, so there is nothing to update there. Run
+`./gradlew validateAgentContext` to confirm the new module has the AGENTS/CLAUDE pair it requires.
 
 ## Rules
 - Core modules **never** depend on `feature` modules.

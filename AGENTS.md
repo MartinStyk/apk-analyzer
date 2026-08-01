@@ -1,254 +1,170 @@
 # Apk Analyzer Agent Instructions
 
-## Project Overview
+Android app for inspecting installed apps and APK files — permissions, components, certificates,
+device-wide statistics. Multi-module, Kotlin, Compose, Hilt.
 
-Apk Analyzer is an Android multi-module application that lets users inspect installed apps and APK files on their device. It shows app details (permissions, activities, services, certificates), device-wide statistics, and permission usage across all installed apps.
+**Every module has its own `AGENTS.md`. Read it before working inside that module** instead of
+re-deriving the module's structure.
 
-* **Language** - Kotlin. Compiler and KSP versions live in [`gradle/libs.versions.toml`](gradle/libs.versions.toml).
-* **UI** - Jetpack Compose only. No XML layouts.
-* **Dependency Injection** - Hilt. No Dagger/Koin.
-* **Libraries** - Use libraries from `gradle/libs.versions.toml`. Do not introduce new libraries unless required.
-* **Concurrency** - Kotlin **coroutines** and **flows** exclusively.
-* **Build System** - Gradle with convention plugins in `build-logic/`.
-* **Android SDK** - Levels are centralized in [`AndroidSdk.kt`](build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/utils/AndroidSdk.kt).
-* **JVM Toolchain** - Configured in [`Kotlin.kt`](build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/utils/Kotlin.kt) and [`gradle-daemon-jvm.properties`](gradle/gradle-daemon-jvm.properties).
+## Non-Negotiables
 
-## Project Structure
+* Kotlin only. Jetpack Compose only — no XML layouts. Hilt only — no Dagger or Koin.
+* Coroutines and flows only for concurrency. Never `Thread`, `Executor`, or `runBlocking`.
+* Don't add a dependency. [`gradle/libs.versions.toml`](gradle/libs.versions.toml) is the only
+  source of coordinates and versions; if a new library seems necessary, ask first.
+* Never write comments or KDoc — not even when the WHY seems non-obvious. Use self-documenting
+  names and structure. The only exception is an explicit request for a comment in that instance.
+* Never hardcode a user-facing string in a Composable. Use `stringResource` backed by
+  `res/values/strings.xml` in the module that owns the UI.
+* Never hardcode SDK levels or the JVM toolchain in a module's `build.gradle.kts` — they come from
+  [`AndroidSdk.kt`](build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/utils/AndroidSdk.kt)
+  and [`Kotlin.kt`](build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/utils/Kotlin.kt).
+* **Commits are authored as the human user only.** Never add `Co-Authored-By: Claude`,
+  `Claude-Session:`, or any AI co-author trailer. See the `git-commit-author` skill.
 
-Every module listed below has its own `AGENTS.md` (dense, agent-oriented reference: purpose,
-package, annotated structure, key interfaces, dependencies, known gotchas — not user
-documentation) plus a one-line `CLAUDE.md` pointer. Read the specific module's `AGENTS.md` before
-working inside it instead of re-deriving its structure from scratch.
+## Verifying a Change
 
-### Shared AI Context
+| When | Run |
+|---|---|
+| Iterating on one module | `./gradlew :feature:apps:impl:compileDebugKotlin` |
+| Before committing | `./gradlew spotlessApply` |
+| Whole-app check (what CI gates on) | `./gradlew spotlessCheck lintDebug :app:assembleDebug` |
+| After changing a context file, skill, adapter, or the module graph | `./gradlew validateAgentContext` |
 
-* `AGENTS.md` files are the canonical repository instructions. Put guidance in the closest relevant
-  `AGENTS.md`; do not copy it into tool-specific files.
-* `CLAUDE.md` files are thin Claude adapters that import their adjacent `AGENTS.md`.
-* `.github/copilot-instructions.md` is the thin Copilot adapter. Copilot also discovers nested
-  `AGENTS.md` files directly.
-* `.claude/skills/` is the shared Agent Skills directory for Claude and Copilot. Do not mirror these
-  skills into `.github/skills/` or `.github/prompts/`.
-* Run `./gradlew validateAgentContext` after changing context files, skills, adapters, or the Gradle
-  module graph. `.github/workflows/agent-context.yml` runs the same check for relevant changes.
+A successful compile is not proof a Compose layout is correct. For visual or layout changes, use
+the `run-app` skill and look at it on a device.
 
-### Modules
+## Module Rules
 
-| Module | Gradle ID | Purpose |
-|--------|-----------|---------|
-| `app` | `:app` | Main Application class, `ApkAnalyzerActivity`, top-level Hilt wiring, navigation host |
-| `core:common` | `:core:common` | `DispatcherProvider`, `PersistenceRepository` (DataStore), `ResourcesManager`, `Logger`, shared models (`AppSource`, `AppSize`), clipboard, digest utilities |
-| `core:apps` | `:core:apps` | `InstalledAppsRepository`, `AppDetailRepository`, `StorageStatsRepository`, `UsageStatsRepository`, `PackageChangesObserver`, analysis utilities (`CertificateExtractor`, `ManifestParser`, `InstallSourceResolver`, `SdkVersionResolver`) |
-| `core:app-permissions` | `:core:app-permissions` | `DevicePermissionsRepository`, `PermissionLabelProvider` for aggregating permission usage |
-| `core:app-statistics` | `:core:app-statistics` | `LocalApplicationStatisticManager` for computing device-wide statistics |
-| `core:user-preferences` | `:core:user-preferences` | `RecentlyViewedAppsRepository`, `SearchHistoryRepository` for user history/settings |
-| `core:navigation` | `:core:navigation` | `NavigationState`, `Navigator`, `rememberNavigationState()`, `toEntries()` |
-| `core:ui-library` | `:core:ui-library` | `ApkAnalyzerTheme`, `AppTheme`, `ApkAnalyzerIcons`, reusable Compose components, animations, modifiers |
-| `feature:apps:api` | `:feature:apps:api` | `AppsNavKey` |
-| `feature:apps:impl` | `:feature:apps:impl` | App list screen, search, filter, sort, permission filter |
-| `feature:app-detail:api` | `:feature:app-detail:api` | `AppDetailNavKey`, `AppDetailInput` |
-| `feature:app-detail:impl` | `:feature:app-detail:impl` | App detail screen, general info sub-screen |
-| `feature:permissions:api` | `:feature:permissions:api` | `PermissionsNavKey` |
-| `feature:permissions:impl` | `:feature:permissions:impl` | Permissions overview screen — **stub/placeholder, not yet implemented** |
-| `feature:statistics:api` | `:feature:statistics:api` | `StatisticsNavKey` |
-| `feature:statistics:impl` | `:feature:statistics:impl` | Statistics overview screen — **stub/placeholder, not yet implemented** |
-| `feature:settings:api` | `:feature:settings:api` | `SettingsNavKey` |
-| `feature:settings:impl` | `:feature:settings:impl` | Settings screen |
+Modules live under `app/`, `core/<name>/`, and `feature/<name>/{api,impl}/`; `settings.gradle.kts`
+is the authoritative list.
 
-### Module Dependency Rules
+* `feature/*/api` — depends on nothing, holds only `@Serializable` NavKeys and the tab-label string.
+* `feature/*/impl` — `api(projects.feature.<name>.api)` plus whichever `core` modules it needs.
+* `core/*` — may depend on other `core` modules. **Never** depends on a `feature` module.
+* A feature never depends on another feature's `impl`. Cross-feature navigation goes through the
+  target's `api` module.
+* `app` — wiring only: the single Activity, the nav host, app-scoped Hilt bindings. Put no feature
+  logic here.
+* Declare dependencies with typesafe accessors (`projects.core.appPermissions`), never
+  `project(":core:app-permissions")`. Apply plugins with `alias(libs.plugins.apkanalyzer.*)`.
+* A module's package matches its directory with hyphens removed: `core/user-preferences` →
+  `core.userpreferences`, `feature/app-detail/impl` → `feature.appdetail.impl`. `app` uses the root
+  package `sk.styk.martin.apkanalyzer` with no suffix.
+* `feature:permissions` and `feature:statistics` are **stubs** — placeholder screens with no
+  ViewModel or logic. Don't assume they work.
 
-* `feature/*/api` → depends on nothing. Contains `@Serializable` NavKey objects. Gets `navigation3-runtime` via `apkanalyzer.feature.api` plugin.
-* `feature/*/impl` → `api(projects.feature.*.api)` + any needed `core` modules. Gets `:core:ui-library`, `:core:navigation`, Hilt, Compose via `apkanalyzer.feature.impl` plugin.
-* `core` modules → can depend on other `core` modules (e.g., `core:apps` → `core:common`). Never depend on `feature` modules.
-* `app` → depends on all `feature/*/impl` and all `core` modules.
+## Architecture
 
-### Package Structure
+### ViewModels
 
-* Root: `sk.styk.martin.apkanalyzer`
-* Feature: `sk.styk.martin.apkanalyzer.feature.<name>.api` / `sk.styk.martin.apkanalyzer.feature.<name>.impl`
-* Core: `sk.styk.martin.apkanalyzer.core.<name>` (package name matches module namespace, e.g. `core.common`, `core.apps`, `core.uilibrary`, `core.apppermissions`, `core.appstatistics`, `core.userpreferences`)
-* App: `sk.styk.martin.apkanalyzer.ui`, `.dependencyinjection`, `.manager`, `.util`
+* Extend `ViewModel()` directly. No base class.
+* Expose exactly one `val state: StateFlow<FeatureState>` and one
+  `fun onAction(action: FeatureAction)` with a `when` dispatch. No other public methods.
+* One-shot events go through `Channel<Event>(Channel.BUFFERED)` exposed as `receiveAsFlow()` —
+  never as state.
+* **State** — `sealed interface` or `@Immutable data class`. Never holds lambdas.
+* **Event** — `sealed interface`. ViewModel→UI signals (navigation, toasts, system intents).
+* **Action** — `sealed interface`. UI→ViewModel intents.
+* Model back navigation as both an Action and an Event so the ViewModel never touches `Navigator`.
+* In Composables: `collectAsStateWithLifecycle()` for state, `LaunchedEffect` for events.
 
-## Convention Plugins (build-logic)
+### Data Layer
 
-Implementation files and applied plugins are documented in [`build-logic/AGENTS.md`](build-logic/AGENTS.md).
+* Repositories and Managers are a public `interface` plus an `internal` `Impl` in the same module,
+  bound with Hilt `@Binds` and scoped `@Singleton`.
+* Interface methods never throw. Return `Result<T>`, a nullable `T?`, or an empty collection.
+* Inject `DispatcherProvider` and switch with `flowOn(dispatcherProvider.default())` or
+  `withContext(dispatcherProvider.io())`. Never hardcode `Dispatchers.IO`.
 
-| Plugin ID | Purpose |
-|-----------|---------|
-| `apkanalyzer.agent-context` | Root task that validates shared AI context |
-| `apkanalyzer.library` | Shared Android library, Kotlin, SDK, and formatting configuration |
-| `apkanalyzer.application` | Android application, Firebase, and release configuration |
-| `apkanalyzer.feature.api` | Feature navigation API modules |
-| `apkanalyzer.feature.impl` | Feature implementation modules with Hilt, Compose, UI library, and navigation |
-| `apkanalyzer.hilt` | Hilt and KSP |
-| `apkanalyzer.compose` | Compose, Navigation 3, and serialization |
-| `apkanalyzer.spotless` | Ktlint and Compose formatting rules |
+### Hilt
 
-## Key Dependencies (from libs.versions.toml)
-
-[`gradle/libs.versions.toml`](gradle/libs.versions.toml) is the only source of dependency coordinates
-and versions.
-
-| Category | Libraries |
-|----------|-----------|
-| Compose | BOM, foundation, Material 3, material icons |
-| Navigation | Navigation 3 runtime/UI, lifecycle integration, Hilt integration |
-| Dependency injection | Hilt |
-| Firebase | Analytics, Crashlytics, Performance |
-| Lifecycle | Runtime, ViewModel, Compose, process lifecycle |
-| Kotlin | Immutable collections, serialization, coroutines |
-| Images | Coil Compose |
-| Logging | Timber behind `core:common`'s `Logger` |
-| Debugging | LeakCanary |
-| Formatting | Spotless, ktlint, compose-rules-ktlint |
-
-## Coding Guidelines
+* `@HiltViewModel` + `@Inject constructor`. When a ViewModel needs a runtime parameter, use
+  `@HiltViewModel(assistedFactory = VM.Factory::class)` + `@AssistedFactory` + `@AssistedInject`.
+* Modules are `@Module @InstallIn(SingletonComponent::class)` — an `interface` with `@Binds` for
+  interfaces, a `class` with `@Provides` only for platform types.
+* Prefer constructor injection over module `@Provides`.
 
 ### Navigation
 
-* **Navigation 3** (`androidx.navigation3`) exclusively. No legacy Jetpack Navigation.
-* Navigation keys are `@Serializable` object/data class implementing `NavKey`, placed in `feature/*/api` modules.
-* Keys with parameters use `data class` (e.g., `AppDetailNavKey(val detailInput: AppDetailInput)`).
-* Internal navigation keys (within a feature sub-graph) are placed in `feature/*/impl/navigation/` (e.g., `AppFilterNavKey`, `AppSearchNavKey`).
-* Screen entry registration uses `EntryProviderScope<NavKey>.featureEntries(navigator: Navigator)` extension functions in `feature/*/impl/navigation/` packages.
-* Top-level navigation uses `NavigationState` + `Navigator` from `:core:navigation`.
-* In `app` module, `ApkAnalyzerApp.kt` wires all entry providers via `entryProvider { }` block.
-* Entry transition metadata: use `bottomEntryMetadata()`, `slideFromEndEntryMetadata()` from `core:uilibrary:animation`.
-* Top-level destinations defined in `app/ui/navigation/TopLevelDestinations.kt` using `NavigationBarItem`.
+* **Navigation 3** only. No legacy Jetpack Navigation.
+* NavKeys are `@Serializable` and implement `NavKey`. `data class` when carrying parameters,
+  `data object` when not. Keys reachable from other features go in `feature/*/api`; keys internal
+  to one feature go in that feature's `impl/navigation/`.
+* Register screens via `EntryProviderScope<NavKey>.<feature>Entries(navigator: Navigator)` in
+  `feature/*/impl/navigation/`, then wire that call into the `entryProvider { }` block in
+  `app/src/main/kotlin/sk/styk/martin/apkanalyzer/ui/ApkAnalyzerApp.kt`. A screen that isn't wired
+  there is unreachable.
+* Transitions: `bottomEntryMetadata()` / `slideFromEndEntryMetadata()` from
+  `sk.styk.martin.apkanalyzer.core.uilibrary.animation`.
+* Multi-stack state lives in `:core:navigation` — see [`core/navigation/AGENTS.md`](core/navigation/AGENTS.md).
 
-### Hilt Dependency Injection
+## Compose
 
-* ViewModels: annotate with `@HiltViewModel`, inject via `@Inject constructor`.
-* Assisted injection: use `@HiltViewModel(assistedFactory = VM.Factory::class)` + `@AssistedFactory` interface + `@AssistedInject constructor` (see `AppDetailViewModel`).
-* Hilt modules: use `@Module @InstallIn(SingletonComponent::class)`. Prefer `interface` with `@Binds` for interfaces. Use `class` with `@Provides` for platform types.
-* Use `@Singleton` for repository/manager bindings.
-* Constructor injection with `@Inject constructor()` is preferred over module `@Provides`.
+* **Feature modules must never import `androidx.compose.material3`.** Use Compose foundation APIs
+  plus the wrappers in `:core:ui-library`. If a component isn't wrapped yet, wrap it there first —
+  see the `create-compose-component` skill. (`app` uses material3 directly for `Scaffold` and theme
+  plumbing; that is the only exception.)
+* Colors and type come from `AppTheme.colors` / `AppTheme.typography`, icons from
+  `ApkAnalyzerIcons`. Never hardcode a color or reach for `MaterialTheme.colorScheme` outside
+  `:core:ui-library`.
+* Check the component inventory in [`core/ui-library/AGENTS.md`](core/ui-library/AGENTS.md) before
+  calling a component — names don't always match file names.
+* Every list property in State classes and Composable parameters is an `ImmutableList` from
+  `kotlinx.collections.immutable`. `@Immutable` on State data classes; `@Stable` on non-data
+  classes used as Composable parameters.
+* Every file with `@Composable` functions has `@Preview` functions: `private`, suffixed `Preview`,
+  wrapped in `ApkAnalyzerTheme { }`, with realistic sample data. Preview the stateless content
+  composable, never the ViewModel-dependent screen.
+* Composable callbacks are present tense — `onClick`, `onSelectItem`, `onBack`. Never
+  `onClicked`, `onItemSelected`, `onBackPressed`.
 
-### MVVM Architecture
+## Conventions
 
-#### ViewModel Pattern
-* Extend `ViewModel()` directly. No base class.
-* Expose `val state: StateFlow<FeatureState>` built with `.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue)` or a simple `MutableStateFlow` with backing field.
-* Events (one-shot): use `Channel<Event>(Channel.BUFFERED)` exposed as `eventChannel.receiveAsFlow()`.
-* Actions: single `fun onAction(action: FeatureAction)` method with `when` dispatch.
-* In Composable: collect state with `collectAsStateWithLifecycle()`, collect events via `LaunchedEffect`.
-
-#### State, Event, Action Pattern
-* **State** - `sealed interface` or `@Immutable data class` + `StateFlow`. No lambdas in State.
-* **Event** - `sealed interface`. One-off VM-to-UI signals (navigation, toasts, system intents).
-* **Action** - `sealed interface`. UI-to-VM intents dispatched via `onAction()`.
-
-#### Data Layer
-* **Repository** - Data retrieval, persistence. Interface + `Impl` class in same module. Bound via Hilt `@Binds`.
-* **Manager** - Complex business logic. Same pattern.
-* No exceptions across interfaces. Use `Result<T>`, nullable `T?`, or empty collections.
-* `DispatcherProvider` injected for dispatcher switching. Use `flowOn(dispatcherProvider.default())` or `withContext(dispatcherProvider.io())`.
-
-#### File Structure
-```
-feature/<name>/impl/
-  navigation/FeatureEntryProvider.kt  (+ inner NavKeys if not top-level)
-  list/                               (or root package for simple features)
-    FeatureScreen.kt
-    FeatureViewModel.kt
-    FeatureState.kt
-    FeatureAction.kt
-    FeatureEvent.kt
-  components/                         (feature-specific reusable components)
-  domain/                             (feature-local use cases/repositories)
-```
-
-### UI Library & Material Usage
-
-* All Material3 components are wrapped in `:core:ui-library` and re-exported: `Button`, `Checkbox`, `Chip`, `Switch`, `Text`, `Toolbar`, `NavigationBar`, `SearchBarActive`, `SearchBarInactive`, `BottomSheet`, `LoadingSpinner`, `SkeletonBox`, `Icon`, `IconButton`, `AppIcon`, `RangeSlider`, `DateRangePickerDialog`.
-* Feature modules must **not** import `androidx.compose.material3` directly. Only use Compose foundation APIs + `:core:ui-library`.
-* Theme: access via `AppTheme.colors` and `AppTheme.typography` from `core:uilibrary:theme`.
-* Icons: `ApkAnalyzerIcons` object in `core:uilibrary:icons`.
-* Shared transitions: `LocalSharedTransitionScope` CompositionLocal in `core:uilibrary:modifier`.
-* Lazy list utilities in `core:uilibrary:lazylist`.
-
-### Compose Stability & Collections
-
-* `kotlinx.collections.immutable` (`ImmutableList`, `persistentListOf`) for list properties in State and Composable parameters.
-* `@Immutable` on State data classes.
-* `@Stable` on non-data classes used as Composable parameters.
-
-### Compose Previews
-
-* Every file with `@Composable` functions includes `@Preview` functions.
-* Wrap in `ApkAnalyzerTheme { }`.
-* Preview functions are `private` and suffixed with `Preview`.
-* Use realistic sample data. Don't preview ViewModel-dependent screen composables.
-
-### Logging
-
-* Use `Logger` from `core:common:logger` (not raw Timber).
-* Pattern: `Logger.d("Tag", "message")`, `Logger.e("Tag", throwable, "message")`.
-* Define `private const val TAG = "ClassName"` at file level for ViewModel/Manager tags.
-
-### Serialization
-
-* **Kotlin Serialization** for navigation keys (`@Serializable`).
-* **Parcelize** for legacy Android-specific data (intents/bundles). Newer models use `@Serializable`.
-
-### Style & Conventions
-
-* Official Kotlin coding conventions.
-* `data object` instead of plain `object` for sealed interface members (e.g., `data object Loading : State`).
+* `data object`, not plain `object`, for sealed interface members.
 * No wildcard imports.
-* Never write comments or KDoc in generated code — not even when the WHY seems non-obvious. Prefer self-documenting names/structure instead. Only exception: the user explicitly asks for a comment to be added in that specific instance.
-* Prefer `private` visibility; `internal` for module-visible.
-* `public` only for actual public API.
-* Spotless: `./gradlew spotlessApply` before committing.
-* Ktlint config: multiline signatures at 3+ params, compose rules enabled.
-* Git commits: always authored as the human user only. Never add `Co-Authored-By: Claude`, `Claude-Session:`, or any AI co-author trailer. See `.claude/skills/git-commit-author/SKILL.md`.
+* Prefer `private`; `internal` for module-visible; `public` only for actual public API.
+* `Logger` from `core.common.logger`, never raw Timber: `Logger.d("Tag", "msg")`,
+  `Logger.e("Tag", throwable, "msg")`. Declare `private const val TAG` at file level.
+* `@Serializable` for nav keys and new models. Parcelize only for existing Android-specific data
+  already passed through intents/bundles.
+* No test infrastructure or test dependencies exist here. Don't add tests, test dependencies, or
+  test source sets unless explicitly asked.
 
-### Naming Conventions
+## User-Facing Copy
 
-* **camelCase** - functions, variables, properties.
-* **PascalCase** - classes, interfaces, objects, enum values, `@Composable` functions.
-* **UPPER_SNAKE_CASE** - constants.
-* Callbacks in Composable: `on<Action>` (present tense, never past tense like `onClicked`).
-
-## Unit Testing
-
-* No tests exist yet. When adding tests:
-* **MockK** for mocking.
-* **Turbine** for Flow testing.
-* **kotlinx-coroutines-test** (`runTest`) for coroutine testing.
-* Place in `src/test/kotlin/` mirroring main source package.
-
-## String Resources & Copywriting
-
-* Write for non-technical users who understand Android basics.
-* Concise, complete, plain English.
-* Active voice, present tense.
-* Be specific — no vague phrases.
-* Technically accurate re: Android concepts.
+Write for non-technical users who understand Android basics. Active voice, present tense, sentence
+case. Name the concrete thing rather than gesturing at it — "Shows which apps use the Camera
+permission", not "View permission information". Never surface class names, internal identifiers, or
+Android API names in a user-facing string.
 
 ## Skills
 
-These files follow the Agent Skills standard and are discovered directly by both Claude and Copilot.
-**You MUST read the relevant skill file before performing any of these tasks.** Skills contain
-step-by-step instructions, templates, and checklists. Agents may load them automatically; hosts that
-expose skill commands use the directory name as the slash command.
+**Read the relevant skill in [`.claude/skills/`](.claude/skills/) before starting a matching
+task** — skills hold the step-by-step procedures this file deliberately omits. Each skill's
+frontmatter states when it applies.
 
-| Skill | Availability | When to Use |
-|-------|--------------|-------------|
-| [`create-feature-module`](.claude/skills/create-feature-module/SKILL.md) | Claude, Copilot | Creating a feature api/impl pair, NavKey, entry provider, and wiring |
-| [`create-core-module`](.claude/skills/create-core-module/SKILL.md) | Claude, Copilot | Creating a shared repository, manager, utility, or data layer |
-| [`create-compose-component`](.claude/skills/create-compose-component/SKILL.md) | Claude, Copilot | Adding a reusable component to `:core:ui-library` |
-| [`implement-navigation`](.claude/skills/implement-navigation/SKILL.md) | Claude, Copilot | Adding destinations, entry providers, or navigation flows |
-| [`spotless-fix`](.claude/skills/spotless-fix/SKILL.md) | Claude, Copilot | Formatting Kotlin or fixing ktlint violations |
-| [`git-commit-author`](.claude/skills/git-commit-author/SKILL.md) | Claude, Copilot | Creating any commit |
-| [`setup-local-tools`](.claude/skills/setup-local-tools/SKILL.md) | Claude, Copilot | Checking or setting up required development tools |
-| [`analyze-ci-failure`](.claude/skills/analyze-ci-failure/SKILL.md) | Claude, Copilot | Inspecting GitHub Actions status or diagnosing a failed run |
-| [`run-app`](.claude/skills/run-app/SKILL.md) | Claude, Copilot | Building, installing, and launching on a device or emulator |
-| [`sync-design-changes`](.claude/skills/sync-design-changes/SKILL.md) | Claude with `DesignSync` | Applying changes from the Claude Design project |
+`create-feature-module`, `create-core-module`, `create-compose-component`, `implement-navigation`,
+`spotless-fix`, `git-commit-author`, `setup-local-tools`, `analyze-ci-failure`, `run-app`,
+`sync-design-changes`.
+
+All are shared by Claude and Copilot except `sync-design-changes`, which needs Claude's `DesignSync`
+tool.
+
+## Shared AI Context
+
+* `AGENTS.md` files are canonical. Put guidance in the closest relevant `AGENTS.md`; never copy it
+  into a tool-specific file.
+* `CLAUDE.md` files contain exactly `@AGENTS.md` and nothing else.
+* `.github/copilot-instructions.md` is the Copilot adapter; Copilot also reads nested `AGENTS.md`
+  directly. `.claude/skills/` is shared by both tools — never mirror skills into `.github/skills/`,
+  `.github/prompts/`, or `.agents/skills/`.
+* `validateAgentContext` enforces AGENTS/CLAUDE pairing, per-module coverage, skill frontmatter,
+  duplicate skill locations, and that every local markdown link resolves.
 
 ## Production References
 
-Use production code instead of copying templates into new files:
+Read these instead of copying a template into a new file:
 
 * [Assisted-injected ViewModel with `MutableStateFlow`](feature/app-detail/impl/src/main/kotlin/sk/styk/martin/apkanalyzer/feature/appdetail/impl/AppDetailViewModel.kt)
 * [Standard flow-backed ViewModel with state, events, and actions](feature/settings/impl/src/main/kotlin/sk/styk/martin/apkanalyzer/feature/settings/impl/SettingsViewModel.kt)

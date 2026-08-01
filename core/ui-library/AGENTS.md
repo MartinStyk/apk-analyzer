@@ -1,7 +1,7 @@
 # core:ui-library Module
 
 ## Purpose
-Design system module providing all reusable Compose UI components, theme, icons, animations, and modifiers. This is the **only** module allowed to depend on `androidx.compose.material3`.
+Design system module providing all reusable Compose UI components, theme, icons, animations, and modifiers. **Feature modules must never import `androidx.compose.material3` — they consume it only through the wrappers here.** (`app` is the one exception: it uses material3 directly for `Scaffold` and theme plumbing in `ApkAnalyzerActivity.kt`/`ApkAnalyzerApp.kt`.)
 
 ## Package: `sk.styk.martin.apkanalyzer.core.uilibrary`
 
@@ -13,33 +13,45 @@ theme/
   Color.kt          - ApkAnalyzerColorPalette, Light/Dark color definitions
   Typography.kt     - ApkAnalyzerTypography, font setup
   Shapes.kt         - Shape definitions
-components/
-  AppIcon.kt        - App icon display (Coil image loading)
-  BottomSheet.kt    - Modal bottom sheet wrapper
-  Button.kt         - Primary/secondary button variants
-  Checkbox.kt       - Checkbox component
-  Chip.kt           - Filter/selection chips
-  DateRangePickerDialog.kt - Date range picker
-  Icon.kt           - Icon wrapper
-  IconButton.kt     - Icon button wrapper
-  LoadingSpinner.kt - Circular progress indicator
-  NavigationBar.kt  - Bottom navigation bar (NavigationBarItem data class)
-  RangeSlider.kt    - Range slider component
-  SearchBarActive.kt  - Expanded search bar with text field
-  SearchBarInactive.kt - Collapsed/clickable search bar
-  SkeletonBox.kt    - Loading skeleton placeholder
-  Switch.kt         - Toggle switch
-  Text.kt           - Text component with theme typography
-  Toolbar.kt        - Top app bar
+components/          - See the component inventory below
 icons/
   ApkAnalyzerIcons.kt - Icon constants (Apps, Permissions, Statistics, etc.)
-  app/              - Custom vector icon assets
+  app/PackageIcon.kt, PackageIconFetcher.kt, PackageIconModule.kt - Coil fetcher for installed-app icons
 animation/
   NavEntryTransitions.kt - bottomEntryMetadata(), slideFromEndEntryMetadata()
-lazylist/           - LazyList utilities
-modifier/           - Custom modifiers, LocalSharedTransitionScope
-util/               - Utility composables
+lazylist/
+  ItemsIndexedWithPosition.kt - LazyList item helper carrying first/middle/last position
+modifier/
+  CardModifier.kt, CollapsingHeader.kt, CollapsingToolbar.kt, Shimmer.kt,
+  SharedTransitionModifier.kt (LocalSharedTransitionScope)
+util/
+  Lerp.kt
 ```
+
+## Component Inventory
+
+One file per component in `components/`. **The composable's name does not always match its file
+name** — check here before calling one:
+
+| Composable | File |
+|---|---|
+| `AppIcon` | `AppIcon.kt` |
+| `BottomSheet` | `BottomSheet.kt` |
+| `Button`, `TextButton` | `Button.kt` |
+| `Checkbox` | `Checkbox.kt` |
+| `Chip`, `OutlinedChip` | `Chip.kt` |
+| `DateRangePickerDialog` | `DateRangePickerDialog.kt` |
+| `Icon` | `Icon.kt` |
+| `IconButton` | `IconButton.kt` |
+| `LoadingSpinner` | `LoadingSpinner.kt` |
+| `NavigationBar` (+ `NavigationBarItem` data class) | `NavigationBar.kt` |
+| `RangeSlider` | `RangeSlider.kt` |
+| `SearchBarActive` | `SearchBarActive.kt` |
+| **`InactiveSearchBar`** — note the inverted name | `SearchBarInactive.kt` |
+| `SkeletonBox` | `SkeletonBox.kt` |
+| `Switch` | `Switch.kt` |
+| `Text` | `Text.kt` |
+| `Toolbar` | `Toolbar.kt` |
 
 ## Key Exports
 
