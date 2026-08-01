@@ -405,6 +405,8 @@ certificates render as stacked cards.
 │ 📡  NFC                        Not on    │
 │     android.hardware.nfc     this device │
 │ 📶  Wi-Fi                                │
+│ 🎮  OpenGL ES 3.0                        │
+│     0x00030000                           │
 │                                          │
 │ OPTIONAL · 3                             │
 │ Used when available                      │
@@ -416,6 +418,26 @@ certificates render as stacked cards.
 The required/optional split is the entire point of the data. Well-known `android.hardware.*` and
 `android.software.*` names map to a friendly label and icon; anything unrecognized falls back to
 the raw string rather than being dropped.
+
+**OpenGL ES is a version, not a name, and the model has to say so.** `getFeatures` in
+`AppDetailRepositoryImpl` currently collapses the two into one string field with
+`name = it.name ?: it.glEsVersion`, because a GL ES `FeatureInfo` carries a null `name` and a
+`reqGlEsVersion` instead. The result is a row whose identifier is `3.0` — a requirement with no
+indication of what is at 3.0. Nothing downstream can tell the two kinds apart without sniffing the
+string, and only the count is consumed today, so the conflation has been invisible.
+
+`Feature` becomes a sealed interface with a `Hardware` case carrying a name and an `OpenGlEs` case
+carrying a version. That makes the display obvious rather than clever:
+
+- **Label is "OpenGL ES 3.0"**, from `FeatureInfo.getGlEsVersion()`.
+- **Raw identifier is the hex**, `0x00030000` — which honours
+  [plain name first, raw identifier always present](#two-cross-cutting-rules) with the value that is
+  genuinely useful, because the hex is literally what the manifest's `android:glEsVersion` attribute
+  contains and what you would paste into a bug report.
+- **The device check is a numeric comparison** of `reqGlEsVersion` against the device's, never a
+  string compare — `"10.0" < "3.0"` lexically, and that will be a real version one day.
+- **A miss names what the device has**: "Needs 3.1 · this device has 3.0" says more than "not on
+  this device", and the version is the one requirement where the gap is a matter of degree.
 
 **Every requirement is checked against this device.** This is the one screen that can turn a list of
 identifiers into an answer, and the answer is *"will this run here?"*
@@ -432,8 +454,9 @@ accessor switching on `dispatcherProvider.io()`, per the module rules.
   memoized in the `@Singleton` and never invalidated. No flow, no observer, no refresh.
 - **OpenGL ES is not a set member.** The device's `FeatureInfo[]` carries one entry with a null
   `name` and `reqGlEsVersion` set to the highest supported version, and an app's GL ES requirement
-  arrives the same way. That one is a numeric comparison, not a lookup, and the repository exposes
-  it separately rather than pretending it fits in the set.
+  arrives the same way. That one is a numeric comparison, not a lookup, so the repository exposes
+  the device's version separately rather than pretending it fits in the set — matching the
+  `Feature.OpenGlEs` case on the app side.
 
 - **Only misses are marked.** A column of green ticks is noise; a single "Not on this device" is the
   finding. When there are none, the screen looks exactly as it does today.
@@ -565,8 +588,15 @@ Screen work:
 
 ### Step 4 — Requirements screen
 
+- **Split `Feature` into a sealed interface** — `Hardware(name)` and `OpenGlEs(version)` — and stop
+  writing `name = it.name ?: it.glEsVersion` in `AppDetailRepositoryImpl.getFeatures`. Keep the raw
+  `reqGlEsVersion` int on the `OpenGlEs` case for the hex identifier and the version comparison; the
+  formatted string is for the label only. The blast radius is one line of mapping and
+  `featuresCount`, because nothing else reads `features` yet — which is why the change is cheap now
+  and would not stay cheap.
 - `FeaturesNavKey`, ViewModel, required/optional split.
-- Curated friendly-name and icon mapping for well-known feature names, raw-string fallback.
+- Curated friendly-name and icon mapping for well-known feature names, raw-string fallback for
+  unrecognized `android.*` names, and the dedicated GL ES rendering.
 - **`DeviceFeaturesRepository`** in `:core:apps` — interface + `internal` `Impl`, `@Binds`,
   `@Singleton`. Exposes the device's available feature names as a memoized `Set<String>` built from
   one `getSystemAvailableFeatures()` call, plus the device's GL ES version separately. Never throws;
