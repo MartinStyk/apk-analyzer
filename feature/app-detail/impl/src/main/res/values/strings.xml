@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="content_description_back">Back</string>
     <string name="app_detail_title">App Detail</string>
     <string name="app_detail_system_app">System Application</string>
     <string name="app_detail_overview_section">Overview</string>
@@ -107,5 +108,86 @@
     <string name="general_info_rationale_install_location">The preferred storage location declared by the developer — internal storage, external storage, or automatic.</string>
     <string name="general_info_rationale_apk_size">The size of the APK file on disk, excluding app data, caches, and runtime-generated files.</string>
     <string name="general_info_rationale_total_size">The combined size of the APK, app data, and cached files. Requires usage access permission.</string>
+
+    <string name="scope_selector_selected">Selected</string>
+
+    <string name="permissions_title">Permissions</string>
+    <string name="permissions_error">Could not read the permissions of this app.</string>
+    <string name="permissions_retry">Try again</string>
+    <plurals name="permissions_filter_hint">
+        <item quantity="one">Filter %1$d permission</item>
+        <item quantity="other">Filter %1$d permissions</item>
+    </plurals>
+    <string name="permissions_scope_sheet_title">Show</string>
+    <string name="permissions_scope_requested">Requested</string>
+    <string name="permissions_scope_defined">Defined by this app</string>
+    <string name="permissions_section_header">%1$s · %2$d</string>
+    <string name="permissions_granted">Granted</string>
+    <string name="permissions_denied">Denied</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
+    <string name="permissions_level_dangerous_explanation">Needs your explicit approval before the app can use it.</string>
+    <string name="permissions_level_signature">Signature</string>
+    <string name="permissions_level_signature_explanation">Only apps signed with the same key can hold these.</string>
+    <string name="permissions_level_internal">Internal</string>
+    <string name="permissions_level_internal_explanation">Reserved for the system and granted by internal rules rather than by you.</string>
+    <string name="permissions_level_normal">Normal</string>
+    <string name="permissions_level_normal_explanation">Granted automatically at install. Low risk on their own.</string>
+    <string name="permissions_flag_privileged">Privileged</string>
+    <string name="permissions_flag_appop">App ops controlled</string>
+    <string name="permissions_flag_instant">Instant apps</string>
+    <string name="permissions_flag_development">Development</string>
+    <string name="permissions_empty_query">No permission matches \"%1$s\".</string>
+    <string name="permissions_empty_filters">No permission matches the selected filters.</string>
+    <string name="permissions_empty_scope">This app requests no permissions.</string>
+    <string name="permissions_clear_narrowing">Clear filters</string>
+    <string name="permissions_detail_full_name">Full name</string>
+    <string name="permissions_detail_grant_state">Grant state</string>
+    <string name="permissions_detail_protection_level">Protection level</string>
+    <string name="permissions_detail_group">Permission group</string>
+    <string name="permissions_detail_declared_by">Declared by</string>
+    <string name="permissions_defined_by">Defined by %1$s.</string>
+
+    <string name="permission_description_camera">Take photos and record video with the device cameras.</string>
+    <string name="permission_description_record_audio">Record sound through the microphone, including while other apps play audio.</string>
+    <string name="permission_description_location_fine">Read the exact position of the device from GPS and nearby networks.</string>
+    <string name="permission_description_location_coarse">Read the approximate position of the device, accurate to roughly a city block.</string>
+    <string name="permission_description_location_background">Read the position of the device even when the app is not open.</string>
+    <string name="permission_description_contacts_read">Read the names, numbers, and addresses stored in your contacts.</string>
+    <string name="permission_description_contacts_write">Add, change, or delete entries in your contacts.</string>
+    <string name="permission_description_accounts">See the list of accounts signed in on this device.</string>
+    <string name="permission_description_calendar_read">Read your events, including who is invited and when.</string>
+    <string name="permission_description_calendar_write">Add, change, or delete events in your calendars.</string>
+    <string name="permission_description_sms_read">Read the text messages stored on this device.</string>
+    <string name="permission_description_sms_send">Send text messages, which may cost money.</string>
+    <string name="permission_description_sms_receive">Receive and read incoming text messages.</string>
+    <string name="permission_description_call_log_read">Read who you called and who called you, and when.</string>
+    <string name="permission_description_call_log_write">Add or delete entries in your call history.</string>
+    <string name="permission_description_call_phone">Place calls without going through the dialler, which may cost money.</string>
+    <string name="permission_description_phone_state">Read the state of the phone, the network operator, and whether a call is active.</string>
+    <string name="permission_description_phone_numbers">Read the phone numbers assigned to this device.</string>
+    <string name="permission_description_storage_read">Read files stored in shared storage, such as downloads and documents.</string>
+    <string name="permission_description_storage_write">Add, change, or delete files in shared storage.</string>
+    <string name="permission_description_storage_manage">Reach every file in shared storage, not only the ones the app created.</string>
+    <string name="permission_description_media_images">Read the photos stored on this device.</string>
+    <string name="permission_description_media_video">Read the videos stored on this device.</string>
+    <string name="permission_description_media_audio">Read the music and audio files stored on this device.</string>
+    <string name="permission_description_body_sensors">Read sensor data about your body, such as heart rate.</string>
+    <string name="permission_description_activity_recognition">Detect whether you are walking, cycling, or driving, and count your steps.</string>
+    <string name="permission_description_bluetooth_scan">Look for nearby Bluetooth devices.</string>
+    <string name="permission_description_bluetooth_connect">Connect to Bluetooth devices that are already paired.</string>
+    <string name="permission_description_notifications">Show notifications on your screen and lock screen.</string>
+    <string name="permission_description_internet">Open network connections and send or receive data over the internet.</string>
+    <string name="permission_description_network_state">See whether the device is online and what kind of connection it uses.</string>
+    <string name="permission_description_wifi_state">See the Wi-Fi networks the device knows about and is connected to.</string>
+    <string name="permission_description_nfc">Exchange data with NFC tags and terminals held against the device.</string>
+    <string name="permission_description_vibrate">Make the device vibrate.</string>
+    <string name="permission_description_wake_lock">Keep the device awake so work continues with the screen off.</string>
+    <string name="permission_description_boot_completed">Start running as soon as the device finishes booting.</string>
+    <string name="permission_description_foreground_service">Keep running in the background with a visible notification.</string>
+    <string name="permission_description_install_packages">Ask you to install other apps from files it provides.</string>
+    <string name="permission_description_overlay">Draw on top of other apps, covering whatever is on screen.</string>
+    <string name="permission_description_exact_alarm">Schedule work at an exact time, even when the device is idle.</string>
+    <string name="permission_description_biometric">Ask you to confirm your identity with a fingerprint or face unlock.</string>
+    <string name="permission_description_query_all_packages">See the full list of apps installed on this device.</string>
 </resources>
 

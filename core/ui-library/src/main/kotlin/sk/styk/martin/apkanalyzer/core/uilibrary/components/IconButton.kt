@@ -28,11 +28,12 @@ fun IconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     style: IconButtonStyle = IconButtonStyle.Standard,
+    contentDescription: String? = null,
 ) {
     when (style) {
         IconButtonStyle.Standard -> {
             IconButton(onClick = onClick, modifier = modifier) {
-                Icon(imageVector = imageVector, contentDescription = null)
+                Icon(imageVector = imageVector, contentDescription = contentDescription)
             }
         }
 
@@ -44,7 +45,7 @@ fun IconButton(
                     contentColor = AppTheme.colors.onSurfaceVariant,
                 ),
             ) {
-                Icon(imageVector = imageVector, contentDescription = null)
+                Icon(imageVector = imageVector, contentDescription = contentDescription)
             }
         }
 
@@ -57,13 +58,13 @@ fun IconButton(
                     contentColor = AppTheme.colors.onBackground,
                 ),
             ) {
-                Icon(imageVector = imageVector, contentDescription = null)
+                Icon(imageVector = imageVector, contentDescription = contentDescription)
             }
         }
 
         IconButtonStyle.Outlined -> {
             OutlinedIconButton(onClick = onClick, modifier = modifier) {
-                Icon(imageVector = imageVector, contentDescription = null)
+                Icon(imageVector = imageVector, contentDescription = contentDescription)
             }
         }
 
@@ -76,7 +77,7 @@ fun IconButton(
                     contentColor = AppTheme.colors.onSecondaryContainer,
                 ),
             ) {
-                Icon(imageVector = imageVector, contentDescription = null)
+                Icon(imageVector = imageVector, contentDescription = contentDescription)
             }
         }
     }

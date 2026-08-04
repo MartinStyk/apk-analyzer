@@ -146,7 +146,7 @@ frontmatter states when it applies.
 
 `create-feature-module`, `create-core-module`, `create-compose-component`, `implement-navigation`,
 `spotless-fix`, `git-commit-author`, `setup-local-tools`, `analyze-ci-failure`, `run-app`,
-`sync-design-changes`.
+`navigate-app-adb`, `sync-design-changes`.
 
 All are shared by Claude and Copilot except `sync-design-changes`, which needs Claude's `DesignSync`
 tool.

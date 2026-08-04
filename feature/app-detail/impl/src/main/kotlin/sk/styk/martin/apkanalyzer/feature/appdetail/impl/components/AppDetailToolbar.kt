@@ -117,6 +117,7 @@ internal fun AppDetailToolbar(
             imageVector = ApkAnalyzerIcons.Back,
             onClick = onBack,
             modifier = Modifier.offset(x = TOOLBAR_PADDING_START, y = TOOLBAR_PADDING_VERTICAL),
+            contentDescription = stringResource(R.string.content_description_back),
         )
 
         Box(

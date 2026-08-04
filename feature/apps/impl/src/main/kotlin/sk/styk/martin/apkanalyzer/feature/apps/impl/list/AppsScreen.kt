@@ -142,11 +142,13 @@ private fun AppsContent(
                     style = IconButtonStyle.Filled,
                     onClick = { onAction(AppsAction.OpenSettings) },
                     modifier = Modifier.sharedBounds("settings"),
+                    contentDescription = stringResource(R.string.content_description_settings),
                 )
                 IconButton(
                     imageVector = ApkAnalyzerIcons.FileUpload,
                     style = IconButtonStyle.Filled,
                     onClick = { onAction(AppsAction.OpenApkDetails) },
+                    contentDescription = stringResource(R.string.content_description_analyze_apk),
                 )
             }
             QuickFilterRow(
@@ -256,6 +258,7 @@ private fun LazyListScope.appsSectionItems(
                     style = if (sortType == SortType.Name) IconButtonStyle.Standard else IconButtonStyle.Highlighted,
                     onClick = onShowSort,
                     modifier = Modifier.size(22.dp),
+                    contentDescription = stringResource(R.string.content_description_sort),
                 )
             }
 

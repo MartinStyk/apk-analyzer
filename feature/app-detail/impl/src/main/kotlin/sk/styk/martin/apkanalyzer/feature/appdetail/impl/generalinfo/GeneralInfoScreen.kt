@@ -2,7 +2,6 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.impl.generalinfo
 
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
-import sk.styk.martin.apkanalyzer.core.uilibrary.components.BottomSheet
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.LoadingSpinner
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Toolbar
@@ -38,6 +36,9 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.InfoRow
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.InfoRowItem
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.RationaleBottomSheet
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.Date
@@ -340,8 +341,6 @@ private fun LoadedContent(
     }
 }
 
-private data class InfoRow(val label: String, val value: String, val rationale: String)
-
 @Composable
 private fun InfoSection(
     title: String,
@@ -363,72 +362,6 @@ private fun InfoSection(
         )
         content()
         Spacer(modifier = Modifier.height(8.dp))
-    }
-}
-
-@Composable
-private fun InfoRowItem(
-    label: String,
-    value: String,
-    rationale: String,
-    onShowRationale: (InfoRow) -> Unit,
-    onCopy: (label: String, value: String) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 2.dp)
-            .clip(Shapes.CardShape)
-            .combinedClickable(
-                onClick = { onShowRationale(InfoRow(label, value, rationale)) },
-                onLongClick = { onCopy(label, value) },
-            )
-            .padding(horizontal = 14.dp, vertical = 10.dp),
-    ) {
-        Text(
-            text = label.uppercase(),
-            style = AppTheme.typography.labelMedium,
-            color = AppTheme.colors.onSurfaceVariant,
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = value,
-            style = AppTheme.typography.titleSmall,
-            color = AppTheme.colors.onBackground,
-        )
-    }
-}
-
-@Composable
-private fun RationaleBottomSheet(
-    row: InfoRow,
-    onDismiss: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    BottomSheet(onDismiss = onDismiss, modifier = modifier) {
-        Column(
-            modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
-        ) {
-            Text(
-                text = row.label,
-                style = AppTheme.typography.titleMedium,
-                color = AppTheme.colors.onSurface,
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = row.value,
-                style = AppTheme.typography.bodyMedium,
-                color = AppTheme.colors.primary,
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = row.rationale,
-                style = AppTheme.typography.bodyMedium,
-                color = AppTheme.colors.onSurfaceVariant,
-            )
-            Spacer(modifier = Modifier.height(24.dp))
-        }
     }
 }
 

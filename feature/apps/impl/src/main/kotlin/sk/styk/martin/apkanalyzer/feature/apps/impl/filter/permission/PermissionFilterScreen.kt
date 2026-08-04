@@ -108,6 +108,7 @@ private fun PermissionFilterContent(
             IconButton(
                 imageVector = ApkAnalyzerIcons.Back,
                 onClick = { onAction(PermissionFilterAction.NavigateBack) },
+                contentDescription = stringResource(R.string.content_description_back),
             )
             SearchBarActive(
                 query = state.searchQuery,

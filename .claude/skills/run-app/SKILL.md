@@ -82,4 +82,5 @@ adb logcat -d -t 200 | grep -A 30 "FATAL EXCEPTION"
       explicit user confirmation before any uninstall
 - [ ] App launched via `am start` and `pidof` returned a PID (not empty)
 - [ ] For a specific feature/screen change: actually navigated to it in the running app, not just
-      confirmed the process didn't crash on the launch screen
+      confirmed the process didn't crash on the launch screen — see the `navigate-app-adb` skill to
+      do this via `adb` instead of a human tapping through the device

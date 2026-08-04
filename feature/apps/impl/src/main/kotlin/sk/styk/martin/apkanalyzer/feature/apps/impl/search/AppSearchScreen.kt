@@ -103,6 +103,7 @@ private fun AppSearchContent(
             IconButton(
                 imageVector = ApkAnalyzerIcons.Back,
                 onClick = onBack,
+                contentDescription = stringResource(R.string.content_description_back),
             )
 
             SearchBarActive(
@@ -244,6 +245,7 @@ fun SearchHistoryRow(
             onClick = onDelete,
             modifier = Modifier.size(32.dp),
             style = IconButtonStyle.StandardMuted,
+            contentDescription = stringResource(R.string.content_description_delete_search, query),
         )
     }
 }
