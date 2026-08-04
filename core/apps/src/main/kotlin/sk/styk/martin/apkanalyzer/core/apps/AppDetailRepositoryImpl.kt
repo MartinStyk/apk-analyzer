@@ -191,7 +191,10 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             name = it.name,
             simpleName = createSimpleName(it.name),
             groupName = it.group,
-            protectionLevel = it.protectionLevel,
+            protection = it.protection,
+            protectionFlags = it.protectionFlags,
+            description = it.loadDescription(packageManager)?.toString(),
+            declaringPackage = it.packageName,
         )
     }
 
@@ -210,7 +213,10 @@ internal class AppDetailRepositoryImpl @Inject constructor(
                         name = name,
                         simpleName = createSimpleName(name),
                         groupName = permissionInfo.group,
-                        protectionLevel = permissionInfo.protectionLevel,
+                        protection = permissionInfo.protection,
+                        protectionFlags = permissionInfo.protectionFlags,
+                        description = permissionInfo.loadDescription(packageManager)?.toString(),
+                        declaringPackage = permissionInfo.packageName,
                     )
                 } catch (_: Exception) {
                     Permission(

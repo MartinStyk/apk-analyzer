@@ -1,7 +1,7 @@
     # App Detail — Full Data Presentation
 
 **Roadmap:** [FR-10 … FR-18](../roadmap.md#12-app-detail), [FR-25](../roadmap.md#15-export--share), plus [EX-07](../roadmap.md#18-data-gaps--extraction-that-doesnt-exist-yet) · R0
-**Status:** Approved design, not yet implemented
+**Status:** Approved design. [Step 1](#step-1--permissions-screen) shipped; Steps 2–6 outstanding
 **Scope:** surface everything `AppDetail` holds inside `feature:app-detail`, and finish the icon
 export action on the hub. Manifest viewer (`FR-16`) and APK export (`FR-24`) are out — see
 [Deferred](#deferred).
@@ -18,8 +18,8 @@ export action on the hub. Manifest viewer (`FR-16`) and APK export (`FR-24`) are
 | `certificates` | First certificate, 4 of 13 fields |
 | `features` | Count only |
 
-Eight of the nine navigation targets in `AppDetailEntryProvider.kt` are
-`Logger.d("not yet implemented")`. Only General Info is wired.
+Seven of the nine navigation targets in `AppDetailEntryProvider.kt` are
+`Logger.d("not yet implemented")`. General Info and Permissions are wired.
 
 ## Audience
 

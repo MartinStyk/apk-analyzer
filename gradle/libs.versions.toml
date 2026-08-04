@@ -5,7 +5,7 @@ ksp = "2.3.10"
 kotlinx-collections-immutable = "0.5.1"
 
 # Android
-agp = "9.3.0"
+agp = "9.3.1"
 core-ktx = "1.19.0"
 appcompat = "1.7.1"
 activity = "1.13.0"

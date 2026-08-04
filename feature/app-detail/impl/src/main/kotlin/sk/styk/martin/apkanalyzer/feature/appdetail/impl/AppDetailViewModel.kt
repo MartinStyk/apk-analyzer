@@ -149,9 +149,7 @@ private fun AppDetail.toLoadedState() = AppDetailState.Loaded(
     firstInstallTime = info.firstInstallTime,
     lastUpdateTime = info.lastUpdateTime,
     totalPermissionsCount = permissions.used.size,
-    dangerousPermissionsCount = permissions.used.count {
-        it.permissionData.protectionLevel and PermissionInfo.PROTECTION_MASK_BASE == PermissionInfo.PROTECTION_DANGEROUS
-    },
+    dangerousPermissionsCount = permissions.used.count { it.permissionData.protection == PermissionInfo.PROTECTION_DANGEROUS },
     definedPermissionsCount = permissions.defined.size,
     activitiesCount = activities.size,
     servicesCount = services.size,

@@ -11,6 +11,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.animation.slideFromEndEntryMeta
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailNavKey
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.AppDetailScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.generalinfo.GeneralInfoScreen
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.permissions.PermissionsScreen
 
 private const val TAG = "AppDetailNavigation"
 
@@ -28,7 +29,7 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
             onSaveIcon = { Logger.d(TAG, "Save icon not yet implemented") },
             onNavigateToManifest = { Logger.d(TAG, "Navigate to manifest not yet implemented") },
             onNavigateToGeneralDetails = { navigator.navigate(GeneralInfoNavKey(key.detailInput)) },
-            onNavigateToPermissions = { Logger.d(TAG, "Navigate to permissions not yet implemented") },
+            onNavigateToPermissions = { navigator.navigate(PermissionsNavKey(key.detailInput)) },
             onNavigateToActivities = { Logger.d(TAG, "Navigate to activities not yet implemented") },
             onNavigateToServices = { Logger.d(TAG, "Navigate to services not yet implemented") },
             onNavigateToReceivers = { Logger.d(TAG, "Navigate to receivers not yet implemented") },
@@ -42,6 +43,15 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
         metadata = slideFromEndEntryMetadata(),
     ) { key ->
         GeneralInfoScreen(
+            appDetailInput = key.detailInput,
+            onBack = { navigator.goBack() },
+        )
+    }
+
+    entry<PermissionsNavKey>(
+        metadata = slideFromEndEntryMetadata(),
+    ) { key ->
+        PermissionsScreen(
             appDetailInput = key.detailInput,
             onBack = { navigator.goBack() },
         )

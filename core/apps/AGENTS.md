@@ -24,7 +24,9 @@ model/
   InstalledApp.kt         - Basic installed app info (packageName, name, sizes, times, source)
   AppDetail.kt            - Complete app detail (info, permissions, activities, services, etc.)
   AppInfo.kt              - Core app metadata
-  Permission.kt           - Single permission definition
+  Permission.kt           - Single permission definition; `protection` and `protectionFlags` are the
+                            already-split values from `PermissionInfo.getProtection()` /
+                            `getProtectionFlags()`, never a raw `protectionLevel` bitfield
   Permissions.kt          - Used + defined permissions container
   UsedPermission.kt       - Permission with grant status
   Activity.kt             - Activity component info
