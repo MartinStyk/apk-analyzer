@@ -3,6 +3,7 @@ package sk.styk.martin.apkanalyzer.core.apps
 import android.content.pm.FeatureInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.content.pm.PermissionInfo
 import android.content.pm.ServiceInfo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
@@ -186,33 +187,40 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         return Permissions(definedPermissions, requestedPermissions)
     }
 
-    private fun getDefinedPermissions(packageInfo: PackageInfo): List<Permission> = packageInfo.permissions.orEmpty().map { it.toPermission() }
+    private fun getDefinedPermissions(packageInfo: PackageInfo): List<Permission> = packageInfo.permissions.orEmpty().map {
+        Permission(
+            name = it.name,
+            simpleName = createSimpleName(it.name),
+            groupName = it.group,
+            protectionLevel = resolveProtectionLevel(it.protection),
+            protectionFlags = resolveProtectionFlags(it.protectionFlags),
+            description = it.loadDescription(packageManager)?.toString(),
+            declaringPackage = it.packageName,
+        )
+    }
 
     private fun getUsedPermissions(packageInfo: PackageInfo): List<UsedPermission> {
         val grantedFlags = packageInfo.requestedPermissionsFlags
         return packageInfo.requestedPermissions.orEmpty().mapIndexed { index, name ->
+            val permissionInfo = try {
+                packageManager.getPermissionInfo(name, PackageManager.GET_META_DATA)
+            } catch (_: Exception) {
+                null
+            }
             UsedPermission(
-                permissionData = loadPermission(name),
+                permissionData = Permission(
+                    name = name,
+                    simpleName = createSimpleName(name),
+                    groupName = permissionInfo?.group,
+                    protectionLevel = permissionInfo?.protection?.let(::resolveProtectionLevel) ?: ProtectionLevel.Normal,
+                    protectionFlags = permissionInfo?.protectionFlags?.let(::resolveProtectionFlags).orEmpty(),
+                    description = permissionInfo?.loadDescription(packageManager)?.toString(),
+                    declaringPackage = permissionInfo?.packageName,
+                ),
                 isGranted = (grantedFlags?.getOrNull(index) ?: 0) and PackageInfo.REQUESTED_PERMISSION_GRANTED != 0,
             )
         }
     }
-
-    private fun loadPermission(name: String): Permission = try {
-        packageManager.getPermissionInfo(name, PackageManager.GET_META_DATA).toPermission()
-    } catch (_: Exception) {
-        Permission(name = name, simpleName = createSimpleName(name))
-    }
-
-    private fun PermissionInfo.toPermission() = Permission(
-        name = name,
-        simpleName = createSimpleName(name),
-        groupName = group,
-        protection = protection,
-        protectionFlags = protectionFlags,
-        description = loadDescription(packageManager)?.toString(),
-        declaringPackage = packageName,
-    )
 
     private fun getFeatures(packageInfo: PackageInfo): List<Feature> = packageInfo.reqFeatures.orEmpty().map {
         Feature(
