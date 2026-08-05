@@ -48,6 +48,7 @@ name** — check here before calling one:
 | `RangeSlider` | `RangeSlider.kt` |
 | `SearchBarActive` | `SearchBarActive.kt` |
 | **`InactiveSearchBar`** — note the inverted name | `SearchBarInactive.kt` |
+| `SelectorChip` | `SelectorChip.kt` |
 | `SkeletonBox` | `SkeletonBox.kt` |
 | `Switch` | `Switch.kt` |
 | `Text` | `Text.kt` |

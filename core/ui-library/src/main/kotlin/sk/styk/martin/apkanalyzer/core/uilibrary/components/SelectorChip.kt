@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.feature.appdetail.impl.components
+package sk.styk.martin.apkanalyzer.core.uilibrary.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -20,17 +20,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import sk.styk.martin.apkanalyzer.core.uilibrary.components.BottomSheet
-import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
-import sk.styk.martin.apkanalyzer.core.uilibrary.components.OutlinedChip
-import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
+import sk.styk.martin.apkanalyzer.core.uilibrary.R
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
-import sk.styk.martin.apkanalyzer.feature.appdetail.impl.R
 
 @Composable
-internal fun <T> ScopeSelectorChip(
+fun <T> SelectorChip(
     sheetTitle: String,
     options: ImmutableList<T>,
     selected: T,
@@ -58,7 +54,7 @@ internal fun <T> ScopeSelectorChip(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 options.forEach { option ->
-                    ScopeOptionRow(
+                    SelectorOptionRow(
                         label = label(option),
                         selected = option == selected,
                         onClick = {
@@ -73,7 +69,7 @@ internal fun <T> ScopeSelectorChip(
 }
 
 @Composable
-private fun ScopeOptionRow(
+private fun SelectorOptionRow(
     label: String,
     selected: Boolean,
     onClick: () -> Unit,
@@ -96,7 +92,7 @@ private fun ScopeOptionRow(
             Icon(
                 imageVector = ApkAnalyzerIcons.Check,
                 tint = AppTheme.colors.primary,
-                contentDescription = stringResource(R.string.scope_selector_selected),
+                contentDescription = stringResource(R.string.content_description_selected),
                 modifier = Modifier.size(20.dp),
             )
         }
@@ -105,12 +101,26 @@ private fun ScopeOptionRow(
 
 @Preview
 @Composable
-private fun ScopeSelectorChipPreview() {
+private fun SelectorChipDefaultPreview() {
     ApkAnalyzerTheme {
-        ScopeSelectorChip(
+        SelectorChip(
             sheetTitle = "Show",
             options = persistentListOf("Requested", "Defined by this app"),
             selected = "Requested",
+            label = { it },
+            onSelectOption = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun SelectorChipDarkPreview() {
+    ApkAnalyzerTheme(isDarkTheme = true) {
+        SelectorChip(
+            sheetTitle = "Show",
+            options = persistentListOf("Requested", "Defined by this app"),
+            selected = "Defined by this app",
             label = { it },
             onSelectOption = {},
         )

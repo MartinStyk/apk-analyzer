@@ -38,7 +38,6 @@ components/
   AppDetailBadge.kt          - Badge classification (Sideloaded, DangerousPermissions, Unused, Large, System, etc.)
   AppDetailToolbar.kt        - Collapsing toolbar for the hub
   InfoRowItem.kt             - InfoRow + InfoRowItem + RationaleBottomSheet, shared by every sub-screen
-  ScopeSelectorChip.kt       - OutlinedChip + BottomSheet that selects one of several scopes
 generalinfo/                 - General info sub-screen
 permissions/                 - Permissions sub-screen (see below)
 ```

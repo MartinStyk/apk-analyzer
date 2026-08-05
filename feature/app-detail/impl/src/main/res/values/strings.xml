@@ -109,8 +109,6 @@
     <string name="general_info_rationale_apk_size">The size of the APK file on disk, excluding app data, caches, and runtime-generated files.</string>
     <string name="general_info_rationale_total_size">The combined size of the APK, app data, and cached files. Requires usage access permission.</string>
 
-    <string name="scope_selector_selected">Selected</string>
-
     <string name="permissions_title">Permissions</string>
     <string name="permissions_error">Could not read the permissions of this app.</string>
     <string name="permissions_retry">Try again</string>

@@ -500,10 +500,9 @@ Shared work this step pulls in:
   `impl/components/`, and repoint `GeneralInfoScreen` at the shared version. This is a genuine
   second consumer, not a prediction — the permission item sheet is the same tap-to-explain /
   long-press-to-copy row.
-- A `ScopeSelectorChip` in `impl/components/` — `OutlinedChip` with `ArrowDropDown` opening a
-  `BottomSheet` of options. Every piece already exists in `:core:ui-library`; this composes them,
-  so it starts local to the feature and only moves to the library if a third screen wants it. Use
-  the `create-compose-component` skill if it does.
+- A `SelectorChip` in `:core:ui-library` — `OutlinedChip` with `ArrowDropDown` opening a
+  `BottomSheet` of options. Every piece already exists in `:core:ui-library`; this composes them
+  into a generic, reusable chip any screen can drive.
 - Add only the icons this screen needs to `ApkAnalyzerIcons` (permission groups, copy, info).
 
 No `TabRow` is built. An earlier revision of this plan added one to `:core:ui-library`; the
@@ -544,8 +543,8 @@ Shared work this step pulls in:
 
 - Extract the Loading / Error / Loaded section scaffold into `impl/components/` now that three
   screens share it, and repoint General Info and Permissions at it.
-- Promote `ScopeSelectorChip` from Step 1 only if the five-option scope exposes a gap the two-option
-  use did not. A second consumer justifies extracting it to `:core:ui-library`; nothing else does.
+- Extend `SelectorChip` from Step 1 only if the five-option scope exposes a gap the two-option
+  use did not.
 
 Screen work:
 
@@ -608,7 +607,7 @@ Screen work:
 - Mark misses only, count them into the summary line, and soften the wording for optional misses.
   Runs in both analysis modes — see the [screen notes](#requirements-features) for why an installed
   app can still miss.
-- **Libraries scope**, only if `FR-44` has landed: reuse `ScopeSelectorChip` from Step 1, apply the
+- **Libraries scope**, only if `FR-44` has landed: reuse `SelectorChip` from Step 1, apply the
   same required/optional split and the same device check to declared `<uses-library>` entries. If
   `FR-44` has not landed, skip this bullet — the chip does not render and nothing else changes.
 

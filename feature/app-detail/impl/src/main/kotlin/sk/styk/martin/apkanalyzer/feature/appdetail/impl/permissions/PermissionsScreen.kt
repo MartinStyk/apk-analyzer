@@ -49,6 +49,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.components.ChipVariant
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.LoadingSpinner
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.SearchBarActive
+import sk.styk.martin.apkanalyzer.core.uilibrary.components.SelectorChip
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.TextButton
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Toolbar
@@ -61,7 +62,6 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.R
-import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.ScopeSelectorChip
 
 @Composable
 internal fun PermissionsScreen(
@@ -229,7 +229,7 @@ private fun NarrowingRow(
             .padding(horizontal = 16.dp, vertical = 4.dp),
     ) {
         if (state.hasScopeChoice) {
-            ScopeSelectorChip(
+            SelectorChip(
                 sheetTitle = stringResource(R.string.permissions_scope_sheet_title),
                 options = state.scopeOptions,
                 selected = state.scope,
