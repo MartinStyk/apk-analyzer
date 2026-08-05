@@ -186,49 +186,33 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         return Permissions(definedPermissions, requestedPermissions)
     }
 
-    private fun getDefinedPermissions(packageInfo: PackageInfo): List<Permission> = packageInfo.permissions.orEmpty().map {
-        Permission(
-            name = it.name,
-            simpleName = createSimpleName(it.name),
-            groupName = it.group,
-            protection = it.protection,
-            protectionFlags = it.protectionFlags,
-            description = it.loadDescription(packageManager)?.toString(),
-            declaringPackage = it.packageName,
-        )
-    }
+    private fun getDefinedPermissions(packageInfo: PackageInfo): List<Permission> = packageInfo.permissions.orEmpty().map { it.toPermission() }
 
     private fun getUsedPermissions(packageInfo: PackageInfo): List<UsedPermission> {
-        val requestedPermissionNames = packageInfo.requestedPermissions.orEmpty()
-        val requestedPermissionFlags = packageInfo.requestedPermissionsFlags
-        val requestedPermissions = ArrayList<UsedPermission>(requestedPermissionNames.size)
-
-        requestedPermissionNames.forEachIndexed { index, name ->
-            val isGranted = ((requestedPermissionFlags?.getOrNull(index) ?: 0) and PackageInfo.REQUESTED_PERMISSION_GRANTED != 0)
-
-            val permissionData =
-                try {
-                    val permissionInfo = packageManager.getPermissionInfo(name, PackageManager.GET_META_DATA)
-                    Permission(
-                        name = name,
-                        simpleName = createSimpleName(name),
-                        groupName = permissionInfo.group,
-                        protection = permissionInfo.protection,
-                        protectionFlags = permissionInfo.protectionFlags,
-                        description = permissionInfo.loadDescription(packageManager)?.toString(),
-                        declaringPackage = permissionInfo.packageName,
-                    )
-                } catch (_: Exception) {
-                    Permission(
-                        name = name,
-                        simpleName = createSimpleName(name),
-                    )
-                }
-
-            requestedPermissions.add(UsedPermission(permissionData, isGranted))
+        val grantedFlags = packageInfo.requestedPermissionsFlags
+        return packageInfo.requestedPermissions.orEmpty().mapIndexed { index, name ->
+            UsedPermission(
+                permissionData = loadPermission(name),
+                isGranted = (grantedFlags?.getOrNull(index) ?: 0) and PackageInfo.REQUESTED_PERMISSION_GRANTED != 0,
+            )
         }
-        return requestedPermissions
     }
+
+    private fun loadPermission(name: String): Permission = try {
+        packageManager.getPermissionInfo(name, PackageManager.GET_META_DATA).toPermission()
+    } catch (_: Exception) {
+        Permission(name = name, simpleName = createSimpleName(name))
+    }
+
+    private fun PermissionInfo.toPermission() = Permission(
+        name = name,
+        simpleName = createSimpleName(name),
+        groupName = group,
+        protection = protection,
+        protectionFlags = protectionFlags,
+        description = loadDescription(packageManager)?.toString(),
+        declaringPackage = packageName,
+    )
 
     private fun getFeatures(packageInfo: PackageInfo): List<Feature> = packageInfo.reqFeatures.orEmpty().map {
         Feature(
