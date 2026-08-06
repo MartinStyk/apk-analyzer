@@ -29,6 +29,8 @@ navigation/
   AppDetailEntryProvider.kt  - appDetailEntries(navigator)
   GeneralInfoNavKey.kt       - Internal nav key for general info sub-screen
   PermissionsNavKey.kt       - Internal nav key for the permissions sub-screen
+  ComponentsNavKey.kt        - Internal nav key for the components sub-screen
+  CertificatesNavKey.kt      - Internal nav key for the certificates sub-screen
 AppDetailScreen.kt           - Main detail screen Composable
 AppDetailViewModel.kt        - Uses @HiltViewModel with AssistedFactory for AppDetailInput
 AppDetailState.kt            - Loading/Loaded/Error states with full app detail data
@@ -43,6 +45,7 @@ generalinfo/                 - General info sub-screen
 permissions/                 - Permissions sub-screen (see below)
 appcomponents/               - Components sub-screen (see below). Named `appcomponents`, not
                                `components`, because `components/` already holds shared UI pieces.
+certificates/                - Signing certificate detail sub-screen
 ```
 
 Each sub-screen directory carries its own State/Action/Event/ViewModel/Screen set, same MVI shape
@@ -114,6 +117,15 @@ They seed the ViewModel's `narrowing` flow exactly once at construction; the Vie
 configuration change, so a rotation cannot re-apply them over a choice the user has since made. The
 same trap applies to `PermissionsScreen`'s `focusedPermission`, which is why the open sheet is keyed
 by `rememberSaveable` name rather than restored by an effect.
+
+### `certificates/`
+
+The certificate screen shows current signing certificates first. A separate Signing history
+section follows only when Android provides a verified rotation chain; previous keys are displayed
+newest-to-oldest and the original key is identified explicitly. Certificate fingerprints are
+always visible in SHA-256, SHA-1, MD5 order; public-key fingerprints use the same shared `HashBox`
+component but remain collapsed until requested. Signing multiplicity and key-rotation data come
+from the explicit current and past certificate lists in `AppDetail.signing`.
 
 ## Key Patterns
 - Uses **Assisted Injection** (`@HiltViewModel(assistedFactory = ...)`) because the ViewModel requires `AppDetailInput` at creation time.

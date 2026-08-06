@@ -79,3 +79,6 @@ name** — check here before calling one:
 - All new Material3 component usage must be wrapped here before use in features.
 - Components should accept theme-consistent defaults.
 - Every component file must include `@Preview` functions.
+- When a styled status `Chip` is interactive, use its `onClick`/`onLongClick` overload so the shared
+  component owns semantics and a shape-clipped ripple. Do not add `Modifier.clickable` to the
+  non-interactive overload at a feature call site.

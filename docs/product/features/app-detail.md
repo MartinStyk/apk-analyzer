@@ -1,7 +1,7 @@
     # App Detail — Full Data Presentation
 
 **Roadmap:** [FR-10 … FR-18](../roadmap.md#12-app-detail), [FR-25](../roadmap.md#15-export--share), plus [EX-07](../roadmap.md#18-data-gaps--extraction-that-doesnt-exist-yet) · R0
-**Status:** Approved design. [Step 1](#step-1--permissions-screen) shipped; Steps 2–6 outstanding
+**Status:** Approved design. [Steps 1–3](#implementation-order) shipped; Steps 4–6 outstanding
 **Scope:** surface everything `AppDetail` holds inside `feature:app-detail`, and finish the icon
 export action on the hub. Manifest viewer (`FR-16`) and APK export (`FR-24`) are out — see
 [Deferred](#deferred).
@@ -13,13 +13,13 @@ export action on the hub. Manifest viewer (`FR-16`) and APK export (`FR-24`) are
 | Data | Today |
 |---|---|
 | `AppInfo` (23 fields) | Fully shown on the General Info screen |
-| `Permissions` | 3 counts. No list, grant state, protection level, or groups |
-| `activities` / `services` / `receivers` / `contentProviders` | Counts only |
-| `certificates` | First certificate, 4 of 13 fields |
+| `Permissions` | Full requested/defined lists with grant and protection details |
+| `activities` / `services` / `receivers` / `contentProviders` | Full searchable, filterable lists with item details |
+| `certificates` | All certificate fields, fingerprints, validity, signer count, and key rotation |
 | `features` | Count only |
 
-Seven of the nine navigation targets in `AppDetailEntryProvider.kt` are
-`Logger.d("not yet implemented")`. General Info and Permissions are wired.
+General Info, Permissions, Components, and Certificates are wired from the app detail hub.
+Requirements and the deferred actions remain.
 
 ## Audience
 

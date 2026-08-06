@@ -80,7 +80,7 @@ internal constructor(
             minSdk = applicationInfo.minSdkVersion,
             apkSize = if (applicationInfo.sourceDir != null) computeApkSize(applicationInfo.sourceDir) else 0.bytes,
             appSource = installSourceResolver.getAppInstallSource(packageInfo),
-            signAlgorithm = certificateExtractor.getCertificateData(packageInfo).firstOrNull()?.signAlgorithm ?: "Unknown",
+            signAlgorithm = certificateExtractor.getAppSigning(packageInfo).currentCertificates.firstOrNull()?.signAlgorithm ?: "Unknown",
             activities = packageInfo.activities?.size ?: 0,
             services = packageInfo.services?.size ?: 0,
             providers = packageInfo.providers?.size ?: 0,

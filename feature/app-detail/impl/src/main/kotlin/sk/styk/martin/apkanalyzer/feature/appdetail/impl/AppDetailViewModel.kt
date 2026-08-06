@@ -181,9 +181,9 @@ private fun AppDetail.toLoadedState(permissionLabelProvider: PermissionLabelProv
         servicesCount = services.size,
         contentProvidersCount = contentProviders.size,
         broadcastReceiversCount = receivers.size,
-        certificatesCount = certificates.size,
+        certificatesCount = signing.currentCertificates.size,
         featuresCount = features.size,
-        certificate = certificates.firstOrNull()?.let { cert ->
+        certificate = signing.currentCertificates.firstOrNull()?.let { cert ->
             AppDetailState.Loaded.CertificateState(
                 signAlgorithm = cert.signAlgorithm,
                 sha256Fingerprint = cert.formattedSha256Fingerprint,
