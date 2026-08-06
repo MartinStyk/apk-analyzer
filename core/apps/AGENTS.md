@@ -42,6 +42,7 @@ model/
   Certificate.kt          - Certificate details
   CertificatePrincipal.kt - Issuer/subject info
   CertificateTrustLevel.kt - Trust classification enum
+  AppSigning.kt           - Current certificates and verified signing-key history
   Feature.kt              - Hardware/software feature
   InstallLocation.kt      - Install location enum
 di/                       - Hilt module bindings
@@ -55,6 +56,20 @@ di/                       - Hilt module bindings
 - `StorageStatsRepository.isPermissionGranted: StateFlow<Boolean>` - Usage access permission state
 - `UsageStatsRepository.isPermissionGranted: StateFlow<Boolean>` - Usage stats permission state
 
+## Signing Certificate Semantics
+
+- `SigningInfo.apkContentsSigners` contains the current signer set. Multiple current signers are one
+  package identity and cannot use signing-key rotation.
+- For a single signer, `SigningInfo.signingCertificateHistory` is Android's verified rotation
+  lineage in oldest-to-current order; its final entry is the current certificate. Keep current and
+  past certificates as separate lists in `AppSigning` rather than attaching role flags to
+  `Certificate`.
+- Historical certificates identify keys previously trusted for the package. Do not claim they can
+  sign normal updates; update and rollback capabilities depend on Android's lineage capabilities.
+- Preserve X.509 validity as `Instant`. Convert to local dates only for display, and compare the
+  exact instants when determining validity.
+- Equal issuer and subject names mean self-issued, not necessarily self-signed. Label a certificate
+  self-signed only after its signature verifies with its own public key.
+
 ## Dependencies
 - `api(projects.core.common)` - exposes common models and DispatcherProvider
-

@@ -4,6 +4,7 @@ import androidx.compose.material3.Typography
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
@@ -43,6 +44,7 @@ data class ApkAnalyzerTypographyStyles(
     val labelLarge: TextStyle,
     val labelMedium: TextStyle,
     val labelSmall: TextStyle,
+    val monospace: TextStyle,
 )
 
 internal fun Typography.toApkAnalyzerTypographyStyles() = ApkAnalyzerTypographyStyles(
@@ -61,6 +63,7 @@ internal fun Typography.toApkAnalyzerTypographyStyles() = ApkAnalyzerTypographyS
     labelLarge = labelLarge,
     labelMedium = labelMedium,
     labelSmall = labelSmall,
+    monospace = bodySmall.copy(fontFamily = FontFamily.Monospace, letterSpacing = 0.sp),
 )
 
 internal val LocalApkAnalyzerTypography = staticCompositionLocalOf { ApkAnalyzerTypography.toApkAnalyzerTypographyStyles() }

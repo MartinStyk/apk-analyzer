@@ -91,7 +91,7 @@ bottom-nav slot — the natural home for Pillar 1's What Changed tab in R1.
 | FR-11 | General info screen                 | Done    | `feature:app-detail` → `generalinfo`                                               |
 | FR-12 | Permissions view (per app)          | Done    | `feature:app-detail` → `permissions`; scope selector, filter chips, protection-level sections, item sheet |
 | FR-13 | Components views                    | Port    | Activities / services / receivers / providers — same, all four unwired             |
-| FR-14 | Certificate detail view             | Port    | Extractor produces full data (MD5/SHA1/SHA256 of cert + key, validity, serial, issuer/subject); only a summary card is rendered |
+| FR-14 | Certificate detail view             | Done    | Full signer, validity, signing status, serial, certificate fingerprints, and expandable public-key fingerprints |
 | FR-15 | Features (uses-feature) view        | Port    | `Feature` model and count exist, no screen                                         |
 | FR-16 | Manifest viewer                     | Port    | `ManifestParser` exists, no viewer                                                 |
 | FR-17 | Exported components view            | Todo    | `isExported` is captured on all four component types; needs intent filters (`EX-07`) to be genuinely useful |

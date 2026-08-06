@@ -51,6 +51,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.AppDetailToolbar
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.HashBox
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.permissions.permissionIcon
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -530,21 +531,9 @@ private fun CertificateSignatureSection(
             )
         }
         Spacer(modifier = Modifier.height(12.dp))
-        Text(
-            text = stringResource(R.string.app_detail_certificate_sha256_fingerprint),
-            style = AppTheme.typography.labelSmall,
-            color = AppTheme.colors.onSurfaceVariant,
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = cert.sha256Fingerprint,
-            style = AppTheme.typography.bodySmall,
-            color = AppTheme.colors.onBackground,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(Shapes.CardShape)
-                .background(AppTheme.colors.surfaceVariant)
-                .padding(12.dp),
+        HashBox(
+            label = stringResource(R.string.app_detail_certificate_sha256_fingerprint),
+            value = cert.sha256Fingerprint,
         )
     }
 }

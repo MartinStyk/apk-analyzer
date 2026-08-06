@@ -99,7 +99,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     ) = AppDetail(
         analysisMode = analysisMode,
         info = getGeneralData(packageInfo, totalSize, lastUsedTime),
-        certificates = certificateExtractor.getCertificateData(packageInfo),
+        signing = certificateExtractor.getAppSigning(packageInfo),
         activities = getActivities(
             packageInfo = packageInfo,
             launcherActivityNames = when (analysisMode) {

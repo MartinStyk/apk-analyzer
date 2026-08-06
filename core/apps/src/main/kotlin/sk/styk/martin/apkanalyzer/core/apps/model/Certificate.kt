@@ -1,6 +1,6 @@
 package sk.styk.martin.apkanalyzer.core.apps.model
 
-import java.util.Date
+import java.time.Instant
 
 data class Certificate(
     val signAlgorithm: String,
@@ -10,16 +10,14 @@ data class Certificate(
     val publicKeyMd5: String,
     val publicKeySha1: String,
     val publicKeySha256: String,
-    val startDate: Date,
-    val endDate: Date,
-    val serialNumber: Int = 0,
+    val validFrom: Instant,
+    val validUntil: Instant,
+    val serialNumber: String,
     val issuer: CertificatePrincipal = CertificatePrincipal(),
     val subject: CertificatePrincipal = CertificatePrincipal(),
     val trustLevel: CertificateTrustLevel = CertificateTrustLevel.Valid,
+    val isSelfSigned: Boolean,
 ) {
     val formattedSha256Fingerprint: String
         get() = certificateHashSha256.uppercase().chunked(2).joinToString(":")
-
-    val formattedSha1Fingerprint: String
-        get() = certificateHashSha1.uppercase().chunked(2).joinToString(":")
 }
