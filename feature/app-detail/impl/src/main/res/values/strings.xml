@@ -117,6 +117,7 @@
     <string name="certificates_algorithm_md2_explanation">%1$s uses MD2. MD2 is obsolete and vulnerable to practical attacks, so it is unsafe for signing certificates. New signing certificates should use SHA-256 or stronger.</string>
     <string name="certificates_algorithm_unknown_explanation">The strength of %1$s cannot be assessed from its algorithm name. Key type and size may also affect its security.</string>
     <string name="certificates_serial">Serial number</string>
+    <string name="certificates_serial_explanation">The certificate issuer assigns this number to identify the certificate. Use it together with the issuer name; it is not a certificate fingerprint.</string>
     <string name="certificates_certificate_fingerprints">Certificate fingerprints</string>
     <string name="certificates_public_key_fingerprints">Public key fingerprints</string>
     <string name="certificates_fingerprint">fingerprint</string>

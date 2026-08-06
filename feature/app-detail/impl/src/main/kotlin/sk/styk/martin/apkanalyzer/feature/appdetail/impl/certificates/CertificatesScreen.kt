@@ -274,6 +274,8 @@ private fun CertificateCard(
                 label = serialLabel,
                 value = certificate.serialNumber,
                 onCopy = onCopy,
+                rationale = stringResource(R.string.certificates_serial_explanation),
+                onShowRationale = onShowRationale,
             )
         }
         CertificateSectionCard(title = stringResource(R.string.certificates_certificate_fingerprints)) {
