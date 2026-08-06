@@ -16,6 +16,8 @@ import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
 import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepositoryImpl
+import sk.styk.martin.apkanalyzer.core.apps.DeviceFeaturesRepository
+import sk.styk.martin.apkanalyzer.core.apps.DeviceFeaturesRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apps.PackageChangesObserver
@@ -44,6 +46,10 @@ internal interface AppsModule {
     @Binds
     @Singleton
     fun bindAppDetailRepository(impl: AppDetailRepositoryImpl): AppDetailRepository
+
+    @Binds
+    @Singleton
+    fun bindDeviceFeaturesRepository(impl: DeviceFeaturesRepositoryImpl): DeviceFeaturesRepository
 
     @Binds
     fun bindInstallSourceResolver(impl: InstallSourceResolverImpl): InstallSourceResolver

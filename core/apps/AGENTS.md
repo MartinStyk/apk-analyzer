@@ -10,6 +10,7 @@ Core domain module for app analysis. Provides repositories and utilities for que
 ```
 InstalledAppsRepository.kt / Impl    - Flow of all installed apps
 AppDetailRepository.kt / Impl        - Full app detail (installed package or APK file)
+DeviceFeaturesRepository.kt / Impl   - What *this device* provides, for checking an app's requirements
 StorageStatsRepository.kt / Impl     - App storage size stats (requires USAGE_STATS permission)
 UsageStatsRepository.kt / Impl       - App usage time/frequency stats
 PackageChangesObserver.kt / Impl     - BroadcastReceiver-based package install/uninstall listener
@@ -44,7 +45,13 @@ model/
   CertificateTrustLevel.kt - Trust classification enum
   SignatureAlgorithmAssessment.kt - Signing digest security assessment
   AppSigning.kt           - Current certificates and verified signing-key history
-  Feature.kt              - Hardware/software feature
+  Feature.kt              - Sealed: `Hardware(name)` for a `uses-feature` name, `OpenGlEs(reqGlEsVersion)`
+                            for a GL ES version requirement. A GL ES `FeatureInfo` carries a null
+                            `name` and a `reqGlEsVersion`, so the two are different kinds of fact and
+                            must not be collapsed into one string field
+  DeviceFeatures.kt       - The device side of that comparison: available feature names plus the
+                            device's GL ES version. `supports()` returns `null` for unknown, never
+                            `false` — an unreadable package manager must not read as "missing"
   InstallLocation.kt      - Install location enum
 di/                       - Hilt module bindings
 ```
@@ -54,6 +61,10 @@ di/                       - Hilt module bindings
 - `InstalledAppsRepository.apps(): Flow<List<InstalledApp>>` - Live list of all installed apps
 - `AppDetailRepository.installedPackageDetails(packageName: String): Result<AppDetail>` - Full details for installed app
 - `AppDetailRepository.apkFilePackageDetails(file: File): Result<AppDetail>` - Full details for APK file
+- `DeviceFeaturesRepository.deviceFeatures(): DeviceFeatures` - Memoized once per process from a single
+  `getSystemAvailableFeatures()` call. Device features cannot change without a reboot, so there is no
+  flow, no observer, and no invalidation. Never call `hasSystemFeature` in a loop instead — that is N
+  binder calls for an answer one call already gave
 - `StorageStatsRepository.isPermissionGranted: StateFlow<Boolean>` - Usage access permission state
 - `UsageStatsRepository.isPermissionGranted: StateFlow<Boolean>` - Usage stats permission state
 
@@ -74,6 +85,14 @@ di/                       - Hilt module bindings
 - Assess recognized signature algorithms in the certificate domain model. The assessment covers
   the digest only; unsupported names remain unknown, and overall security also depends on key type
   and size. Feature ViewModels may map the typed result but must not duplicate its policy.
+
+## Device Requirement Semantics
+
+`AppDetail` describes an app; device availability describes a *pairing* of an app and a device. Keep
+them apart: `AppDetailRepositoryImpl` caches `AppDetail` keyed by package and invalidated by
+`PackageChangesObserver`, so folding device state into it would make cached entries depend on a
+second input the key does not mention and the invalidation does not track. Consumers inject both
+repositories and combine them while mapping to state.
 
 ## Dependencies
 - `api(projects.core.common)` - exposes common models and DispatcherProvider
