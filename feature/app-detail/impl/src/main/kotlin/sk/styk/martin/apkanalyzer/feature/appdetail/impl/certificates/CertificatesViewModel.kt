@@ -92,7 +92,7 @@ private fun AppDetail.toCertificatesState(): CertificatesState.Loaded {
 
 private fun Certificate.toCertificateItem(now: Instant, zoneId: ZoneId) = CertificateItem(
     signAlgorithm = signAlgorithm,
-    algorithmStrength = signAlgorithm.toAlgorithmStrength(),
+    signatureAlgorithmStrength = signatureAlgorithmStrength,
     certificateHashMd5 = certificateHashMd5.toFingerprint(),
     certificateHashSha1 = certificateHashSha1.toFingerprint(),
     certificateHashSha256 = certificateHashSha256.toFingerprint(),
@@ -114,12 +114,3 @@ private fun Certificate.toCertificateItem(now: Instant, zoneId: ZoneId) = Certif
 )
 
 private fun String.toFingerprint(): String = uppercase(Locale.ROOT).chunked(2).joinToString(":")
-
-private fun String.toAlgorithmStrength(): AlgorithmStrength {
-    val normalized = uppercase(Locale.ROOT).replace("-", "")
-    return when {
-        normalized.contains("MD2") || normalized.contains("MD5") || normalized.contains("SHA1") -> AlgorithmStrength.Weak
-        normalized.contains("SHA256") || normalized.contains("SHA384") || normalized.contains("SHA512") -> AlgorithmStrength.Strong
-        else -> AlgorithmStrength.Unknown
-    }
-}

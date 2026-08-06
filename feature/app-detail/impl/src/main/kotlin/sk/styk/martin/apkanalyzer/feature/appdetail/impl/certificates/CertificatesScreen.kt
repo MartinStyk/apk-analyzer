@@ -39,6 +39,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificateTrustLevel
+import sk.styk.martin.apkanalyzer.core.apps.model.SignatureAlgorithmStrength
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Chip
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.ChipVariant
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
@@ -258,13 +259,13 @@ private fun CertificateCard(
                 SigningSection(
                     signerCount = signerCount,
                     algorithm = certificate.signAlgorithm,
-                    algorithmStrength = certificate.algorithmStrength,
+                    algorithmStrength = certificate.signatureAlgorithmStrength,
                     onShowRationale = onShowRationale,
                     onCopy = onCopy,
                 )
             } ?: AlgorithmFact(
                 algorithm = certificate.signAlgorithm,
-                strength = certificate.algorithmStrength,
+                strength = certificate.signatureAlgorithmStrength,
                 onShowRationale = onShowRationale,
                 onCopy = onCopy,
             )
@@ -489,7 +490,7 @@ private fun ValiditySection(
 private fun SigningSection(
     signerCount: Int,
     algorithm: String,
-    algorithmStrength: AlgorithmStrength,
+    algorithmStrength: SignatureAlgorithmStrength,
     onShowRationale: (InfoRow) -> Unit,
     onCopy: (label: String, value: String) -> Unit,
     modifier: Modifier = Modifier,
@@ -578,21 +579,21 @@ private fun InfoFact(
 @Composable
 private fun AlgorithmFact(
     algorithm: String,
-    strength: AlgorithmStrength,
+    strength: SignatureAlgorithmStrength,
     onShowRationale: (InfoRow) -> Unit,
     onCopy: (label: String, value: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val label = stringResource(R.string.certificates_algorithm)
     val strengthLabel = when (strength) {
-        AlgorithmStrength.Strong -> stringResource(R.string.certificates_algorithm_strong)
-        AlgorithmStrength.Weak -> stringResource(R.string.certificates_algorithm_weak)
-        AlgorithmStrength.Unknown -> stringResource(R.string.certificates_algorithm_unknown)
+        SignatureAlgorithmStrength.Strong -> stringResource(R.string.certificates_algorithm_strong)
+        SignatureAlgorithmStrength.Weak -> stringResource(R.string.certificates_algorithm_weak)
+        SignatureAlgorithmStrength.Unknown -> stringResource(R.string.certificates_algorithm_unknown)
     }
     val rationale = when (strength) {
-        AlgorithmStrength.Strong -> stringResource(R.string.certificates_algorithm_strong_explanation, algorithm)
+        SignatureAlgorithmStrength.Strong -> stringResource(R.string.certificates_algorithm_strong_explanation, algorithm)
 
-        AlgorithmStrength.Weak -> when {
+        SignatureAlgorithmStrength.Weak -> when {
             algorithm.contains("SHA1", ignoreCase = true) || algorithm.contains("SHA-1", ignoreCase = true) ->
                 stringResource(R.string.certificates_algorithm_sha1_explanation, algorithm)
 
@@ -605,7 +606,7 @@ private fun AlgorithmFact(
             else -> stringResource(R.string.certificates_algorithm_weak_explanation, algorithm)
         }
 
-        AlgorithmStrength.Unknown -> stringResource(R.string.certificates_algorithm_unknown_explanation, algorithm)
+        SignatureAlgorithmStrength.Unknown -> stringResource(R.string.certificates_algorithm_unknown_explanation, algorithm)
     }
     val algorithmInfo = InfoRow(label, algorithm, rationale)
 
@@ -654,10 +655,10 @@ private fun AlgorithmFact(
     }
 }
 
-private fun AlgorithmStrength.chipVariant() = when (this) {
-    AlgorithmStrength.Strong -> ChipVariant.Positive
-    AlgorithmStrength.Weak -> ChipVariant.Warning
-    AlgorithmStrength.Unknown -> ChipVariant.Default
+private fun SignatureAlgorithmStrength.chipVariant() = when (this) {
+    SignatureAlgorithmStrength.Strong -> ChipVariant.Positive
+    SignatureAlgorithmStrength.Weak -> ChipVariant.Warning
+    SignatureAlgorithmStrength.Unknown -> ChipVariant.Default
 }
 
 private fun CertificateValidity.chipVariant() = when (this) {
@@ -886,7 +887,7 @@ private fun sampleLoadedState(certificate: CertificateItem = sampleCertificate()
 
 private fun sampleCertificate() = CertificateItem(
     signAlgorithm = "SHA256withRSA",
-    algorithmStrength = AlgorithmStrength.Strong,
+    signatureAlgorithmStrength = SignatureAlgorithmStrength.Strong,
     certificateHashMd5 = "25:D6:8E:11:9F:4C:2A:70:B3:5E:C8:D1:21:42:8A:0F",
     certificateHashSha1 = "38:91:8A:45:3D:07:19:93:54:F8:B1:9A:7A:6D:2B:EC:96:5A:21:22",
     certificateHashSha256 = "A1:B2:C3:D4:E5:F6:A7:B8:C9:D0:E1:F2:A3:B4:C5:D6:E7:F8:A9:B0:C1:D2:E3:F4:A5:B6:C7:D8:E9:F0:A1:B2",

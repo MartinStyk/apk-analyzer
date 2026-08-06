@@ -18,6 +18,9 @@ data class Certificate(
     val trustLevel: CertificateTrustLevel = CertificateTrustLevel.Valid,
     val isSelfSigned: Boolean,
 ) {
+    val signatureAlgorithmStrength: SignatureAlgorithmStrength
+        get() = SignatureAlgorithmStrength.from(signAlgorithm)
+
     val formattedSha256Fingerprint: String
         get() = certificateHashSha256.uppercase().chunked(2).joinToString(":")
 }

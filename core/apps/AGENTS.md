@@ -42,6 +42,7 @@ model/
   Certificate.kt          - Certificate details
   CertificatePrincipal.kt - Issuer/subject info
   CertificateTrustLevel.kt - Trust classification enum
+  SignatureAlgorithmStrength.kt - Signing algorithm security classification
   AppSigning.kt           - Current certificates and verified signing-key history
   Feature.kt              - Hardware/software feature
   InstallLocation.kt      - Install location enum
@@ -70,6 +71,8 @@ di/                       - Hilt module bindings
   exact instants when determining validity.
 - Equal issuer and subject names mean self-issued, not necessarily self-signed. Label a certificate
   self-signed only after its signature verifies with its own public key.
+- Classify signature algorithm strength in the certificate domain model. Feature ViewModels may
+  map that typed result into presentation state but must not duplicate the classification policy.
 
 ## Dependencies
 - `api(projects.core.common)` - exposes common models and DispatcherProvider
