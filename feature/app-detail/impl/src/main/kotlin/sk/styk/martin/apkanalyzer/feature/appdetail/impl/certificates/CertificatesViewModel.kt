@@ -23,7 +23,6 @@ import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import java.io.File
 import java.time.Instant
-import java.time.ZoneId
 import java.util.Locale
 
 private const val TAG = "CertificatesViewModel"
@@ -83,24 +82,23 @@ internal class CertificatesViewModel @AssistedInject constructor(
 
 private fun AppDetail.toCertificatesState(): CertificatesState.Loaded {
     val now = Instant.now()
-    val zoneId = ZoneId.systemDefault()
     return CertificatesState.Loaded(
-        currentCertificates = signing.currentCertificates.map { it.toCertificateItem(now, zoneId) }.toImmutableList(),
-        pastCertificates = signing.pastCertificates.reversed().map { it.toCertificateItem(now, zoneId) }.toImmutableList(),
+        currentCertificates = signing.currentCertificates.map { it.toCertificateItem(now) }.toImmutableList(),
+        pastCertificates = signing.pastCertificates.reversed().map { it.toCertificateItem(now) }.toImmutableList(),
     )
 }
 
-private fun Certificate.toCertificateItem(now: Instant, zoneId: ZoneId) = CertificateItem(
+private fun Certificate.toCertificateItem(now: Instant) = CertificateItem(
     signAlgorithm = signAlgorithm,
-    signatureAlgorithmStrength = signatureAlgorithmStrength,
+    signatureAlgorithmAssessment = signatureAlgorithmAssessment,
     certificateHashMd5 = certificateHashMd5.toFingerprint(),
     certificateHashSha1 = certificateHashSha1.toFingerprint(),
     certificateHashSha256 = certificateHashSha256.toFingerprint(),
     publicKeyMd5 = publicKeyMd5.toFingerprint(),
     publicKeySha1 = publicKeySha1.toFingerprint(),
     publicKeySha256 = publicKeySha256.toFingerprint(),
-    validFrom = validFrom.atZone(zoneId).toLocalDate(),
-    validUntil = validUntil.atZone(zoneId).toLocalDate(),
+    validFrom = validFrom,
+    validUntil = validUntil,
     serialNumber = serialNumber,
     issuer = issuer,
     subject = subject,

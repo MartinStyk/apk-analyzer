@@ -39,7 +39,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificateTrustLevel
-import sk.styk.martin.apkanalyzer.core.apps.model.SignatureAlgorithmStrength
+import sk.styk.martin.apkanalyzer.core.apps.model.SignatureAlgorithmAssessment
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Chip
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.ChipVariant
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
@@ -56,9 +56,11 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.InfoRow
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.RationaleBottomSheet
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionLoading
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatterBuilder
 import java.time.format.FormatStyle
+import java.time.format.TextStyle
 import java.util.Locale
 
 @Composable
@@ -259,13 +261,13 @@ private fun CertificateCard(
                 SigningSection(
                     signerCount = signerCount,
                     algorithm = certificate.signAlgorithm,
-                    algorithmStrength = certificate.signatureAlgorithmStrength,
+                    algorithmAssessment = certificate.signatureAlgorithmAssessment,
                     onShowRationale = onShowRationale,
                     onCopy = onCopy,
                 )
             } ?: AlgorithmFact(
                 algorithm = certificate.signAlgorithm,
-                strength = certificate.signatureAlgorithmStrength,
+                assessment = certificate.signatureAlgorithmAssessment,
                 onShowRationale = onShowRationale,
                 onCopy = onCopy,
             )
@@ -442,13 +444,18 @@ private fun ValiditySection(
         CertificateValidity.Expired -> stringResource(R.string.certificates_expired_explanation)
         CertificateValidity.NotYetValid -> stringResource(R.string.certificates_not_yet_valid_explanation)
     }
-    val dateFormatter = remember {
-        DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.getDefault())
+    val dateTimeFormatter = remember {
+        DateTimeFormatterBuilder()
+            .appendLocalized(FormatStyle.MEDIUM, FormatStyle.SHORT)
+            .appendLiteral(" ")
+            .appendZoneText(TextStyle.SHORT)
+            .toFormatter(Locale.getDefault())
+            .withZone(ZoneId.systemDefault())
     }
     val dateRange = stringResource(
         R.string.certificates_date_range,
-        certificate.validFrom.format(dateFormatter),
-        certificate.validUntil.format(dateFormatter),
+        dateTimeFormatter.format(certificate.validFrom),
+        dateTimeFormatter.format(certificate.validUntil),
     )
     val validityInfo = InfoRow(validityLabel, status, validityRationale)
 
@@ -490,7 +497,7 @@ private fun ValiditySection(
 private fun SigningSection(
     signerCount: Int,
     algorithm: String,
-    algorithmStrength: SignatureAlgorithmStrength,
+    algorithmAssessment: SignatureAlgorithmAssessment,
     onShowRationale: (InfoRow) -> Unit,
     onCopy: (label: String, value: String) -> Unit,
     modifier: Modifier = Modifier,
@@ -516,7 +523,7 @@ private fun SigningSection(
         )
         AlgorithmFact(
             algorithm = algorithm,
-            strength = algorithmStrength,
+            assessment = algorithmAssessment,
             onShowRationale = onShowRationale,
             onCopy = onCopy,
         )
@@ -579,34 +586,37 @@ private fun InfoFact(
 @Composable
 private fun AlgorithmFact(
     algorithm: String,
-    strength: SignatureAlgorithmStrength,
+    assessment: SignatureAlgorithmAssessment,
     onShowRationale: (InfoRow) -> Unit,
     onCopy: (label: String, value: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val label = stringResource(R.string.certificates_algorithm)
-    val strengthLabel = when (strength) {
-        SignatureAlgorithmStrength.Strong -> stringResource(R.string.certificates_algorithm_strong)
-        SignatureAlgorithmStrength.Weak -> stringResource(R.string.certificates_algorithm_weak)
-        SignatureAlgorithmStrength.Unknown -> stringResource(R.string.certificates_algorithm_unknown)
+    val assessmentLabel = when (assessment) {
+        SignatureAlgorithmAssessment.ModernDigest -> stringResource(R.string.certificates_algorithm_modern_digest)
+
+        SignatureAlgorithmAssessment.WeakSha1Digest,
+        SignatureAlgorithmAssessment.WeakMd5Digest,
+        SignatureAlgorithmAssessment.WeakMd2Digest,
+        -> stringResource(R.string.certificates_algorithm_weak_digest)
+
+        SignatureAlgorithmAssessment.Unknown -> stringResource(R.string.certificates_algorithm_unknown_digest)
     }
-    val rationale = when (strength) {
-        SignatureAlgorithmStrength.Strong -> stringResource(R.string.certificates_algorithm_strong_explanation, algorithm)
+    val rationale = when (assessment) {
+        SignatureAlgorithmAssessment.ModernDigest ->
+            stringResource(R.string.certificates_algorithm_modern_digest_explanation, algorithm)
 
-        SignatureAlgorithmStrength.Weak -> when {
-            algorithm.contains("SHA1", ignoreCase = true) || algorithm.contains("SHA-1", ignoreCase = true) ->
-                stringResource(R.string.certificates_algorithm_sha1_explanation, algorithm)
+        SignatureAlgorithmAssessment.WeakSha1Digest ->
+            stringResource(R.string.certificates_algorithm_sha1_explanation, algorithm)
 
-            algorithm.contains("MD5", ignoreCase = true) ->
-                stringResource(R.string.certificates_algorithm_md5_explanation, algorithm)
+        SignatureAlgorithmAssessment.WeakMd5Digest ->
+            stringResource(R.string.certificates_algorithm_md5_explanation, algorithm)
 
-            algorithm.contains("MD2", ignoreCase = true) ->
-                stringResource(R.string.certificates_algorithm_md2_explanation, algorithm)
+        SignatureAlgorithmAssessment.WeakMd2Digest ->
+            stringResource(R.string.certificates_algorithm_md2_explanation, algorithm)
 
-            else -> stringResource(R.string.certificates_algorithm_weak_explanation, algorithm)
-        }
-
-        SignatureAlgorithmStrength.Unknown -> stringResource(R.string.certificates_algorithm_unknown_explanation, algorithm)
+        SignatureAlgorithmAssessment.Unknown ->
+            stringResource(R.string.certificates_algorithm_unknown_digest_explanation, algorithm)
     }
     val algorithmInfo = InfoRow(label, algorithm, rationale)
 
@@ -637,10 +647,10 @@ private fun AlgorithmFact(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Chip(
-                    label = strengthLabel,
-                    variant = strength.chipVariant(),
+                    label = assessmentLabel,
+                    variant = assessment.chipVariant(),
                     onClick = { onShowRationale(algorithmInfo) },
-                    onLongClick = { onCopy(label, strengthLabel) },
+                    onLongClick = { onCopy(label, assessmentLabel) },
                 )
             }
         }
@@ -655,10 +665,15 @@ private fun AlgorithmFact(
     }
 }
 
-private fun SignatureAlgorithmStrength.chipVariant() = when (this) {
-    SignatureAlgorithmStrength.Strong -> ChipVariant.Positive
-    SignatureAlgorithmStrength.Weak -> ChipVariant.Warning
-    SignatureAlgorithmStrength.Unknown -> ChipVariant.Default
+private fun SignatureAlgorithmAssessment.chipVariant() = when (this) {
+    SignatureAlgorithmAssessment.ModernDigest -> ChipVariant.Positive
+
+    SignatureAlgorithmAssessment.WeakSha1Digest,
+    SignatureAlgorithmAssessment.WeakMd5Digest,
+    SignatureAlgorithmAssessment.WeakMd2Digest,
+    -> ChipVariant.Warning
+
+    SignatureAlgorithmAssessment.Unknown -> ChipVariant.Default
 }
 
 private fun CertificateValidity.chipVariant() = when (this) {
@@ -887,15 +902,15 @@ private fun sampleLoadedState(certificate: CertificateItem = sampleCertificate()
 
 private fun sampleCertificate() = CertificateItem(
     signAlgorithm = "SHA256withRSA",
-    signatureAlgorithmStrength = SignatureAlgorithmStrength.Strong,
+    signatureAlgorithmAssessment = SignatureAlgorithmAssessment.ModernDigest,
     certificateHashMd5 = "25:D6:8E:11:9F:4C:2A:70:B3:5E:C8:D1:21:42:8A:0F",
     certificateHashSha1 = "38:91:8A:45:3D:07:19:93:54:F8:B1:9A:7A:6D:2B:EC:96:5A:21:22",
     certificateHashSha256 = "A1:B2:C3:D4:E5:F6:A7:B8:C9:D0:E1:F2:A3:B4:C5:D6:E7:F8:A9:B0:C1:D2:E3:F4:A5:B6:C7:D8:E9:F0:A1:B2",
     publicKeyMd5 = "AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99",
     publicKeySha1 = "11:22:33:44:55:66:77:88:99:AA:BB:CC:DD:EE:FF:00:11:22:33:44",
     publicKeySha256 = "01:23:45:67:89:AB:CD:EF:01:23:45:67:89:AB:CD:EF:01:23:45:67:89:AB:CD:EF:01:23:45:67:89:AB:CD:EF",
-    validFrom = LocalDate.of(2008, 8, 21),
-    validUntil = LocalDate.of(2045, 9, 12),
+    validFrom = Instant.parse("2008-08-21T12:00:00Z"),
+    validUntil = Instant.parse("2045-09-12T12:00:00Z"),
     serialNumber = "0A:1B:2C:3D:4E:5F:60:71",
     issuer = CertificatePrincipal(name = "Android", organization = "Google Inc.", country = "US"),
     subject = CertificatePrincipal(name = "Android", organization = "Google Inc.", country = "US"),

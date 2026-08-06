@@ -4,8 +4,8 @@ import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificateTrustLevel
-import sk.styk.martin.apkanalyzer.core.apps.model.SignatureAlgorithmStrength
-import java.time.LocalDate
+import sk.styk.martin.apkanalyzer.core.apps.model.SignatureAlgorithmAssessment
+import java.time.Instant
 
 internal enum class CertificateValidity {
     Valid,
@@ -16,15 +16,15 @@ internal enum class CertificateValidity {
 @Immutable
 internal data class CertificateItem(
     val signAlgorithm: String,
-    val signatureAlgorithmStrength: SignatureAlgorithmStrength,
+    val signatureAlgorithmAssessment: SignatureAlgorithmAssessment,
     val certificateHashMd5: String,
     val certificateHashSha1: String,
     val certificateHashSha256: String,
     val publicKeyMd5: String,
     val publicKeySha1: String,
     val publicKeySha256: String,
-    val validFrom: LocalDate,
-    val validUntil: LocalDate,
+    val validFrom: Instant,
+    val validUntil: Instant,
     val serialNumber: String,
     val issuer: CertificatePrincipal,
     val subject: CertificatePrincipal,

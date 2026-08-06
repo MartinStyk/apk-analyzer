@@ -28,7 +28,8 @@ internal class CertificateExtractorImpl @Inject constructor(private val digestMa
         val pastSignatures = if (signingInfo.hasMultipleSigners()) {
             emptyList()
         } else {
-            signingInfo.signingCertificateHistory.orEmpty().dropLast(1)
+            val currentSignerSet = currentSignatures.toSet()
+            signingInfo.signingCertificateHistory.orEmpty().filterNot(currentSignerSet::contains)
         }
 
         return AppSigning(
