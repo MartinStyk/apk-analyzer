@@ -10,6 +10,8 @@ import sk.styk.martin.apkanalyzer.core.navigation.Navigator
 import sk.styk.martin.apkanalyzer.core.uilibrary.animation.slideFromEndEntryMetadata
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailNavKey
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.AppDetailScreen
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.appcomponents.ComponentScope
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.appcomponents.ComponentsScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.generalinfo.GeneralInfoScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.permissions.PermissionsScreen
 
@@ -29,11 +31,12 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
             onSaveIcon = { Logger.d(TAG, "Save icon not yet implemented") },
             onNavigateToManifest = { Logger.d(TAG, "Navigate to manifest not yet implemented") },
             onNavigateToGeneralDetails = { navigator.navigate(GeneralInfoNavKey(key.detailInput)) },
-            onNavigateToPermissions = { navigator.navigate(PermissionsNavKey(key.detailInput)) },
-            onNavigateToActivities = { Logger.d(TAG, "Navigate to activities not yet implemented") },
-            onNavigateToServices = { Logger.d(TAG, "Navigate to services not yet implemented") },
-            onNavigateToReceivers = { Logger.d(TAG, "Navigate to receivers not yet implemented") },
-            onNavigateToProviders = { Logger.d(TAG, "Navigate to providers not yet implemented") },
+            onNavigateToPermissions = { permissionName -> navigator.navigate(PermissionsNavKey(key.detailInput, permissionName)) },
+            onNavigateToComponents = { navigator.navigate(ComponentsNavKey(key.detailInput)) },
+            onNavigateToActivities = { navigator.navigate(ComponentsNavKey(key.detailInput, ComponentScope.Activities)) },
+            onNavigateToServices = { navigator.navigate(ComponentsNavKey(key.detailInput, ComponentScope.Services)) },
+            onNavigateToReceivers = { navigator.navigate(ComponentsNavKey(key.detailInput, ComponentScope.Receivers)) },
+            onNavigateToProviders = { navigator.navigate(ComponentsNavKey(key.detailInput, ComponentScope.Providers)) },
             onNavigateToCertificates = { Logger.d(TAG, "Navigate to certificates not yet implemented") },
             onNavigateToFeatures = { Logger.d(TAG, "Navigate to features not yet implemented") },
         )
@@ -53,6 +56,18 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
     ) { key ->
         PermissionsScreen(
             appDetailInput = key.detailInput,
+            focusedPermission = key.focusedPermission,
+            onBack = { navigator.goBack() },
+        )
+    }
+
+    entry<ComponentsNavKey>(
+        metadata = slideFromEndEntryMetadata(),
+    ) { key ->
+        ComponentsScreen(
+            appDetailInput = key.detailInput,
+            initialScope = key.scope,
+            initialFilters = key.filters,
             onBack = { navigator.goBack() },
         )
     }

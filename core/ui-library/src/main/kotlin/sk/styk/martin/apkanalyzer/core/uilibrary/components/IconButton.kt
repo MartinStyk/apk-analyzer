@@ -1,5 +1,6 @@
 package sk.styk.martin.apkanalyzer.core.uilibrary.components
 
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.FilledIconButton
@@ -11,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 
@@ -29,11 +32,14 @@ fun IconButton(
     modifier: Modifier = Modifier,
     style: IconButtonStyle = IconButtonStyle.Standard,
     contentDescription: String? = null,
+    iconSize: Dp? = null,
 ) {
+    val iconModifier = if (iconSize != null) Modifier.size(iconSize) else Modifier
+
     when (style) {
         IconButtonStyle.Standard -> {
             IconButton(onClick = onClick, modifier = modifier) {
-                Icon(imageVector = imageVector, contentDescription = contentDescription)
+                Icon(imageVector = imageVector, contentDescription = contentDescription, modifier = iconModifier)
             }
         }
 
@@ -45,7 +51,7 @@ fun IconButton(
                     contentColor = AppTheme.colors.onSurfaceVariant,
                 ),
             ) {
-                Icon(imageVector = imageVector, contentDescription = contentDescription)
+                Icon(imageVector = imageVector, contentDescription = contentDescription, modifier = iconModifier)
             }
         }
 
@@ -58,13 +64,13 @@ fun IconButton(
                     contentColor = AppTheme.colors.onBackground,
                 ),
             ) {
-                Icon(imageVector = imageVector, contentDescription = contentDescription)
+                Icon(imageVector = imageVector, contentDescription = contentDescription, modifier = iconModifier)
             }
         }
 
         IconButtonStyle.Outlined -> {
             OutlinedIconButton(onClick = onClick, modifier = modifier) {
-                Icon(imageVector = imageVector, contentDescription = contentDescription)
+                Icon(imageVector = imageVector, contentDescription = contentDescription, modifier = iconModifier)
             }
         }
 
@@ -77,7 +83,7 @@ fun IconButton(
                     contentColor = AppTheme.colors.onSecondaryContainer,
                 ),
             ) {
-                Icon(imageVector = imageVector, contentDescription = contentDescription)
+                Icon(imageVector = imageVector, contentDescription = contentDescription, modifier = iconModifier)
             }
         }
     }
@@ -112,6 +118,20 @@ private fun IconButtonFilledPreview() {
 private fun IconButtonOutlinedPreview() {
     ApkAnalyzerTheme {
         IconButton(imageVector = Icons.Filled.Star, onClick = {}, style = IconButtonStyle.Outlined)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun IconButtonCompactPreview() {
+    ApkAnalyzerTheme {
+        IconButton(
+            imageVector = Icons.Filled.Star,
+            onClick = {},
+            style = IconButtonStyle.Filled,
+            iconSize = 18.dp,
+            modifier = Modifier.size(34.dp),
+        )
     }
 }
 

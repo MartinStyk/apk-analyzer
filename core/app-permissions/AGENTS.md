@@ -36,7 +36,7 @@ class PermissionLabelProvider @Inject constructor(
 ## Notable Implementation Details
 
 - The permissions flow is built once via `.flowOn(dispatcherProvider.io()).shareIn(appScope, SharingStarted.Lazily, replay = 1)` — all collectors share one cached computation, recomputed only when the underlying installed-apps flow emits again.
-- `PermissionLabelProvider.getLabel` resolution order: (1) hardcoded map of ~45 well-known permissions via string resources, (2) `PackageManager.getPermissionInfo(name, 0).loadLabel(...)` wrapped in try/catch (many vendor permissions throw `NameNotFoundException`), (3) `createSimpleName` fallback — strips the package prefix and humanizes `SNAKE_CASE`.
+- `PermissionLabelProvider.getLabel` resolution order: (1) hardcoded map of ~80 well-known permissions via string resources, (2) `PackageManager.getPermissionInfo(name, 0).loadLabel(...)` wrapped in try/catch (many vendor permissions throw `NameNotFoundException`), (3) `createSimpleName` fallback — strips the package prefix and humanizes `SNAKE_CASE`.
 - `createSimpleName` is a manual char-by-char `StringBuilder` mutation with a subtle off-by-one: the humanizing loop starts at index 1, so the very first character is never transformed. Worth fixing carefully if touched, not obviously by design.
 - No memoization on `getLabel()` itself beyond the static known-labels map — unknown-permission lookups hit `PackageManager` again each time, though callers typically only call it once per unique permission thanks to `DevicePermissionsRepositoryImpl`'s caching.
 - `parcelize` plugin is applied in `build.gradle.kts` but nothing in this module actually uses `@Parcelize` — likely inherited boilerplate from the module template, not a real requirement.

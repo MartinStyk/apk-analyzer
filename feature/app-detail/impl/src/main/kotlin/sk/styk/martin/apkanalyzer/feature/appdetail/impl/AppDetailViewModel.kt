@@ -1,6 +1,5 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl
 
-import android.content.pm.PermissionInfo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.assisted.Assisted
@@ -15,9 +14,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import sk.styk.martin.apkanalyzer.core.apppermissions.PermissionLabelProvider
 import sk.styk.martin.apkanalyzer.core.apps.AppClassificationThresholds
 import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
+import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
@@ -31,7 +32,12 @@ import kotlin.time.toJavaDuration
 private const val TAG = "AppDetailViewModel"
 
 @HiltViewModel(assistedFactory = AppDetailViewModel.Factory::class)
-internal class AppDetailViewModel @AssistedInject constructor(@Assisted private val appDetailInput: AppDetailInput, private val appDetailRepository: AppDetailRepository, private val dispatcherProvider: DispatcherProvider) : ViewModel() {
+internal class AppDetailViewModel @AssistedInject constructor(
+    @Assisted private val appDetailInput: AppDetailInput,
+    private val appDetailRepository: AppDetailRepository,
+    private val permissionLabelProvider: PermissionLabelProvider,
+    private val dispatcherProvider: DispatcherProvider,
+) : ViewModel() {
 
     @AssistedFactory
     interface Factory {
@@ -57,7 +63,8 @@ internal class AppDetailViewModel @AssistedInject constructor(@Assisted private 
             is AppDetailAction.OpenPlayStore -> withLoadedState { sendEvent(AppDetailEvent.OpenPlayStore(it.packageName)) }
             is AppDetailAction.OpenAppInfo -> withLoadedState { sendEvent(AppDetailEvent.OpenAppInfo(it.packageName)) }
             is AppDetailAction.NavigateGeneralDetails -> sendEvent(AppDetailEvent.NavigateToGeneralDetails)
-            is AppDetailAction.NavigatePermissions -> sendEvent(AppDetailEvent.NavigateToPermissions)
+            is AppDetailAction.NavigatePermissions -> sendEvent(AppDetailEvent.NavigateToPermissions(action.permissionName))
+            is AppDetailAction.NavigateComponents -> sendEvent(AppDetailEvent.NavigateToComponents)
             is AppDetailAction.NavigateActivities -> sendEvent(AppDetailEvent.NavigateToActivities)
             is AppDetailAction.NavigateServices -> sendEvent(AppDetailEvent.NavigateToServices)
             is AppDetailAction.NavigateReceivers -> sendEvent(AppDetailEvent.NavigateToReceivers)
@@ -87,7 +94,7 @@ internal class AppDetailViewModel @AssistedInject constructor(@Assisted private 
                 Logger.e(TAG, it, "Can not load app detail for $appDetailInput")
             }.fold(
                 onSuccess = { detail ->
-                    detail.toLoadedState().let { state ->
+                    detail.toLoadedState(permissionLabelProvider).let { state ->
                         state.copy(badges = computeBadges(state))
                     }
                 },
@@ -125,46 +132,66 @@ internal class AppDetailViewModel @AssistedInject constructor(@Assisted private 
     }
 }
 
-@Suppress("DEPRECATION")
-private fun AppDetail.toLoadedState() = AppDetailState.Loaded(
-    analysisMode = analysisMode,
-    appName = info.applicationName,
-    packageName = info.packageName,
-    processName = info.processName,
-    versionName = info.versionName,
-    versionCode = info.versionCode,
-    uid = info.uid,
-    description = info.description,
-    isSystemApp = info.isSystemApp,
-    source = info.source.name,
-    apkDirectory = info.apkDirectory,
-    dataDirectory = info.dataDirectory,
-    apkSize = info.apkSize,
-    targetSdkVersion = info.targetSdkVersion,
-    targetSdkLabel = info.targetSdkLabel,
-    minSdkVersion = info.minSdkVersion,
-    minSdkLabel = info.minSdkLabel,
-    installLocation = info.installLocation.name,
-    appInstaller = info.appInstaller,
-    firstInstallTime = info.firstInstallTime,
-    lastUpdateTime = info.lastUpdateTime,
-    totalPermissionsCount = permissions.used.size,
-    dangerousPermissionsCount = permissions.used.count { it.permissionData.protection == PermissionInfo.PROTECTION_DANGEROUS },
-    definedPermissionsCount = permissions.defined.size,
-    activitiesCount = activities.size,
-    servicesCount = services.size,
-    contentProvidersCount = contentProviders.size,
-    broadcastReceiversCount = receivers.size,
-    certificatesCount = certificates.size,
-    featuresCount = features.size,
-    certificate = certificates.firstOrNull()?.let { cert ->
-        AppDetailState.Loaded.CertificateState(
-            signAlgorithm = cert.signAlgorithm,
-            sha256Fingerprint = cert.formattedSha256Fingerprint,
-            issuer = cert.issuer,
-            trustLevel = cert.trustLevel,
-        )
-    },
-    totalSize = info.totalSize,
-    lastUsedTime = info.lastUsedTime,
-)
+private fun AppDetail.toLoadedState(permissionLabelProvider: PermissionLabelProvider): AppDetailState.Loaded {
+    val dangerousPermissions = permissions.used.filter {
+        it.permissionData.details?.protectionLevel == ProtectionLevel.Dangerous
+    }
+    val relevantDangerousPermissions = when (analysisMode) {
+        AppDetail.AnalysisMode.InstalledPackage -> dangerousPermissions.filter { it.isGranted }
+        AppDetail.AnalysisMode.ApkFile -> dangerousPermissions
+    }
+    return AppDetailState.Loaded(
+        analysisMode = analysisMode,
+        appName = info.applicationName,
+        packageName = info.packageName,
+        processName = info.processName,
+        versionName = info.versionName,
+        versionCode = info.versionCode,
+        uid = info.uid,
+        description = info.description,
+        isSystemApp = info.isSystemApp,
+        source = info.source.name,
+        apkDirectory = info.apkDirectory,
+        dataDirectory = info.dataDirectory,
+        apkSize = info.apkSize,
+        targetSdkVersion = info.targetSdkVersion,
+        targetSdkLabel = info.targetSdkLabel,
+        minSdkVersion = info.minSdkVersion,
+        minSdkLabel = info.minSdkLabel,
+        installLocation = info.installLocation.name,
+        appInstaller = info.appInstaller,
+        firstInstallTime = info.firstInstallTime,
+        lastUpdateTime = info.lastUpdateTime,
+        totalPermissionsCount = permissions.used.size,
+        dangerousPermissionsCount = dangerousPermissions.size,
+        grantedDangerousPermissionsCount = dangerousPermissions
+            .takeIf { analysisMode == AppDetail.AnalysisMode.InstalledPackage }
+            ?.count { it.isGranted },
+        dangerousPermissionPreviews = relevantDangerousPermissions
+            .map {
+                AppDetailState.Loaded.PermissionPreview(
+                    name = it.permissionData.name,
+                    groupName = it.permissionData.details?.groupName,
+                    label = permissionLabelProvider.getLabel(it.permissionData.name),
+                )
+            }
+            .toImmutableList(),
+        definedPermissionsCount = permissions.defined.size,
+        activitiesCount = activities.size,
+        servicesCount = services.size,
+        contentProvidersCount = contentProviders.size,
+        broadcastReceiversCount = receivers.size,
+        certificatesCount = certificates.size,
+        featuresCount = features.size,
+        certificate = certificates.firstOrNull()?.let { cert ->
+            AppDetailState.Loaded.CertificateState(
+                signAlgorithm = cert.signAlgorithm,
+                sha256Fingerprint = cert.formattedSha256Fingerprint,
+                issuer = cert.issuer,
+                trustLevel = cert.trustLevel,
+            )
+        },
+        totalSize = info.totalSize,
+        lastUsedTime = info.lastUsedTime,
+    )
+}

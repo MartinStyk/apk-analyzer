@@ -8,7 +8,8 @@ sealed interface AppDetailAction {
     data object OpenPlayStore : AppDetailAction
     data object OpenAppInfo : AppDetailAction
     data object NavigateGeneralDetails : AppDetailAction
-    data object NavigatePermissions : AppDetailAction
+    data class NavigatePermissions(val permissionName: String? = null) : AppDetailAction
+    data object NavigateComponents : AppDetailAction
     data object NavigateActivities : AppDetailAction
     data object NavigateServices : AppDetailAction
     data object NavigateReceivers : AppDetailAction

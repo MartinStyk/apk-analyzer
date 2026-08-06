@@ -2,11 +2,15 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.impl.permissions
 
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
+import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionFlag
+import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.R
 
 internal val PermissionItem.icon: ImageVector
-    get() = permissionIcons[name] ?: groupIcons[groupName] ?: ApkAnalyzerIcons.Permissions
+    get() = permissionIcon(name = name, groupName = groupName)
+
+internal fun permissionIcon(name: String, groupName: String?): ImageVector = permissionIcons[name] ?: groupIcons[groupName] ?: ApkAnalyzerIcons.Permissions
 
 @get:StringRes
 internal val PermissionScope.labelRes: Int
@@ -16,40 +20,69 @@ internal val PermissionScope.labelRes: Int
     }
 
 @get:StringRes
-internal val PermissionFilter.labelRes: Int
-    get() = when (this) {
-        PermissionFilter.Dangerous -> R.string.permissions_level_dangerous
-        PermissionFilter.Granted -> R.string.permissions_granted
-        PermissionFilter.Denied -> R.string.permissions_denied
-    }
-
-@get:StringRes
 internal val GrantState.labelRes: Int
     get() = when (this) {
         GrantState.Granted -> R.string.permissions_granted
-        GrantState.Denied -> R.string.permissions_denied
+        GrantState.NotGranted -> R.string.permissions_not_granted
     }
 
 @get:StringRes
-internal val ProtectionLevel.labelRes: Int
+internal val PermissionItem.grantExplanationRes: Int?
+    get() = when (val state = grantState) {
+        null -> null
+
+        else -> when (protectionLevel) {
+            ProtectionLevel.Dangerous -> when (state) {
+                GrantState.Granted -> R.string.permissions_grant_dangerous_granted
+                GrantState.NotGranted -> R.string.permissions_grant_dangerous_not_granted
+            }
+
+            ProtectionLevel.Signature -> when (state) {
+                GrantState.Granted -> when {
+                    isSelfDeclared -> R.string.permissions_grant_signature_self
+                    ProtectionFlag.Privileged in protectionFlags -> R.string.permissions_grant_signature_granted_privileged
+                    else -> R.string.permissions_grant_signature_granted
+                }
+
+                GrantState.NotGranted -> R.string.permissions_grant_signature_not_granted
+            }
+
+            ProtectionLevel.Internal -> when (state) {
+                GrantState.Granted -> R.string.permissions_grant_internal_granted
+                GrantState.NotGranted -> R.string.permissions_grant_internal_not_granted
+            }
+
+            ProtectionLevel.Normal -> when (state) {
+                GrantState.Granted -> R.string.permissions_grant_normal_granted
+                GrantState.NotGranted -> R.string.permissions_grant_normal_not_granted
+            }
+
+            null -> R.string.permissions_grant_unavailable
+        }
+    }
+
+@get:StringRes
+internal val ProtectionLevel?.labelRes: Int
     get() = when (this) {
         ProtectionLevel.Dangerous -> R.string.permissions_level_dangerous
         ProtectionLevel.Signature -> R.string.permissions_level_signature
         ProtectionLevel.Internal -> R.string.permissions_level_internal
         ProtectionLevel.Normal -> R.string.permissions_level_normal
+        null -> R.string.permissions_level_unavailable
     }
 
 @get:StringRes
-internal val ProtectionLevel.explanationRes: Int
+internal val ProtectionLevel?.explanationRes: Int
     get() = when (this) {
         ProtectionLevel.Dangerous -> R.string.permissions_level_dangerous_explanation
         ProtectionLevel.Signature -> R.string.permissions_level_signature_explanation
         ProtectionLevel.Internal -> R.string.permissions_level_internal_explanation
         ProtectionLevel.Normal -> R.string.permissions_level_normal_explanation
+        null -> R.string.permissions_level_unavailable_explanation
     }
 
 @get:StringRes
-internal val ProtectionFlag.labelRes: Int
+internal val ProtectionFlag.explanationRes: Int
     get() = when (this) {
         ProtectionFlag.Privileged -> R.string.permissions_flag_privileged
         ProtectionFlag.AppOp -> R.string.permissions_flag_appop

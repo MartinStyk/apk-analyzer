@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -32,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificateTrustLevel
@@ -49,6 +51,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.AppDetailToolbar
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.permissions.permissionIcon
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.Date
@@ -64,7 +67,8 @@ internal fun AppDetailScreen(
     onSaveIcon: (packageName: String) -> Unit,
     onNavigateToManifest: () -> Unit,
     onNavigateToGeneralDetails: () -> Unit,
-    onNavigateToPermissions: () -> Unit,
+    onNavigateToPermissions: (permissionName: String?) -> Unit,
+    onNavigateToComponents: () -> Unit,
     onNavigateToActivities: () -> Unit,
     onNavigateToServices: () -> Unit,
     onNavigateToReceivers: () -> Unit,
@@ -87,7 +91,8 @@ internal fun AppDetailScreen(
                 is AppDetailEvent.SaveIcon -> onSaveIcon(event.packageName)
                 is AppDetailEvent.NavigateToManifest -> onNavigateToManifest()
                 is AppDetailEvent.NavigateToGeneralDetails -> onNavigateToGeneralDetails()
-                is AppDetailEvent.NavigateToPermissions -> onNavigateToPermissions()
+                is AppDetailEvent.NavigateToPermissions -> onNavigateToPermissions(event.permissionName)
+                is AppDetailEvent.NavigateToComponents -> onNavigateToComponents()
                 is AppDetailEvent.NavigateToActivities -> onNavigateToActivities()
                 is AppDetailEvent.NavigateToServices -> onNavigateToServices()
                 is AppDetailEvent.NavigateToReceivers -> onNavigateToReceivers()
@@ -204,7 +209,7 @@ private fun DetailRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
+            .padding(horizontal = 16.dp, vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(
@@ -232,8 +237,10 @@ private fun NavigableRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .padding(horizontal = 8.dp)
+            .clip(Shapes.CardShape)
             .clickable(onClick = onClick)
-            .padding(vertical = 8.dp),
+            .padding(horizontal = 8.dp, vertical = 10.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -264,14 +271,19 @@ private fun NavigableRow(
 }
 
 @Composable
-private fun SectionCard(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+private fun SectionCard(
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
+    content: @Composable () -> Unit,
+) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clip(Shapes.CardShape)
             .background(AppTheme.colors.surface)
-            .padding(16.dp),
+            .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
+            .padding(vertical = 16.dp),
     ) {
         content()
     }
@@ -543,23 +555,113 @@ private fun PermissionsSection(
     onAction: (AppDetailAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    SectionCard(modifier = modifier) {
-        SectionHeader(title = stringResource(R.string.app_detail_permissions_section))
-        Spacer(modifier = Modifier.height(8.dp))
-        DetailRow(
-            label = stringResource(R.string.app_detail_total_permissions),
-            value = state.totalPermissionsCount.toString(),
-        )
-        DetailRow(
-            label = stringResource(R.string.app_detail_dangerous_permissions),
-            value = state.dangerousPermissionsCount.toString(),
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        NavigableRow(
-            label = stringResource(R.string.app_detail_view_permissions),
-            value = "",
-            onClick = { onAction(AppDetailAction.NavigatePermissions) },
-        )
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .clip(Shapes.CardShape)
+            .background(AppTheme.colors.surface)
+            .clickable { onAction(AppDetailAction.NavigatePermissions()) },
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, top = 16.dp, end = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            SectionHeader(title = stringResource(R.string.app_detail_permissions_section))
+            Icon(
+                imageVector = ApkAnalyzerIcons.ChevronRight,
+                tint = AppTheme.colors.onSurfaceVariant,
+                modifier = Modifier.size(20.dp),
+            )
+        }
+        Spacer(modifier = Modifier.height(6.dp))
+        val highlightedSensitiveCount = state.grantedDangerousPermissionsCount ?: state.dangerousPermissionsCount
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(horizontal = 16.dp),
+        ) {
+            Icon(
+                imageVector = if (highlightedSensitiveCount > 0) ApkAnalyzerIcons.DangerousPermissions else ApkAnalyzerIcons.Check,
+                tint = if (highlightedSensitiveCount > 0) AppTheme.colors.warning else AppTheme.colors.positive,
+                modifier = Modifier.size(16.dp),
+            )
+            Spacer(modifier = Modifier.width(6.dp))
+            Text(
+                text = when {
+                    state.totalPermissionsCount == 0 ->
+                        stringResource(R.string.app_detail_permissions_none)
+
+                    state.dangerousPermissionsCount == 0 ->
+                        stringResource(R.string.app_detail_permissions_no_dangerous)
+
+                    state.grantedDangerousPermissionsCount == 0 ->
+                        stringResource(R.string.app_detail_permissions_none_granted)
+
+                    state.grantedDangerousPermissionsCount != null ->
+                        pluralStringResource(
+                            R.plurals.app_detail_permissions_granted_summary,
+                            state.dangerousPermissionsCount,
+                            state.grantedDangerousPermissionsCount,
+                            state.dangerousPermissionsCount,
+                        )
+
+                    else ->
+                        pluralStringResource(
+                            R.plurals.app_detail_permissions_dangerous_summary,
+                            state.dangerousPermissionsCount,
+                            state.dangerousPermissionsCount,
+                        )
+                },
+                style = AppTheme.typography.bodySmall,
+                color = AppTheme.colors.onSurfaceVariant,
+            )
+        }
+        if (state.dangerousPermissionPreviews.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier
+                    .horizontalScroll(rememberScrollState())
+                    .padding(horizontal = 8.dp),
+            ) {
+                state.dangerousPermissionPreviews.forEach { preview ->
+                    ActionItem(
+                        icon = permissionIcon(
+                            name = preview.name,
+                            groupName = preview.groupName,
+                        ),
+                        label = preview.label,
+                        onClick = { onAction(AppDetailAction.NavigatePermissions(preview.name)) },
+                    )
+                }
+            }
+        }
+        if (state.totalPermissionsCount > 0) {
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                text = if (state.dangerousPermissionsCount > 0) {
+                    stringResource(
+                        R.string.app_detail_permissions_counts,
+                        state.totalPermissionsCount,
+                        state.dangerousPermissionsCount,
+                    )
+                } else {
+                    pluralStringResource(
+                        R.plurals.app_detail_permissions_total,
+                        state.totalPermissionsCount,
+                        state.totalPermissionsCount,
+                    )
+                },
+                style = AppTheme.typography.bodySmall,
+                color = AppTheme.colors.onSurfaceVariant,
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+            )
+        } else {
+            Spacer(modifier = Modifier.height(16.dp))
+        }
     }
 }
 
@@ -569,8 +671,24 @@ private fun ComponentsSection(
     onAction: (AppDetailAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    SectionCard(modifier = modifier) {
-        SectionHeader(title = stringResource(R.string.app_detail_components_section))
+    SectionCard(
+        modifier = modifier,
+        onClick = { onAction(AppDetailAction.NavigateComponents) },
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            SectionHeader(title = stringResource(R.string.app_detail_components_section))
+            Icon(
+                imageVector = ApkAnalyzerIcons.ChevronRight,
+                tint = AppTheme.colors.onSurfaceVariant,
+                modifier = Modifier.size(20.dp),
+            )
+        }
         Spacer(modifier = Modifier.height(8.dp))
         NavigableRow(
             label = stringResource(R.string.app_detail_activities),
@@ -602,7 +720,10 @@ private fun FeaturesSection(
     modifier: Modifier = Modifier,
 ) {
     SectionCard(modifier = modifier) {
-        SectionHeader(title = stringResource(R.string.app_detail_features_section))
+        SectionHeader(
+            title = stringResource(R.string.app_detail_features_section),
+            modifier = Modifier.padding(horizontal = 16.dp),
+        )
         Spacer(modifier = Modifier.height(8.dp))
         DetailRow(
             label = stringResource(R.string.app_detail_features_count),
@@ -713,6 +834,39 @@ private fun sampleLoadedState() = AppDetailState.Loaded(
     lastUpdateTime = Instant.ofEpochMilli(1_748_736_000_000),
     totalPermissionsCount = 32,
     dangerousPermissionsCount = 6,
+    grantedDangerousPermissionsCount = 4,
+    dangerousPermissionPreviews = persistentListOf(
+        AppDetailState.Loaded.PermissionPreview(
+            name = "android.permission.CAMERA",
+            groupName = "android.permission-group.CAMERA",
+            label = "Camera",
+        ),
+        AppDetailState.Loaded.PermissionPreview(
+            name = "android.permission.RECORD_AUDIO",
+            groupName = "android.permission-group.MICROPHONE",
+            label = "Microphone",
+        ),
+        AppDetailState.Loaded.PermissionPreview(
+            name = "android.permission.ACCESS_FINE_LOCATION",
+            groupName = "android.permission-group.LOCATION",
+            label = "Location",
+        ),
+        AppDetailState.Loaded.PermissionPreview(
+            name = "android.permission.READ_CONTACTS",
+            groupName = "android.permission-group.CONTACTS",
+            label = "Contacts",
+        ),
+        AppDetailState.Loaded.PermissionPreview(
+            name = "android.permission.READ_MEDIA_AUDIO",
+            groupName = "android.permission-group.READ_MEDIA_AURAL",
+            label = "Music and audio",
+        ),
+        AppDetailState.Loaded.PermissionPreview(
+            name = "android.permission.POST_NOTIFICATIONS",
+            groupName = "android.permission-group.NOTIFICATIONS",
+            label = "Notifications",
+        ),
+    ),
     definedPermissionsCount = 1,
     activitiesCount = 428,
     servicesCount = 57,

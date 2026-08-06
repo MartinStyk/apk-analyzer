@@ -44,6 +44,7 @@ name** — check here before calling one:
 | `Icon` | `Icon.kt` |
 | `IconButton` | `IconButton.kt` |
 | `LoadingSpinner` | `LoadingSpinner.kt` |
+| `MultiSelectorChip` | `MultiSelectorChip.kt` |
 | `NavigationBar` (+ `NavigationBarItem` data class) | `NavigationBar.kt` |
 | `RangeSlider` | `RangeSlider.kt` |
 | `SearchBarActive` | `SearchBarActive.kt` |
@@ -78,4 +79,3 @@ name** — check here before calling one:
 - All new Material3 component usage must be wrapped here before use in features.
 - Components should accept theme-consistent defaults.
 - Every component file must include `@Preview` functions.
-

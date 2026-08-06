@@ -9,10 +9,6 @@ import java.io.File
 
 fun computeApkSize(sourceDir: String?): AppSize = (sourceDir?.let { File(it).length() } ?: 0L).bytes
 
-internal fun createSimpleName(name: String): String = name.substringAfterLast('.', name)
-    .split('_')
-    .joinToString(" ") { it.lowercase().replaceFirstChar(Char::uppercaseChar) }
-
 @Suppress("DEPRECATION")
 internal fun resolveProtectionLevel(protection: Int): ProtectionLevel = when (protection) {
     PermissionInfo.PROTECTION_DANGEROUS -> ProtectionLevel.Dangerous

@@ -7,7 +7,8 @@ sealed interface AppDetailEvent {
     data class SaveIcon(val packageName: String) : AppDetailEvent
     data object NavigateToManifest : AppDetailEvent
     data object NavigateToGeneralDetails : AppDetailEvent
-    data object NavigateToPermissions : AppDetailEvent
+    data class NavigateToPermissions(val permissionName: String?) : AppDetailEvent
+    data object NavigateToComponents : AppDetailEvent
     data object NavigateToActivities : AppDetailEvent
     data object NavigateToServices : AppDetailEvent
     data object NavigateToReceivers : AppDetailEvent

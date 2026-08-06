@@ -32,17 +32,18 @@ fun Context.openGooglePlay(packageName: String) {
     }
 }
 
-fun Context.startForeignActivity(packageName: String, activityName: String) {
-    val intent = Intent().apply {
-        component = ComponentName(packageName, activityName)
-        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-    }
-    try {
-        startActivity(intent)
-    } catch (e: Exception) {
-        Logger.e(TAG, e, "Could not start activity $activityName in $packageName")
-    }
-}
+fun Context.startForeignActivity(packageName: String, activityName: String): Result<Unit> = runCatching {
+    startActivity(
+        Intent().apply {
+            component = ComponentName(packageName, activityName)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        },
+    )
+}.onFailure { Logger.e(TAG, it, "Could not start activity $activityName in $packageName") }
+
+fun Context.sendForeignBroadcast(packageName: String, receiverName: String): Result<Unit> = runCatching {
+    sendBroadcast(Intent().apply { component = ComponentName(packageName, receiverName) })
+}.onFailure { Logger.e(TAG, it, "Could not send broadcast to $receiverName in $packageName") }
 
 fun Context.openBrowser(url: String) {
     try {

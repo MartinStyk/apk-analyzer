@@ -38,8 +38,11 @@ components/
   AppDetailBadge.kt          - Badge classification (Sideloaded, DangerousPermissions, Unused, Large, System, etc.)
   AppDetailToolbar.kt        - Collapsing toolbar for the hub
   InfoRowItem.kt             - InfoRow + InfoRowItem + RationaleBottomSheet, shared by every sub-screen
+  SectionScaffold.kt         - SectionLoading + SectionError, the Loading/Error branch every sub-screen shares
 generalinfo/                 - General info sub-screen
 permissions/                 - Permissions sub-screen (see below)
+appcomponents/               - Components sub-screen (see below). Named `appcomponents`, not
+                               `components`, because `components/` already holds shared UI pieces.
 ```
 
 Each sub-screen directory carries its own State/Action/Event/ViewModel/Screen set, same MVI shape
@@ -50,20 +53,67 @@ as the hub.
 ```
 PermissionsScreen.kt              - Pinned toolbar, collapsing filter header, sectioned list
 PermissionDetailBottomSheet.kt    - The item sheet: every raw field for one permission, tap a field to copy
-PermissionResources.kt            - Enum -> @StringRes / icon mapping, kept out of the screen
+PermissionResources.kt            - Enum -> @StringRes / icon mapping, kept out of the screen,
+                                    incl. `grantExplanationRes` (protection level x grant state)
 PermissionsViewModel.kt           - Assisted-injected; combines a loaded source with the active narrowing
-PermissionsState.kt               - Loading/Error/Loaded plus PermissionItem, PermissionSection and the
-                                    PermissionScope / ProtectionLevel / ProtectionFlag / PermissionFilter
-                                    / GrantState enums
-PermissionsAction.kt              - Retry, ChangeQuery, SelectScope, ToggleFilter, ClearNarrowing, CopyValue
+PermissionsState.kt               - Loading/Error/Loaded plus PermissionItem, PermissionSection,
+                                    PermissionScope / GrantState enums, and multi-select filter state
+PermissionsAction.kt              - Retry, ChangeQuery, SelectScope, property filter toggles, ClearNarrowing, CopyValue
 PermissionsEvent.kt               - ShowCopiedFeedback
 PermissionDescriptionProvider.kt  - @Singleton; curated string -> system loadDescription -> declaring package
 ```
 
 Narrowing (query, scope, property filters) lives in the ViewModel, not the Composable — the screen
-receives only the already-filtered sections. Scope is a chip that opens a bottom sheet rather than a
-tab row, and it renders only when the app defines permissions of its own. Grant pills and the
-Granted / Denied filters render only in `InstalledPackage` mode.
+receives only the already-filtered sections. Scope is a single-choice chip that opens a bottom sheet
+rather than a tab row, and it renders only when the app defines permissions of its own. Protection
+level and grant state use multi-choice selector chips whose empty state applies no filter. Grant
+pills and the grant-state selector render only in `InstalledPackage` mode.
+
+The sheet explains *why* a permission has its grant state — the answer differs per protection level
+(you allowed it / signing key match / system rules / automatic at install), so `grantExplanationRes`
+keys on protection level x grant state and replaces the generic protection-level explanation. It
+falls back to that generic sentence in `ApkFile` mode, where there is no grant state. A signature
+permission is granted exactly when the keys match, so no certificate comparison is needed; the
+`Privileged` flag is the one case that softens the wording. `PermissionItem.isSelfDeclared` marks
+permissions the analysed app declares itself, which is the common source of granted signature
+permissions.
+
+### `appcomponents/`
+
+```
+ComponentsScreen.kt               - Pinned toolbar, collapsing filter header, sectioned list
+ComponentDetailBottomSheet.kt     - The item sheet, per component type
+ComponentResources.kt             - Enum -> @StringRes / icon mapping
+ComponentsViewModel.kt            - Assisted-injected with the initial scope and filters
+ComponentsState.kt                - Loading/Error/Loaded plus ComponentItem, ComponentDetails,
+                                    ComponentScope / ComponentFilter / ComponentType / ComponentFlag
+ComponentsAction.kt / ComponentsEvent.kt
+```
+
+One screen for all four component types; the scope selector carries the type, so the hub's four
+component rows deep-link with their scope preselected. Under scope `All` the list is sectioned by
+type. Exported items sort first. `isGuarded` folds a provider's read/write permissions and the other
+types' single `permission` into one flag, so `isUnprotected` (exported and unguarded) means the same
+thing everywhere — it is the one fact on this screen with real consequences and gets the row warning.
+`isLaunchable` is deliberately *not* `isUnprotected`: it is exported-and-unguarded (which is exactly
+"we are allowed to start it") in `InstalledPackage` mode, for activities and receivers only. Launcher
+activities are the most launchable thing there is, so reusing `isUnprotected` would hide the run
+button precisely where it is most useful. Services are excluded because background-start restrictions
+make `startService` fail or no-op from a backgrounded app, and providers have nothing to start.
+**A successful `startActivity` only means the intent was accepted** — the target may finish itself
+immediately when it needs extras, so the confirmation says a request was sent, never that something
+opened.
+
+Launcher activities are excluded from `isUnprotected`: they are exported with no permission guard by
+definition, so warning about them is a false positive that devalues the real ones. They are excluded
+from the `Unprotected` filter for the same reason, and the sheet explains why being exported is
+expected there rather than claiming a permission guards it.
+
+**The initial scope and filters are `@Assisted` constructor parameters, not a `LaunchedEffect`.**
+They seed the ViewModel's `narrowing` flow exactly once at construction; the ViewModel survives
+configuration change, so a rotation cannot re-apply them over a choice the user has since made. The
+same trap applies to `PermissionsScreen`'s `focusedPermission`, which is why the open sheet is keyed
+by `rememberSaveable` name rather than restored by an effect.
 
 ## Key Patterns
 - Uses **Assisted Injection** (`@HiltViewModel(assistedFactory = ...)`) because the ViewModel requires `AppDetailInput` at creation time.
@@ -82,4 +132,3 @@ before adding one.
 - `core:app-permissions` (PermissionLabelProvider)
 - `kotlinx-collections-immutable`
 - `coil-compose`
-

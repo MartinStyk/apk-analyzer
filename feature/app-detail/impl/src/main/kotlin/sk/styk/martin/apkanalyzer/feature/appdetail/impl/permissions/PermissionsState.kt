@@ -3,35 +3,17 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.impl.permissions
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
+import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionFlag
+import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionLevel
 
 internal enum class PermissionScope {
     Requested,
     Defined,
 }
 
-internal enum class ProtectionLevel {
-    Dangerous,
-    Signature,
-    Internal,
-    Normal,
-}
-
-internal enum class ProtectionFlag {
-    Privileged,
-    AppOp,
-    Instant,
-    Development,
-}
-
-internal enum class PermissionFilter {
-    Dangerous,
-    Granted,
-    Denied,
-}
-
 internal enum class GrantState {
     Granted,
-    Denied,
+    NotGranted,
 }
 
 @Immutable
@@ -40,14 +22,15 @@ internal data class PermissionItem(
     val label: String,
     val description: String?,
     val groupName: String?,
-    val protectionLevel: ProtectionLevel,
+    val protectionLevel: ProtectionLevel?,
     val protectionFlags: ImmutableList<ProtectionFlag>,
     val grantState: GrantState?,
     val declaringPackage: String?,
+    val isSelfDeclared: Boolean,
 )
 
 @Immutable
-internal data class PermissionSection(val protectionLevel: ProtectionLevel, val permissions: ImmutableList<PermissionItem>)
+internal data class PermissionSection(val protectionLevel: ProtectionLevel?, val permissions: ImmutableList<PermissionItem>)
 
 @Immutable
 internal sealed interface PermissionsState {
@@ -59,8 +42,10 @@ internal sealed interface PermissionsState {
     data class Loaded(
         val scope: PermissionScope,
         val scopeOptions: ImmutableList<PermissionScope>,
-        val activeFilters: ImmutableSet<PermissionFilter>,
-        val availableFilters: ImmutableList<PermissionFilter>,
+        val selectedProtectionLevels: ImmutableSet<ProtectionLevel?>,
+        val protectionLevelOptions: ImmutableList<ProtectionLevel?>,
+        val selectedGrantStates: ImmutableSet<GrantState>,
+        val grantStateOptions: ImmutableList<GrantState>,
         val query: String,
         val scopeTotal: Int,
         val sections: ImmutableList<PermissionSection>,
@@ -72,6 +57,6 @@ internal sealed interface PermissionsState {
             get() = sections.isNotEmpty()
 
         val isNarrowed: Boolean
-            get() = query.isNotBlank() || activeFilters.isNotEmpty()
+            get() = query.isNotBlank() || selectedProtectionLevels.isNotEmpty() || selectedGrantStates.isNotEmpty()
     }
 }

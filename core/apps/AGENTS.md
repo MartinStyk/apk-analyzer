@@ -19,17 +19,23 @@ analysis/
   ManifestParser.kt                  - AndroidManifest.xml parsing
   InstallSourceResolver.kt / Impl   - Determine app install source (Play Store, sideload, etc.)
   SdkVersionResolver.kt             - SDK version to Android name mapping
-  AnalysisUtils.kt                   - Shared analysis helpers
+  AnalysisUtils.kt                   - Shared analysis helpers, incl. permission protection decoding
 model/
   InstalledApp.kt         - Basic installed app info (packageName, name, sizes, times, source)
   AppDetail.kt            - Complete app detail (info, permissions, activities, services, etc.)
   AppInfo.kt              - Core app metadata
-  Permission.kt           - Single permission definition; `protection` and `protectionFlags` are the
-                            already-split values from `PermissionInfo.getProtection()` /
-                            `getProtectionFlags()`, never a raw `protectionLevel` bitfield
+  Permission.kt           - Single permission: name plus `details`, which is null when the device
+                            can't resolve the permission (declaring app not installed)
+  PermissionDetails.kt    - Resolved permission details; `protectionLevel` and `protectionFlags` are
+                            domain enums, never raw `PermissionInfo` ints
+  ProtectionLevel.kt      - Base protection level enum
+  ProtectionFlag.kt       - Additional protection flags enum
   Permissions.kt          - Used + defined permissions container
   UsedPermission.kt       - Permission with grant status
-  Activity.kt             - Activity component info
+  Activity.kt             - Activity component info. `isLauncher` is nullable: it is resolved from
+                            `queryIntentActivities` for an installed package, and is `null` for an
+                            APK file, where the intent filters cannot be read — null means unknown,
+                            never "not a launcher"
   Service.kt              - Service component info
   BroadcastReceiver.kt    - Receiver component info
   ContentProvider.kt      - Provider component info

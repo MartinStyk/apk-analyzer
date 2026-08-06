@@ -39,6 +39,8 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.impl.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.InfoRow
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.InfoRowItem
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.RationaleBottomSheet
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionError
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionLoading
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.Date
@@ -89,34 +91,10 @@ private fun GeneralInfoContent(
             onBack = onBack,
         )
         when (state) {
-            is GeneralInfoState.Loading -> LoadingContent()
-            is GeneralInfoState.Error -> ErrorContent()
+            is GeneralInfoState.Loading -> SectionLoading()
+            is GeneralInfoState.Error -> SectionError(message = stringResource(R.string.general_info_error))
             is GeneralInfoState.Loaded -> LoadedContent(state = state, onAction = onAction)
         }
-    }
-}
-
-@Composable
-private fun LoadingContent(modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
-        LoadingSpinner()
-    }
-}
-
-@Composable
-private fun ErrorContent(modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(
-            text = stringResource(R.string.general_info_error),
-            style = AppTheme.typography.bodyLarge,
-            color = AppTheme.colors.onBackground,
-        )
     }
 }
 

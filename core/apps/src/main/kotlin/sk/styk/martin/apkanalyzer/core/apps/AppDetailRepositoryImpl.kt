@@ -1,5 +1,6 @@
 package sk.styk.martin.apkanalyzer.core.apps
 
+import android.content.Intent
 import android.content.pm.FeatureInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
@@ -13,7 +14,8 @@ import sk.styk.martin.apkanalyzer.core.apps.analysis.CertificateExtractor
 import sk.styk.martin.apkanalyzer.core.apps.analysis.InstallSourceResolver
 import sk.styk.martin.apkanalyzer.core.apps.analysis.SdkVersionResolver
 import sk.styk.martin.apkanalyzer.core.apps.analysis.computeApkSize
-import sk.styk.martin.apkanalyzer.core.apps.analysis.createSimpleName
+import sk.styk.martin.apkanalyzer.core.apps.analysis.resolveProtectionFlags
+import sk.styk.martin.apkanalyzer.core.apps.analysis.resolveProtectionLevel
 import sk.styk.martin.apkanalyzer.core.apps.model.Activity
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.model.AppInfo
@@ -22,6 +24,7 @@ import sk.styk.martin.apkanalyzer.core.apps.model.ContentProvider
 import sk.styk.martin.apkanalyzer.core.apps.model.Feature
 import sk.styk.martin.apkanalyzer.core.apps.model.InstallLocation
 import sk.styk.martin.apkanalyzer.core.apps.model.Permission
+import sk.styk.martin.apkanalyzer.core.apps.model.PermissionDetails
 import sk.styk.martin.apkanalyzer.core.apps.model.Permissions
 import sk.styk.martin.apkanalyzer.core.apps.model.Service
 import sk.styk.martin.apkanalyzer.core.apps.model.UsedPermission
@@ -97,7 +100,13 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         analysisMode = analysisMode,
         info = getGeneralData(packageInfo, totalSize, lastUsedTime),
         certificates = certificateExtractor.getCertificateData(packageInfo),
-        activities = getActivities(packageInfo),
+        activities = getActivities(
+            packageInfo = packageInfo,
+            launcherActivityNames = when (analysisMode) {
+                AppDetail.AnalysisMode.InstalledPackage -> queryLauncherActivityNames(packageInfo.packageName)
+                AppDetail.AnalysisMode.ApkFile -> null
+            },
+        ),
         services = getServices(packageInfo),
         contentProviders = getContentProviders(packageInfo),
         receivers = getBroadcastReceivers(packageInfo),
@@ -139,7 +148,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         )
     }
 
-    private fun getActivities(packageInfo: PackageInfo): List<Activity> = packageInfo.activities.orEmpty().map {
+    private fun getActivities(packageInfo: PackageInfo, launcherActivityNames: Set<String>?): List<Activity> = packageInfo.activities.orEmpty().map {
         Activity(
             name = it.name,
             packageName = it.packageName,
@@ -148,8 +157,19 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             permission = it.permission,
             parentName = it.parentActivityName,
             isExported = it.exported,
+            isLauncher = launcherActivityNames?.contains(it.name),
         )
     }
+
+    private fun queryLauncherActivityNames(packageName: String): Set<String> = launcherCategories
+        .flatMap { category ->
+            val intent = Intent(Intent.ACTION_MAIN).addCategory(category).setPackage(packageName)
+            runCatching { packageManager.queryIntentActivities(intent, 0) }
+                .onFailure { Logger.w(TAG, "Can not resolve launcher activities of $packageName") }
+                .getOrDefault(emptyList())
+                .map { it.activityInfo.name }
+        }
+        .toSet()
 
     private fun getServices(packageInfo: PackageInfo): List<Service> = packageInfo.services.orEmpty().map {
         Service(
@@ -190,12 +210,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     private fun getDefinedPermissions(packageInfo: PackageInfo): List<Permission> = packageInfo.permissions.orEmpty().map {
         Permission(
             name = it.name,
-            simpleName = createSimpleName(it.name),
-            groupName = it.group,
-            protectionLevel = resolveProtectionLevel(it.protection),
-            protectionFlags = resolveProtectionFlags(it.protectionFlags),
-            description = it.loadDescription(packageManager)?.toString(),
-            declaringPackage = it.packageName,
+            details = it.toDetails(),
         )
     }
 
@@ -210,17 +225,20 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             UsedPermission(
                 permissionData = Permission(
                     name = name,
-                    simpleName = createSimpleName(name),
-                    groupName = permissionInfo?.group,
-                    protectionLevel = permissionInfo?.protection?.let(::resolveProtectionLevel) ?: ProtectionLevel.Normal,
-                    protectionFlags = permissionInfo?.protectionFlags?.let(::resolveProtectionFlags).orEmpty(),
-                    description = permissionInfo?.loadDescription(packageManager)?.toString(),
-                    declaringPackage = permissionInfo?.packageName,
+                    details = permissionInfo?.toDetails(),
                 ),
                 isGranted = (grantedFlags?.getOrNull(index) ?: 0) and PackageInfo.REQUESTED_PERMISSION_GRANTED != 0,
             )
         }
     }
+
+    private fun PermissionInfo.toDetails() = PermissionDetails(
+        groupName = group,
+        protectionLevel = resolveProtectionLevel(protection),
+        protectionFlags = resolveProtectionFlags(protectionFlags),
+        description = loadDescription(packageManager)?.toString(),
+        declaringPackage = packageName,
+    )
 
     private fun getFeatures(packageInfo: PackageInfo): List<Feature> = packageInfo.reqFeatures.orEmpty().map {
         Feature(
@@ -237,5 +255,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
 
     companion object {
         private const val TAG = "AppDetailRepositoryImpl"
+
+        private val launcherCategories = listOf(Intent.CATEGORY_LAUNCHER, Intent.CATEGORY_LEANBACK_LAUNCHER)
     }
 }

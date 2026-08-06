@@ -11,8 +11,8 @@ import javax.inject.Singleton
 internal class PermissionDescriptionProvider @Inject constructor(@ApplicationContext private val context: Context) {
 
     fun describe(permission: Permission): String? = curatedDescriptions[permission.name]?.let(context::getString)
-        ?: permission.description?.takeIf { it.isNotBlank() }
-        ?: permission.declaringPackage
+        ?: permission.details?.description?.takeIf { it.isNotBlank() }
+        ?: permission.details?.declaringPackage
             ?.takeIf { it != PLATFORM_PACKAGE }
             ?.let { context.getString(R.string.permissions_defined_by, it) }
 

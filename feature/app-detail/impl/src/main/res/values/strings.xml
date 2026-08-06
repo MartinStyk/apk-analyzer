@@ -16,7 +16,7 @@
     <string name="app_detail_no">No</string>
     <string name="app_detail_unknown">Unknown</string>
     <string name="app_detail_error">Failed to load app details</string>
-    <string name="app_detail_retry">Retry</string>
+    <string name="app_detail_retry">Try again</string>
     <string name="app_detail_action_manifest">Manifest</string>
     <string name="app_detail_action_export_apk">Export APK</string>
     <string name="app_detail_action_save_icon">Save Icon</string>
@@ -26,6 +26,22 @@
     <string name="app_detail_total_permissions">Total Permissions</string>
     <string name="app_detail_dangerous_permissions">Dangerous Permissions</string>
     <string name="app_detail_view_permissions">View Permissions</string>
+    <string name="app_detail_permissions_none">No permissions requested</string>
+    <string name="app_detail_permissions_no_dangerous">No sensitive permissions requested</string>
+    <string name="app_detail_permissions_none_granted">No sensitive permissions granted</string>
+    <plurals name="app_detail_permissions_granted_summary">
+        <item quantity="one">%1$d of %2$d sensitive permission granted</item>
+        <item quantity="other">%1$d of %2$d sensitive permissions granted</item>
+    </plurals>
+    <plurals name="app_detail_permissions_dangerous_summary">
+        <item quantity="one">%1$d sensitive permission requested</item>
+        <item quantity="other">%1$d sensitive permissions requested</item>
+    </plurals>
+    <plurals name="app_detail_permissions_total">
+        <item quantity="one">%1$d permission requested in total</item>
+        <item quantity="other">%1$d permissions requested in total</item>
+    </plurals>
+    <string name="app_detail_permissions_counts">%1$d requested · %2$d sensitive</string>
     <string name="app_detail_components_section">Components</string>
     <string name="app_detail_activities">Activities</string>
     <string name="app_detail_services">Services</string>
@@ -111,7 +127,6 @@
 
     <string name="permissions_title">Permissions</string>
     <string name="permissions_error">Could not read the permissions of this app.</string>
-    <string name="permissions_retry">Try again</string>
     <plurals name="permissions_filter_hint">
         <item quantity="one">Filter %1$d permission</item>
         <item quantity="other">Filter %1$d permissions</item>
@@ -119,9 +134,12 @@
     <string name="permissions_scope_sheet_title">Show</string>
     <string name="permissions_scope_requested">Requested</string>
     <string name="permissions_scope_defined">Defined by this app</string>
+    <string name="permissions_filter_protection_level">Protection level</string>
+    <string name="permissions_filter_grant_state">Grant state</string>
+    <string name="permissions_filter_multiple_selection">%1$s +%2$d</string>
     <string name="permissions_section_header">%1$s · %2$d</string>
     <string name="permissions_granted">Granted</string>
-    <string name="permissions_denied">Denied</string>
+    <string name="permissions_not_granted">Not granted</string>
     <string name="permissions_level_dangerous">Dangerous</string>
     <string name="permissions_level_dangerous_explanation">Needs your explicit approval before the app can use it.</string>
     <string name="permissions_level_signature">Signature</string>
@@ -129,21 +147,111 @@
     <string name="permissions_level_internal">Internal</string>
     <string name="permissions_level_internal_explanation">Reserved for the system and granted by internal rules rather than by you.</string>
     <string name="permissions_level_normal">Normal</string>
-    <string name="permissions_level_normal_explanation">Granted automatically at install. Low risk on their own.</string>
-    <string name="permissions_flag_privileged">Privileged</string>
-    <string name="permissions_flag_appop">App ops controlled</string>
-    <string name="permissions_flag_instant">Instant apps</string>
-    <string name="permissions_flag_development">Development</string>
+    <string name="permissions_level_normal_explanation">Usually granted automatically at install. Low risk on their own.</string>
+    <string name="permissions_level_unavailable">Details not available</string>
+    <string name="permissions_level_unavailable_explanation">No app on this device declares these, so we can\'t show what they protect.</string>
+    <string name="permissions_flag_privileged">Privileged system apps can hold this too, without your approval.</string>
+    <string name="permissions_flag_appop">This one also has its own toggle in Settings, separate from the permission itself.</string>
+    <string name="permissions_flag_instant">Instant apps — apps that run without being installed — can hold this too.</string>
+    <string name="permissions_flag_development">Can also be granted by hand for development.</string>
     <string name="permissions_empty_query">No permission matches \"%1$s\".</string>
     <string name="permissions_empty_filters">No permission matches the selected filters.</string>
     <string name="permissions_empty_scope">This app requests no permissions.</string>
     <string name="permissions_clear_narrowing">Clear filters</string>
+    <string name="components_title">Components</string>
+    <string name="components_error">Failed to load components</string>
+    <string name="components_scope_sheet_title">Show</string>
+    <string name="components_scope_all">All components</string>
+    <string name="components_scope_activities">Activities</string>
+    <string name="components_scope_services">Services</string>
+    <string name="components_scope_receivers">Receivers</string>
+    <string name="components_scope_providers">Providers</string>
+    <string name="components_type_activities">Activities</string>
+    <string name="components_type_services">Services</string>
+    <string name="components_type_receivers">Receivers</string>
+    <string name="components_type_providers">Providers</string>
+    <plurals name="components_filter_hint_all">
+        <item quantity="one">Filter %1$d component</item>
+        <item quantity="other">Filter %1$d components</item>
+    </plurals>
+    <plurals name="components_filter_hint_activities">
+        <item quantity="one">Filter %1$d activity</item>
+        <item quantity="other">Filter %1$d activities</item>
+    </plurals>
+    <plurals name="components_filter_hint_services">
+        <item quantity="one">Filter %1$d service</item>
+        <item quantity="other">Filter %1$d services</item>
+    </plurals>
+    <plurals name="components_filter_hint_receivers">
+        <item quantity="one">Filter %1$d receiver</item>
+        <item quantity="other">Filter %1$d receivers</item>
+    </plurals>
+    <plurals name="components_filter_hint_providers">
+        <item quantity="one">Filter %1$d provider</item>
+        <item quantity="other">Filter %1$d providers</item>
+    </plurals>
+    <string name="components_filter_exported">Exported</string>
+    <string name="components_filter_unprotected">Unprotected</string>
+    <string name="components_section_header">%1$s · %2$d</string>
+    <string name="components_tag_exported">Exported</string>
+    <string name="components_tag_launcher">Launcher</string>
+    <string name="components_launch">Start this component</string>
+    <string name="components_launch_started">Start request sent — the app decides what happens next.</string>
+    <string name="components_launch_broadcast_sent">Broadcast sent — nothing here reports whether it was handled.</string>
+    <string name="components_launch_failed">The system refused to start this.</string>
+    <string name="components_detail_launcher">Launcher screen</string>
+    <string name="components_detail_launcher_explanation">This is what opens when you tap the app\'s icon.</string>
+    <string name="components_tag_unprotected">Exported with no permission guard</string>
+    <string name="components_empty_query">No component matches \"%1$s\".</string>
+    <string name="components_empty_filters">No component matches the selected filters.</string>
+    <string name="components_empty_scope">This app declares no components of this kind.</string>
+    <string name="components_clear_narrowing">Clear filters</string>
+    <string name="components_flag_stop_with_task">Stops with task</string>
+    <string name="components_flag_stop_with_task_explanation">Shuts down when you swipe the app away from recents.</string>
+    <string name="components_flag_single_user">Single user</string>
+    <string name="components_flag_single_user_explanation">Runs once for the whole device rather than once per user profile.</string>
+    <string name="components_flag_isolated_process">Isolated process</string>
+    <string name="components_flag_isolated_process_explanation">Runs sandboxed with no permissions of its own.</string>
+    <string name="components_flag_external_service">External service</string>
+    <string name="components_flag_external_service_explanation">Other apps can run this inside their own process.</string>
+    <string name="components_flag_enabled">Yes</string>
+    <string name="components_detail_full_name">Full name</string>
+    <string name="components_detail_section_reachability">Reachability</string>
+    <string name="components_detail_section_details">Details</string>
+    <string name="components_detail_exported">Exported</string>
+    <string name="components_exported_yes">Yes</string>
+    <string name="components_exported_no">No</string>
+    <string name="components_exported_unprotected_explanation">Any other app on this device can start or bind to this — no permission is required.</string>
+    <string name="components_exported_guarded_explanation">Other apps can reach this, but only if they hold the permission below.</string>
+    <string name="components_exported_launcher_explanation">Expected here — the launcher has to reach this to open the app.</string>
+    <string name="components_exported_no_explanation">Only this app can reach it.</string>
+    <string name="components_detail_permission">Required permission</string>
+    <string name="components_detail_read_permission">Read permission</string>
+    <string name="components_detail_write_permission">Write permission</string>
+    <string name="components_detail_label">Label</string>
+    <string name="components_detail_target_activity">Target activity</string>
+    <string name="components_detail_parent">Parent activity</string>
+    <string name="components_detail_authority">Authority</string>
+
     <string name="permissions_detail_full_name">Full name</string>
     <string name="permissions_detail_grant_state">Grant state</string>
     <string name="permissions_detail_protection_level">Protection level</string>
     <string name="permissions_detail_group">Permission group</string>
     <string name="permissions_detail_declared_by">Declared by</string>
     <string name="permissions_defined_by">Defined by %1$s.</string>
+    <string name="permissions_detail_section_status">Status</string>
+    <string name="permissions_detail_extra_rules">Extra rules</string>
+    <string name="permissions_grant_dangerous_granted">You allowed this. You can take it back in Settings.</string>
+    <string name="permissions_grant_dangerous_not_granted">You haven\'t allowed this yet.</string>
+    <string name="permissions_grant_signature_self">This app defines this permission itself.</string>
+    <string name="permissions_grant_signature_granted">This app is signed with the same key as the app that defines it.</string>
+    <string name="permissions_grant_signature_granted_privileged">This app is signed with the same key as the app that defines it, or runs as a privileged system app.</string>
+    <string name="permissions_grant_signature_not_granted">This app is signed with a different key than the app that defines it.</string>
+    <string name="permissions_grant_internal_granted">The system granted this by its own rules.</string>
+    <string name="permissions_grant_internal_not_granted">The system\'s rules don\'t grant this here.</string>
+    <string name="permissions_grant_normal_granted">Granted automatically when the app was installed.</string>
+    <string name="permissions_grant_normal_not_granted">Not granted at install — most often the app only asks for it on older Android versions.</string>
+    <string name="permissions_grant_unavailable">No app on this device declares this permission, so nothing can grant it.</string>
 
     <string name="permission_description_camera">Take photos and record video with the device cameras.</string>
     <string name="permission_description_record_audio">Record sound through the microphone, including while other apps play audio.</string>
@@ -188,4 +296,3 @@
     <string name="permission_description_biometric">Ask you to confirm your identity with a fingerprint or face unlock.</string>
     <string name="permission_description_query_all_packages">See the full list of apps installed on this device.</string>
 </resources>
-

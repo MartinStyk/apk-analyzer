@@ -30,6 +30,7 @@ import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.InsertChart
 import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.material.icons.rounded.Lock
+import androidx.compose.material.icons.rounded.Memory
 import androidx.compose.material.icons.rounded.Mic
 import androidx.compose.material.icons.rounded.NewReleases
 import androidx.compose.material.icons.rounded.Notifications
@@ -40,6 +41,7 @@ import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Security
 import androidx.compose.material.icons.rounded.Sensors
 import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.rounded.SettingsInputAntenna
 import androidx.compose.material.icons.rounded.Sms
 import androidx.compose.material.icons.rounded.Storage
 import androidx.compose.material.icons.rounded.SwapVert
@@ -47,6 +49,7 @@ import androidx.compose.material.icons.rounded.Sync
 import androidx.compose.material.icons.rounded.UploadFile
 import androidx.compose.material.icons.rounded.VerifiedUser
 import androidx.compose.material.icons.rounded.Warning
+import androidx.compose.material.icons.rounded.WebAsset
 import androidx.compose.material.icons.rounded.Wifi
 
 data object ApkAnalyzerIcons {
@@ -61,6 +64,10 @@ data object ApkAnalyzerIcons {
     val Camera = Icons.Rounded.PhotoCamera
     val Check = Icons.Rounded.Check
     val ChevronRight = Icons.Rounded.ChevronRight
+    val ComponentActivity = Icons.Rounded.WebAsset
+    val ComponentService = Icons.Rounded.Memory
+    val ComponentReceiver = Icons.Rounded.SettingsInputAntenna
+    val ComponentProvider = Icons.Rounded.Storage
     val Contacts = Icons.Rounded.Contacts
     val Copy = Icons.Rounded.ContentCopy
     val DataUsage = Icons.Rounded.DataUsage

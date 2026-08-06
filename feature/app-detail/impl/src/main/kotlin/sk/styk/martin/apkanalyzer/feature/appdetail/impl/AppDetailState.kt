@@ -41,6 +41,8 @@ sealed interface AppDetailState {
         val lastUsedTime: Instant? = null,
         val totalPermissionsCount: Int,
         val dangerousPermissionsCount: Int,
+        val grantedDangerousPermissionsCount: Int?,
+        val dangerousPermissionPreviews: ImmutableList<PermissionPreview>,
         val definedPermissionsCount: Int,
         val activitiesCount: Int,
         val servicesCount: Int,
@@ -59,6 +61,9 @@ sealed interface AppDetailState {
             val signerDisplayName: String?
                 get() = issuer.displayName
         }
+
+        @Immutable
+        data class PermissionPreview(val name: String, val groupName: String?, val label: String)
     }
 
     data object Error : AppDetailState
