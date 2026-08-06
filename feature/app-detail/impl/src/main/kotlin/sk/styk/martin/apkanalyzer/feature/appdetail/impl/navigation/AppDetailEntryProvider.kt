@@ -15,6 +15,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.impl.appcomponents.Component
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.certificates.CertificatesScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.generalinfo.GeneralInfoScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.permissions.PermissionsScreen
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.requirements.RequirementsScreen
 
 private const val TAG = "AppDetailNavigation"
 
@@ -39,7 +40,7 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
             onNavigateToReceivers = { navigator.navigate(ComponentsNavKey(key.detailInput, ComponentScope.Receivers)) },
             onNavigateToProviders = { navigator.navigate(ComponentsNavKey(key.detailInput, ComponentScope.Providers)) },
             onNavigateToCertificates = { navigator.navigate(CertificatesNavKey(key.detailInput)) },
-            onNavigateToFeatures = { Logger.d(TAG, "Navigate to features not yet implemented") },
+            onNavigateToFeatures = { navigator.navigate(RequirementsNavKey(key.detailInput)) },
         )
     }
 
@@ -77,6 +78,15 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
         metadata = slideFromEndEntryMetadata(),
     ) { key ->
         CertificatesScreen(
+            appDetailInput = key.detailInput,
+            onBack = { navigator.goBack() },
+        )
+    }
+
+    entry<RequirementsNavKey>(
+        metadata = slideFromEndEntryMetadata(),
+    ) { key ->
+        RequirementsScreen(
             appDetailInput = key.detailInput,
             onBack = { navigator.goBack() },
         )

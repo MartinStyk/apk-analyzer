@@ -31,6 +31,7 @@ navigation/
   PermissionsNavKey.kt       - Internal nav key for the permissions sub-screen
   ComponentsNavKey.kt        - Internal nav key for the components sub-screen
   CertificatesNavKey.kt      - Internal nav key for the certificates sub-screen
+  RequirementsNavKey.kt      - Internal nav key for the device requirements sub-screen
 AppDetailScreen.kt           - Main detail screen Composable
 AppDetailViewModel.kt        - Uses @HiltViewModel with AssistedFactory for AppDetailInput
 AppDetailState.kt            - Loading/Loaded/Error states with full app detail data
@@ -46,6 +47,7 @@ permissions/                 - Permissions sub-screen (see below)
 appcomponents/               - Components sub-screen (see below). Named `appcomponents`, not
                                `components`, because `components/` already holds shared UI pieces.
 certificates/                - Signing certificate detail sub-screen
+requirements/                - Device requirements (uses-feature) sub-screen (see below)
 ```
 
 Each sub-screen directory carries its own State/Action/Event/ViewModel/Screen set, same MVI shape
@@ -126,6 +128,31 @@ newest-to-oldest and the original key is identified explicitly. Certificate fing
 always visible in SHA-256, SHA-1, MD5 order; public-key fingerprints use the same shared `HashBox`
 component but remain collapsed until requested. Signing multiplicity and key-rotation data come
 from the explicit current and past certificate lists in `AppDetail.signing`.
+
+### `requirements/`
+
+```
+RequirementsScreen.kt             - Pinned toolbar, miss summary, required/optional sections
+RequirementResources.kt           - Feature name -> @StringRes / icon maps, raw-name fallback
+RequirementsViewModel.kt          - Assisted-injected; combines AppDetail with DeviceFeaturesRepository
+RequirementsState.kt              - Loading/Error/Loaded plus RequirementSection, RequirementItem
+                                    (Hardware / OpenGlEs) and RequirementAvailability
+RequirementsAction.kt / RequirementsEvent.kt
+```
+
+The required/optional split is the point of the data, so it is the section structure rather than a
+filter. **Only misses are marked** — a column of green ticks is noise, so `Available` renders no
+marker and a device whose features could not be read yields `Unknown`, which also renders nothing.
+Missing optional requirements are worded more softly than missing required ones: missing an optional
+feature is by definition fine and only explains why part of the app does nothing.
+
+OpenGL ES is a version comparison, not a set lookup, so its miss names both sides ("Needs 3.1 · this
+device has 3.0") and its raw identifier is the hex the manifest's `android:glEsVersion` actually
+contains. The check runs in **both** analysis modes: the platform does not enforce `uses-feature` at
+install time, so a sideloaded app can sit on a device that cannot satisfy its own requirements.
+
+There is no search and no scope selector. The `Libraries` scope from the design doc needs
+`<uses-library>` extraction (roadmap `FR-44`), which does not exist yet.
 
 ## Key Patterns
 - Uses **Assisted Injection** (`@HiltViewModel(assistedFactory = ...)`) because the ViewModel requires `AppDetailInput` at creation time.

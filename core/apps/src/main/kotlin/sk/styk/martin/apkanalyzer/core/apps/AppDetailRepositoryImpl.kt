@@ -240,11 +240,12 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         declaringPackage = packageName,
     )
 
-    private fun getFeatures(packageInfo: PackageInfo): List<Feature> = packageInfo.reqFeatures.orEmpty().map {
-        Feature(
-            name = it.name ?: it.glEsVersion,
-            isRequired = (it.flags and FeatureInfo.FLAG_REQUIRED) > 0,
-        )
+    private fun getFeatures(packageInfo: PackageInfo): List<Feature> = packageInfo.reqFeatures.orEmpty().map { featureInfo ->
+        val isRequired = (featureInfo.flags and FeatureInfo.FLAG_REQUIRED) > 0
+        when (val name = featureInfo.name) {
+            null -> Feature.OpenGlEs(reqGlEsVersion = featureInfo.reqGlEsVersion, isRequired = isRequired)
+            else -> Feature.Hardware(name = name, isRequired = isRequired)
+        }
     }
 
     private fun PackageManager.getPackageArchiveInfoWithCorrectPath(pathToPackage: String, flags: Int): PackageInfo? {
