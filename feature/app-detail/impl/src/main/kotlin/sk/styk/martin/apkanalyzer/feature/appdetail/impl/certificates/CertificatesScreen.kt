@@ -58,9 +58,8 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionLoading
 import java.time.Instant
 import java.time.ZoneId
-import java.time.format.DateTimeFormatterBuilder
+import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import java.time.format.TextStyle
 import java.util.Locale
 
 @Composable
@@ -444,18 +443,16 @@ private fun ValiditySection(
         CertificateValidity.Expired -> stringResource(R.string.certificates_expired_explanation)
         CertificateValidity.NotYetValid -> stringResource(R.string.certificates_not_yet_valid_explanation)
     }
-    val dateTimeFormatter = remember {
-        DateTimeFormatterBuilder()
-            .appendLocalized(FormatStyle.MEDIUM, FormatStyle.SHORT)
-            .appendLiteral(" ")
-            .appendZoneText(TextStyle.SHORT)
-            .toFormatter(Locale.getDefault())
+    val dateFormatter = remember {
+        DateTimeFormatter
+            .ofLocalizedDate(FormatStyle.MEDIUM)
+            .withLocale(Locale.getDefault())
             .withZone(ZoneId.systemDefault())
     }
     val dateRange = stringResource(
         R.string.certificates_date_range,
-        dateTimeFormatter.format(certificate.validFrom),
-        dateTimeFormatter.format(certificate.validUntil),
+        dateFormatter.format(certificate.validFrom),
+        dateFormatter.format(certificate.validUntil),
     )
     val validityInfo = InfoRow(validityLabel, status, validityRationale)
 
@@ -593,18 +590,18 @@ private fun AlgorithmFact(
 ) {
     val label = stringResource(R.string.certificates_algorithm)
     val assessmentLabel = when (assessment) {
-        SignatureAlgorithmAssessment.ModernDigest -> stringResource(R.string.certificates_algorithm_modern_digest)
+        SignatureAlgorithmAssessment.ModernDigest -> stringResource(R.string.certificates_algorithm_strong)
 
         SignatureAlgorithmAssessment.WeakSha1Digest,
         SignatureAlgorithmAssessment.WeakMd5Digest,
         SignatureAlgorithmAssessment.WeakMd2Digest,
-        -> stringResource(R.string.certificates_algorithm_weak_digest)
+        -> stringResource(R.string.certificates_algorithm_weak)
 
-        SignatureAlgorithmAssessment.Unknown -> stringResource(R.string.certificates_algorithm_unknown_digest)
+        SignatureAlgorithmAssessment.Unknown -> stringResource(R.string.certificates_algorithm_unknown)
     }
     val rationale = when (assessment) {
         SignatureAlgorithmAssessment.ModernDigest ->
-            stringResource(R.string.certificates_algorithm_modern_digest_explanation, algorithm)
+            stringResource(R.string.certificates_algorithm_strong_explanation, algorithm)
 
         SignatureAlgorithmAssessment.WeakSha1Digest ->
             stringResource(R.string.certificates_algorithm_sha1_explanation, algorithm)
@@ -616,7 +613,7 @@ private fun AlgorithmFact(
             stringResource(R.string.certificates_algorithm_md2_explanation, algorithm)
 
         SignatureAlgorithmAssessment.Unknown ->
-            stringResource(R.string.certificates_algorithm_unknown_digest_explanation, algorithm)
+            stringResource(R.string.certificates_algorithm_unknown_explanation, algorithm)
     }
     val algorithmInfo = InfoRow(label, algorithm, rationale)
 
@@ -639,28 +636,17 @@ private fun AlgorithmFact(
                 color = AppTheme.colors.onSurfaceVariant,
             )
             Spacer(modifier = Modifier.height(3.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = algorithm,
-                    style = AppTheme.typography.titleSmall,
-                    color = AppTheme.colors.onSurface,
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Chip(
-                    label = assessmentLabel,
-                    variant = assessment.chipVariant(),
-                    onClick = { onShowRationale(algorithmInfo) },
-                    onLongClick = { onCopy(label, assessmentLabel) },
-                )
-            }
+            Text(
+                text = algorithm,
+                style = AppTheme.typography.titleSmall,
+                color = AppTheme.colors.onSurface,
+            )
         }
-        Icon(
-            imageVector = ApkAnalyzerIcons.Info,
-            contentDescription = null,
-            tint = AppTheme.colors.onSurfaceVariant,
-            modifier = Modifier
-                .padding(12.dp)
-                .size(18.dp),
+        Chip(
+            label = assessmentLabel,
+            variant = assessment.chipVariant(),
+            onClick = { onShowRationale(algorithmInfo) },
+            onLongClick = { onCopy(label, assessmentLabel) },
         )
     }
 }
