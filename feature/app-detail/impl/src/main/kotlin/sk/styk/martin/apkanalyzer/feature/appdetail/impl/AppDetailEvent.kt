@@ -1,10 +1,10 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl
 
-sealed interface AppDetailEvent {
+internal sealed interface AppDetailEvent {
     data class OpenPlayStore(val packageName: String) : AppDetailEvent
     data class OpenAppInfo(val packageName: String) : AppDetailEvent
-    data class ExportApk(val packageName: String) : AppDetailEvent
-    data class SaveIcon(val packageName: String) : AppDetailEvent
+    data class CreateDocument(val export: AppDetailExport, val suggestedName: String) : AppDetailEvent
+    data class ShowFeedback(val feedback: AppDetailFeedback) : AppDetailEvent
     data object NavigateToManifest : AppDetailEvent
     data object NavigateToGeneralDetails : AppDetailEvent
     data class NavigateToPermissions(val permissionName: String?) : AppDetailEvent
@@ -15,4 +15,12 @@ sealed interface AppDetailEvent {
     data object NavigateToProviders : AppDetailEvent
     data object NavigateToCertificates : AppDetailEvent
     data object NavigateToFeatures : AppDetailEvent
+}
+
+internal sealed interface AppDetailFeedback {
+    data class ApkSaved(val displayName: String, val baseApkOnly: Boolean) : AppDetailFeedback
+    data class IconSaved(val displayName: String) : AppDetailFeedback
+    data object ApkSaveFailed : AppDetailFeedback
+    data object IconSaveFailed : AppDetailFeedback
+    data object DocumentPickerUnavailable : AppDetailFeedback
 }

@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.unit.sp
+import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.AppIcon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Chip
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.ChipVariant
@@ -55,6 +56,7 @@ private val ICON_SIZE_COLLAPSED = 32.dp
 @Composable
 internal fun AppDetailToolbar(
     state: AppDetailState.Loaded,
+    appReference: AppReference,
     collapsingState: CollapsingToolbarState,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
@@ -134,7 +136,7 @@ internal fun AppDetailToolbar(
                 .padding(iconContainerPadding),
         ) {
             AppIcon(
-                packageName = state.packageName,
+                source = appReference,
                 size = iconSize,
             )
         }

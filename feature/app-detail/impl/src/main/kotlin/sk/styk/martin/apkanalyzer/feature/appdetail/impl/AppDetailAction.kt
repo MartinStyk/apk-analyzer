@@ -1,6 +1,8 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl
 
-sealed interface AppDetailAction {
+import android.net.Uri
+
+internal sealed interface AppDetailAction {
     data object Retry : AppDetailAction
     data object ViewManifest : AppDetailAction
     data object ExportApk : AppDetailAction
@@ -16,4 +18,9 @@ sealed interface AppDetailAction {
     data object NavigateProviders : AppDetailAction
     data object NavigateCertificates : AppDetailAction
     data object NavigateFeatures : AppDetailAction
+    data class NavigateInsight(val insight: AppDetailInsight) : AppDetailAction
+    data class ExportApkTo(val destination: Uri) : AppDetailAction
+    data class SaveIconTo(val destination: Uri) : AppDetailAction
+    data class DocumentPickerUnavailable(val export: AppDetailExport) : AppDetailAction
+    data class DocumentPickerCancelled(val export: AppDetailExport) : AppDetailAction
 }

@@ -22,6 +22,27 @@
     <string name="app_detail_action_save_icon">Save Icon</string>
     <string name="app_detail_action_play_store">Play Store</string>
     <string name="app_detail_action_app_info">App Info</string>
+    <string name="app_detail_action_saving">Saving…</string>
+    <string name="app_detail_worth_knowing">Worth knowing</string>
+    <string name="app_detail_insight_debug_certificate">Signed with Android\'s shared debug key</string>
+    <string name="app_detail_insight_certificate_not_yet_valid">Signing certificate is not valid yet</string>
+    <plurals name="app_detail_insight_outdated_target">
+        <item quantity="one">Targets API %1$d, one API level behind this device</item>
+        <item quantity="other">Targets API %1$d, %2$d API levels behind this device</item>
+    </plurals>
+    <string name="app_detail_insight_background_location">Can access location while running in the background</string>
+    <string name="app_detail_insight_messages">Can read, receive, or send text messages</string>
+    <string name="app_detail_insight_call_history">Can access or change call history</string>
+    <string name="app_detail_insight_contacts">Can access or change contacts</string>
+    <string name="app_detail_insight_calendar">Can access or change calendar events</string>
+    <string name="app_detail_apk_saved">Saved %1$s</string>
+    <string name="app_detail_split_apk_saved_title">Base APK saved</string>
+    <string name="app_detail_split_apk_saved_description">%1$s was saved. This app uses split APKs, so the file does not contain the complete installed app. You can inspect it, but installing it by itself may fail.</string>
+    <string name="app_detail_split_apk_saved_close">Close</string>
+    <string name="app_detail_icon_saved">Saved %1$s</string>
+    <string name="app_detail_apk_save_failed">The APK could not be saved</string>
+    <string name="app_detail_icon_save_failed">The icon could not be saved</string>
+    <string name="app_detail_document_picker_unavailable">No app can choose a save location</string>
     <string name="app_detail_permissions_section">Permissions</string>
     <string name="app_detail_total_permissions">Total Permissions</string>
     <string name="app_detail_dangerous_permissions">Dangerous Permissions</string>
@@ -63,8 +84,12 @@
     <string name="app_detail_certificate_unknown_signer">Unknown signer</string>
     <string name="app_detail_certificate_sha256_fingerprint">SHA-256 Fingerprint</string>
     <string name="app_detail_certificate_debug">Debug certificate</string>
+    <string name="app_detail_certificate_self_signed">Self-signed certificate</string>
+    <string name="app_detail_certificate_valid_until">Valid until %1$s</string>
+    <string name="app_detail_certificate_expired">Certificate validity ended %1$s. Android still uses the signing identity for updates.</string>
+    <string name="app_detail_certificate_not_yet_valid">Certificate validity starts %1$s</string>
     <string name="app_detail_badge_sideloaded">Sideloaded</string>
-    <string name="app_detail_badge_dangerous_permissions">Risky Permissions</string>
+    <string name="app_detail_badge_dangerous_permissions">Sensitive access</string>
     <string name="app_detail_badge_unused">Unused</string>
     <string name="app_detail_badge_large">Large App</string>
     <string name="app_detail_badge_system">System</string>
@@ -72,6 +97,25 @@
     <string name="app_detail_badge_recently_installed">New</string>
     <string name="app_detail_badge_recently_updated">Updated</string>
     <string name="app_detail_badge_recently_used">Recently Used</string>
+
+    <string name="manifest_title">Android manifest</string>
+    <string name="manifest_error">The manifest could not be read</string>
+    <string name="manifest_search">Search manifest</string>
+    <string name="manifest_expand">Expand manifest</string>
+    <string name="manifest_collapse">Collapse manifest</string>
+    <string name="manifest_no_matches">No manifest line contains “%1$s”.</string>
+    <plurals name="manifest_line_count">
+        <item quantity="one">%1$d line</item>
+        <item quantity="other">%1$d lines</item>
+    </plurals>
+    <plurals name="manifest_match_count">
+        <item quantity="one">%1$d matching line · %2$d total</item>
+        <item quantity="other">%1$d matching lines · %2$d total</item>
+    </plurals>
+    <plurals name="manifest_base_split_note">
+        <item quantity="one">Shows the base APK manifest. This app has %1$d additional installed split with its own manifest.</item>
+        <item quantity="other">Shows the base APK manifest. This app has %1$d additional installed splits with their own manifests.</item>
+    </plurals>
 
     <string name="certificates_title">Signing certificate</string>
     <string name="certificates_error">Failed to load the signing certificate</string>

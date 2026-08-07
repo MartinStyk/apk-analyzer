@@ -1,5 +1,10 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl
 
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -20,11 +25,15 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -37,6 +46,7 @@ import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificateTrustLevel
+import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.LoadingSpinner
@@ -52,6 +62,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.AppDetailToolbar
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.HashBox
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SplitApkExportBottomSheet
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.permissions.permissionIcon
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.requirements.requirementIcon
 import java.text.SimpleDateFormat
@@ -59,14 +70,15 @@ import java.time.Instant
 import java.util.Date
 import java.util.Locale
 
+private const val APK_MIME_TYPE = "application/vnd.android.package-archive"
+private const val ICON_MIME_TYPE = "image/png"
+
 @Composable
 internal fun AppDetailScreen(
     appDetailInput: AppDetailInput,
     onBack: () -> Unit,
     onOpenPlayStore: (packageName: String) -> Unit,
     onOpenAppInfo: (packageName: String) -> Unit,
-    onExportApk: (packageName: String) -> Unit,
-    onSaveIcon: (packageName: String) -> Unit,
     onNavigateToManifest: () -> Unit,
     onNavigateToGeneralDetails: () -> Unit,
     onNavigateToPermissions: (permissionName: String?) -> Unit,
@@ -83,23 +95,73 @@ internal fun AppDetailScreen(
     },
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val appReference = appDetailInput.toAppReference()
+    var splitApkExportName by rememberSaveable { mutableStateOf<String?>(null) }
+    val apkDocumentLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument(APK_MIME_TYPE),
+    ) { destination ->
+        if (destination != null) {
+            viewModel.onAction(AppDetailAction.ExportApkTo(destination))
+        } else {
+            viewModel.onAction(AppDetailAction.DocumentPickerCancelled(AppDetailExport.Apk))
+        }
+    }
+    val iconDocumentLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument(ICON_MIME_TYPE),
+    ) { destination ->
+        if (destination != null) {
+            viewModel.onAction(AppDetailAction.SaveIconTo(destination))
+        } else {
+            viewModel.onAction(AppDetailAction.DocumentPickerCancelled(AppDetailExport.Icon))
+        }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
                 is AppDetailEvent.OpenPlayStore -> onOpenPlayStore(event.packageName)
+
                 is AppDetailEvent.OpenAppInfo -> onOpenAppInfo(event.packageName)
-                is AppDetailEvent.ExportApk -> onExportApk(event.packageName)
-                is AppDetailEvent.SaveIcon -> onSaveIcon(event.packageName)
+
+                is AppDetailEvent.CreateDocument -> {
+                    try {
+                        when (event.export) {
+                            AppDetailExport.Apk -> apkDocumentLauncher.launch(event.suggestedName)
+                            AppDetailExport.Icon -> iconDocumentLauncher.launch(event.suggestedName)
+                        }
+                    } catch (_: ActivityNotFoundException) {
+                        viewModel.onAction(AppDetailAction.DocumentPickerUnavailable(event.export))
+                    }
+                }
+
+                is AppDetailEvent.ShowFeedback -> {
+                    val feedback = event.feedback
+                    if (feedback is AppDetailFeedback.ApkSaved && feedback.baseApkOnly) {
+                        splitApkExportName = feedback.displayName
+                    } else {
+                        Toast.makeText(context, feedback.message(context), Toast.LENGTH_LONG).show()
+                    }
+                }
+
                 is AppDetailEvent.NavigateToManifest -> onNavigateToManifest()
+
                 is AppDetailEvent.NavigateToGeneralDetails -> onNavigateToGeneralDetails()
+
                 is AppDetailEvent.NavigateToPermissions -> onNavigateToPermissions(event.permissionName)
+
                 is AppDetailEvent.NavigateToComponents -> onNavigateToComponents()
+
                 is AppDetailEvent.NavigateToActivities -> onNavigateToActivities()
+
                 is AppDetailEvent.NavigateToServices -> onNavigateToServices()
+
                 is AppDetailEvent.NavigateToReceivers -> onNavigateToReceivers()
+
                 is AppDetailEvent.NavigateToProviders -> onNavigateToProviders()
+
                 is AppDetailEvent.NavigateToCertificates -> onNavigateToCertificates()
+
                 is AppDetailEvent.NavigateToFeatures -> onNavigateToFeatures()
             }
         }
@@ -107,15 +169,31 @@ internal fun AppDetailScreen(
 
     AppDetailContent(
         state = state,
+        appReference = appReference,
         onAction = viewModel::onAction,
         onBack = onBack,
         modifier = modifier,
     )
+    splitApkExportName?.let { displayName ->
+        SplitApkExportBottomSheet(
+            displayName = displayName,
+            onDismiss = { splitApkExportName = null },
+        )
+    }
+}
+
+private fun AppDetailFeedback.message(context: Context): String = when (this) {
+    is AppDetailFeedback.ApkSaved -> context.getString(R.string.app_detail_apk_saved, displayName)
+    is AppDetailFeedback.IconSaved -> context.getString(R.string.app_detail_icon_saved, displayName)
+    AppDetailFeedback.ApkSaveFailed -> context.getString(R.string.app_detail_apk_save_failed)
+    AppDetailFeedback.IconSaveFailed -> context.getString(R.string.app_detail_icon_save_failed)
+    AppDetailFeedback.DocumentPickerUnavailable -> context.getString(R.string.app_detail_document_picker_unavailable)
 }
 
 @Composable
 private fun AppDetailContent(
     state: AppDetailState,
+    appReference: AppReference,
     onAction: (AppDetailAction) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
@@ -145,6 +223,7 @@ private fun AppDetailContent(
             is AppDetailState.Loaded -> {
                 LoadedContent(
                     state = state,
+                    appReference = appReference,
                     onAction = onAction,
                     onBack = onBack,
                 )
@@ -156,6 +235,7 @@ private fun AppDetailContent(
 @Composable
 private fun LoadedContent(
     state: AppDetailState.Loaded,
+    appReference: AppReference,
     onAction: (AppDetailAction) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
@@ -165,6 +245,7 @@ private fun LoadedContent(
     Column(modifier = modifier.fillMaxSize()) {
         AppDetailToolbar(
             state = state,
+            appReference = appReference,
             collapsingState = collapsingState,
             onBack = onBack,
         )
@@ -177,8 +258,12 @@ private fun LoadedContent(
         ) {
             Spacer(modifier = Modifier.height(8.dp))
             OverviewSection(state = state, onAction = onAction)
+            if (state.insights.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(12.dp))
+                WorthKnowingSection(state = state, onAction = onAction)
+            }
             Spacer(modifier = Modifier.height(12.dp))
-            ActionsSection(onAction = onAction)
+            ActionsSection(state = state, onAction = onAction)
             Spacer(modifier = Modifier.height(12.dp))
             CertificateSignatureSection(state = state, onAction = onAction)
             Spacer(modifier = Modifier.height(12.dp))
@@ -189,6 +274,95 @@ private fun LoadedContent(
             RequirementsSection(state = state, onAction = onAction)
             Spacer(modifier = Modifier.height(24.dp))
         }
+    }
+}
+
+@Composable
+private fun WorthKnowingSection(
+    state: AppDetailState.Loaded,
+    onAction: (AppDetailAction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                imageVector = ApkAnalyzerIcons.Warning,
+                tint = AppTheme.colors.warning,
+                modifier = Modifier.size(20.dp),
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            SectionHeader(title = stringResource(R.string.app_detail_worth_knowing))
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Column(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
+        ) {
+            state.insights.forEach { insight ->
+                WorthKnowingRow(
+                    insight = insight,
+                    onClick = { onAction(AppDetailAction.NavigateInsight(insight)) },
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun WorthKnowingRow(
+    insight: AppDetailInsight,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(Shapes.CardShape)
+            .background(AppTheme.colors.surface)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 14.dp, vertical = 14.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = insight.label(),
+            style = AppTheme.typography.bodyMedium,
+            color = AppTheme.colors.onSurface,
+            modifier = Modifier.weight(1f),
+        )
+        Icon(
+            imageVector = ApkAnalyzerIcons.ChevronRight,
+            tint = AppTheme.colors.onSurfaceVariant,
+            modifier = Modifier.size(20.dp),
+        )
+    }
+}
+
+@Composable
+private fun AppDetailInsight.label(): String = when (this) {
+    AppDetailInsight.DebugCertificate -> stringResource(R.string.app_detail_insight_debug_certificate)
+
+    AppDetailInsight.CertificateNotYetValid -> stringResource(R.string.app_detail_insight_certificate_not_yet_valid)
+
+    is AppDetailInsight.OutdatedTargetSdk -> pluralStringResource(
+        R.plurals.app_detail_insight_outdated_target,
+        apiLevelGap,
+        targetSdk,
+        apiLevelGap,
+    )
+
+    is AppDetailInsight.SensitivePermission -> when (access) {
+        SensitiveAccess.BackgroundLocation -> stringResource(R.string.app_detail_insight_background_location)
+        SensitiveAccess.Messages -> stringResource(R.string.app_detail_insight_messages)
+        SensitiveAccess.CallHistory -> stringResource(R.string.app_detail_insight_call_history)
+        SensitiveAccess.Contacts -> stringResource(R.string.app_detail_insight_contacts)
+        SensitiveAccess.Calendar -> stringResource(R.string.app_detail_insight_calendar)
     }
 }
 
@@ -387,7 +561,11 @@ private fun OverviewGridCell(
 }
 
 @Composable
-private fun ActionsSection(onAction: (AppDetailAction) -> Unit, modifier: Modifier = Modifier) {
+private fun ActionsSection(
+    state: AppDetailState.Loaded,
+    onAction: (AppDetailAction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -410,26 +588,40 @@ private fun ActionsSection(onAction: (AppDetailAction) -> Unit, modifier: Modifi
                 label = stringResource(R.string.app_detail_action_manifest),
                 onClick = { onAction(AppDetailAction.ViewManifest) },
             )
-            ActionItem(
-                icon = ApkAnalyzerIcons.Storage,
-                label = stringResource(R.string.app_detail_action_export_apk),
-                onClick = { onAction(AppDetailAction.ExportApk) },
-            )
+            if (state.analysisMode == AppDetail.AnalysisMode.InstalledPackage) {
+                ActionItem(
+                    icon = ApkAnalyzerIcons.Storage,
+                    label = if (state.exportInProgress == AppDetailExport.Apk) {
+                        stringResource(R.string.app_detail_action_saving)
+                    } else {
+                        stringResource(R.string.app_detail_action_export_apk)
+                    },
+                    onClick = { onAction(AppDetailAction.ExportApk) },
+                    enabled = state.exportInProgress == null,
+                )
+            }
             ActionItem(
                 icon = ApkAnalyzerIcons.Android,
-                label = stringResource(R.string.app_detail_action_save_icon),
+                label = if (state.exportInProgress == AppDetailExport.Icon) {
+                    stringResource(R.string.app_detail_action_saving)
+                } else {
+                    stringResource(R.string.app_detail_action_save_icon)
+                },
                 onClick = { onAction(AppDetailAction.SaveIcon) },
+                enabled = state.exportInProgress == null,
             )
             ActionItem(
                 icon = ApkAnalyzerIcons.Apps,
                 label = stringResource(R.string.app_detail_action_play_store),
                 onClick = { onAction(AppDetailAction.OpenPlayStore) },
             )
-            ActionItem(
-                icon = ApkAnalyzerIcons.Settings,
-                label = stringResource(R.string.app_detail_action_app_info),
-                onClick = { onAction(AppDetailAction.OpenAppInfo) },
-            )
+            if (state.analysisMode == AppDetail.AnalysisMode.InstalledPackage) {
+                ActionItem(
+                    icon = ApkAnalyzerIcons.Settings,
+                    label = stringResource(R.string.app_detail_action_app_info),
+                    onClick = { onAction(AppDetailAction.OpenAppInfo) },
+                )
+            }
         }
         Spacer(modifier = Modifier.height(2.dp))
     }
@@ -460,13 +652,14 @@ private fun ActionItem(
     label: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .width(72.dp)
             .clip(Shapes.CardShape)
-            .clickable(onClick = onClick)
+            .then(if (enabled) Modifier.clickable(onClick = onClick) else Modifier)
             .padding(horizontal = 8.dp, vertical = 10.dp),
     ) {
         Box(
@@ -477,7 +670,7 @@ private fun ActionItem(
         ) {
             Icon(
                 imageVector = icon,
-                tint = AppTheme.colors.primary,
+                tint = if (enabled) AppTheme.colors.primary else AppTheme.colors.onSurfaceVariant,
                 modifier = Modifier.size(22.dp),
             )
         }
@@ -485,7 +678,7 @@ private fun ActionItem(
         Text(
             text = label,
             style = AppTheme.typography.labelSmall,
-            color = AppTheme.colors.onSurface,
+            color = if (enabled) AppTheme.colors.onSurface else AppTheme.colors.onSurfaceVariant,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,
@@ -500,6 +693,7 @@ private fun CertificateSignatureSection(
     modifier: Modifier = Modifier,
 ) {
     val cert = state.certificate ?: return
+    val validity = cert.validity(Instant.now())
     val (icon, iconTint, signerText) = when (cert.trustLevel) {
         CertificateTrustLevel.Debug -> Triple(
             ApkAnalyzerIcons.Warning,
@@ -550,6 +744,39 @@ private fun CertificateSignatureSection(
                 color = AppTheme.colors.onSurfaceVariant,
             )
         }
+        if (cert.isSelfSigned) {
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = stringResource(R.string.app_detail_certificate_self_signed),
+                style = AppTheme.typography.bodySmall,
+                color = AppTheme.colors.onSurfaceVariant,
+            )
+        }
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = when (validity) {
+                CertificateValidity.Valid -> stringResource(
+                    R.string.app_detail_certificate_valid_until,
+                    formatTimestamp(cert.validUntil),
+                )
+
+                CertificateValidity.Expired -> stringResource(
+                    R.string.app_detail_certificate_expired,
+                    formatTimestamp(cert.validUntil),
+                )
+
+                CertificateValidity.NotYetValid -> stringResource(
+                    R.string.app_detail_certificate_not_yet_valid,
+                    formatTimestamp(cert.validFrom),
+                )
+            },
+            style = AppTheme.typography.bodySmall,
+            color = if (validity == CertificateValidity.Valid) {
+                AppTheme.colors.onSurfaceVariant
+            } else {
+                AppTheme.colors.warning
+            },
+        )
         Spacer(modifier = Modifier.height(12.dp))
         HashBox(
             label = stringResource(R.string.app_detail_certificate_sha256_fingerprint),
@@ -853,6 +1080,7 @@ private fun AppDetailLoadingPreview() {
     ApkAnalyzerTheme {
         AppDetailContent(
             state = AppDetailState.Loading,
+            appReference = AppReference.InstalledPackage("com.spotify.music"),
             onAction = {},
             onBack = {},
         )
@@ -865,6 +1093,7 @@ private fun AppDetailErrorPreview() {
     ApkAnalyzerTheme {
         AppDetailContent(
             state = AppDetailState.Error,
+            appReference = AppReference.InstalledPackage("com.spotify.music"),
             onAction = {},
             onBack = {},
         )
@@ -877,6 +1106,7 @@ private fun AppDetailLoadedPreview() {
     ApkAnalyzerTheme {
         AppDetailContent(
             state = sampleLoadedState(),
+            appReference = AppReference.InstalledPackage("com.spotify.music"),
             onAction = {},
             onBack = {},
         )
@@ -963,5 +1193,14 @@ private fun sampleLoadedState() = AppDetailState.Loaded(
         sha256Fingerprint = "A1:B2:C3:D4:E5:F6:A7:B8:C9:D0:E1:F2:A3:B4:C5:D6:E7:F8:A9:B0:C1:D2:E3:F4:A5:B6:C7:D8:E9:F0:A1:B2",
         issuer = CertificatePrincipal(name = "Android", organization = "Google Inc."),
         trustLevel = CertificateTrustLevel.Valid,
+        validFrom = Instant.ofEpochMilli(1_609_459_200_000),
+        validUntil = Instant.ofEpochMilli(2_388_441_600_000),
+        isSelfSigned = true,
+    ),
+    insights = persistentListOf(
+        AppDetailInsight.SensitivePermission(
+            access = SensitiveAccess.BackgroundLocation,
+            permissionName = "android.permission.ACCESS_BACKGROUND_LOCATION",
+        ),
     ),
 )

@@ -11,6 +11,7 @@ Foundation module with shared utilities depended on by nearly all other modules.
 coroutines/
   DispatcherProvider.kt   - Injectable dispatcher provider (main, default, io, unconfined)
   Flows.kt                - Flow utility extensions
+  RunCatching.kt          - Result capture for suspend code that rethrows cancellation
 logger/
   Logger.kt               - Timber + Firebase Crashlytics logging wrapper (object)
 resources/
@@ -21,6 +22,7 @@ settings/
   PersistenceModule.kt             - Hilt module
   Key.kt                           - Preference key definitions (includes ColorAppScheme)
 model/
+  AppReference.kt         - Installed-package or APK-file reference shared across analysis and UI
   AppSource.kt            - Enum: GooglePlay, Amazon, Huawei, Samsung, Unknown, etc.
   AppSize.kt              - Value class for file sizes with formatting
 clipboard/                - Clipboard access utilities
@@ -35,6 +37,7 @@ util/                     - General utilities (FileUtil, etc.)
 - `ResourcesManager` - Injectable Android resources access
 - `PersistenceRepository` - DataStore preferences abstraction
 - `AppSource` - App install source classification
+- `AppReference` - Type-safe reference to an installed package or an APK file
 - `AppSize` - File size value with display formatting
 - `ColorAppScheme` - Day/Night/FollowSystem enum
 
@@ -43,4 +46,3 @@ util/                     - General utilities (FileUtil, etc.)
 - Timber
 - DataStore Preferences
 - Hilt
-

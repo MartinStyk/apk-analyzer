@@ -1,10 +1,10 @@
     # App Detail — Full Data Presentation
 
 **Roadmap:** [FR-10 … FR-18](../roadmap.md#12-app-detail), [FR-25](../roadmap.md#15-export--share), plus [EX-07](../roadmap.md#18-data-gaps--extraction-that-doesnt-exist-yet) · R0
-**Status:** Approved design. [Steps 1–3](#implementation-order) shipped; Steps 4–6 outstanding
-**Scope:** surface everything `AppDetail` holds inside `feature:app-detail`, and finish the icon
-export action on the hub. Manifest viewer (`FR-16`) and APK export (`FR-24`) are out — see
-[Deferred](#deferred).
+**Status:** Approved design. [Steps 1–3](#implementation-order), the hub rework, manifest viewer,
+and export actions shipped; Requirements and the final polish pass remain
+**Scope:** surface everything `AppDetail` holds inside `feature:app-detail`, provide a readable
+manifest, and finish base-APK and icon export. The Requirements screen remains separate work.
 
 ## Why
 
@@ -18,8 +18,8 @@ export action on the hub. Manifest viewer (`FR-16`) and APK export (`FR-24`) are
 | `certificates` | All certificate fields, fingerprints, validity, signer count, and key rotation |
 | `features` | Count only |
 
-General Info, Permissions, Components, and Certificates are wired from the app detail hub.
-Requirements and the deferred actions remain.
+General Info, Permissions, Components, Certificates, and the manifest viewer are wired from the app
+detail hub. Requirements remains.
 
 ## Audience
 
@@ -174,15 +174,14 @@ actions row.
 │                                          │
 │ ⚠ Signed with a debug certificate      › │
 │ ⚠ Targets Android 10 — outdated        › │
-│ ⚠ 12 components open to other apps     › │
-│ ⚠ 6 dangerous permissions granted      › │
+│ ⚠ Can access location in background    › │
 └──────────────────────────────────────────┘
 ```
 
 Each line deep-links to the relevant section. Most apps produce zero lines and the card does not
 render. Attention is spent only where the app is unusual.
 
-**Changed — cards preview instead of counting:**
+**Changed — cards preview instead of counting where the available evidence supports interpretation:**
 
 ```
 ┌──────────────────────────────────────────┐
@@ -195,7 +194,6 @@ render. Attention is spent only where the app is unusual.
 │ Services           57                    │
 │ Receivers          89                    │
 │ Providers           4                    │
-│ ⚠ 12 exported to other apps              │
 ├──────────────────────────────────────────┤
 │ Signing                                › │
 │ ✓ Google Inc. · self-signed              │
@@ -613,16 +611,27 @@ Screen work:
 
 ### Step 5 — Hub rework
 
-- Card previews: dangerous permission group icons, exported component count, certificate validity
-  line and self-signed note, required/optional feature split.
-- "Worth knowing" card with its rule set: debug certificate, outdated target SDK, exported
-  components without a permission guard, dangerous permissions granted. Each row deep-links.
+- Card previews: dangerous permission group icons, certificate validity line and self-signed note,
+  and required/optional feature split. Components stay as neutral per-type counts until `EX-07`
+  provides the intent-filter evidence needed to interpret exposure.
+- "Worth knowing" card with its rule set: debug or not-yet-valid certificate, a target at least four
+  API levels behind the device, and actually granted high-impact access such as background location,
+  messages, call history, contacts, or calendar. Exported components and merely requested
+  permissions are not findings. Each row deep-links.
 - Extend `AppDetailState.Loaded` with the derived values the previews need.
 - **Save icon**: an icon loader in `:core:apps` returning the full-resolution bitmap for a package
   name or an APK path (setting `sourceDir` / `publicSourceDir` in the archive case), PNG encoding,
   an `ACTION_CREATE_DOCUMENT` launcher wired to `AppDetailEvent.SaveIcon` in
   `AppDetailEntryProvider`, and the success/failure messages. Replaces the
   `Logger.d("not yet implemented")` handler.
+- **Manifest viewer**: readable namespaced XML for installed packages and APK files, lazy-rendered
+  by line. Search shows each matching line with its full owning start tag, so a matching attribute
+  keeps the component name and related attributes needed to interpret it. Installed packages read
+  the base APK directly; when additional splits are installed, the screen states how many other
+  manifest documents exist rather than presenting an arbitrary split or claiming a merged source.
+- **Export APK**: `ACTION_CREATE_DOCUMENT` writes the installed base APK. When the app uses split
+  APKs, a persistent bottom sheet explains that the saved base APK is not a complete install
+  package. APK-file mode hides the redundant export action.
 
 ### Step 6 — Polish pass
 
@@ -638,8 +647,6 @@ Screen work:
   Collapsible groups by package prefix would tame 428 items and reveal the app's architecture, but
   search plus the exported filters carry it for now. Revisit after Step 2 ships and the list has
   been used against a real 400-component app.
-- **Manifest viewer** (`FR-16`), **Export APK** (`FR-24`) — existing stub actions on the hub, still
-  in R0 but out of scope for this doc.
 - **"Also signed with this certificate"** (`CE-06`) — listing the other installed apps that share
   this signer would turn the fingerprint section from a hex dump into an answer, and the data is
   already extracted for every app. It needs the device-wide certificate index (`CE-01`), so it is
@@ -653,8 +660,9 @@ Screen work:
 - **Repeated loading on APK-file input only.** `AppDetailRepositoryImpl` is `@Singleton` and holds a
   `ConcurrentHashMap<String, AppDetail>` keyed by package name, invalidated by
   `PackageChangesObserver`. Installed packages are parsed once and every section ViewModel after
-  that is a map lookup — no problem there. But `apkFilePackageDetails` has **no cache**: each call
-  runs `getPackageArchiveInfo` plus certificate extraction against the file again. With five
+  that is a map lookup — no problem there. But `details(AppReference.ApkFile(...))` has **no
+  cache**: each call runs `getPackageArchiveInfo` plus certificate extraction against the file
+  again. With five
   section screens, opening an APK re-parses the archive on every navigation. Fix is small — key the
   same cache by file path plus last-modified — but decide whether it belongs in this work or as a
   separate `:core:apps` change.

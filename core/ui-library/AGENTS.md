@@ -16,7 +16,7 @@ theme/
 components/          - See the component inventory below
 icons/
   ApkAnalyzerIcons.kt - Icon constants (Apps, Permissions, Statistics, etc.)
-  app/PackageIcon.kt, PackageIconFetcher.kt, PackageIconModule.kt - Coil fetcher for installed-app icons
+  app/PackageIconFetcher.kt, PackageIconModule.kt - Coil fetcher for `AppReference` icons
 animation/
   NavEntryTransitions.kt - bottomEntryMetadata(), slideFromEndEntryMetadata()
 lazylist/

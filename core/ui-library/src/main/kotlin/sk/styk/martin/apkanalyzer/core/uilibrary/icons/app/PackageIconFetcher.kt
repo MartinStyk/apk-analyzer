@@ -11,19 +11,46 @@ import coil3.fetch.Fetcher
 import coil3.fetch.ImageFetchResult
 import coil3.key.Keyer
 import coil3.request.Options
+import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
+import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 
-internal class PackageIconKeyer : Keyer<PackageIcon> {
-    override fun key(data: PackageIcon, options: Options): String = "package_icon:${data.packageName}"
+internal class PackageIconKeyer : Keyer<AppReference> {
+    override fun key(data: AppReference, options: Options): String = when (data) {
+        is AppReference.InstalledPackage -> "package_icon:installed:${data.packageName}"
+        is AppReference.ApkFile -> "package_icon:apk:${data.path}"
+    }
 }
 
-internal class PackageIconFetcher(private val data: PackageIcon, private val packageManager: PackageManager) : Fetcher {
+internal class PackageIconFetcher(private val data: AppReference, private val packageManager: PackageManager) : Fetcher {
 
     override suspend fun fetch(): FetchResult? {
-        val drawable = runCatching {
-            packageManager.getApplicationInfo(data.packageName, 0).loadIcon(packageManager)
+        val drawable = runCatchingCancellable {
+            when (data) {
+                is AppReference.InstalledPackage ->
+                    packageManager
+                        .getApplicationInfo(data.packageName, 0)
+                        .loadIcon(packageManager)
+
+                is AppReference.ApkFile ->
+                    packageManager
+                        .getPackageArchiveInfo(data.path, 0)
+                        ?.applicationInfo
+                        ?.apply {
+                            sourceDir = data.path
+                            publicSourceDir = data.path
+                        }
+                        ?.let { applicationInfo ->
+                            if (applicationInfo.icon == 0) {
+                                packageManager.defaultActivityIcon
+                            } else {
+                                packageManager.getResourcesForApplication(applicationInfo)
+                                    .getDrawable(applicationInfo.icon, null)
+                            }
+                        } ?: error("Can not read APK icon")
+            }
         }.onFailure {
-            Logger.e("PackageIconFetcher", it, "Icon not available for ${data.packageName}")
+            Logger.e(TAG, it, "Icon not available for $data")
         }.getOrNull() ?: return null
 
         val bitmap = drawable.toBitmap()
@@ -34,11 +61,15 @@ internal class PackageIconFetcher(private val data: PackageIcon, private val pac
         )
     }
 
-    class Factory(private val packageManager: PackageManager) : Fetcher.Factory<PackageIcon> {
+    class Factory(private val packageManager: PackageManager) : Fetcher.Factory<AppReference> {
         override fun create(
-            data: PackageIcon,
+            data: AppReference,
             options: Options,
             imageLoader: ImageLoader,
         ): Fetcher = PackageIconFetcher(data, packageManager)
+    }
+
+    private companion object {
+        const val TAG = "PackageIconFetcher"
     }
 }
