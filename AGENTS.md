@@ -56,8 +56,8 @@ is the authoritative list.
 * A module's package matches its directory with hyphens removed: `core/user-preferences` →
   `core.userpreferences`, `feature/app-detail/impl` → `feature.appdetail.impl`. `app` uses the root
   package `sk.styk.martin.apkanalyzer` with no suffix.
-* `feature:permissions` and `feature:statistics` are **stubs** — placeholder screens with no
-  ViewModel or logic. Don't assume they work.
+* `feature:browse` is a **stub** — a placeholder screen with no ViewModel or logic. Don't assume it
+  works.
 
 ## Architecture
 

@@ -53,7 +53,7 @@ A multi-module Gradle project with one strict dependency direction:
 
 ```
 app                          → wires everything together (Hilt graph, nav host, Activity)
-├── core/*                   → domain & infra: apps, app-permissions, app-statistics,
+├── core/*                   → domain & infra: apps, app-permissions, app-index,
 │                               common, navigation, ui-library, user-preferences
 └── feature/<name>/{api,impl}
     ├── api                  → NavKey only, depends on nothing

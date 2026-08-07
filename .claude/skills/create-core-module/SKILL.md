@@ -149,7 +149,7 @@ The root `AGENTS.md` does not list individual modules, so there is nothing to up
 |-----------|----------------|
 | `core/apps` | `core.apps` |
 | `core/app-permissions` | `core.apppermissions` |
-| `core/app-statistics` | `core.appstatistics` |
+| `core/app-index` | `core.appindex` |
 | `core/user-preferences` | `core.userpreferences` |
 | `core/ui-library` | `core.uilibrary` |
 | `core/common` | `core.common` |

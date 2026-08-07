@@ -1,0 +1,60 @@
+# core:app-index Module
+
+## Purpose
+Builds `attribute → apps` indexes across every installed app — target SDK, min SDK, install source,
+permission, and signing certificate (fingerprint, organization, country) — for the `feature:browse`
+"Browse by Attribute" screen (roadmap `CE-01`). A pure bucketing layer: it holds no `PackageManager`
+access of its own and reaches only two public `core:apps` repositories (`InstalledAppsRepository`,
+`AppSigningRepository`), never `analysis/` internals (`CertificateExtractor`, `InstallSourceResolver`)
+directly.
+
+## Package: `sk.styk.martin.apkanalyzer.core.appindex`
+
+## Structure
+
+```
+AppIndexRepository.kt / Impl  - Flow of AppIndexStatus, combines InstalledAppsRepository.apps() and AppSigningRepository.signing()
+AppIndexer.kt                  - internal object; pure (List<InstalledApp>, Map<packageName, AppSigning>) -> AppAttributeIndex transform, one groupBy helper per dimension
+model/
+  AppAttributeIndex.kt         - targetSdk / minSdk / installSource / permission / certificateFingerprint / certificateOrganization / certificateCountry buckets, each Map<value, List<packageName>>
+  AppIndexStatus.kt            - sealed: Loading | Data(index) - Loading before the first combined emission
+di/
+  AppIndexModule.kt            - Hilt @Binds for AppIndexRepository
+```
+
+## Key Interface
+
+```kotlin
+interface AppIndexRepository {
+    fun index(): Flow<AppIndexStatus>
+}
+```
+
+Recomputes whenever `InstalledAppsRepository.apps()` or `AppSigningRepository.signing()` emits — no
+separate `PackageChangesObserver` subscription, no separate caching of its own. Grouping is CPU-bound,
+not I/O, so the combine step runs on `dispatcherProvider.default()` — the certificate digest/verify
+work itself happens upstream in `AppSigningRepositoryImpl`, on `dispatcherProvider.io()`.
+
+## Dimensions, and why the first four are cheaper than the last three
+
+`targetSdk`, `minSdk`, `installSource`, `permission` are all already on `InstalledApp` — no new query.
+`certificateFingerprint`/`certificateOrganization`/`certificateCountry` come from
+`AppSigningRepository`, which runs a real X.509 parse, six digest computations, and a signature-verify
+per certificate — genuinely heavier, which is why that repository is `Lazily` shared (see
+`core/apps/AGENTS.md`) rather than computed unconditionally like `InstalledAppsRepository`. A
+multi-signer app is indexed under every current signer, not an arbitrary "first" one
+(`AppIndexer.byCertificate` `flatMap`s over `AppSigning.currentCertificates`). Fingerprint uses
+`Certificate.certificateHashSha256` per roadmap `FR-09` ("same publisher" — group by fingerprint, not
+signing algorithm); organization/country come from `Certificate.subject`, matching the certificate
+screen's existing convention for "the signer."
+
+**Uses-feature grouping is still deferred** — it would need a new `PackageManager` flag
+(`GET_CONFIGURATIONS`) nothing currently requests. Unlike certificate, no other `core:apps` consumer
+needs a device-wide feature list today, so there's no general-purpose repository to build yet; add one
+the same way `AppSigningRepository` was added — in `core:apps`, not here — when a real second consumer
+appears.
+
+## Dependencies
+- `implementation(projects.core.apps)` - `InstalledAppsRepository`, `AppSigningRepository`, and their
+  models, public surface only
+- `implementation(projects.core.common)` - `AppSource`, `DispatcherProvider`

@@ -5,11 +5,9 @@ import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.NavigationBarItem
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.feature.apps.api.AppsNavKey
-import sk.styk.martin.apkanalyzer.feature.permissions.api.PermissionsNavKey
-import sk.styk.martin.apkanalyzer.feature.statistics.api.StatisticsNavKey
+import sk.styk.martin.apkanalyzer.feature.browse.api.BrowseNavKey
 import sk.styk.martin.apkanalyzer.feature.apps.api.R as AppsR
-import sk.styk.martin.apkanalyzer.feature.permissions.api.R as PermissionsR
-import sk.styk.martin.apkanalyzer.feature.statistics.api.R as StatisticsR
+import sk.styk.martin.apkanalyzer.feature.browse.api.R as BrowseR
 
 internal val TOP_LEVEL_DESTINATIONS =
     persistentListOf(
@@ -20,16 +18,10 @@ internal val TOP_LEVEL_DESTINATIONS =
             title = AppsR.string.apps,
         ),
         NavigationBarItem(
-            navKey = PermissionsNavKey,
-            selectedIcon = ApkAnalyzerIcons.Permissions,
-            unselectedIcon = ApkAnalyzerIcons.PermissionsBorder,
-            title = PermissionsR.string.permissions,
-        ),
-        NavigationBarItem(
-            navKey = StatisticsNavKey,
-            selectedIcon = ApkAnalyzerIcons.Statistics,
-            unselectedIcon = ApkAnalyzerIcons.StatisticsBorder,
-            title = StatisticsR.string.statistics,
+            navKey = BrowseNavKey,
+            selectedIcon = ApkAnalyzerIcons.Browse,
+            unselectedIcon = ApkAnalyzerIcons.BrowseBorder,
+            title = BrowseR.string.browse,
         ),
     )
 

@@ -178,7 +178,7 @@ Impl Structure, Key Patterns, Dependencies), plus a one-line `CLAUDE.md` pointer
 
 If the feature starts as a placeholder screen (Step 4's stub), say so explicitly in the `AGENTS.md`
 purpose line — e.g. "Status: stub/placeholder — not yet implemented" (see
-`feature/permissions/AGENTS.md`) — so a future agent doesn't assume real behavior exists. Update it
+`feature/browse/AGENTS.md`) — so a future agent doesn't assume real behavior exists. Update it
 once the feature is actually built out.
 
 The root `AGENTS.md` does not list individual modules, so there is nothing to update there. Run

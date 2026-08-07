@@ -21,9 +21,8 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.LocalSharedTransitionS
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.navigation.appDetailEntries
 import sk.styk.martin.apkanalyzer.feature.apps.api.AppsNavKey
 import sk.styk.martin.apkanalyzer.feature.apps.impl.navigation.appEntries
-import sk.styk.martin.apkanalyzer.feature.permissions.impl.navigation.permissionEntries
+import sk.styk.martin.apkanalyzer.feature.browse.impl.navigation.browseEntries
 import sk.styk.martin.apkanalyzer.feature.settings.impl.navigation.settingsEntries
-import sk.styk.martin.apkanalyzer.feature.statistics.impl.navigation.statisticsEntries
 import sk.styk.martin.apkanalyzer.ui.navigation.TOP_LEVEL_DESTINATIONS
 import sk.styk.martin.apkanalyzer.ui.navigation.TOP_LEVEL_KEYS
 
@@ -44,8 +43,7 @@ internal fun ApkAnalyzerApp() {
                     val entryProvider = entryProvider {
                         appEntries(navigator)
                         appDetailEntries(navigator)
-                        permissionEntries()
-                        statisticsEntries()
+                        browseEntries()
                         settingsEntries(navigator)
                     }
                     NavDisplay(
