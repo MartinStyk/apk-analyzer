@@ -88,7 +88,11 @@ internal sealed interface AppDetailState {
         }
 
         @Immutable
-        data class PermissionPreview(val name: String, val groupName: String?, val label: String)
+        data class PermissionPreview(
+            val name: String,
+            val groupName: String?,
+            val label: String,
+        )
 
         @Immutable
         data class RequirementPreview(val name: String?, val isUnmetRequirement: Boolean)

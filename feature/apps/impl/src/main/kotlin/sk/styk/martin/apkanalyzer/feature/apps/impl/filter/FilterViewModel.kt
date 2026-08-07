@@ -214,5 +214,9 @@ class FilterViewModel @Inject constructor(
         }
     }
 
-    private data class AppsMetadata(val sdkVersions: List<Int>, val apkSizeRange: AppSizeRange?, val totalSizeRange: AppSizeRange?)
+    private data class AppsMetadata(
+        val sdkVersions: List<Int>,
+        val apkSizeRange: AppSizeRange?,
+        val totalSizeRange: AppSizeRange?,
+    )
 }

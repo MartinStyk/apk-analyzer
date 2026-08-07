@@ -19,7 +19,11 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 
 @Immutable
-internal data class InfoRow(val label: String, val value: String, val rationale: String)
+internal data class InfoRow(
+    val label: String,
+    val value: String,
+    val rationale: String,
+)
 
 @Composable
 internal fun InfoRowItem(

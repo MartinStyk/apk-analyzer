@@ -38,7 +38,13 @@ internal enum class ComponentFlag {
 internal sealed interface ComponentDetails {
 
     @Immutable
-    data class ActivityDetails(val label: String?, val targetActivity: String?, val parentName: String?, val permission: String?, val isLauncher: Boolean?) : ComponentDetails
+    data class ActivityDetails(
+        val label: String?,
+        val targetActivity: String?,
+        val parentName: String?,
+        val permission: String?,
+        val isLauncher: Boolean?,
+    ) : ComponentDetails
 
     @Immutable
     data class ServiceDetails(val permission: String?) : ComponentDetails
@@ -47,7 +53,11 @@ internal sealed interface ComponentDetails {
     data class ReceiverDetails(val permission: String?) : ComponentDetails
 
     @Immutable
-    data class ProviderDetails(val authority: String?, val readPermission: String?, val writePermission: String?) : ComponentDetails
+    data class ProviderDetails(
+        val authority: String?,
+        val readPermission: String?,
+        val writePermission: String?,
+    ) : ComponentDetails
 }
 
 @Immutable
@@ -77,8 +87,14 @@ internal sealed interface ComponentsState {
     data object Error : ComponentsState
 
     @Immutable
-    data class Loaded(val scope: ComponentScope, val scopeOptions: ImmutableList<ComponentScope>, val selectedFilters: ImmutableSet<ComponentFilter>, val query: String, val scopeTotal: Int, val sections: ImmutableList<ComponentSection>) :
-        ComponentsState {
+    data class Loaded(
+        val scope: ComponentScope,
+        val scopeOptions: ImmutableList<ComponentScope>,
+        val selectedFilters: ImmutableSet<ComponentFilter>,
+        val query: String,
+        val scopeTotal: Int,
+        val sections: ImmutableList<ComponentSection>,
+    ) : ComponentsState {
         val hasResults: Boolean
             get() = sections.isNotEmpty()
 

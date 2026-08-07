@@ -10,8 +10,11 @@ import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import javax.inject.Inject
 
-internal class AppIndexRepositoryImpl @Inject constructor(private val installedAppsRepository: InstalledAppsRepository, private val appSigningRepository: AppSigningRepository, private val dispatcherProvider: DispatcherProvider) :
-    AppIndexRepository {
+internal class AppIndexRepositoryImpl @Inject constructor(
+    private val installedAppsRepository: InstalledAppsRepository,
+    private val appSigningRepository: AppSigningRepository,
+    private val dispatcherProvider: DispatcherProvider,
+) : AppIndexRepository {
 
     override fun index(): Flow<AppIndexStatus> = combine(
         installedAppsRepository.apps(),

@@ -27,7 +27,13 @@ sealed interface RequirementItem {
     val availability: FeatureAvailability
 
     @Immutable
-    data class Hardware(val name: String, val requiredVersion: Int, val deviceVersion: Int?, override val isRequired: Boolean, override val availability: FeatureAvailability) : RequirementItem {
+    data class Hardware(
+        val name: String,
+        val requiredVersion: Int,
+        val deviceVersion: Int?,
+        override val isRequired: Boolean,
+        override val availability: FeatureAvailability,
+    ) : RequirementItem {
         override val identifier: String
             get() = name
 
@@ -36,5 +42,11 @@ sealed interface RequirementItem {
     }
 
     @Immutable
-    data class OpenGlEs(val versionName: String, val deviceVersionName: String?, override val identifier: String, override val isRequired: Boolean, override val availability: FeatureAvailability) : RequirementItem
+    data class OpenGlEs(
+        val versionName: String,
+        val deviceVersionName: String?,
+        override val identifier: String,
+        override val isRequired: Boolean,
+        override val availability: FeatureAvailability,
+    ) : RequirementItem
 }

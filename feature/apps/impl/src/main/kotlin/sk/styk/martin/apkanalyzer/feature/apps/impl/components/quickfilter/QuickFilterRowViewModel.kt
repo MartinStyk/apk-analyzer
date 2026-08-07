@@ -17,7 +17,11 @@ import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.QuickFilter
 import javax.inject.Inject
 
 @HiltViewModel
-class QuickFilterRowViewModel @Inject constructor(private val appFilterRepository: AppFilterRepository, private val usageStatsRepository: UsageStatsRepository, private val storageStatsRepository: StorageStatsRepository) : ViewModel() {
+class QuickFilterRowViewModel @Inject constructor(
+    private val appFilterRepository: AppFilterRepository,
+    private val usageStatsRepository: UsageStatsRepository,
+    private val storageStatsRepository: StorageStatsRepository,
+) : ViewModel() {
 
     private val eventChannel = Channel<QuickFilterRowEvent>(Channel.BUFFERED)
     val events = eventChannel.receiveAsFlow()
