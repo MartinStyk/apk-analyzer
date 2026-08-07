@@ -31,6 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.IconButton
@@ -50,7 +51,7 @@ import java.time.Instant
 
 @Composable
 internal fun AppSearchScreen(
-    onAppClick: (String) -> Unit,
+    onAppClick: (PackageName) -> Unit,
     onBack: () -> Unit,
     onFilter: () -> Unit,
     modifier: Modifier = Modifier,
@@ -317,7 +318,7 @@ private fun AppSearchContentResultsPreview() {
                 query = "insta",
                 results = persistentListOf(
                     AppListItem(
-                        packageName = "com.instagram.android",
+                        packageName = PackageName("com.instagram.android"),
                         applicationName = "Instagram",
                         targetSdk = 34,
                         apkSize = 64.megabytes,

@@ -80,7 +80,7 @@ internal fun AppListItemRow(
             Spacer(modifier = Modifier.height(2.dp))
 
             Text(
-                text = app.packageName,
+                text = app.packageName.value,
                 style = AppTheme.typography.bodySmall,
                 color = AppTheme.colors.onSurfaceVariant,
                 maxLines = 1,

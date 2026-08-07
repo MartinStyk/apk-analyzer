@@ -320,9 +320,6 @@ private fun AppDetail.toLoadedState(permissionLabelProvider: PermissionLabelProv
                 sha256Fingerprint = cert.formattedSha256Fingerprint,
                 issuer = cert.issuer,
                 trustLevel = cert.trustLevel,
-                validFrom = cert.validFrom,
-                validUntil = cert.validUntil,
-                isSelfSigned = cert.isSelfSigned,
             )
         },
         totalSize = info.totalSize,

@@ -16,6 +16,7 @@ import sk.styk.martin.apkanalyzer.core.apps.analysis.InstallSourceResolver
 import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import java.io.File
 import java.time.Instant
@@ -68,7 +69,7 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
     private fun PackageInfo.toInstalledApp(): InstalledApp {
         val appInfo = applicationInfo
         return InstalledApp(
-            packageName = packageName,
+            packageName = PackageName(packageName),
             applicationName = appInfo?.loadLabel(packageManager)?.toString() ?: packageName,
             isSystemApp = installSourceResolver.isSystemInstalledApp(this),
             version = longVersionCode,

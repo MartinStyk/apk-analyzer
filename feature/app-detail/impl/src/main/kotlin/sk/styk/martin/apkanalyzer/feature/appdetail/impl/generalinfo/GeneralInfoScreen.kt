@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.LoadingSpinner
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Toolbar
@@ -121,7 +122,7 @@ private fun LoadedContent(
             )
             InfoRowItem(
                 label = stringResource(R.string.general_info_package_name),
-                value = state.packageName,
+                value = state.packageName.value,
                 rationale = stringResource(R.string.general_info_rationale_package_name),
                 onShowRationale = { rationaleRow = it },
                 onCopy = onCopy,
@@ -227,7 +228,7 @@ private fun LoadedContent(
             state.appInstaller?.let { value ->
                 InfoRowItem(
                     label = stringResource(R.string.general_info_installer_package),
-                    value = value,
+                    value = value.value,
                     rationale = stringResource(R.string.general_info_rationale_installer_package),
                     onShowRationale = { rationaleRow = it },
                     onCopy = onCopy,
@@ -360,7 +361,7 @@ private fun GeneralInfoLoadedPreview() {
 
 private fun sampleGeneralInfoState() = GeneralInfoState.Loaded(
     applicationName = "Spotify",
-    packageName = "com.spotify.music",
+    packageName = PackageName("com.spotify.music"),
     processName = "com.spotify.music",
     uid = 10234,
     description = null,
@@ -372,7 +373,7 @@ private fun sampleGeneralInfoState() = GeneralInfoState.Loaded(
     targetSdkLabel = "Android 15",
     isSystemApp = false,
     source = "GooglePlay",
-    appInstaller = "com.android.vending",
+    appInstaller = PackageName("com.android.vending"),
     firstInstallTime = Instant.ofEpochMilli(1_736_640_000_000),
     lastUpdateTime = Instant.ofEpochMilli(1_748_736_000_000),
     lastUsedTime = Instant.ofEpochMilli(1_749_600_000_000),

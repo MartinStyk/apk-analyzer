@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -33,8 +34,8 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
     final override val isPermissionGranted: StateFlow<Boolean>
         field = MutableStateFlow(checkPermission())
 
-    final override val lastUsedTimes: StateFlow<Map<String, Instant>>
-        field = MutableStateFlow<Map<String, Instant>>(emptyMap())
+    final override val lastUsedTimes: StateFlow<Map<PackageName, Instant>>
+        field = MutableStateFlow<Map<PackageName, Instant>>(emptyMap())
 
     override fun onStart(owner: LifecycleOwner) {
         applicationScope.launch(dispatcherProvider.default()) {
@@ -42,11 +43,11 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun queryLastUsedTime(packageName: String): Instant? {
+    override suspend fun queryLastUsedTime(packageName: PackageName): Instant? {
         lastUsedTimes.value[packageName]?.let { return it }
         if (!checkPermission()) return null
         return queryRawUsageStats()
-            .filter { it.packageName == packageName }
+            .filter { it.packageName == packageName.value }
             .maxOfOrNull { it.lastTimeUsed }
             ?.let { Instant.ofEpochMilli(it) }
     }
@@ -58,7 +59,7 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
 
         Logger.d(INSTALLED_APPS, "Load apps last used time")
         lastUsedTimes.value = queryRawUsageStats()
-            .groupBy { it.packageName }
+            .groupBy { PackageName(it.packageName) }
             .mapValues { (_, usages) -> Instant.ofEpochMilli(usages.maxOf { it.lastTimeUsed }) }
         Logger.d(INSTALLED_APPS, "Apps last used time loaded")
     }

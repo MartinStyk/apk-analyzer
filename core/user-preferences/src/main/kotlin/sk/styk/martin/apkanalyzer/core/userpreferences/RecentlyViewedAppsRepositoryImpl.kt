@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.settings.Key
 import sk.styk.martin.apkanalyzer.core.common.settings.PersistenceRepository
 import javax.inject.Inject
@@ -20,16 +21,16 @@ internal class RecentlyViewedAppsRepositoryImpl @Inject constructor(private val 
                     persistenceRepository.observe(Key.RecentlyViewedApps),
                     installedAppsRepository.apps().map { it.associateBy { it.packageName } },
                 ) { recentPackages, installedApps ->
-                    recentPackages.mapNotNull { installedApps[it] }
+                    recentPackages.mapNotNull { installedApps[PackageName(it)] }
                 }
             } else {
                 flowOf(emptyList())
             }
         }
 
-    override suspend fun addRecent(packageName: String) {
+    override suspend fun addRecent(packageName: PackageName) {
         val current = persistenceRepository.get(Key.RecentlyViewedApps)
-        val updated = (listOf(packageName) + current.filter { it != packageName }).take(MAX_RECENTS)
+        val updated = (listOf(packageName.value) + current.filter { it != packageName.value }).take(MAX_RECENTS)
         persistenceRepository.save(Key.RecentlyViewedApps, updated)
     }
 

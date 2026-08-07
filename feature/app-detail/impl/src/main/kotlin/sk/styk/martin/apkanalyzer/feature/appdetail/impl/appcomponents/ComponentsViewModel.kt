@@ -30,6 +30,7 @@ import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.toAppReference
 
@@ -95,7 +96,7 @@ internal class ComponentsViewModel @AssistedInject constructor(
             }
 
             is ComponentsAction.LaunchComponent -> {
-                val packageName = (appDetailInput as? AppDetailInput.InstalledPackage)?.packageName ?: return
+                val packageName = (appDetailInput as? AppDetailInput.InstalledPackage)?.packageName?.let(::PackageName) ?: return
                 viewModelScope.launch {
                     eventChannel.send(ComponentsEvent.LaunchComponent(packageName, action.className, action.type))
                 }

@@ -47,6 +47,7 @@ import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
 import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionFlag
 import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.LoadingSpinner
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.MultiSelectorChip
@@ -468,7 +469,7 @@ private fun sampleLoadedState() = PermissionsState.Loaded(
                     protectionLevel = ProtectionLevel.Dangerous,
                     protectionFlags = persistentListOf(),
                     grantState = GrantState.Granted,
-                    declaringPackage = "android",
+                    declaringPackage = PackageName("android"),
                     isSelfDeclared = false,
                 ),
                 PermissionItem(
@@ -479,7 +480,7 @@ private fun sampleLoadedState() = PermissionsState.Loaded(
                     protectionLevel = ProtectionLevel.Dangerous,
                     protectionFlags = persistentListOf(ProtectionFlag.AppOp),
                     grantState = GrantState.NotGranted,
-                    declaringPackage = "android",
+                    declaringPackage = PackageName("android"),
                     isSelfDeclared = false,
                 ),
             ),
@@ -495,7 +496,7 @@ private fun sampleLoadedState() = PermissionsState.Loaded(
                     protectionLevel = ProtectionLevel.Normal,
                     protectionFlags = persistentListOf(),
                     grantState = GrantState.Granted,
-                    declaringPackage = "android",
+                    declaringPackage = PackageName("android"),
                     isSelfDeclared = false,
                 ),
             ),

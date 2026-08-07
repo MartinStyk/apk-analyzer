@@ -21,6 +21,10 @@ plugins {
 
 android {
     namespace = "sk.styk.martin.apkanalyzer.core.<flatname>"
+
+    buildFeatures {
+        androidResources = false
+    }
 }
 
 dependencies {
@@ -37,12 +41,21 @@ plugins {
 
 android {
     namespace = "sk.styk.martin.apkanalyzer.core.<flatname>"
+
+    buildFeatures {
+        androidResources = false
+    }
 }
 
 dependencies {
     implementation(projects.core.common)
 }
 ```
+
+Drop the `buildFeatures` block only if this module ends up owning its own `res/` (e.g. a
+`strings.xml` for user-facing copy) — see `core/apps/build.gradle.kts` for that shape. Every module
+without resources of its own must set `androidResources = false`; don't leave it unset "just in
+case."
 
 ## Step 2 — Create repository interface
 

@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.shareIn
 import sk.styk.martin.apkanalyzer.core.apps.analysis.CertificateExtractor
 import sk.styk.martin.apkanalyzer.core.apps.model.AppSigning
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import javax.inject.Inject
 
 internal class AppSigningRepositoryImpl @Inject constructor(
@@ -27,8 +28,8 @@ internal class AppSigningRepositoryImpl @Inject constructor(
         .flowOn(dispatcherProvider.io())
         .shareIn(appScope, SharingStarted.Lazily, replay = 1)
 
-    override fun signing(): Flow<Map<String, AppSigning>> = cachedSigning
+    override fun signing(): Flow<Map<PackageName, AppSigning>> = cachedSigning
 
-    private fun loadAllSigning(): Map<String, AppSigning> = packageManager.getInstalledPackages(PackageManager.GET_SIGNING_CERTIFICATES)
-        .associate { it.packageName to certificateExtractor.getAppSigning(it) }
+    private fun loadAllSigning(): Map<PackageName, AppSigning> = packageManager.getInstalledPackages(PackageManager.GET_SIGNING_CERTIFICATES)
+        .associate { PackageName(it.packageName) to certificateExtractor.getAppSigning(it) }
 }

@@ -29,6 +29,7 @@ import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.toAppReference
 
@@ -132,7 +133,7 @@ internal class PermissionsViewModel @AssistedInject constructor(
         )
     }
 
-    private fun Permission.toItem(analysedPackage: String, grantState: GrantState?) = PermissionItem(
+    private fun Permission.toItem(analysedPackage: PackageName, grantState: GrantState?) = PermissionItem(
         name = name,
         label = permissionLabelProvider.getLabel(name),
         description = permissionDescriptionProvider.describe(this),

@@ -39,7 +39,7 @@ fun EntryProviderScope<NavKey>.appEntries(navigator: Navigator) {
 
         AppsScreen(
             onAppDetails = { packageName ->
-                navigator.navigate(AppDetailNavKey(AppDetailInput.InstalledPackage(packageName)))
+                navigator.navigate(AppDetailNavKey(AppDetailInput.InstalledPackage(packageName.value)))
             },
             onSearch = {
                 navigator.navigate(AppSearchNavKey)
@@ -63,7 +63,7 @@ fun EntryProviderScope<NavKey>.appEntries(navigator: Navigator) {
     ) {
         AppSearchScreen(
             onAppClick = { packageName ->
-                navigator.navigate(AppDetailNavKey(AppDetailInput.InstalledPackage(packageName)))
+                navigator.navigate(AppDetailNavKey(AppDetailInput.InstalledPackage(packageName.value)))
             },
             onBack = {
                 navigator.goBack()

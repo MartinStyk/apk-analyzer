@@ -33,6 +33,7 @@ import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import java.io.File
 import java.time.Instant
 import java.util.concurrent.ConcurrentHashMap
@@ -52,7 +53,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     dispatcherProvider: DispatcherProvider,
 ) : AppDetailRepository {
 
-    private val cache = ConcurrentHashMap<String, AppDetail>()
+    private val cache = ConcurrentHashMap<PackageName, AppDetail>()
 
     private val analysisFlags = PackageManager.GET_SIGNING_CERTIFICATES or
         PackageManager.GET_ACTIVITIES or
@@ -76,11 +77,11 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         is AppReference.ApkFile -> apkFilePackageDetails(File(reference.path))
     }
 
-    private suspend fun installedPackageDetails(packageName: String): Result<AppDetail> {
+    private suspend fun installedPackageDetails(packageName: PackageName): Result<AppDetail> {
         cache[packageName]?.let { return Result.success(it) }
         Logger.d(TAG, "Loading details of $packageName")
         return runCatchingCancellable {
-            val packageInfo = packageManager.getPackageInfo(packageName, analysisFlags)
+            val packageInfo = packageManager.getPackageInfo(packageName.value, analysisFlags)
             getPackageDetails(
                 analysisMode = AppDetail.AnalysisMode.InstalledPackage,
                 packageInfo = packageInfo,
@@ -110,7 +111,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         activities = getActivities(
             packageInfo = packageInfo,
             launcherActivityNames = when (analysisMode) {
-                AppDetail.AnalysisMode.InstalledPackage -> queryLauncherActivityNames(packageInfo.packageName)
+                AppDetail.AnalysisMode.InstalledPackage -> queryLauncherActivityNames(PackageName(packageInfo.packageName))
                 AppDetail.AnalysisMode.ApkFile -> null
             },
         ),
@@ -130,7 +131,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         val minSdk = applicationInfo?.minSdkVersion
 
         return AppInfo(
-            packageName = packageInfo.packageName,
+            packageName = PackageName(packageInfo.packageName),
             applicationName = applicationInfo?.loadLabel(packageManager).toString(),
             processName = applicationInfo?.processName,
             versionName = packageInfo.versionName,
@@ -158,7 +159,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     private fun getActivities(packageInfo: PackageInfo, launcherActivityNames: Set<String>?): List<Activity> = packageInfo.activities.orEmpty().map {
         Activity(
             name = it.name,
-            packageName = it.packageName,
+            packageName = PackageName(it.packageName),
             label = it.loadLabel(packageManager).toString(),
             targetActivity = it.targetActivity,
             permission = it.permission,
@@ -168,9 +169,9 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         )
     }
 
-    private fun queryLauncherActivityNames(packageName: String): Set<String> = launcherCategories
+    private fun queryLauncherActivityNames(packageName: PackageName): Set<String> = launcherCategories
         .flatMap { category ->
-            val intent = Intent(Intent.ACTION_MAIN).addCategory(category).setPackage(packageName)
+            val intent = Intent(Intent.ACTION_MAIN).addCategory(category).setPackage(packageName.value)
             runCatching { packageManager.queryIntentActivities(intent, 0) }
                 .onFailure { Logger.w(TAG, "Can not resolve launcher activities of $packageName") }
                 .getOrDefault(emptyList())
@@ -244,7 +245,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         protectionLevel = resolveProtectionLevel(protection),
         protectionFlags = resolveProtectionFlags(protectionFlags),
         description = loadDescription(packageManager)?.toString(),
-        declaringPackage = packageName,
+        declaringPackage = PackageName(packageName),
     )
 
     private fun getFeatures(packageInfo: PackageInfo): List<Feature> = packageInfo.reqFeatures.orEmpty().map { featureInfo ->

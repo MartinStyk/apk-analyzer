@@ -5,6 +5,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionFlag
 import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 
 internal enum class PermissionScope {
     Requested,
@@ -25,7 +26,7 @@ internal data class PermissionItem(
     val protectionLevel: ProtectionLevel?,
     val protectionFlags: ImmutableList<ProtectionFlag>,
     val grantState: GrantState?,
-    val declaringPackage: String?,
+    val declaringPackage: PackageName?,
     val isSelfDeclared: Boolean,
 )
 
