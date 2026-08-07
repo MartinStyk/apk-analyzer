@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.AppIcon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
@@ -63,7 +64,7 @@ internal fun AppListItemRow(
             .padding(horizontal = 12.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        AppIcon(packageName = app.packageName)
+        AppIcon(source = AppReference.InstalledPackage(app.packageName))
 
         Spacer(modifier = Modifier.width(12.dp))
 

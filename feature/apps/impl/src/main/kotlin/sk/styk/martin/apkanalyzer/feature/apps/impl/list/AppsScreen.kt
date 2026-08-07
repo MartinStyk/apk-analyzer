@@ -40,6 +40,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.AppIcon
@@ -463,7 +464,10 @@ private fun RecentAppItem(
             .clickable(onClick = onClick)
             .padding(vertical = 12.dp),
     ) {
-        AppIcon(packageName = app.packageName, size = 56.dp)
+        AppIcon(
+            source = AppReference.InstalledPackage(app.packageName),
+            size = 56.dp,
+        )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = app.applicationName,

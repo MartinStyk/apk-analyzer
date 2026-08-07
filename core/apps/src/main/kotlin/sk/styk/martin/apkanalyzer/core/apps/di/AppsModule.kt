@@ -16,6 +16,8 @@ import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
 import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepositoryImpl
+import sk.styk.martin.apkanalyzer.core.apps.AppExportManager
+import sk.styk.martin.apkanalyzer.core.apps.AppExportManagerImpl
 import sk.styk.martin.apkanalyzer.core.apps.DeviceFeaturesRepository
 import sk.styk.martin.apkanalyzer.core.apps.DeviceFeaturesRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
@@ -30,6 +32,8 @@ import sk.styk.martin.apkanalyzer.core.apps.analysis.CertificateExtractor
 import sk.styk.martin.apkanalyzer.core.apps.analysis.CertificateExtractorImpl
 import sk.styk.martin.apkanalyzer.core.apps.analysis.InstallSourceResolver
 import sk.styk.martin.apkanalyzer.core.apps.analysis.InstallSourceResolverImpl
+import sk.styk.martin.apkanalyzer.core.apps.analysis.ManifestParser
+import sk.styk.martin.apkanalyzer.core.apps.analysis.ManifestParserImpl
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -56,6 +60,13 @@ internal interface AppsModule {
 
     @Binds
     fun bindCertificateExtractor(impl: CertificateExtractorImpl): CertificateExtractor
+
+    @Binds
+    fun bindManifestParser(impl: ManifestParserImpl): ManifestParser
+
+    @Binds
+    @Singleton
+    fun bindAppExportManager(impl: AppExportManagerImpl): AppExportManager
 
     @Binds
     @Singleton

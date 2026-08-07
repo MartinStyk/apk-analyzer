@@ -25,12 +25,13 @@ import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.model.BroadcastReceiver
 import sk.styk.martin.apkanalyzer.core.apps.model.ContentProvider
 import sk.styk.martin.apkanalyzer.core.apps.model.Service
+import sk.styk.martin.apkanalyzer.core.apps.model.isExternallyReachableWithoutPermission
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
-import java.io.File
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.toAppReference
 
 private const val TAG = "ComponentsViewModel"
 
@@ -106,10 +107,7 @@ internal class ComponentsViewModel @AssistedInject constructor(
         source.value = ComponentsSource.Loading
         viewModelScope.launch {
             source.value = withContext(dispatcherProvider.default()) {
-                when (appDetailInput) {
-                    is AppDetailInput.InstalledPackage -> appDetailRepository.installedPackageDetails(appDetailInput.packageName)
-                    is AppDetailInput.ApkFile -> appDetailRepository.apkFilePackageDetails(File(appDetailInput.apkFilePath))
-                }.onFailure {
+                appDetailRepository.details(appDetailInput.toAppReference()).onFailure {
                     Logger.e(TAG, it, "Can not load components for $appDetailInput")
                 }.fold(
                     onSuccess = { it.toSource(canLaunch = appDetailInput is AppDetailInput.InstalledPackage) },
@@ -149,8 +147,9 @@ private fun Activity.toItem(canLaunch: Boolean) = ComponentItem(
     packagePath = name.substringBeforeLast('.', ""),
     type = ComponentType.Activity,
     isExported = isExported,
-    isGuarded = permission != null,
-    isLaunchable = canLaunch && isExported && permission == null,
+    isGuarded = !permission.isNullOrBlank(),
+    isUnprotected = isExternallyReachableWithoutPermission,
+    isLaunchable = canLaunch && isExported && permission.isNullOrBlank(),
     flags = emptyImmutableFlags,
     details = ComponentDetails.ActivityDetails(
         label = label,
@@ -167,7 +166,8 @@ private fun Service.toItem() = ComponentItem(
     packagePath = name.substringBeforeLast('.', ""),
     type = ComponentType.Service,
     isExported = isExported,
-    isGuarded = permission != null,
+    isGuarded = !permission.isNullOrBlank(),
+    isUnprotected = isExternallyReachableWithoutPermission,
     isLaunchable = false,
     flags = buildList {
         if (isStopWithTask) add(ComponentFlag.StopWithTask)
@@ -184,8 +184,9 @@ private fun BroadcastReceiver.toItem(canLaunch: Boolean) = ComponentItem(
     packagePath = name.substringBeforeLast('.', ""),
     type = ComponentType.Receiver,
     isExported = isExported,
-    isGuarded = permission != null,
-    isLaunchable = canLaunch && isExported && permission == null,
+    isGuarded = !permission.isNullOrBlank(),
+    isUnprotected = isExternallyReachableWithoutPermission,
+    isLaunchable = canLaunch && isExported && permission.isNullOrBlank(),
     flags = emptyImmutableFlags,
     details = ComponentDetails.ReceiverDetails(permission = permission),
 )
@@ -196,7 +197,8 @@ private fun ContentProvider.toItem() = ComponentItem(
     packagePath = name.substringBeforeLast('.', ""),
     type = ComponentType.Provider,
     isExported = isExported,
-    isGuarded = readPermission != null || writePermission != null,
+    isGuarded = !readPermission.isNullOrBlank() && !writePermission.isNullOrBlank(),
+    isUnprotected = isExternallyReachableWithoutPermission,
     isLaunchable = false,
     flags = emptyImmutableFlags,
     details = ComponentDetails.ProviderDetails(

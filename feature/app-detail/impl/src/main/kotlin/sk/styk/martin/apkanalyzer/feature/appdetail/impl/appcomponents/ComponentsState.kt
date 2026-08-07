@@ -58,15 +58,13 @@ internal data class ComponentItem(
     val type: ComponentType,
     val isExported: Boolean,
     val isGuarded: Boolean,
+    val isUnprotected: Boolean,
     val isLaunchable: Boolean,
     val flags: ImmutableList<ComponentFlag>,
     val details: ComponentDetails,
 ) {
     val isLauncher: Boolean
         get() = (details as? ComponentDetails.ActivityDetails)?.isLauncher == true
-
-    val isUnprotected: Boolean
-        get() = isExported && !isGuarded && !isLauncher
 }
 
 @Immutable

@@ -6,16 +6,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import sk.styk.martin.apkanalyzer.core.uilibrary.icons.app.PackageIcon
+import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 
 @Composable
 fun AppIcon(
-    packageName: String,
+    source: AppReference,
     modifier: Modifier = Modifier,
     size: Dp = 44.dp,
 ) {
     AsyncImage(
-        model = PackageIcon(packageName),
+        model = source,
         contentDescription = null,
         modifier = modifier.size(size),
     )

@@ -30,7 +30,7 @@ import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
-import java.io.File
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.toAppReference
 
 private const val TAG = "PermissionsViewModel"
 
@@ -101,10 +101,7 @@ internal class PermissionsViewModel @AssistedInject constructor(
         source.value = PermissionsSource.Loading
         viewModelScope.launch {
             source.value = withContext(dispatcherProvider.default()) {
-                when (appDetailInput) {
-                    is AppDetailInput.InstalledPackage -> appDetailRepository.installedPackageDetails(appDetailInput.packageName)
-                    is AppDetailInput.ApkFile -> appDetailRepository.apkFilePackageDetails(File(appDetailInput.apkFilePath))
-                }.onFailure {
+                appDetailRepository.details(appDetailInput.toAppReference()).onFailure {
                     Logger.e(TAG, it, "Can not load permissions for $appDetailInput")
                 }.fold(
                     onSuccess = { it.toSource() },

@@ -1,9 +1,8 @@
 package sk.styk.martin.apkanalyzer.core.apps
 
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
-import java.io.File
+import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 
 interface AppDetailRepository {
-    suspend fun installedPackageDetails(packageName: String): Result<AppDetail>
-    suspend fun apkFilePackageDetails(accessibleFile: File): Result<AppDetail>
+    suspend fun details(reference: AppReference): Result<AppDetail>
 }

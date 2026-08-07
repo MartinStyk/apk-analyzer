@@ -10,4 +10,5 @@ object AppClassificationThresholds {
     val RECENT_PERIOD: Duration = 30.days.toJavaDuration()
     const val RECENTLY_USED_DAYS = 2
     val UNUSED_PERIOD: Duration = 180.days.toJavaDuration()
+    const val OUTDATED_TARGET_SDK_RELEASE_GAP = 4
 }

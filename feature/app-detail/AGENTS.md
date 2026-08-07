@@ -32,11 +32,15 @@ navigation/
   ComponentsNavKey.kt        - Internal nav key for the components sub-screen
   CertificatesNavKey.kt      - Internal nav key for the certificates sub-screen
   RequirementsNavKey.kt      - Internal nav key for the device requirements sub-screen
+  ManifestNavKey.kt          - Internal nav key for the readable Android manifest
 AppDetailScreen.kt           - Main detail screen Composable
 AppDetailViewModel.kt        - Uses @HiltViewModel with AssistedFactory for AppDetailInput
 AppDetailState.kt            - Loading/Loaded/Error states with full app detail data
+AppDetailInsight.kt          - Feature-owned finding model
+AppDetailInsightEvaluator.kt - Pure policy evaluator for "Worth knowing" findings
 AppDetailAction.kt           - User actions (retry, view manifest, export, navigate sections)
 AppDetailEvent.kt            - Navigation/system events
+AppDetailInputAdapters.kt    - Maps the navigation DTO to shared `AppReference`
 components/
   AppDetailBadge.kt          - Badge classification (Sideloaded, DangerousPermissions, Unused, Large, System, etc.)
   AppDetailToolbar.kt        - Collapsing toolbar for the hub
@@ -44,12 +48,14 @@ components/
   SectionScaffold.kt         - SectionLoading + SectionError, the Loading/Error branch every sub-screen shares
   DetailField.kt             - The labelled, tap-to-copy field every item bottom sheet is built from.
                                Use it; do not add a private copy — there were three before it was extracted
+  SplitApkExportBottomSheet.kt - Persistent explanation after exporting only the base of a split app
 generalinfo/                 - General info sub-screen
 permissions/                 - Permissions sub-screen (see below)
 appcomponents/               - Components sub-screen (see below). Named `appcomponents`, not
                                `components`, because `components/` already holds shared UI pieces.
 certificates/                - Signing certificate detail sub-screen
 requirements/                - Device requirements (uses-feature) sub-screen (see below)
+manifest/                    - Searchable readable Android manifest for installed and APK inputs
 ```
 
 Each sub-screen directory carries its own State/Action/Event/ViewModel/Screen set, same MVI shape
@@ -101,7 +107,8 @@ One screen for all four component types; the scope selector carries the type, so
 component rows deep-link with their scope preselected. Under scope `All` the list is sectioned by
 type. Exported items sort first. `isGuarded` folds a provider's read/write permissions and the other
 types' single `permission` into one flag, so `isUnprotected` (exported and unguarded) means the same
-thing everywhere — it is the one fact on this screen with real consequences and gets the row warning.
+thing everywhere. It is a technical narrowing filter, not a risk verdict: intent filters and path
+permissions are not extracted yet, so this state does not feed the hub's "Worth knowing" card.
 `isLaunchable` is deliberately *not* `isUnprotected`: it is exported-and-unguarded (which is exactly
 "we are allowed to start it") in `InstalledPackage` mode, for activities and receivers only. Launcher
 activities are the most launchable thing there is, so reusing `isUnprotected` would hide the run
@@ -114,7 +121,9 @@ opened.
 Launcher activities are excluded from `isUnprotected`: they are exported with no permission guard by
 definition, so warning about them is a false positive that devalues the real ones. They are excluded
 from the `Unprotected` filter for the same reason, and the sheet explains why being exported is
-expected there rather than claiming a permission guards it.
+expected there rather than claiming a permission guards it. APK-file analysis cannot resolve
+launcher status, so its technical `Unprotected` filter may include the launcher; this state does not
+feed the hub's findings.
 
 **The initial scope and filters are `@Assisted` constructor parameters, not a `LaunchedEffect`.**
 They seed the ViewModel's `narrowing` flow exactly once at construction; the ViewModel survives
@@ -161,6 +170,23 @@ There is no search and no scope selector. The `Libraries` scope from the design 
 - `AppDetailState.Loaded` is a large data class with all detail fields (no nested loading).
 - Badge computation uses `AppClassificationThresholds` from `core:apps`.
 - Sub-screens follow the `GeneralInfoScreen` idiom: **tap = explain, long-press = copy**.
+- "Worth knowing" excludes component exposure and merely requested dangerous permissions. Component
+  intent-filter and path-permission evidence is not available yet, so the hub does not interpret
+  exported components. It surfaces actually granted high-impact access, debug or not-yet-valid
+  signing, and targets at least four API levels behind the device.
+- Granted high-impact access is deliberately narrower than every dangerous permission: background
+  location, messages, call history, contacts, and calendar. Camera and microphone stay in the
+  permission preview because they are common and need app-purpose context before they become a
+  useful finding. Special-access and service capabilities remain out until their grant state is
+  extracted reliably.
+- APK export writes the installed base APK through `ACTION_CREATE_DOCUMENT` and explicitly reports
+  when split APKs mean the result is not a complete install package. APK-file mode hides this
+  redundant action.
+- Icon export supports installed packages and APK files at natural resolution through
+  `ACTION_CREATE_DOCUMENT`.
+- Installed manifest viewing targets the base APK directly. Merged resources can resolve
+  `AndroidManifest.xml` from an arbitrary feature split. The screen reports additional installed
+  split manifests instead of pretending the base document is a merged manifest.
 
 ## Design Doc
 

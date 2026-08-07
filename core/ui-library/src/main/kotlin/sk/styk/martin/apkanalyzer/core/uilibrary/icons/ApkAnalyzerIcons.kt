@@ -26,6 +26,8 @@ import androidx.compose.material.icons.rounded.Explore
 import androidx.compose.material.icons.rounded.FilterList
 import androidx.compose.material.icons.rounded.Fingerprint
 import androidx.compose.material.icons.rounded.Folder
+import androidx.compose.material.icons.rounded.Fullscreen
+import androidx.compose.material.icons.rounded.FullscreenExit
 import androidx.compose.material.icons.rounded.Gamepad
 import androidx.compose.material.icons.rounded.GppBad
 import androidx.compose.material.icons.rounded.History
@@ -87,6 +89,8 @@ data object ApkAnalyzerIcons {
     val DangerousPermissions = Icons.Rounded.GppBad
     val Fingerprint = Icons.Rounded.Fingerprint
     val Folder = Icons.Rounded.Folder
+    val Fullscreen = Icons.Rounded.Fullscreen
+    val FullscreenExit = Icons.Rounded.FullscreenExit
     val Gamepad = Icons.Rounded.Gamepad
     val Graphics = Icons.Rounded.Animation
     val HourglassEmpty = Icons.Rounded.HourglassEmpty

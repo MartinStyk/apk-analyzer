@@ -179,6 +179,7 @@ private fun ComponentDetailBottomSheetActivityPreview() {
                 type = ComponentType.Activity,
                 isExported = true,
                 isGuarded = false,
+                isUnprotected = false,
                 isLaunchable = true,
                 flags = persistentListOf(),
                 details = ComponentDetails.ActivityDetails(
@@ -207,6 +208,7 @@ private fun ComponentDetailBottomSheetServicePreview() {
                 type = ComponentType.Service,
                 isExported = true,
                 isGuarded = true,
+                isUnprotected = false,
                 isLaunchable = false,
                 flags = persistentListOf(ComponentFlag.IsolatedProcess, ComponentFlag.StopWithTask),
                 details = ComponentDetails.ServiceDetails(permission = "android.permission.BIND_JOB_SERVICE"),
@@ -229,6 +231,7 @@ private fun ComponentDetailBottomSheetProviderPreview() {
                 type = ComponentType.Provider,
                 isExported = false,
                 isGuarded = false,
+                isUnprotected = false,
                 isLaunchable = false,
                 flags = persistentListOf(),
                 details = ComponentDetails.ProviderDetails(

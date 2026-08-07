@@ -15,9 +15,10 @@ StorageStatsRepository.kt / Impl     - App storage size stats (requires USAGE_ST
 UsageStatsRepository.kt / Impl       - App usage time/frequency stats
 PackageChangesObserver.kt / Impl     - BroadcastReceiver-based package install/uninstall listener
 AppClassificationThresholds.kt      - Constants for "large app", "recently installed", "unused" thresholds
+AppExportManager.kt / Impl          - SAF-backed base APK and full-resolution icon export
 analysis/
   CertificateExtractor.kt / Impl    - APK signing certificate extraction
-  ManifestParser.kt                  - AndroidManifest.xml parsing
+  ManifestParser.kt                  - Installed/APK AndroidManifest.xml parsing into readable namespaced XML
   InstallSourceResolver.kt / Impl   - Determine app install source (Play Store, sideload, etc.)
   SdkVersionResolver.kt             - SDK version to Android name mapping
   AnalysisUtils.kt                   - Shared analysis helpers, incl. permission protection decoding
@@ -40,6 +41,7 @@ model/
   Service.kt              - Service component info
   BroadcastReceiver.kt    - Receiver component info
   ContentProvider.kt      - Provider component info
+  ComponentExposure.kt    - Shared unprotected-component classification for detailed filters
   Certificate.kt          - Certificate details
   CertificatePrincipal.kt - Issuer/subject info
   CertificateTrustLevel.kt - Trust classification enum
@@ -59,12 +61,17 @@ di/                       - Hilt module bindings
 ## Key Interfaces
 
 - `InstalledAppsRepository.apps(): Flow<List<InstalledApp>>` - Live list of all installed apps
-- `AppDetailRepository.installedPackageDetails(packageName: String): Result<AppDetail>` - Full details for installed app
-- `AppDetailRepository.apkFilePackageDetails(file: File): Result<AppDetail>` - Full details for APK file
+- `AppDetailRepository.details(reference: AppReference): Result<AppDetail>` - Full installed-package
+  or APK-file details
 - `DeviceFeaturesRepository.deviceFeatures(): DeviceFeatures` - Memoized once per process from a single
   `getSystemAvailableFeatures()` call. Device features cannot change without a reboot, so there is no
   flow, no observer, and no invalidation. Never call `hasSystemFeature` in a loop instead — that is N
   binder calls for an answer one call already gave
+- `ManifestParser.manifest(reference: AppReference): Result<ParsedManifest>` - Readable manifest.
+  Installed packages parse the base path directly and report additional split count; opening
+  `AndroidManifest.xml` from merged resources can resolve to an arbitrary split.
+- `AppExportManager` - Writes an APK or natural-resolution icon for an `AppReference` to a
+  user-selected document URI
 - `StorageStatsRepository.isPermissionGranted: StateFlow<Boolean>` - Usage access permission state
 - `UsageStatsRepository.isPermissionGranted: StateFlow<Boolean>` - Usage stats permission state
 
@@ -93,6 +100,18 @@ them apart: `AppDetailRepositoryImpl` caches `AppDetail` keyed by package and in
 `PackageChangesObserver`, so folding device state into it would make cached entries depend on a
 second input the key does not mention and the invalidation does not track. Consumers inject both
 repositories and combine them while mapping to state.
+
+## External Entry Semantics
+
+- These rules support the Components screen's technical filter. They are not a risk verdict and do
+  not feed the hub until intent filters and path permissions provide the missing context.
+- Exported alone is not a finding. Launcher activities are expected to be exported and are excluded.
+- An activity is unguarded only when launcher status is known to be false and no permission is required.
+- Services and receivers are unguarded when exported without a required permission.
+- An exported provider is unguarded when either its read or write path lacks a permission.
+- APK activities have unknown launcher status. The technical `Unprotected` filter includes exported
+  activities without permission guards and may therefore include the launcher activity; the hub
+  does not interpret this as a finding.
 
 ## Dependencies
 - `api(projects.core.common)` - exposes common models and DispatcherProvider

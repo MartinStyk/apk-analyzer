@@ -29,7 +29,9 @@ import sk.styk.martin.apkanalyzer.core.apps.model.Permissions
 import sk.styk.martin.apkanalyzer.core.apps.model.Service
 import sk.styk.martin.apkanalyzer.core.apps.model.UsedPermission
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
+import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import java.io.File
 import java.time.Instant
@@ -69,10 +71,15 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             .launchIn(appScope + dispatcherProvider.default())
     }
 
-    override suspend fun installedPackageDetails(packageName: String): Result<AppDetail> {
+    override suspend fun details(reference: AppReference): Result<AppDetail> = when (reference) {
+        is AppReference.InstalledPackage -> installedPackageDetails(reference.packageName)
+        is AppReference.ApkFile -> apkFilePackageDetails(File(reference.path))
+    }
+
+    private suspend fun installedPackageDetails(packageName: String): Result<AppDetail> {
         cache[packageName]?.let { return Result.success(it) }
         Logger.d(TAG, "Loading details of $packageName")
-        return runCatching {
+        return runCatchingCancellable {
             val packageInfo = packageManager.getPackageInfo(packageName, analysisFlags)
             getPackageDetails(
                 analysisMode = AppDetail.AnalysisMode.InstalledPackage,
@@ -83,7 +90,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         }.onSuccess { cache[packageName] = it }
     }
 
-    override suspend fun apkFilePackageDetails(accessibleFile: File): Result<AppDetail> = runCatching {
+    private suspend fun apkFilePackageDetails(accessibleFile: File): Result<AppDetail> = runCatchingCancellable {
         getPackageDetails(
             analysisMode = AppDetail.AnalysisMode.ApkFile,
             packageInfo = packageManager.getPackageArchiveInfoWithCorrectPath(accessibleFile.absolutePath, analysisFlags)
@@ -251,6 +258,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     private fun PackageManager.getPackageArchiveInfoWithCorrectPath(pathToPackage: String, flags: Int): PackageInfo? {
         val packageInfo = getPackageArchiveInfo(pathToPackage, flags)
         packageInfo?.applicationInfo?.sourceDir = pathToPackage
+        packageInfo?.applicationInfo?.publicSourceDir = pathToPackage
         return packageInfo
     }
 

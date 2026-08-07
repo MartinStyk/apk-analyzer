@@ -14,6 +14,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.impl.appcomponents.Component
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.appcomponents.ComponentsScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.certificates.CertificatesScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.generalinfo.GeneralInfoScreen
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.manifest.ManifestScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.permissions.PermissionsScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.requirements.RequirementsScreen
 
@@ -29,9 +30,7 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
             onBack = { navigator.goBack() },
             onOpenPlayStore = { packageName -> context.openGooglePlay(packageName) },
             onOpenAppInfo = { packageName -> context.openAppSystemPage(packageName) },
-            onExportApk = { Logger.d(TAG, "Export APK not yet implemented") },
-            onSaveIcon = { Logger.d(TAG, "Save icon not yet implemented") },
-            onNavigateToManifest = { Logger.d(TAG, "Navigate to manifest not yet implemented") },
+            onNavigateToManifest = { navigator.navigate(ManifestNavKey(key.detailInput)) },
             onNavigateToGeneralDetails = { navigator.navigate(GeneralInfoNavKey(key.detailInput)) },
             onNavigateToPermissions = { permissionName -> navigator.navigate(PermissionsNavKey(key.detailInput, permissionName)) },
             onNavigateToComponents = { navigator.navigate(ComponentsNavKey(key.detailInput)) },
@@ -87,6 +86,15 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
         metadata = slideFromEndEntryMetadata(),
     ) { key ->
         RequirementsScreen(
+            appDetailInput = key.detailInput,
+            onBack = { navigator.goBack() },
+        )
+    }
+
+    entry<ManifestNavKey>(
+        metadata = slideFromEndEntryMetadata(),
+    ) { key ->
+        ManifestScreen(
             appDetailInput = key.detailInput,
             onBack = { navigator.goBack() },
         )
