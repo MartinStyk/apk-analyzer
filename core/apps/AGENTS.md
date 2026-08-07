@@ -18,7 +18,7 @@ AppClassificationThresholds.kt      - Constants for "large app", "recently insta
 AppExportManager.kt / Impl          - SAF-backed base APK and full-resolution icon export
 analysis/
   CertificateExtractor.kt / Impl    - APK signing certificate extraction
-  ManifestParser.kt                  - Installed/APK AndroidManifest.xml parsing into readable namespaced XML
+  ManifestParser.kt / Impl           - Installed/APK AndroidManifest.xml parsing into readable namespaced XML
   InstallSourceResolver.kt / Impl   - Determine app install source (Play Store, sideload, etc.)
   SdkVersionResolver.kt             - SDK version to Android name mapping
   AnalysisUtils.kt                   - Shared analysis helpers, incl. permission protection decoding
@@ -41,7 +41,6 @@ model/
   Service.kt              - Service component info
   BroadcastReceiver.kt    - Receiver component info
   ContentProvider.kt      - Provider component info
-  ComponentExposure.kt    - Shared unprotected-component classification for detailed filters
   Certificate.kt          - Certificate details
   CertificatePrincipal.kt - Issuer/subject info
   CertificateTrustLevel.kt - Trust classification enum

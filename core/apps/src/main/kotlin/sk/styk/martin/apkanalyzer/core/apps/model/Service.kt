@@ -9,3 +9,6 @@ data class Service(
     val isIsolatedProcess: Boolean = false,
     val isExternalService: Boolean = false,
 )
+
+val Service.isExternallyReachableWithoutPermission: Boolean
+    get() = isExported && permission.isNullOrBlank()
