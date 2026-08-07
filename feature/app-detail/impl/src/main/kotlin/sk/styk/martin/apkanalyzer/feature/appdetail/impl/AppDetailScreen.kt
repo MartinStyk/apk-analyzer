@@ -53,6 +53,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.AppDetailToolbar
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.HashBox
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.permissions.permissionIcon
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.requirements.requirementIcon
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.Date
@@ -185,7 +186,7 @@ private fun LoadedContent(
             Spacer(modifier = Modifier.height(12.dp))
             ComponentsSection(state = state, onAction = onAction)
             Spacer(modifier = Modifier.height(12.dp))
-            FeaturesSection(state = state, onAction = onAction)
+            RequirementsSection(state = state, onAction = onAction)
             Spacer(modifier = Modifier.height(24.dp))
         }
     }
@@ -431,6 +432,25 @@ private fun ActionsSection(onAction: (AppDetailAction) -> Unit, modifier: Modifi
             )
         }
         Spacer(modifier = Modifier.height(2.dp))
+    }
+}
+
+@Composable
+private fun RequirementPreviewIcon(preview: AppDetailState.Loaded.RequirementPreview, modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .size(44.dp)
+            .background(
+                color = if (preview.isUnmetRequirement) AppTheme.colors.warningContainer else AppTheme.colors.surfaceVariant,
+                shape = CircleShape,
+            ),
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(
+            imageVector = requirementIcon(preview.name),
+            tint = if (preview.isUnmetRequirement) AppTheme.colors.warning else AppTheme.colors.primary,
+            modifier = Modifier.size(22.dp),
+        )
     }
 }
 
@@ -703,26 +723,91 @@ private fun ComponentsSection(
 }
 
 @Composable
-private fun FeaturesSection(
+private fun RequirementsSection(
     state: AppDetailState.Loaded,
     onAction: (AppDetailAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    SectionCard(modifier = modifier) {
-        SectionHeader(
-            title = stringResource(R.string.app_detail_features_section),
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .clip(Shapes.CardShape)
+            .background(AppTheme.colors.surface)
+            .clickable { onAction(AppDetailAction.NavigateFeatures) },
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, top = 16.dp, end = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            SectionHeader(title = stringResource(R.string.app_detail_features_section))
+            Icon(
+                imageVector = ApkAnalyzerIcons.ChevronRight,
+                tint = AppTheme.colors.onSurfaceVariant,
+                modifier = Modifier.size(20.dp),
+            )
+        }
+        if (state.requirementsCount == 0) {
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                text = stringResource(R.string.app_detail_features_none),
+                style = AppTheme.typography.bodySmall,
+                color = AppTheme.colors.onSurfaceVariant,
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+            )
+            return@Column
+        }
+        Spacer(modifier = Modifier.height(6.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(horizontal = 16.dp),
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        DetailRow(
-            label = stringResource(R.string.app_detail_features_count),
-            value = state.featuresCount.toString(),
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        NavigableRow(
-            label = stringResource(R.string.app_detail_view_details),
-            value = "",
-            onClick = { onAction(AppDetailAction.NavigateFeatures) },
+        ) {
+            Icon(
+                imageVector = if (state.unmetRequirementsCount > 0) ApkAnalyzerIcons.Warning else ApkAnalyzerIcons.Check,
+                tint = if (state.unmetRequirementsCount > 0) AppTheme.colors.warning else AppTheme.colors.positive,
+                modifier = Modifier.size(16.dp),
+            )
+            Spacer(modifier = Modifier.width(6.dp))
+            Text(
+                text = if (state.unmetRequirementsCount > 0) {
+                    pluralStringResource(
+                        R.plurals.app_detail_features_unmet,
+                        state.unmetRequirementsCount,
+                        state.unmetRequirementsCount,
+                    )
+                } else {
+                    stringResource(R.string.app_detail_features_all_met)
+                },
+                style = AppTheme.typography.bodySmall,
+                color = AppTheme.colors.onSurfaceVariant,
+            )
+        }
+        if (state.requirementPreviews.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(10.dp))
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier
+                    .horizontalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp),
+            ) {
+                state.requirementPreviews.forEach { preview ->
+                    RequirementPreviewIcon(preview = preview)
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(6.dp))
+        Text(
+            text = stringResource(
+                R.string.app_detail_features_counts,
+                state.requiredFeaturesCount,
+                state.optionalFeaturesCount,
+            ),
+            style = AppTheme.typography.bodySmall,
+            color = AppTheme.colors.onSurfaceVariant,
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
         )
     }
 }
@@ -862,7 +947,17 @@ private fun sampleLoadedState() = AppDetailState.Loaded(
     contentProvidersCount = 4,
     broadcastReceiversCount = 89,
     certificatesCount = 2,
-    featuresCount = 12,
+    requirementsCount = 12,
+    requiredFeaturesCount = 9,
+    optionalFeaturesCount = 3,
+    unmetRequirementsCount = 1,
+    requirementPreviews = persistentListOf(
+        AppDetailState.Loaded.RequirementPreview(name = "android.hardware.nfc", isUnmetRequirement = true),
+        AppDetailState.Loaded.RequirementPreview(name = "android.hardware.camera", isUnmetRequirement = false),
+        AppDetailState.Loaded.RequirementPreview(name = "android.hardware.wifi", isUnmetRequirement = false),
+        AppDetailState.Loaded.RequirementPreview(name = "android.hardware.bluetooth_le", isUnmetRequirement = false),
+        AppDetailState.Loaded.RequirementPreview(name = null, isUnmetRequirement = false),
+    ),
     certificate = AppDetailState.Loaded.CertificateState(
         signAlgorithm = "SHA256withRSA",
         sha256Fingerprint = "A1:B2:C3:D4:E5:F6:A7:B8:C9:D0:E1:F2:A3:B4:C5:D6:E7:F8:A9:B0:C1:D2:E3:F4:A5:B6:C7:D8:E9:F0:A1:B2",

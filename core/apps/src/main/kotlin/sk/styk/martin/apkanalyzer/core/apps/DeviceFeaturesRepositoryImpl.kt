@@ -25,7 +25,9 @@ internal class DeviceFeaturesRepositoryImpl @Inject constructor(private val pack
             ?: return DeviceFeatures.Unknown
 
         return DeviceFeatures(
-            featureNames = systemFeatures.mapNotNull { it.name }.toSet(),
+            featureVersions = systemFeatures
+                .filter { it.name != null }
+                .associate { it.name to it.version },
             openGlEsVersion = systemFeatures
                 .firstOrNull { it.name == null && it.reqGlEsVersion != FeatureInfo.GL_ES_VERSION_UNDEFINED }
                 ?.reqGlEsVersion,

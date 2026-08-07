@@ -2,28 +2,62 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.impl.requirements
 
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
+import sk.styk.martin.apkanalyzer.core.apps.model.FeatureAvailability
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.R
 
 internal val RequirementItem.icon: ImageVector
     get() = when (this) {
-        is RequirementItem.Hardware -> featureIcons[name] ?: ApkAnalyzerIcons.Android
+        is RequirementItem.Hardware -> requirementIcon(name)
         is RequirementItem.OpenGlEs -> ApkAnalyzerIcons.Graphics
     }
 
-@get:StringRes
-internal val RequirementItem.Hardware.labelRes: Int?
-    get() = featureLabels[name]
+internal fun requirementIcon(name: String?): ImageVector = when (name) {
+    null -> ApkAnalyzerIcons.Graphics
+    else -> requirementIcons[name] ?: ApkAnalyzerIcons.Android
+}
 
 @get:StringRes
-internal val RequirementSection.titleRes: Int
+internal val RequirementItem.Hardware.labelRes: Int?
+    get() = requirementLabels[name]
+
+internal fun requirementVersionName(name: String, version: Int): String = when (name) {
+    VULKAN_VERSION_FEATURE -> "${version ushr 22}.${(version ushr 12) and 0x3FF}"
+    else -> version.toString()
+}
+
+private const val VULKAN_VERSION_FEATURE = "android.hardware.vulkan.version"
+
+@get:StringRes
+internal val FeatureAvailability.labelRes: Int
+    get() = when (this) {
+        FeatureAvailability.Available -> R.string.requirements_availability_available
+        FeatureAvailability.Missing -> R.string.requirements_availability_missing
+        FeatureAvailability.Unknown -> R.string.requirements_availability_unknown
+    }
+
+@StringRes
+internal fun RequirementItem.availabilityExplanationRes(): Int = when (availability) {
+    FeatureAvailability.Available -> R.string.requirements_availability_available_explanation
+
+    FeatureAvailability.Missing -> if (isRequired) {
+        R.string.requirements_availability_missing_required_explanation
+    } else {
+        R.string.requirements_availability_missing_optional_explanation
+    }
+
+    FeatureAvailability.Unknown -> R.string.requirements_availability_unknown_explanation
+}
+
+@get:StringRes
+internal val RequirementSection.labelRes: Int
     get() = if (isRequired) R.string.requirements_section_required else R.string.requirements_section_optional
 
 @get:StringRes
 internal val RequirementSection.explanationRes: Int
     get() = if (isRequired) R.string.requirements_section_required_explanation else R.string.requirements_section_optional_explanation
 
-private val featureLabels = mapOf(
+private val requirementLabels = mapOf(
     "android.hardware.camera" to R.string.requirement_camera,
     "android.hardware.camera.any" to R.string.requirement_camera_any,
     "android.hardware.camera.front" to R.string.requirement_camera_front,
@@ -81,6 +115,8 @@ private val featureLabels = mapOf(
     "android.hardware.type.automotive" to R.string.requirement_type_automotive,
     "android.hardware.type.pc" to R.string.requirement_type_pc,
     "android.hardware.vr.high_performance" to R.string.requirement_vr,
+    "android.hardware.vr.headtracking" to R.string.requirement_vr_headtracking,
+    "android.software.vr.mode" to R.string.requirement_vr_mode,
     "android.software.webview" to R.string.requirement_webview,
     "android.software.print" to R.string.requirement_print,
     "android.software.midi" to R.string.requirement_midi,
@@ -100,7 +136,7 @@ private val featureLabels = mapOf(
     "android.software.connectionservice" to R.string.requirement_connection_service,
 )
 
-private val featureIcons = mapOf(
+private val requirementIcons = mapOf(
     "android.hardware.camera" to ApkAnalyzerIcons.Camera,
     "android.hardware.camera.any" to ApkAnalyzerIcons.Camera,
     "android.hardware.camera.front" to ApkAnalyzerIcons.Camera,
@@ -157,6 +193,8 @@ private val featureIcons = mapOf(
     "android.hardware.type.television" to ApkAnalyzerIcons.Television,
     "android.hardware.type.pc" to ApkAnalyzerIcons.Screen,
     "android.hardware.vr.high_performance" to ApkAnalyzerIcons.Graphics,
+    "android.hardware.vr.headtracking" to ApkAnalyzerIcons.Graphics,
+    "android.software.vr.mode" to ApkAnalyzerIcons.Graphics,
     "android.software.print" to ApkAnalyzerIcons.Print,
     "android.software.midi" to ApkAnalyzerIcons.Speaker,
     "android.software.leanback" to ApkAnalyzerIcons.Television,

@@ -244,7 +244,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         val isRequired = (featureInfo.flags and FeatureInfo.FLAG_REQUIRED) > 0
         when (val name = featureInfo.name) {
             null -> Feature.OpenGlEs(reqGlEsVersion = featureInfo.reqGlEsVersion, isRequired = isRequired)
-            else -> Feature.Hardware(name = name, isRequired = isRequired)
+            else -> Feature.Hardware(name = name, version = featureInfo.version, isRequired = isRequired)
         }
     }
 

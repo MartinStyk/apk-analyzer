@@ -17,7 +17,11 @@ import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.apppermissions.PermissionLabelProvider
 import sk.styk.martin.apkanalyzer.core.apps.AppClassificationThresholds
 import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
+import sk.styk.martin.apkanalyzer.core.apps.DeviceFeaturesRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
+import sk.styk.martin.apkanalyzer.core.apps.model.DeviceFeatures
+import sk.styk.martin.apkanalyzer.core.apps.model.Feature
+import sk.styk.martin.apkanalyzer.core.apps.model.FeatureAvailability
 import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
@@ -35,6 +39,7 @@ private const val TAG = "AppDetailViewModel"
 internal class AppDetailViewModel @AssistedInject constructor(
     @Assisted private val appDetailInput: AppDetailInput,
     private val appDetailRepository: AppDetailRepository,
+    private val deviceFeaturesRepository: DeviceFeaturesRepository,
     private val permissionLabelProvider: PermissionLabelProvider,
     private val dispatcherProvider: DispatcherProvider,
 ) : ViewModel() {
@@ -85,6 +90,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
     private fun loadDetail() {
         _state.value = AppDetailState.Loading
         viewModelScope.launch {
+            val deviceFeatures = deviceFeaturesRepository.deviceFeatures()
             _state.value = withContext(dispatcherProvider.default()) {
                 when (appDetailInput) {
                     is AppDetailInput.InstalledPackage -> appDetailRepository.installedPackageDetails(appDetailInput.packageName)
@@ -94,7 +100,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
                 Logger.e(TAG, it, "Can not load app detail for $appDetailInput")
             }.fold(
                 onSuccess = { detail ->
-                    detail.toLoadedState(permissionLabelProvider).let { state ->
+                    detail.toLoadedState(permissionLabelProvider, deviceFeatures).let { state ->
                         state.copy(badges = computeBadges(state))
                     }
                 },
@@ -132,7 +138,9 @@ internal class AppDetailViewModel @AssistedInject constructor(
     }
 }
 
-private fun AppDetail.toLoadedState(permissionLabelProvider: PermissionLabelProvider): AppDetailState.Loaded {
+private const val MAX_REQUIREMENT_PREVIEWS = 6
+
+private fun AppDetail.toLoadedState(permissionLabelProvider: PermissionLabelProvider, deviceFeatures: DeviceFeatures): AppDetailState.Loaded {
     val dangerousPermissions = permissions.used.filter {
         it.permissionData.details?.protectionLevel == ProtectionLevel.Dangerous
     }
@@ -182,7 +190,20 @@ private fun AppDetail.toLoadedState(permissionLabelProvider: PermissionLabelProv
         contentProvidersCount = contentProviders.size,
         broadcastReceiversCount = receivers.size,
         certificatesCount = signing.currentCertificates.size,
-        featuresCount = features.size,
+        requirementsCount = features.size,
+        requiredFeaturesCount = features.count { it.isRequired },
+        optionalFeaturesCount = features.count { !it.isRequired },
+        unmetRequirementsCount = features.count { it.isRequired && deviceFeatures.availabilityOf(it) == FeatureAvailability.Missing },
+        requirementPreviews = features
+            .sortedWith(compareBy({ deviceFeatures.availabilityOf(it) != FeatureAvailability.Missing }, { !it.isRequired }))
+            .take(MAX_REQUIREMENT_PREVIEWS)
+            .map {
+                AppDetailState.Loaded.RequirementPreview(
+                    name = (it as? Feature.Hardware)?.name,
+                    isUnmetRequirement = it.isRequired && deviceFeatures.availabilityOf(it) == FeatureAvailability.Missing,
+                )
+            }
+            .toImmutableList(),
         certificate = signing.currentCertificates.firstOrNull()?.let { cert ->
             AppDetailState.Loaded.CertificateState(
                 signAlgorithm = cert.signAlgorithm,

@@ -64,6 +64,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.ListSectionHeader
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionLoading
 
@@ -184,7 +185,14 @@ private fun LoadedContent(
             ) {
                 state.sections.forEach { section ->
                     item(key = section.protectionLevel?.name ?: UNRESOLVED_SECTION_KEY) {
-                        SectionHeader(section = section)
+                        ListSectionHeader(
+                            title = stringResource(
+                                R.string.permissions_section_header,
+                                stringResource(section.protectionLevel.labelRes).uppercase(),
+                                section.permissions.size,
+                            ),
+                            explanation = stringResource(section.protectionLevel.explanationRes),
+                        )
                     }
                     items(items = section.permissions, key = { it.name }) { permission ->
                         PermissionRow(
@@ -283,27 +291,6 @@ private fun NarrowingRow(
                 onToggleOption = { onAction(PermissionsAction.ToggleGrantState(it)) },
             )
         }
-    }
-}
-
-@Composable
-private fun SectionHeader(section: PermissionSection, modifier: Modifier = Modifier) {
-    Column(modifier = modifier.padding(top = 20.dp, bottom = 8.dp, start = 4.dp, end = 4.dp)) {
-        Text(
-            text = stringResource(
-                R.string.permissions_section_header,
-                stringResource(section.protectionLevel.labelRes).uppercase(),
-                section.permissions.size,
-            ),
-            style = AppTheme.typography.labelMedium,
-            color = AppTheme.colors.primary,
-        )
-        Spacer(modifier = Modifier.height(2.dp))
-        Text(
-            text = stringResource(section.protectionLevel.explanationRes),
-            style = AppTheme.typography.bodySmall,
-            color = AppTheme.colors.onSurfaceVariant,
-        )
     }
 }
 

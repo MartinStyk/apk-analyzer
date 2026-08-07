@@ -71,6 +71,20 @@ Then use the Read tool on `screenshot.png` to look at it directly.
 
 ## Gotchas
 
+- **On Windows, drive `adb` from PowerShell, not the Bash tool.** Git Bash rewrites `/sdcard/...`
+  into a Windows path, so `uiautomator dump /sdcard/window_dump.xml` writes to
+  `C:/Program Files/Git/sdcard/...` and the following `adb pull` fails. Either use the PowerShell
+  tool or prefix the command with `MSYS_NO_PATHCONV=1`.
+- **Never redirect `adb exec-out screencap -p` into a file from PowerShell.** PowerShell re-encodes
+  the stream and corrupts the PNG. Capture on the device and pull it:
+  `adb shell screencap -p /sdcard/screen.png` then `adb pull /sdcard/screen.png`.
+- **Floating overlays steal taps.** A Messenger chat head or similar bubble sits above the app and
+  swallows a tap aimed at what's underneath — which can open someone's private conversation. Tap
+  toward the left of a row rather than its centre, and re-dump after every tap to confirm you are
+  where you expect before tapping again.
+- **A locked device answers `adb` but shows nothing.** `dumpsys window | grep mDreamingLockscreen`
+  reports `true` when the keyguard is up; a secure lock can't be dismissed from `adb`, so ask the
+  user to unlock rather than retrying taps into a black screen.
 - **Off-screen elements don't dump.** A list item below the fold won't appear until you scroll
   (`adb shell input swipe <x1> <y1> <x2> <y2> <durationMs>`) or it's within the initial viewport.
 - **Matches aren't always unique.** Two rows can share a label (e.g. two apps with the same display

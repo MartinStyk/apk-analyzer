@@ -50,8 +50,14 @@
     <string name="app_detail_certificates_section">Certificates</string>
     <string name="app_detail_certificates_count">Certificates</string>
     <string name="app_detail_view_details">View Details</string>
-    <string name="app_detail_features_section">Features</string>
-    <string name="app_detail_features_count">Features</string>
+    <string name="app_detail_features_section">Device requirements</string>
+    <string name="app_detail_features_counts">%1$d required · %2$d optional</string>
+    <string name="app_detail_features_all_met">This device meets everything the app requires</string>
+    <string name="app_detail_features_none">This app declares no device requirements</string>
+    <plurals name="app_detail_features_unmet">
+        <item quantity="one">%1$d requirement this device cannot meet</item>
+        <item quantity="other">%1$d requirements this device cannot meet</item>
+    </plurals>
     <string name="app_detail_certificate_signature_section">Certificate Signature</string>
     <string name="app_detail_certificate_signed_by">Signed by %1$s</string>
     <string name="app_detail_certificate_unknown_signer">Unknown signer</string>
@@ -371,9 +377,21 @@
         <item quantity="other">%1$d requirements this device cannot meet</item>
     </plurals>
     <string name="requirements_missing">Not on this device</string>
-    <string name="requirements_missing_optional">Not on this device — whatever uses it stays off</string>
-    <string name="requirements_missing_open_gl_es">Needs %1$s · this device has %2$s</string>
+    <string name="requirements_missing_version">Needs %1$s · this device has %2$s</string>
     <string name="requirements_open_gl_es">OpenGL ES %1$s</string>
+    <string name="requirements_label_with_version">%1$s %2$s</string>
+    <string name="requirements_detail_identifier">Identifier</string>
+    <string name="requirements_detail_necessity">Necessity</string>
+    <string name="requirements_detail_availability">On this device</string>
+    <string name="requirements_detail_version">Version</string>
+    <string name="requirements_detail_version_comparison">%1$s needed · %2$s on this device</string>
+    <string name="requirements_availability_available">Available</string>
+    <string name="requirements_availability_available_explanation">This device provides it, so the app can use it.</string>
+    <string name="requirements_availability_missing">Not available</string>
+    <string name="requirements_availability_missing_required_explanation">The app declares it as required, yet this device does not provide it. Parts of the app may not work, and a fresh install would normally be blocked.</string>
+    <string name="requirements_availability_missing_optional_explanation">The app works without it. Whatever depends on it stays off.</string>
+    <string name="requirements_availability_unknown">Unknown</string>
+    <string name="requirements_availability_unknown_explanation">This device\'s feature list could not be read, so we can\'t say either way.</string>
 
     <string name="requirement_camera">Camera</string>
     <string name="requirement_camera_any">Camera, front or back</string>
@@ -431,6 +449,8 @@
     <string name="requirement_type_automotive">Car display</string>
     <string name="requirement_type_pc">Desktop computer</string>
     <string name="requirement_vr">High-performance VR</string>
+    <string name="requirement_vr_mode">VR mode</string>
+    <string name="requirement_vr_headtracking">VR head tracking</string>
     <string name="requirement_webview">System web view</string>
     <string name="requirement_print">Printing</string>
     <string name="requirement_midi">MIDI</string>

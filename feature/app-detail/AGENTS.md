@@ -42,6 +42,8 @@ components/
   AppDetailToolbar.kt        - Collapsing toolbar for the hub
   InfoRowItem.kt             - InfoRow + InfoRowItem + RationaleBottomSheet, shared by every sub-screen
   SectionScaffold.kt         - SectionLoading + SectionError, the Loading/Error branch every sub-screen shares
+  DetailField.kt             - The labelled, tap-to-copy field every item bottom sheet is built from.
+                               Use it; do not add a private copy — there were three before it was extracted
 generalinfo/                 - General info sub-screen
 permissions/                 - Permissions sub-screen (see below)
 appcomponents/               - Components sub-screen (see below). Named `appcomponents`, not

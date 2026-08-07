@@ -18,6 +18,7 @@ import sk.styk.martin.apkanalyzer.core.apps.DeviceFeaturesRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.model.DeviceFeatures
 import sk.styk.martin.apkanalyzer.core.apps.model.Feature
+import sk.styk.martin.apkanalyzer.core.apps.model.FeatureAvailability
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
@@ -83,46 +84,52 @@ internal class RequirementsViewModel @AssistedInject constructor(
 }
 
 private fun AppDetail.toRequirementsState(deviceFeatures: DeviceFeatures): RequirementsState.Loaded {
-    val (required, optional) = features.partition { it.isRequired }
-    val requiredItems = required.toSortedItems(deviceFeatures)
+    val (required, optional) = features
+        .map { it.toRequirementItem(deviceFeatures) }
+        .sortedByDescending { it.isRequired }
+        .distinctBy { it.identifier }
+        .partition { it.isRequired }
 
     return RequirementsState.Loaded(
         sections = listOfNotNull(
-            requiredItems.toSectionOrNull(isRequired = true),
-            optional.toSortedItems(deviceFeatures).toSectionOrNull(isRequired = false),
+            required.toSectionOrNull(isRequired = true),
+            optional.toSectionOrNull(isRequired = false),
         ).toImmutableList(),
-        missingRequiredCount = requiredItems.count { it.availability == RequirementAvailability.Missing },
+        missingRequiredCount = required.count { it.availability == FeatureAvailability.Missing },
     )
 }
 
-private fun List<Feature>.toSortedItems(deviceFeatures: DeviceFeatures) = map { it.toRequirementItem(deviceFeatures) }
-    .sortedWith(
-        compareBy(
-            { it.availability != RequirementAvailability.Missing },
-            { it is RequirementItem.OpenGlEs },
-            { it.identifier },
-        ),
-    )
-
 private fun List<RequirementItem>.toSectionOrNull(isRequired: Boolean) = takeIf { it.isNotEmpty() }
-    ?.let { RequirementSection(isRequired = isRequired, requirements = it.toImmutableList()) }
+    ?.let {
+        RequirementSection(
+            isRequired = isRequired,
+            requirements = it.sortedWith(requirementOrder).toImmutableList(),
+        )
+    }
+
+private val requirementOrder = compareBy<RequirementItem>(
+    { it.availability != FeatureAvailability.Missing },
+    { it is RequirementItem.OpenGlEs },
+    { it.identifier },
+)
 
 private fun Feature.toRequirementItem(deviceFeatures: DeviceFeatures): RequirementItem {
-    val availability = deviceFeatures.supports(this).toAvailability()
+    val availability = deviceFeatures.availabilityOf(this)
     return when (this) {
-        is Feature.Hardware -> RequirementItem.Hardware(name = name, availability = availability)
+        is Feature.Hardware -> RequirementItem.Hardware(
+            name = name,
+            requiredVersion = version,
+            deviceVersion = deviceFeatures.versionOf(name),
+            isRequired = isRequired,
+            availability = availability,
+        )
 
         is Feature.OpenGlEs -> RequirementItem.OpenGlEs(
             versionName = versionName,
             deviceVersionName = deviceFeatures.openGlEsVersionName,
             identifier = "0x%08X".format(reqGlEsVersion),
+            isRequired = isRequired,
             availability = availability,
         )
     }
-}
-
-private fun Boolean?.toAvailability() = when (this) {
-    true -> RequirementAvailability.Available
-    false -> RequirementAvailability.Missing
-    null -> RequirementAvailability.Unknown
 }

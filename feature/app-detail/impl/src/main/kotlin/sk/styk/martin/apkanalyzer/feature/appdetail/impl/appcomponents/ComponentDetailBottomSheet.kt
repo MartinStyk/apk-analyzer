@@ -26,6 +26,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.DetailField
 
 @Composable
 internal fun ComponentDetailBottomSheet(
@@ -163,42 +164,6 @@ private fun SheetSection(
         )
         Spacer(modifier = Modifier.height(4.dp))
         content()
-    }
-}
-
-@Composable
-private fun DetailField(
-    label: String,
-    value: String,
-    onCopy: (label: String, value: String) -> Unit,
-    modifier: Modifier = Modifier,
-    explanation: String? = null,
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(Shapes.CardShape)
-            .clickable { onCopy(label, value) }
-            .padding(vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(2.dp),
-    ) {
-        Text(
-            text = label.uppercase(),
-            style = AppTheme.typography.labelMedium,
-            color = AppTheme.colors.onSurfaceVariant,
-        )
-        Text(
-            text = value,
-            style = AppTheme.typography.bodyMedium,
-            color = AppTheme.colors.onBackground,
-        )
-        explanation?.let {
-            Text(
-                text = it,
-                style = AppTheme.typography.bodySmall,
-                color = AppTheme.colors.onSurfaceVariant,
-            )
-        }
     }
 }
 
