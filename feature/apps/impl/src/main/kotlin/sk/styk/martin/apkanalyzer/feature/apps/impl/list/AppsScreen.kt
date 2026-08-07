@@ -50,6 +50,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.components.IconButton
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.IconButtonStyle
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.InactiveSearchBar
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
+import sk.styk.martin.apkanalyzer.core.uilibrary.components.navigationBarContentPadding
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.uilibrary.lazylist.itemsPositioned
 import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.card
@@ -169,7 +170,11 @@ private fun AppsContent(
 
         LazyColumn(
             state = lazyListState,
-            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp),
+            contentPadding = PaddingValues(
+                start = 16.dp,
+                end = 16.dp,
+                bottom = navigationBarContentPadding + 16.dp,
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .offset { collapsingState.contentOffset },
