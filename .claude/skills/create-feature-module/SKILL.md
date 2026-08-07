@@ -17,8 +17,15 @@ plugins {
 
 android {
     namespace = "sk.styk.martin.apkanalyzer.feature.<name>.api"
+
+    buildFeatures {
+        androidResources = false
+    }
 }
 ```
+
+Drop the `buildFeatures` block once this module gets its own `res/` — most commonly in Step 8, when
+a top-level destination needs its tab-label string in `feature/<name>/api/src/main/res/values/strings.xml`.
 
 **`feature/<name>/api/src/main/kotlin/sk/styk/martin/apkanalyzer/feature/<name>/api/<Name>NavKey.kt`**
 ```kotlin
@@ -47,6 +54,10 @@ plugins {
 
 android {
     namespace = "sk.styk.martin.apkanalyzer.feature.<name>.impl"
+
+    buildFeatures {
+        androidResources = false
+    }
 }
 
 dependencies {
@@ -57,6 +68,10 @@ dependencies {
     // implementation(libs.coil.compose)
 }
 ```
+
+Drop the `buildFeatures` block as soon as the screen has real UI copy and gets its own
+`res/values/strings.xml` — every user-facing string in this module's Composables must come from
+`stringResource`, so this almost always happens by the time Step 4's placeholder is replaced.
 
 ## Step 3 — Create entry provider
 

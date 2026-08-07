@@ -2,11 +2,12 @@ package sk.styk.martin.apkanalyzer.core.apps.model
 
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import java.time.Instant
 
 data class AppInfo(
-    val packageName: String,
+    val packageName: PackageName,
     val applicationName: String,
     val processName: String? = null,
     val versionName: String? = null,
@@ -18,7 +19,7 @@ data class AppInfo(
     val apkDirectory: String? = null,
     val dataDirectory: String? = null,
     val installLocation: InstallLocation,
-    val appInstaller: String? = null,
+    val appInstaller: PackageName? = null,
     val apkSize: AppSize = 0.bytes,
     val firstInstallTime: Instant? = null,
     val lastUpdateTime: Instant? = null,

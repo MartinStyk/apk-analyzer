@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import java.io.IOException
 import javax.inject.Inject
@@ -32,13 +33,13 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
 ) : StorageStatsRepository,
     DefaultLifecycleObserver {
 
-    private var packageNames: List<String> = emptyList()
+    private var packageNames: List<PackageName> = emptyList()
 
     final override val isPermissionGranted: StateFlow<Boolean>
         field = MutableStateFlow(checkPermission())
 
-    final override val totalSizes: StateFlow<Map<String, AppSize>>
-        field = MutableStateFlow<Map<String, AppSize>>(emptyMap())
+    final override val totalSizes: StateFlow<Map<PackageName, AppSize>>
+        field = MutableStateFlow<Map<PackageName, AppSize>>(emptyMap())
 
     override fun onStart(owner: LifecycleOwner) {
         applicationScope.launch(dispatcherProvider.io()) {
@@ -55,20 +56,20 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
         return mode == AppOpsManager.MODE_ALLOWED
     }
 
-    override fun requestTotalSizes(packageNames: List<String>) {
+    override fun requestTotalSizes(packageNames: List<PackageName>) {
         this.packageNames = packageNames
         applicationScope.launch(dispatcherProvider.io()) {
             fetchTotalSizes(packageNames)
         }
     }
 
-    override suspend fun queryTotalSize(packageName: String): AppSize? {
+    override suspend fun queryTotalSize(packageName: PackageName): AppSize? {
         totalSizes.value[packageName]?.let { return it }
         if (!checkPermission()) return null
         return queryPackageSize(UserHandle.getUserHandleForUid(Process.myUid()), packageName)
     }
 
-    private fun fetchTotalSizes(packageNames: List<String>) {
+    private fun fetchTotalSizes(packageNames: List<PackageName>) {
         val hasPermission = checkPermission()
         isPermissionGranted.value = hasPermission
         if (!hasPermission) return
@@ -81,8 +82,8 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
         Logger.d(INSTALLED_APPS, "Apps total size loaded")
     }
 
-    private fun queryPackageSize(user: UserHandle, packageName: String): AppSize? = try {
-        val stats = storageStatsManager.queryStatsForPackage(StorageManager.UUID_DEFAULT, packageName, user)
+    private fun queryPackageSize(user: UserHandle, packageName: PackageName): AppSize? = try {
+        val stats = storageStatsManager.queryStatsForPackage(StorageManager.UUID_DEFAULT, packageName.value, user)
         stats.appBytes.bytes + stats.dataBytes.bytes + stats.cacheBytes.bytes
     } catch (_: PackageManager.NameNotFoundException) {
         null

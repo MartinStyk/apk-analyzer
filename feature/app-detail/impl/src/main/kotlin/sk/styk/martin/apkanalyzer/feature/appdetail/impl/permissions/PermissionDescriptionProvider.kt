@@ -12,7 +12,7 @@ internal class PermissionDescriptionProvider @Inject constructor(@ApplicationCon
 
     fun describe(permission: Permission): String? = curatedDescriptions[permission.name]?.let(context::getString)
         ?: permission.details?.description?.takeIf { it.isNotBlank() }
-        ?: permission.details?.declaringPackage
+        ?: permission.details?.declaringPackage?.value
             ?.takeIf { it != PLATFORM_PACKAGE }
             ?.let { context.getString(R.string.permissions_defined_by, it) }
 

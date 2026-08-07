@@ -2,10 +2,11 @@ package sk.styk.martin.apkanalyzer.core.apps
 
 import kotlinx.coroutines.flow.StateFlow
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 
 interface StorageStatsRepository {
     val isPermissionGranted: StateFlow<Boolean>
-    val totalSizes: StateFlow<Map<String, AppSize>>
-    fun requestTotalSizes(packageNames: List<String>)
-    suspend fun queryTotalSize(packageName: String): AppSize?
+    val totalSizes: StateFlow<Map<PackageName, AppSize>>
+    fun requestTotalSizes(packageNames: List<PackageName>)
+    suspend fun queryTotalSize(packageName: PackageName): AppSize?
 }

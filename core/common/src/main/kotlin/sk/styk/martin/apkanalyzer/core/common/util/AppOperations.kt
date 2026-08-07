@@ -8,10 +8,11 @@ import android.net.Uri
 import android.provider.Settings
 import androidx.core.net.toUri
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 
 private const val TAG = "AppOperations"
 
-fun Context.openAppSystemPage(packageName: String) {
+fun Context.openAppSystemPage(packageName: PackageName) {
     try {
         startActivity(
             Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
@@ -23,7 +24,7 @@ fun Context.openAppSystemPage(packageName: String) {
     }
 }
 
-fun Context.openGooglePlay(packageName: String) {
+fun Context.openGooglePlay(packageName: PackageName) {
     try {
         startActivity(Intent(Intent.ACTION_VIEW, "market://details?id=$packageName".toUri()))
     } catch (e: ActivityNotFoundException) {
@@ -32,17 +33,17 @@ fun Context.openGooglePlay(packageName: String) {
     }
 }
 
-fun Context.startForeignActivity(packageName: String, activityName: String): Result<Unit> = runCatching {
+fun Context.startForeignActivity(packageName: PackageName, activityName: String): Result<Unit> = runCatching {
     startActivity(
         Intent().apply {
-            component = ComponentName(packageName, activityName)
+            component = ComponentName(packageName.value, activityName)
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
         },
     )
 }.onFailure { Logger.e(TAG, it, "Could not start activity $activityName in $packageName") }
 
-fun Context.sendForeignBroadcast(packageName: String, receiverName: String): Result<Unit> = runCatching {
-    sendBroadcast(Intent().apply { component = ComponentName(packageName, receiverName) })
+fun Context.sendForeignBroadcast(packageName: PackageName, receiverName: String): Result<Unit> = runCatching {
+    sendBroadcast(Intent().apply { component = ComponentName(packageName.value, receiverName) })
 }.onFailure { Logger.e(TAG, it, "Could not send broadcast to $receiverName in $packageName") }
 
 fun Context.openBrowser(url: String) {

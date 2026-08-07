@@ -1,8 +1,10 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl
 
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
+
 internal sealed interface AppDetailEvent {
-    data class OpenPlayStore(val packageName: String) : AppDetailEvent
-    data class OpenAppInfo(val packageName: String) : AppDetailEvent
+    data class OpenPlayStore(val packageName: PackageName) : AppDetailEvent
+    data class OpenAppInfo(val packageName: PackageName) : AppDetailEvent
     data class CreateDocument(val export: AppDetailExport, val suggestedName: String) : AppDetailEvent
     data class ShowFeedback(val feedback: AppDetailFeedback) : AppDetailEvent
     data object NavigateToManifest : AppDetailEvent

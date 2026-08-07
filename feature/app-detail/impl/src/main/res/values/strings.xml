@@ -84,10 +84,6 @@
     <string name="app_detail_certificate_unknown_signer">Unknown signer</string>
     <string name="app_detail_certificate_sha256_fingerprint">SHA-256 Fingerprint</string>
     <string name="app_detail_certificate_debug">Debug certificate</string>
-    <string name="app_detail_certificate_self_signed">Self-signed certificate</string>
-    <string name="app_detail_certificate_valid_until">Valid until %1$s</string>
-    <string name="app_detail_certificate_expired">Certificate validity ended %1$s. Android still uses the signing identity for updates.</string>
-    <string name="app_detail_certificate_not_yet_valid">Certificate validity starts %1$s</string>
     <string name="app_detail_badge_sideloaded">Sideloaded</string>
     <string name="app_detail_badge_dangerous_permissions">Sensitive access</string>
     <string name="app_detail_badge_unused">Unused</string>

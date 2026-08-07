@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionFlag
 import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.BottomSheet
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
@@ -75,7 +76,7 @@ internal fun PermissionDetailBottomSheet(
             item.declaringPackage?.let { declaringPackage ->
                 DetailField(
                     label = stringResource(R.string.permissions_detail_declared_by),
-                    value = declaringPackage,
+                    value = declaringPackage.value,
                     onCopy = onCopy,
                 )
             }
@@ -169,7 +170,7 @@ private fun PermissionDetailBottomSheetPreview() {
                 protectionLevel = ProtectionLevel.Dangerous,
                 protectionFlags = persistentListOf(ProtectionFlag.AppOp, ProtectionFlag.Instant),
                 grantState = GrantState.NotGranted,
-                declaringPackage = "android",
+                declaringPackage = PackageName("android"),
                 isSelfDeclared = false,
             ),
             onCopy = { _, _ -> },
@@ -191,7 +192,7 @@ private fun PermissionDetailBottomSheetSignaturePreview() {
                 protectionLevel = ProtectionLevel.Signature,
                 protectionFlags = persistentListOf(),
                 grantState = GrantState.NotGranted,
-                declaringPackage = "com.facebook.katana",
+                declaringPackage = PackageName("com.facebook.katana"),
                 isSelfDeclared = false,
             ),
             onCopy = { _, _ -> },
@@ -213,7 +214,7 @@ private fun PermissionDetailBottomSheetSelfDeclaredPreview() {
                 protectionLevel = ProtectionLevel.Signature,
                 protectionFlags = persistentListOf(),
                 grantState = GrantState.Granted,
-                declaringPackage = "com.instagram.android",
+                declaringPackage = PackageName("com.instagram.android"),
                 isSelfDeclared = true,
             ),
             onCopy = { _, _ -> },

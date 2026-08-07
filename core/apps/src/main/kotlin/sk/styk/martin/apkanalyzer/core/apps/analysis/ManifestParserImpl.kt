@@ -8,6 +8,7 @@ import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import javax.inject.Inject
 
 internal class ManifestParserImpl @Inject constructor(private val packageManager: PackageManager, private val dispatcherProvider: DispatcherProvider) : ManifestParser {
@@ -17,9 +18,9 @@ internal class ManifestParserImpl @Inject constructor(private val packageManager
         is AppReference.ApkFile -> apkFileManifest(reference.path)
     }
 
-    private suspend fun installedPackageManifest(packageName: String): Result<ParsedManifest> = withContext(dispatcherProvider.io()) {
+    private suspend fun installedPackageManifest(packageName: PackageName): Result<ParsedManifest> = withContext(dispatcherProvider.io()) {
         runCatchingCancellable {
-            val applicationInfo = packageManager.getApplicationInfo(packageName, 0)
+            val applicationInfo = packageManager.getApplicationInfo(packageName.value, 0)
             ParsedManifest(
                 xml = readManifest(resourcesForApk(applicationInfo.sourceDir)),
                 additionalInstalledSplits = applicationInfo.splitSourceDirs.orEmpty().size,

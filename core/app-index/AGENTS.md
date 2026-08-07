@@ -13,8 +13,11 @@ directly.
 ## Structure
 
 ```
-AppIndexRepository.kt / Impl  - Flow of AppIndexStatus, combines InstalledAppsRepository.apps() and AppSigningRepository.signing()
-AppIndexer.kt                  - internal object; pure (List<InstalledApp>, Map<packageName, AppSigning>) -> AppAttributeIndex transform, one groupBy helper per dimension
+AppIndexRepository.kt / Impl  - Flow of AppIndexStatus; Impl combines InstalledAppsRepository.apps()
+                                and AppSigningRepository.signing(), and holds the
+                                (List<InstalledApp>, Map<packageName, AppSigning>) -> AppAttributeIndex
+                                transform as private functions (one groupBy helper per dimension) —
+                                inlined rather than a separate object since it has exactly one caller
 model/
   AppAttributeIndex.kt         - targetSdk / minSdk / installSource / permission / certificateFingerprint / certificateOrganization / certificateCountry buckets, each Map<value, List<packageName>>
   AppIndexStatus.kt            - sealed: Loading | Data(index) - Loading before the first combined emission
@@ -31,9 +34,12 @@ interface AppIndexRepository {
 ```
 
 Recomputes whenever `InstalledAppsRepository.apps()` or `AppSigningRepository.signing()` emits — no
-separate `PackageChangesObserver` subscription, no separate caching of its own. Grouping is CPU-bound,
-not I/O, so the combine step runs on `dispatcherProvider.default()` — the certificate digest/verify
-work itself happens upstream in `AppSigningRepositoryImpl`, on `dispatcherProvider.io()`.
+separate `PackageChangesObserver` subscription. Grouping is CPU-bound, not I/O, so the combine step
+runs on `dispatcherProvider.default()` — the certificate digest/verify work itself happens upstream in
+`AppSigningRepositoryImpl`, on `dispatcherProvider.io()`. The combined result is `shareIn(appScope,
+SharingStarted.Lazily, replay = 1)`, matching `AppSigningRepositoryImpl`'s reasoning: the grouping work
+only matters once a real consumer (a browse screen) subscribes, and multiple simultaneous subscribers
+must not each redo it.
 
 ## Dimensions, and why the first four are cheaper than the last three
 
@@ -43,7 +49,7 @@ work itself happens upstream in `AppSigningRepositoryImpl`, on `dispatcherProvid
 per certificate — genuinely heavier, which is why that repository is `Lazily` shared (see
 `core/apps/AGENTS.md`) rather than computed unconditionally like `InstalledAppsRepository`. A
 multi-signer app is indexed under every current signer, not an arbitrary "first" one
-(`AppIndexer.byCertificate` `flatMap`s over `AppSigning.currentCertificates`). Fingerprint uses
+(`byCertificate` `flatMap`s over `AppSigning.currentCertificates`). Fingerprint uses
 `Certificate.certificateHashSha256` per roadmap `FR-09` ("same publisher" — group by fingerprint, not
 signing algorithm); organization/country come from `Certificate.subject`, matching the certificate
 screen's existing convention for "the signer."

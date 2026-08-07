@@ -42,6 +42,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.AppIcon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.BottomSheet
@@ -73,7 +74,7 @@ import java.time.Instant
 
 @Composable
 internal fun AppsScreen(
-    onAppDetails: (String) -> Unit,
+    onAppDetails: (PackageName) -> Unit,
     onSearch: () -> Unit,
     onSettings: () -> Unit,
     onApkDetails: () -> Unit,
@@ -220,7 +221,7 @@ private fun AppsContent(
 private fun LazyListScope.recentsSectionItems(
     recents: RecentsState,
     sortType: SortType,
-    onAppClicked: (String) -> Unit,
+    onAppClicked: (PackageName) -> Unit,
 ) {
     when (recents) {
         RecentsState.Loading -> item(key = "recents_skeleton_section") {
@@ -245,7 +246,7 @@ private fun LazyListScope.appsSectionItems(
     apps: AppListState,
     isFiltering: Boolean,
     sortType: SortType,
-    onAppClicked: (String) -> Unit,
+    onAppClicked: (PackageName) -> Unit,
     onClearFilters: () -> Unit,
     onShowSort: () -> Unit,
 ) {
@@ -294,7 +295,7 @@ private fun LazyListScope.appsSectionItems(
             } else {
                 itemsPositioned(
                     items = apps.apps,
-                    key = { _, app -> app.packageName },
+                    key = { _, app -> app.packageName.value },
                 ) { position, app ->
                     AppListItemRow(
                         app = app,
@@ -422,7 +423,7 @@ private fun RecentsSkeleton(modifier: Modifier = Modifier) {
 @Composable
 private fun RecentsContent(
     recentApps: ImmutableList<AppListItem>,
-    onAppClick: (String) -> Unit,
+    onAppClick: (PackageName) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     RecentsSection(modifier = modifier) {
@@ -439,7 +440,7 @@ private fun RecentsContent(
         ) {
             items(
                 items = recentApps,
-                key = { it.packageName },
+                key = { it.packageName.value },
             ) { app ->
                 RecentAppItem(
                     app = app,
@@ -509,7 +510,7 @@ private fun AppsContentReadyPreview() {
                 apps = AppListState.Content(
                     apps = persistentListOf(
                         AppListItem(
-                            packageName = "com.instagram.android",
+                            packageName = PackageName("com.instagram.android"),
                             applicationName = "Instagram",
                             targetSdk = 34,
                             apkSize = 64.megabytes,
@@ -520,7 +521,7 @@ private fun AppsContentReadyPreview() {
                             source = AppSource.GooglePlay,
                         ),
                         AppListItem(
-                            packageName = "com.whatsapp",
+                            packageName = PackageName("com.whatsapp"),
                             applicationName = "WhatsApp",
                             targetSdk = 33,
                             apkSize = 32.megabytes,

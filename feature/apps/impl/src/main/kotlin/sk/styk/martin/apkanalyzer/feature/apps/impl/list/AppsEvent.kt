@@ -1,7 +1,9 @@
 package sk.styk.martin.apkanalyzer.feature.apps.impl.list
 
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
+
 sealed interface AppsEvent {
-    data class NavigateToAppDetail(val packageName: String) : AppsEvent
+    data class NavigateToAppDetail(val packageName: PackageName) : AppsEvent
     data object NavigateToSearch : AppsEvent
     data object NavigateToSettings : AppsEvent
     data object NavigateToShowApkDetails : AppsEvent

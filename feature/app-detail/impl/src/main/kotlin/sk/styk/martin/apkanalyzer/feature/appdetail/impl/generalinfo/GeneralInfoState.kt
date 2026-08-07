@@ -2,6 +2,7 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.impl.generalinfo
 
 import androidx.compose.runtime.Immutable
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import java.time.Instant
 
 @Immutable
@@ -11,7 +12,7 @@ sealed interface GeneralInfoState {
     @Immutable
     data class Loaded(
         val applicationName: String,
-        val packageName: String,
+        val packageName: PackageName,
         val processName: String?,
         val uid: Int?,
         val description: String?,
@@ -23,7 +24,7 @@ sealed interface GeneralInfoState {
         val targetSdkLabel: String?,
         val isSystemApp: Boolean,
         val source: String,
-        val appInstaller: String?,
+        val appInstaller: PackageName?,
         val firstInstallTime: Instant?,
         val lastUpdateTime: Instant?,
         val lastUsedTime: Instant?,

@@ -7,6 +7,7 @@ import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.AppDetailBadge
 import java.time.Instant
 
@@ -23,7 +24,7 @@ internal sealed interface AppDetailState {
     data class Loaded(
         val analysisMode: AppDetail.AnalysisMode,
         val appName: String,
-        val packageName: String,
+        val packageName: PackageName,
         val processName: String?,
         val versionName: String?,
         val versionCode: Long,
@@ -40,7 +41,7 @@ internal sealed interface AppDetailState {
         val minSdkVersion: Int?,
         val minSdkLabel: String?,
         val installLocation: String,
-        val appInstaller: String?,
+        val appInstaller: PackageName?,
         val firstInstallTime: Instant?,
         val lastUpdateTime: Instant?,
         val lastUsedTime: Instant? = null,
@@ -73,18 +74,9 @@ internal sealed interface AppDetailState {
             val sha256Fingerprint: String,
             val issuer: CertificatePrincipal,
             val trustLevel: CertificateTrustLevel,
-            val validFrom: Instant,
-            val validUntil: Instant,
-            val isSelfSigned: Boolean,
         ) {
             val signerDisplayName: String?
                 get() = issuer.displayName
-
-            fun validity(now: Instant): CertificateValidity = when {
-                now.isBefore(validFrom) -> CertificateValidity.NotYetValid
-                now.isAfter(validUntil) -> CertificateValidity.Expired
-                else -> CertificateValidity.Valid
-            }
         }
 
         @Immutable
@@ -99,10 +91,4 @@ internal sealed interface AppDetailState {
     }
 
     data object Error : AppDetailState
-}
-
-internal enum class CertificateValidity {
-    Valid,
-    Expired,
-    NotYetValid,
 }

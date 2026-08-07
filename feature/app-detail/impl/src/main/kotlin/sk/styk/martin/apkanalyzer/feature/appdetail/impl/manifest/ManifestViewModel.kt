@@ -26,7 +26,11 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.impl.toAppReference
 private const val TAG = "ManifestViewModel"
 
 @HiltViewModel(assistedFactory = ManifestViewModel.Factory::class)
-internal class ManifestViewModel @AssistedInject constructor(@Assisted private val appDetailInput: AppDetailInput, private val manifestParser: ManifestParser, private val dispatcherProvider: DispatcherProvider) : ViewModel() {
+internal class ManifestViewModel @AssistedInject constructor(
+    @Assisted private val appDetailInput: AppDetailInput,
+    private val manifestParser: ManifestParser,
+    private val dispatcherProvider: DispatcherProvider,
+) : ViewModel() {
 
     @AssistedFactory
     interface Factory {

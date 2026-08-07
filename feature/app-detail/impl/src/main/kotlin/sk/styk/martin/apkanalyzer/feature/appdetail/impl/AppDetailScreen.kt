@@ -47,6 +47,7 @@ import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.LoadingSpinner
@@ -77,8 +78,8 @@ private const val ICON_MIME_TYPE = "image/png"
 internal fun AppDetailScreen(
     appDetailInput: AppDetailInput,
     onBack: () -> Unit,
-    onOpenPlayStore: (packageName: String) -> Unit,
-    onOpenAppInfo: (packageName: String) -> Unit,
+    onOpenPlayStore: (packageName: PackageName) -> Unit,
+    onOpenAppInfo: (packageName: PackageName) -> Unit,
     onNavigateToManifest: () -> Unit,
     onNavigateToGeneralDetails: () -> Unit,
     onNavigateToPermissions: (permissionName: String?) -> Unit,
@@ -693,7 +694,6 @@ private fun CertificateSignatureSection(
     modifier: Modifier = Modifier,
 ) {
     val cert = state.certificate ?: return
-    val validity = cert.validity(Instant.now())
     val (icon, iconTint, signerText) = when (cert.trustLevel) {
         CertificateTrustLevel.Debug -> Triple(
             ApkAnalyzerIcons.Warning,
@@ -744,39 +744,6 @@ private fun CertificateSignatureSection(
                 color = AppTheme.colors.onSurfaceVariant,
             )
         }
-        if (cert.isSelfSigned) {
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = stringResource(R.string.app_detail_certificate_self_signed),
-                style = AppTheme.typography.bodySmall,
-                color = AppTheme.colors.onSurfaceVariant,
-            )
-        }
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = when (validity) {
-                CertificateValidity.Valid -> stringResource(
-                    R.string.app_detail_certificate_valid_until,
-                    formatTimestamp(cert.validUntil),
-                )
-
-                CertificateValidity.Expired -> stringResource(
-                    R.string.app_detail_certificate_expired,
-                    formatTimestamp(cert.validUntil),
-                )
-
-                CertificateValidity.NotYetValid -> stringResource(
-                    R.string.app_detail_certificate_not_yet_valid,
-                    formatTimestamp(cert.validFrom),
-                )
-            },
-            style = AppTheme.typography.bodySmall,
-            color = if (validity == CertificateValidity.Valid) {
-                AppTheme.colors.onSurfaceVariant
-            } else {
-                AppTheme.colors.warning
-            },
-        )
         Spacer(modifier = Modifier.height(12.dp))
         HashBox(
             label = stringResource(R.string.app_detail_certificate_sha256_fingerprint),
@@ -1080,7 +1047,7 @@ private fun AppDetailLoadingPreview() {
     ApkAnalyzerTheme {
         AppDetailContent(
             state = AppDetailState.Loading,
-            appReference = AppReference.InstalledPackage("com.spotify.music"),
+            appReference = AppReference.InstalledPackage(PackageName("com.spotify.music")),
             onAction = {},
             onBack = {},
         )
@@ -1093,7 +1060,7 @@ private fun AppDetailErrorPreview() {
     ApkAnalyzerTheme {
         AppDetailContent(
             state = AppDetailState.Error,
-            appReference = AppReference.InstalledPackage("com.spotify.music"),
+            appReference = AppReference.InstalledPackage(PackageName("com.spotify.music")),
             onAction = {},
             onBack = {},
         )
@@ -1106,7 +1073,7 @@ private fun AppDetailLoadedPreview() {
     ApkAnalyzerTheme {
         AppDetailContent(
             state = sampleLoadedState(),
-            appReference = AppReference.InstalledPackage("com.spotify.music"),
+            appReference = AppReference.InstalledPackage(PackageName("com.spotify.music")),
             onAction = {},
             onBack = {},
         )
@@ -1116,7 +1083,7 @@ private fun AppDetailLoadedPreview() {
 private fun sampleLoadedState() = AppDetailState.Loaded(
     analysisMode = AppDetail.AnalysisMode.InstalledPackage,
     appName = "Spotify",
-    packageName = "com.spotify.music",
+    packageName = PackageName("com.spotify.music"),
     processName = "com.spotify.music",
     versionName = "9.4.12",
     versionCode = 90412,
@@ -1133,7 +1100,7 @@ private fun sampleLoadedState() = AppDetailState.Loaded(
     minSdkVersion = 24,
     minSdkLabel = "Android 7.0",
     installLocation = "InternalOnly",
-    appInstaller = "com.android.vending",
+    appInstaller = PackageName("com.android.vending"),
     firstInstallTime = Instant.ofEpochMilli(1_736_640_000_000),
     lastUpdateTime = Instant.ofEpochMilli(1_748_736_000_000),
     totalPermissionsCount = 32,
@@ -1193,9 +1160,6 @@ private fun sampleLoadedState() = AppDetailState.Loaded(
         sha256Fingerprint = "A1:B2:C3:D4:E5:F6:A7:B8:C9:D0:E1:F2:A3:B4:C5:D6:E7:F8:A9:B0:C1:D2:E3:F4:A5:B6:C7:D8:E9:F0:A1:B2",
         issuer = CertificatePrincipal(name = "Android", organization = "Google Inc."),
         trustLevel = CertificateTrustLevel.Valid,
-        validFrom = Instant.ofEpochMilli(1_609_459_200_000),
-        validUntil = Instant.ofEpochMilli(2_388_441_600_000),
-        isSelfSigned = true,
     ),
     insights = persistentListOf(
         AppDetailInsight.SensitivePermission(

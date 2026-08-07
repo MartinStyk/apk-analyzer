@@ -22,7 +22,7 @@ class SearchAppsUseCase @Inject constructor() {
 
     private fun bestScore(query: String, app: AppListItem): Float {
         val nameScore = scoreField(query, app.applicationName.lowercase())
-        val packageScore = scoreField(query, app.packageName.lowercase())
+        val packageScore = scoreField(query, app.packageName.value.lowercase())
         return min(nameScore, packageScore)
     }
 

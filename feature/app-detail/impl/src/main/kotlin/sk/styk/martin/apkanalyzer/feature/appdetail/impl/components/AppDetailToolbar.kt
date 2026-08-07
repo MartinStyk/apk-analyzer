@@ -166,7 +166,7 @@ internal fun AppDetailToolbar(
         }
 
         Text(
-            text = state.packageName,
+            text = state.packageName.value,
             style = AppTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
             color = AppTheme.colors.onSurfaceVariant,
             textAlign = TextAlign.Center,

@@ -22,7 +22,11 @@ import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject
 
-internal class AppExportManagerImpl @Inject constructor(@ApplicationContext context: Context, private val packageManager: PackageManager, private val dispatcherProvider: DispatcherProvider) : AppExportManager {
+internal class AppExportManagerImpl @Inject constructor(
+    @ApplicationContext context: Context,
+    private val packageManager: PackageManager,
+    private val dispatcherProvider: DispatcherProvider,
+) : AppExportManager {
 
     private val contentResolver = context.contentResolver
 
@@ -56,7 +60,7 @@ internal class AppExportManagerImpl @Inject constructor(@ApplicationContext cont
 
     private fun resolveApkSource(reference: AppReference): ApkSource = when (reference) {
         is AppReference.InstalledPackage -> {
-            val applicationInfo = packageManager.getApplicationInfo(reference.packageName, 0)
+            val applicationInfo = packageManager.getApplicationInfo(reference.packageName.value, 0)
             ApkSource(
                 file = File(applicationInfo.sourceDir),
                 defaultName = "${reference.packageName}.apk",
@@ -73,7 +77,7 @@ internal class AppExportManagerImpl @Inject constructor(@ApplicationContext cont
 
     private fun resolveIconSource(reference: AppReference): IconSource = when (reference) {
         is AppReference.InstalledPackage -> IconSource(
-            drawable = packageManager.getApplicationInfo(reference.packageName, 0).loadIcon(packageManager),
+            drawable = packageManager.getApplicationInfo(reference.packageName.value, 0).loadIcon(packageManager),
             defaultName = "${reference.packageName}.png",
         )
 
@@ -159,7 +163,11 @@ internal class AppExportManagerImpl @Inject constructor(@ApplicationContext cont
         const val COPY_BUFFER_SIZE = 64 * 1024
     }
 
-    private data class ApkSource(val file: File, val defaultName: String, val baseApkOnly: Boolean)
+    private data class ApkSource(
+        val file: File,
+        val defaultName: String,
+        val baseApkOnly: Boolean,
+    )
 
     private data class IconSource(val drawable: Drawable, val defaultName: String)
 }

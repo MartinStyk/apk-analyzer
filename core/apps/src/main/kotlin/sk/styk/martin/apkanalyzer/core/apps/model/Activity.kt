@@ -1,8 +1,10 @@
 package sk.styk.martin.apkanalyzer.core.apps.model
 
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
+
 data class Activity(
     val name: String,
-    val packageName: String,
+    val packageName: PackageName,
     val label: String? = null,
     val targetActivity: String? = null,
     val permission: String? = null,

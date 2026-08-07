@@ -29,7 +29,7 @@ internal class PackageIconFetcher(private val data: AppReference, private val pa
             when (data) {
                 is AppReference.InstalledPackage ->
                     packageManager
-                        .getApplicationInfo(data.packageName, 0)
+                        .getApplicationInfo(data.packageName.value, 0)
                         .loadIcon(packageManager)
 
                 is AppReference.ApkFile ->
