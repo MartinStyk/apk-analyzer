@@ -153,7 +153,12 @@ private sealed interface PermissionsSource {
 
 private val orderedProtectionLevels: List<ProtectionLevel?> = ProtectionLevel.entries + null
 
-private data class Narrowing(val scope: PermissionScope = PermissionScope.Requested, val query: String = "", val protectionLevels: Set<ProtectionLevel?> = emptySet(), val grantStates: Set<GrantState> = emptySet())
+private data class Narrowing(
+    val scope: PermissionScope = PermissionScope.Requested,
+    val query: String = "",
+    val protectionLevels: Set<ProtectionLevel?> = emptySet(),
+    val grantStates: Set<GrantState> = emptySet(),
+)
 
 private fun PermissionsSource.Ready.narrowedBy(narrowing: Narrowing): PermissionsState.Loaded {
     val scopeOptions = if (defined.isEmpty()) {

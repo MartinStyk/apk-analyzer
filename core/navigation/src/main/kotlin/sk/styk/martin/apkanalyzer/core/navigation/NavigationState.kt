@@ -28,7 +28,11 @@ fun rememberNavigationState(startKey: NavKey, topLevelKeys: List<NavKey>): Navig
     }
 }
 
-class NavigationState(val startKey: NavKey, val topLevelStack: NavBackStack<NavKey>, val subStacks: Map<NavKey, NavBackStack<NavKey>>) {
+class NavigationState(
+    val startKey: NavKey,
+    val topLevelStack: NavBackStack<NavKey>,
+    val subStacks: Map<NavKey, NavBackStack<NavKey>>,
+) {
     val currentTopLevelKey: NavKey by derivedStateOf { topLevelStack.last() }
 
     val topLevelKeys

@@ -7,4 +7,8 @@ import sk.styk.martin.apkanalyzer.feature.apps.impl.components.AppDataPermission
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.QuickFilter
 
 @Immutable
-data class QuickFilterRowState(val activeQuickFilters: ImmutableSet<QuickFilter> = persistentSetOf(), val isDeepFilterActive: Boolean = false, val permissionRationale: AppDataPermission? = null)
+data class QuickFilterRowState(
+    val activeQuickFilters: ImmutableSet<QuickFilter> = persistentSetOf(),
+    val isDeepFilterActive: Boolean = false,
+    val permissionRationale: AppDataPermission? = null,
+)

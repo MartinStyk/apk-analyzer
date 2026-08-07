@@ -31,7 +31,12 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.animation.NAV_DURATION_STANDARD
 val navigationBarContentPadding: Dp = 80.dp
 
 @Stable
-data class NavigationBarItem(val navKey: NavKey, val selectedIcon: ImageVector, val unselectedIcon: ImageVector, @StringRes val title: Int)
+data class NavigationBarItem(
+    val navKey: NavKey,
+    val selectedIcon: ImageVector,
+    val unselectedIcon: ImageVector,
+    @StringRes val title: Int,
+)
 
 @Composable
 fun NavigationBar(

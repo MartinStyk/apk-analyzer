@@ -6,4 +6,9 @@ import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.feature.apps.impl.list.AppListItem
 
 @Immutable
-data class AppSearchState(val query: String = "", val results: ImmutableList<AppListItem> = persistentListOf(), val searchHistory: ImmutableList<String> = persistentListOf(), val totalAppCount: Int = 0)
+data class AppSearchState(
+    val query: String = "",
+    val results: ImmutableList<AppListItem> = persistentListOf(),
+    val searchHistory: ImmutableList<String> = persistentListOf(),
+    val totalAppCount: Int = 0,
+)

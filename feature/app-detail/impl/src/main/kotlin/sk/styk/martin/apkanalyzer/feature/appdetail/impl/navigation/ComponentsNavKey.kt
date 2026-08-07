@@ -7,4 +7,8 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.impl.appcomponents.Component
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.appcomponents.ComponentScope
 
 @Serializable
-internal data class ComponentsNavKey(val detailInput: AppDetailInput, val scope: ComponentScope = ComponentScope.All, val filters: Set<ComponentFilter> = emptySet()) : NavKey
+internal data class ComponentsNavKey(
+    val detailInput: AppDetailInput,
+    val scope: ComponentScope = ComponentScope.All,
+    val filters: Set<ComponentFilter> = emptySet(),
+) : NavKey

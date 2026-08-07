@@ -124,7 +124,11 @@ private sealed interface ComponentsSource {
     data class Ready(val componentsByType: Map<ComponentType, List<ComponentItem>>) : ComponentsSource
 }
 
-private data class Narrowing(val scope: ComponentScope, val query: String = "", val filters: Set<ComponentFilter> = emptySet())
+private data class Narrowing(
+    val scope: ComponentScope,
+    val query: String = "",
+    val filters: Set<ComponentFilter> = emptySet(),
+)
 
 private fun AppDetail.toSource(canLaunch: Boolean) = ComponentsSource.Ready(
     componentsByType = mapOf(

@@ -3,7 +3,11 @@ package sk.styk.martin.apkanalyzer.core.apps.model
 sealed interface Feature {
     val isRequired: Boolean
 
-    data class Hardware(val name: String, val version: Int = VERSION_UNSPECIFIED, override val isRequired: Boolean = false) : Feature
+    data class Hardware(
+        val name: String,
+        val version: Int = VERSION_UNSPECIFIED,
+        override val isRequired: Boolean = false,
+    ) : Feature
 
     data class OpenGlEs(val reqGlEsVersion: Int, override val isRequired: Boolean = false) : Feature {
         val versionName: String
