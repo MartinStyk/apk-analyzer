@@ -23,7 +23,7 @@ ui/
   ApkAnalyzerState.kt                   - sealed interface: Loading / Data(colorAppScheme: ColorAppScheme)
   ApkAnalyzerViewModel.kt               - @HiltViewModel; maps PersistenceRepository.observe(Key.ColorScheme) into ApkAnalyzerState via stateIn(WhileSubscribed(5000)) — exists solely so the Activity can drive day/night mode before the Compose theme renders
   navigation/
-    TopLevelDestinations.kt             - internal TOP_LEVEL_DESTINATIONS (persistentListOf<NavigationBarItem>): Apps, Permissions, Statistics tabs with icons/titles; internal TOP_LEVEL_KEYS
+    TopLevelDestinations.kt             - internal TOP_LEVEL_DESTINATIONS (persistentListOf<NavigationBarItem>): Apps, Browse tabs with icons/titles; internal TOP_LEVEL_KEYS
 util/
   ViewModelExtensions.kt                - Legacy pre-Hilt ViewModelProvider.Factory helper extensions
   file/
@@ -53,8 +53,7 @@ internal fun ApkAnalyzerApp() {
                 val entryProvider = entryProvider {
                     appEntries(navigator)
                     appDetailEntries(navigator)
-                    permissionEntries()
-                    statisticsEntries()
+                    browseEntries()
                     settingsEntries(navigator)
                 }
                 NavDisplay(
@@ -70,8 +69,8 @@ internal fun ApkAnalyzerApp() {
 
 `AppsNavKey` is the start destination. Each `*Entries()` call comes from the corresponding
 `feature/*/impl/navigation/*EntryProvider.kt` and only takes a `navigator` param when that
-feature navigates *out* to another feature (apps, app-detail, settings do; permissions, statistics
-currently don't since they're stub screens — see their own `AGENTS.md`). **Adding a new
+feature navigates *out* to another feature (apps, app-detail, settings do; browse
+currently doesn't since it's a stub screen — see its own `AGENTS.md`). **Adding a new
 feature/screen means adding its `*Entries()` call here** — see the `create-feature-module` and
 `implement-navigation` skills.
 
@@ -87,7 +86,7 @@ feature/screen means adding its `*Entries()` call here** — see the `create-fea
 
 Plugins: `apkanalyzer.application`, `apkanalyzer.hilt`, `apkanalyzer.compose`, `apkanalyzer.spotless`, `parcelize`.
 
-`projects.*`: all of `core.apps`, `core.appPermissions`, `core.appStatistics`, `core.common`, `core.userPreferences`, `core.navigation`, `core.uiLibrary`, and all of `feature.apps.impl`, `feature.permissions.impl`, `feature.statistics.impl`, `feature.settings.impl`, `feature.appDetail.impl`.
+`projects.*`: all of `core.apps`, `core.appPermissions`, `core.appIndex`, `core.common`, `core.userPreferences`, `core.navigation`, `core.uiLibrary`, and all of `feature.apps.impl`, `feature.browse.impl`, `feature.settings.impl`, `feature.appDetail.impl`.
 
 Key libraries: `androidx.activity.compose`, `androidx.appcompat`, `androidx.lifecycle.viewmodel.ktx`/`.runtime.compose`/`.process` (for `ProcessLifecycleOwner`), `androidx.compose.material3`, `kotlinx.collections.immutable`, `coil.compose`, `debugImplementation(libs.leakcanary)`.
 

@@ -10,6 +10,11 @@ Core domain module for app analysis. Provides repositories and utilities for que
 ```
 InstalledAppsRepository.kt / Impl    - Flow of all installed apps
 AppDetailRepository.kt / Impl        - Full app detail (installed package or APK file)
+AppSigningRepository.kt / Impl       - Flow<Map<packageName, AppSigning>> for every installed app, one
+                                        bulk GET_SIGNING_CERTIFICATES query + CertificateExtractor per
+                                        entry. Lazily shared (unlike InstalledAppsRepository's Eagerly)
+                                        since the per-cert digest/verify work only matters once a real
+                                        consumer subscribes
 DeviceFeaturesRepository.kt / Impl   - What *this device* provides, for checking an app's requirements
 StorageStatsRepository.kt / Impl     - App storage size stats (requires USAGE_STATS permission)
 UsageStatsRepository.kt / Impl       - App usage time/frequency stats
@@ -23,7 +28,8 @@ analysis/
   SdkVersionResolver.kt             - SDK version to Android name mapping
   AnalysisUtils.kt                   - Shared analysis helpers, incl. permission protection decoding
 model/
-  InstalledApp.kt         - Basic installed app info (packageName, name, sizes, times, source)
+  InstalledApp.kt         - Basic installed app info (packageName, name, sizes, times, source,
+                            targetSdk, minSdk)
   AppDetail.kt            - Complete app detail (info, permissions, activities, services, etc.)
   AppInfo.kt              - Core app metadata
   Permission.kt           - Single permission: name plus `details`, which is null when the device

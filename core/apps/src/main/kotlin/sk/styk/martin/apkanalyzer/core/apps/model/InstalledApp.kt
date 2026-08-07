@@ -11,6 +11,7 @@ data class InstalledApp(
     val version: Long,
     val source: AppSource,
     val targetSdk: Int,
+    val minSdk: Int,
     val apkSize: AppSize,
     val versionName: String?,
     val installTime: Instant,

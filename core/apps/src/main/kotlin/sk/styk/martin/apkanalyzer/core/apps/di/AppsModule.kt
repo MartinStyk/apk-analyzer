@@ -18,6 +18,8 @@ import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apps.AppExportManager
 import sk.styk.martin.apkanalyzer.core.apps.AppExportManagerImpl
+import sk.styk.martin.apkanalyzer.core.apps.AppSigningRepository
+import sk.styk.martin.apkanalyzer.core.apps.AppSigningRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apps.DeviceFeaturesRepository
 import sk.styk.martin.apkanalyzer.core.apps.DeviceFeaturesRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
@@ -54,6 +56,10 @@ internal interface AppsModule {
     @Binds
     @Singleton
     fun bindDeviceFeaturesRepository(impl: DeviceFeaturesRepositoryImpl): DeviceFeaturesRepository
+
+    @Binds
+    @Singleton
+    fun bindAppSigningRepository(impl: AppSigningRepositoryImpl): AppSigningRepository
 
     @Binds
     fun bindInstallSourceResolver(impl: InstallSourceResolverImpl): InstallSourceResolver

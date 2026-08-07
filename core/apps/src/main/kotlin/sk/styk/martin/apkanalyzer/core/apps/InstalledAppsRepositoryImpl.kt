@@ -74,6 +74,7 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
             version = longVersionCode,
             source = installSourceResolver.getAppInstallSource(this),
             targetSdk = appInfo?.targetSdkVersion ?: 0,
+            minSdk = appInfo?.minSdkVersion ?: 0,
             apkSize = (appInfo?.sourceDir?.let { File(it).length() } ?: 0L).bytes,
             versionName = versionName,
             installTime = Instant.ofEpochMilli(firstInstallTime),

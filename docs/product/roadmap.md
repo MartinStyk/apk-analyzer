@@ -59,27 +59,34 @@ One index, one screen, N dimensions. Pick a dimension → get its buckets with c
 distribution *is* the bucket counts of an index, and rendering it this way makes every number a
 door instead of a dead end.
 
-`core:app-statistics` already builds two thirds of this. `StatisticsData` is literally
-`Map<attributeValue, List<packageName>>` for install location, target SDK, min SDK, source and sign
-algorithm — bucket → apps, package names retained. That half gets promoted. The `MathStatistics`
-half (mean/median APK size, average activity/service/provider/receiver/permission counts) is the
-part that was low-value trivia, and it gets dropped.
+`core:app-index` builds the `attribute → apps` side of this today — target SDK, min SDK, install
+source, permission, and signing certificate (fingerprint, organization, country), each a
+`Map<attributeValue, List<packageName>>`. The first four come straight from `InstalledAppsRepository`,
+no device scan. Certificate comes from a new `AppSigningRepository` in `core:apps` — a real, general-
+purpose repository (not an indexing-only scanner), `Lazily` shared since its per-app X.509
+parse/digest/verify work is genuinely heavier than the free dimensions. The old `core:app-statistics`
+module (and its `MathStatistics` half — mean/median APK size, average component counts — which was
+low-value trivia) is deleted rather than repurposed; it was fully dead code with no live consumers and
+several known bugs. Uses-feature grouping is still deferred — it would need a new `PackageManager`
+flag (`GET_CONFIGURATIONS`) with no other `core:apps` consumer yet, unlike certificate. See
+`core/app-index/AGENTS.md`.
 
 | ID    | Item                                | Status  | Notes                                                                                     |
 |-------|-------------------------------------|---------|--------------------------------------------------------------------------------------------|
-| CE-01 | Attribute index infrastructure      | Todo    | `attribute → apps` builder + bucket counts. Reuses the map half of `LocalApplicationStatisticManager`, including its proven full-device pass with progress |
+| CE-01 | Attribute index infrastructure      | Partial | `core:app-index` ships target SDK, min SDK, install source, permission, certificate. Data layer only — no UI yet, see `CE-05` |
 | CE-05 | Browse screen                       | Todo    | Dimension picker → bucket list with counts → app list. One screen serves every dimension  |
-| FR-08 | ↳ dimension: permission             | Partial | Multi-permission filter works in `feature:apps`; the standalone tab is a stub screen      |
-| FR-09 | ↳ dimension: signing certificate    | Todo    | Group by cert fingerprint, not sign algorithm — "same publisher" is the useful question; algorithm has ~5 values and answers nothing |
-| FR-40 | ↳ dimension: target SDK / min SDK   | Todo    | Already built in the maps. This is what the SDK chart was, made tappable                 |
-| FR-41 | ↳ dimension: install source         | Todo    | Already built in the maps                                                                 |
+| FR-08 | ↳ dimension: permission             | Partial | Indexed in `core:app-index` (free — already on `InstalledApp`); multi-permission filter also works in `feature:apps`; no browse UI yet |
+| FR-09 | ↳ dimension: signing certificate    | Partial | Indexed in `core:app-index` by fingerprint, organization, and country via the new `AppSigningRepository` (`core:apps`) — no browse UI yet |
+| FR-40 | ↳ dimension: target SDK / min SDK   | Partial | Indexed in `core:app-index`. This is what the SDK chart was, made tappable — no browse UI yet |
+| FR-41 | ↳ dimension: install source         | Partial | Indexed in `core:app-index` — no browse UI yet                                            |
 | FR-42 | ↳ dimension: shared UID             | Todo    | Needs `FR-35`                                                                             |
 | FR-43 | ↳ dimension: app category           | Todo    | Needs `FR-39`                                                                             |
 | CE-06 | "Also signed with this certificate" | Backlog | The other installed apps sharing this signer, listed on the app detail certificate screen. Data is already extracted; it needs the `CE-01` index. **Revisit when CE-01 / FR-09 certificate grouping is built** — see [features/app-detail.md](features/app-detail.md#deferred) |
 
-**Module consolidation:** `feature:permissions` and `feature:statistics` are both placeholder
-screens and both hold a top-level nav slot. They collapse into one `feature:browse`. That frees a
-bottom-nav slot — the natural home for Pillar 1's What Changed tab in R1.
+**Module consolidation: done.** `feature:permissions` and `feature:statistics` — both placeholder
+screens each holding a top-level nav slot — are deleted and collapsed into one `feature:browse`
+(currently also a placeholder, pending `CE-05`). That frees a bottom-nav slot — the natural home for
+Pillar 1's What Changed tab in R1.
 
 ### 1.2 App Detail
 
