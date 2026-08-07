@@ -63,6 +63,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.ListSectionHeader
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionLoading
 
@@ -193,7 +194,13 @@ private fun LoadedContent(
                 state.sections.forEach { section ->
                     if (state.isSectioned) {
                         item(key = section.type.name) {
-                            SectionHeader(section = section)
+                            ListSectionHeader(
+                                title = stringResource(
+                                    R.string.components_section_header,
+                                    stringResource(section.type.sectionLabelRes).uppercase(),
+                                    section.components.size,
+                                ),
+                            )
                         }
                     }
                     items(items = section.components, key = { it.name }) { component ->
@@ -253,20 +260,6 @@ private fun NarrowingRow(
             )
         }
     }
-}
-
-@Composable
-private fun SectionHeader(section: ComponentSection, modifier: Modifier = Modifier) {
-    Text(
-        text = stringResource(
-            R.string.components_section_header,
-            stringResource(section.type.sectionLabelRes).uppercase(),
-            section.components.size,
-        ),
-        style = AppTheme.typography.labelMedium,
-        color = AppTheme.colors.primary,
-        modifier = modifier.padding(top = 20.dp, bottom = 8.dp, start = 4.dp, end = 4.dp),
-    )
 }
 
 @Composable

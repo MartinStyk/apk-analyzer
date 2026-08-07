@@ -49,7 +49,11 @@ sealed interface AppDetailState {
         val contentProvidersCount: Int,
         val broadcastReceiversCount: Int,
         val certificatesCount: Int,
-        val featuresCount: Int,
+        val requirementsCount: Int,
+        val requiredFeaturesCount: Int,
+        val optionalFeaturesCount: Int,
+        val unmetRequirementsCount: Int,
+        val requirementPreviews: ImmutableList<RequirementPreview>,
         val certificate: CertificateState? = null,
         val badges: ImmutableList<AppDetailBadge> = persistentListOf(),
     ) : AppDetailState {
@@ -64,6 +68,9 @@ sealed interface AppDetailState {
 
         @Immutable
         data class PermissionPreview(val name: String, val groupName: String?, val label: String)
+
+        @Immutable
+        data class RequirementPreview(val name: String?, val isUnmetRequirement: Boolean)
     }
 
     data object Error : AppDetailState

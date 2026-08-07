@@ -32,7 +32,12 @@ re-deriving the module's structure.
 | After changing a context file, skill, adapter, or the module graph | `./gradlew validateAgentContext` |
 
 A successful compile is not proof a Compose layout is correct. For visual or layout changes, use
-the `run-app` skill and look at it on a device.
+the `run-app` skill and look at it on a device. Two failure modes that pass every gate: text that
+wraps to three lines inside a fixed-width column, and two indicators that disagree because each
+derived its own answer.
+
+`spotlessCheck` does not flag unused imports. Deleting the last use of something does not delete its
+import, and no gate will tell you — check by hand.
 
 ## Module Rules
 
@@ -118,10 +123,24 @@ is the authoritative list.
   composable, never the ViewModel-dependent screen.
 * Composable callbacks are present tense — `onClick`, `onSelectItem`, `onBack`. Never
   `onClicked`, `onItemSelected`, `onBackPressed`.
+* **`LazyColumn` item keys must be unique across the whole list, not per section.** A sectioned list
+  keyed on an item identifier crashes when the same identifier lands in two sections. Deduplicate in
+  the ViewModel rather than compounding the key with the section.
+* **Two indicators of the same fact must come from one predicate.** A verdict line and a row of
+  icons that each recompute "is this a problem" will eventually contradict each other on screen.
+* **A row that has nothing to show on tap means the item sheet is missing, not that the idiom is
+  optional.** Don't neutralise the tap (`indication = null`, a no-op `onClick`) to hide a dead
+  affordance — every list row in app detail is `tap = explain, long-press = copy`.
 
 ## Conventions
 
 * `data object`, not plain `object`, for sealed interface members.
+* **A nullable primitive that encodes a variant or a third state is a type in disguise.** `Boolean?`
+  meaning yes/no/unknown, or a `String?` whose null marks "a different kind of thing", belongs in an
+  enum or a sealed interface. `Feature` (`Hardware` vs `OpenGlEs`) and `FeatureAvailability` in
+  `core:apps` are the worked examples — both replaced exactly that shape.
+* **Extract a shared helper when the second consumer appears — and grep for a third before writing
+  your own.** Duplicated composables here have reached three identical copies before anyone noticed.
 * No wildcard imports.
 * Prefer `private`; `internal` for module-visible; `public` only for actual public API.
 * `Logger` from `core.common.logger`, never raw Timber: `Logger.d("Tag", "msg")`,

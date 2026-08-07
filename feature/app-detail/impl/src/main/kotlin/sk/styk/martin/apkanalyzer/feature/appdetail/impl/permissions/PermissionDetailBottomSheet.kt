@@ -28,6 +28,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.DetailField
 
 private const val UNDEFINED_PERMISSION_GROUP = "android.permission-group.UNDEFINED"
 
@@ -152,42 +153,6 @@ private fun LabelledBlock(
             color = AppTheme.colors.onSurfaceVariant,
         )
         content()
-    }
-}
-
-@Composable
-private fun DetailField(
-    label: String,
-    value: String,
-    onCopy: (label: String, value: String) -> Unit,
-    modifier: Modifier = Modifier,
-    explanation: String? = null,
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(Shapes.CardShape)
-            .clickable { onCopy(label, value) }
-            .padding(vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(2.dp),
-    ) {
-        Text(
-            text = label.uppercase(),
-            style = AppTheme.typography.labelMedium,
-            color = AppTheme.colors.onSurfaceVariant,
-        )
-        Text(
-            text = value,
-            style = AppTheme.typography.bodyMedium,
-            color = AppTheme.colors.onBackground,
-        )
-        explanation?.let {
-            Text(
-                text = it,
-                style = AppTheme.typography.bodySmall,
-                color = AppTheme.colors.onSurfaceVariant,
-            )
-        }
     }
 }
 

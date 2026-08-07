@@ -54,6 +54,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.impl.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.HashBox
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.InfoRow
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.RationaleBottomSheet
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionCard
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionLoading
 import java.time.Instant
@@ -239,7 +240,7 @@ private fun CertificateCard(
         if (certificate.trustLevel == CertificateTrustLevel.Debug) {
             DebugBanner()
         }
-        CertificateSectionCard(
+        SectionCard(
             title = stringResource(R.string.certificates_signer),
             status = selfSignedLabel.takeIf { certificate.isSelfSigned },
             onClickStatus = { onShowRationale(selfSignedInfo) }.takeIf { certificate.isSelfSigned },
@@ -250,7 +251,7 @@ private fun CertificateCard(
                 onCopy = onCopy,
             )
         }
-        CertificateSectionCard(title = stringResource(R.string.certificates_details)) {
+        SectionCard(title = stringResource(R.string.certificates_details)) {
             ValiditySection(
                 certificate = certificate,
                 onShowRationale = onShowRationale,
@@ -278,7 +279,7 @@ private fun CertificateCard(
                 onShowRationale = onShowRationale,
             )
         }
-        CertificateSectionCard(title = stringResource(R.string.certificates_certificate_fingerprints)) {
+        SectionCard(title = stringResource(R.string.certificates_certificate_fingerprints)) {
             FingerprintSection(
                 certificate = certificate,
                 onCopy = onCopy,
@@ -312,45 +313,6 @@ private fun CertificateGroupHeader(
                 color = AppTheme.colors.onSurfaceVariant,
             )
         }
-    }
-}
-
-@Composable
-private fun CertificateSectionCard(
-    title: String,
-    modifier: Modifier = Modifier,
-    status: String? = null,
-    onClickStatus: (() -> Unit)? = null,
-    onLongClickStatus: (() -> Unit)? = null,
-    content: @Composable () -> Unit,
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(Shapes.CardShape)
-            .background(AppTheme.colors.surface),
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 8.dp),
-        ) {
-            Text(
-                text = title,
-                style = AppTheme.typography.titleLarge,
-                color = AppTheme.colors.primary,
-                modifier = Modifier.weight(1f),
-            )
-            if (status != null) {
-                Chip(
-                    label = status,
-                    variant = ChipVariant.Tonal,
-                    onClick = onClickStatus ?: {},
-                    onLongClick = onLongClickStatus,
-                )
-            }
-        }
-        content()
-        Spacer(modifier = Modifier.height(8.dp))
     }
 }
 

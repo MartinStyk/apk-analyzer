@@ -3,7 +3,6 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.impl.requirements
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,7 +19,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,6 +36,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
+import sk.styk.martin.apkanalyzer.core.apps.model.Feature
+import sk.styk.martin.apkanalyzer.core.apps.model.FeatureAvailability
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Toolbar
@@ -43,6 +47,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.ListSectionHeader
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionLoading
 
@@ -114,6 +119,12 @@ private fun LoadedContent(
         return
     }
 
+    var detailIdentifier by rememberSaveable { mutableStateOf<String?>(null) }
+    val detailSection = remember(detailIdentifier, state.sections) {
+        state.sections.firstOrNull { section -> section.requirements.any { it.identifier == detailIdentifier } }
+    }
+    val detailItem = detailSection?.requirements?.firstOrNull { it.identifier == detailIdentifier }
+
     LazyColumn(
         contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 24.dp),
         modifier = modifier.fillMaxWidth(),
@@ -125,16 +136,34 @@ private fun LoadedContent(
         }
         state.sections.forEach { section ->
             item(key = section.isRequired) {
-                SectionHeader(section = section)
+                ListSectionHeader(
+                    title = stringResource(
+                        R.string.requirements_section_header,
+                        stringResource(section.labelRes).uppercase(),
+                        section.requirements.size,
+                    ),
+                    explanation = stringResource(section.explanationRes),
+                )
             }
             items(items = section.requirements, key = { it.identifier }) { requirement ->
                 RequirementRow(
                     item = requirement,
-                    isRequired = section.isRequired,
+
+                    onClick = { detailIdentifier = requirement.identifier },
                     onLongClick = { label -> onAction(RequirementsAction.CopyValue(label, requirement.identifier)) },
                 )
             }
         }
+    }
+
+    if (detailItem != null && detailSection != null) {
+        RequirementDetailBottomSheet(
+            item = detailItem,
+
+            label = detailItem.label(),
+            onCopy = { label, value -> onAction(RequirementsAction.CopyValue(label, value)) },
+            onDismiss = { detailIdentifier = null },
+        )
     }
 }
 
@@ -165,30 +194,9 @@ private fun MissingSummary(missingRequiredCount: Int, modifier: Modifier = Modif
 }
 
 @Composable
-private fun SectionHeader(section: RequirementSection, modifier: Modifier = Modifier) {
-    Column(modifier = modifier.padding(top = 20.dp, bottom = 8.dp, start = 4.dp, end = 4.dp)) {
-        Text(
-            text = stringResource(
-                R.string.requirements_section_header,
-                stringResource(section.titleRes).uppercase(),
-                section.requirements.size,
-            ),
-            style = AppTheme.typography.labelMedium,
-            color = AppTheme.colors.primary,
-        )
-        Spacer(modifier = Modifier.height(2.dp))
-        Text(
-            text = stringResource(section.explanationRes),
-            style = AppTheme.typography.bodySmall,
-            color = AppTheme.colors.onSurfaceVariant,
-        )
-    }
-}
-
-@Composable
 private fun RequirementRow(
     item: RequirementItem,
-    isRequired: Boolean,
+    onClick: () -> Unit,
     onLongClick: (label: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -202,12 +210,7 @@ private fun RequirementRow(
             .padding(bottom = 6.dp)
             .clip(Shapes.CardShape)
             .background(AppTheme.colors.surface)
-            .combinedClickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = {},
-                onLongClick = { onLongClick(label) },
-            )
+            .combinedClickable(onClick = onClick, onLongClick = { onLongClick(label) })
             .padding(horizontal = 14.dp, vertical = 12.dp),
     ) {
         Icon(
@@ -236,34 +239,33 @@ private fun RequirementRow(
                 )
             }
         }
-        if (item.availability == RequirementAvailability.Missing) {
+        if (item.availability == FeatureAvailability.Missing) {
             Spacer(modifier = Modifier.width(8.dp))
-            MissingMarker(item = item, isRequired = isRequired)
+            MissingMarker(item = item)
         }
     }
 }
 
 @Composable
-private fun MissingMarker(
-    item: RequirementItem,
-    isRequired: Boolean,
-    modifier: Modifier = Modifier,
-) {
-    val openGlEsDeviceVersion = (item as? RequirementItem.OpenGlEs)?.deviceVersionName
-
+private fun MissingMarker(item: RequirementItem, modifier: Modifier = Modifier) {
     Text(
         text = when {
-            item is RequirementItem.OpenGlEs && openGlEsDeviceVersion != null ->
-                stringResource(R.string.requirements_missing_open_gl_es, item.versionName, openGlEsDeviceVersion)
+            item is RequirementItem.OpenGlEs && item.deviceVersionName != null ->
+                stringResource(R.string.requirements_missing_version, item.versionName, item.deviceVersionName)
 
-            isRequired -> stringResource(R.string.requirements_missing)
+            item is RequirementItem.Hardware && item.isVersionMiss ->
+                stringResource(
+                    R.string.requirements_missing_version,
+                    requirementVersionName(item.name, item.requiredVersion),
+                    requirementVersionName(item.name, checkNotNull(item.deviceVersion)),
+                )
 
-            else -> stringResource(R.string.requirements_missing_optional)
+            else -> stringResource(R.string.requirements_missing)
         },
         style = AppTheme.typography.labelMedium,
-        color = if (isRequired) AppTheme.colors.warning else AppTheme.colors.onSurfaceVariant,
+        color = if (item.isRequired) AppTheme.colors.warning else AppTheme.colors.onSurfaceVariant,
         textAlign = TextAlign.End,
-        modifier = modifier.width(112.dp),
+        modifier = modifier.width(96.dp),
     )
 }
 
@@ -287,7 +289,15 @@ private fun EmptyContent(modifier: Modifier = Modifier) {
 
 @Composable
 private fun RequirementItem.label(): String = when (this) {
-    is RequirementItem.Hardware -> labelRes?.let { stringResource(it) } ?: name
+    is RequirementItem.Hardware -> {
+        val name = labelRes?.let { stringResource(it) } ?: name
+        if (requiredVersion == Feature.VERSION_UNSPECIFIED) {
+            name
+        } else {
+            stringResource(R.string.requirements_label_with_version, name, requirementVersionName(identifier, requiredVersion))
+        }
+    }
+
     is RequirementItem.OpenGlEs -> stringResource(R.string.requirements_open_gl_es, versionName)
 }
 
@@ -342,32 +352,52 @@ private fun RequirementsEmptyPreview() {
 }
 
 private fun sampleLoadedState() = RequirementsState.Loaded(
-    missingRequiredCount = 3,
+    missingRequiredCount = 4,
     sections = persistentListOf(
         RequirementSection(
             isRequired = true,
             requirements = persistentListOf(
                 RequirementItem.Hardware(
                     name = "android.hardware.nfc",
-                    availability = RequirementAvailability.Missing,
+                    requiredVersion = Feature.VERSION_UNSPECIFIED,
+                    deviceVersion = null,
+                    isRequired = true,
+                    availability = FeatureAvailability.Missing,
+                ),
+                RequirementItem.Hardware(
+                    name = "android.hardware.vulkan.version",
+                    requiredVersion = 4198400,
+                    deviceVersion = 4194304,
+                    isRequired = true,
+                    availability = FeatureAvailability.Missing,
                 ),
                 RequirementItem.Hardware(
                     name = "android.hardware.camera",
-                    availability = RequirementAvailability.Available,
+                    requiredVersion = Feature.VERSION_UNSPECIFIED,
+                    deviceVersion = 0,
+                    isRequired = true,
+                    availability = FeatureAvailability.Available,
                 ),
                 RequirementItem.Hardware(
                     name = "android.hardware.wifi",
-                    availability = RequirementAvailability.Available,
+                    requiredVersion = Feature.VERSION_UNSPECIFIED,
+                    deviceVersion = 0,
+                    isRequired = true,
+                    availability = FeatureAvailability.Available,
                 ),
                 RequirementItem.Hardware(
                     name = "com.sonymobile.hardware.tv",
-                    availability = RequirementAvailability.Missing,
+                    requiredVersion = Feature.VERSION_UNSPECIFIED,
+                    deviceVersion = null,
+                    isRequired = true,
+                    availability = FeatureAvailability.Missing,
                 ),
                 RequirementItem.OpenGlEs(
                     versionName = "3.1",
                     deviceVersionName = "3.0",
                     identifier = "0x00030001",
-                    availability = RequirementAvailability.Missing,
+                    isRequired = true,
+                    availability = FeatureAvailability.Missing,
                 ),
             ),
         ),
@@ -376,11 +406,17 @@ private fun sampleLoadedState() = RequirementsState.Loaded(
             requirements = persistentListOf(
                 RequirementItem.Hardware(
                     name = "android.hardware.bluetooth_le",
-                    availability = RequirementAvailability.Available,
+                    requiredVersion = Feature.VERSION_UNSPECIFIED,
+                    deviceVersion = 0,
+                    isRequired = false,
+                    availability = FeatureAvailability.Available,
                 ),
                 RequirementItem.Hardware(
                     name = "android.hardware.sensor.heartrate",
-                    availability = RequirementAvailability.Missing,
+                    requiredVersion = Feature.VERSION_UNSPECIFIED,
+                    deviceVersion = null,
+                    isRequired = false,
+                    availability = FeatureAvailability.Missing,
                 ),
             ),
         ),

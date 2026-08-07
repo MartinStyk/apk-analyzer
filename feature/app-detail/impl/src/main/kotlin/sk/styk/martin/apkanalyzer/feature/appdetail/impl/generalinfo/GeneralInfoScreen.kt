@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -20,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,16 +27,15 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.LoadingSpinner
-import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
-import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.InfoRow
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.InfoRowItem
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.RationaleBottomSheet
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionCard
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionLoading
 import java.text.SimpleDateFormat
@@ -110,10 +107,11 @@ private fun LoadedContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        InfoSection(title = stringResource(R.string.general_info_section_identification)) {
+        SectionCard(title = stringResource(R.string.general_info_section_identification)) {
             InfoRowItem(
                 label = stringResource(R.string.general_info_application_name),
                 value = state.applicationName,
@@ -157,7 +155,7 @@ private fun LoadedContent(
             }
         }
 
-        InfoSection(title = stringResource(R.string.general_info_section_versioning)) {
+        SectionCard(title = stringResource(R.string.general_info_section_versioning)) {
             state.versionName?.let { value ->
                 InfoRowItem(
                     label = stringResource(R.string.general_info_version_name),
@@ -176,7 +174,7 @@ private fun LoadedContent(
             )
         }
 
-        InfoSection(title = stringResource(R.string.general_info_section_api_targets)) {
+        SectionCard(title = stringResource(R.string.general_info_section_api_targets)) {
             state.minSdkVersion?.let { version ->
                 val value = if (state.minSdkLabel != null) {
                     stringResource(R.string.app_detail_sdk_version, version, state.minSdkLabel)
@@ -207,7 +205,7 @@ private fun LoadedContent(
             }
         }
 
-        InfoSection(title = stringResource(R.string.general_info_section_installation)) {
+        SectionCard(title = stringResource(R.string.general_info_section_installation)) {
             InfoRowItem(
                 label = stringResource(R.string.general_info_app_type),
                 value = if (state.isSystemApp) {
@@ -264,7 +262,7 @@ private fun LoadedContent(
             }
         }
 
-        InfoSection(title = stringResource(R.string.general_info_section_storage)) {
+        SectionCard(title = stringResource(R.string.general_info_section_storage)) {
             state.apkDirectory?.let { value ->
                 InfoRowItem(
                     label = stringResource(R.string.general_info_apk_directory),
@@ -316,30 +314,6 @@ private fun LoadedContent(
             row = row,
             onDismiss = { rationaleRow = null },
         )
-    }
-}
-
-@Composable
-private fun InfoSection(
-    title: String,
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .clip(Shapes.CardShape)
-            .background(AppTheme.colors.surface),
-    ) {
-        Text(
-            text = title,
-            style = AppTheme.typography.titleLarge,
-            color = AppTheme.colors.primary,
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
-        )
-        content()
-        Spacer(modifier = Modifier.height(8.dp))
     }
 }
 
