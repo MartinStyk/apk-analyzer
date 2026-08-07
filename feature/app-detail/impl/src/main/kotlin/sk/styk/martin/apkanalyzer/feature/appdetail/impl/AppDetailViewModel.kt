@@ -8,12 +8,15 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.apppermissions.PermissionLabelProvider
@@ -52,14 +55,23 @@ internal class AppDetailViewModel @AssistedInject constructor(
         fun create(target: AppDetailInput): AppDetailViewModel
     }
 
-    private val _state = MutableStateFlow<AppDetailState>(AppDetailState.Loading)
-    val state: StateFlow<AppDetailState> = _state
+    private val source = MutableStateFlow<AppDetailSource>(AppDetailSource.Loading)
+    private val exportInProgress = MutableStateFlow<AppDetailExport?>(null)
+
+    val state: StateFlow<AppDetailState> = combine(source, exportInProgress) { source, exportInProgress ->
+        when (source) {
+            AppDetailSource.Loading -> AppDetailState.Loading
+            AppDetailSource.Error -> AppDetailState.Error
+            is AppDetailSource.Ready -> source.state.copy(exportInProgress = exportInProgress)
+        }
+    }
+        .flowOn(dispatcherProvider.default())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AppDetailState.Loading)
 
     private val eventChannel = Channel<AppDetailEvent>(Channel.BUFFERED)
     val events = eventChannel.receiveAsFlow()
 
     private var activeExport: AppDetailExport? = null
-    private var exportInProgress: AppDetailExport? = null
     private val appReference = appDetailInput.toAppReference()
 
     init {
@@ -105,13 +117,13 @@ internal class AppDetailViewModel @AssistedInject constructor(
             is AppDetailAction.SaveIconTo -> exportIcon(action.destination)
 
             is AppDetailAction.DocumentPickerUnavailable -> {
-                updateExportInProgress(null)
+                exportInProgress.value = null
                 sendEvent(AppDetailEvent.ShowFeedback(AppDetailFeedback.DocumentPickerUnavailable))
             }
 
             is AppDetailAction.DocumentPickerCancelled -> {
-                if ((_state.value as? AppDetailState.Loaded)?.exportInProgress == action.export) {
-                    updateExportInProgress(null)
+                if (exportInProgress.value == action.export) {
+                    exportInProgress.value = null
                 }
             }
         }
@@ -119,10 +131,10 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
     private fun requestDocument(export: AppDetailExport) {
         withLoadedState { state ->
-            if (exportInProgress != null) return@withLoadedState
+            if (exportInProgress.value != null) return@withLoadedState
             if (export == AppDetailExport.Apk && appDetailInput !is AppDetailInput.InstalledPackage) return@withLoadedState
             val extension = if (export == AppDetailExport.Apk) "apk" else "png"
-            updateExportInProgress(export)
+            exportInProgress.value = export
             sendEvent(AppDetailEvent.CreateDocument(export, "${state.packageName}.$extension"))
         }
     }
@@ -143,14 +155,14 @@ internal class AppDetailViewModel @AssistedInject constructor(
         if (appDetailInput !is AppDetailInput.InstalledPackage) return
         if (activeExport != null) return
         activeExport = AppDetailExport.Apk
-        updateExportInProgress(AppDetailExport.Apk)
+        exportInProgress.value = AppDetailExport.Apk
         viewModelScope.launch {
             val feedback = appExportManager.exportApk(appReference, destination).fold(
                 onSuccess = { AppDetailFeedback.ApkSaved(it.displayName, it.baseApkOnly) },
                 onFailure = { AppDetailFeedback.ApkSaveFailed },
             )
             activeExport = null
-            updateExportInProgress(null)
+            exportInProgress.value = null
             eventChannel.send(AppDetailEvent.ShowFeedback(feedback))
         }
     }
@@ -158,7 +170,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
     private fun exportIcon(destination: Uri) {
         if (activeExport != null) return
         activeExport = AppDetailExport.Icon
-        updateExportInProgress(AppDetailExport.Icon)
+        exportInProgress.value = AppDetailExport.Icon
         viewModelScope.launch {
             val result = appExportManager.exportIcon(appReference, destination)
             val feedback = result.fold(
@@ -166,15 +178,8 @@ internal class AppDetailViewModel @AssistedInject constructor(
                 onFailure = { AppDetailFeedback.IconSaveFailed },
             )
             activeExport = null
-            updateExportInProgress(null)
+            exportInProgress.value = null
             eventChannel.send(AppDetailEvent.ShowFeedback(feedback))
-        }
-    }
-
-    private fun updateExportInProgress(export: AppDetailExport?) {
-        exportInProgress = export
-        (_state.value as? AppDetailState.Loaded)?.let { current ->
-            _state.value = current.copy(exportInProgress = export)
         }
     }
 
@@ -183,62 +188,61 @@ internal class AppDetailViewModel @AssistedInject constructor(
     }
 
     private fun withLoadedState(block: (AppDetailState.Loaded) -> Unit) {
-        (_state.value as? AppDetailState.Loaded)?.let(block)
+        (source.value as? AppDetailSource.Ready)?.state?.let(block)
     }
 
     private fun loadDetail() {
-        _state.value = AppDetailState.Loading
+        source.value = AppDetailSource.Loading
         viewModelScope.launch {
             val deviceFeatures = deviceFeaturesRepository.deviceFeatures()
-            val loadedState = withContext(dispatcherProvider.default()) {
+            source.value = withContext(dispatcherProvider.default()) {
                 appDetailRepository.details(appReference)
             }.onFailure {
                 Logger.e(TAG, it, "Can not load app detail for $appDetailInput")
             }.fold(
                 onSuccess = { detail ->
-                    detail.toLoadedState(permissionLabelProvider, deviceFeatures).let { state ->
-                        state.copy(
-                            badges = computeBadges(state),
-                            exportInProgress = exportInProgress,
-                        )
-                    }
+                    AppDetailSource.Ready(
+                        detail.toLoadedState(permissionLabelProvider, deviceFeatures)
+                            .withComputedBadges(Instant.now()),
+                    )
                 },
-                onFailure = { AppDetailState.Error },
+                onFailure = { AppDetailSource.Error },
             )
-            _state.value = loadedState
         }
-    }
-
-    private fun computeBadges(state: AppDetailState.Loaded): ImmutableList<AppDetailBadge> {
-        val now = Instant.now()
-        return buildList {
-            if (state.source == AppSource.Unknown.name) add(AppDetailBadge.Sideloaded)
-            if (state.insights.any { it is AppDetailInsight.SensitivePermission }) add(AppDetailBadge.DangerousPermissions)
-            state.lastUsedTime?.let { lastUsed ->
-                if (lastUsed.isBefore(now.minus(AppClassificationThresholds.UNUSED_PERIOD))) add(AppDetailBadge.Unused)
-            }
-            val effectiveSize = state.totalSize ?: state.apkSize
-            if (effectiveSize >= AppClassificationThresholds.LARGE_SIZE) add(AppDetailBadge.Large)
-            if (state.isSystemApp) add(AppDetailBadge.System)
-            state.firstInstallTime?.let { installTime ->
-                if (installTime.isAfter(now.minus(AppClassificationThresholds.RECENT_PERIOD))) add(AppDetailBadge.RecentlyInstalled)
-            }
-            state.lastUpdateTime?.let { updateTime ->
-                if (updateTime.isAfter(now.minus(AppClassificationThresholds.RECENT_PERIOD))) add(AppDetailBadge.RecentlyUpdated)
-            }
-            state.lastUsedTime?.let { lastUsed ->
-                if (lastUsed.isAfter(now.minus(AppClassificationThresholds.RECENTLY_USED_DAYS.days.toJavaDuration()))) add(AppDetailBadge.RecentlyUsed)
-            }
-            if (state.source == AppSource.GooglePlay.name) add(AppDetailBadge.GooglePlay)
-        }.take(MAX_BADGES).toImmutableList()
-    }
-
-    private companion object {
-        const val MAX_BADGES = 3
     }
 }
 
+private sealed interface AppDetailSource {
+    data object Loading : AppDetailSource
+    data object Error : AppDetailSource
+    data class Ready(val state: AppDetailState.Loaded) : AppDetailSource
+}
+
+private const val MAX_BADGES = 3
 private const val MAX_REQUIREMENT_PREVIEWS = 6
+
+private fun AppDetailState.Loaded.withComputedBadges(now: Instant): AppDetailState.Loaded = copy(
+    badges = buildList {
+        if (source == AppSource.Unknown.name) add(AppDetailBadge.Sideloaded)
+        if (insights.any { it is AppDetailInsight.SensitivePermission }) add(AppDetailBadge.DangerousPermissions)
+        lastUsedTime?.let { lastUsed ->
+            if (lastUsed.isBefore(now.minus(AppClassificationThresholds.UNUSED_PERIOD))) add(AppDetailBadge.Unused)
+        }
+        val effectiveSize = totalSize ?: apkSize
+        if (effectiveSize >= AppClassificationThresholds.LARGE_SIZE) add(AppDetailBadge.Large)
+        if (isSystemApp) add(AppDetailBadge.System)
+        firstInstallTime?.let { installTime ->
+            if (installTime.isAfter(now.minus(AppClassificationThresholds.RECENT_PERIOD))) add(AppDetailBadge.RecentlyInstalled)
+        }
+        lastUpdateTime?.let { updateTime ->
+            if (updateTime.isAfter(now.minus(AppClassificationThresholds.RECENT_PERIOD))) add(AppDetailBadge.RecentlyUpdated)
+        }
+        lastUsedTime?.let { lastUsed ->
+            if (lastUsed.isAfter(now.minus(AppClassificationThresholds.RECENTLY_USED_DAYS.days.toJavaDuration()))) add(AppDetailBadge.RecentlyUsed)
+        }
+        if (source == AppSource.GooglePlay.name) add(AppDetailBadge.GooglePlay)
+    }.take(MAX_BADGES).toImmutableList(),
+)
 
 private fun AppDetail.toLoadedState(permissionLabelProvider: PermissionLabelProvider, deviceFeatures: DeviceFeatures): AppDetailState.Loaded {
     val dangerousPermissions = permissions.used.filter {
