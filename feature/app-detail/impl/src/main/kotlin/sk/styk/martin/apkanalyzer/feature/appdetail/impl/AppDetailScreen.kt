@@ -594,7 +594,7 @@ private fun PermissionsSection(
         ) {
             Icon(
                 imageVector = if (highlightedSensitiveCount > 0) ApkAnalyzerIcons.DangerousPermissions else ApkAnalyzerIcons.Check,
-                tint = if (highlightedSensitiveCount > 0) AppTheme.colors.warning else AppTheme.colors.positive,
+                tint = if (highlightedSensitiveCount > 0) AppTheme.colors.warning else AppTheme.colors.primary,
                 modifier = Modifier.size(16.dp),
             )
             Spacer(modifier = Modifier.width(6.dp))
@@ -767,7 +767,7 @@ private fun RequirementsSection(
         ) {
             Icon(
                 imageVector = if (state.unmetRequirementsCount > 0) ApkAnalyzerIcons.Warning else ApkAnalyzerIcons.Check,
-                tint = if (state.unmetRequirementsCount > 0) AppTheme.colors.warning else AppTheme.colors.positive,
+                tint = if (state.unmetRequirementsCount > 0) AppTheme.colors.warning else AppTheme.colors.primary,
                 modifier = Modifier.size(16.dp),
             )
             Spacer(modifier = Modifier.width(6.dp))
