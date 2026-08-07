@@ -99,10 +99,10 @@ Pillar 1's What Changed tab in R1.
 | FR-12 | Permissions view (per app)          | Done    | `feature:app-detail` → `permissions`; scope selector, filter chips, protection-level sections, item sheet |
 | FR-13 | Components views                    | Done    | One searchable/filterable screen for activities, services, receivers, and providers |
 | FR-14 | Certificate detail view             | Done    | Full signer, validity, signing status, serial, certificate fingerprints, and expandable public-key fingerprints |
-| FR-15 | Features (uses-feature) view        | Port    | `Feature` model and count exist, no screen                                         |
+| FR-15 | Features (uses-feature) view        | Done    | `feature:app-detail` → `requirements`; required/optional split, per-device check, dedicated GL ES handling. `Libraries` scope still needs `FR-44` |
 | FR-16 | Manifest viewer                     | Done    | Readable namespaced XML with line-based search for installed packages and APK files |
-| FR-17 | Exported components view            | Todo    | `isExported` is captured on all four component types; needs intent filters (`EX-07`) to be genuinely useful |
-| FR-18 | Custom permission audit             | Todo    | Data ready — `Permissions.defined`                                                 |
+| FR-17 | Exported components view            | Partial | Exported/Unprotected filter chips ship in the Components screen (`FR-13`); it's a technical filter, not a risk verdict — needs intent filters (`EX-07`) before exposure can be interpreted |
+| FR-18 | Custom permission audit             | Partial | Permissions screen's `Defined` scope lists the app's declared permissions with full detail sheets; no audit judgment (e.g. protection-level risk) applied yet |
 
 ### 1.3 APK File Analysis
 

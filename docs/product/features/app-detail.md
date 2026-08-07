@@ -1,10 +1,12 @@
     # App Detail — Full Data Presentation
 
 **Roadmap:** [FR-10 … FR-18](../roadmap.md#12-app-detail), [FR-25](../roadmap.md#15-export--share), plus [EX-07](../roadmap.md#18-data-gaps--extraction-that-doesnt-exist-yet) · R0
-**Status:** Approved design. [Steps 1–3](#implementation-order), the hub rework, manifest viewer,
-and export actions shipped; Requirements and the final polish pass remain
+**Status:** Shipped. [All six implementation steps](#implementation-order) are built and wired,
+including Requirements and the polish pass. Two pieces described below are still open, both blocked
+on roadmap data-extraction items rather than on this design: the Requirements `Libraries` scope
+(needs `FR-44`) and exported-component risk interpretation on the hub and in `FR-17` (needs `EX-07`).
 **Scope:** surface everything `AppDetail` holds inside `feature:app-detail`, provide a readable
-manifest, and finish base-APK and icon export. The Requirements screen remains separate work.
+manifest, and finish base-APK and icon export.
 
 ## Why
 
@@ -18,8 +20,8 @@ manifest, and finish base-APK and icon export. The Requirements screen remains s
 | `certificates` | All certificate fields, fingerprints, validity, signer count, and key rotation |
 | `features` | Count only |
 
-General Info, Permissions, Components, Certificates, and the manifest viewer are wired from the app
-detail hub. Requirements remains.
+General Info, Permissions, Components, Certificates, Requirements, and the manifest viewer are all
+wired from the app detail hub.
 
 ## Audience
 
@@ -490,7 +492,7 @@ is created in the step that first needs it, and a shared abstraction is extracte
 consumer appears — not predicted at the first. Each step below therefore lists the shared work it
 pulls in, and that work is justified by the screen being built in that same step.
 
-### Step 1 — Permissions screen
+### Step 1 — Permissions screen — Shipped
 
 Shared work this step pulls in:
 
@@ -535,7 +537,7 @@ Screen work:
 By the end of this step the Loading / Error / Loaded scaffold exists in two places (General Info and
 Permissions). Leave it duplicated — extract it in Step 2, when a third consumer proves the shape.
 
-### Step 2 — Components screen
+### Step 2 — Components screen — Shipped
 
 Shared work this step pulls in:
 
@@ -558,7 +560,7 @@ Screen work:
   see [search rules](#search--narrowing-not-navigation).
 - Item sheet per component type with every raw field.
 
-### Step 3 — Certificates screen
+### Step 3 — Certificates screen — Shipped
 
 - Add a monospace style to `ApkAnalyzerTypography` and a small labelled hash-box composable; adopt
   it in the hub's existing fingerprint box so the two screens match.
@@ -583,7 +585,7 @@ Screen work:
 - Certificate fingerprint group open with all three hashes; public key fingerprint group in an
   expander, collapsed by default, same three hashes and same treatment inside.
 
-### Step 4 — Requirements screen
+### Step 4 — Requirements screen — Shipped, Libraries scope pending `FR-44`
 
 - **Split `Feature` into a sealed interface** — `Hardware(name)` and `OpenGlEs(version)` — and stop
   writing `name = it.name ?: it.glEsVersion` in `AppDetailRepositoryImpl.getFeatures`. Keep the raw
@@ -608,12 +610,14 @@ Screen work:
 - **Libraries scope**, only if `FR-44` has landed: reuse `SelectorChip` from Step 1, apply the
   same required/optional split and the same device check to declared `<uses-library>` entries. If
   `FR-44` has not landed, skip this bullet — the chip does not render and nothing else changes.
+  **Not yet built** — `FR-44` hasn't landed, so the screen remains Hardware-only.
 
-### Step 5 — Hub rework
+### Step 5 — Hub rework — Shipped
 
 - Card previews: dangerous permission group icons, certificate validity line and self-signed note,
   and required/optional feature split. Components stay as neutral per-type counts until `EX-07`
-  provides the intent-filter evidence needed to interpret exposure.
+  provides the intent-filter evidence needed to interpret exposure. **Still true** — `EX-07` hasn't
+  landed, so component exposure stays out of both the card preview and the "Worth knowing" rule set.
 - "Worth knowing" card with its rule set: debug or not-yet-valid certificate, a target at least four
   API levels behind the device, and actually granted high-impact access such as background location,
   messages, call history, contacts, or calendar. Exported components and merely requested
@@ -633,7 +637,7 @@ Screen work:
   APKs, a persistent bottom sheet explains that the saved base APK is not a complete install
   package. APK-file mode hides the redundant export action.
 
-### Step 6 — Polish pass
+### Step 6 — Polish pass — Shipped
 
 - APK-file mode audit across every new screen: verify nothing renders an empty or misleading row.
 - Empty states for each section (an app with zero receivers, zero features, no certificate).
