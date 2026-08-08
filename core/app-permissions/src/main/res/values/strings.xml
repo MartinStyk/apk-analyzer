@@ -77,5 +77,6 @@
     <string name="permission_label_overlay">Draw over Other Apps</string>
     <string name="permission_label_manage_storage">Manage All Files</string>
     <string name="permission_label_schedule_alarm">Exact Alarms</string>
+    <string name="permission_label_query_all_packages">Query Installed Packages</string>
 </resources>
 

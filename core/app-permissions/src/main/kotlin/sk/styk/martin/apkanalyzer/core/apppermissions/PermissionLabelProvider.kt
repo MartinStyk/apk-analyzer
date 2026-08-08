@@ -120,5 +120,6 @@ class PermissionLabelProvider @Inject constructor(@ApplicationContext private va
         "android.permission.MANAGE_EXTERNAL_STORAGE" to context.getString(R.string.permission_label_manage_storage),
         "android.permission.SCHEDULE_EXACT_ALARM" to context.getString(R.string.permission_label_schedule_alarm),
         "android.permission.USE_EXACT_ALARM" to context.getString(R.string.permission_label_schedule_alarm),
+        "android.permission.QUERY_ALL_PACKAGES" to context.getString(R.string.permission_label_query_all_packages),
     )
 }
