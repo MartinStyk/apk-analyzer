@@ -1,19 +1,16 @@
 package sk.styk.martin.apkanalyzer.feature.apps.impl.navigation
 
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.ui.NavDisplay
-import sk.styk.martin.apkanalyzer.core.common.util.FileUtil
 import sk.styk.martin.apkanalyzer.core.navigation.Navigator
 import sk.styk.martin.apkanalyzer.core.uilibrary.animation.bottomEntryMetadata
 import sk.styk.martin.apkanalyzer.core.uilibrary.animation.slideFromEndEntryMetadata
+import sk.styk.martin.apkanalyzer.feature.appdetail.api.ApkFileLifetime
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailNavKey
 import sk.styk.martin.apkanalyzer.feature.apps.api.AppsNavKey
@@ -25,18 +22,6 @@ import sk.styk.martin.apkanalyzer.feature.settings.api.SettingsNavKey
 
 fun EntryProviderScope<NavKey>.appEntries(navigator: Navigator) {
     entry<AppsNavKey> {
-        val context = LocalContext.current
-        val apkFileLauncher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.OpenDocument(),
-        ) { uri ->
-            if (uri != null) {
-                val cachedFile = FileUtil.copyUriToCache(context, uri)
-                if (cachedFile != null) {
-                    navigator.navigate(AppDetailNavKey(AppDetailInput.ApkFile(cachedFile.absolutePath)))
-                }
-            }
-        }
-
         AppsScreen(
             onAppDetails = { packageName ->
                 navigator.navigate(AppDetailNavKey(AppDetailInput.InstalledPackage(packageName.value)))
@@ -47,8 +32,15 @@ fun EntryProviderScope<NavKey>.appEntries(navigator: Navigator) {
             onSettings = {
                 navigator.navigate(SettingsNavKey)
             },
-            onApkDetails = {
-                apkFileLauncher.launch(arrayOf("application/vnd.android.package-archive"))
+            onApkDetails = { apkFilePath ->
+                navigator.navigate(
+                    AppDetailNavKey(
+                        AppDetailInput.ApkFile(
+                            apkFilePath = apkFilePath,
+                            lifetime = ApkFileLifetime.Temporary,
+                        ),
+                    ),
+                )
             },
             onFilter = {
                 navigator.navigate(AppFilterNavKey)

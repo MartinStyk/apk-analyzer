@@ -1,11 +1,11 @@
 # app Module
 
 ## Purpose
-The top-level Android application module. No business logic of its own — wires together every `core/*` and `feature/*/impl` module, hosts the single `Activity`, defines the app-wide navigation graph, and provides app-scoped analytics and lifecycle bindings.
+The top-level Android application module. No business logic of its own — wires together every `core/*` and `feature/*/impl` module, hosts the launcher and external-APK document activities, defines their navigation graphs, and provides app-scoped analytics and lifecycle bindings.
 
 ## Package: `sk.styk.martin.apkanalyzer` (root — no module suffix, unlike `core.*`/`feature.*`)
 
-Sub-packages: `.dependencyinjection`, `.manager.analytics`, `.ui` (`.navigation`), `.util.file`.
+Sub-packages: `.dependencyinjection`, `.manager.analytics`, `.ui` (`.externalapk`, `.navigation`), `.util.file`.
 
 ## Structure
 
@@ -18,7 +18,9 @@ manager/
   analytics/
     AnalyticsTracker.kt                 - Wraps FirebaseAnalytics; AppAction enum (SHOW_MANIFEST, EXPORT_APK, SAVE_ICON, OPEN_SYSTEM_ABOUT, OPEN_GOOGLE_PLAY) + trackScreenView()
 ui/
-  ApkAnalyzerActivity.kt                - @AndroidEntryPoint ComponentActivity, the app's one and only Activity; edge-to-edge, observes ApkAnalyzerViewModel.state for color scheme, drives AppCompatDelegate.setDefaultNightMode, wraps content in ApkAnalyzerTheme { ApkAnalyzerApp() }
+  ApkAnalyzerActivity.kt                - @AndroidEntryPoint launcher Activity; observes ApkAnalyzerViewModel.state for color scheme and hosts ApkAnalyzerApp
+  ApkAnalyzerThemeHost.kt               - Shared Compose theme/night-mode host used by both activities
+  externalapk/                           - Document-task Activity, URI-copy ViewModel, and standalone Navigation 3 host for APKs opened by other apps
   ApkAnalyzerApp.kt                     - Top-level @Composable: NavigationState + Navigator (core:navigation), Scaffold + bottom NavigationBar (core:ui-library), SharedTransitionLayout + entryProvider wiring every feature's nav graph, NavDisplay
   ApkAnalyzerState.kt                   - sealed interface: Loading / Data(colorAppScheme: ColorAppScheme)
   ApkAnalyzerViewModel.kt               - @HiltViewModel; maps PersistenceRepository.observe(Key.ColorScheme) into ApkAnalyzerState via stateIn(WhileSubscribed(5000)) — exists solely so the Activity can drive day/night mode before the Compose theme renders
@@ -78,7 +80,8 @@ feature/screen means adding its `*Entries()` call here** — see the `create-fea
 
 - **Permissions:** `QUERY_ALL_PACKAGES` (lint-suppressed), `PACKAGE_USAGE_STATS` (lint-suppressed, protected permission).
 - **Application:** `android:name=".ApkAnalyzer"`, `allowBackup=true`, `hardwareAccelerated=true`, `largeHeap=true`, `supportsRtl=true`.
-- **Activity:** `.ui.ApkAnalyzerActivity` — the only one, `exported=true`, `windowSoftInputMode=adjustResize`, `MAIN`/`LAUNCHER`. A second activity block (VIEW/INSTALL_PACKAGE intent filter for opening `.apk` files externally) exists but is commented out/disabled.
+- **Launcher activity:** `.ui.ApkAnalyzerActivity` — `exported=true`, `windowSoftInputMode=adjustResize`, `MAIN`/`LAUNCHER`.
+- **External APK activity:** `.ui.externalapk.ExternalApkActivity` — `exported=true`, `documentLaunchMode=always`, excluded from recents, and handles `VIEW`/`INSTALL_PACKAGE` for `.apk` files in an isolated document task.
 - **Provider:** `.util.file.GenericFileProvider`, authority `${applicationId}`, `exported=false`, `grantUriPermissions=true`.
 - **Meta-data:** `google_analytics_automatic_screen_reporting_enabled = false` — screen views are tracked manually via `AnalyticsTracker.trackScreenView`, not GA's automatic tracking.
 

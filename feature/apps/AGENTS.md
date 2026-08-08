@@ -40,6 +40,7 @@ filter/
     PermissionFilterScreen.kt - Permission-based filtering
     PermissionFilterState/Action/Event/ViewModel.kt - Own State/Action/Event/ViewModel
 components/
+  apkfilepicker/                     - Reusable APK document-picker button with its own MVI ViewModel and temporary-file ownership
   PermissionRationaleBottomSheet.kt - Defines AppDataPermission (sealed interface: UsageAccess, StorageAccess — NOT an enum) + the rationale bottom sheet UI
   AppsSkeletons.kt         - Loading skeleton placeholders
   appitem/AppListItemRow.kt - Single app row in the list
@@ -68,4 +69,3 @@ AppFilterNavKey → PermissionFilterNavKey (slide from end)
 AppsNavKey → AppDetailNavKey (via navigator)
 AppsNavKey → SettingsNavKey (via navigator)
 ```
-

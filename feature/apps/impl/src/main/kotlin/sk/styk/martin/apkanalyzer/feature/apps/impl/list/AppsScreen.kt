@@ -68,6 +68,7 @@ import sk.styk.martin.apkanalyzer.feature.apps.impl.components.AppDataPermission
 import sk.styk.martin.apkanalyzer.feature.apps.impl.components.AppListItemRowSkeleton
 import sk.styk.martin.apkanalyzer.feature.apps.impl.components.PermissionRationaleBottomSheet
 import sk.styk.martin.apkanalyzer.feature.apps.impl.components.RecentAppsRowSkeleton
+import sk.styk.martin.apkanalyzer.feature.apps.impl.components.apkfilepicker.ApkFilePickerButton
 import sk.styk.martin.apkanalyzer.feature.apps.impl.components.appitem.AppListItemRow
 import sk.styk.martin.apkanalyzer.feature.apps.impl.components.quickfilter.QuickFilterRow
 import java.time.Instant
@@ -77,7 +78,7 @@ internal fun AppsScreen(
     onAppDetails: (PackageName) -> Unit,
     onSearch: () -> Unit,
     onSettings: () -> Unit,
-    onApkDetails: () -> Unit,
+    onApkDetails: (String) -> Unit,
     onFilter: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AppsViewModel = hiltViewModel(),
@@ -91,7 +92,6 @@ internal fun AppsScreen(
                 is AppsEvent.NavigateToAppDetail -> onAppDetails(event.packageName)
                 is AppsEvent.NavigateToSearch -> onSearch()
                 is AppsEvent.NavigateToSettings -> onSettings()
-                is AppsEvent.NavigateToShowApkDetails -> onApkDetails()
                 is AppsEvent.NavigateToFilter -> onFilter()
                 is AppsEvent.OpenUsageAccessSettings -> context.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
             }
@@ -101,6 +101,7 @@ internal fun AppsScreen(
     AppsContent(
         state = state,
         onAction = viewModel::onAction,
+        onApkDetails = onApkDetails,
         modifier = modifier,
     )
 }
@@ -109,6 +110,7 @@ internal fun AppsScreen(
 private fun AppsContent(
     state: AppsState,
     onAction: (AppsAction) -> Unit,
+    onApkDetails: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var showSortSheet by remember { mutableStateOf(false) }
@@ -147,12 +149,7 @@ private fun AppsContent(
                     modifier = Modifier.sharedBounds("settings"),
                     contentDescription = stringResource(R.string.content_description_settings),
                 )
-                IconButton(
-                    imageVector = ApkAnalyzerIcons.FileUpload,
-                    style = IconButtonStyle.Filled,
-                    onClick = { onAction(AppsAction.OpenApkDetails) },
-                    contentDescription = stringResource(R.string.content_description_analyze_apk),
-                )
+                ApkFilePickerButton(onApkDetails = onApkDetails)
             }
             QuickFilterRow(
                 onFilter = { onAction(AppsAction.FilterClicked) },
@@ -536,6 +533,7 @@ private fun AppsContentReadyPreview() {
                 recents = RecentsState.NoRecents,
             ),
             onAction = {},
+            onApkDetails = {},
         )
     }
 }
@@ -550,6 +548,7 @@ private fun AppsContentEmptyFilteredPreview() {
                 recents = RecentsState.NoRecents,
             ),
             onAction = {},
+            onApkDetails = {},
         )
     }
 }
@@ -561,6 +560,7 @@ private fun AppsContentLoadingPreview() {
         AppsContent(
             state = AppsState(),
             onAction = {},
+            onApkDetails = {},
         )
     }
 }
@@ -575,6 +575,7 @@ private fun AppsContentActiveFiltersPreview() {
                 recents = RecentsState.NoRecents,
             ),
             onAction = {},
+            onApkDetails = {},
         )
     }
 }

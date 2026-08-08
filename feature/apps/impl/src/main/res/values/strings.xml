@@ -3,6 +3,7 @@
     <string name="content_description_back">Back</string>
     <string name="content_description_settings">Settings</string>
     <string name="content_description_analyze_apk">Analyze APK file</string>
+    <string name="apps_apk_open_error">Couldn’t open this APK</string>
     <string name="content_description_sort">Sort</string>
     <string name="content_description_delete_search">Delete search: %1$s</string>
     <string name="filter_date_clear">Clear date range</string>

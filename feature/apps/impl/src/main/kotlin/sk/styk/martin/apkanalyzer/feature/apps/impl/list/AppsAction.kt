@@ -8,7 +8,6 @@ sealed interface AppsAction {
     data class AppClicked(val packageName: PackageName) : AppsAction
     data object SearchClicked : AppsAction
     data object OpenSettings : AppsAction
-    data object OpenApkDetails : AppsAction
     data object FilterClicked : AppsAction
     data object ClearAllFilters : AppsAction
     data object DismissSortPermissionRationale : AppsAction

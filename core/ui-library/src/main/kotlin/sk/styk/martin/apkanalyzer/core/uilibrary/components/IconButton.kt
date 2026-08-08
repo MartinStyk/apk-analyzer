@@ -31,6 +31,7 @@ fun IconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     style: IconButtonStyle = IconButtonStyle.Standard,
+    enabled: Boolean = true,
     contentDescription: String? = null,
     iconSize: Dp? = null,
 ) {
@@ -38,7 +39,7 @@ fun IconButton(
 
     when (style) {
         IconButtonStyle.Standard -> {
-            IconButton(onClick = onClick, modifier = modifier) {
+            IconButton(onClick = onClick, modifier = modifier, enabled = enabled) {
                 Icon(imageVector = imageVector, contentDescription = contentDescription, modifier = iconModifier)
             }
         }
@@ -47,6 +48,7 @@ fun IconButton(
             IconButton(
                 onClick = onClick,
                 modifier = modifier,
+                enabled = enabled,
                 colors = IconButtonDefaults.iconButtonColors(
                     contentColor = AppTheme.colors.onSurfaceVariant,
                 ),
@@ -59,6 +61,7 @@ fun IconButton(
             FilledIconButton(
                 onClick = onClick,
                 modifier = modifier,
+                enabled = enabled,
                 colors = IconButtonDefaults.filledIconButtonColors(
                     containerColor = AppTheme.colors.surfaceVariant,
                     contentColor = AppTheme.colors.onBackground,
@@ -69,7 +72,7 @@ fun IconButton(
         }
 
         IconButtonStyle.Outlined -> {
-            OutlinedIconButton(onClick = onClick, modifier = modifier) {
+            OutlinedIconButton(onClick = onClick, modifier = modifier, enabled = enabled) {
                 Icon(imageVector = imageVector, contentDescription = contentDescription, modifier = iconModifier)
             }
         }
@@ -78,6 +81,7 @@ fun IconButton(
             FilledIconButton(
                 onClick = onClick,
                 modifier = modifier,
+                enabled = enabled,
                 colors = IconButtonDefaults.filledIconButtonColors(
                     containerColor = AppTheme.colors.secondaryContainer,
                     contentColor = AppTheme.colors.onSecondaryContainer,

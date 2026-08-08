@@ -32,8 +32,10 @@ import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
+import sk.styk.martin.apkanalyzer.feature.appdetail.api.ApkFileLifetime
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.AppDetailBadge
+import java.io.File
 import java.time.Instant
 import kotlin.time.Duration.Companion.days
 import kotlin.time.toJavaDuration
@@ -126,6 +128,13 @@ internal class AppDetailViewModel @AssistedInject constructor(
                     exportInProgress.value = null
                 }
             }
+        }
+    }
+
+    override fun onCleared() {
+        val apkFile = appDetailInput as? AppDetailInput.ApkFile
+        if (apkFile?.lifetime == ApkFileLifetime.Temporary) {
+            File(apkFile.apkFilePath).delete()
         }
     }
 

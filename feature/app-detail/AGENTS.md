@@ -18,7 +18,10 @@ data class AppDetailNavKey(val detailInput: AppDetailInput) : NavKey
 @Serializable
 sealed interface AppDetailInput {
     @Serializable data class InstalledPackage(val packageName: String) : AppDetailInput
-    @Serializable data class ApkFile(val apkFilePath: String) : AppDetailInput
+    @Serializable data class ApkFile(
+        val apkFilePath: String,
+        val lifetime: ApkFileLifetime = ApkFileLifetime.Persistent,
+    ) : AppDetailInput
 }
 ```
 

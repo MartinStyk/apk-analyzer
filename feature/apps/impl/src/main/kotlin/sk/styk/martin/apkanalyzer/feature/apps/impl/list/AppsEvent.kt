@@ -6,7 +6,6 @@ sealed interface AppsEvent {
     data class NavigateToAppDetail(val packageName: PackageName) : AppsEvent
     data object NavigateToSearch : AppsEvent
     data object NavigateToSettings : AppsEvent
-    data object NavigateToShowApkDetails : AppsEvent
     data object NavigateToFilter : AppsEvent
     data object OpenUsageAccessSettings : AppsEvent
 }

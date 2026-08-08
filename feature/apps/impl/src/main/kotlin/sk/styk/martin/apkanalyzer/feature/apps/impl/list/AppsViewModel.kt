@@ -34,7 +34,7 @@ class AppsViewModel @Inject constructor(
     private val filterApps: FilterAppsUseCase,
     private val usageStatsRepository: UsageStatsRepository,
     private val storageStatsRepository: StorageStatsRepository,
-    dispatcherProvider: DispatcherProvider,
+    private val dispatcherProvider: DispatcherProvider,
 ) : ViewModel() {
 
     private val sortType = MutableStateFlow(SortType.Name)
@@ -121,8 +121,6 @@ class AppsViewModel @Inject constructor(
             is AppsAction.SearchClicked -> eventChannel.trySend(AppsEvent.NavigateToSearch)
 
             is AppsAction.OpenSettings -> eventChannel.trySend(AppsEvent.NavigateToSettings)
-
-            is AppsAction.OpenApkDetails -> eventChannel.trySend(AppsEvent.NavigateToShowApkDetails)
 
             is AppsAction.FilterClicked -> eventChannel.trySend(AppsEvent.NavigateToFilter)
 

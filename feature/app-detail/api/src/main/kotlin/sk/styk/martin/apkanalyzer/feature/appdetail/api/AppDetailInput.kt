@@ -11,5 +11,11 @@ sealed interface AppDetailInput {
     data class InstalledPackage(val packageName: String) : AppDetailInput
 
     @Serializable
-    data class ApkFile(val apkFilePath: String) : AppDetailInput
+    data class ApkFile(val apkFilePath: String, val lifetime: ApkFileLifetime = ApkFileLifetime.Persistent) : AppDetailInput
+}
+
+@Serializable
+enum class ApkFileLifetime {
+    Persistent,
+    Temporary,
 }

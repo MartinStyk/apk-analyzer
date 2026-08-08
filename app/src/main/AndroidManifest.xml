@@ -28,22 +28,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.externalapk.ExternalApkActivity"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.INSTALL_PACKAGE" />
 
-        <!--        <activity-->
-        <!--            android:name=".ApkAnalyzerActivity"-->
-        <!--            android:exported="true">-->
-        <!--            <intent-filter>-->
-        <!--                <action android:name="android.intent.action.VIEW" />-->
-        <!--                <action android:name="android.intent.action.INSTALL_PACKAGE" />-->
+                <category android:name="android.intent.category.DEFAULT" />
 
-        <!--                <category android:name="android.intent.category.DEFAULT" />-->
-
-        <!--                <data android:scheme="package" />-->
-        <!--                <data android:scheme="content" />-->
-        <!--                <data android:scheme="file" />-->
-        <!--                <data android:mimeType="application/vnd.android.package-archive" />-->
-        <!--            </intent-filter>-->
-        <!--        </activity>-->
+                <data android:scheme="content" />
+                <data android:scheme="file" />
+                <data android:mimeType="application/vnd.android.package-archive" />
+            </intent-filter>
+        </activity>
 
         <provider
             android:name=".util.file.GenericFileProvider"
