@@ -209,6 +209,9 @@
     <string name="general_info_app_type_system">System</string>
     <string name="general_info_app_type_user">User</string>
     <string name="general_info_install_source">Install Source</string>
+    <string name="general_info_install_source_google_play">Google Play</string>
+    <string name="general_info_install_source_system">System</string>
+    <string name="general_info_install_source_unknown">Unknown</string>
     <string name="general_info_installer_package">Installer Package</string>
     <string name="general_info_first_installed">First Installed</string>
     <string name="general_info_last_updated">Last Updated</string>

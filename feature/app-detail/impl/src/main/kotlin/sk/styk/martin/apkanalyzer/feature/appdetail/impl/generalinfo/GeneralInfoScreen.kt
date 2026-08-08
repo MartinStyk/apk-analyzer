@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.LoadingSpinner
@@ -226,7 +227,7 @@ private fun LoadedContent(
             )
             InfoRowItem(
                 label = stringResource(R.string.general_info_install_source),
-                value = state.source,
+                value = state.source.displayName(),
                 rationale = stringResource(R.string.general_info_rationale_install_source),
                 onShowRationale = { rationaleRow = it },
                 onCopy = onCopy,
@@ -452,7 +453,7 @@ private fun sampleGeneralInfoState() = GeneralInfoState.Loaded(
     isDebuggable = true,
     allowsBackup = false,
     usesCleartextTraffic = true,
-    source = "GooglePlay",
+    source = AppSource.GooglePlay,
     appInstaller = PackageName("com.android.vending"),
     firstInstallTime = Instant.ofEpochMilli(1_736_640_000_000),
     lastUpdateTime = Instant.ofEpochMilli(1_748_736_000_000),
@@ -463,3 +464,10 @@ private fun sampleGeneralInfoState() = GeneralInfoState.Loaded(
     apkSize = 152.megabytes,
     totalSize = 510.megabytes,
 )
+
+@Composable
+private fun AppSource.displayName(): String = when (this) {
+    AppSource.GooglePlay -> stringResource(R.string.general_info_install_source_google_play)
+    AppSource.SystemPreinstalled -> stringResource(R.string.general_info_install_source_system)
+    AppSource.Unknown -> stringResource(R.string.general_info_install_source_unknown)
+}
