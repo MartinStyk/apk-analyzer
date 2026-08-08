@@ -59,7 +59,8 @@ potential-bugs:
 
 style:
   MagicNumber:
-    active: false
+    active: true
+    severity: info
   MaxLineLength:
     active: false
   ModifierOrder:
