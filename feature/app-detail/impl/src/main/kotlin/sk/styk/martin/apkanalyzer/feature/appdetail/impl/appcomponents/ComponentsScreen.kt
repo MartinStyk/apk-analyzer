@@ -51,6 +51,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.components.IconButton
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.IconButtonStyle
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.SearchBarActive
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.SelectorChip
+import sk.styk.martin.apkanalyzer.core.uilibrary.components.Tag
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.TextButton
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Toolbar
@@ -333,16 +334,16 @@ private fun ComponentRow(
                         )
                     }
                     if (item.isLauncher) {
-                        RowTag(
+                        Tag(
                             text = stringResource(R.string.components_tag_launcher),
                             highlighted = true,
                         )
                     }
                     if (item.isExported) {
-                        RowTag(text = stringResource(R.string.components_tag_exported))
+                        Tag(text = stringResource(R.string.components_tag_exported))
                     }
                     item.flags.forEach { flag ->
-                        RowTag(text = stringResource(flag.labelRes))
+                        Tag(text = stringResource(flag.labelRes))
                     }
                 }
             }
@@ -359,23 +360,6 @@ private fun ComponentRow(
             )
         }
     }
-}
-
-@Composable
-private fun RowTag(
-    text: String,
-    modifier: Modifier = Modifier,
-    highlighted: Boolean = false,
-) {
-    Text(
-        text = text,
-        style = AppTheme.typography.labelSmall,
-        color = if (highlighted) AppTheme.colors.onSecondaryContainer else AppTheme.colors.onSurfaceVariant,
-        modifier = modifier
-            .clip(Shapes.CardShape)
-            .background(if (highlighted) AppTheme.colors.secondaryContainer else AppTheme.colors.surfaceVariant)
-            .padding(horizontal = 6.dp, vertical = 2.dp),
-    )
 }
 
 @Composable
