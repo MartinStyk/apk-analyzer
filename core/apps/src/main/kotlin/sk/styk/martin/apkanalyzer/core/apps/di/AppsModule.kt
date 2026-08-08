@@ -32,10 +32,14 @@ import sk.styk.martin.apkanalyzer.core.apps.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.apps.UsageStatsRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apps.analysis.CertificateExtractor
 import sk.styk.martin.apkanalyzer.core.apps.analysis.CertificateExtractorImpl
+import sk.styk.martin.apkanalyzer.core.apps.analysis.ComponentManifestParser
+import sk.styk.martin.apkanalyzer.core.apps.analysis.ComponentManifestParserImpl
 import sk.styk.martin.apkanalyzer.core.apps.analysis.InstallSourceResolver
 import sk.styk.martin.apkanalyzer.core.apps.analysis.InstallSourceResolverImpl
 import sk.styk.martin.apkanalyzer.core.apps.analysis.ManifestParser
 import sk.styk.martin.apkanalyzer.core.apps.analysis.ManifestParserImpl
+import sk.styk.martin.apkanalyzer.core.apps.analysis.ManifestXmlRenderer
+import sk.styk.martin.apkanalyzer.core.apps.analysis.ManifestXmlRendererImpl
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -69,6 +73,12 @@ internal interface AppsModule {
 
     @Binds
     fun bindManifestParser(impl: ManifestParserImpl): ManifestParser
+
+    @Binds
+    fun bindComponentManifestParser(impl: ComponentManifestParserImpl): ComponentManifestParser
+
+    @Binds
+    fun bindManifestXmlRenderer(impl: ManifestXmlRendererImpl): ManifestXmlRenderer
 
     @Binds
     @Singleton
