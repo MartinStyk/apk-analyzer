@@ -52,6 +52,7 @@ name** — check here before calling one:
 | `SelectorChip` | `SelectorChip.kt` |
 | `SkeletonBox` | `SkeletonBox.kt` |
 | `Switch` | `Switch.kt` |
+| `Tag` | `Tag.kt` |
 | `Text` | `Text.kt` |
 | `Toolbar` | `Toolbar.kt` |
 
@@ -82,3 +83,8 @@ name** — check here before calling one:
 - When a styled status `Chip` is interactive, use its `onClick`/`onLongClick` overload so the shared
   component owns semantics and a shape-clipped ripple. Do not add `Modifier.clickable` to the
   non-interactive overload at a feature call site.
+- `Chip` and `Tag` are not interchangeable. `Chip` is for selectable/interactive filter chips
+  (larger touch target, `labelLarge`/`labelMedium` text). `Tag` is a small non-interactive inline
+  badge for a fact on a list row (`labelSmall`, tighter padding) — e.g. Exported, Launcher, a
+  permission flag. Reach for `Tag` first when labeling a row; a second private copy of either shape
+  belongs here, not in a feature module.
