@@ -531,16 +531,6 @@ private fun InfoFact(
                 color = AppTheme.colors.onSurface,
             )
         }
-        if (rationale != null && onShowRationale != null) {
-            Icon(
-                imageVector = ApkAnalyzerIcons.Info,
-                contentDescription = null,
-                tint = AppTheme.colors.onSurfaceVariant,
-                modifier = Modifier
-                    .padding(12.dp)
-                    .size(18.dp),
-            )
-        }
     }
 }
 
