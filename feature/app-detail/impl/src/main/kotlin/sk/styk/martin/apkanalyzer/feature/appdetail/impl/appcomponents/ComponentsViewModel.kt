@@ -25,6 +25,7 @@ import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.model.BroadcastReceiver
 import sk.styk.martin.apkanalyzer.core.apps.model.ContentProvider
 import sk.styk.martin.apkanalyzer.core.apps.model.Service
+import sk.styk.martin.apkanalyzer.core.apps.model.hasUnguardedPathPermission
 import sk.styk.martin.apkanalyzer.core.apps.model.isExternallyReachableWithoutPermission
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
@@ -216,7 +217,7 @@ private fun ContentProvider.toItem(areIntentFiltersAvailable: Boolean) = Compone
     packagePath = name.substringBeforeLast('.', ""),
     type = ComponentType.Provider,
     isExported = isExported,
-    isGuarded = !readPermission.isNullOrBlank() && !writePermission.isNullOrBlank(),
+    isGuarded = !readPermission.isNullOrBlank() && !writePermission.isNullOrBlank() && !hasUnguardedPathPermission,
     isUnprotected = isExternallyReachableWithoutPermission,
     isLaunchable = false,
     flags = emptyImmutableFlags,
@@ -226,6 +227,14 @@ private fun ContentProvider.toItem(areIntentFiltersAvailable: Boolean) = Compone
         authority = authority,
         readPermission = readPermission,
         writePermission = writePermission,
+        pathPermissions = pathPermissions.map {
+            ProviderPathPermissionItem(
+                path = it.path,
+                matchType = it.matchType,
+                readPermission = it.readPermission,
+                writePermission = it.writePermission,
+            )
+        }.toImmutableList(),
     ),
 )
 

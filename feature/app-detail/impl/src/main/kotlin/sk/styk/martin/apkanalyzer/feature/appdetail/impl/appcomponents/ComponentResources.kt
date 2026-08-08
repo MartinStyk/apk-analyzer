@@ -4,6 +4,7 @@ import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
 import sk.styk.martin.apkanalyzer.core.apps.model.IntentFilterDataRuleType
+import sk.styk.martin.apkanalyzer.core.apps.model.ProviderPathMatchType
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.R
 
@@ -97,4 +98,14 @@ internal val IntentFilterDataRuleType.labelRes: Int
         IntentFilterDataRuleType.FragmentAdvancedPattern -> R.string.components_intent_data_fragment_advanced_pattern
         IntentFilterDataRuleType.MimeType -> R.string.components_intent_data_mime_type
         IntentFilterDataRuleType.MimeGroup -> R.string.components_intent_data_mime_group
+    }
+
+@get:StringRes
+internal val ProviderPathMatchType.explanationRes: Int
+    get() = when (this) {
+        ProviderPathMatchType.Literal -> R.string.components_path_permission_type_literal
+        ProviderPathMatchType.Prefix -> R.string.components_path_permission_type_prefix
+        ProviderPathMatchType.SimpleGlob -> R.string.components_path_permission_type_simple_glob
+        ProviderPathMatchType.AdvancedGlob -> R.string.components_path_permission_type_advanced_glob
+        ProviderPathMatchType.Suffix -> R.string.components_path_permission_type_suffix
     }

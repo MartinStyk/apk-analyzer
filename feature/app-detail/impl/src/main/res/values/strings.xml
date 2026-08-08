@@ -441,6 +441,15 @@
     <string name="components_detail_target_activity">Target activity</string>
     <string name="components_detail_parent">Parent activity</string>
     <string name="components_detail_authority">Authority</string>
+    <string name="components_detail_section_path_permissions">Path permissions</string>
+    <string name="components_detail_path_permissions_explanation">Rules for specific paths under this provider. A path can grant or remove access beyond the general read and write permissions above.</string>
+    <string name="components_detail_path_permission_path">Path</string>
+    <string name="components_detail_path_permission_open">No permission required</string>
+    <string name="components_path_permission_type_literal">Matches this exact path</string>
+    <string name="components_path_permission_type_prefix">Matches this path and everything under it</string>
+    <string name="components_path_permission_type_simple_glob">Matches this path using a wildcard pattern</string>
+    <string name="components_path_permission_type_advanced_glob">Matches this path using an advanced wildcard pattern</string>
+    <string name="components_path_permission_type_suffix">Matches any path ending with this</string>
 
     <string name="permissions_detail_full_name">Full name</string>
     <string name="permissions_detail_grant_state">Grant state</string>

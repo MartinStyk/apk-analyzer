@@ -6,6 +6,7 @@ import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.Serializable
 import sk.styk.martin.apkanalyzer.core.apps.model.IntentFilterDataRuleType
+import sk.styk.martin.apkanalyzer.core.apps.model.ProviderPathMatchType
 
 @Serializable
 internal enum class ComponentScope {
@@ -60,8 +61,17 @@ internal sealed interface ComponentDetails {
         val authority: String?,
         val readPermission: String?,
         val writePermission: String?,
+        val pathPermissions: ImmutableList<ProviderPathPermissionItem>,
     ) : ComponentDetails
 }
+
+@Immutable
+internal data class ProviderPathPermissionItem(
+    val path: String,
+    val matchType: ProviderPathMatchType,
+    val readPermission: String?,
+    val writePermission: String?,
+)
 
 @Immutable
 internal data class ComponentItem(

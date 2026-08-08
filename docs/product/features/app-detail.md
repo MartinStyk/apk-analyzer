@@ -2,10 +2,11 @@
 
 **Roadmap:** [FR-10 … FR-18](../roadmap.md#12-app-detail), [FR-25](../roadmap.md#15-export--share), plus [EX-07, EX-08](../roadmap.md#18-data-gaps--extraction-that-doesnt-exist-yet) · R0
 **Status:** Shipped. [All six implementation steps](#implementation-order) are built and wired,
-including Requirements and the polish pass. Two pieces described below are still open, both blocked
-on roadmap data-extraction items rather than on this design: the Requirements `Libraries` scope
-(needs `FR-44`) and exported-component risk interpretation on the hub and in `FR-17` (needs
-`EX-08` — `EX-07`'s intent filters have landed and already back the Components item sheets).
+including Requirements and the polish pass. Two pieces described below are still open: the
+Requirements `Libraries` scope, blocked on roadmap data-extraction item `FR-44`; and exported-
+component risk interpretation on the hub, which now has all its data (`EX-07` and `EX-08` have both
+landed and back the Components screen's filter and item sheet) but still needs a deliberate hub rule
+rather than more extraction — see `RI-03`.
 **Scope:** surface everything `AppDetail` holds inside `feature:app-detail`, provide a readable
 manifest, and finish base-APK and icon export.
 
@@ -616,10 +617,12 @@ Screen work:
 ### Step 5 — Hub rework — Shipped
 
 - Card previews: dangerous permission group icons, certificate validity line and self-signed note,
-  and required/optional feature split. Components stay as neutral per-type counts until path
-  permissions (`EX-08`) provide the remaining evidence needed to interpret exposure. **Still
-  true** — `EX-07`'s intent filters landed and now back the Components item sheets, but `EX-08`
-  hasn't, so component exposure stays out of both the card preview and the "Worth knowing" rule set.
+  and required/optional feature split. Components stay as neutral per-type counts. **Updated** —
+  `EX-07` (intent filters) and `EX-08` (content-provider path permissions) have both landed and back
+  the Components screen's `Unprotected` filter and item sheet, so the extraction gap this step
+  originally cited is closed. What's still missing is a deliberate hub rule to turn that technical
+  filter into a "Worth knowing" finding (see `RI-03`), not more data — component exposure stays out
+  of the card preview and the rule set until that rule is designed and built.
 - "Worth knowing" card with its rule set: enabled debug access, debug or not-yet-valid certificate,
   a target at least four API levels behind the device, and actually granted high-impact access such
   as background location, messages, call history, contacts, or calendar. Backup and cleartext flags

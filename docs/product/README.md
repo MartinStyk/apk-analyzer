@@ -60,4 +60,4 @@ When a feature ships, update the roadmap status for its IDs and mark the feature
 
 | Doc                                | Roadmap IDs                     | Status                            |
 |------------------------------------|---------------------------------|------------------------------------|
-| [App detail](features/app-detail.md) | FR-10 … FR-18, FR-25, plus EX-07, EX-08 | Shipped — Libraries scope (FR-44) and exposure interpretation (EX-08) still pending |
+| [App detail](features/app-detail.md) | FR-10 … FR-18, FR-25, plus EX-07, EX-08 | Shipped — Libraries scope (FR-44) and a hub exposure rule (RI-03) still pending |
