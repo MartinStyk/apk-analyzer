@@ -79,8 +79,8 @@ flag (`GET_CONFIGURATIONS`) with no other `core:apps` consumer yet, unlike certi
 | FR-09 | ↳ dimension: signing certificate    | Done    | Bucketed by signer organization (`certificateOrganization`); fingerprint and country stay indexed in `core:app-index` but are not separate browse dimensions in this pass |
 | FR-40 | ↳ dimension: target SDK / min SDK   | Done    | Bucket label from `SdkVersionResolver` (`core:apps`), e.g. "Android 14"; raw API level shown as the identifier |
 | FR-41 | ↳ dimension: install source         | Done    | Google Play / System / Unknown, three buckets                                             |
-| FR-42 | ↳ dimension: shared UID             | Todo    | Needs `FR-35`                                                                             |
-| FR-43 | ↳ dimension: app category           | Todo    | Needs `FR-39`                                                                             |
+| FR-42 | ↳ dimension: shared UID             | Done    | `BrowseDimension.SharedUserId`; only apps declaring `android:sharedUserId` are bucketed, no "unshared" sentinel |
+| FR-43 | ↳ dimension: app category           | Done    | `BrowseDimension.AppCategory`; `AppCategory.Undefined` is a real bucket, not dropped               |
 | CE-06 | "Also signed with this certificate" | Backlog | The other installed apps sharing this signer, listed on the app detail certificate screen. Data is already extracted; it needs a fingerprint-keyed lookup instead of `CE-05`'s organization-keyed bucket. **Revisit when that lookup is built** — see [features/app-detail.md](features/app-detail.md#deferred) |
 
 **Module consolidation: done.** `feature:permissions` and `feature:statistics` — both placeholder
@@ -153,11 +153,11 @@ doing in R0 rather than later.
 | FR-32 | Manifest security flags           | Done   | `debuggable`, `allowBackup`, and `usesCleartextTraffic` from public `ApplicationInfo`; custom network config deferred |
 | FR-33 | Native libraries / ABIs           | Todo   | Was in the Pro backlog; it's raw data, so free. Also the cheapest tracker-detection signal (`TR-03`) |
 | FR-34 | Split APKs / config splits        | Todo   | Most modern installs are splits; APK size and "what's installed" are both wrong without it           |
-| FR-35 | Shared UID group                  | Todo   | Security-relevant, one field, currently unread                                                       |
+| FR-35 | Shared UID group                  | Done   | `InstalledApp.sharedUserId` from `PackageInfo.sharedUserId`; feeds the `FR-42` browse dimension       |
 | FR-36 | Signing scheme version & signers  | Todo   | v1–v4, multi-signer, rotation history — feeds `CE-02` / `CE-03`                                       |
 | FR-37 | Storage breakdown                 | Todo   | `StorageStats` already gives app/data/cache; only the total is used                                  |
 | FR-38 | Full install-source chain         | Todo   | Only `installingPackageName` is read; initiating + originating package are what actually distinguish a sideload from a store install |
-| FR-39 | App category                      | Todo   | One field; unlocks the `FR-43` browse dimension                                                      |
+| FR-39 | App category                      | Done   | `InstalledApp.category` (`AppCategory` enum) from `ApplicationInfo.category`; feeds the `FR-43` browse dimension |
 | EX-07 | Component intent filters          | Done   | What an exported component actually responds to. Backs `ComponentIntentFilterKey` / `IntentFiltersScreen` in the Components screen (`FR-13`) and is available for `RI-03`. `EX-08` is the remaining half `FR-17` needs before exposure becomes a hub finding |
 | EX-08 | Content-provider path permissions | Done   | `<path-permission>` read/write grants per path, read straight off `ProviderInfo.pathPermissions` (already fetched via `GET_PROVIDERS`, no manifest parsing needed). Feeds the Components screen's `Unprotected` filter and item sheet; hub interpretation still needs a rule, tracked under `RI-03` |
 | FR-44 | Declared `<uses-library>` entries  | Todo   | Name and `android:required`, from the manifest for APK files and `sharedLibraryFiles` for installed apps. The platform-library half of device requirements — `org.apache.http.legacy` on a modern app is a signal the hardware list cannot give |

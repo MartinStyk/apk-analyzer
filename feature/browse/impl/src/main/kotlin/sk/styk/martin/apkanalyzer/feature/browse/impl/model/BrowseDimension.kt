@@ -9,4 +9,6 @@ internal enum class BrowseDimension {
     TargetSdk,
     MinSdk,
     InstallSource,
+    SharedUserId,
+    AppCategory,
 }

@@ -145,6 +145,15 @@ private fun LoadedContent(
                     onCopy = onCopy,
                 )
             }
+            state.sharedUserId?.let { value ->
+                InfoRowItem(
+                    label = stringResource(R.string.general_info_shared_user_id),
+                    value = value,
+                    rationale = stringResource(R.string.general_info_rationale_shared_user_id),
+                    onShowRationale = { rationaleRow = it },
+                    onCopy = onCopy,
+                )
+            }
             state.description?.let { value ->
                 InfoRowItem(
                     label = stringResource(R.string.general_info_description),
@@ -441,6 +450,7 @@ private fun sampleGeneralInfoState() = GeneralInfoState.Loaded(
     packageName = PackageName("com.spotify.music"),
     processName = "com.spotify.music",
     uid = 10234,
+    sharedUserId = null,
     description = null,
     versionName = "8.9.42.575",
     versionCode = 120400567,

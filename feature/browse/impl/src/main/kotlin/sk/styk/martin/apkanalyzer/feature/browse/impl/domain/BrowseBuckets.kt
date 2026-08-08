@@ -16,6 +16,10 @@ internal fun AppAttributeIndex.bucketsFor(dimension: BrowseDimension, subKey: St
 
     BrowseDimension.InstallSource -> installSource.mapKeys { it.key.name }
 
+    BrowseDimension.SharedUserId -> sharedUserId
+
+    BrowseDimension.AppCategory -> appCategory.mapKeys { it.key.name }
+
     BrowseDimension.SigningCertificate -> when (subKey) {
         CERTIFICATE_ORGANIZATION -> certificateOrganization.mapKeys { it.key ?: UNKNOWN_SIGNER_KEY }
         CERTIFICATE_COUNTRY -> certificateCountry.mapKeys { it.key ?: UNKNOWN_COUNTRY_KEY }

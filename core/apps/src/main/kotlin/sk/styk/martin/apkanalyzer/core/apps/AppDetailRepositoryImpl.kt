@@ -161,6 +161,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             allowsBackup = applicationInfo.hasFlag(ApplicationInfo.FLAG_ALLOW_BACKUP),
             usesCleartextTraffic = applicationInfo.hasFlag(ApplicationInfo.FLAG_USES_CLEARTEXT_TRAFFIC),
             uid = applicationInfo?.uid,
+            sharedUserId = packageInfo.sharedUserId,
             description = applicationInfo?.loadDescription(packageManager)?.toString(),
             apkDirectory = applicationInfo?.sourceDir,
             dataDirectory = applicationInfo?.dataDir,

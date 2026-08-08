@@ -1,8 +1,10 @@
 package sk.styk.martin.apkanalyzer.core.apps.analysis
 
+import android.content.pm.ApplicationInfo
 import android.content.pm.PathPermission
 import android.content.pm.PermissionInfo
 import android.os.PatternMatcher
+import sk.styk.martin.apkanalyzer.core.apps.model.AppCategory
 import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionFlag
 import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.apps.model.ProviderPathMatchType
@@ -49,4 +51,17 @@ private fun resolvePathMatchType(type: Int): ProviderPathMatchType = when (type)
     PatternMatcher.PATTERN_ADVANCED_GLOB -> ProviderPathMatchType.AdvancedGlob
     PatternMatcher.PATTERN_SUFFIX -> ProviderPathMatchType.Suffix
     else -> ProviderPathMatchType.Literal
+}
+
+internal fun resolveAppCategory(category: Int): AppCategory = when (category) {
+    ApplicationInfo.CATEGORY_GAME -> AppCategory.Game
+    ApplicationInfo.CATEGORY_AUDIO -> AppCategory.Audio
+    ApplicationInfo.CATEGORY_VIDEO -> AppCategory.Video
+    ApplicationInfo.CATEGORY_IMAGE -> AppCategory.Image
+    ApplicationInfo.CATEGORY_SOCIAL -> AppCategory.Social
+    ApplicationInfo.CATEGORY_NEWS -> AppCategory.News
+    ApplicationInfo.CATEGORY_MAPS -> AppCategory.Maps
+    ApplicationInfo.CATEGORY_PRODUCTIVITY -> AppCategory.Productivity
+    ApplicationInfo.CATEGORY_ACCESSIBILITY -> AppCategory.Accessibility
+    else -> AppCategory.Undefined
 }

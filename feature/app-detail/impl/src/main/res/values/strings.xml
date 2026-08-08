@@ -194,6 +194,7 @@
     <string name="general_info_package_name">Package Name</string>
     <string name="general_info_process_name">Process Name</string>
     <string name="general_info_uid">UID</string>
+    <string name="general_info_shared_user_id">Shared identity</string>
     <string name="general_info_description">Description</string>
     <string name="general_info_version_name">Version Name</string>
     <string name="general_info_version_code">Version Code</string>
@@ -224,6 +225,7 @@
     <string name="general_info_rationale_package_name">The unique identifier for this app on the device. No two apps can share the same package name.</string>
     <string name="general_info_rationale_process_name">The name of the operating system process the app runs in. By default, it matches the package name.</string>
     <string name="general_info_rationale_uid">The unique identifier assigned to this app by the Android system. It determines the app\'s access to system resources and file permissions.</string>
+    <string name="general_info_rationale_shared_user_id">This app declares that it runs under a shared identity with other apps signed by the same key. Apps sharing this identity can access each other\'s data and permissions as if they were one app.</string>
     <string name="general_info_rationale_description">An optional summary provided by the app developer in the manifest.</string>
     <string name="general_info_rationale_version_name">The human-readable version string displayed to users, such as \"2.5.1\" or \"Beta 3\".</string>
     <string name="general_info_rationale_version_code">An internal integer that increases with every release. The system uses it to determine whether one version is newer than another.</string>

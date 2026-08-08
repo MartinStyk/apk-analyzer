@@ -2,11 +2,11 @@
 
 ## Purpose
 Builds `attribute → apps` indexes across every installed app — target SDK, min SDK, install source,
-permission, and signing certificate (fingerprint, organization, country) — for the `feature:browse`
-"Browse by Attribute" screen (roadmap `CE-01`). A pure bucketing layer: it holds no `PackageManager`
-access of its own and reaches only two public `core:apps` repositories (`InstalledAppsRepository`,
-`AppSigningRepository`), never `analysis/` internals (`CertificateExtractor`, `InstallSourceResolver`)
-directly.
+permission, shared UID, app category, and signing certificate (fingerprint, organization, country) —
+for the `feature:browse` "Browse by Attribute" screen (roadmap `CE-01`). A pure bucketing layer: it
+holds no `PackageManager` access of its own and reaches only two public `core:apps` repositories
+(`InstalledAppsRepository`, `AppSigningRepository`), never `analysis/` internals
+(`CertificateExtractor`, `InstallSourceResolver`) directly.
 
 ## Package: `sk.styk.martin.apkanalyzer.core.appindex`
 
@@ -19,7 +19,7 @@ AppIndexRepository.kt / Impl  - Flow of AppIndexStatus; Impl combines InstalledA
                                 transform as private functions (one groupBy helper per dimension) —
                                 inlined rather than a separate object since it has exactly one caller
 model/
-  AppAttributeIndex.kt         - targetSdk / minSdk / installSource / permission / certificateFingerprint / certificateOrganization / certificateCountry buckets, each Map<value, List<packageName>>
+  AppAttributeIndex.kt         - targetSdk / minSdk / installSource / permission / certificateFingerprint / certificateOrganization / certificateCountry / sharedUserId / appCategory buckets, each Map<value, List<packageName>>
   AppIndexStatus.kt            - sealed: Loading | Data(index) - Loading before the first combined emission
 di/
   AppIndexModule.kt            - Hilt @Binds for AppIndexRepository
@@ -41,9 +41,15 @@ SharingStarted.Lazily, replay = 1)`, matching `AppSigningRepositoryImpl`'s reaso
 only matters once a real consumer (a browse screen) subscribes, and multiple simultaneous subscribers
 must not each redo it.
 
-## Dimensions, and why the first four are cheaper than the last three
+## Dimensions, and why the first six are cheaper than the last three
 
-`targetSdk`, `minSdk`, `installSource`, `permission` are all already on `InstalledApp` — no new query.
+`targetSdk`, `minSdk`, `installSource`, `permission`, `sharedUserId`, `appCategory` are all already on
+`InstalledApp` — no new query. `sharedUserId` is the one dimension that legitimately drops apps: only
+those declaring `android:sharedUserId` are indexed (`bySharedUserId` `mapNotNull`s the null case away),
+matching `byPermission`'s existing "no signal, no bucket" shape rather than inventing an "unshared"
+sentinel bucket that would just be most of the device. `appCategory` keeps `AppCategory.Undefined` as
+a real, groupable bucket instead, because most third-party apps genuinely declare no category and
+that absence is itself the fact worth counting.
 `certificateFingerprint`/`certificateOrganization`/`certificateCountry` come from
 `AppSigningRepository`, which runs a real X.509 parse, six digest computations, and a signature-verify
 per certificate — genuinely heavier, which is why that repository is `Lazily` shared (see

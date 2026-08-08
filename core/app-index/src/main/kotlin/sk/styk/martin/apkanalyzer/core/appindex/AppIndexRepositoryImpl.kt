@@ -43,6 +43,8 @@ internal class AppIndexRepositoryImpl @Inject constructor(
         certificateFingerprint = apps.byCertificate(signing) { it.certificateHashSha256 },
         certificateOrganization = apps.byCertificate(signing) { it.subject.organization },
         certificateCountry = apps.byCertificate(signing) { it.subject.country },
+        sharedUserId = apps.bySharedUserId(),
+        appCategory = apps.byAppCategory(),
     )
 
     private fun List<InstalledApp>.byTargetSdk() = groupBy(InstalledApp::targetSdk, InstalledApp::packageName)
@@ -53,6 +55,11 @@ internal class AppIndexRepositoryImpl @Inject constructor(
 
     private fun List<InstalledApp>.byPermission() = flatMap { app -> app.requestedPermissions.map { it to app.packageName } }
         .groupBy({ it.first }, { it.second })
+
+    private fun List<InstalledApp>.bySharedUserId() = mapNotNull { app -> app.sharedUserId?.let { it to app.packageName } }
+        .groupBy({ it.first }, { it.second })
+
+    private fun List<InstalledApp>.byAppCategory() = groupBy(InstalledApp::category, InstalledApp::packageName)
 
     private fun <T> List<InstalledApp>.byCertificate(signing: Map<PackageName, AppSigning>, key: (Certificate) -> T): Map<T, List<PackageName>> =
         flatMap { app -> signing[app.packageName]?.currentCertificates.orEmpty().map { key(it) to app.packageName } }

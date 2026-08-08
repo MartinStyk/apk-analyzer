@@ -11,6 +11,8 @@ internal fun BrowseDimension.icon(): ImageVector = when (this) {
     BrowseDimension.SigningCertificate -> ApkAnalyzerIcons.Fingerprint
     BrowseDimension.TargetSdk, BrowseDimension.MinSdk -> ApkAnalyzerIcons.Android
     BrowseDimension.InstallSource -> ApkAnalyzerIcons.Folder
+    BrowseDimension.SharedUserId -> ApkAnalyzerIcons.Group
+    BrowseDimension.AppCategory -> ApkAnalyzerIcons.Widgets
 }
 
 @Composable
@@ -21,6 +23,8 @@ internal fun BrowseDimension.title(): String = stringResource(
         BrowseDimension.TargetSdk -> R.string.browse_dimension_target_sdk_title
         BrowseDimension.MinSdk -> R.string.browse_dimension_min_sdk_title
         BrowseDimension.InstallSource -> R.string.browse_dimension_install_source_title
+        BrowseDimension.SharedUserId -> R.string.browse_dimension_shared_user_id_title
+        BrowseDimension.AppCategory -> R.string.browse_dimension_app_category_title
     },
 )
 
@@ -32,5 +36,7 @@ internal fun BrowseDimension.subtitle(): String = stringResource(
         BrowseDimension.TargetSdk -> R.string.browse_dimension_target_sdk_subtitle
         BrowseDimension.MinSdk -> R.string.browse_dimension_min_sdk_subtitle
         BrowseDimension.InstallSource -> R.string.browse_dimension_install_source_subtitle
+        BrowseDimension.SharedUserId -> R.string.browse_dimension_shared_user_id_subtitle
+        BrowseDimension.AppCategory -> R.string.browse_dimension_app_category_subtitle
     },
 )

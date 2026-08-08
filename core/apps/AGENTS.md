@@ -30,7 +30,9 @@ analysis/
   AnalysisUtils.kt                   - Shared analysis helpers, incl. permission protection decoding
 model/
   InstalledApp.kt         - Basic installed app info (packageName, name, sizes, times, source,
-                            targetSdk, minSdk)
+                            targetSdk, minSdk, sharedUserId, category)
+  AppCategory.kt          - `ApplicationInfo.category` int decoded to a domain enum; `Undefined` is
+                            the untagged case (most third-party apps), not an error
   AppDetail.kt            - Complete app detail (info, permissions, activities, services, etc.)
   AppInfo.kt              - Core app metadata, including public manifest security flags from `ApplicationInfo`
   Permission.kt           - Single permission: name plus `details`, which is null when the device
