@@ -118,6 +118,15 @@ repositories and combine them while mapping to state.
   permits different component types to share the same class name.
 - Every filter preserves its actions, categories, data rules, priority, order, and link-verification
   request. Multiple `<data>` tags accumulate as rules on one filter, matching Android's semantics.
+  `host` and `port` are the one exception: Android pairs them per `<data>` tag into a single
+  authority match, so they are combined into one `Host` rule (`host:port`) instead of two
+  independently flattened rules — otherwise two `<data>` tags with different host/port combinations
+  would render as an ambiguous cross-product. A `port` without a `host` is dropped, matching
+  Android, which ignores it.
+- Reading every installed split manifest is required, not best-effort: if any split manifest cannot
+  be read, `componentIntentFilters()` fails for the whole package rather than silently returning
+  filters from only the splits it could read. Partial results would understate a component's real
+  entry points and read as "no intent filters" to callers that only check `Result.isSuccess`.
 
 ## External Entry Semantics
 

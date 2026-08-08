@@ -45,7 +45,7 @@ internal fun IntentFilterDetailBottomSheet(
             if (filter.actions.isNotEmpty()) {
                 DetailField(
                     label = stringResource(R.string.components_detail_intent_actions),
-                    value = filter.actions.joinToString(separator = "\n"),
+                    value = filter.actions.map { it.toDisplayRequestType() }.joinToString(separator = "\n"),
                     explanation = stringResource(R.string.components_detail_intent_actions_explanation),
                     onCopy = onCopy,
                 )
@@ -53,7 +53,7 @@ internal fun IntentFilterDetailBottomSheet(
             if (filter.categories.isNotEmpty()) {
                 DetailField(
                     label = stringResource(R.string.components_detail_intent_categories),
-                    value = filter.categories.joinToString(separator = "\n"),
+                    value = filter.categories.map { it.toDisplayCategory() }.joinToString(separator = "\n"),
                     explanation = stringResource(R.string.components_detail_intent_categories_explanation),
                     onCopy = onCopy,
                 )

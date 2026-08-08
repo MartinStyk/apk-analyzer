@@ -84,8 +84,8 @@ internal class ManifestParserImpl @Inject constructor(private val packageManager
             }
         }
 
-        if (manifests.size != expectedManifestCount) {
-            Logger.w(TAG, "Read ${manifests.size} of $expectedManifestCount installed manifests for $packageName")
+        check(manifests.size == expectedManifestCount) {
+            "Read ${manifests.size} of $expectedManifestCount installed manifests for $packageName"
         }
         return manifests.values.flatMap { it.filters }
     }
@@ -162,12 +162,20 @@ internal class ManifestParserImpl @Inject constructor(private val packageManager
                     CATEGORY_TAG -> parser.resolvedAndroidString(resources, NAME_ATTRIBUTE)?.let { currentFilter?.categories?.add(it) }
 
                     DATA_TAG -> currentFilter?.let { filter ->
-                        IntentFilterDataRuleType.entries.forEach { type ->
-                            parser.resolvedAndroidString(resources, type.manifestAttribute)?.let { value ->
-                                val rule = IntentFilterDataRule(type = type, value = value)
-                                currentUriRelativeGroup?.dataRules?.add(rule) ?: filter.dataRules.add(rule)
-                            }
+                        val rules = currentUriRelativeGroup?.dataRules ?: filter.dataRules
+                        val host = parser.resolvedAndroidString(resources, IntentFilterDataRuleType.Host.manifestAttribute)
+                        val port = parser.resolvedAndroidString(resources, IntentFilterDataRuleType.Port.manifestAttribute)
+                        if (host != null) {
+                            val authority = if (port != null) "$host:$port" else host
+                            rules.add(IntentFilterDataRule(type = IntentFilterDataRuleType.Host, value = authority))
                         }
+                        IntentFilterDataRuleType.entries
+                            .filterNot { it == IntentFilterDataRuleType.Host || it == IntentFilterDataRuleType.Port }
+                            .forEach { type ->
+                                parser.resolvedAndroidString(resources, type.manifestAttribute)?.let { value ->
+                                    rules.add(IntentFilterDataRule(type = type, value = value))
+                                }
+                            }
                     }
                 }
 
@@ -293,7 +301,10 @@ internal class ManifestParserImpl @Inject constructor(private val packageManager
         return if (resourceId == 0) {
             getAttributeValue(ANDROID_NAMESPACE, name)?.takeIf { it.isNotBlank() }
         } else {
-            resources.getString(resourceId).takeIf { it.isNotBlank() }
+            runCatching { resources.getString(resourceId) }
+                .onFailure { Logger.w(TAG, "Can not resolve string resource for attribute $name") }
+                .getOrNull()
+                ?.takeIf { it.isNotBlank() }
         }
     }
 
@@ -306,7 +317,9 @@ internal class ManifestParserImpl @Inject constructor(private val packageManager
         return if (resourceId == 0) {
             getAttributeIntValue(ANDROID_NAMESPACE, name, defaultValue)
         } else {
-            resources.getInteger(resourceId)
+            runCatching { resources.getInteger(resourceId) }
+                .onFailure { Logger.w(TAG, "Can not resolve integer resource for attribute $name") }
+                .getOrDefault(defaultValue)
         }
     }
 
@@ -319,7 +332,9 @@ internal class ManifestParserImpl @Inject constructor(private val packageManager
         return if (resourceId == 0) {
             getAttributeBooleanValue(ANDROID_NAMESPACE, name, defaultValue)
         } else {
-            resources.getBoolean(resourceId)
+            runCatching { resources.getBoolean(resourceId) }
+                .onFailure { Logger.w(TAG, "Can not resolve boolean resource for attribute $name") }
+                .getOrDefault(defaultValue)
         }
     }
 
