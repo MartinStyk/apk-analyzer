@@ -198,6 +198,7 @@ design for the remaining sub-screens (Components, Certificates, Requirements, hu
 before adding one.
 
 ## Dependencies
+- `core:apk-files` (TemporaryApkManager)
 - `core:apps` (AppDetailRepository)
 - `core:app-permissions` (PermissionLabelProvider)
 - `kotlinx-collections-immutable`

@@ -1,23 +1,20 @@
 package sk.styk.martin.apkanalyzer.feature.apps.impl.components.apkfilepicker
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.apkfiles.TemporaryApkManager
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
-import sk.styk.martin.apkanalyzer.core.common.util.FileUtil
 import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
-internal class ApkFilePickerViewModel @Inject constructor(@ApplicationContext private val context: Context, private val dispatcherProvider: DispatcherProvider) : ViewModel() {
+internal class ApkFilePickerViewModel @Inject constructor(private val temporaryApkManager: TemporaryApkManager) : ViewModel() {
 
     val state: StateFlow<ApkFilePickerState>
         field = MutableStateFlow<ApkFilePickerState>(ApkFilePickerState.Ready)
@@ -31,7 +28,7 @@ internal class ApkFilePickerViewModel @Inject constructor(@ApplicationContext pr
         when (action) {
             ApkFilePickerAction.OpenPicker -> eventChannel.trySend(ApkFilePickerEvent.OpenDocument)
 
-            is ApkFilePickerAction.ApkSelected -> copyApkToCache(action.uri)
+            is ApkFilePickerAction.ApkSelected -> copyApkToCache(action.uri, action.taskId)
 
             is ApkFilePickerAction.ApkDetailOpened -> {
                 if (cachedApkFile?.absolutePath == action.apkFilePath) {
@@ -42,20 +39,27 @@ internal class ApkFilePickerViewModel @Inject constructor(@ApplicationContext pr
     }
 
     override fun onCleared() {
-        cachedApkFile?.delete()
+        cachedApkFile?.let { file ->
+            temporaryApkManager.release(file.absolutePath).onFailure { error ->
+                Logger.e(TAG, error, "Unable to release selected APK")
+            }
+        }
     }
 
-    private fun copyApkToCache(uri: android.net.Uri) {
+    private fun copyApkToCache(uri: android.net.Uri, taskId: Int) {
         if (state.value == ApkFilePickerState.Copying) return
         state.value = ApkFilePickerState.Copying
         viewModelScope.launch {
-            FileUtil.copyApkUriToCache(
-                context = context,
+            temporaryApkManager.copy(
                 uri = uri,
-                dispatcherProvider = dispatcherProvider,
+                taskId = taskId,
             ).fold(
                 onSuccess = { file ->
-                    cachedApkFile?.delete()
+                    cachedApkFile?.let { previousFile ->
+                        temporaryApkManager.release(previousFile.absolutePath).onFailure { error ->
+                            Logger.e(TAG, error, "Unable to release replaced selected APK")
+                        }
+                    }
                     cachedApkFile = file
                     state.value = ApkFilePickerState.Ready
                     eventChannel.send(ApkFilePickerEvent.OpenApkDetail(file.absolutePath))

@@ -53,6 +53,7 @@ State/Action/Event/ViewModel MVI shape as the top-level `AppsViewModel` — not 
 screen with helper composables.
 
 ## Key Dependencies
+- `core:apk-files` (TemporaryApkManager)
 - `core:apps` (InstalledAppsRepository, StorageStatsRepository, UsageStatsRepository)
 - `core:user-preferences` (RecentlyViewedAppsRepository)
 - `core:app-permissions` (for permission filter)

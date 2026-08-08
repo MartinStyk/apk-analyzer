@@ -1,5 +1,8 @@
 package sk.styk.martin.apkanalyzer.feature.apps.impl.components.apkfilepicker
 
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -43,10 +46,11 @@ private fun ApkFilePickerButtonWithViewModel(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val taskId = context.requireActivity().taskId
     val apkFileLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument(),
     ) { uri ->
-        uri?.let { viewModel.onAction(ApkFilePickerAction.ApkSelected(it)) }
+        uri?.let { viewModel.onAction(ApkFilePickerAction.ApkSelected(it, taskId)) }
     }
 
     LaunchedEffect(Unit) {
@@ -112,3 +116,9 @@ private fun ApkFilePickerButtonCopyingPreview() {
 }
 
 private const val APK_MIME_TYPE = "application/vnd.android.package-archive"
+
+private fun Context.requireActivity(): Activity = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.requireActivity()
+    else -> error("APK file picker requires an Activity context")
+}

@@ -1,6 +1,5 @@
 package sk.styk.martin.apkanalyzer.ui.externalapk
 
-import android.content.Context
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -9,13 +8,11 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.apkfiles.TemporaryApkManager
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
-import sk.styk.martin.apkanalyzer.core.common.util.FileUtil
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.ApkFileLifetime
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import java.io.File
@@ -23,8 +20,8 @@ import java.io.File
 @HiltViewModel(assistedFactory = ExternalApkViewModel.Factory::class)
 internal class ExternalApkViewModel @AssistedInject constructor(
     @Assisted private val sourceUri: String,
-    @ApplicationContext private val context: Context,
-    private val dispatcherProvider: DispatcherProvider,
+    @Assisted private val taskId: Int,
+    private val temporaryApkManager: TemporaryApkManager,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private var cachedFile = savedStateHandle
@@ -37,7 +34,7 @@ internal class ExternalApkViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(sourceUri: String): ExternalApkViewModel
+        fun create(sourceUri: String, taskId: Int): ExternalApkViewModel
     }
 
     init {
@@ -48,20 +45,27 @@ internal class ExternalApkViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
-        cachedFile?.delete()
+        cachedFile?.let { file ->
+            temporaryApkManager.release(file.absolutePath).onFailure { error ->
+                Logger.e(TAG, error, "Unable to release external APK")
+            }
+        }
         savedStateHandle.remove<String>(CACHED_APK_PATH_KEY)
     }
 
     private fun load() {
         viewModelScope.launch {
-            val result = FileUtil.copyApkUriToCache(
-                context = context,
+            val result = temporaryApkManager.copy(
                 uri = sourceUri.toUri(),
-                dispatcherProvider = dispatcherProvider,
+                taskId = taskId,
             )
             result.fold(
                 onSuccess = { file ->
-                    cachedFile?.delete()
+                    cachedFile?.let { previousFile ->
+                        temporaryApkManager.release(previousFile.absolutePath).onFailure { error ->
+                            Logger.e(TAG, error, "Unable to release replaced external APK")
+                        }
+                    }
                     cachedFile = file
                     savedStateHandle[CACHED_APK_PATH_KEY] = file.absolutePath
                     state.value = file.toLoadedState()

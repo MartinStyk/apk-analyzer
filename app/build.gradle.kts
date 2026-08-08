@@ -34,6 +34,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.apkFiles)
     implementation(projects.core.apps)
     implementation(projects.core.appPermissions)
     implementation(projects.core.appIndex)
