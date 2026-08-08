@@ -150,7 +150,7 @@ doing in R0 rather than later.
 
 | ID    | Item                              | Status | Why it matters                                                                                       |
 |-------|-----------------------------------|--------|-------------------------------------------------------------------------------------------------------|
-| FR-32 | Manifest security flags           | Todo   | `debuggable`, `allowBackup`, `usesCleartextTraffic`, network security config — the single highest-value/lowest-cost gap; direct input to `RI-03` |
+| FR-32 | Manifest security flags           | Done   | `debuggable`, `allowBackup`, and `usesCleartextTraffic` from public `ApplicationInfo`; custom network config deferred |
 | FR-33 | Native libraries / ABIs           | Todo   | Was in the Pro backlog; it's raw data, so free. Also the cheapest tracker-detection signal (`TR-03`) |
 | FR-34 | Split APKs / config splits        | Todo   | Most modern installs are splits; APK size and "what's installed" are both wrong without it           |
 | FR-35 | Shared UID group                  | Todo   | Security-relevant, one field, currently unread                                                       |

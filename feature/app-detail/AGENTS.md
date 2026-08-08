@@ -172,8 +172,9 @@ There is no search and no scope selector. The `Libraries` scope from the design 
 - Sub-screens follow the `GeneralInfoScreen` idiom: **tap = explain, long-press = copy**.
 - "Worth knowing" excludes component exposure and merely requested dangerous permissions. Component
   intent-filter and path-permission evidence is not available yet, so the hub does not interpret
-  exported components. It surfaces actually granted high-impact access, debug or not-yet-valid
-  signing, and targets at least four API levels behind the device.
+  exported components. It surfaces debug access, actually granted high-impact access, debug or
+  not-yet-valid signing, and targets at least four API levels behind the device. Backup and cleartext
+  flags remain neutral facts in General information rather than findings.
 - Granted high-impact access is deliberately narrower than every dangerous permission: background
   location, messages, call history, contacts, and calendar. Camera and microphone stay in the
   permission preview because they are common and need app-purpose context before they become a

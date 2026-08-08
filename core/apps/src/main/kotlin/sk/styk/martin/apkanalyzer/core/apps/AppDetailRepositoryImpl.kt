@@ -1,6 +1,7 @@
 package sk.styk.martin.apkanalyzer.core.apps
 
 import android.content.Intent
+import android.content.pm.ApplicationInfo
 import android.content.pm.FeatureInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
@@ -137,6 +138,9 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             versionName = packageInfo.versionName,
             versionCode = packageInfo.longVersionCode,
             isSystemApp = installSourceResolver.isSystemInstalledApp(packageInfo),
+            isDebuggable = applicationInfo?.hasFlag(ApplicationInfo.FLAG_DEBUGGABLE) == true,
+            allowsBackup = applicationInfo?.hasFlag(ApplicationInfo.FLAG_ALLOW_BACKUP) == true,
+            usesCleartextTraffic = applicationInfo?.hasFlag(ApplicationInfo.FLAG_USES_CLEARTEXT_TRAFFIC) == true,
             uid = applicationInfo?.uid,
             description = applicationInfo?.loadDescription(packageManager)?.toString(),
             apkDirectory = applicationInfo?.sourceDir,
@@ -255,6 +259,8 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             else -> Feature.Hardware(name = name, version = featureInfo.version, isRequired = isRequired)
         }
     }
+
+    private fun ApplicationInfo.hasFlag(flag: Int): Boolean = flags and flag != 0
 
     private fun PackageManager.getPackageArchiveInfoWithCorrectPath(pathToPackage: String, flags: Int): PackageInfo? {
         val packageInfo = getPackageArchiveInfo(pathToPackage, flags)

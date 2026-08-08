@@ -17,6 +17,9 @@ internal object AppDetailInsightEvaluator {
         deviceSdk: Int,
     ): ImmutableList<AppDetailInsight> = with(appDetail) {
         buildList {
+            if (info.isDebuggable) {
+                add(AppDetailInsight.Debuggable)
+            }
             val currentCertificates = signing.currentCertificates
             if (currentCertificates.any { it.trustLevel == CertificateTrustLevel.Debug }) {
                 add(AppDetailInsight.DebugCertificate)
