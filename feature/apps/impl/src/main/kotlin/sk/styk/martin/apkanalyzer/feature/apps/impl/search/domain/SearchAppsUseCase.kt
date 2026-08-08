@@ -26,18 +26,19 @@ class SearchAppsUseCase @Inject constructor() {
         return min(nameScore, packageScore)
     }
 
-    private fun scoreField(query: String, field: String): Float {
-        if (field.contains(query)) return SCORE_EXACT_CONTAINS
+    private fun scoreField(query: String, field: String): Float = when {
+        field.contains(query) -> SCORE_EXACT_CONTAINS
 
-        if (field.split('.', ' ', '-', '_').any { it.startsWith(query) }) {
-            return SCORE_WORD_PREFIX
+        field.split('.', ' ', '-', '_').any { it.startsWith(query) } -> SCORE_WORD_PREFIX
+
+        else -> {
+            val minWindowDistance = slidingWindowDistance(query, field)
+            val normalized = minWindowDistance.toFloat() / query.length
+            SCORE_FUZZY_BASE + normalized
         }
-
-        val minWindowDistance = slidingWindowDistance(query, field)
-        val normalized = minWindowDistance.toFloat() / query.length
-        return SCORE_FUZZY_BASE + normalized
     }
 
+    @Suppress("ReturnCount")
     private fun slidingWindowDistance(query: String, text: String): Int {
         if (query.length > text.length) return levenshtein(query, text)
 
@@ -62,6 +63,7 @@ class SearchAppsUseCase @Inject constructor() {
     }
 }
 
+@Suppress("ReturnCount")
 internal fun levenshtein(a: String, b: String): Int {
     val m = a.length
     val n = b.length
