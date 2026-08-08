@@ -1,3 +1,5 @@
+@file:Suppress("MatchingDeclarationName")
+
 package sk.styk.martin.apkanalyzer.feature.apps.impl.components
 
 import androidx.compose.foundation.layout.Arrangement
