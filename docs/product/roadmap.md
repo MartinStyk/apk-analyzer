@@ -101,7 +101,7 @@ What Changed tab in R1.
 | FR-14 | Certificate detail view             | Done    | Full signer, validity, signing status, serial, certificate fingerprints, and expandable public-key fingerprints |
 | FR-15 | Features (uses-feature) view        | Done    | `feature:app-detail` → `requirements`; required/optional split, per-device check, dedicated GL ES handling. `Libraries` scope still needs `FR-44` |
 | FR-16 | Manifest viewer                     | Done    | Readable namespaced XML with line-based search for installed packages and APK files |
-| FR-17 | Exported components view            | Partial | Exported/Unprotected filter chips ship in the Components screen (`FR-13`); it's a technical filter, not a risk verdict — needs intent filters (`EX-07`) before exposure can be interpreted |
+| FR-17 | Exported components view            | Partial | Exported/Unprotected filter chips ship in the Components screen (`FR-13`), and the item sheet shows every declared intent filter (`EX-07`, done). Still a technical filter, not a risk verdict — needs content-provider path permissions (`EX-08`) before exposure can be interpreted |
 | FR-18 | Custom permission audit             | Partial | Permissions screen's `Defined` scope lists the app's declared permissions with full detail sheets; no audit judgment (e.g. protection-level risk) applied yet |
 
 ### 1.3 APK File Analysis
@@ -158,10 +158,11 @@ doing in R0 rather than later.
 | FR-37 | Storage breakdown                 | Todo   | `StorageStats` already gives app/data/cache; only the total is used                                  |
 | FR-38 | Full install-source chain         | Todo   | Only `installingPackageName` is read; initiating + originating package are what actually distinguish a sideload from a store install |
 | FR-39 | App category                      | Todo   | One field; unlocks the `FR-43` browse dimension                                                      |
-| EX-07 | Component intent filters          | Todo   | What an exported component actually responds to. Makes `FR-17` meaningful and feeds `RI-03`. Moved here from Pro — it is raw manifest data |
+| EX-07 | Component intent filters          | Done   | What an exported component actually responds to. Backs `ComponentIntentFilterKey` / `IntentFiltersScreen` in the Components screen (`FR-13`) and is available for `RI-03`. `EX-08` is the remaining half `FR-17` needs before exposure becomes a hub finding |
+| EX-08 | Content-provider path permissions | Todo   | `<path-permission>` read/write grants per path, not currently extracted. The last piece `FR-17` needs — a provider exported without a top-level permission can still be guarded per-path, and `EX-07`'s intent filters don't cover providers |
 | FR-44 | Declared `<uses-library>` entries  | Todo   | Name and `android:required`, from the manifest for APK files and `sharedLibraryFiles` for installed apps. The platform-library half of device requirements — `org.apache.http.legacy` on a modern app is a signal the hardware list cannot give |
 
-**R0 scope:** CE-01, CE-05, FR-08 … FR-21, FR-24 … FR-44, EX-07. Excludes the retired FR-22/FR-23 and the backlogged CE-06.
+**R0 scope:** CE-01, CE-05, FR-08 … FR-21, FR-24 … FR-44, EX-07, EX-08. Excludes the retired FR-22/FR-23 and the backlogged CE-06.
 **R0 estimate: ~7–8 weeks** (was ~4, which assumed the ported items were already present).
 Retiring the statistics screen roughly pays for the browse screen — one surface instead of two,
 against an index that is already two-thirds built.
@@ -234,7 +235,7 @@ finding."
 |-------|--------------------------------|-------------------------------------------------------------------------------|------|
 | RI-01 | Rule model                     | Declarative rule + finding types                                              | S    |
 | RI-02 | Rule set: permission combos    | Dangerous combinations, curated by hand                                       | M    |
-| RI-03 | Rule set: manifest hygiene     | Debuggable, cleartext, backup, exported-without-permission (`FR-32`, `EX-07`) | S    |
+| RI-03 | Rule set: manifest hygiene     | Debuggable, cleartext, backup, exported-without-permission (`FR-32`, `EX-07`, `EX-08`) | S    |
 | RI-04 | Rule set: SDK anomalies        | Deprecated target SDK, weak signing algorithm                                 | S    |
 | CE-02 | Rule set: shared-cert / clone signal | Reads the `CE-01` index; flags apps that unexpectedly share a signer    | S    |
 | CE-03 | Rule set: certificate trust    | Debug, self-signed, expired — extends `CertificateTrustLevel`                 | XS   |
@@ -350,7 +351,7 @@ entry points were retired with the statistics screen — see §1.4.)*
 
 | ID | Release         | Contents                                                       | Duration     | Cumulative |
 |----|-----------------|-----------------------------------------------------------------|--------------|------------|
-| R0 | Free Rework     | CE-01, CE-05, FR-08 … FR-21, FR-24 … FR-44, EX-07, plus `EN`    | ~7–8 weeks   | Week 8     |
+| R0 | Free Rework     | CE-01, CE-05, FR-08 … FR-21, FR-24 … FR-44, EX-07, EX-08, plus `EN`    | ~7–8 weeks   | Week 8     |
 | R1 | Pro Launch      | `HI`, `RI`, `TR`, `RP`, `CP`                                    | ~5.5–6.5 weeks | Week 15  |
 | R2 | Bulk Tools      | `BX`                                                            | ~1.5–2 weeks | Week 17    |
 | R3 | Optional polish | OP-01 … OP-03                                                   | as-needed    | Ongoing    |
