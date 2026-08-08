@@ -30,9 +30,9 @@ import javax.inject.Inject
 class FilterViewModel @Inject constructor(
     private val appFilterRepository: AppFilterRepository,
     private val permissionFilterCoordinator: PermissionFilterCoordinator,
-    private val installedAppsRepository: InstalledAppsRepository,
-    private val usageStatsRepository: UsageStatsRepository,
-    private val storageStatsRepository: StorageStatsRepository,
+    installedAppsRepository: InstalledAppsRepository,
+    usageStatsRepository: UsageStatsRepository,
+    storageStatsRepository: StorageStatsRepository,
 ) : ViewModel() {
 
     private val localFilter = MutableStateFlow(appFilterRepository.filter.value)
@@ -114,33 +114,13 @@ class FilterViewModel @Inject constructor(
 
     fun onAction(action: FilterAction) {
         when (action) {
-            is FilterAction.SourceToggled -> localFilter.update { current ->
-                val newSources = if (action.selected) {
-                    (current.selectedSources + action.source).toPersistentSet()
-                } else {
-                    (current.selectedSources - action.source).toPersistentSet()
-                }
-                current.copy(selectedSources = newSources)
-            }
+            is FilterAction.SourceToggled -> toggleSource(action)
 
-            is FilterAction.SdkVersionToggled -> localFilter.update { current ->
-                val newSdks = if (action.sdkVersion in current.selectedSdkVersions) {
-                    (current.selectedSdkVersions - action.sdkVersion).toPersistentSet()
-                } else {
-                    (current.selectedSdkVersions + action.sdkVersion).toPersistentSet()
-                }
-                current.copy(selectedSdkVersions = newSdks)
-            }
+            is FilterAction.SdkVersionToggled -> toggleSdkVersion(action)
 
-            is FilterAction.ApkSizeRangeChanged -> localFilter.update { current ->
-                val bounds = (state.value.apkSizeSectionState as? ApkSizeSectionState.RangeAvailable)?.bounds
-                current.copy(apkSizeRange = if (bounds == action.range) null else action.range)
-            }
+            is FilterAction.ApkSizeRangeChanged -> changeApkSizeRange(action)
 
-            is FilterAction.TotalSizeRangeChanged -> localFilter.update { current ->
-                val bounds = (state.value.totalSizeSectionState as? TotalSizeSectionState.RangeAvailable)?.bounds
-                current.copy(totalSizeRange = if (bounds == action.range) null else action.range)
-            }
+            is FilterAction.TotalSizeRangeChanged -> changeTotalSizeRange(action)
 
             is FilterAction.InstallTimeRangeChanged -> localFilter.update { current ->
                 current.copy(installTimeRange = action.range)
@@ -154,64 +134,110 @@ class FilterViewModel @Inject constructor(
                 current.copy(unusedPeriod = if (current.unusedPeriod == action.period) null else action.period)
             }
 
-            FilterAction.OpenUsagePermissionSettings -> {
-                eventChannel.trySend(FilterEvent.OpenUsagePermissionSettings)
-            }
+            FilterAction.OpenUsagePermissionSettings -> eventChannel.trySend(FilterEvent.OpenUsagePermissionSettings)
 
-            FilterAction.OpenPermissionFilter -> {
-                permissionFilterCoordinator.setInput(
-                    PermissionFilterDraft(
-                        selectedPermissions = localFilter.value.selectedPermissions,
-                        matchAll = localFilter.value.permissionMatchAll,
-                    ),
-                )
-                eventChannel.trySend(FilterEvent.NavigateToPermissionFilter)
-            }
+            FilterAction.OpenPermissionFilter -> openPermissionFilter()
 
-            is FilterAction.PermissionPresetToggled -> localFilter.update { current ->
-                val preset = action.preset
-                val allSelected = preset.permissions.all { it in current.selectedPermissions }
-                val newPermissions = if (allSelected) {
-                    (current.selectedPermissions - preset.permissions).toPersistentSet()
-                } else {
-                    (current.selectedPermissions + preset.permissions).toPersistentSet()
-                }
-                current.copy(selectedPermissions = newPermissions)
-            }
+            is FilterAction.PermissionPresetToggled -> togglePermissionPreset(action)
 
-            FilterAction.Apply -> {
-                appFilterRepository.update(localFilter.value)
-                eventChannel.trySend(FilterEvent.NavigateBack)
-            }
+            FilterAction.Apply -> applyFilter()
 
-            FilterAction.Reset -> {
-                localFilter.value = AppFilterState()
-                appFilterRepository.update(localFilter.value)
-            }
+            FilterAction.Reset -> resetFilter()
 
-            FilterAction.NavigateBack -> {
-                if (localFilter.value != appFilterRepository.filter.value) {
-                    showUnsavedChangesSheet.value = true
-                } else {
-                    eventChannel.trySend(FilterEvent.NavigateBack)
-                }
-            }
+            FilterAction.NavigateBack -> navigateBack()
 
-            FilterAction.SaveAndClose -> {
-                showUnsavedChangesSheet.value = false
-                appFilterRepository.update(localFilter.value)
-                eventChannel.trySend(FilterEvent.NavigateBack)
-            }
+            FilterAction.SaveAndClose -> saveAndClose()
 
             FilterAction.DiscardChanges -> {
                 showUnsavedChangesSheet.value = false
                 eventChannel.trySend(FilterEvent.NavigateBack)
             }
 
-            FilterAction.DismissUnsavedChangesSheet -> {
-                showUnsavedChangesSheet.value = false
-            }
+            FilterAction.DismissUnsavedChangesSheet -> showUnsavedChangesSheet.value = false
         }
+    }
+
+    private fun toggleSource(action: FilterAction.SourceToggled) {
+        localFilter.update { current ->
+            val newSources = if (action.selected) {
+                (current.selectedSources + action.source).toPersistentSet()
+            } else {
+                (current.selectedSources - action.source).toPersistentSet()
+            }
+            current.copy(selectedSources = newSources)
+        }
+    }
+
+    private fun toggleSdkVersion(action: FilterAction.SdkVersionToggled) {
+        localFilter.update { current ->
+            val newSdks = if (action.sdkVersion in current.selectedSdkVersions) {
+                (current.selectedSdkVersions - action.sdkVersion).toPersistentSet()
+            } else {
+                (current.selectedSdkVersions + action.sdkVersion).toPersistentSet()
+            }
+            current.copy(selectedSdkVersions = newSdks)
+        }
+    }
+
+    private fun changeApkSizeRange(action: FilterAction.ApkSizeRangeChanged) {
+        localFilter.update { current ->
+            val bounds = (state.value.apkSizeSectionState as? ApkSizeSectionState.RangeAvailable)?.bounds
+            current.copy(apkSizeRange = if (bounds == action.range) null else action.range)
+        }
+    }
+
+    private fun changeTotalSizeRange(action: FilterAction.TotalSizeRangeChanged) {
+        localFilter.update { current ->
+            val bounds = (state.value.totalSizeSectionState as? TotalSizeSectionState.RangeAvailable)?.bounds
+            current.copy(totalSizeRange = if (bounds == action.range) null else action.range)
+        }
+    }
+
+    private fun openPermissionFilter() {
+        permissionFilterCoordinator.setInput(
+            PermissionFilterDraft(
+                selectedPermissions = localFilter.value.selectedPermissions,
+                matchAll = localFilter.value.permissionMatchAll,
+            ),
+        )
+        eventChannel.trySend(FilterEvent.NavigateToPermissionFilter)
+    }
+
+    private fun togglePermissionPreset(action: FilterAction.PermissionPresetToggled) {
+        localFilter.update { current ->
+            val preset = action.preset
+            val allSelected = preset.permissions.all { it in current.selectedPermissions }
+            val newPermissions = if (allSelected) {
+                (current.selectedPermissions - preset.permissions).toPersistentSet()
+            } else {
+                (current.selectedPermissions + preset.permissions).toPersistentSet()
+            }
+            current.copy(selectedPermissions = newPermissions)
+        }
+    }
+
+    private fun applyFilter() {
+        appFilterRepository.update(localFilter.value)
+        eventChannel.trySend(FilterEvent.NavigateBack)
+    }
+
+    private fun resetFilter() {
+        localFilter.value = AppFilterState()
+        appFilterRepository.update(localFilter.value)
+    }
+
+    private fun navigateBack() {
+        if (localFilter.value != appFilterRepository.filter.value) {
+            showUnsavedChangesSheet.value = true
+        } else {
+            eventChannel.trySend(FilterEvent.NavigateBack)
+        }
+    }
+
+    private fun saveAndClose() {
+        showUnsavedChangesSheet.value = false
+        appFilterRepository.update(localFilter.value)
+        eventChannel.trySend(FilterEvent.NavigateBack)
     }
 
     private data class AppsMetadata(

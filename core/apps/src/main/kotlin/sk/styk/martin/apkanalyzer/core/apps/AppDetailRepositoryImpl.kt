@@ -45,6 +45,7 @@ import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Singleton
 
+@Suppress("TooManyFunctions")
 @Singleton
 internal class AppDetailRepositoryImpl @Inject constructor(
     private val packageManager: PackageManager,

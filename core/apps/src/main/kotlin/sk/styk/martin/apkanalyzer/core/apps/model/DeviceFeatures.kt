@@ -9,13 +9,13 @@ data class DeviceFeatures(val featureVersions: Map<String, Int>, val openGlEsVer
 
     fun versionOf(featureName: String): Int? = featureVersions[featureName]
 
-    fun availabilityOf(feature: Feature): FeatureAvailability {
-        if (!isKnown) return FeatureAvailability.Unknown
-        return when (feature) {
-            is Feature.Hardware -> {
-                val deviceVersion = featureVersions[feature.name] ?: return FeatureAvailability.Missing
-                availabilityOf(required = feature.version, onDevice = deviceVersion)
-            }
+    fun availabilityOf(feature: Feature): FeatureAvailability = if (!isKnown) {
+        FeatureAvailability.Unknown
+    } else {
+        when (feature) {
+            is Feature.Hardware -> featureVersions[feature.name]
+                ?.let { availabilityOf(required = feature.version, onDevice = it) }
+                ?: FeatureAvailability.Missing
 
             is Feature.OpenGlEs -> when (openGlEsVersion) {
                 null -> FeatureAvailability.Unknown

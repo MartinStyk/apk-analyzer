@@ -1,3 +1,5 @@
+@file:Suppress("MatchingDeclarationName")
+
 package sk.styk.martin.apkanalyzer.core.uilibrary.lazylist
 
 import androidx.compose.foundation.lazy.LazyItemScope

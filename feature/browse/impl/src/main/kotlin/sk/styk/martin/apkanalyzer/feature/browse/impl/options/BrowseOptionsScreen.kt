@@ -137,6 +137,7 @@ private fun BrowseOptionsList(
                 SearchBarActive(
                     query = state.query,
                     placeholder = pluralStringResource(R.plurals.browse_options_filter_hint, state.totalOptions, state.totalOptions),
+                    sharedElementKey = null,
                     onQueryChange = { onAction(BrowseOptionsAction.ChangeQuery(it)) },
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                 )

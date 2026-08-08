@@ -14,9 +14,9 @@ import javax.inject.Singleton
 
 @Singleton
 internal class DevicePermissionsRepositoryImpl @Inject constructor(
-    private val installedAppsRepository: InstalledAppsRepository,
-    private val permissionLabelProvider: PermissionLabelProvider,
-    private val dispatcherProvider: DispatcherProvider,
+    installedAppsRepository: InstalledAppsRepository,
+    permissionLabelProvider: PermissionLabelProvider,
+    dispatcherProvider: DispatcherProvider,
     appScope: CoroutineScope,
 ) : DevicePermissionsRepository {
 

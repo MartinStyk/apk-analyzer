@@ -31,10 +31,10 @@ class AppsViewModel @Inject constructor(
     installedAppsRepository: InstalledAppsRepository,
     private val recentlyViewedAppsRepository: RecentlyViewedAppsRepository,
     private val appFilterRepository: AppFilterRepository,
-    private val filterApps: FilterAppsUseCase,
+    filterApps: FilterAppsUseCase,
     private val usageStatsRepository: UsageStatsRepository,
     private val storageStatsRepository: StorageStatsRepository,
-    private val dispatcherProvider: DispatcherProvider,
+    dispatcherProvider: DispatcherProvider,
 ) : ViewModel() {
 
     private val sortType = MutableStateFlow(SortType.Name)

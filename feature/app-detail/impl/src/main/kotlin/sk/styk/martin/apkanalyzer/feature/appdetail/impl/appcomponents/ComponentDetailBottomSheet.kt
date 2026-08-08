@@ -33,6 +33,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.DetailField
 
+@Suppress("CyclomaticComplexMethod")
 @Composable
 internal fun ComponentDetailBottomSheet(
     item: ComponentItem,
