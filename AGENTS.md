@@ -49,8 +49,8 @@ is the authoritative list.
 * `core/*` — may depend on other `core` modules. **Never** depends on a `feature` module.
 * A feature never depends on another feature's `impl`. Cross-feature navigation goes through the
   target's `api` module.
-* `app` — wiring only: the single Activity, the nav host, app-scoped Hilt bindings. Put no feature
-  logic here.
+* `app` — wiring only: the launcher Activity, the external-APK document Activity, nav hosts, and
+  app-scoped Hilt bindings. Put no feature logic here.
 * Declare dependencies with typesafe accessors (`projects.core.appPermissions`), never
   `project(":core:app-permissions")`. Apply plugins with `alias(libs.plugins.apkanalyzer.*)`.
 * A module's package matches its directory with hyphens removed: `core/user-preferences` →

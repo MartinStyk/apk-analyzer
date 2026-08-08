@@ -23,7 +23,8 @@ Converts all sub-stacks into decorated nav entries for use with `NavDisplay`.
 ### `Navigator`
 Imperative navigation controller wrapping `NavigationState`.
 - `navigate(key: NavKey)` - Smart routing: top-level switch, same-tab reset, or sub-stack push.
-- `goBack()` - Pop current sub-stack or go back to previous top-level tab.
+- `goBack()` - Pop current sub-stack, go back to the previous top-level tab, or invoke the host's
+  `onBackAtRoot` callback from the start destination.
 
 ## Usage Pattern
 ```kotlin
@@ -39,4 +40,3 @@ NavDisplay(
 ## Dependencies
 - `apkanalyzer.library` + `apkanalyzer.compose` plugins
 - Navigation 3 runtime + UI, lifecycle-viewmodel-navigation3
-

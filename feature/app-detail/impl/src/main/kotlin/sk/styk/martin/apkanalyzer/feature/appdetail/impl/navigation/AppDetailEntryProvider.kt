@@ -27,7 +27,7 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
         val context = LocalContext.current
         AppDetailScreen(
             appDetailInput = key.detailInput,
-            onBack = { navigator.goBack() },
+            onBack = navigator::goBack,
             onOpenPlayStore = { packageName -> context.openGooglePlay(packageName) },
             onOpenAppInfo = { packageName -> context.openAppSystemPage(packageName) },
             onNavigateToManifest = { navigator.navigate(ManifestNavKey(key.detailInput)) },

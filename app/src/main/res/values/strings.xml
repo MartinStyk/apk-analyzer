@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Apk Analyzer</string>
+    <string name="external_apk_open_error">Couldn’t open this APK</string>
 
     <string-array name="preference_color_theme_options_values">
         <item>system</item>

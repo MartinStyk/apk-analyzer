@@ -2,7 +2,7 @@ package sk.styk.martin.apkanalyzer.core.navigation
 
 import androidx.navigation3.runtime.NavKey
 
-class Navigator(val navigationState: NavigationState) {
+class Navigator(val navigationState: NavigationState, private val onBackAtRoot: () -> Unit = { error("You cannot go back from the start route") }) {
     fun navigate(key: NavKey) {
         when (key) {
             navigationState.currentTopLevelKey -> clearSubStack()
@@ -13,7 +13,7 @@ class Navigator(val navigationState: NavigationState) {
 
     fun goBack() {
         when (navigationState.currentKey) {
-            navigationState.startKey -> error("You cannot go back from the start route")
+            navigationState.startKey -> onBackAtRoot()
 
             navigationState.currentTopLevelKey -> {
                 navigationState.topLevelStack.removeLastOrNull()
