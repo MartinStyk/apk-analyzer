@@ -43,7 +43,7 @@ internal fun ApkAnalyzerApp() {
                     val entryProvider = entryProvider {
                         appEntries(navigator)
                         appDetailEntries(navigator)
-                        browseEntries()
+                        browseEntries(navigator)
                         settingsEntries(navigator)
                     }
                     NavDisplay(

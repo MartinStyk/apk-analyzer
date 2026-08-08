@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="browse_title">Browse</string>
+    <string name="browse_subtitle_loading">Scanning installed apps…</string>
+    <plurals name="browse_subtitle">
+        <item quantity="one">Explore %1$d app installed on this device</item>
+        <item quantity="other">Explore %1$d apps installed on this device</item>
+    </plurals>
+
+    <string name="browse_dimension_permission_title">Permissions</string>
+    <string name="browse_dimension_permission_subtitle">See which apps use a given permission</string>
+    <string name="browse_dimension_certificate_title">Signing certificate</string>
+    <string name="browse_dimension_certificate_subtitle">Group apps by signer identity, publisher name, or country</string>
+    <string name="browse_dimension_target_sdk_title">Target Android version</string>
+    <string name="browse_dimension_target_sdk_subtitle">See which Android version each app was built for</string>
+    <string name="browse_dimension_min_sdk_title">Minimum Android version</string>
+    <string name="browse_dimension_min_sdk_subtitle">See the oldest Android version each app still supports</string>
+    <string name="browse_dimension_install_source_title">Install source</string>
+    <string name="browse_dimension_install_source_subtitle">See where each app came from</string>
+    <plurals name="browse_dimension_option_count">
+        <item quantity="one">%1$d option</item>
+        <item quantity="other">%1$d options</item>
+    </plurals>
+
+    <string name="browse_sdk_unknown">API level %1$s</string>
+    <string name="browse_api_level">API %1$s</string>
+    <string name="browse_source_google_play">Google Play</string>
+    <string name="browse_source_system">System</string>
+    <string name="browse_source_unknown">Unknown</string>
+    <string name="browse_signer_unknown">Unknown signer</string>
+    <string name="browse_country_unknown">Unknown country</string>
+
+    <string name="browse_sub_attribute_sheet_title">Group by</string>
+    <string name="browse_certificate_attribute_fingerprint">Identity (SHA-256)</string>
+    <string name="browse_certificate_attribute_organization">Publisher name</string>
+    <string name="browse_certificate_attribute_country">Country</string>
+
+    <plurals name="browse_options_filter_hint">
+        <item quantity="one">Filter %1$d option</item>
+        <item quantity="other">Filter %1$d options</item>
+    </plurals>
+    <string name="browse_options_empty_query">No options match “%1$s”</string>
+    <plurals name="browse_apps_count">
+        <item quantity="one">%1$d app</item>
+        <item quantity="other">%1$d apps</item>
+    </plurals>
+
+    <plurals name="browse_apps_filter_hint">
+        <item quantity="one">Filter %1$d app</item>
+        <item quantity="other">Filter %1$d apps</item>
+    </plurals>
+    <string name="browse_apps_empty_query">No apps match “%1$s”</string>
+</resources>
