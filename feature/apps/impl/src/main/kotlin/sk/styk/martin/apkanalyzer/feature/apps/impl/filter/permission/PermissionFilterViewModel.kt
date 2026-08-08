@@ -22,7 +22,7 @@ import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.PermissionPres
 import javax.inject.Inject
 
 @HiltViewModel
-class PermissionFilterViewModel @Inject constructor(private val permissionFilterCoordinator: PermissionFilterCoordinator, private val devicePermissionsRepository: DevicePermissionsRepository) : ViewModel() {
+class PermissionFilterViewModel @Inject constructor(private val permissionFilterCoordinator: PermissionFilterCoordinator, devicePermissionsRepository: DevicePermissionsRepository) : ViewModel() {
 
     private val input = permissionFilterCoordinator.consumeInput()
 

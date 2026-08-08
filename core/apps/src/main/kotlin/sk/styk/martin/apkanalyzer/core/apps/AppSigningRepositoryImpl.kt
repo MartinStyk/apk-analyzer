@@ -17,8 +17,8 @@ import javax.inject.Inject
 internal class AppSigningRepositoryImpl @Inject constructor(
     private val packageManager: PackageManager,
     private val certificateExtractor: CertificateExtractor,
-    private val packageChangesObserver: PackageChangesObserver,
-    private val dispatcherProvider: DispatcherProvider,
+    packageChangesObserver: PackageChangesObserver,
+    dispatcherProvider: DispatcherProvider,
     appScope: CoroutineScope,
 ) : AppSigningRepository {
 
