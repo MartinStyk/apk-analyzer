@@ -32,10 +32,11 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.impl.navigation.appDetailEnt
 @Composable
 internal fun ExternalApkApp(
     sourceUri: String,
+    taskId: Int,
     onClose: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ExternalApkViewModel = hiltViewModel { factory: ExternalApkViewModel.Factory ->
-        factory.create(sourceUri)
+        factory.create(sourceUri, taskId)
     },
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()

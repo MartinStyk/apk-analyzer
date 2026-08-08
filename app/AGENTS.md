@@ -20,7 +20,7 @@ manager/
 ui/
   ApkAnalyzerActivity.kt                - @AndroidEntryPoint launcher Activity; observes ApkAnalyzerViewModel.state for color scheme and hosts ApkAnalyzerApp
   ApkAnalyzerThemeHost.kt               - Shared Compose theme/night-mode host used by both activities
-  externalapk/                           - Document-task Activity, URI-copy ViewModel, and standalone Navigation 3 host for APKs opened by other apps
+  externalapk/                           - Document-task Activity, external APK state ViewModel, and standalone Navigation 3 host
   ApkAnalyzerApp.kt                     - Top-level @Composable: NavigationState + Navigator (core:navigation), Scaffold + bottom NavigationBar (core:ui-library), SharedTransitionLayout + entryProvider wiring every feature's nav graph, NavDisplay
   ApkAnalyzerState.kt                   - sealed interface: Loading / Data(colorAppScheme: ColorAppScheme)
   ApkAnalyzerViewModel.kt               - @HiltViewModel; maps PersistenceRepository.observe(Key.ColorScheme) into ApkAnalyzerState via stateIn(WhileSubscribed(5000)) — exists solely so the Activity can drive day/night mode before the Compose theme renders
@@ -89,7 +89,7 @@ feature/screen means adding its `*Entries()` call here** — see the `create-fea
 
 Plugins: `apkanalyzer.application`, `apkanalyzer.hilt`, `apkanalyzer.compose`, `apkanalyzer.spotless`, `parcelize`.
 
-`projects.*`: all of `core.apps`, `core.appPermissions`, `core.appIndex`, `core.common`, `core.userPreferences`, `core.navigation`, `core.uiLibrary`, and all of `feature.apps.impl`, `feature.browse.impl`, `feature.settings.impl`, `feature.appDetail.impl`.
+`projects.*`: all of `core.apkFiles`, `core.apps`, `core.appPermissions`, `core.appIndex`, `core.common`, `core.userPreferences`, `core.navigation`, `core.uiLibrary`, and all of `feature.apps.impl`, `feature.browse.impl`, `feature.settings.impl`, `feature.appDetail.impl`.
 
 Key libraries: `androidx.activity.compose`, `androidx.appcompat`, `androidx.lifecycle.viewmodel.ktx`/`.runtime.compose`/`.process` (for `ProcessLifecycleOwner`), `androidx.compose.material3`, `kotlinx.collections.immutable`, `coil.compose`, `debugImplementation(libs.leakcanary)`.
 

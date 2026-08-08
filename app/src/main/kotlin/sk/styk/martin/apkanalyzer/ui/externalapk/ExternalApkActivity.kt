@@ -31,6 +31,7 @@ class ExternalApkActivity : ComponentActivity() {
             ApkAnalyzerThemeHost(state = appState) {
                 ExternalApkApp(
                     sourceUri = sourceUri,
+                    taskId = taskId,
                     onClose = ::finishAndRemoveTask,
                 )
             }

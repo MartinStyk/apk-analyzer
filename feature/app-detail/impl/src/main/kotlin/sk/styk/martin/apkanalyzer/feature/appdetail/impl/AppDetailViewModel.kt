@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import sk.styk.martin.apkanalyzer.core.apkfiles.TemporaryApkManager
 import sk.styk.martin.apkanalyzer.core.apppermissions.PermissionLabelProvider
 import sk.styk.martin.apkanalyzer.core.apps.AppClassificationThresholds
 import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
@@ -35,7 +36,6 @@ import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.ApkFileLifetime
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.AppDetailBadge
-import java.io.File
 import java.time.Instant
 import kotlin.time.Duration.Companion.days
 import kotlin.time.toJavaDuration
@@ -50,6 +50,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
     private val deviceFeaturesRepository: DeviceFeaturesRepository,
     private val permissionLabelProvider: PermissionLabelProvider,
     private val dispatcherProvider: DispatcherProvider,
+    private val temporaryApkManager: TemporaryApkManager,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -134,7 +135,9 @@ internal class AppDetailViewModel @AssistedInject constructor(
     override fun onCleared() {
         val apkFile = appDetailInput as? AppDetailInput.ApkFile
         if (apkFile?.lifetime == ApkFileLifetime.Temporary) {
-            File(apkFile.apkFilePath).delete()
+            temporaryApkManager.release(apkFile.apkFilePath).onFailure { error ->
+                Logger.e(TAG, error, "Unable to release temporary APK")
+            }
         }
     }
 

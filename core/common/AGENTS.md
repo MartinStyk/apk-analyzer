@@ -27,7 +27,7 @@ model/
   AppSize.kt              - Value class for file sizes with formatting
 clipboard/                - Clipboard access utilities
 digest/                   - Hash/digest utilities
-util/                     - General utilities (FileUtil, etc.)
+util/                     - General Android and formatting utilities
 ```
 
 ## Key Exports

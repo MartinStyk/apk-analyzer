@@ -8,6 +8,7 @@ android {
 
 dependencies {
     api(projects.feature.appDetail.api)
+    implementation(projects.core.apkFiles)
     implementation(projects.core.apps)
     implementation(projects.core.appPermissions)
     implementation(libs.kotlinx.collections.immutable)

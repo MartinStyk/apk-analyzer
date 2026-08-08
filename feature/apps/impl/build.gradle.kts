@@ -10,6 +10,7 @@ dependencies {
     api(projects.feature.apps.api)
     implementation(projects.feature.settings.api)
     implementation(projects.feature.appDetail.api)
+    implementation(projects.core.apkFiles)
     implementation(projects.core.apps)
     implementation(projects.core.userPreferences)
     implementation(projects.core.appPermissions)
