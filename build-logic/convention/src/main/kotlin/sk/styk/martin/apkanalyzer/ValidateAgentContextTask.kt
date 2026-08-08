@@ -10,6 +10,8 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.work.DisableCachingByDefault
 import java.io.File
 
+private val nonLocalLinkPrefixes = listOf("http://", "https://", "mailto:", "#")
+
 @DisableCachingByDefault(because = "The task validates the live repository context without producing outputs.")
 abstract class ValidateAgentContextTask : DefaultTask() {
 
@@ -60,18 +62,12 @@ abstract class ValidateAgentContextTask : DefaultTask() {
 
         val normalizedRoot = rootDirectory.toPath().toAbsolutePath().normalize()
         modules.get().forEach { (modulePath, relativeModuleDirectory) ->
-            var directory = rootDirectory.resolve(relativeModuleDirectory)
-            var closestAgentFile: File? = null
-
-            while (directory.toPath().toAbsolutePath().normalize().startsWith(normalizedRoot)) {
-                val candidate = directory.resolve("AGENTS.md")
-                if (candidate.isFile) {
-                    closestAgentFile = candidate
-                    break
-                }
-                if (directory == rootDirectory) break
-                directory = directory.parentFile
+            val closestAgentFile = generateSequence(rootDirectory.resolve(relativeModuleDirectory)) { directory ->
+                directory.parentFile.takeIf { directory != rootDirectory }
             }
+                .takeWhile { directory -> directory.toPath().toAbsolutePath().normalize().startsWith(normalizedRoot) }
+                .map { directory -> directory.resolve("AGENTS.md") }
+                .firstOrNull(File::isFile)
 
             if (closestAgentFile == null || closestAgentFile == rootDirectory.resolve("AGENTS.md")) {
                 errors += "$modulePath has no module-scoped AGENTS.md."
@@ -91,38 +87,37 @@ abstract class ValidateAgentContextTask : DefaultTask() {
             option = RegexOption.DOT_MATCHES_ALL,
         )
 
-        for (skillDirectory in skillDirectories) {
+        skillDirectories.forEach { skillDirectory ->
             val skillFile = skillDirectory.resolve("SKILL.md")
             if (!skillFile.isFile) {
                 errors += "Missing ${skillFile.displayPath()}."
-                continue
-            }
-            skillFiles += skillFile
+            } else {
+                skillFiles += skillFile
 
-            val frontmatter = frontmatterPattern.find(skillFile.readText())?.groupValues?.get(1)
-            if (frontmatter == null) {
-                errors += "${skillFile.displayPath()} has invalid YAML frontmatter."
-                continue
-            }
+                val frontmatter = frontmatterPattern.find(skillFile.readText())?.groupValues?.get(1)
+                if (frontmatter == null) {
+                    errors += "${skillFile.displayPath()} has invalid YAML frontmatter."
+                } else {
+                    fun metadataValue(key: String): String? = Regex("""(?m)^$key:\s*(.+?)\s*$""")
+                        .find(frontmatter)
+                        ?.groupValues
+                        ?.get(1)
+                        ?.trim()
+                        ?.trim('"', '\'')
 
-            fun metadataValue(key: String): String? = Regex("""(?m)^$key:\s*(.+?)\s*$""")
-                .find(frontmatter)
-                ?.groupValues
-                ?.get(1)
-                ?.trim()
-                ?.trim('"', '\'')
+                    val name = metadataValue("name")
+                    val description = metadataValue("description")
 
-            val name = metadataValue("name")
-            val description = metadataValue("description")
-
-            if (name != skillDirectory.name) {
-                errors += "${skillFile.displayPath()} name must match directory ${skillDirectory.name}."
-            }
-            if (name == null || !skillNamePattern.matches(name)) {
-                errors += "${skillFile.displayPath()} has an invalid skill name."
-            }
-            if (description.isNullOrBlank() || description.length > 1024) {
-                errors += "${skillFile.displayPath()} needs a description of 1 to 1024 characters."
+                    if (name != skillDirectory.name) {
+                        errors += "${skillFile.displayPath()} name must match directory ${skillDirectory.name}."
+                    }
+                    if (name == null || !skillNamePattern.matches(name)) {
+                        errors += "${skillFile.displayPath()} has an invalid skill name."
+                    }
+                    if (description.isNullOrBlank() || description.length > 1024) {
+                        errors += "${skillFile.displayPath()} needs a description of 1 to 1024 characters."
+                    }
+                }
             }
         }
 
@@ -168,12 +163,7 @@ abstract class ValidateAgentContextTask : DefaultTask() {
         contextFiles.forEach { contextFile ->
             for (match in markdownLinkPattern.findAll(contextFile.readText())) {
                 val target = match.groupValues[1]
-                if (
-                    target.startsWith("http://") ||
-                    target.startsWith("https://") ||
-                    target.startsWith("mailto:") ||
-                    target.startsWith("#")
-                ) {
+                if (nonLocalLinkPrefixes.any(target::startsWith)) {
                     continue
                 }
 

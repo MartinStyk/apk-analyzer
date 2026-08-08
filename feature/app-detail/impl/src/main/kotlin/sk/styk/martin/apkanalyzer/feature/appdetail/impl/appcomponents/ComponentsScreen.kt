@@ -317,7 +317,8 @@ private fun ComponentRow(
                     overflow = TextOverflow.StartEllipsis,
                 )
             }
-            if (item.isUnprotected || item.isLauncher || item.isExported || item.flags.isNotEmpty()) {
+            val hasStatusTag = item.isUnprotected || item.isLauncher || item.isExported
+            if (hasStatusTag || item.flags.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(6.dp))
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(4.dp),

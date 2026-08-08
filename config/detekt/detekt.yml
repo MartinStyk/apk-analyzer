@@ -7,8 +7,12 @@ comments:
 
 complexity:
   severity: warning
+  ComplexCondition:
+    severity: error
   CyclomaticComplexMethod:
     allowedComplexity: 15
+  NestedBlockDepth:
+    severity: error
   TooManyFunctions:
     active: false
 
@@ -24,8 +28,6 @@ coroutines:
     active: true
 
 exceptions:
-  TooGenericExceptionCaught:
-    severity: warning
   TooGenericExceptionThrown:
     severity: warning
   ErrorUsageWithThrowable:
@@ -54,8 +56,6 @@ potential-bugs:
     active: true
 
 style:
-  LoopWithTooManyJumpStatements:
-    severity: warning
   MagicNumber:
     active: false
   MaxLineLength:

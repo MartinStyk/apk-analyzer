@@ -204,6 +204,9 @@ private fun IntentFilterRow(
         .filterNot { it == Intent.CATEGORY_DEFAULT }
         .map { it.toDisplayCategory() }
         .filter { it.isNotBlank() }
+    val hasBlockedRules = filter.uriRelativeGroups.any { !it.isAllowed }
+    val hasRequestBadges = actionBadges.isNotEmpty() || categoryBadges.isNotEmpty()
+    val hasFilterBadges = filter.isAutoVerify || hasBlockedRules
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -242,12 +245,7 @@ private fun IntentFilterRow(
             label = stringResource(R.string.components_intent_data_mime_type),
             values = dataRules.valuesFor(IntentFilterDataRuleType.MimeType),
         )
-        if (
-            actionBadges.isNotEmpty() ||
-            categoryBadges.isNotEmpty() ||
-            filter.isAutoVerify ||
-            filter.uriRelativeGroups.any { !it.isAllowed }
-        ) {
+        if (hasRequestBadges || hasFilterBadges) {
             Spacer(modifier = Modifier.height(12.dp))
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
@@ -262,7 +260,7 @@ private fun IntentFilterRow(
                 if (filter.isAutoVerify) {
                     IntentFilterTag(text = stringResource(R.string.intent_filters_tag_verified))
                 }
-                if (filter.uriRelativeGroups.any { !it.isAllowed }) {
+                if (hasBlockedRules) {
                     IntentFilterTag(text = stringResource(R.string.intent_filters_tag_blocked_rules))
                 }
             }
