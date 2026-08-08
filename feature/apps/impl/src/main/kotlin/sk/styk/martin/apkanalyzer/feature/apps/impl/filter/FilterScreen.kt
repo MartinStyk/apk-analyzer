@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -661,10 +662,10 @@ private fun AppSource.displayName(): String = when (this) {
 
 @Composable
 private fun UnusedAppsPeriod.label(): String = when (this) {
-    UnusedAppsPeriod.ONE_MONTH -> stringResource(R.string.filter_unused_months_count, 1)
-    UnusedAppsPeriod.TWO_MONTHS -> stringResource(R.string.filter_unused_months_count, 2)
-    UnusedAppsPeriod.THREE_MONTHS -> stringResource(R.string.filter_unused_months_count, 3)
-    UnusedAppsPeriod.SIX_MONTHS -> stringResource(R.string.filter_unused_months_count, 6)
+    UnusedAppsPeriod.ONE_MONTH -> pluralStringResource(R.plurals.filter_unused_months_count, 1, 1)
+    UnusedAppsPeriod.TWO_MONTHS -> pluralStringResource(R.plurals.filter_unused_months_count, 2, 2)
+    UnusedAppsPeriod.THREE_MONTHS -> pluralStringResource(R.plurals.filter_unused_months_count, 3, 3)
+    UnusedAppsPeriod.SIX_MONTHS -> pluralStringResource(R.plurals.filter_unused_months_count, 6, 6)
     UnusedAppsPeriod.ONE_YEAR -> stringResource(R.string.filter_unused_year)
 }
 
