@@ -8,3 +8,4 @@ They describe how the repository should evolve without adding product scope.
 | Document | Status |
 |---|---|
 | [Kotlin code quality](kotlin-code-quality.md) | Proposed |
+| [Repository load performance](repository-load-performance.md) | Proposed |
