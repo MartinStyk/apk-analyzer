@@ -162,8 +162,6 @@ private fun DimensionCard(
                     text = summary.dimension.subtitle(),
                     style = AppTheme.typography.bodySmall,
                     color = AppTheme.colors.onSurfaceVariant,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
