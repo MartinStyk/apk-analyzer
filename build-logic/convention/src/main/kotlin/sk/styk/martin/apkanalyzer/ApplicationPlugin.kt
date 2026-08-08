@@ -19,6 +19,7 @@ class ApplicationPlugin : Plugin<Project> {
             apply("com.google.gms.google-services")
             apply("com.google.firebase.firebase-perf")
             apply("com.google.firebase.crashlytics")
+            apply("apkanalyzer.detekt")
         }
 
         extensions.configure<ApplicationExtension> {

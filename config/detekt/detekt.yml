@@ -1,0 +1,84 @@
+config:
+  validation: true
+  warningsAsErrors: true
+
+comments:
+  active: false
+
+complexity:
+  severity: warning
+  CyclomaticComplexMethod:
+    allowedComplexity: 15
+  TooManyFunctions:
+    active: false
+
+coroutines:
+  GlobalCoroutineUsage:
+    active: true
+  InjectDispatcher:
+    excludes:
+      - '**/coroutines/DispatcherProvider.kt'
+  SuspendFunInFinallySection:
+    active: true
+  SuspendFunSwallowedCancellation:
+    active: true
+
+exceptions:
+  TooGenericExceptionCaught:
+    severity: warning
+  TooGenericExceptionThrown:
+    severity: warning
+  ErrorUsageWithThrowable:
+    active: true
+  NotImplementedDeclaration:
+    active: true
+  ObjectExtendsThrowable:
+    active: true
+
+potential-bugs:
+  CastNullableToNonNullableType:
+    active: true
+  CastToNullableType:
+    active: true
+  CharArrayToStringCall:
+    active: true
+  DontDowncastCollectionTypes:
+    active: true
+  NullCheckOnMutableProperty:
+    active: true
+  NullableToStringCall:
+    active: true
+  PropertyUsedBeforeDeclaration:
+    active: true
+  UnconditionalJumpStatementInLoop:
+    active: true
+
+style:
+  LoopWithTooManyJumpStatements:
+    severity: warning
+  MagicNumber:
+    active: false
+  MaxLineLength:
+    active: false
+  ModifierOrder:
+    active: false
+  NewLineAtEndOfFile:
+    active: false
+  ReturnCount:
+    severity: warning
+  ThrowsCount:
+    severity: warning
+  UnusedPrivateFunction:
+    allowedNames: '.*Preview'
+  UnusedPrivateProperty:
+    active: false
+  WildcardImport:
+    active: false
+
+naming:
+  FunctionNaming:
+    active: false
+  MatchingDeclarationName:
+    active: false
+  TopLevelPropertyNaming:
+    constantPattern: '[A-Z][A-Za-z0-9_]*'

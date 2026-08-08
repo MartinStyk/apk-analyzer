@@ -31,19 +31,19 @@ constructor() {
                 sb.append(0)
             }
 
-            sb.append(sTemp.uppercase(Locale.getDefault()))
+            sb.append(sTemp.uppercase(Locale.ROOT))
         }
 
         return sb.toString()
     }
 
-    private fun getHexString(digest: ByteArray): String = digest.joinToString("") { "%02x".format(it) }
+    private fun getHexString(digest: ByteArray): String = digest.joinToString("") { "%02x".format(Locale.ROOT, it) }
 
     private fun getDigest(algorithm: String): MessageDigest {
         try {
             return MessageDigest.getInstance(algorithm)
         } catch (e: NoSuchAlgorithmException) {
-            throw RuntimeException(e.message, e)
+            throw IllegalStateException("Digest algorithm is unavailable: $algorithm", e)
         }
     }
 

@@ -36,6 +36,7 @@ leakcanary = "2.14"
 coil = "3.5.0"
 spotless = "8.8.0"
 compose-rules-ktlint = "0.6.3"
+detekt = "2.0.0-alpha.6"
 
 [libraries]
 # AndroidX Core
@@ -93,6 +94,7 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 ksp-gradle-plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 spotless-gradle-plugin = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless" }
 compose-rules-ktlint = { module = "io.nlopez.compose.rules:ktlint", version.ref = "compose-rules-ktlint" }
+detekt-gradle-plugin = { module = "dev.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -106,6 +108,7 @@ google-services = { id = "com.google.gms.google-services", version.ref = "google
 crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics-plugin" }
 firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "firebase-perf-plugin" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+detekt = { id = "dev.detekt", version.ref = "detekt" }
 apkanalyzer-library = { id = "apkanalyzer.library" }
 apkanalyzer-application = { id = "apkanalyzer.application" }
 apkanalyzer-agent-context = { id = "apkanalyzer.agent-context" }
@@ -113,6 +116,7 @@ apkanalyzer-feature-api = { id = "apkanalyzer.feature.api" }
 apkanalyzer-feature-impl = { id = "apkanalyzer.feature.impl" }
 apkanalyzer-hilt = { id = "apkanalyzer.hilt" }
 apkanalyzer-spotless = { id = "apkanalyzer.spotless" }
+apkanalyzer-detekt = { id = "apkanalyzer.detekt" }
 apkanalyzer-compose = { id = "apkanalyzer.compose" }
 
 [bundles]

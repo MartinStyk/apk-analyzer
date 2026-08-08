@@ -150,7 +150,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
 
         return AppInfo(
             packageName = PackageName(packageInfo.packageName),
-            applicationName = applicationInfo?.loadLabel(packageManager).toString(),
+            applicationName = applicationInfo?.loadLabel(packageManager)?.toString() ?: packageInfo.packageName,
             processName = applicationInfo?.processName,
             versionName = packageInfo.versionName,
             versionCode = packageInfo.longVersionCode,

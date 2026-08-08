@@ -367,33 +367,6 @@ private fun SectionHeader(title: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun DetailRow(
-    label: String,
-    value: String,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 4.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        Text(
-            text = label,
-            style = AppTheme.typography.bodyMedium,
-            color = AppTheme.colors.onSurfaceVariant,
-            modifier = Modifier.weight(0.4f),
-        )
-        Text(
-            text = value,
-            style = AppTheme.typography.bodyMedium,
-            color = AppTheme.colors.onBackground,
-            modifier = Modifier.weight(0.6f),
-        )
-    }
-}
-
-@Composable
 private fun NavigableRow(
     label: String,
     value: String,

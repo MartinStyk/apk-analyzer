@@ -4,7 +4,6 @@ import android.app.ActivityManager
 import android.content.Context
 import android.net.Uri
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
@@ -27,15 +26,17 @@ internal class TemporaryApkManagerImpl @Inject constructor(
 
     override suspend fun copy(uri: Uri, taskId: Int): Result<File> {
         var copiedFile: File? = null
+        var copyCompleted = false
         return try {
             withContext(dispatcherProvider.io()) {
                 copyToTaskDirectory(uri, taskId).also { result ->
                     copiedFile = result.getOrNull()
                 }
+            }.also {
+                copyCompleted = true
             }
-        } catch (error: CancellationException) {
-            copiedFile?.let(::releaseAfterCopyFailure)
-            throw error
+        } finally {
+            if (!copyCompleted) copiedFile?.let(::releaseAfterCopyFailure)
         }
     }
 
@@ -50,6 +51,7 @@ internal class TemporaryApkManagerImpl @Inject constructor(
 
     private suspend fun copyToTaskDirectory(uri: Uri, taskId: Int): Result<File> {
         var destination: File? = null
+        var copyCompleted = false
         return try {
             cleanupDiscardedTasks()
             cleanupLegacyFiles()
@@ -65,19 +67,17 @@ internal class TemporaryApkManagerImpl @Inject constructor(
                     it.copyTo(output, MAX_APK_SIZE_BYTES)
                 }
             }
-            Result.success(destination)
-        } catch (error: CancellationException) {
-            destination?.let(::releaseAfterCopyFailure)
-            throw error
+            Result.success(destination).also {
+                copyCompleted = true
+            }
         } catch (error: IOException) {
-            destination?.let(::releaseAfterCopyFailure)
             Result.failure(error)
         } catch (error: SecurityException) {
-            destination?.let(::releaseAfterCopyFailure)
             Result.failure(error)
         } catch (error: IllegalArgumentException) {
-            destination?.let(::releaseAfterCopyFailure)
             Result.failure(error)
+        } finally {
+            if (!copyCompleted) destination?.let(::releaseAfterCopyFailure)
         }
     }
 

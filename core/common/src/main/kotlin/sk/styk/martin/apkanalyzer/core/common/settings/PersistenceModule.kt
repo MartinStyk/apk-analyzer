@@ -8,8 +8,8 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class PersistenceModule {
+interface PersistenceModule {
     @Binds
     @Singleton
-    abstract fun bindPersistenceRepository(impl: DataStorePersistenceRepository): PersistenceRepository
+    fun bindPersistenceRepository(impl: DataStorePersistenceRepository): PersistenceRepository
 }

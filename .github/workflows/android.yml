@@ -49,6 +49,9 @@ jobs:
       - name: Spotless check
         run: ./gradlew spotlessCheck
 
+      - name: Detekt check
+        run: ./gradlew detektDebug :build-logic:convention:detektMain
+
       - name: Lint check
         run: ./gradlew lintDebug
 

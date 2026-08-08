@@ -6,12 +6,8 @@ import timber.log.Timber
 
 object Logger {
     fun init(logToConsole: Boolean) {
-        val trees =
-            buildList {
-                if (logToConsole) add(Timber.DebugTree())
-                add(FirebaseTree())
-            }
-        Timber.plant(*trees.toTypedArray())
+        if (logToConsole) Timber.plant(Timber.DebugTree())
+        Timber.plant(FirebaseTree())
     }
 
     fun v(tag: String, message: String) = Timber.tag(tag).v(message)
@@ -43,7 +39,7 @@ object Logger {
             message: String,
             t: Throwable?,
         ) {
-            FirebaseCrashlytics.getInstance().log("${priority.toPriorityChar()}/$tag: $message")
+            FirebaseCrashlytics.getInstance().log("${priority.toPriorityChar()}/${tag.orEmpty()}: $message")
             if (priority >= Log.WARN && t != null) {
                 FirebaseCrashlytics.getInstance().recordException(t)
             }

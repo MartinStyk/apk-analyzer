@@ -25,6 +25,7 @@ import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.toAppReference
+import java.util.Locale
 
 private const val TAG = "RequirementsViewModel"
 
@@ -124,7 +125,7 @@ private fun Feature.toRequirementItem(deviceFeatures: DeviceFeatures): Requireme
         is Feature.OpenGlEs -> RequirementItem.OpenGlEs(
             versionName = versionName,
             deviceVersionName = deviceFeatures.openGlEsVersionName,
-            identifier = "0x%08X".format(reqGlEsVersion),
+            identifier = "0x%08X".format(Locale.ROOT, reqGlEsVersion),
             isRequired = isRequired,
             availability = availability,
         )

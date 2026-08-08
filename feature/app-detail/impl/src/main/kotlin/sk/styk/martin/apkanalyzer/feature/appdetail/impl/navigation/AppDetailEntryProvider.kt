@@ -3,7 +3,6 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.impl.navigation
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
-import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.util.openAppSystemPage
 import sk.styk.martin.apkanalyzer.core.common.util.openGooglePlay
 import sk.styk.martin.apkanalyzer.core.navigation.Navigator
@@ -18,8 +17,6 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.impl.generalinfo.GeneralInfo
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.manifest.ManifestScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.permissions.PermissionsScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.requirements.RequirementsScreen
-
-private const val TAG = "AppDetailNavigation"
 
 fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
     entry<AppDetailNavKey>(

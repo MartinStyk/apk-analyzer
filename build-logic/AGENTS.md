@@ -17,6 +17,7 @@ Gradle convention plugins that standardize build configuration across all module
 | `apkanalyzer.hilt` | `HiltPlugin.kt` | `hilt.android` + `ksp` + hilt-compiler |
 | `apkanalyzer.compose` | `ComposePlugin.kt` | `kotlin.compose` + `kotlin.serialization` + Compose BOM + compose bundle + navigation3 bundle |
 | `apkanalyzer.spotless` | `SpotlessPlugin.kt` | Spotless + ktlint + compose-rules-ktlint custom ruleset |
+| `apkanalyzer.detekt` | `DetektPlugin.kt` | Baseline-free, type-resolved Kotlin static analysis using the shared root configuration |
 
 ## Utility Files (`utils/`)
 
@@ -30,6 +31,12 @@ Gradle convention plugins that standardize build configuration across all module
 - Multiline function signatures at 3+ parameters
 - Compose naming rules (ignores `@Composable` for function naming)
 - `compositionlocal-allowlist` and `lambda-param-in-effect` rules disabled
+
+## Detekt Configuration
+- Shared rules in `config/detekt/detekt.yml`
+- Android modules analyze the debug variant with type resolution
+- `build-logic` analyzes its main JVM source set
+- CI runs every Android module's `detektDebug` task and `build-logic:convention:detektMain`
 
 ## When Adding a New Plugin
 1. Create implementation class in `src/main/kotlin/sk/styk/martin/apkanalyzer/`
