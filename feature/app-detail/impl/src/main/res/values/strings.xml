@@ -24,6 +24,7 @@
     <string name="app_detail_action_app_info">App Info</string>
     <string name="app_detail_action_saving">Saving…</string>
     <string name="app_detail_worth_knowing">Worth knowing</string>
+    <string name="app_detail_insight_debuggable">Debug access is enabled</string>
     <string name="app_detail_insight_debug_certificate">Signed with Android\'s shared debug key</string>
     <string name="app_detail_insight_certificate_not_yet_valid">Signing certificate is not valid yet</string>
     <plurals name="app_detail_insight_outdated_target">
@@ -184,6 +185,7 @@
     <string name="general_info_section_identification">Identification</string>
     <string name="general_info_section_versioning">Versioning</string>
     <string name="general_info_section_api_targets">API Targets</string>
+    <string name="general_info_section_security">Security settings</string>
     <string name="general_info_section_installation">Installation &amp; Source</string>
     <string name="general_info_section_storage">Storage &amp; Paths</string>
 
@@ -197,6 +199,12 @@
     <string name="general_info_version_code">Version Code</string>
     <string name="general_info_min_sdk">Min SDK</string>
     <string name="general_info_target_sdk">Target SDK</string>
+    <string name="general_info_debug_access">Debug access</string>
+    <string name="general_info_app_data_backup">App data backup</string>
+    <string name="general_info_unencrypted_traffic">Unencrypted traffic default</string>
+    <string name="general_info_enabled">Enabled</string>
+    <string name="general_info_disabled">Disabled</string>
+    <string name="general_info_allowed">Allowed</string>
     <string name="general_info_app_type">App Type</string>
     <string name="general_info_app_type_system">System</string>
     <string name="general_info_app_type_user">User</string>
@@ -221,6 +229,12 @@
     <string name="general_info_rationale_version_code">An internal integer that increases with every release. The system uses it to determine whether one version is newer than another.</string>
     <string name="general_info_rationale_min_sdk">The lowest Android API level this app supports. Devices running an older version cannot install it.</string>
     <string name="general_info_rationale_target_sdk">The API level the app was designed and tested for. It tells the system which compatibility behaviors to apply.</string>
+    <string name="general_info_rationale_debug_access_enabled">Development tools can inspect and control this app while it runs. This helps during testing, but published apps usually turn it off because anyone with debugging access to the device gets extra access to the app.</string>
+    <string name="general_info_rationale_debug_access_disabled">Development tools cannot attach to this app using Android\'s normal app-debugging access.</string>
+    <string name="general_info_rationale_backup_allowed">Android may include this app\'s data in backups or move it to another device. The exact data depends on the app\'s backup rules and the Android version.</string>
+    <string name="general_info_rationale_backup_blocked">The app disables Android cloud backup. Device-to-device transfer may still vary by Android version and device manufacturer.</string>
+    <string name="general_info_rationale_cleartext_allowed">The app\'s general manifest setting allows network connections without encryption. Custom network security rules can override this setting. This does not prove the app sends unencrypted data.</string>
+    <string name="general_info_rationale_cleartext_blocked">The app\'s general manifest setting disables network connections without encryption. Custom network security rules and some networking libraries can behave differently.</string>
     <string name="general_info_rationale_app_type">Whether the app is a pre-installed system app or a user-installed app. System apps have elevated privileges and cannot be fully uninstalled.</string>
     <string name="general_info_rationale_install_source">Where the app was installed from — Google Play, another store, or sideloaded manually.</string>
     <string name="general_info_rationale_installer_package">The package name of the app that performed the installation, such as \"com.android.vending\" for Google Play.</string>

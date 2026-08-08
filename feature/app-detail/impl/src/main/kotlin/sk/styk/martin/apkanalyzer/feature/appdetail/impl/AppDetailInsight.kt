@@ -12,6 +12,7 @@ internal enum class SensitiveAccess {
 
 @Immutable
 internal sealed interface AppDetailInsight {
+    data object Debuggable : AppDetailInsight
     data object DebugCertificate : AppDetailInsight
     data object CertificateNotYetValid : AppDetailInsight
     data class OutdatedTargetSdk(val targetSdk: Int, val deviceSdk: Int) : AppDetailInsight {

@@ -31,7 +31,7 @@ model/
   InstalledApp.kt         - Basic installed app info (packageName, name, sizes, times, source,
                             targetSdk, minSdk)
   AppDetail.kt            - Complete app detail (info, permissions, activities, services, etc.)
-  AppInfo.kt              - Core app metadata
+  AppInfo.kt              - Core app metadata, including public manifest security flags from `ApplicationInfo`
   Permission.kt           - Single permission: name plus `details`, which is null when the device
                             can't resolve the permission (declaring app not installed)
   PermissionDetails.kt    - Resolved permission details; `protectionLevel` and `protectionFlags` are

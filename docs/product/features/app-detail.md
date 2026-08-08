@@ -618,10 +618,11 @@ Screen work:
   and required/optional feature split. Components stay as neutral per-type counts until `EX-07`
   provides the intent-filter evidence needed to interpret exposure. **Still true** — `EX-07` hasn't
   landed, so component exposure stays out of both the card preview and the "Worth knowing" rule set.
-- "Worth knowing" card with its rule set: debug or not-yet-valid certificate, a target at least four
-  API levels behind the device, and actually granted high-impact access such as background location,
-  messages, call history, contacts, or calendar. Exported components and merely requested
-  permissions are not findings. Each row deep-links.
+- "Worth knowing" card with its rule set: enabled debug access, debug or not-yet-valid certificate,
+  a target at least four API levels behind the device, and actually granted high-impact access such
+  as background location, messages, call history, contacts, or calendar. Backup and cleartext flags
+  remain neutral facts in General information. Exported components and merely requested permissions
+  are not findings. Each row deep-links.
 - Extend `AppDetailState.Loaded` with the derived values the previews need.
 - **Save icon**: an icon loader in `:core:apps` returning the full-resolution bitmap for a package
   name or an APK path (setting `sourceDir` / `publicSourceDir` in the archive case), PNG encoding,

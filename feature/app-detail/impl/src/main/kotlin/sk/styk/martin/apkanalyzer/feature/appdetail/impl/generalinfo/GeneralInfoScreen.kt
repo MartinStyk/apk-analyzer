@@ -206,6 +206,12 @@ private fun LoadedContent(
             }
         }
 
+        SecuritySettingsSection(
+            state = state,
+            onShowRationale = { rationaleRow = it },
+            onCopy = onCopy,
+        )
+
         SectionCard(title = stringResource(R.string.general_info_section_installation)) {
             InfoRowItem(
                 label = stringResource(R.string.general_info_app_type),
@@ -318,6 +324,77 @@ private fun LoadedContent(
     }
 }
 
+@Composable
+private fun SecuritySettingsSection(
+    state: GeneralInfoState.Loaded,
+    onShowRationale: (InfoRow) -> Unit,
+    onCopy: (label: String, value: String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    SectionCard(
+        title = stringResource(R.string.general_info_section_security),
+        modifier = modifier,
+    ) {
+        InfoRowItem(
+            label = stringResource(R.string.general_info_debug_access),
+            value = stringResource(
+                if (state.isDebuggable) {
+                    R.string.general_info_enabled
+                } else {
+                    R.string.general_info_disabled
+                },
+            ),
+            rationale = stringResource(
+                if (state.isDebuggable) {
+                    R.string.general_info_rationale_debug_access_enabled
+                } else {
+                    R.string.general_info_rationale_debug_access_disabled
+                },
+            ),
+            onShowRationale = onShowRationale,
+            onCopy = onCopy,
+        )
+        InfoRowItem(
+            label = stringResource(R.string.general_info_app_data_backup),
+            value = stringResource(
+                if (state.allowsBackup) {
+                    R.string.general_info_allowed
+                } else {
+                    R.string.general_info_disabled
+                },
+            ),
+            rationale = stringResource(
+                if (state.allowsBackup) {
+                    R.string.general_info_rationale_backup_allowed
+                } else {
+                    R.string.general_info_rationale_backup_blocked
+                },
+            ),
+            onShowRationale = onShowRationale,
+            onCopy = onCopy,
+        )
+        InfoRowItem(
+            label = stringResource(R.string.general_info_unencrypted_traffic),
+            value = stringResource(
+                if (state.usesCleartextTraffic) {
+                    R.string.general_info_allowed
+                } else {
+                    R.string.general_info_disabled
+                },
+            ),
+            rationale = stringResource(
+                if (state.usesCleartextTraffic) {
+                    R.string.general_info_rationale_cleartext_allowed
+                } else {
+                    R.string.general_info_rationale_cleartext_blocked
+                },
+            ),
+            onShowRationale = onShowRationale,
+            onCopy = onCopy,
+        )
+    }
+}
+
 private fun formatTimestamp(instant: Instant): String {
     val dateFormat = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
     return dateFormat.format(Date.from(instant))
@@ -372,6 +449,9 @@ private fun sampleGeneralInfoState() = GeneralInfoState.Loaded(
     targetSdkVersion = 35,
     targetSdkLabel = "Android 15",
     isSystemApp = false,
+    isDebuggable = true,
+    allowsBackup = false,
+    usesCleartextTraffic = true,
     source = "GooglePlay",
     appInstaller = PackageName("com.android.vending"),
     firstInstallTime = Instant.ofEpochMilli(1_736_640_000_000),

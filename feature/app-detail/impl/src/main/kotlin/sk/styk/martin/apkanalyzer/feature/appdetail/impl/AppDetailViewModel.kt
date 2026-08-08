@@ -141,11 +141,13 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
     private fun navigateToInsight(insight: AppDetailInsight) {
         when (insight) {
+            AppDetailInsight.Debuggable,
+            is AppDetailInsight.OutdatedTargetSdk,
+            -> sendEvent(AppDetailEvent.NavigateToGeneralDetails)
+
             AppDetailInsight.DebugCertificate,
             AppDetailInsight.CertificateNotYetValid,
             -> sendEvent(AppDetailEvent.NavigateToCertificates)
-
-            is AppDetailInsight.OutdatedTargetSdk -> sendEvent(AppDetailEvent.NavigateToGeneralDetails)
 
             is AppDetailInsight.SensitivePermission -> sendEvent(AppDetailEvent.NavigateToPermissions(insight.permissionName))
         }

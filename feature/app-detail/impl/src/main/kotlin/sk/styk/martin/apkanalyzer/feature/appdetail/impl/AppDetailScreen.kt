@@ -340,6 +340,8 @@ private fun WorthKnowingRow(
 
 @Composable
 private fun AppDetailInsight.label(): String = when (this) {
+    AppDetailInsight.Debuggable -> stringResource(R.string.app_detail_insight_debuggable)
+
     AppDetailInsight.DebugCertificate -> stringResource(R.string.app_detail_insight_debug_certificate)
 
     AppDetailInsight.CertificateNotYetValid -> stringResource(R.string.app_detail_insight_certificate_not_yet_valid)
@@ -1155,6 +1157,7 @@ private fun sampleLoadedState() = AppDetailState.Loaded(
         trustLevel = CertificateTrustLevel.Valid,
     ),
     insights = persistentListOf(
+        AppDetailInsight.Debuggable,
         AppDetailInsight.SensitivePermission(
             access = SensitiveAccess.BackgroundLocation,
             permissionName = "android.permission.ACCESS_BACKGROUND_LOCATION",
