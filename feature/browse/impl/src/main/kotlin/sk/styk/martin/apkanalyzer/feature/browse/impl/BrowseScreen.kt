@@ -131,10 +131,12 @@ private fun DimensionCard(
             .fillMaxWidth()
             .clip(Shapes.CardShape)
             .background(AppTheme.colors.surface)
-            .clickable(onClick = onClick)
-            .padding(16.dp),
+            .clickable(onClick = onClick),
     ) {
-        Row(verticalAlignment = Alignment.Top) {
+        Row(
+            verticalAlignment = Alignment.Top,
+            modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp),
+        ) {
             Box(
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
@@ -181,7 +183,7 @@ private fun DimensionCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .horizontalScroll(rememberScrollState(), enabled = false)
-                    .padding(start = 60.dp),
+                    .padding(start = 76.dp),
             ) {
                 summary.topLabels.forEach { label ->
                     Chip(label = label, variant = ChipVariant.Tonal)
@@ -194,7 +196,7 @@ private fun DimensionCard(
             text = pluralStringResource(R.plurals.browse_dimension_option_count, summary.optionCount, summary.optionCount),
             style = AppTheme.typography.labelMedium,
             color = AppTheme.colors.primary,
-            modifier = Modifier.padding(start = 60.dp),
+            modifier = Modifier.padding(start = 76.dp, end = 16.dp, bottom = 16.dp),
         )
     }
 }
