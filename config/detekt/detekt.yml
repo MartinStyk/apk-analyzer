@@ -11,10 +11,17 @@ complexity:
     severity: error
   CyclomaticComplexMethod:
     allowedComplexity: 24
+  LongMethod:
+    severity: info
   NestedBlockDepth:
     severity: error
   TooManyFunctions:
-    active: false
+    active: true
+    allowedFunctionsPerFile: 20
+    ignoreAnnotatedFunctions:
+      - 'Binds'
+      - 'Preview'
+      - 'Provides'
 
 coroutines:
   GlobalCoroutineUsage:
@@ -57,7 +64,8 @@ potential-bugs:
 
 style:
   MagicNumber:
-    active: false
+    active: true
+    severity: info
   MaxLineLength:
     active: false
   ModifierOrder:
@@ -71,7 +79,7 @@ style:
   UnusedPrivateFunction:
     allowedNames: '.*Preview'
   UnusedPrivateProperty:
-    active: false
+    active: true
   WildcardImport:
     active: false
 
@@ -79,6 +87,6 @@ naming:
   FunctionNaming:
     active: false
   MatchingDeclarationName:
-    active: false
+    active: true
   TopLevelPropertyNaming:
     constantPattern: '[A-Z][A-Za-z0-9_]*'

@@ -32,6 +32,7 @@ import androidx.compose.material.icons.rounded.Fullscreen
 import androidx.compose.material.icons.rounded.FullscreenExit
 import androidx.compose.material.icons.rounded.Gamepad
 import androidx.compose.material.icons.rounded.GppBad
+import androidx.compose.material.icons.rounded.GppGood
 import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.HourglassEmpty
 import androidx.compose.material.icons.rounded.Info
@@ -134,6 +135,7 @@ data object ApkAnalyzerIcons {
     val File = Icons.AutoMirrored.Rounded.InsertDriveFile
     val Storage = Icons.Rounded.Storage
     val Verified = Icons.Rounded.VerifiedUser
+    val VerifiedShield = Icons.Rounded.GppGood
     val Warning = Icons.Rounded.Warning
     val Wifi = Icons.Rounded.Wifi
 }

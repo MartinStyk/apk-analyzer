@@ -31,10 +31,10 @@ class AppsViewModel @Inject constructor(
     installedAppsRepository: InstalledAppsRepository,
     private val recentlyViewedAppsRepository: RecentlyViewedAppsRepository,
     private val appFilterRepository: AppFilterRepository,
-    private val filterApps: FilterAppsUseCase,
+    filterApps: FilterAppsUseCase,
     private val usageStatsRepository: UsageStatsRepository,
     private val storageStatsRepository: StorageStatsRepository,
-    private val dispatcherProvider: DispatcherProvider,
+    dispatcherProvider: DispatcherProvider,
 ) : ViewModel() {
 
     private val sortType = MutableStateFlow(SortType.Name)
@@ -145,7 +145,12 @@ class AppsViewModel @Inject constructor(
             SortType.ApkSize -> compareBy { it.apkSize }
 
             SortType.TotalSize -> Comparator { a, b ->
-                compareNullable(a.totalSize, b.totalSize)
+                when {
+                    a.totalSize == null && b.totalSize == null -> 0
+                    a.totalSize == null -> -1
+                    b.totalSize == null -> 1
+                    else -> a.totalSize.compareTo(b.totalSize)
+                }
             }
 
             SortType.InstallDate -> compareBy { it.installTime }
@@ -155,7 +160,12 @@ class AppsViewModel @Inject constructor(
             SortType.LastUpdated -> compareBy { it.lastUpdateTime }
 
             SortType.LastUsed -> Comparator { a, b ->
-                compareNullable(a.lastUsedTime, b.lastUsedTime)
+                when {
+                    a.lastUsedTime == null && b.lastUsedTime == null -> 0
+                    a.lastUsedTime == null -> -1
+                    b.lastUsedTime == null -> 1
+                    else -> a.lastUsedTime.compareTo(b.lastUsedTime)
+                }
             }
         }
         return if (ascending) base else base.reversed()
@@ -172,11 +182,4 @@ class AppsViewModel @Inject constructor(
         lastUsedTime = lastUsedTime,
         source = source,
     )
-}
-
-private fun <T : Comparable<T>> compareNullable(first: T?, second: T?): Int = when {
-    first == null && second == null -> 0
-    first == null -> -1
-    second == null -> 1
-    else -> first.compareTo(second)
 }

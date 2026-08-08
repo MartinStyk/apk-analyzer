@@ -43,13 +43,13 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun queryLastUsedTime(packageName: PackageName): Instant? {
-        lastUsedTimes.value[packageName]?.let { return it }
-        if (!checkPermission()) return null
-        return queryRawUsageStats()
+    override suspend fun queryLastUsedTime(packageName: PackageName): Instant? = lastUsedTimes.value[packageName] ?: if (checkPermission()) {
+        queryRawUsageStats()
             .filter { it.packageName == packageName.value }
             .maxOfOrNull { it.lastTimeUsed }
             ?.let { Instant.ofEpochMilli(it) }
+    } else {
+        null
     }
 
     private fun fetchUsageTimes() {

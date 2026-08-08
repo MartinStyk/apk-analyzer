@@ -63,10 +63,10 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun queryTotalSize(packageName: PackageName): AppSize? {
-        totalSizes.value[packageName]?.let { return it }
-        if (!checkPermission()) return null
-        return queryPackageSize(UserHandle.getUserHandleForUid(Process.myUid()), packageName)
+    override suspend fun queryTotalSize(packageName: PackageName): AppSize? = totalSizes.value[packageName] ?: if (checkPermission()) {
+        queryPackageSize(UserHandle.getUserHandleForUid(Process.myUid()), packageName)
+    } else {
+        null
     }
 
     private fun fetchTotalSizes(packageNames: List<PackageName>) {

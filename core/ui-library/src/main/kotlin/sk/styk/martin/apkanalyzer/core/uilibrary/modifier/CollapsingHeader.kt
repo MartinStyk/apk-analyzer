@@ -1,3 +1,5 @@
+@file:Suppress("MatchingDeclarationName")
+
 package sk.styk.martin.apkanalyzer.core.uilibrary.modifier
 
 import androidx.compose.runtime.Composable
