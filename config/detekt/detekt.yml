@@ -79,6 +79,6 @@ naming:
   FunctionNaming:
     active: false
   MatchingDeclarationName:
-    active: false
+    active: true
   TopLevelPropertyNaming:
     constantPattern: '[A-Z][A-Za-z0-9_]*'

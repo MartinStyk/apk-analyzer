@@ -9,10 +9,10 @@ Design system module providing all reusable Compose UI components, theme, icons,
 
 ```
 theme/
-  Theme.kt          - ApkAnalyzerTheme, AppTheme (colors + typography access)
-  Color.kt          - ApkAnalyzerColorPalette, Light/Dark color definitions
-  Typography.kt     - ApkAnalyzerTypography, font setup
-  Shapes.kt         - Shape definitions
+  Theme.kt                    - ApkAnalyzerTheme, AppTheme (colors + typography access)
+  ApkAnalyzerColorPalette.kt  - ApkAnalyzerColorPalette, Light/Dark color definitions
+  Typography.kt               - ApkAnalyzerTypography, font setup
+  Shapes.kt                   - Shape definitions
 components/          - See the component inventory below
 icons/
   ApkAnalyzerIcons.kt - Icon constants (Apps, Permissions, Statistics, etc.)
@@ -20,9 +20,9 @@ icons/
 animation/
   NavEntryTransitions.kt - bottomEntryMetadata(), slideFromEndEntryMetadata()
 lazylist/
-  ItemsIndexedWithPosition.kt - LazyList item helper carrying first/middle/last position
+  ItemsPositioned.kt, ListItemPosition.kt - LazyList item helper carrying first/middle/last position
 modifier/
-  CardModifier.kt, CollapsingHeader.kt, CollapsingToolbar.kt, Shimmer.kt,
+  CardModifier.kt, CollapsingHeaderState.kt, CollapsingToolbarState.kt, Shimmer.kt,
   SharedTransitionModifier.kt (LocalSharedTransitionScope)
 util/
   Lerp.kt

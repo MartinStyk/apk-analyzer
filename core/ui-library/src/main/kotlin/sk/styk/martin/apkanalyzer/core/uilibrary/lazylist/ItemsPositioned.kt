@@ -5,8 +5,6 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 
-enum class ListItemPosition { Single, First, Middle, Last }
-
 fun <T> LazyListScope.itemsPositioned(
     items: List<T>,
     key: ((index: Int, item: T) -> Any)? = null,

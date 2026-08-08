@@ -17,14 +17,6 @@ import androidx.compose.ui.unit.dp
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 
-enum class IconButtonStyle {
-    Standard,
-    StandardMuted,
-    Filled,
-    Outlined,
-    Highlighted,
-}
-
 @Composable
 fun IconButton(
     imageVector: ImageVector,

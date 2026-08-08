@@ -47,7 +47,8 @@ AppDetailInputAdapters.kt    - Maps the navigation DTO to shared `AppReference`
 components/
   AppDetailBadge.kt          - Badge classification (Sideloaded, DangerousPermissions, Unused, Large, System, etc.)
   AppDetailToolbar.kt        - Collapsing toolbar for the hub
-  InfoRowItem.kt             - InfoRow + InfoRowItem + RationaleBottomSheet, shared by every sub-screen
+  InfoRow.kt                 - Shared rationale row model
+  InfoRowItem.kt             - InfoRowItem + RationaleBottomSheet, shared by every sub-screen
   SectionScaffold.kt         - SectionLoading + SectionError, the Loading/Error branch every sub-screen shares
   DetailField.kt             - The labelled, tap-to-copy field every item bottom sheet is built from.
                                Use it; do not add a private copy — there were three before it was extracted
