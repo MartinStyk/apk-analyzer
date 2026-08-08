@@ -84,8 +84,8 @@ internal class ManifestParserImpl @Inject constructor(private val packageManager
             }
         }
 
-        check(manifests.size == expectedManifestCount) {
-            "Read ${manifests.size} of $expectedManifestCount installed manifests for $packageName"
+        if (manifests.size != expectedManifestCount) {
+            Logger.w(TAG, "Read ${manifests.size} of $expectedManifestCount installed manifests for $packageName")
         }
         return manifests.values.flatMap { it.filters }
     }
