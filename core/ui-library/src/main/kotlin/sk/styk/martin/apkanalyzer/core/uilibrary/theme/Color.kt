@@ -1,3 +1,5 @@
+@file:Suppress("MatchingDeclarationName")
+
 package sk.styk.martin.apkanalyzer.core.uilibrary.theme
 
 import androidx.compose.material3.darkColorScheme
