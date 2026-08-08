@@ -24,12 +24,16 @@ re-deriving the module's structure.
 
 ## Verifying a Change
 
+Move fast: don't run `detektDebug`, `lintDebug`, `spotlessCheck`, or `validateAgentContext` after
+every edit. CI runs the whole-app check on every push — let it catch those, and fix failures in a
+follow-up commit instead of gating local iteration on them.
+
 | When | Run |
 |---|---|
 | Iterating on one module | `./gradlew :feature:apps:impl:compileDebugKotlin` |
-| Before committing | `./gradlew spotlessApply` |
-| Whole-app check (what CI gates on) | `./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug :app:assembleDebug` |
-| After changing a context file, skill, adapter, or the module graph | `./gradlew validateAgentContext` |
+| Before committing | `./gradlew spotlessApply` — the only gate required locally |
+| Whole-app check (what CI gates on — don't run this locally unless debugging a CI failure) | `./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug :app:assembleDebug` |
+| After changing a context file, skill, adapter, or the module graph | `./gradlew validateAgentContext` — skip this too; CI covers it |
 
 A successful compile is not proof a Compose layout is correct. For visual or layout changes, use
 the `run-app` skill and look at it on a device. Two failure modes that pass every gate: text that
