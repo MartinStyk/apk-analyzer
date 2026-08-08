@@ -56,41 +56,15 @@ jobs:
         run: |
           ./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug --continue
 
-      - name: Collect Detekt SARIF reports
+      - name: Merge SARIF reports
         if: always()
-        run: |
-          mkdir -p build/reports/detekt-sarif
-          find . -type f -path '*/build/reports/detekt/*.sarif' -print0 |
-            while IFS= read -r -d '' report; do
-              destination="build/reports/detekt-sarif/${report#./}"
-              mkdir -p "$(dirname "$destination")"
-              cp "$report" "$destination"
-            done
-          mapfile -d '' reports < <(find build/reports/detekt-sarif -type f -name '*.sarif' -print0 | sort -z)
-          if (( ${#reports[@]} == 0 )); then
-            echo "No Detekt SARIF reports found" >&2
-            exit 1
-          fi
-          jq -s '
-            . as $reports
-            | $reports[0] as $first
-            | (
-                $first.runs[0]
-                | .tool.driver.rules = ([$reports[].runs[0].tool.driver.rules[]?] | unique_by(.id))
-                | .results = [$reports[].runs[0].results[]?]
-              ) as $run
-            | {
-                "$schema": $first["$schema"],
-                "version": $first.version,
-                "runs": [$run]
-              }
-          ' "${reports[@]}" > build/reports/detekt.sarif
+        run: ./gradlew mergeSarifReports
 
-      - name: Upload Detekt SARIF reports
+      - name: Upload SARIF reports
         if: ${{ always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
         uses: github/codeql-action/upload-sarif@v4
         with:
-          sarif_file: build/reports/detekt.sarif
+          sarif_file: build/reports/merged.sarif
 
   build-apk:
     runs-on: ubuntu-latest

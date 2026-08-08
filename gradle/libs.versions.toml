@@ -117,6 +117,7 @@ apkanalyzer-feature-impl = { id = "apkanalyzer.feature.impl" }
 apkanalyzer-hilt = { id = "apkanalyzer.hilt" }
 apkanalyzer-spotless = { id = "apkanalyzer.spotless" }
 apkanalyzer-detekt = { id = "apkanalyzer.detekt" }
+apkanalyzer-sarif-merge = { id = "apkanalyzer.sarif-merge" }
 apkanalyzer-compose = { id = "apkanalyzer.compose" }
 
 [bundles]

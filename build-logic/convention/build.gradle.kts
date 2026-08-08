@@ -61,6 +61,10 @@ gradlePlugin {
             id = "apkanalyzer.detekt"
             implementationClass = "sk.styk.martin.apkanalyzer.DetektPlugin"
         }
+        register("apkanalyzer.sarif-merge") {
+            id = "apkanalyzer.sarif-merge"
+            implementationClass = "sk.styk.martin.apkanalyzer.SarifMergePlugin"
+        }
         register("apkanalyzer.compose") {
             id = "apkanalyzer.compose"
             implementationClass = "sk.styk.martin.apkanalyzer.ComposePlugin"
