@@ -18,6 +18,7 @@ Gradle convention plugins that standardize build configuration across all module
 | `apkanalyzer.compose` | `ComposePlugin.kt` | `kotlin.compose` + `kotlin.serialization` + Compose BOM + compose bundle + navigation3 bundle |
 | `apkanalyzer.spotless` | `SpotlessPlugin.kt` | Spotless + ktlint + compose-rules-ktlint custom ruleset |
 | `apkanalyzer.detekt` | `DetektPlugin.kt` | Baseline-free, type-resolved Kotlin static analysis using the shared root configuration |
+| `apkanalyzer.sarif-merge` | `SarifMergePlugin.kt` | Root-only `mergeSarifReports` task that combines every module's Detekt and Lint SARIF reports into one file for upload |
 
 ## Utility Files (`utils/`)
 
@@ -40,6 +41,17 @@ Gradle convention plugins that standardize build configuration across all module
 - Android modules analyze the debug variant with type resolution
 - `build-logic` analyzes its main JVM source set
 - CI runs every Android module's `detektDebug` task and `build-logic:convention:detektMain`
+
+## SARIF Reporting
+- Detekt (`dev.detekt`) and Android Lint (AGP) both emit a per-module `.sarif` report by default —
+  no explicit `reports {}`/`lint {}` config is needed to turn SARIF on.
+- The root-only `mergeSarifReports` task (`apkanalyzer.sarif-merge`) globs every module's
+  `build/reports/detekt/*.sarif` and `build/reports/lint-results-*.sarif` and merges them into
+  `build/reports/merged.sarif` using Detekt's own `ReportMergeTask` — no custom parsing script.
+- CI runs Detekt and Lint with `--continue` so every module's report is produced even when one
+  module fails, then runs `mergeSarifReports` and uploads the single merged file via
+  `github/codeql-action/upload-sarif`, which shows results as PR annotations and in the repo's
+  Security > Code scanning tab.
 
 ## When Adding a New Plugin
 1. Create implementation class in `src/main/kotlin/sk/styk/martin/apkanalyzer/`
