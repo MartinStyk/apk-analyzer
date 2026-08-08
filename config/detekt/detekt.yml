@@ -71,7 +71,7 @@ style:
   UnusedPrivateFunction:
     allowedNames: '.*Preview'
   UnusedPrivateProperty:
-    active: false
+    active: true
   WildcardImport:
     active: false
 

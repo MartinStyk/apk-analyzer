@@ -30,9 +30,9 @@ import javax.inject.Inject
 class FilterViewModel @Inject constructor(
     private val appFilterRepository: AppFilterRepository,
     private val permissionFilterCoordinator: PermissionFilterCoordinator,
-    private val installedAppsRepository: InstalledAppsRepository,
-    private val usageStatsRepository: UsageStatsRepository,
-    private val storageStatsRepository: StorageStatsRepository,
+    installedAppsRepository: InstalledAppsRepository,
+    usageStatsRepository: UsageStatsRepository,
+    storageStatsRepository: StorageStatsRepository,
 ) : ViewModel() {
 
     private val localFilter = MutableStateFlow(appFilterRepository.filter.value)

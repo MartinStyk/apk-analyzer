@@ -27,10 +27,10 @@ internal const val INSTALLED_APPS = "InstalledApps"
 internal class InstalledAppsRepositoryImpl @Inject constructor(
     private val packageManager: PackageManager,
     private val installSourceResolver: InstallSourceResolver,
-    private val packageChangesObserver: PackageChangesObserver,
-    private val dispatcherProvider: DispatcherProvider,
-    private val storageStatsRepository: StorageStatsRepository,
-    private val usageStatsRepository: UsageStatsRepository,
+    packageChangesObserver: PackageChangesObserver,
+    dispatcherProvider: DispatcherProvider,
+    storageStatsRepository: StorageStatsRepository,
+    usageStatsRepository: UsageStatsRepository,
     appScope: CoroutineScope,
 ) : InstalledAppsRepository {
 

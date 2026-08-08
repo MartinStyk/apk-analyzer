@@ -32,8 +32,8 @@ class AppSearchViewModel @Inject constructor(
     private val recentlyViewedAppsRepository: RecentlyViewedAppsRepository,
     private val searchHistoryRepository: SearchHistoryRepository,
     private val appFilterRepository: AppFilterRepository,
-    private val filterApps: FilterAppsUseCase,
-    private val searchApps: SearchAppsUseCase,
+    filterApps: FilterAppsUseCase,
+    searchApps: SearchAppsUseCase,
     dispatcherProvider: DispatcherProvider,
 ) : ViewModel() {
 
