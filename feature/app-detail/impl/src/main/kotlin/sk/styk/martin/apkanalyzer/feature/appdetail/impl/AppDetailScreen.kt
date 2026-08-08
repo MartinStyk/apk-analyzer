@@ -205,13 +205,7 @@ private fun AppDetailContent(
             .background(AppTheme.colors.background),
     ) {
         when (state) {
-            is AppDetailState.Loading -> {
-                Toolbar(
-                    title = stringResource(R.string.app_detail_title),
-                    onBack = onBack,
-                )
-                LoadingContent()
-            }
+            is AppDetailState.Loading -> LoadingContent()
 
             is AppDetailState.Error -> {
                 Toolbar(
