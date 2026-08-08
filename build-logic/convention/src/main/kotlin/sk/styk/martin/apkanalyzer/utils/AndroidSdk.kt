@@ -1,5 +1,5 @@
 package sk.styk.martin.apkanalyzer.utils
 
-const val CompileSdk = 37
-const val TargetSdk = 37
-const val MinSdk = 28
+const val COMPILE_SDK = 37
+const val TARGET_SDK = 37
+const val MIN_SDK = 28

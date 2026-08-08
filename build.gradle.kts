@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.apkanalyzer.agent.context)
+    alias(libs.plugins.apkanalyzer.spotless)
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.hilt.android) apply false
     alias(libs.plugins.compose.compiler) apply false

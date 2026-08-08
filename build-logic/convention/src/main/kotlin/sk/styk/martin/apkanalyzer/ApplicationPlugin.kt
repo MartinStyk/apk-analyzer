@@ -5,9 +5,9 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
-import sk.styk.martin.apkanalyzer.utils.CompileSdk
-import sk.styk.martin.apkanalyzer.utils.MinSdk
-import sk.styk.martin.apkanalyzer.utils.TargetSdk
+import sk.styk.martin.apkanalyzer.utils.COMPILE_SDK
+import sk.styk.martin.apkanalyzer.utils.MIN_SDK
+import sk.styk.martin.apkanalyzer.utils.TARGET_SDK
 import sk.styk.martin.apkanalyzer.utils.configureKotlin
 import sk.styk.martin.apkanalyzer.utils.implementation
 import sk.styk.martin.apkanalyzer.utils.libs
@@ -22,10 +22,10 @@ class ApplicationPlugin : Plugin<Project> {
         }
 
         extensions.configure<ApplicationExtension> {
-            compileSdk = CompileSdk
+            compileSdk = COMPILE_SDK
             defaultConfig {
-                targetSdk = TargetSdk
-                minSdk = MinSdk
+                targetSdk = TARGET_SDK
+                minSdk = MIN_SDK
             }
 
             signingConfigs {

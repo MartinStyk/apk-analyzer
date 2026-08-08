@@ -12,7 +12,6 @@ import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.getByType
 
-
 val Project.androidLibrary: LibraryExtension
     get() = extensions.getByType(LibraryExtension::class.java)
 

@@ -46,6 +46,7 @@ abstract class ValidateAgentContextTask : DefaultTask() {
             val claudeFile = agentFile.resolveSibling("CLAUDE.md")
             when {
                 !claudeFile.isFile -> errors += "Missing ${claudeFile.displayPath()} for ${agentFile.displayPath()}."
+
                 claudeFile.readText().trim() != "@AGENTS.md" ->
                     errors += "${claudeFile.displayPath()} must contain only @AGENTS.md."
             }
@@ -160,7 +161,7 @@ abstract class ValidateAgentContextTask : DefaultTask() {
                 claudeFiles +
                 skillFiles +
                 listOf(rootDirectory.resolve("README.md"), copilotInstructions)
-        ).filter(File::isFile)
+            ).filter(File::isFile)
             .distinct()
         val markdownLinkPattern = Regex("""(?<!!)\[[^]]+]\(([^)]+)\)""")
 

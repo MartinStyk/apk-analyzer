@@ -5,7 +5,6 @@ import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-
 internal fun Project.configureKotlin() {
     extensions.configure(KotlinAndroidProjectExtension::class.java) {
         jvmToolchain(25)
@@ -18,6 +17,5 @@ internal fun Project.configureKotlin() {
                 "-opt-in=kotlinx.coroutines.FlowPreview",
             )
         }
-
     }
 }

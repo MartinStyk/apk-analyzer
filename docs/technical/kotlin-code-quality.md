@@ -26,10 +26,9 @@ Each tool should have one responsibility:
 
 Detekt formatting rules should remain disabled so they do not overlap or disagree with Spotless.
 
-ktlint should be pinned explicitly to the newest compatible release. Pinning does not mean staying
-on an old release: it makes the selected version visible, lets ktlint be upgraded independently of
-Spotless, and prevents a Spotless upgrade from silently changing formatting behavior. The version
-should be updated deliberately whenever a newer compatible ktlint release is available.
+The repository should use the ktlint version selected by Spotless and update Spotless deliberately.
+An explicit ktlint override adds another compatibility decision without providing value while the
+Spotless default is current and compatible with compose-rules-ktlint.
 
 The repository should keep the `intellij_idea` ktlint style. `ktlint_official` would standardize
 some wrapping and indentation decisions, but it would not make Kotlin more idiomatic or add semantic
@@ -53,7 +52,7 @@ The following snapshot was taken on 2026-08-08.
 ### Gaps
 
 - Spotless does not cover root Gradle scripts or `build-logic` sources.
-- The ktlint version is implicit in the Spotless version instead of being pinned independently.
+- Kotlin files are targeted by both the Kotlin and Kotlin Gradle Spotless steps.
 - `.editorconfig` selects `intellij_idea` style and allows lines up to 240 characters.
 - There is no Detekt configuration.
 - Kotlin compiler warnings are not treated as errors.
@@ -92,22 +91,25 @@ Examples currently outside automated enforcement include:
 Each step is intended to be a separate pull request. Mechanical formatting changes must not be
 combined with Detekt-driven refactoring.
 
-### KQ-01: Make formatting deterministic and complete
+### KQ-01: Make formatting complete and consistently managed
 
 **Changes**
 
-- Add the newest compatible ktlint version explicitly to `gradle/libs.versions.toml`.
-- Pass that version to both Kotlin and Kotlin Gradle Spotless steps.
-- Update ktlint independently when newer compatible releases become available.
-- Apply Spotless to root Gradle scripts and `build-logic`.
-- Add a lightweight miscellaneous format for trailing whitespace and final newlines in Markdown,
-  YAML, properties files, and `.gitignore`.
+- Update Spotless to the newest compatible release and use its managed ktlint version.
+- Apply the existing Spotless convention plugin to the root project.
+- Make the convention plugin format root Gradle scripts and `build-logic` when applied at the root.
+- Use project-relative targets that do not overlap between root and module applications.
+- Stop targeting Kotlin files from the Kotlin Gradle step.
+- Add a lightweight miscellaneous format for trailing whitespace and final newlines in YAML and
+  `.gitignore` files. Leave Markdown and properties files unchanged because trailing whitespace can
+  carry meaning in those formats.
 - Keep the existing formatting style in this step to avoid unrelated source changes.
 
 **Exit criteria**
 
 - `spotlessCheck` covers Android modules, root scripts, and `build-logic`.
-- Spotless and ktlint versions can be upgraded independently.
+- Spotless configuration remains centralized in the convention plugin.
+- Each Kotlin file is handled by one Spotless format.
 - `spotlessApply` leaves the working tree clean after a second run.
 
 ### KQ-02: Enforce a practical line-length limit
