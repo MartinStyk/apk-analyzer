@@ -5,12 +5,16 @@ import android.content.Context
 import android.net.Uri
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 import javax.inject.Inject
 
 internal class TemporaryApkManagerImpl @Inject constructor(
@@ -44,7 +48,7 @@ internal class TemporaryApkManagerImpl @Inject constructor(
         releaseFile(file)
     }
 
-    private fun copyToTaskDirectory(uri: Uri, taskId: Int): Result<File> {
+    private suspend fun copyToTaskDirectory(uri: Uri, taskId: Int): Result<File> {
         var destination: File? = null
         return try {
             cleanupDiscardedTasks()
@@ -58,10 +62,13 @@ internal class TemporaryApkManagerImpl @Inject constructor(
                 ?: throw FileNotFoundException("Content provider returned no stream")
             input.use {
                 destination.outputStream().use { output ->
-                    it.copyTo(output)
+                    it.copyTo(output, MAX_APK_SIZE_BYTES)
                 }
             }
             Result.success(destination)
+        } catch (error: CancellationException) {
+            destination?.let(::releaseAfterCopyFailure)
+            throw error
         } catch (error: IOException) {
             destination?.let(::releaseAfterCopyFailure)
             Result.failure(error)
@@ -120,6 +127,21 @@ internal class TemporaryApkManagerImpl @Inject constructor(
         }
     }
 
+    private suspend fun InputStream.copyTo(output: OutputStream, maxBytes: Long) {
+        val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+        var copiedBytes = 0L
+        while (true) {
+            currentCoroutineContext().ensureActive()
+            val bytesRead = read(buffer)
+            if (bytesRead < 0) return
+            copiedBytes += bytesRead
+            if (copiedBytes > maxBytes) {
+                throw IOException("APK exceeds the maximum supported size")
+            }
+            output.write(buffer, 0, bytesRead)
+        }
+    }
+
     private companion object {
         const val TAG = "TemporaryApkManager"
         const val CACHE_DIRECTORY = "apk-analysis"
@@ -127,5 +149,6 @@ internal class TemporaryApkManagerImpl @Inject constructor(
         const val FILE_PREFIX = "apk_"
         const val FILE_SUFFIX = ".apk"
         const val LEGACY_FILE_PREFIX = "temp_apk_"
+        const val MAX_APK_SIZE_BYTES = 1024L * 1024L * 1024L
     }
 }

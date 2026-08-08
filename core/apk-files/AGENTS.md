@@ -21,6 +21,9 @@ queries `ActivityManager.appTasks` and removes directories whose task no longer 
 and external document tasks therefore keep independent files, while files orphaned by process
 death are removed by the next APK analysis after their task is discarded.
 
+Copies are limited to 1 GiB while streaming. Provider-reported sizes are not trusted because an
+exported intent can receive a URI from an arbitrary content provider.
+
 Call `release(apkFilePath)` when ownership ends. Release is idempotent because both the importing
 ViewModel and app-detail ViewModel may observe the same Activity teardown.
 
