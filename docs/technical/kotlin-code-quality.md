@@ -151,7 +151,7 @@ combined with Detekt-driven refactoring.
 
 **Exit criteria**
 
-- Detekt fails CI for new findings.
+- Detekt fails CI for new error-severity findings.
 - No formatting rule is enforced by both Detekt and Spotless.
 - The repository has no Detekt baseline.
 
@@ -161,7 +161,7 @@ combined with Detekt-driven refactoring.
 
 **Changes**
 
-- Refactor baseline entries in small, behavior-preserving pull requests.
+- Refactor visible complexity findings in small, behavior-preserving pull requests.
 - Start with the largest screen files:
   - `AppDetailScreen.kt`;
   - `CertificatesScreen.kt`;
