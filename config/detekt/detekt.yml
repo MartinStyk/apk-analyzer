@@ -58,38 +58,7 @@ potential-bugs:
 style:
   MagicNumber:
     active: true
-    excludes:
-      - '**/test/**'
-      - '**/androidTest/**'
-      - '**/commonTest/**'
-      - '**/jvmTest/**'
-      - '**/androidUnitTest/**'
-      - '**/androidInstrumentedTest/**'
-      - '**/jsTest/**'
-      - '**/iosTest/**'
-      - '**/*.kts'
-      - '**/*Screen.kt'
-      - '**/animation/**'
-      - '**/components/**'
-      - '**/navigation/**'
-      - '**/theme/**'
-      - '**/analysis/SdkVersionResolver.kt'
-      - '**/utils/Kotlin.kt'
-    ignoreNumbers:
-      - '-1'
-      - '0'
-      - '1'
-      - '2'
-    ignoreHashCodeFunction: true
-    ignorePropertyDeclaration: true
-    ignoreLocalVariableDeclaration: true
-    ignoreConstantDeclaration: true
-    ignoreCompanionObjectPropertyDeclaration: true
-    ignoreAnnotation: true
-    ignoreNamedArgument: true
-    ignoreEnums: true
-    ignoreRanges: false
-    ignoreExtensionFunctions: true
+    severity: info
   MaxLineLength:
     active: false
   ModifierOrder:

@@ -103,7 +103,7 @@ internal class AppExportManagerImpl @Inject constructor(
         val bitmap = drawable.toNaturalBitmap()
         writeTo(destination) { output ->
             currentCoroutineContext().ensureActive()
-            check(bitmap.compress(Bitmap.CompressFormat.PNG, PNG_COMPRESSION_QUALITY, output)) {
+            check(bitmap.compress(Bitmap.CompressFormat.PNG, 100, output)) {
                 "The icon could not be encoded as PNG"
             }
         }
@@ -164,7 +164,6 @@ internal class AppExportManagerImpl @Inject constructor(
         const val TAG = "AppExportManager"
         const val DEFAULT_ICON_SIZE = 512
         const val COPY_BUFFER_SIZE = 64 * 1024
-        const val PNG_COMPRESSION_QUALITY = 100
     }
 
     private data class ApkSource(

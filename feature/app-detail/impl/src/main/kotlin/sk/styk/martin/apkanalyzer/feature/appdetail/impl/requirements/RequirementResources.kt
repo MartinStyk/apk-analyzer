@@ -21,7 +21,6 @@ internal fun requirementIcon(name: String?): ImageVector = when (name) {
 internal val RequirementItem.Hardware.labelRes: Int?
     get() = requirementLabels[name]
 
-@Suppress("MagicNumber")
 internal fun requirementVersionName(name: String, version: Int): String = when (name) {
     VULKAN_VERSION_FEATURE -> "${version ushr 22}.${(version ushr 12) and 0x3FF}"
     else -> version.toString()
