@@ -2,7 +2,6 @@ package sk.styk.martin.apkanalyzer
 
 import android.app.Application
 import android.content.Context
-import android.content.pm.ApplicationInfo
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.ProcessLifecycleOwner
 import coil3.ImageLoader
@@ -24,7 +23,7 @@ class ApkAnalyzer :
 
     override fun onCreate() {
         super.onCreate()
-        Logger.init(logToConsole = applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0)
+        Logger.init(logToConsole = BuildConfig.DEBUG)
         lifecycleObservers.forEach { ProcessLifecycleOwner.get().lifecycle.addObserver(it) }
     }
 
