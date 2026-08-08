@@ -9,20 +9,20 @@ description: Use to check GitHub Actions build status or diagnose why a workflow
 
 ## Workflows in this repo
 
-Both live at `.github/workflows/`.
+They live at `.github/workflows/`.
 
 | File | Name | Trigger | What it runs |
 |---|---|---|---|
-| `.github/workflows/android.yml` | `Continuous integration` | Push to or pull request against `develop` | `build`: `spotlessCheck`, `lintDebug`, `assembleDebug`; `distribute` on pushes: Firebase App Distribution |
-| `.github/workflows/android-publish.yml` | `Release` | Push of a semantic version tag (`X.Y.Z`) | `build`: lint, version, build, sign, artifacts, GitHub release; parallel Play Store beta and Firebase App Distribution jobs |
+| `.github/workflows/ci.yml` | `Continuous integration` | Push to or pull request against `develop` | Parallel `verify` and `build-apk` jobs; `distribute` on pushes after both pass |
+| `.github/workflows/release.yml` | `Release` | Push of a semantic version tag (`X.Y.Z`) | Parallel `verify` and `build-release` jobs; GitHub Release, Play Store beta, and Firebase App Distribution publish after both pass |
 | `.github/workflows/agent-context.yml` | `Agent context` | Context, skill, adapter, root-build, or module-graph changes against `develop` | `validate`: `validateAgentContext` |
 
 ## Step 1 — Find the run
 
 | Given | Command |
 |---|---|
-| "latest build" / "latest CI run" | `gh run list --workflow android.yml --limit 5` |
-| "latest release run" | `gh run list --workflow android-publish.yml --limit 5` |
+| "latest build" / "latest CI run" | `gh run list --workflow ci.yml --limit 5` |
+| "latest release run" | `gh run list --workflow release.yml --limit 5` |
 | "latest context check" | `gh run list --workflow agent-context.yml --limit 5` |
 | A run ID or run URL | `gh run view <run-id>` |
 | A PR number | `gh pr checks <pr-number>` |
@@ -31,9 +31,10 @@ Both live at `.github/workflows/`.
 ## Step 2 — Check job-level status, not just the run-level conclusion
 
 `gh run view <run-id>` prints a ✓/X per job — read this before pulling logs. The Android workflows
-have downstream distribution jobs, and the release workflow also has a Play Store job. Confirm the
-failed job and its dependencies before assuming the cause; a downstream artifact failure may still
-originate in `build`.
+have parallel verification and artifact-build jobs followed by downstream distribution jobs. The
+release workflow also has Play Store and GitHub Release jobs. Confirm the failed job and its
+dependencies before assuming the cause; a downstream artifact failure may still originate in
+`build-apk` or `build-release`.
 
 ## Step 3 — Pull only the failing job's log, then filter for the signal
 
@@ -68,7 +69,7 @@ Gradle task.
 | `BUILD FAILED` with ktlint-style messages or Compose compile errors traceable to formatting | Unformatted/violating Kotlin broke compilation | Use the `spotless-fix` skill |
 | `e: file:///path/to/File.kt:12:5 ...` | Kotlin compiler error, points directly at file:line | Open the file, fix per `AGENTS.md` conventions |
 | `Fetch Firebase google-services.json` fails in either workflow | `FIREBASE_TOKEN`, `FIREBASE_APP_ID`, or `FIREBASE_PROJECT_ID` is missing/wrong, or the token cannot access the configured Firebase project/app | Use `gh secret list` to confirm all three exist. Secret values are masked and Firebase access cannot be repaired from logs; report the exact Firebase CLI error to the user |
-| Signing step fails in `android-publish.yml` (`sign_aab` or `sign_apk`) | One of `SIGN_KEY`, `SIGN_KEY_ALIAS`, `SIGN_KEY_STORE_PASSWORD`, `SIGN_KEY_PASSWORD` repo secrets is missing/wrong, or the keystore is corrupt/mismatched with the alias | `gh secret list` to confirm all four exist; can't verify the keystore itself from CI logs — ask the user to check it locally |
+| Signing step fails in `release.yml` (`sign_aab` or `sign_apk`) | One of `SIGN_KEY`, `SIGN_KEY_ALIAS`, `SIGN_KEY_STORE_PASSWORD`, `SIGN_KEY_PASSWORD` repo secrets is missing/wrong, or the keystore is corrupt/mismatched with the alias | `gh secret list` to confirm all four exist; can't verify the keystore itself from CI logs — ask the user to check it locally |
 | `Deploy to Play Store` step fails with an auth/permission error | `GOOGLE_SERVICE_ACCOUNT` secret is missing, expired, or the service account lacks Play Console API access for `sk.styk.martin.apkanalyzer` | Check `gh secret list`; Play Console access itself can't be fixed from CI — flag to the user |
 | `Distribute APK to Firebase App Distribution` fails after a successful build | `FIREBASE_TOKEN`/`FIREBASE_APP_ID` is wrong, the token lacks access, or the `internal-testers` group is unavailable | Confirm both secrets exist with `gh secret list`, then report the Firebase CLI error; project permissions and tester groups require user access |
 | A future JDK bump to the Gradle toolchain (`jvmToolchain(N)`, `gradle-daemon-jvm.properties`) isn't mirrored in one of the two workflows' `setup-java` step | **Usually not the actual failure cause even if they briefly drift** — `gradle-daemon-jvm.properties` has `toolchainUrl.*` entries for the foojay Disco API, so Gradle auto-downloads a matching JDK regardless of the JDK `setup-java` installed (needs the `org.gradle.toolchains.foojay-resolver-convention` plugin in `settings.gradle.kts`, which is applied). Don't assume a JDK mismatch is the root cause without other evidence | If you do suspect it, search the log for `Downloading` / `Unpacking JDK` lines from the toolchain auto-provisioning, or a `No matching toolchains found` error, before concluding this is the cause |

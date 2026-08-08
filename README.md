@@ -1,7 +1,7 @@
 # ApkAnalyzer
 
-[![Continuous integration](https://github.com/MartinStyk/AndroidApkAnalyzer/actions/workflows/android.yml/badge.svg)](https://github.com/MartinStyk/AndroidApkAnalyzer/actions/workflows/android.yml)
-[![Release](https://github.com/MartinStyk/AndroidApkAnalyzer/actions/workflows/android-publish.yml/badge.svg)](https://github.com/MartinStyk/AndroidApkAnalyzer/actions/workflows/android-publish.yml)
+[![Continuous integration](https://github.com/MartinStyk/AndroidApkAnalyzer/actions/workflows/ci.yml/badge.svg)](https://github.com/MartinStyk/AndroidApkAnalyzer/actions/workflows/ci.yml)
+[![Release](https://github.com/MartinStyk/AndroidApkAnalyzer/actions/workflows/release.yml/badge.svg)](https://github.com/MartinStyk/AndroidApkAnalyzer/actions/workflows/release.yml)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4.10-blue.svg?logo=kotlin)](gradle/libs.versions.toml)
 

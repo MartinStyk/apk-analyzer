@@ -5,17 +5,15 @@ on:
     tags:
       - '+([0-9]).+([0-9]).+([0-9])'
 
+permissions:
+  contents: read
+
 jobs:
-  build:
+  verify:
     runs-on: ubuntu-latest
-    outputs:
-      apk_name: apk-analyzer-${{ github.ref_name }}.apk
-      aab_name: apk-analyzer-${{ github.ref_name }}.aab
 
     steps:
       - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
 
       - name: Set up JDK 25
         uses: actions/setup-java@v5
@@ -36,12 +34,45 @@ jobs:
           FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
         run: |
           rm -f app/google-services.json
-          npx firebase-tools@latest apps:sdkconfig ANDROID "$FIREBASE_APP_ID" \
+          npx --yes firebase-tools@15.26.0 apps:sdkconfig ANDROID "$FIREBASE_APP_ID" \
             --project "$FIREBASE_PROJECT_ID" \
             -o app/google-services.json
 
-      - name: Lint check
-        run: ./gradlew lintRelease
+      - name: Verify release
+        run: |
+          ./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintRelease --continue
+
+  build-release:
+    runs-on: ubuntu-latest
+    outputs:
+      apk_name: apk-analyzer-${{ github.ref_name }}.apk
+      aab_name: apk-analyzer-${{ github.ref_name }}.aab
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Fetch Firebase google-services.json
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+        run: |
+          rm -f app/google-services.json
+          npx --yes firebase-tools@15.26.0 apps:sdkconfig ANDROID "$FIREBASE_APP_ID" \
+            --project "$FIREBASE_PROJECT_ID" \
+            -o app/google-services.json
 
       - name: Compute versionCode from tag
         id: version
@@ -53,7 +84,7 @@ jobs:
         run: |
           ./gradlew bundleRelease assembleRelease \
             -Pversion.code=${{ steps.version.outputs.code }} \
-            -Pversion.name=$GITHUB_REF_NAME
+            -Pversion.name="$GITHUB_REF_NAME"
 
       - name: Sign AAB
         uses: r0adkll/sign-android-release@v1
@@ -85,18 +116,40 @@ jobs:
         with:
           name: apk-analyzer-aab
           path: app/build/outputs/bundle/release/apk-analyzer-${{ github.ref_name }}.aab
+          compression-level: 0
+          if-no-files-found: error
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: apk-analyzer-apk
           path: app/build/outputs/apk/release/apk-analyzer-${{ github.ref_name }}.apk
+          compression-level: 0
+          if-no-files-found: error
 
       - name: Upload mapping file artifact
         uses: actions/upload-artifact@v4
         with:
           name: apk-analyzer-mapping
           path: app/build/outputs/mapping/release/mapping.txt
+          if-no-files-found: error
+
+  publish-github-release:
+    needs: [ verify, build-release ]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Download APK artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: apk-analyzer-apk
+          path: artifacts
 
       - name: Read tag annotation as release notes
         id: notes
@@ -113,11 +166,12 @@ jobs:
           name: ${{ github.ref_name }}
           tag_name: ${{ github.ref_name }}
           body: ${{ steps.notes.outputs.body }}
-          files: app/build/outputs/apk/release/apk-analyzer-${{ github.ref_name }}.apk
+          files: artifacts/${{ needs['build-release'].outputs.apk_name }}
 
   publish-play-store:
-    needs: build
+    needs: [ verify, build-release ]
     runs-on: ubuntu-latest
+
     steps:
       - name: Download AAB artifact
         uses: actions/download-artifact@v4
@@ -136,14 +190,15 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
           packageName: sk.styk.martin.apkanalyzer
-          releaseFiles: artifacts/${{ needs.build.outputs.aab_name }}
+          releaseFiles: artifacts/${{ needs['build-release'].outputs.aab_name }}
           mappingFile: artifacts/mapping.txt
           track: beta
           status: completed
 
   distribute-app-distribution:
-    needs: build
+    needs: [ verify, build-release ]
     runs-on: ubuntu-latest
+
     steps:
       - name: Download APK artifact
         uses: actions/download-artifact@v4
@@ -156,7 +211,7 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
         run: |
-          npx firebase-tools@latest appdistribution:distribute "artifacts/${{ needs.build.outputs.apk_name }}" \
+          npx --yes firebase-tools@15.26.0 appdistribution:distribute "artifacts/${{ needs['build-release'].outputs.apk_name }}" \
             --app "$FIREBASE_APP_ID" \
             --groups "internal-testers" \
             --release-notes "${{ github.ref_name }}"
