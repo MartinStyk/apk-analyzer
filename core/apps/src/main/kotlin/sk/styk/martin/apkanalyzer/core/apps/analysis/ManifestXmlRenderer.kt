@@ -2,10 +2,15 @@ package sk.styk.martin.apkanalyzer.core.apps.analysis
 
 import android.content.res.Resources
 import android.content.res.XmlResourceParser
+import javax.inject.Inject
 
-internal class ManifestXmlRenderer {
+internal interface ManifestXmlRenderer {
+    fun render(resources: Resources): String
+}
 
-    fun render(resources: Resources): String {
+internal class ManifestXmlRendererImpl @Inject constructor() : ManifestXmlRenderer {
+
+    override fun render(resources: Resources): String {
         val output = StringBuilder()
         resources.assets.openXmlResourceParser(MANIFEST_FILE_NAME).use { parser ->
             var eventType = parser.eventType

@@ -12,10 +12,12 @@ import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import javax.inject.Inject
 
-internal class ManifestParserImpl @Inject constructor(private val packageManager: PackageManager, private val dispatcherProvider: DispatcherProvider) : ManifestParser {
-
-    private val manifestXmlRenderer = ManifestXmlRenderer()
-    private val componentManifestParser = ComponentManifestParser()
+internal class ManifestParserImpl @Inject constructor(
+    private val packageManager: PackageManager,
+    private val dispatcherProvider: DispatcherProvider,
+    private val manifestXmlRenderer: ManifestXmlRenderer,
+    private val componentManifestParser: ComponentManifestParser,
+) : ManifestParser {
 
     override suspend fun manifest(reference: AppReference): Result<ParsedManifest> = when (reference) {
         is AppReference.InstalledPackage -> installedPackageManifest(reference.packageName)

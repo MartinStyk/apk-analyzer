@@ -11,10 +11,21 @@ import sk.styk.martin.apkanalyzer.core.apps.model.IntentFilterUriRelativeGroup
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import java.io.FileNotFoundException
+import javax.inject.Inject
 
-internal class ComponentManifestParser {
-
+internal interface ComponentManifestParser {
     fun parseInstalled(
+        resources: Resources,
+        packageName: PackageName,
+        expectedManifestCount: Int,
+    ): List<Pair<ComponentIntentFilterKey, ComponentIntentFilter>>
+
+    fun parse(resources: Resources): List<Pair<ComponentIntentFilterKey, ComponentIntentFilter>>
+}
+
+internal class ComponentManifestParserImpl @Inject constructor() : ComponentManifestParser {
+
+    override fun parseInstalled(
         resources: Resources,
         packageName: PackageName,
         expectedManifestCount: Int,
@@ -35,7 +46,7 @@ internal class ComponentManifestParser {
         return manifests.values.flatMap { it.filters }
     }
 
-    fun parse(resources: Resources): List<Pair<ComponentIntentFilterKey, ComponentIntentFilter>> = resources.assets.openXmlResourceParser(MANIFEST_FILE_NAME).use { parser ->
+    override fun parse(resources: Resources): List<Pair<ComponentIntentFilterKey, ComponentIntentFilter>> = resources.assets.openXmlResourceParser(MANIFEST_FILE_NAME).use { parser ->
         parse(parser, resources).filters
     }
 
