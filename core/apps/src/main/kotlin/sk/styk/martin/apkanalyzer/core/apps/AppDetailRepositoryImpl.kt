@@ -16,6 +16,7 @@ import sk.styk.martin.apkanalyzer.core.apps.analysis.InstallSourceResolver
 import sk.styk.martin.apkanalyzer.core.apps.analysis.ManifestParser
 import sk.styk.martin.apkanalyzer.core.apps.analysis.SdkVersionResolver
 import sk.styk.martin.apkanalyzer.core.apps.analysis.computeApkSize
+import sk.styk.martin.apkanalyzer.core.apps.analysis.resolvePathPermissions
 import sk.styk.martin.apkanalyzer.core.apps.analysis.resolveProtectionFlags
 import sk.styk.martin.apkanalyzer.core.apps.analysis.resolveProtectionLevel
 import sk.styk.martin.apkanalyzer.core.apps.model.Activity
@@ -230,6 +231,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             readPermission = it.readPermission,
             writePermission = it.writePermission,
             isExported = it.exported,
+            pathPermissions = resolvePathPermissions(it.pathPermissions),
             intentFilters = intentFiltersByComponent[ComponentIntentFilterKey(it.name, ComponentKind.Provider)].orEmpty(),
         )
     }

@@ -101,7 +101,7 @@ What Changed tab in R1.
 | FR-14 | Certificate detail view             | Done    | Full signer, validity, signing status, serial, certificate fingerprints, and expandable public-key fingerprints |
 | FR-15 | Features (uses-feature) view        | Done    | `feature:app-detail` → `requirements`; required/optional split, per-device check, dedicated GL ES handling. `Libraries` scope still needs `FR-44` |
 | FR-16 | Manifest viewer                     | Done    | Readable namespaced XML with line-based search for installed packages and APK files |
-| FR-17 | Exported components view            | Partial | Exported/Unprotected filter chips ship in the Components screen (`FR-13`), and the item sheet shows every declared intent filter (`EX-07`, done). Still a technical filter, not a risk verdict — needs content-provider path permissions (`EX-08`) before exposure can be interpreted |
+| FR-17 | Exported components view            | Partial | Exported/Unprotected filter chips ship in the Components screen (`FR-13`), backed by both intent filters (`EX-07`) and content-provider path permissions (`EX-08`), both done. Still a technical filter, not a risk verdict — needs a deliberate hub rule (see `RI-03`) before exposure becomes a "Worth knowing" finding |
 | FR-18 | Custom permission audit             | Partial | Permissions screen's `Defined` scope lists the app's declared permissions with full detail sheets; no audit judgment (e.g. protection-level risk) applied yet |
 
 ### 1.3 APK File Analysis
@@ -159,7 +159,7 @@ doing in R0 rather than later.
 | FR-38 | Full install-source chain         | Todo   | Only `installingPackageName` is read; initiating + originating package are what actually distinguish a sideload from a store install |
 | FR-39 | App category                      | Todo   | One field; unlocks the `FR-43` browse dimension                                                      |
 | EX-07 | Component intent filters          | Done   | What an exported component actually responds to. Backs `ComponentIntentFilterKey` / `IntentFiltersScreen` in the Components screen (`FR-13`) and is available for `RI-03`. `EX-08` is the remaining half `FR-17` needs before exposure becomes a hub finding |
-| EX-08 | Content-provider path permissions | Todo   | `<path-permission>` read/write grants per path, not currently extracted. The last piece `FR-17` needs — a provider exported without a top-level permission can still be guarded per-path, and `EX-07`'s intent filters don't cover providers |
+| EX-08 | Content-provider path permissions | Done   | `<path-permission>` read/write grants per path, read straight off `ProviderInfo.pathPermissions` (already fetched via `GET_PROVIDERS`, no manifest parsing needed). Feeds the Components screen's `Unprotected` filter and item sheet; hub interpretation still needs a rule, tracked under `RI-03` |
 | FR-44 | Declared `<uses-library>` entries  | Todo   | Name and `android:required`, from the manifest for APK files and `sharedLibraryFiles` for installed apps. The platform-library half of device requirements — `org.apache.http.legacy` on a modern app is a signal the hardware list cannot give |
 
 **R0 scope:** CE-01, CE-05, FR-08 … FR-21, FR-24 … FR-44, EX-07, EX-08. Excludes the retired FR-22/FR-23 and the backlogged CE-06.

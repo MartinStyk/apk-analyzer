@@ -47,7 +47,8 @@ model/
                             never "not a launcher"
   Service.kt              - Service component info
   BroadcastReceiver.kt    - Receiver component info
-  ContentProvider.kt      - Provider component info
+  ContentProvider.kt      - Provider component info, incl. `ProviderPathPermission` (`<path-permission>`
+                            entries) and the `ProviderPathMatchType` enum for `PatternMatcher`'s int type
   Certificate.kt          - Certificate details
   CertificatePrincipal.kt - Issuer/subject info
   CertificateTrustLevel.kt - Trust classification enum
@@ -131,14 +132,31 @@ repositories and combine them while mapping to state.
 ## External Entry Semantics
 
 - These rules support the Components screen's technical filter. They are not a risk verdict and do
-  not feed the hub until path permissions provide the remaining context.
+  not feed the hub — that needs a deliberate rule set, not just accurate raw data.
 - Exported alone is not a finding. Launcher activities are expected to be exported and are excluded.
 - An activity is unguarded only when launcher status is known to be false and no permission is required.
 - Services and receivers are unguarded when exported without a required permission.
-- An exported provider is unguarded when either its read or write path lacks a permission.
+- An exported provider is unguarded when either its top-level read or write permission is missing, or
+  any `<path-permission>` entry opens a path without one — see Content Provider Path Permissions.
 - APK activities have unknown launcher status. The technical `Unprotected` filter includes exported
   activities without permission guards and may therefore include the launcher activity; the hub
   does not interpret this as a finding.
+
+## Content Provider Path Permissions
+
+- `ProviderInfo.pathPermissions` is populated by `PackageManager` whenever `GET_PROVIDERS` is
+  queried — unlike intent filters, no manifest parsing is needed, and the flag was already in use.
+  `AnalysisUtils.resolvePathPermissions()` maps it to `ProviderPathPermission`, and `PathPermission`'s
+  `type` int becomes the typed `ProviderPathMatchType` enum.
+- A `<path-permission>` can carve out access that the provider's top-level `readPermission` /
+  `writePermission` does not grant: an entry with neither permission set opens that specific path
+  regardless of what the provider otherwise requires. `ContentProvider.hasUnguardedPathPermission`
+  captures exactly that unambiguous case — it does not attempt to resolve full path-matching
+  precedence when multiple `<path-permission>` entries could overlap.
+- `isExternallyReachableWithoutPermission` folds this in: a provider is reachable without permission
+  if the top level is open **or** any path permission is. It deliberately does not flip the other
+  way — a blank top-level permission still leaves any path not covered by a `<path-permission>` open,
+  so path permissions can only add exposure to the verdict, never resolve it into "guarded."
 
 ## Dependencies
 - `api(projects.core.common)` - exposes common models and DispatcherProvider

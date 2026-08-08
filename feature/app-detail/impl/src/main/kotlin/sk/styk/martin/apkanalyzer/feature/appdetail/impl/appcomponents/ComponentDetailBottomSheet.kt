@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.apps.model.IntentFilterDataRuleType
+import sk.styk.martin.apkanalyzer.core.apps.model.ProviderPathMatchType
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.BottomSheet
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
@@ -104,6 +105,37 @@ internal fun ComponentDetailBottomSheet(
                         details.writePermission?.let {
                             DetailField(label = stringResource(R.string.components_detail_write_permission), value = it, onCopy = onCopy)
                         }
+                    }
+                }
+            }
+
+            val providerDetails = item.details as? ComponentDetails.ProviderDetails
+            if (providerDetails != null && providerDetails.pathPermissions.isNotEmpty()) {
+                SheetSection(title = stringResource(R.string.components_detail_section_path_permissions)) {
+                    Text(
+                        text = stringResource(R.string.components_detail_path_permissions_explanation),
+                        style = AppTheme.typography.bodySmall,
+                        color = AppTheme.colors.onSurfaceVariant,
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    providerDetails.pathPermissions.forEachIndexed { index, pathPermission ->
+                        if (index > 0) Spacer(modifier = Modifier.height(12.dp))
+                        DetailField(
+                            label = stringResource(R.string.components_detail_path_permission_path),
+                            value = pathPermission.path,
+                            explanation = stringResource(pathPermission.matchType.explanationRes),
+                            onCopy = onCopy,
+                        )
+                        DetailField(
+                            label = stringResource(R.string.components_detail_read_permission),
+                            value = pathPermission.readPermission ?: stringResource(R.string.components_detail_path_permission_open),
+                            onCopy = onCopy,
+                        )
+                        DetailField(
+                            label = stringResource(R.string.components_detail_write_permission),
+                            value = pathPermission.writePermission ?: stringResource(R.string.components_detail_path_permission_open),
+                            onCopy = onCopy,
+                        )
                     }
                 }
             }
@@ -317,6 +349,43 @@ private fun ComponentDetailBottomSheetProviderPreview() {
                     authority = "com.spotify.music.androidx-startup",
                     readPermission = null,
                     writePermission = null,
+                    pathPermissions = persistentListOf(),
+                ),
+            ),
+            onCopy = { _, _ -> },
+            onOpenIntentFilters = {},
+            onDismiss = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ComponentDetailBottomSheetProviderPathPermissionPreview() {
+    ApkAnalyzerTheme {
+        ComponentDetailBottomSheet(
+            item = ComponentItem(
+                name = "com.spotify.music.sharing.SharingProvider",
+                simpleName = "SharingProvider",
+                packagePath = "com.spotify.music.sharing",
+                type = ComponentType.Provider,
+                isExported = true,
+                isGuarded = false,
+                isUnprotected = true,
+                isLaunchable = false,
+                flags = persistentListOf(),
+                details = ComponentDetails.ProviderDetails(
+                    authority = "com.spotify.music.sharing",
+                    readPermission = "com.spotify.music.permission.ACCESS_SHARING",
+                    writePermission = "com.spotify.music.permission.ACCESS_SHARING",
+                    pathPermissions = persistentListOf(
+                        ProviderPathPermissionItem(
+                            path = "/public",
+                            matchType = ProviderPathMatchType.Prefix,
+                            readPermission = null,
+                            writePermission = null,
+                        ),
+                    ),
                 ),
             ),
             onCopy = { _, _ -> },
