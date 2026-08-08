@@ -284,9 +284,7 @@ private fun WorthKnowingSection(
     onAction: (AppDetailAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier.fillMaxWidth(),
-    ) {
+    SectionCard(modifier = modifier) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -302,16 +300,11 @@ private fun WorthKnowingSection(
             SectionHeader(title = stringResource(R.string.app_detail_worth_knowing))
         }
         Spacer(modifier = Modifier.height(8.dp))
-        Column(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(6.dp),
-        ) {
-            state.insights.forEach { insight ->
-                WorthKnowingRow(
-                    insight = insight,
-                    onClick = { onAction(AppDetailAction.NavigateInsight(insight)) },
-                )
-            }
+        state.insights.forEach { insight ->
+            WorthKnowingRow(
+                insight = insight,
+                onClick = { onAction(AppDetailAction.NavigateInsight(insight)) },
+            )
         }
     }
 }
@@ -325,10 +318,10 @@ private fun WorthKnowingRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .padding(horizontal = 8.dp)
             .clip(Shapes.CardShape)
-            .background(AppTheme.colors.surface)
             .clickable(onClick = onClick)
-            .padding(horizontal = 14.dp, vertical = 14.dp),
+            .padding(horizontal = 8.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
@@ -417,7 +410,7 @@ private fun NavigableRow(
             .padding(horizontal = 8.dp)
             .clip(Shapes.CardShape)
             .clickable(onClick = onClick)
-            .padding(horizontal = 8.dp, vertical = 10.dp),
+            .padding(horizontal = 8.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
