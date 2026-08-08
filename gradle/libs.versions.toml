@@ -34,7 +34,7 @@ google-services = "4.5.0"
 timber = "5.0.1"
 leakcanary = "2.14"
 coil = "3.5.0"
-spotless = "8.8.0"
+spotless = "8.9.0"
 compose-rules-ktlint = "0.6.3"
 
 [libraries]

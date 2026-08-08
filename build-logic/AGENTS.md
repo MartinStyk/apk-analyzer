@@ -20,7 +20,7 @@ Gradle convention plugins that standardize build configuration across all module
 
 ## Utility Files (`utils/`)
 
-- `AndroidSdk.kt` - `CompileSdk = 37`, `TargetSdk = 37`, `MinSdk = 28`
+- `AndroidSdk.kt` - `COMPILE_SDK = 37`, `TARGET_SDK = 37`, `MIN_SDK = 28`
 - `DependenciesExtension.kt` - `implementation()`, `api()` helper extensions
 - `Kotlin.kt` - `configureKotlin()` (JVM toolchain 25)
 - `ProjectExtensions.kt` - `Project.libs` accessor for version catalog
@@ -30,6 +30,9 @@ Gradle convention plugins that standardize build configuration across all module
 - Multiline function signatures at 3+ parameters
 - Compose naming rules (ignores `@Composable` for function naming)
 - `compositionlocal-allowlist` and `lambda-param-in-effect` rules disabled
+- Module applications format their Kotlin and Kotlin Gradle sources.
+- The root application formats root Gradle scripts, `build-logic`, YAML workflows, and `.gitignore` files.
+- Project-relative targets keep root and module formatting scopes from overlapping.
 
 ## When Adding a New Plugin
 1. Create implementation class in `src/main/kotlin/sk/styk/martin/apkanalyzer/`

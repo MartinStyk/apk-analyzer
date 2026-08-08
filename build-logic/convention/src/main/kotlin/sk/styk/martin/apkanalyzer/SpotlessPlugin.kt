@@ -17,9 +17,10 @@ class SpotlessPlugin : Plugin<Project> {
 
         extensions.configure<SpotlessExtension> {
             kotlin {
-                target("**/*.kt")
-                targetExclude("${layout.buildDirectory}/**/*.kt")
-                targetExclude("bin/**/*.kt")
+                target(
+                    "src/**/*.kt",
+                    "build-logic/convention/src/**/*.kt",
+                )
                 ktlint()
                     .customRuleSets(listOf(composeRulesKtlint))
                     .editorConfigOverride(
@@ -29,14 +30,27 @@ class SpotlessPlugin : Plugin<Project> {
                             "ktlint_compose_compositionlocal-allowlist" to "disabled",
                             "ktlint_compose_lambda-param-in-effect" to "disabled",
                             "ktlint_function_naming_ignore_when_annotated_with" to "Composable",
-                        )
+                        ),
                     )
             }
             kotlinGradle {
-                target("**/*.kt")
-                target("**/*.kts")
-                targetExclude("${layout.buildDirectory}/**/*.kts")
+                target(
+                    "*.gradle.kts",
+                    "settings.gradle.kts",
+                    "build-logic/*.gradle.kts",
+                    "build-logic/**/*.gradle.kts",
+                )
                 ktlint()
+            }
+            format("misc") {
+                target(
+                    ".github/**/*.yml",
+                    ".github/**/*.yaml",
+                    ".gitignore",
+                    ".idea/.gitignore",
+                )
+                trimTrailingWhitespace()
+                endWithNewline()
             }
         }
     }

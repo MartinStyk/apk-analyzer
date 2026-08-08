@@ -17,6 +17,5 @@ class FeatureImplPlugin : Plugin<Project> {
             implementation(project(":core:ui-library"))
             implementation(project(":core:navigation"))
         }
-
     }
 }

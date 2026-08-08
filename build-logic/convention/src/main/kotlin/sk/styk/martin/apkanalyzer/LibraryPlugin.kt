@@ -4,8 +4,8 @@ import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
-import sk.styk.martin.apkanalyzer.utils.CompileSdk
-import sk.styk.martin.apkanalyzer.utils.MinSdk
+import sk.styk.martin.apkanalyzer.utils.COMPILE_SDK
+import sk.styk.martin.apkanalyzer.utils.MIN_SDK
 import sk.styk.martin.apkanalyzer.utils.configureKotlin
 
 class LibraryPlugin : Plugin<Project> {
@@ -16,9 +16,9 @@ class LibraryPlugin : Plugin<Project> {
         }
 
         extensions.configure<LibraryExtension> {
-            compileSdk = CompileSdk
+            compileSdk = COMPILE_SDK
             defaultConfig {
-                minSdk = MinSdk
+                minSdk = MIN_SDK
             }
         }
 
