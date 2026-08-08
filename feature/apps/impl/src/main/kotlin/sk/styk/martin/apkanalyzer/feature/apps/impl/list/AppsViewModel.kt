@@ -93,7 +93,6 @@ class AppsViewModel @Inject constructor(
         .flowOn(dispatcherProvider.default())
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AppsState())
 
-    @Suppress("CyclomaticComplexMethod")
     fun onAction(action: AppsAction) {
         when (action) {
             is AppsAction.SortTypeSelected -> {

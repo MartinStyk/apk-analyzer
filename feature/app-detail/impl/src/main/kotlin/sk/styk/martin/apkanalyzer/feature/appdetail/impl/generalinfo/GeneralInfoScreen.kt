@@ -96,7 +96,6 @@ private fun GeneralInfoContent(
     }
 }
 
-@Suppress("CyclomaticComplexMethod")
 @Composable
 private fun LoadedContent(
     state: GeneralInfoState.Loaded,

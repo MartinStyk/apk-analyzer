@@ -55,7 +55,6 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
         context.dataStore.edit { prefs -> key.write(prefs, value) }
     }
 
-    @Suppress("CyclomaticComplexMethod")
     private fun <T : Any> Key<T>.read(prefs: Preferences): T = when (this) {
         Key.ColorScheme -> {
             when (prefs[KEY_COLOR_SCHEME]) {

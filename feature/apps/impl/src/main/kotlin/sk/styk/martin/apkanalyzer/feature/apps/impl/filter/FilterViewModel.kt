@@ -112,7 +112,6 @@ class FilterViewModel @Inject constructor(
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), FilterState())
 
-    @Suppress("CyclomaticComplexMethod")
     fun onAction(action: FilterAction) {
         when (action) {
             is FilterAction.SourceToggled -> localFilter.update { current ->

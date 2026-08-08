@@ -14,7 +14,6 @@ class FilterAppsUseCase @Inject constructor() {
         return apps.filter { app -> predicates.all { it(app) } }
     }
 
-    @Suppress("CyclomaticComplexMethod")
     private fun AppFilterState.toPredicates(): List<(InstalledApp) -> Boolean> = buildList {
         if (selectedSources.isNotEmpty()) {
             add { it.source in selectedSources }
