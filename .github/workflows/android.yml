@@ -19,6 +19,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
 
     steps:
       - uses: actions/checkout@v7
@@ -50,7 +53,24 @@ jobs:
         run: ./gradlew spotlessCheck
 
       - name: Detekt check
-        run: ./gradlew detektDebug :build-logic:convention:detektMain
+        run: ./gradlew detektDebug :build-logic:convention:detektMain --continue
+
+      - name: Collect Detekt SARIF reports
+        if: always()
+        run: |
+          mkdir -p build/reports/detekt-sarif
+          find . -type f -path '*/build/reports/detekt/*.sarif' -print0 |
+            while IFS= read -r -d '' report; do
+              destination="build/reports/detekt-sarif/${report#./}"
+              mkdir -p "$(dirname "$destination")"
+              cp "$report" "$destination"
+            done
+
+      - name: Upload Detekt SARIF reports
+        if: ${{ always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: build/reports/detekt-sarif
 
       - name: Lint check
         run: ./gradlew lintDebug
