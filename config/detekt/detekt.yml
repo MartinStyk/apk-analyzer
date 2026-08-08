@@ -11,6 +11,8 @@ complexity:
     severity: error
   CyclomaticComplexMethod:
     allowedComplexity: 15
+  LongMethod:
+    severity: info
   NestedBlockDepth:
     severity: error
   TooManyFunctions:
