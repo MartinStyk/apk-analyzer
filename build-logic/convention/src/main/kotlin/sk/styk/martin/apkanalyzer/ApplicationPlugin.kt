@@ -28,6 +28,15 @@ class ApplicationPlugin : Plugin<Project> {
                 minSdk = MinSdk
             }
 
+            signingConfigs {
+                getByName("debug") {
+                    storeFile = target.file("debug.keystore")
+                    storePassword = "android"
+                    keyAlias = "androiddebugkey"
+                    keyPassword = "android"
+                }
+            }
+
             buildTypes {
                 getByName("release") {
                     isMinifyEnabled = true
