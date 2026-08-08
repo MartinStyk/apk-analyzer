@@ -73,20 +73,20 @@ flag (`GET_CONFIGURATIONS`) with no other `core:apps` consumer yet, unlike certi
 
 | ID    | Item                                | Status  | Notes                                                                                     |
 |-------|-------------------------------------|---------|--------------------------------------------------------------------------------------------|
-| CE-01 | Attribute index infrastructure      | Partial | `core:app-index` ships target SDK, min SDK, install source, permission, certificate. Data layer only — no UI yet, see `CE-05` |
-| CE-05 | Browse screen                       | Todo    | Dimension picker → bucket list with counts → app list. One screen serves every dimension  |
-| FR-08 | ↳ dimension: permission             | Partial | Indexed in `core:app-index` (free — already on `InstalledApp`); multi-permission filter also works in `feature:apps`; no browse UI yet |
-| FR-09 | ↳ dimension: signing certificate    | Partial | Indexed in `core:app-index` by fingerprint, organization, and country via the new `AppSigningRepository` (`core:apps`) — no browse UI yet |
-| FR-40 | ↳ dimension: target SDK / min SDK   | Partial | Indexed in `core:app-index`. This is what the SDK chart was, made tappable — no browse UI yet |
-| FR-41 | ↳ dimension: install source         | Partial | Indexed in `core:app-index` — no browse UI yet                                            |
+| CE-01 | Attribute index infrastructure      | Done    | `core:app-index` ships target SDK, min SDK, install source, permission, certificate, consumed end to end by `CE-05` |
+| CE-05 | Browse screen                       | Done    | `feature:browse` — dimension cards (hub) → bucket list with counts (options) → app list (apps) → `feature:app-detail`. One screen shape serves every dimension |
+| FR-08 | ↳ dimension: permission             | Done    | Bucket label from `PermissionLabelProvider` (`core:app-permissions`); raw permission name shown as the identifier |
+| FR-09 | ↳ dimension: signing certificate    | Done    | Bucketed by signer organization (`certificateOrganization`); fingerprint and country stay indexed in `core:app-index` but are not separate browse dimensions in this pass |
+| FR-40 | ↳ dimension: target SDK / min SDK   | Done    | Bucket label from `SdkVersionResolver` (`core:apps`), e.g. "Android 14"; raw API level shown as the identifier |
+| FR-41 | ↳ dimension: install source         | Done    | Google Play / System / Unknown, three buckets                                             |
 | FR-42 | ↳ dimension: shared UID             | Todo    | Needs `FR-35`                                                                             |
 | FR-43 | ↳ dimension: app category           | Todo    | Needs `FR-39`                                                                             |
-| CE-06 | "Also signed with this certificate" | Backlog | The other installed apps sharing this signer, listed on the app detail certificate screen. Data is already extracted; it needs the `CE-01` index. **Revisit when CE-01 / FR-09 certificate grouping is built** — see [features/app-detail.md](features/app-detail.md#deferred) |
+| CE-06 | "Also signed with this certificate" | Backlog | The other installed apps sharing this signer, listed on the app detail certificate screen. Data is already extracted; it needs a fingerprint-keyed lookup instead of `CE-05`'s organization-keyed bucket. **Revisit when that lookup is built** — see [features/app-detail.md](features/app-detail.md#deferred) |
 
 **Module consolidation: done.** `feature:permissions` and `feature:statistics` — both placeholder
-screens each holding a top-level nav slot — are deleted and collapsed into one `feature:browse`
-(currently also a placeholder, pending `CE-05`). That frees a bottom-nav slot — the natural home for
-Pillar 1's What Changed tab in R1.
+screens each holding a top-level nav slot — are deleted and collapsed into one `feature:browse`,
+now fully implemented per `CE-05`. That frees a bottom-nav slot — the natural home for Pillar 1's
+What Changed tab in R1.
 
 ### 1.2 App Detail
 

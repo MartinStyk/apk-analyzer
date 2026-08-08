@@ -55,7 +55,7 @@ internal fun ApkAnalyzerApp() {
                 val entryProvider = entryProvider {
                     appEntries(navigator)
                     appDetailEntries(navigator)
-                    browseEntries()
+                    browseEntries(navigator)
                     settingsEntries(navigator)
                 }
                 NavDisplay(
@@ -70,11 +70,10 @@ internal fun ApkAnalyzerApp() {
 ```
 
 `AppsNavKey` is the start destination. Each `*Entries()` call comes from the corresponding
-`feature/*/impl/navigation/*EntryProvider.kt` and only takes a `navigator` param when that
-feature navigates *out* to another feature (apps, app-detail, settings do; browse
-currently doesn't since it's a stub screen — see its own `AGENTS.md`). **Adding a new
-feature/screen means adding its `*Entries()` call here** — see the `create-feature-module` and
-`implement-navigation` skills.
+`feature/*/impl/navigation/*EntryProvider.kt` and takes a `navigator` param whenever that feature
+navigates *out* to another feature — all four registered here do (browse navigates into
+`feature:app-detail` from its apps screen). **Adding a new feature/screen means adding its
+`*Entries()` call here** — see the `create-feature-module` and `implement-navigation` skills.
 
 ## Manifest Highlights (`app/src/main/AndroidManifest.xml`)
 
