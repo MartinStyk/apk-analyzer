@@ -12,6 +12,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailNavKey
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.AppDetailScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.appcomponents.ComponentScope
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.appcomponents.ComponentsScreen
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.appcomponents.IntentFiltersScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.certificates.CertificatesScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.generalinfo.GeneralInfoScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.manifest.ManifestScreen
@@ -69,6 +70,20 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
             appDetailInput = key.detailInput,
             initialScope = key.scope,
             initialFilters = key.filters,
+            onBack = { navigator.goBack() },
+            onNavigateToIntentFilters = { componentName, componentType ->
+                navigator.navigate(IntentFiltersNavKey(key.detailInput, componentName, componentType))
+            },
+        )
+    }
+
+    entry<IntentFiltersNavKey>(
+        metadata = slideFromEndEntryMetadata(),
+    ) { key ->
+        IntentFiltersScreen(
+            appDetailInput = key.detailInput,
+            componentName = key.componentName,
+            componentType = key.componentType,
             onBack = { navigator.goBack() },
         )
     }

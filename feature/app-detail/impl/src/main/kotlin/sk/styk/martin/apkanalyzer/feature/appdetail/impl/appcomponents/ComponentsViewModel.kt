@@ -133,10 +133,18 @@ private data class Narrowing(
 
 private fun AppDetail.toSource(canLaunch: Boolean) = ComponentsSource.Ready(
     componentsByType = mapOf(
-        ComponentType.Activity to activities.map { it.toItem(canLaunch) }.sortedForDisplay(),
-        ComponentType.Service to services.map { it.toItem() }.sortedForDisplay(),
-        ComponentType.Receiver to receivers.map { it.toItem(canLaunch) }.sortedForDisplay(),
-        ComponentType.Provider to contentProviders.map { it.toItem() }.sortedForDisplay(),
+        ComponentType.Activity to activities.map {
+            it.toItem(canLaunch, areComponentIntentFiltersAvailable)
+        }.sortedForDisplay(),
+        ComponentType.Service to services.map {
+            it.toItem(areComponentIntentFiltersAvailable)
+        }.sortedForDisplay(),
+        ComponentType.Receiver to receivers.map {
+            it.toItem(canLaunch, areComponentIntentFiltersAvailable)
+        }.sortedForDisplay(),
+        ComponentType.Provider to contentProviders.map {
+            it.toItem(areComponentIntentFiltersAvailable)
+        }.sortedForDisplay(),
     ),
 )
 
@@ -146,7 +154,7 @@ private fun List<ComponentItem>.sortedForDisplay() = sortedWith(
         .thenBy { it.simpleName.lowercase() },
 )
 
-private fun Activity.toItem(canLaunch: Boolean) = ComponentItem(
+private fun Activity.toItem(canLaunch: Boolean, areIntentFiltersAvailable: Boolean) = ComponentItem(
     name = name,
     simpleName = name.substringAfterLast('.'),
     packagePath = name.substringBeforeLast('.', ""),
@@ -156,6 +164,8 @@ private fun Activity.toItem(canLaunch: Boolean) = ComponentItem(
     isUnprotected = isExternallyReachableWithoutPermission,
     isLaunchable = canLaunch && isExported && permission.isNullOrBlank(),
     flags = emptyImmutableFlags,
+    intentFilters = intentFilters.toItems(),
+    areIntentFiltersAvailable = areIntentFiltersAvailable,
     details = ComponentDetails.ActivityDetails(
         label = label,
         targetActivity = targetActivity,
@@ -165,7 +175,7 @@ private fun Activity.toItem(canLaunch: Boolean) = ComponentItem(
     ),
 )
 
-private fun Service.toItem() = ComponentItem(
+private fun Service.toItem(areIntentFiltersAvailable: Boolean) = ComponentItem(
     name = name,
     simpleName = name.substringAfterLast('.'),
     packagePath = name.substringBeforeLast('.', ""),
@@ -180,10 +190,12 @@ private fun Service.toItem() = ComponentItem(
         if (isIsolatedProcess) add(ComponentFlag.IsolatedProcess)
         if (isExternalService) add(ComponentFlag.ExternalService)
     }.toImmutableList(),
+    intentFilters = intentFilters.toItems(),
+    areIntentFiltersAvailable = areIntentFiltersAvailable,
     details = ComponentDetails.ServiceDetails(permission = permission),
 )
 
-private fun BroadcastReceiver.toItem(canLaunch: Boolean) = ComponentItem(
+private fun BroadcastReceiver.toItem(canLaunch: Boolean, areIntentFiltersAvailable: Boolean) = ComponentItem(
     name = name,
     simpleName = name.substringAfterLast('.'),
     packagePath = name.substringBeforeLast('.', ""),
@@ -193,10 +205,12 @@ private fun BroadcastReceiver.toItem(canLaunch: Boolean) = ComponentItem(
     isUnprotected = isExternallyReachableWithoutPermission,
     isLaunchable = canLaunch && isExported && permission.isNullOrBlank(),
     flags = emptyImmutableFlags,
+    intentFilters = intentFilters.toItems(),
+    areIntentFiltersAvailable = areIntentFiltersAvailable,
     details = ComponentDetails.ReceiverDetails(permission = permission),
 )
 
-private fun ContentProvider.toItem() = ComponentItem(
+private fun ContentProvider.toItem(areIntentFiltersAvailable: Boolean) = ComponentItem(
     name = name,
     simpleName = name.substringAfterLast('.'),
     packagePath = name.substringBeforeLast('.', ""),
@@ -206,6 +220,8 @@ private fun ContentProvider.toItem() = ComponentItem(
     isUnprotected = isExternallyReachableWithoutPermission,
     isLaunchable = false,
     flags = emptyImmutableFlags,
+    intentFilters = intentFilters.toItems(),
+    areIntentFiltersAvailable = areIntentFiltersAvailable,
     details = ComponentDetails.ProviderDetails(
         authority = authority,
         readPermission = readPermission,

@@ -73,6 +73,7 @@ internal fun ComponentsScreen(
     initialScope: ComponentScope,
     initialFilters: Set<ComponentFilter>,
     onBack: () -> Unit,
+    onNavigateToIntentFilters: (componentName: String, componentType: ComponentType) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ComponentsViewModel = hiltViewModel { factory: ComponentsViewModel.Factory ->
         factory.create(appDetailInput, initialScope, initialFilters)
@@ -106,6 +107,7 @@ internal fun ComponentsScreen(
         state = state,
         onAction = viewModel::onAction,
         onBack = onBack,
+        onNavigateToIntentFilters = onNavigateToIntentFilters,
         modifier = modifier,
     )
 }
@@ -115,6 +117,7 @@ private fun ComponentsContent(
     state: ComponentsState,
     onAction: (ComponentsAction) -> Unit,
     onBack: () -> Unit,
+    onNavigateToIntentFilters: (componentName: String, componentType: ComponentType) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -134,7 +137,11 @@ private fun ComponentsContent(
                 onRetry = { onAction(ComponentsAction.Retry) },
             )
 
-            is ComponentsState.Loaded -> LoadedContent(state = state, onAction = onAction)
+            is ComponentsState.Loaded -> LoadedContent(
+                state = state,
+                onAction = onAction,
+                onNavigateToIntentFilters = onNavigateToIntentFilters,
+            )
         }
     }
 }
@@ -143,13 +150,14 @@ private fun ComponentsContent(
 private fun LoadedContent(
     state: ComponentsState.Loaded,
     onAction: (ComponentsAction) -> Unit,
+    onNavigateToIntentFilters: (componentName: String, componentType: ComponentType) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var detailComponentName by rememberSaveable { mutableStateOf<String?>(null) }
+    var detailComponentKey by rememberSaveable { mutableStateOf<String?>(null) }
     val collapsingState = rememberCollapsingHeaderState()
     val listState = rememberLazyListState()
-    val detailItem = remember(detailComponentName, state.sections) {
-        state.sections.firstNotNullOfOrNull { section -> section.components.firstOrNull { it.name == detailComponentName } }
+    val detailItem = remember(detailComponentKey, state.sections) {
+        state.sections.firstNotNullOfOrNull { section -> section.components.firstOrNull { it.stableKey == detailComponentKey } }
     }
 
     val narrowingKey = "${state.scope}|${state.selectedFilters.joinToString(",")}|${state.query}"
@@ -203,10 +211,10 @@ private fun LoadedContent(
                             )
                         }
                     }
-                    items(items = section.components, key = { it.name }) { component ->
+                    items(items = section.components, key = { it.stableKey }) { component ->
                         ComponentRow(
                             item = component,
-                            onClick = { detailComponentName = component.name },
+                            onClick = { detailComponentKey = component.stableKey },
                             onLongClick = { onAction(ComponentsAction.CopyValue(component.simpleName, component.name)) },
                             onLaunch = { onAction(ComponentsAction.LaunchComponent(component.name, component.type)) },
                         )
@@ -226,7 +234,11 @@ private fun LoadedContent(
         ComponentDetailBottomSheet(
             item = item,
             onCopy = { label, value -> onAction(ComponentsAction.CopyValue(label, value)) },
-            onDismiss = { detailComponentName = null },
+            onOpenIntentFilters = {
+                detailComponentKey = null
+                onNavigateToIntentFilters(item.name, item.type)
+            },
+            onDismiss = { detailComponentKey = null },
         )
     }
 }
@@ -401,7 +413,12 @@ private fun EmptyContent(
 @Composable
 private fun ComponentsLoadingPreview() {
     ApkAnalyzerTheme {
-        ComponentsContent(state = ComponentsState.Loading, onAction = {}, onBack = {})
+        ComponentsContent(
+            state = ComponentsState.Loading,
+            onAction = {},
+            onBack = {},
+            onNavigateToIntentFilters = { _, _ -> },
+        )
     }
 }
 
@@ -409,7 +426,12 @@ private fun ComponentsLoadingPreview() {
 @Composable
 private fun ComponentsErrorPreview() {
     ApkAnalyzerTheme {
-        ComponentsContent(state = ComponentsState.Error, onAction = {}, onBack = {})
+        ComponentsContent(
+            state = ComponentsState.Error,
+            onAction = {},
+            onBack = {},
+            onNavigateToIntentFilters = { _, _ -> },
+        )
     }
 }
 
@@ -417,7 +439,12 @@ private fun ComponentsErrorPreview() {
 @Composable
 private fun ComponentsLoadedPreview() {
     ApkAnalyzerTheme {
-        ComponentsContent(state = sampleLoadedState(), onAction = {}, onBack = {})
+        ComponentsContent(
+            state = sampleLoadedState(),
+            onAction = {},
+            onBack = {},
+            onNavigateToIntentFilters = { _, _ -> },
+        )
     }
 }
 
@@ -429,6 +456,7 @@ private fun ComponentsEmptyResultPreview() {
             state = sampleLoadedState().copy(query = "widget", sections = persistentListOf()),
             onAction = {},
             onBack = {},
+            onNavigateToIntentFilters = { _, _ -> },
         )
     }
 }
