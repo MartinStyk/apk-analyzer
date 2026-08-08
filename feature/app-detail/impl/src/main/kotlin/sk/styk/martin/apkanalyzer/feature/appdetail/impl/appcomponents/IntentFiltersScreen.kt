@@ -366,60 +366,63 @@ internal fun ComponentIntentFilterItem.purposeTitleRes(componentType: ComponentT
 
 @StringRes
 private fun ComponentIntentFilterItem.purposeTitleRes(componentType: ComponentType, action: String): Int = when (componentType) {
-    ComponentType.Activity -> when (action) {
-        Intent.ACTION_MAIN -> when {
-            Intent.CATEGORY_LAUNCHER in categories -> R.string.intent_filters_purpose_launcher
-            Intent.CATEGORY_LEANBACK_LAUNCHER in categories -> R.string.intent_filters_purpose_tv_launcher
-            else -> R.string.intent_filters_purpose_main
-        }
-
-        Intent.ACTION_VIEW -> R.string.intent_filters_purpose_view
-
-        Intent.ACTION_SEND,
-        Intent.ACTION_SEND_MULTIPLE,
-        -> R.string.intent_filters_purpose_share
-
-        Intent.ACTION_SENDTO -> R.string.intent_filters_purpose_send_to
-
-        Intent.ACTION_EDIT -> R.string.intent_filters_purpose_edit
-
-        Intent.ACTION_PICK,
-        Intent.ACTION_GET_CONTENT,
-        -> R.string.intent_filters_purpose_choose_content
-
-        Intent.ACTION_SEARCH,
-        Intent.ACTION_WEB_SEARCH,
-        -> R.string.intent_filters_purpose_search
-
-        Intent.ACTION_DIAL,
-        Intent.ACTION_CALL,
-        -> R.string.intent_filters_purpose_call
-
-        else -> R.string.intent_filters_purpose_activity_other
-    }
-
-    ComponentType.Receiver -> when (action) {
-        Intent.ACTION_BOOT_COMPLETED,
-        Intent.ACTION_LOCKED_BOOT_COMPLETED,
-        -> R.string.intent_filters_purpose_device_start
-
-        Intent.ACTION_PACKAGE_ADDED,
-        Intent.ACTION_PACKAGE_REMOVED,
-        Intent.ACTION_PACKAGE_CHANGED,
-        Intent.ACTION_PACKAGE_REPLACED,
-        Intent.ACTION_PACKAGE_RESTARTED,
-        -> R.string.intent_filters_purpose_app_change
-
-        Intent.ACTION_POWER_CONNECTED,
-        Intent.ACTION_POWER_DISCONNECTED,
-        -> R.string.intent_filters_purpose_power
-
-        else -> R.string.intent_filters_purpose_receiver_other
-    }
-
+    ComponentType.Activity -> activityPurposeTitleRes(action)
+    ComponentType.Receiver -> receiverPurposeTitleRes(action)
     ComponentType.Service -> R.string.intent_filters_purpose_service_other
-
     ComponentType.Provider -> R.string.intent_filters_purpose_provider_other
+}
+
+@StringRes
+private fun ComponentIntentFilterItem.activityPurposeTitleRes(action: String): Int = when (action) {
+    Intent.ACTION_MAIN -> when {
+        Intent.CATEGORY_LAUNCHER in categories -> R.string.intent_filters_purpose_launcher
+        Intent.CATEGORY_LEANBACK_LAUNCHER in categories -> R.string.intent_filters_purpose_tv_launcher
+        else -> R.string.intent_filters_purpose_main
+    }
+
+    Intent.ACTION_VIEW -> R.string.intent_filters_purpose_view
+
+    Intent.ACTION_SEND,
+    Intent.ACTION_SEND_MULTIPLE,
+    -> R.string.intent_filters_purpose_share
+
+    Intent.ACTION_SENDTO -> R.string.intent_filters_purpose_send_to
+
+    Intent.ACTION_EDIT -> R.string.intent_filters_purpose_edit
+
+    Intent.ACTION_PICK,
+    Intent.ACTION_GET_CONTENT,
+    -> R.string.intent_filters_purpose_choose_content
+
+    Intent.ACTION_SEARCH,
+    Intent.ACTION_WEB_SEARCH,
+    -> R.string.intent_filters_purpose_search
+
+    Intent.ACTION_DIAL,
+    Intent.ACTION_CALL,
+    -> R.string.intent_filters_purpose_call
+
+    else -> R.string.intent_filters_purpose_activity_other
+}
+
+@StringRes
+private fun receiverPurposeTitleRes(action: String): Int = when (action) {
+    Intent.ACTION_BOOT_COMPLETED,
+    Intent.ACTION_LOCKED_BOOT_COMPLETED,
+    -> R.string.intent_filters_purpose_device_start
+
+    Intent.ACTION_PACKAGE_ADDED,
+    Intent.ACTION_PACKAGE_REMOVED,
+    Intent.ACTION_PACKAGE_CHANGED,
+    Intent.ACTION_PACKAGE_REPLACED,
+    Intent.ACTION_PACKAGE_RESTARTED,
+    -> R.string.intent_filters_purpose_app_change
+
+    Intent.ACTION_POWER_CONNECTED,
+    Intent.ACTION_POWER_DISCONNECTED,
+    -> R.string.intent_filters_purpose_power
+
+    else -> R.string.intent_filters_purpose_receiver_other
 }
 
 @Preview

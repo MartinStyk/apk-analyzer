@@ -124,6 +124,7 @@ internal class ManifestParserImpl @Inject constructor(private val packageManager
         readComponentManifest(parser, resources)
     }
 
+    @Suppress("CyclomaticComplexMethod")
     private fun readComponentManifest(parser: XmlResourceParser, resources: Resources): ParsedComponentManifest {
         val filters = mutableListOf<Pair<ComponentIntentFilterKey, ComponentIntentFilter>>()
         var packageName = ""

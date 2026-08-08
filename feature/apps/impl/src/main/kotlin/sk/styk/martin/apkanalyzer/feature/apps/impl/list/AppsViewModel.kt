@@ -93,6 +93,7 @@ class AppsViewModel @Inject constructor(
         .flowOn(dispatcherProvider.default())
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AppsState())
 
+    @Suppress("CyclomaticComplexMethod")
     fun onAction(action: AppsAction) {
         when (action) {
             is AppsAction.SortTypeSelected -> {
@@ -145,12 +146,7 @@ class AppsViewModel @Inject constructor(
             SortType.ApkSize -> compareBy { it.apkSize }
 
             SortType.TotalSize -> Comparator { a, b ->
-                when {
-                    a.totalSize == null && b.totalSize == null -> 0
-                    a.totalSize == null -> -1
-                    b.totalSize == null -> 1
-                    else -> a.totalSize.compareTo(b.totalSize)
-                }
+                compareNullable(a.totalSize, b.totalSize)
             }
 
             SortType.InstallDate -> compareBy { it.installTime }
@@ -160,12 +156,7 @@ class AppsViewModel @Inject constructor(
             SortType.LastUpdated -> compareBy { it.lastUpdateTime }
 
             SortType.LastUsed -> Comparator { a, b ->
-                when {
-                    a.lastUsedTime == null && b.lastUsedTime == null -> 0
-                    a.lastUsedTime == null -> -1
-                    b.lastUsedTime == null -> 1
-                    else -> a.lastUsedTime.compareTo(b.lastUsedTime)
-                }
+                compareNullable(a.lastUsedTime, b.lastUsedTime)
             }
         }
         return if (ascending) base else base.reversed()
@@ -182,4 +173,11 @@ class AppsViewModel @Inject constructor(
         lastUsedTime = lastUsedTime,
         source = source,
     )
+}
+
+private fun <T : Comparable<T>> compareNullable(first: T?, second: T?): Int = when {
+    first == null && second == null -> 0
+    first == null -> -1
+    second == null -> 1
+    else -> first.compareTo(second)
 }

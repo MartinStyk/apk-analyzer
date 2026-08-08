@@ -81,6 +81,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
         loadDetail()
     }
 
+    @Suppress("CyclomaticComplexMethod")
     fun onAction(action: AppDetailAction) {
         when (action) {
             is AppDetailAction.Retry -> loadDetail()

@@ -56,13 +56,7 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
     }
 
     private fun <T : Any> Key<T>.read(prefs: Preferences): T = when (this) {
-        Key.ColorScheme -> {
-            when (prefs[KEY_COLOR_SCHEME]) {
-                "light" -> ColorAppScheme.Day
-                "dark" -> ColorAppScheme.Night
-                else -> ColorAppScheme.FollowSystem
-            }
-        }
+        Key.ColorScheme -> prefs.readColorScheme()
 
         Key.OnboardingRequired -> {
             prefs[KEY_ONBOARDING] ?: true
@@ -73,8 +67,7 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
         }
 
         Key.RecentlyViewedApps -> {
-            val raw = prefs[KEY_RECENTLY_VIEWED] ?: ""
-            if (raw.isEmpty()) emptyList() else raw.split("|")
+            prefs[KEY_RECENTLY_VIEWED].toStoredList()
         }
 
         Key.RecentlyViewedAppsEnabled -> {
@@ -82,10 +75,17 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
         }
 
         Key.SearchHistory -> {
-            val raw = prefs[KEY_SEARCH_HISTORY] ?: ""
-            if (raw.isEmpty()) emptyList() else raw.split("|")
+            prefs[KEY_SEARCH_HISTORY].toStoredList()
         }
     } as T
+
+    private fun Preferences.readColorScheme(): ColorAppScheme = when (this[KEY_COLOR_SCHEME]) {
+        "light" -> ColorAppScheme.Day
+        "dark" -> ColorAppScheme.Night
+        else -> ColorAppScheme.FollowSystem
+    }
+
+    private fun String?.toStoredList(): List<String> = if (isNullOrEmpty()) emptyList() else split("|")
 
     private fun <T : Any> Key<T>.write(prefs: MutablePreferences, value: T) = when (this) {
         Key.ColorScheme -> {

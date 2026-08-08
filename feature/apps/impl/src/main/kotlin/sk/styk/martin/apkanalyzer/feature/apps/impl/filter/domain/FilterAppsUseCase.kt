@@ -14,45 +14,52 @@ class FilterAppsUseCase @Inject constructor() {
         return apps.filter { app -> predicates.all { it(app) } }
     }
 
-    private fun AppFilterState.toPredicates(): List<(InstalledApp) -> Boolean> = buildList {
-        if (selectedSources.isNotEmpty()) {
-            add { it.source in selectedSources }
-        }
-        if (selectedSdkVersions.isNotEmpty()) {
-            add { it.targetSdk in selectedSdkVersions }
-        }
-        apkSizeRange?.let { range ->
-            add { it.apkSize in range }
-        }
-        totalSizeRange?.let { range ->
-            add { app -> app.totalSize?.let { it in range } ?: true }
-        }
+    private fun AppFilterState.toPredicates(): List<(InstalledApp) -> Boolean> = listOfNotNull(
+        sourcePredicate(),
+        sdkPredicate(),
+        apkSizeRange?.let { range -> { app: InstalledApp -> app.apkSize in range } },
+        totalSizeRange?.let { range -> { app: InstalledApp -> app.totalSize?.let { it in range } ?: true } },
         installTimeRange?.let { range ->
-            add { !it.installTime.isBefore(range.start) && !it.installTime.isAfter(range.end) }
-        }
+            { app: InstalledApp -> !app.installTime.isBefore(range.start) && !app.installTime.isAfter(range.end) }
+        },
         updateTimeRange?.let { range ->
-            add { !it.lastUpdateTime.isBefore(range.start) && !it.lastUpdateTime.isAfter(range.end) }
+            { app: InstalledApp -> !app.lastUpdateTime.isBefore(range.start) && !app.lastUpdateTime.isAfter(range.end) }
+        },
+        unusedPredicate(),
+        recentlyUsedPredicate(),
+        permissionPredicate(),
+    )
+
+    private fun AppFilterState.sourcePredicate(): ((InstalledApp) -> Boolean)? = selectedSources.takeIf { it.isNotEmpty() }?.let { sources ->
+        { app -> app.source in sources }
+    }
+
+    private fun AppFilterState.sdkPredicate(): ((InstalledApp) -> Boolean)? = selectedSdkVersions.takeIf { it.isNotEmpty() }?.let { versions ->
+        { app -> app.targetSdk in versions }
+    }
+
+    private fun AppFilterState.unusedPredicate(): ((InstalledApp) -> Boolean)? {
+        val period = unusedPeriod ?: return null
+        return { app ->
+            val lastUsed = app.lastUsedTime
+            lastUsed == null || lastUsed.isBefore(Instant.now().minusMillis(period.days.days.inWholeMilliseconds))
         }
-        unusedPeriod?.let { period ->
-            add { app ->
-                val lastUsed = app.lastUsedTime ?: return@add true
-                val threshold = Instant.now().minusMillis(period.days.days.inWholeMilliseconds)
-                lastUsed.isBefore(threshold)
-            }
+    }
+
+    private fun AppFilterState.recentlyUsedPredicate(): ((InstalledApp) -> Boolean)? {
+        val recentDays = recentlyUsedDays ?: return null
+        return { app ->
+            val lastUsed = app.lastUsedTime
+            lastUsed != null && lastUsed.isAfter(Instant.now().minus(recentDays.days.toJavaDuration()))
         }
-        recentlyUsedDays?.let { recentDays ->
-            add { app ->
-                val lastUsed = app.lastUsedTime ?: return@add false
-                val threshold = Instant.now().minus(recentDays.days.toJavaDuration())
-                lastUsed.isAfter(threshold)
-            }
-        }
-        if (selectedPermissions.isNotEmpty()) {
-            if (permissionMatchAll) {
-                add { app -> selectedPermissions.all { it in app.requestedPermissions } }
-            } else {
-                add { app -> app.requestedPermissions.any { it in selectedPermissions } }
-            }
+    }
+
+    private fun AppFilterState.permissionPredicate(): ((InstalledApp) -> Boolean)? {
+        if (selectedPermissions.isEmpty()) return null
+        return if (permissionMatchAll) {
+            { app -> selectedPermissions.all { it in app.requestedPermissions } }
+        } else {
+            { app -> app.requestedPermissions.any { it in selectedPermissions } }
         }
     }
 }

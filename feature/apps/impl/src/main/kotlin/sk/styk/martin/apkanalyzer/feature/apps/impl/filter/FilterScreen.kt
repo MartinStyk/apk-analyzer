@@ -668,6 +668,7 @@ private fun UnusedAppsPeriod.label(): String = when (this) {
     UnusedAppsPeriod.ONE_YEAR -> stringResource(R.string.filter_unused_year)
 }
 
+@Suppress("CyclomaticComplexMethod")
 private fun Int.toAndroidVersionLabel(): String {
     val name = when (this) {
         21 -> "Android 5"
