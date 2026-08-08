@@ -258,6 +258,7 @@ private fun AppDetailState.Loaded.withComputedBadges(now: Instant): AppDetailSta
     }.take(MAX_BADGES).toImmutableList(),
 )
 
+@Suppress("LongMethod")
 private fun AppDetail.toLoadedState(permissionLabelProvider: PermissionLabelProvider, deviceFeatures: DeviceFeatures): AppDetailState.Loaded {
     val dangerousPermissions = permissions.used.filter {
         it.permissionData.details?.protectionLevel == ProtectionLevel.Dangerous

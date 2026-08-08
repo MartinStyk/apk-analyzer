@@ -103,6 +103,7 @@ internal fun FilterScreen(
     )
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun FilterContent(
     state: FilterState,

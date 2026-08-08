@@ -20,6 +20,7 @@ import sk.styk.martin.apkanalyzer.feature.apps.impl.list.AppsScreen
 import sk.styk.martin.apkanalyzer.feature.apps.impl.search.AppSearchScreen
 import sk.styk.martin.apkanalyzer.feature.settings.api.SettingsNavKey
 
+@Suppress("LongMethod")
 fun EntryProviderScope<NavKey>.appEntries(navigator: Navigator) {
     entry<AppsNavKey> {
         AppsScreen(

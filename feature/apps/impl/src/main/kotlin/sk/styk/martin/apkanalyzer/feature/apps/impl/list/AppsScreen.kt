@@ -106,6 +106,7 @@ internal fun AppsScreen(
     )
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun AppsContent(
     state: AppsState,

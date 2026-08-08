@@ -73,6 +73,7 @@ internal fun ManifestScreen(
     )
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun ManifestContent(
     state: ManifestState,

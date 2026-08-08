@@ -26,6 +26,7 @@ abstract class ValidateAgentContextTask : DefaultTask() {
         description = "Validates repository AI context structure, metadata, links, and module coverage."
     }
 
+    @Suppress("LongMethod")
     @TaskAction
     fun validate() {
         val rootDirectory = repositoryDirectory.asFile.get()

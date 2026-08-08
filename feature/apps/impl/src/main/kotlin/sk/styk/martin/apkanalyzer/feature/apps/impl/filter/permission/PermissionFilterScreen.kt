@@ -84,6 +84,7 @@ internal fun PermissionFilterScreen(
     )
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun PermissionFilterContent(
     state: PermissionFilterState,

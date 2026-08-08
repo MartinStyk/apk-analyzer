@@ -146,6 +146,7 @@ private fun ComponentsContent(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun LoadedContent(
     state: ComponentsState.Loaded,
@@ -274,6 +275,7 @@ private fun NarrowingRow(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun ComponentRow(
     item: ComponentItem,
@@ -462,6 +464,7 @@ private fun ComponentsEmptyResultPreview() {
     }
 }
 
+@Suppress("LongMethod")
 private fun sampleLoadedState() = ComponentsState.Loaded(
     scope = ComponentScope.All,
     scopeOptions = persistentListOf(

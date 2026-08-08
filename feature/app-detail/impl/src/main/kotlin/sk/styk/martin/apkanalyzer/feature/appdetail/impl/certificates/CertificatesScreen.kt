@@ -120,6 +120,7 @@ private fun CertificatesContent(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun LoadedContent(
     state: CertificatesState.Loaded,
@@ -208,6 +209,7 @@ private fun LoadedContent(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun CertificateCard(
     certificate: CertificateItem,
