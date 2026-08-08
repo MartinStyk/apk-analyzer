@@ -11,6 +11,7 @@ import org.gradle.work.DisableCachingByDefault
 import java.io.File
 
 private val nonLocalLinkPrefixes = listOf("http://", "https://", "mailto:", "#")
+private const val MAX_SKILL_DESCRIPTION_LENGTH = 1024
 
 @DisableCachingByDefault(because = "The task validates the live repository context without producing outputs.")
 abstract class ValidateAgentContextTask : DefaultTask() {
@@ -114,8 +115,9 @@ abstract class ValidateAgentContextTask : DefaultTask() {
                     if (name == null || !skillNamePattern.matches(name)) {
                         errors += "${skillFile.displayPath()} has an invalid skill name."
                     }
-                    if (description.isNullOrBlank() || description.length > 1024) {
-                        errors += "${skillFile.displayPath()} needs a description of 1 to 1024 characters."
+                    if (description.isNullOrBlank() || description.length > MAX_SKILL_DESCRIPTION_LENGTH) {
+                        errors +=
+                            "${skillFile.displayPath()} needs a description of 1 to $MAX_SKILL_DESCRIPTION_LENGTH characters."
                     }
                 }
             }
