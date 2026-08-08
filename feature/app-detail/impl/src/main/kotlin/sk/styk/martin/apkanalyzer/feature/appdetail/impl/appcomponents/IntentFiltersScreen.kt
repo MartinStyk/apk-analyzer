@@ -6,6 +6,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -27,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -39,9 +42,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.apps.model.IntentFilterDataRuleType
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.SearchBarActive
+import sk.styk.martin.apkanalyzer.core.uilibrary.components.Tag
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.TextButton
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Toolbar
+import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
+import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.collapsingHeader
+import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.collapsingHeaderContainer
+import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.rememberCollapsingHeaderState
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
@@ -122,43 +130,58 @@ private fun IntentFiltersLoadedContent(
     val detailFilter = remember(detailFilterIndex, state.filters) {
         state.filters.firstOrNull { it.index == detailFilterIndex }
     }
+    val collapsingState = rememberCollapsingHeaderState()
     val listState = rememberLazyListState()
 
     LaunchedEffect(state.query) {
         listState.scrollToItem(0)
     }
 
-    Column(modifier = modifier.fillMaxSize()) {
-        Text(
-            text = stringResource(R.string.intent_filters_component_heading, state.simpleComponentName),
-            style = AppTheme.typography.titleSmall,
-            color = AppTheme.colors.onBackground,
-            maxLines = 1,
-            overflow = TextOverflow.MiddleEllipsis,
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp),
-        )
-        Text(
-            text = stringResource(R.string.intent_filters_explanation),
-            style = AppTheme.typography.bodySmall,
-            color = AppTheme.colors.onSurfaceVariant,
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp),
-        )
-        SearchBarActive(
-            query = state.query,
-            placeholder = pluralStringResource(
-                R.plurals.intent_filters_search_hint,
-                state.totalCount,
-                state.totalCount,
-            ),
-            onQueryChange = { onAction(IntentFiltersAction.ChangeQuery(it)) },
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-        )
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .clipToBounds()
+            .collapsingHeaderContainer(collapsingState),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .offset { collapsingState.headerOffset }
+                .background(AppTheme.colors.background)
+                .collapsingHeader(collapsingState),
+        ) {
+            Text(
+                text = stringResource(R.string.intent_filters_component_heading, state.simpleComponentName),
+                style = AppTheme.typography.titleSmall,
+                color = AppTheme.colors.onBackground,
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp),
+            )
+            Text(
+                text = stringResource(R.string.intent_filters_explanation),
+                style = AppTheme.typography.bodySmall,
+                color = AppTheme.colors.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp),
+            )
+            SearchBarActive(
+                query = state.query,
+                placeholder = pluralStringResource(
+                    R.plurals.intent_filters_search_hint,
+                    state.totalCount,
+                    state.totalCount,
+                ),
+                onQueryChange = { onAction(IntentFiltersAction.ChangeQuery(it)) },
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            )
+        }
+
         if (state.hasResults) {
             LazyColumn(
                 state = listState,
                 contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(6.dp),
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .offset { collapsingState.contentOffset },
             ) {
                 items(items = state.filters, key = { it.index }) { filter ->
                     IntentFilterRow(
@@ -175,6 +198,7 @@ private fun IntentFiltersLoadedContent(
             EmptyIntentFilters(
                 query = state.query,
                 onClearQuery = { onAction(IntentFiltersAction.ClearQuery) },
+                modifier = Modifier.offset { collapsingState.contentOffset },
             )
         }
     }
@@ -197,71 +221,90 @@ private fun IntentFilterRow(
     onCopy: (label: String, value: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val title = stringResource(filter.purposeTitleRes(componentType))
+    val copyLabel = stringResource(filter.purposeTitleRes(componentType))
+    val purposeBadgeRes = filter.purposeBadgeRes(componentType)
     val dataRules = filter.dataRules + filter.uriRelativeGroups.filter { it.isAllowed }.flatMap { it.dataRules }
-    val actionBadges = filter.actions.map { it.toDisplayRequestType() }.filter { it.isNotBlank() }
-    val categoryBadges = filter.categories
+    val actionValues = filter.actions.map { it.toDisplayRequestType() }.filter { it.isNotBlank() }
+    val categoryValues = filter.categories
         .filterNot { it == Intent.CATEGORY_DEFAULT }
         .map { it.toDisplayCategory() }
         .filter { it.isNotBlank() }
-    val hasBlockedRules = filter.uriRelativeGroups.any { !it.isAllowed }
-    val hasRequestBadges = actionBadges.isNotEmpty() || categoryBadges.isNotEmpty()
-    val hasFilterBadges = filter.isAutoVerify || hasBlockedRules
+    val hasPurposeRow = purposeBadgeRes != null || filter.isAutoVerify || filter.uriRelativeGroups.any { !it.isAllowed }
+    val hasNoDeclaredContent = !hasPurposeRow && actionValues.isEmpty() && categoryValues.isEmpty() && dataRules.isEmpty()
     Column(
+        verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = modifier
             .fillMaxWidth()
             .clip(Shapes.CardShape)
             .background(AppTheme.colors.surface)
             .combinedClickable(
                 onClick = onClick,
-                onLongClick = { onCopy(title, filter.copyValue()) },
+                onLongClick = { onCopy(copyLabel, filter.copyValue()) },
             )
             .padding(horizontal = 14.dp, vertical = 12.dp),
     ) {
-        Text(
-            text = title,
-            style = AppTheme.typography.titleSmall,
-            color = AppTheme.colors.onBackground,
-        )
-        IntentFilterDataField(
-            label = stringResource(R.string.intent_filters_scheme),
-            values = dataRules.valuesFor(IntentFilterDataRuleType.Scheme),
-        )
-        IntentFilterDataField(
-            label = stringResource(R.string.components_intent_data_host),
-            values = dataRules.valuesFor(IntentFilterDataRuleType.Host),
-        )
-        IntentFilterDataField(
-            label = stringResource(R.string.intent_filters_path),
-            values = dataRules.valuesFor(
-                IntentFilterDataRuleType.Path,
-                IntentFilterDataRuleType.PathPrefix,
-                IntentFilterDataRuleType.PathSuffix,
-                IntentFilterDataRuleType.PathPattern,
-                IntentFilterDataRuleType.PathAdvancedPattern,
-            ),
-        )
-        IntentFilterDataField(
-            label = stringResource(R.string.components_intent_data_mime_type),
-            values = dataRules.valuesFor(IntentFilterDataRuleType.MimeType),
-        )
-        if (hasRequestBadges || hasFilterBadges) {
-            Spacer(modifier = Modifier.height(12.dp))
+        if (hasNoDeclaredContent) {
+            Text(
+                text = copyLabel,
+                style = AppTheme.typography.titleSmall,
+                color = AppTheme.colors.onBackground,
+            )
+        }
+        if (hasPurposeRow) {
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
                 verticalArrangement = Arrangement.spacedBy(6.dp),
             ) {
-                actionBadges.forEach { action ->
-                    IntentFilterTag(text = action, emphasized = true)
-                }
-                categoryBadges.forEach { category ->
-                    IntentFilterTag(text = category)
+                purposeBadgeRes?.let {
+                    Tag(text = stringResource(it), icon = ApkAnalyzerIcons.PlayArrow, highlighted = true)
                 }
                 if (filter.isAutoVerify) {
-                    IntentFilterTag(text = stringResource(R.string.intent_filters_tag_verified))
+                    Tag(text = stringResource(R.string.intent_filters_tag_verified), icon = ApkAnalyzerIcons.VerifiedShield)
                 }
-                if (hasBlockedRules) {
-                    IntentFilterTag(text = stringResource(R.string.intent_filters_tag_blocked_rules))
+                if (filter.uriRelativeGroups.any { !it.isAllowed }) {
+                    Tag(text = stringResource(R.string.intent_filters_tag_blocked_rules))
+                }
+            }
+        }
+        IntentFilterChipField(
+            label = stringResource(R.string.components_detail_intent_actions),
+            values = actionValues,
+            emphasized = true,
+        )
+        IntentFilterChipField(
+            label = stringResource(R.string.components_detail_intent_categories),
+            values = categoryValues,
+        )
+        dataRules.groupedByType().forEach { (type, values) ->
+            IntentFilterDataField(
+                label = stringResource(type.labelRes),
+                values = values,
+            )
+        }
+    }
+}
+
+@Composable
+private fun IntentFilterChipField(
+    label: String,
+    values: List<String>,
+    modifier: Modifier = Modifier,
+    emphasized: Boolean = false,
+) {
+    if (values.isNotEmpty()) {
+        Column(modifier = modifier) {
+            Text(
+                text = label.uppercase(),
+                style = AppTheme.typography.labelSmall,
+                color = AppTheme.colors.onSurfaceVariant,
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp),
+            ) {
+                values.forEach { value ->
+                    Tag(text = value, highlighted = emphasized)
                 }
             }
         }
@@ -276,7 +319,6 @@ private fun IntentFilterDataField(
 ) {
     if (values.isNotEmpty()) {
         Column(modifier = modifier) {
-            Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = label.uppercase(),
                 style = AppTheme.typography.labelSmall,
@@ -292,23 +334,6 @@ private fun IntentFilterDataField(
             )
         }
     }
-}
-
-@Composable
-private fun IntentFilterTag(
-    text: String,
-    modifier: Modifier = Modifier,
-    emphasized: Boolean = false,
-) {
-    Text(
-        text = text,
-        style = AppTheme.typography.labelSmall,
-        color = if (emphasized) AppTheme.colors.onSecondaryContainer else AppTheme.colors.onSurfaceVariant,
-        modifier = modifier
-            .clip(Shapes.CardShape)
-            .background(if (emphasized) AppTheme.colors.secondaryContainer else AppTheme.colors.surfaceVariant)
-            .padding(horizontal = 6.dp, vertical = 2.dp),
-    )
 }
 
 @Composable
@@ -343,7 +368,10 @@ private fun EmptyIntentFilters(
     }
 }
 
-private fun List<IntentFilterDataRuleItem>.valuesFor(vararg types: IntentFilterDataRuleType): List<String> = filter { it.type in types }.map { it.value }.distinct()
+private fun List<IntentFilterDataRuleItem>.groupedByType(): List<Pair<IntentFilterDataRuleType, List<String>>> = groupBy { it.type }
+    .toList()
+    .sortedBy { (type, _) -> type.ordinal }
+    .map { (type, rules) -> type to rules.map { it.value }.distinct() }
 
 private fun ComponentIntentFilterItem.copyValue(): String = buildList {
     addAll(actions)
@@ -360,12 +388,22 @@ internal fun ComponentIntentFilterItem.purposeTitleRes(componentType: ComponentT
     if (actions.isEmpty()) {
         return R.string.intent_filters_filter_fallback
     }
-    val resolvedTitles = actions.map { action -> purposeTitleRes(componentType, action) }.distinct()
+    val resolvedTitles = actions.map { action -> purposeActionRes(componentType, action) ?: otherPurposeRes(componentType) }.distinct()
     return resolvedTitles.singleOrNull() ?: R.string.intent_filters_purpose_multiple
 }
 
 @StringRes
-private fun ComponentIntentFilterItem.purposeTitleRes(componentType: ComponentType, action: String): Int = when (componentType) {
+internal fun ComponentIntentFilterItem.purposeBadgeRes(componentType: ComponentType): Int? {
+    if (componentType != ComponentType.Activity || Intent.ACTION_MAIN !in actions) return null
+    return when {
+        Intent.CATEGORY_LAUNCHER in categories -> R.string.intent_filters_purpose_launcher
+        Intent.CATEGORY_LEANBACK_LAUNCHER in categories -> R.string.intent_filters_purpose_tv_launcher
+        else -> null
+    }
+}
+
+@StringRes
+private fun ComponentIntentFilterItem.purposeActionRes(componentType: ComponentType, action: String): Int? = when (componentType) {
     ComponentType.Activity -> when (action) {
         Intent.ACTION_MAIN -> when {
             Intent.CATEGORY_LAUNCHER in categories -> R.string.intent_filters_purpose_launcher
@@ -395,7 +433,7 @@ private fun ComponentIntentFilterItem.purposeTitleRes(componentType: ComponentTy
         Intent.ACTION_CALL,
         -> R.string.intent_filters_purpose_call
 
-        else -> R.string.intent_filters_purpose_activity_other
+        else -> null
     }
 
     ComponentType.Receiver -> when (action) {
@@ -414,11 +452,19 @@ private fun ComponentIntentFilterItem.purposeTitleRes(componentType: ComponentTy
         Intent.ACTION_POWER_DISCONNECTED,
         -> R.string.intent_filters_purpose_power
 
-        else -> R.string.intent_filters_purpose_receiver_other
+        else -> null
     }
 
-    ComponentType.Service -> R.string.intent_filters_purpose_service_other
+    ComponentType.Service,
+    ComponentType.Provider,
+    -> null
+}
 
+@StringRes
+private fun otherPurposeRes(componentType: ComponentType): Int = when (componentType) {
+    ComponentType.Activity -> R.string.intent_filters_purpose_activity_other
+    ComponentType.Receiver -> R.string.intent_filters_purpose_receiver_other
+    ComponentType.Service -> R.string.intent_filters_purpose_service_other
     ComponentType.Provider -> R.string.intent_filters_purpose_provider_other
 }
 
@@ -432,7 +478,7 @@ private fun IntentFiltersLoadedPreview() {
                 componentType = ComponentType.Activity,
                 query = "",
                 totalCount = 2,
-                filters = persistentListOf(sampleIntentFilter()),
+                filters = persistentListOf(sampleIntentFilter(), sampleCustomActionIntentFilter()),
             ),
             onAction = {},
         )
@@ -471,4 +517,17 @@ private fun sampleIntentFilter() = ComponentIntentFilterItem(
     priority = 0,
     order = 0,
     isAutoVerify = true,
+)
+
+private fun sampleCustomActionIntentFilter() = ComponentIntentFilterItem(
+    index = 1,
+    actions = persistentListOf("com.google.firebase.MESSAGING_EVENT"),
+    categories = persistentListOf("android.intent.category.DEFAULT"),
+    dataRules = persistentListOf(
+        IntentFilterDataRuleItem(IntentFilterDataRuleType.MimeType, "application/vnd.spotify.track+json"),
+    ),
+    uriRelativeGroups = persistentListOf(),
+    priority = 0,
+    order = 0,
+    isAutoVerify = false,
 )

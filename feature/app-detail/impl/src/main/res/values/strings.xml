@@ -404,10 +404,6 @@
         <item quantity="other">Search %1$d request rules</item>
     </plurals>
     <string name="intent_filters_filter_fallback">Intent filter</string>
-    <string name="intent_filters_action_custom">Custom action</string>
-    <string name="intent_filters_category_custom">Custom category</string>
-    <string name="intent_filters_scheme">Scheme</string>
-    <string name="intent_filters_path">Path</string>
     <string name="intent_filters_purpose_launcher">App launcher entry</string>
     <string name="intent_filters_purpose_tv_launcher">TV launcher entry</string>
     <string name="intent_filters_purpose_main">Main entry request</string>
