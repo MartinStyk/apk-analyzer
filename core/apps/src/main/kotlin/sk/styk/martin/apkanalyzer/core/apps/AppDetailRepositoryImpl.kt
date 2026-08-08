@@ -138,9 +138,9 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             versionName = packageInfo.versionName,
             versionCode = packageInfo.longVersionCode,
             isSystemApp = installSourceResolver.isSystemInstalledApp(packageInfo),
-            isDebuggable = applicationInfo?.hasFlag(ApplicationInfo.FLAG_DEBUGGABLE) == true,
-            allowsBackup = applicationInfo?.hasFlag(ApplicationInfo.FLAG_ALLOW_BACKUP) == true,
-            usesCleartextTraffic = applicationInfo?.hasFlag(ApplicationInfo.FLAG_USES_CLEARTEXT_TRAFFIC) == true,
+            isDebuggable = applicationInfo.hasFlag(ApplicationInfo.FLAG_DEBUGGABLE),
+            allowsBackup = applicationInfo.hasFlag(ApplicationInfo.FLAG_ALLOW_BACKUP),
+            usesCleartextTraffic = applicationInfo.hasFlag(ApplicationInfo.FLAG_USES_CLEARTEXT_TRAFFIC),
             uid = applicationInfo?.uid,
             description = applicationInfo?.loadDescription(packageManager)?.toString(),
             apkDirectory = applicationInfo?.sourceDir,
@@ -260,7 +260,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun ApplicationInfo.hasFlag(flag: Int): Boolean = flags and flag != 0
+    private fun ApplicationInfo?.hasFlag(flag: Int): Boolean = this?.flags?.and(flag) != 0
 
     private fun PackageManager.getPackageArchiveInfoWithCorrectPath(pathToPackage: String, flags: Int): PackageInfo? {
         val packageInfo = getPackageArchiveInfo(pathToPackage, flags)
