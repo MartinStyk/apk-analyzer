@@ -131,7 +131,6 @@ private fun PermissionsContent(
     }
 }
 
-@Suppress("LongMethod")
 @Composable
 private fun LoadedContent(
     state: PermissionsState.Loaded,
@@ -223,7 +222,6 @@ private fun LoadedContent(
     }
 }
 
-@Suppress("LongMethod")
 @Composable
 private fun NarrowingRow(
     state: PermissionsState.Loaded,
@@ -450,7 +448,6 @@ private fun PermissionsEmptyResultPreview() {
     }
 }
 
-@Suppress("LongMethod")
 private fun sampleLoadedState() = PermissionsState.Loaded(
     scope = PermissionScope.Requested,
     scopeOptions = persistentListOf(PermissionScope.Requested, PermissionScope.Defined),

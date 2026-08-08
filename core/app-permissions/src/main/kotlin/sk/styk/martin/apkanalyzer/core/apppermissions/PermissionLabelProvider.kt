@@ -40,7 +40,6 @@ class PermissionLabelProvider @Inject constructor(@ApplicationContext private va
         return builder.toString()
     }
 
-    @Suppress("LongMethod")
     private fun buildKnownLabels(): Map<String, String> = mapOf(
         "android.permission.CAMERA" to context.getString(R.string.permission_label_camera),
         "android.permission.RECORD_AUDIO" to context.getString(R.string.permission_label_microphone),

@@ -96,7 +96,6 @@ private fun GeneralInfoContent(
     }
 }
 
-@Suppress("LongMethod")
 @Composable
 private fun LoadedContent(
     state: GeneralInfoState.Loaded,
@@ -325,7 +324,6 @@ private fun LoadedContent(
     }
 }
 
-@Suppress("LongMethod")
 @Composable
 private fun SecuritySettingsSection(
     state: GeneralInfoState.Loaded,

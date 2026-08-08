@@ -109,7 +109,6 @@ private fun BrowseOptionsContent(
     }
 }
 
-@Suppress("LongMethod")
 @Composable
 private fun BrowseOptionsList(
     dimension: BrowseDimension,

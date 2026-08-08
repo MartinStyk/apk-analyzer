@@ -18,7 +18,6 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.impl.manifest.ManifestScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.permissions.PermissionsScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.requirements.RequirementsScreen
 
-@Suppress("LongMethod")
 fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
     entry<AppDetailNavKey>(
         metadata = slideFromEndEntryMetadata(),

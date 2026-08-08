@@ -53,7 +53,6 @@ private val TOOLBAR_PADDING_START = 4.dp
 private val ICON_SIZE_EXPANDED = 96.dp
 private val ICON_SIZE_COLLAPSED = 32.dp
 
-@Suppress("LongMethod")
 @Composable
 internal fun AppDetailToolbar(
     state: AppDetailState.Loaded,

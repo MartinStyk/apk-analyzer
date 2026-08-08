@@ -351,7 +351,6 @@ private fun RequirementsEmptyPreview() {
     }
 }
 
-@Suppress("LongMethod")
 private fun sampleLoadedState() = RequirementsState.Loaded(
     missingRequiredCount = 4,
     sections = persistentListOf(

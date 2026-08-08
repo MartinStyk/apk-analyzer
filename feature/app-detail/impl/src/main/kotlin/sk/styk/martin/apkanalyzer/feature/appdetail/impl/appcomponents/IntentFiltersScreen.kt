@@ -112,7 +112,6 @@ private fun IntentFiltersContent(
     }
 }
 
-@Suppress("LongMethod")
 @Composable
 private fun IntentFiltersLoadedContent(
     state: IntentFiltersState.Loaded,
@@ -190,7 +189,6 @@ private fun IntentFiltersLoadedContent(
     }
 }
 
-@Suppress("LongMethod")
 @Composable
 private fun IntentFilterRow(
     filter: ComponentIntentFilterItem,

@@ -33,7 +33,6 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.DetailField
 
 private const val UNDEFINED_PERMISSION_GROUP = "android.permission-group.UNDEFINED"
 
-@Suppress("LongMethod")
 @Composable
 internal fun PermissionDetailBottomSheet(
     item: PermissionItem,

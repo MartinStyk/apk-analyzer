@@ -21,7 +21,6 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.DetailField
 
-@Suppress("LongMethod")
 @Composable
 internal fun IntentFilterDetailBottomSheet(
     filter: ComponentIntentFilterItem,

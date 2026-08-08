@@ -120,7 +120,6 @@ private fun BrowseHeader(state: BrowseState, modifier: Modifier = Modifier) {
     }
 }
 
-@Suppress("LongMethod")
 @Composable
 private fun DimensionCard(
     summary: DimensionSummary,

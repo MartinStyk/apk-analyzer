@@ -74,7 +74,6 @@ import java.util.Locale
 private const val APK_MIME_TYPE = "application/vnd.android.package-archive"
 private const val ICON_MIME_TYPE = "image/png"
 
-@Suppress("LongMethod")
 @Composable
 internal fun AppDetailScreen(
     appDetailInput: AppDetailInput,
@@ -429,7 +428,6 @@ private fun SectionCard(
     }
 }
 
-@Suppress("LongMethod")
 @Composable
 private fun OverviewSection(
     state: AppDetailState.Loaded,
@@ -525,7 +523,6 @@ private fun OverviewGridCell(
     }
 }
 
-@Suppress("LongMethod")
 @Composable
 private fun ActionsSection(
     state: AppDetailState.Loaded,
@@ -717,7 +714,6 @@ private fun CertificateSignatureSection(
     }
 }
 
-@Suppress("LongMethod")
 @Composable
 private fun PermissionsSection(
     state: AppDetailState.Loaded,
@@ -882,7 +878,6 @@ private fun ComponentsSection(
     }
 }
 
-@Suppress("LongMethod")
 @Composable
 private fun RequirementsSection(
     state: AppDetailState.Loaded,
@@ -1047,7 +1042,6 @@ private fun AppDetailLoadedPreview() {
     }
 }
 
-@Suppress("LongMethod")
 private fun sampleLoadedState() = AppDetailState.Loaded(
     analysisMode = AppDetail.AnalysisMode.InstalledPackage,
     appName = "Spotify",
