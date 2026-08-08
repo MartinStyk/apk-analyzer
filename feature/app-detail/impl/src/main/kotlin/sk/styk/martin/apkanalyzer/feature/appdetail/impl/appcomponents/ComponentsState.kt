@@ -3,7 +3,9 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.impl.appcomponents
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.Serializable
+import sk.styk.martin.apkanalyzer.core.apps.model.IntentFilterDataRuleType
 
 @Serializable
 internal enum class ComponentScope {
@@ -20,6 +22,7 @@ internal enum class ComponentFilter {
     Unprotected,
 }
 
+@Serializable
 internal enum class ComponentType {
     Activity,
     Service,
@@ -71,11 +74,34 @@ internal data class ComponentItem(
     val isUnprotected: Boolean,
     val isLaunchable: Boolean,
     val flags: ImmutableList<ComponentFlag>,
+    val intentFilters: ImmutableList<ComponentIntentFilterItem> = persistentListOf(),
+    val areIntentFiltersAvailable: Boolean = true,
     val details: ComponentDetails,
 ) {
+    val stableKey: String
+        get() = "${type.name}:$name"
+
     val isLauncher: Boolean
         get() = (details as? ComponentDetails.ActivityDetails)?.isLauncher == true
 }
+
+@Immutable
+internal data class ComponentIntentFilterItem(
+    val index: Int,
+    val actions: ImmutableList<String>,
+    val categories: ImmutableList<String>,
+    val dataRules: ImmutableList<IntentFilterDataRuleItem>,
+    val uriRelativeGroups: ImmutableList<IntentFilterUriRelativeGroupItem>,
+    val priority: Int,
+    val order: Int,
+    val isAutoVerify: Boolean,
+)
+
+@Immutable
+internal data class IntentFilterUriRelativeGroupItem(val isAllowed: Boolean, val dataRules: ImmutableList<IntentFilterDataRuleItem>)
+
+@Immutable
+internal data class IntentFilterDataRuleItem(val type: IntentFilterDataRuleType, val value: String)
 
 @Immutable
 internal data class ComponentSection(val type: ComponentType, val components: ImmutableList<ComponentItem>)

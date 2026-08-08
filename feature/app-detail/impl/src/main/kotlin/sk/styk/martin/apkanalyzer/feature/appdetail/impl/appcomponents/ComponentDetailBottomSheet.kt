@@ -11,17 +11,22 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.persistentListOf
+import sk.styk.martin.apkanalyzer.core.apps.model.IntentFilterDataRuleType
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.BottomSheet
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
+import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
@@ -32,12 +37,14 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.DetailField
 internal fun ComponentDetailBottomSheet(
     item: ComponentItem,
     onCopy: (label: String, value: String) -> Unit,
+    onOpenIntentFilters: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BottomSheet(onDismiss = onDismiss, modifier = modifier) {
         Column(
             modifier = Modifier
+                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp)
                 .padding(bottom = 32.dp),
         ) {
@@ -97,6 +104,56 @@ internal fun ComponentDetailBottomSheet(
                             DetailField(label = stringResource(R.string.components_detail_write_permission), value = it, onCopy = onCopy)
                         }
                     }
+                }
+            }
+
+            if (item.intentFilters.isNotEmpty()) {
+                SheetSection(title = stringResource(R.string.components_detail_section_intent_filters)) {
+                    Text(
+                        text = stringResource(R.string.components_detail_intent_filters_explanation),
+                        style = AppTheme.typography.bodySmall,
+                        color = AppTheme.colors.onSurfaceVariant,
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(Shapes.CardShape)
+                            .clickable(onClick = onOpenIntentFilters)
+                            .padding(vertical = 10.dp),
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = stringResource(R.string.components_detail_intent_filters_open),
+                                style = AppTheme.typography.titleSmall,
+                                color = AppTheme.colors.onSurface,
+                            )
+                            Text(
+                                text = pluralStringResource(
+                                    R.plurals.components_intent_filter_count,
+                                    item.intentFilters.size,
+                                    item.intentFilters.size,
+                                ),
+                                style = AppTheme.typography.bodySmall,
+                                color = AppTheme.colors.onSurfaceVariant,
+                            )
+                        }
+                        Icon(
+                            imageVector = ApkAnalyzerIcons.ChevronRight,
+                            contentDescription = null,
+                            tint = AppTheme.colors.onSurfaceVariant,
+                            modifier = Modifier.size(24.dp),
+                        )
+                    }
+                }
+            } else if (!item.areIntentFiltersAvailable) {
+                SheetSection(title = stringResource(R.string.components_detail_section_intent_filters)) {
+                    Text(
+                        text = stringResource(R.string.components_detail_intent_filters_unavailable),
+                        style = AppTheme.typography.bodyMedium,
+                        color = AppTheme.colors.onSurfaceVariant,
+                    )
                 }
             }
 
@@ -182,6 +239,25 @@ private fun ComponentDetailBottomSheetActivityPreview() {
                 isUnprotected = false,
                 isLaunchable = true,
                 flags = persistentListOf(),
+                intentFilters = persistentListOf(
+                    ComponentIntentFilterItem(
+                        index = 0,
+                        actions = persistentListOf("android.intent.action.VIEW"),
+                        categories = persistentListOf(
+                            "android.intent.category.DEFAULT",
+                            "android.intent.category.BROWSABLE",
+                        ),
+                        dataRules = persistentListOf(
+                            IntentFilterDataRuleItem(IntentFilterDataRuleType.Scheme, "https"),
+                            IntentFilterDataRuleItem(IntentFilterDataRuleType.Host, "open.spotify.com"),
+                            IntentFilterDataRuleItem(IntentFilterDataRuleType.PathPrefix, "/track/"),
+                        ),
+                        uriRelativeGroups = persistentListOf(),
+                        priority = 0,
+                        order = 0,
+                        isAutoVerify = true,
+                    ),
+                ),
                 details = ComponentDetails.ActivityDetails(
                     label = "Spotify",
                     targetActivity = null,
@@ -191,6 +267,7 @@ private fun ComponentDetailBottomSheetActivityPreview() {
                 ),
             ),
             onCopy = { _, _ -> },
+            onOpenIntentFilters = {},
             onDismiss = {},
         )
     }
@@ -214,6 +291,7 @@ private fun ComponentDetailBottomSheetServicePreview() {
                 details = ComponentDetails.ServiceDetails(permission = "android.permission.BIND_JOB_SERVICE"),
             ),
             onCopy = { _, _ -> },
+            onOpenIntentFilters = {},
             onDismiss = {},
         )
     }
@@ -241,6 +319,7 @@ private fun ComponentDetailBottomSheetProviderPreview() {
                 ),
             ),
             onCopy = { _, _ -> },
+            onOpenIntentFilters = {},
             onDismiss = {},
         )
     }

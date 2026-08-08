@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.plus
 import sk.styk.martin.apkanalyzer.core.apps.analysis.CertificateExtractor
 import sk.styk.martin.apkanalyzer.core.apps.analysis.InstallSourceResolver
+import sk.styk.martin.apkanalyzer.core.apps.analysis.ManifestParser
 import sk.styk.martin.apkanalyzer.core.apps.analysis.SdkVersionResolver
 import sk.styk.martin.apkanalyzer.core.apps.analysis.computeApkSize
 import sk.styk.martin.apkanalyzer.core.apps.analysis.resolveProtectionFlags
@@ -21,6 +22,9 @@ import sk.styk.martin.apkanalyzer.core.apps.model.Activity
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.model.AppInfo
 import sk.styk.martin.apkanalyzer.core.apps.model.BroadcastReceiver
+import sk.styk.martin.apkanalyzer.core.apps.model.ComponentIntentFilter
+import sk.styk.martin.apkanalyzer.core.apps.model.ComponentIntentFilterKey
+import sk.styk.martin.apkanalyzer.core.apps.model.ComponentKind
 import sk.styk.martin.apkanalyzer.core.apps.model.ContentProvider
 import sk.styk.martin.apkanalyzer.core.apps.model.Feature
 import sk.styk.martin.apkanalyzer.core.apps.model.InstallLocation
@@ -47,6 +51,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     private val sdkVersionResolver: SdkVersionResolver,
     private val installSourceResolver: InstallSourceResolver,
     private val certificateExtractor: CertificateExtractor,
+    private val manifestParser: ManifestParser,
     private val storageStatsRepository: StorageStatsRepository,
     private val usageStatsRepository: UsageStatsRepository,
     packageChangesObserver: PackageChangesObserver,
@@ -82,10 +87,14 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         cache[packageName]?.let { return Result.success(it) }
         Logger.d(TAG, "Loading details of $packageName")
         return runCatchingCancellable {
+            val reference = AppReference.InstalledPackage(packageName)
             val packageInfo = packageManager.getPackageInfo(packageName.value, analysisFlags)
+            val intentFilters = manifestParser.componentIntentFilters(reference)
             getPackageDetails(
                 analysisMode = AppDetail.AnalysisMode.InstalledPackage,
                 packageInfo = packageInfo,
+                intentFiltersByComponent = intentFilters.getOrDefault(emptyMap()),
+                areIntentFiltersAvailable = intentFilters.isSuccess,
                 totalSize = storageStatsRepository.queryTotalSize(packageName),
                 lastUsedTime = usageStatsRepository.queryLastUsedTime(packageName),
             )
@@ -93,16 +102,22 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     }
 
     private suspend fun apkFilePackageDetails(accessibleFile: File): Result<AppDetail> = runCatchingCancellable {
+        val reference = AppReference.ApkFile(accessibleFile.absolutePath)
+        val intentFilters = manifestParser.componentIntentFilters(reference)
         getPackageDetails(
             analysisMode = AppDetail.AnalysisMode.ApkFile,
             packageInfo = packageManager.getPackageArchiveInfoWithCorrectPath(accessibleFile.absolutePath, analysisFlags)
                 ?: error("Cannot parse APK file: ${accessibleFile.absolutePath}"),
+            intentFiltersByComponent = intentFilters.getOrDefault(emptyMap()),
+            areIntentFiltersAvailable = intentFilters.isSuccess,
         )
     }
 
     private fun getPackageDetails(
         analysisMode: AppDetail.AnalysisMode,
         packageInfo: PackageInfo,
+        intentFiltersByComponent: Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>,
+        areIntentFiltersAvailable: Boolean,
         totalSize: AppSize? = null,
         lastUsedTime: Instant? = null,
     ) = AppDetail(
@@ -115,12 +130,14 @@ internal class AppDetailRepositoryImpl @Inject constructor(
                 AppDetail.AnalysisMode.InstalledPackage -> queryLauncherActivityNames(PackageName(packageInfo.packageName))
                 AppDetail.AnalysisMode.ApkFile -> null
             },
+            intentFiltersByComponent = intentFiltersByComponent,
         ),
-        services = getServices(packageInfo),
-        contentProviders = getContentProviders(packageInfo),
-        receivers = getBroadcastReceivers(packageInfo),
+        services = getServices(packageInfo, intentFiltersByComponent),
+        contentProviders = getContentProviders(packageInfo, intentFiltersByComponent),
+        receivers = getBroadcastReceivers(packageInfo, intentFiltersByComponent),
         permissions = getPermissions(packageInfo),
         features = getFeatures(packageInfo),
+        areComponentIntentFiltersAvailable = areIntentFiltersAvailable,
     )
 
     private fun getGeneralData(
@@ -160,7 +177,11 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         )
     }
 
-    private fun getActivities(packageInfo: PackageInfo, launcherActivityNames: Set<String>?): List<Activity> = packageInfo.activities.orEmpty().map {
+    private fun getActivities(
+        packageInfo: PackageInfo,
+        launcherActivityNames: Set<String>?,
+        intentFiltersByComponent: Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>,
+    ): List<Activity> = packageInfo.activities.orEmpty().map {
         Activity(
             name = it.name,
             packageName = PackageName(it.packageName),
@@ -170,6 +191,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             parentName = it.parentActivityName,
             isExported = it.exported,
             isLauncher = launcherActivityNames?.contains(it.name),
+            intentFilters = intentFiltersByComponent[ComponentIntentFilterKey(it.name, ComponentKind.Activity)].orEmpty(),
         )
     }
 
@@ -183,7 +205,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         }
         .toSet()
 
-    private fun getServices(packageInfo: PackageInfo): List<Service> = packageInfo.services.orEmpty().map {
+    private fun getServices(packageInfo: PackageInfo, intentFiltersByComponent: Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>): List<Service> = packageInfo.services.orEmpty().map {
         Service(
             name = it.name,
             permission = it.permission,
@@ -192,24 +214,27 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             isSingleUser = it.flags and ServiceInfo.FLAG_SINGLE_USER > 0,
             isIsolatedProcess = it.flags and ServiceInfo.FLAG_ISOLATED_PROCESS > 0,
             isExternalService = it.flags and ServiceInfo.FLAG_EXTERNAL_SERVICE > 0,
+            intentFilters = intentFiltersByComponent[ComponentIntentFilterKey(it.name, ComponentKind.Service)].orEmpty(),
         )
     }
 
-    private fun getContentProviders(packageInfo: PackageInfo): List<ContentProvider> = packageInfo.providers.orEmpty().map {
+    private fun getContentProviders(packageInfo: PackageInfo, intentFiltersByComponent: Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>): List<ContentProvider> = packageInfo.providers.orEmpty().map {
         ContentProvider(
             name = it.name,
             authority = it.authority,
             readPermission = it.readPermission,
             writePermission = it.writePermission,
             isExported = it.exported,
+            intentFilters = intentFiltersByComponent[ComponentIntentFilterKey(it.name, ComponentKind.Provider)].orEmpty(),
         )
     }
 
-    private fun getBroadcastReceivers(packageInfo: PackageInfo): List<BroadcastReceiver> = packageInfo.receivers.orEmpty().map {
+    private fun getBroadcastReceivers(packageInfo: PackageInfo, intentFiltersByComponent: Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>): List<BroadcastReceiver> = packageInfo.receivers.orEmpty().map {
         BroadcastReceiver(
             name = it.name,
             permission = it.permission,
             isExported = it.exported,
+            intentFilters = intentFiltersByComponent[ComponentIntentFilterKey(it.name, ComponentKind.Receiver)].orEmpty(),
         )
     }
 

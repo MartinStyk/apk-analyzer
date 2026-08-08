@@ -6,6 +6,7 @@ data class ContentProvider(
     val readPermission: String? = null,
     val writePermission: String? = null,
     val isExported: Boolean = false,
+    val intentFilters: List<ComponentIntentFilter> = emptyList(),
 )
 
 val ContentProvider.isExternallyReachableWithoutPermission: Boolean

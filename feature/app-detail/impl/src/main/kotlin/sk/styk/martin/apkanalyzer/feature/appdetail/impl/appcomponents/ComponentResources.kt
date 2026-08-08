@@ -3,6 +3,7 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.impl.appcomponents
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
+import sk.styk.martin.apkanalyzer.core.apps.model.IntentFilterDataRuleType
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.R
 
@@ -66,4 +67,34 @@ internal val ComponentFlag.explanationRes: Int
         ComponentFlag.SingleUser -> R.string.components_flag_single_user_explanation
         ComponentFlag.IsolatedProcess -> R.string.components_flag_isolated_process_explanation
         ComponentFlag.ExternalService -> R.string.components_flag_external_service_explanation
+    }
+
+@get:StringRes
+internal val IntentFilterDataRuleType.labelRes: Int
+    get() = when (this) {
+        IntentFilterDataRuleType.Scheme -> R.string.components_intent_data_scheme
+        IntentFilterDataRuleType.Host -> R.string.components_intent_data_host
+        IntentFilterDataRuleType.Port -> R.string.components_intent_data_port
+        IntentFilterDataRuleType.Path -> R.string.components_intent_data_path
+        IntentFilterDataRuleType.PathPrefix -> R.string.components_intent_data_path_prefix
+        IntentFilterDataRuleType.PathSuffix -> R.string.components_intent_data_path_suffix
+        IntentFilterDataRuleType.PathPattern -> R.string.components_intent_data_path_pattern
+        IntentFilterDataRuleType.PathAdvancedPattern -> R.string.components_intent_data_path_advanced_pattern
+        IntentFilterDataRuleType.SchemeSpecificPart -> R.string.components_intent_data_scheme_specific_part
+        IntentFilterDataRuleType.SchemeSpecificPartPrefix -> R.string.components_intent_data_scheme_specific_part_prefix
+        IntentFilterDataRuleType.SchemeSpecificPartSuffix -> R.string.components_intent_data_scheme_specific_part_suffix
+        IntentFilterDataRuleType.SchemeSpecificPartPattern -> R.string.components_intent_data_scheme_specific_part_pattern
+        IntentFilterDataRuleType.SchemeSpecificPartAdvancedPattern -> R.string.components_intent_data_scheme_specific_part_advanced_pattern
+        IntentFilterDataRuleType.Query -> R.string.components_intent_data_query
+        IntentFilterDataRuleType.QueryPrefix -> R.string.components_intent_data_query_prefix
+        IntentFilterDataRuleType.QuerySuffix -> R.string.components_intent_data_query_suffix
+        IntentFilterDataRuleType.QueryPattern -> R.string.components_intent_data_query_pattern
+        IntentFilterDataRuleType.QueryAdvancedPattern -> R.string.components_intent_data_query_advanced_pattern
+        IntentFilterDataRuleType.Fragment -> R.string.components_intent_data_fragment
+        IntentFilterDataRuleType.FragmentPrefix -> R.string.components_intent_data_fragment_prefix
+        IntentFilterDataRuleType.FragmentSuffix -> R.string.components_intent_data_fragment_suffix
+        IntentFilterDataRuleType.FragmentPattern -> R.string.components_intent_data_fragment_pattern
+        IntentFilterDataRuleType.FragmentAdvancedPattern -> R.string.components_intent_data_fragment_advanced_pattern
+        IntentFilterDataRuleType.MimeType -> R.string.components_intent_data_mime_type
+        IntentFilterDataRuleType.MimeGroup -> R.string.components_intent_data_mime_group
     }

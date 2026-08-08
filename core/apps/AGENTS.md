@@ -24,6 +24,7 @@ AppExportManager.kt / Impl          - SAF-backed base APK and full-resolution ic
 analysis/
   CertificateExtractor.kt / Impl    - APK signing certificate extraction
   ManifestParser.kt / Impl           - Installed/APK AndroidManifest.xml parsing into readable namespaced XML
+                                       and component intent filters
   InstallSourceResolver.kt / Impl   - Determine app install source (Play Store, sideload, etc.)
   SdkVersionResolver.kt             - SDK version to Android name mapping
   AnalysisUtils.kt                   - Shared analysis helpers, incl. permission protection decoding
@@ -42,7 +43,7 @@ model/
   UsedPermission.kt       - Permission with grant status
   Activity.kt             - Activity component info. `isLauncher` is nullable: it is resolved from
                             `queryIntentActivities` for an installed package, and is `null` for an
-                            APK file, where the intent filters cannot be read — null means unknown,
+                            APK file, where launcher resolution is unavailable — null means unknown,
                             never "not a launcher"
   Service.kt              - Service component info
   BroadcastReceiver.kt    - Receiver component info
@@ -106,10 +107,22 @@ them apart: `AppDetailRepositoryImpl` caches `AppDetail` keyed by package and in
 second input the key does not mention and the invalidation does not track. Consumers inject both
 repositories and combine them while mapping to state.
 
+## Component Intent Filters
+
+- `PackageInfo` exposes component metadata but not its declared intent filters.
+- `queryIntentActivities` and the other `queryIntent*` APIs only return filters that match an intent
+  the caller already knows, so they cannot enumerate an app's entry points.
+- `ManifestParser.componentIntentFilters()` reads the base manifest and every installed split manifest
+  with Android's public binary XML resource parser. It normalizes relative component class names before
+  joining filters back to `PackageInfo` components. Component kind is part of the key because Android
+  permits different component types to share the same class name.
+- Every filter preserves its actions, categories, data rules, priority, order, and link-verification
+  request. Multiple `<data>` tags accumulate as rules on one filter, matching Android's semantics.
+
 ## External Entry Semantics
 
 - These rules support the Components screen's technical filter. They are not a risk verdict and do
-  not feed the hub until intent filters and path permissions provide the missing context.
+  not feed the hub until path permissions provide the remaining context.
 - Exported alone is not a finding. Launcher activities are expected to be exported and are excluded.
 - An activity is unguarded only when launcher status is known to be false and no permission is required.
 - Services and receivers are unguarded when exported without a required permission.

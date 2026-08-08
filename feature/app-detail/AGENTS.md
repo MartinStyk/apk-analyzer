@@ -96,6 +96,10 @@ permissions.
 ```
 ComponentsScreen.kt               - Pinned toolbar, collapsing filter header, sectioned list
 ComponentDetailBottomSheet.kt     - The item sheet, per component type
+IntentFiltersScreen.kt            - Searchable filters for one component; each row summarizes one
+                                    filter and opens its full structured detail sheet
+IntentFiltersViewModel.kt         - Assisted-injected with the app input and component class name
+IntentFilterDetailBottomSheet.kt  - Full actions, categories, URI/content rules, and matching metadata
 ComponentResources.kt             - Enum -> @StringRes / icon mapping
 ComponentsViewModel.kt            - Assisted-injected with the initial scope and filters
 ComponentsState.kt                - Loading/Error/Loaded plus ComponentItem, ComponentDetails,
@@ -107,8 +111,12 @@ One screen for all four component types; the scope selector carries the type, so
 component rows deep-link with their scope preselected. Under scope `All` the list is sectioned by
 type. Exported items sort first. `isGuarded` folds a provider's read/write permissions and the other
 types' single `permission` into one flag, so `isUnprotected` (exported and unguarded) means the same
-thing everywhere. It is a technical narrowing filter, not a risk verdict: intent filters and path
-permissions are not extracted yet, so this state does not feed the hub's "Worth knowing" card.
+thing everywhere. The component sheet shows every declared intent filter as the requests, links,
+and content that can reach that component. It shows only a filter count and links to a searchable
+full-screen list; filter counts do not appear on component rows because quantity is not a risk
+signal. A manifest parsing failure remains explicit in the component sheet but does not fail the
+rest of app detail. Path permissions are not extracted yet, so exposure
+still does not feed the hub's "Worth knowing" card.
 `isLaunchable` is deliberately *not* `isUnprotected`: it is exported-and-unguarded (which is exactly
 "we are allowed to start it") in `InstalledPackage` mode, for activities and receivers only. Launcher
 activities are the most launchable thing there is, so reusing `isUnprotected` would hide the run
@@ -171,10 +179,11 @@ There is no search and no scope selector. The `Libraries` scope from the design 
 - Badge computation uses `AppClassificationThresholds` from `core:apps`.
 - Sub-screens follow the `GeneralInfoScreen` idiom: **tap = explain, long-press = copy**.
 - "Worth knowing" excludes component exposure and merely requested dangerous permissions. Component
-  intent-filter and path-permission evidence is not available yet, so the hub does not interpret
-  exported components. It surfaces debug access, actually granted high-impact access, debug or
-  not-yet-valid signing, and targets at least four API levels behind the device. Backup and cleartext
-  flags remain neutral facts in General information rather than findings.
+  intent filters are available in the component detail sheet, but path-permission evidence is still
+  missing, so the hub does not yet interpret exported components. It surfaces debug access, actually
+  granted high-impact access, debug or not-yet-valid signing, and targets at least four API levels
+  behind the device. Backup and cleartext flags remain neutral facts in General information rather
+  than findings.
 - Granted high-impact access is deliberately narrower than every dangerous permission: background
   location, messages, call history, contacts, and calendar. Camera and microphone stay in the
   permission preview because they are common and need app-purpose context before they become a
