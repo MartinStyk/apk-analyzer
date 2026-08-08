@@ -60,6 +60,6 @@ fun NavigationState.toEntries(entryProvider: (NavKey) -> NavEntry<NavKey>): Snap
     }
 
     return topLevelStack
-        .flatMap { decoratedEntries[it] ?: emptyList() }
+        .flatMap { decoratedEntries[it].orEmpty() }
         .toMutableStateList()
 }

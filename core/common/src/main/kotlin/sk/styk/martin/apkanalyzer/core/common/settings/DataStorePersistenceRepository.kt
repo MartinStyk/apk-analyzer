@@ -47,15 +47,15 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
 class DataStorePersistenceRepository
 @Inject
 constructor(@param:ApplicationContext private val context: Context) : PersistenceRepository {
-    override fun <T> observe(key: Key<T>): Flow<T> = context.dataStore.data.map { key.read(it) }
+    override fun <T : Any> observe(key: Key<T>): Flow<T> = context.dataStore.data.map { key.read(it) }
 
-    override suspend fun <T> get(key: Key<T>): T = context.dataStore.data.first().let { key.read(it) }
+    override suspend fun <T : Any> get(key: Key<T>): T = context.dataStore.data.first().let { key.read(it) }
 
-    override suspend fun <T> save(key: Key<T>, value: T) {
+    override suspend fun <T : Any> save(key: Key<T>, value: T) {
         context.dataStore.edit { prefs -> key.write(prefs, value) }
     }
 
-    private fun <T> Key<T>.read(prefs: Preferences): T = when (this) {
+    private fun <T : Any> Key<T>.read(prefs: Preferences): T = when (this) {
         Key.ColorScheme -> {
             when (prefs[KEY_COLOR_SCHEME]) {
                 "light" -> ColorAppScheme.Day
@@ -87,7 +87,7 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
         }
     } as T
 
-    private fun <T> Key<T>.write(prefs: MutablePreferences, value: T) = when (this) {
+    private fun <T : Any> Key<T>.write(prefs: MutablePreferences, value: T) = when (this) {
         Key.ColorScheme -> {
             prefs[KEY_COLOR_SCHEME] =
                 when (value as ColorAppScheme) {

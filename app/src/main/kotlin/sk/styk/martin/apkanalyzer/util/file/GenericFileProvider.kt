@@ -4,6 +4,6 @@ import androidx.core.content.FileProvider
 
 class GenericFileProvider : FileProvider() {
     companion object {
-        val AUTHORITY = "sk.styk.martin.apkanalyzer"
+        const val AUTHORITY = "sk.styk.martin.apkanalyzer"
     }
 }

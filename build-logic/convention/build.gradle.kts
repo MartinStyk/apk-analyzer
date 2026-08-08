@@ -1,5 +1,6 @@
 plugins {
     `kotlin-dsl`
+    alias(libs.plugins.detekt)
 }
 
 group = "sk.styk.martin.apkanalyzer.buildlogic"
@@ -13,6 +14,14 @@ dependencies {
     compileOnly(libs.kotlin.gradle.plugin)
     compileOnly(libs.ksp.gradle.plugin)
     compileOnly(libs.spotless.gradle.plugin)
+    compileOnly(libs.detekt.gradle.plugin)
+}
+
+detekt {
+    buildUponDefaultConfig.set(true)
+    config.setFrom(layout.projectDirectory.file("../../config/detekt/detekt.yml"))
+    basePath.set(layout.projectDirectory.dir("../.."))
+    parallel.set(true)
 }
 
 gradlePlugin {
@@ -44,6 +53,10 @@ gradlePlugin {
         register("apkanalyzer.spotless") {
             id = "apkanalyzer.spotless"
             implementationClass = "sk.styk.martin.apkanalyzer.SpotlessPlugin"
+        }
+        register("apkanalyzer.detekt") {
+            id = "apkanalyzer.detekt"
+            implementationClass = "sk.styk.martin.apkanalyzer.DetektPlugin"
         }
         register("apkanalyzer.compose") {
             id = "apkanalyzer.compose"

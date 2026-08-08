@@ -110,14 +110,17 @@ internal class AppExportManagerImpl @Inject constructor(
     }
 
     private suspend fun writeTo(destination: Uri, write: suspend (OutputStream) -> Unit) {
+        var writeCompleted = false
         try {
             val output = contentResolver.openOutputStream(destination, "w")
                 ?: error("The selected destination can not be opened")
             output.use { write(it) }
-        } catch (throwable: Throwable) {
-            runCatching { contentResolver.delete(destination, null, null) }
-                .onFailure { Logger.w(TAG, it, "Can not remove incomplete export") }
-            throw throwable
+            writeCompleted = true
+        } finally {
+            if (!writeCompleted) {
+                runCatching { contentResolver.delete(destination, null, null) }
+                    .onFailure { Logger.w(TAG, it, "Can not remove incomplete export") }
+            }
         }
     }
 

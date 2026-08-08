@@ -19,7 +19,7 @@ internal class RecentlyViewedAppsRepositoryImpl @Inject constructor(private val 
             if (enabled) {
                 combine(
                     persistenceRepository.observe(Key.RecentlyViewedApps),
-                    installedAppsRepository.apps().map { it.associateBy { it.packageName } },
+                    installedAppsRepository.apps().map { apps -> apps.associateBy { it.packageName } },
                 ) { recentPackages, installedApps ->
                     recentPackages.mapNotNull { installedApps[PackageName(it)] }
                 }

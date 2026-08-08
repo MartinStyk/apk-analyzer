@@ -1,5 +1,6 @@
 package sk.styk.martin.apkanalyzer.core.common.model
 
+import java.util.Locale
 import kotlin.math.abs
 
 @JvmInline
@@ -11,9 +12,9 @@ value class AppSize private constructor(val bytes: Long) : Comparable<AppSize> {
 
     fun formatted(): String = when {
         abs(bytes) < 1024L -> "$bytes B"
-        abs(bytes) < 1024L * 1024L -> "%.0f KB".format(kilobytes)
-        abs(bytes) < 1024L * 1024L * 1024L -> "%.1f MB".format(megabytes)
-        else -> "%.2f GB".format(gigabytes)
+        abs(bytes) < 1024L * 1024L -> "%.0f KB".format(Locale.getDefault(), kilobytes)
+        abs(bytes) < 1024L * 1024L * 1024L -> "%.1f MB".format(Locale.getDefault(), megabytes)
+        else -> "%.2f GB".format(Locale.getDefault(), gigabytes)
     }
 
     operator fun plus(other: AppSize): AppSize = AppSize(bytes + other.bytes)

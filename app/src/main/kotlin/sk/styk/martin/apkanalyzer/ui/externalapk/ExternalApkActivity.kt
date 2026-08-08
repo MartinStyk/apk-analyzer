@@ -42,7 +42,8 @@ class ExternalApkActivity : ComponentActivity() {
 @Suppress("DEPRECATION")
 private fun Intent.externalApkUri(): String? {
     if (action != Intent.ACTION_VIEW && action != Intent.ACTION_INSTALL_PACKAGE) return null
-    return data
-        ?.takeIf { it.scheme == ContentResolver.SCHEME_CONTENT || it.scheme == ContentResolver.SCHEME_FILE }
+    val uri = data ?: return null
+    return uri
+        .takeIf { it.scheme == ContentResolver.SCHEME_CONTENT || it.scheme == ContentResolver.SCHEME_FILE }
         ?.toString()
 }

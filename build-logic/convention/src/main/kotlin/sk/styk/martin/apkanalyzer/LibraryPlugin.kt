@@ -13,6 +13,7 @@ class LibraryPlugin : Plugin<Project> {
         with(pluginManager) {
             apply("com.android.library")
             apply("apkanalyzer.spotless")
+            apply("apkanalyzer.detekt")
         }
 
         extensions.configure<LibraryExtension> {

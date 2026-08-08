@@ -129,7 +129,7 @@ combined with Detekt-driven refactoring.
 - All enabled ktlint and Compose rules pass.
 - The pull request contains no behavioral refactoring.
 
-### KQ-03: Add a curated Detekt baseline
+### KQ-03: Add curated Detekt analysis
 
 **Depends on:** KQ-01
 
@@ -144,15 +144,18 @@ combined with Detekt-driven refactoring.
   - cyclomatic complexity: 15;
   - nested block depth: 4.
 - Keep formatting, KDoc, `MagicNumber`, and aggressive `TooManyFunctions` rules disabled.
-- Fix high-confidence findings before creating a baseline.
-- Baseline only accepted legacy complexity that cannot be safely refactored in this step.
-- Add `detekt` to CI.
+- Run high-confidence checks with type resolution through Android variant tasks and the JVM main
+  source set.
+- Fix high-confidence findings before making the checks blocking.
+- Keep complexity findings non-blocking until the affected code is refactored.
+- Do not create a baseline. Stage rule severities instead of hiding accepted findings.
+- Run every Android module's `detektDebug` task and `build-logic:convention:detektMain` in CI.
 
 **Exit criteria**
 
-- Detekt fails CI for new findings.
+- Detekt fails CI for new error-severity findings.
 - No formatting rule is enforced by both Detekt and Spotless.
-- Every baseline entry has been reviewed rather than generated and accepted blindly.
+- The repository has no Detekt baseline.
 
 ### KQ-04: Pay down legacy complexity
 
@@ -160,19 +163,21 @@ combined with Detekt-driven refactoring.
 
 **Changes**
 
-- Refactor baseline entries in small, behavior-preserving pull requests.
+- Refactor visible complexity findings in small, behavior-preserving pull requests.
 - Start with the largest screen files:
   - `AppDetailScreen.kt`;
   - `CertificatesScreen.kt`;
   - `FilterScreen.kt`;
   - `AppsScreen.kt`.
 - Extract cohesive UI sections and sample preview data into focused files.
-- Remove each Detekt baseline entry in the same pull request that fixes it.
+- Promote each complexity rule to blocking after its existing findings are fixed.
+- After all warning findings are resolved, make warning-severity findings fail Detekt.
 
 **Exit criteria**
 
 - No production Kotlin file exceeds the agreed class or method limits.
-- The Detekt baseline is empty, or contains only documented platform-generated exceptions.
+- All enabled Detekt rules pass without a baseline.
+- Detekt fails CI for every error- or warning-severity finding.
 - Refactoring does not change user-visible behavior.
 
 ### KQ-05: Make diagnostics blocking
@@ -224,7 +229,7 @@ focused architecture checks rather than AST lint rules.
 After all steps, the main quality gate should be equivalent to:
 
 ```shell
-./gradlew spotlessCheck detekt lintDebug :app:assembleDebug
+./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug :app:assembleDebug
 ```
 
 `spotlessApply` remains the only automatic formatting command. Detekt and Android Lint remain

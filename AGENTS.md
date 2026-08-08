@@ -28,7 +28,7 @@ re-deriving the module's structure.
 |---|---|
 | Iterating on one module | `./gradlew :feature:apps:impl:compileDebugKotlin` |
 | Before committing | `./gradlew spotlessApply` |
-| Whole-app check (what CI gates on) | `./gradlew spotlessCheck lintDebug :app:assembleDebug` |
+| Whole-app check (what CI gates on) | `./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug :app:assembleDebug` |
 | After changing a context file, skill, adapter, or the module graph | `./gradlew validateAgentContext` |
 
 A successful compile is not proof a Compose layout is correct. For visual or layout changes, use

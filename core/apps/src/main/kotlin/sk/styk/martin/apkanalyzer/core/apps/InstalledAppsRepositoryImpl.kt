@@ -80,7 +80,7 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
             versionName = versionName,
             installTime = Instant.ofEpochMilli(firstInstallTime),
             lastUpdateTime = Instant.ofEpochMilli(lastUpdateTime),
-            requestedPermissions = requestedPermissions?.toList() ?: emptyList(),
+            requestedPermissions = requestedPermissions?.toList().orEmpty(),
         )
     }
 }
