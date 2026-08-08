@@ -48,9 +48,9 @@ import javax.inject.Singleton
 @Singleton
 internal class AppDetailRepositoryImpl @Inject constructor(
     private val packageManager: PackageManager,
-    private val sdkVersionResolver: SdkVersionResolver,
-    private val installSourceResolver: InstallSourceResolver,
-    private val certificateExtractor: CertificateExtractor,
+    sdkVersionResolver: SdkVersionResolver,
+    installSourceResolver: InstallSourceResolver,
+    certificateExtractor: CertificateExtractor,
     private val manifestParser: ManifestParser,
     private val storageStatsRepository: StorageStatsRepository,
     private val usageStatsRepository: UsageStatsRepository,
@@ -60,6 +60,12 @@ internal class AppDetailRepositoryImpl @Inject constructor(
 ) : AppDetailRepository {
 
     private val cache = ConcurrentHashMap<PackageName, AppDetail>()
+    private val appDetailMapper = AppDetailMapper(
+        packageManager = packageManager,
+        sdkVersionResolver = sdkVersionResolver,
+        installSourceResolver = installSourceResolver,
+        certificateExtractor = certificateExtractor,
+    )
 
     private val analysisFlags = PackageManager.GET_SIGNING_CERTIFICATES or
         PackageManager.GET_ACTIVITIES or
@@ -90,7 +96,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             val reference = AppReference.InstalledPackage(packageName)
             val packageInfo = packageManager.getPackageInfo(packageName.value, analysisFlags)
             val intentFilters = manifestParser.componentIntentFilters(reference)
-            getPackageDetails(
+            appDetailMapper.getPackageDetails(
                 analysisMode = AppDetail.AnalysisMode.InstalledPackage,
                 packageInfo = packageInfo,
                 intentFiltersByComponent = intentFilters.getOrDefault(emptyMap()),
@@ -104,7 +110,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     private suspend fun apkFilePackageDetails(accessibleFile: File): Result<AppDetail> = runCatchingCancellable {
         val reference = AppReference.ApkFile(accessibleFile.absolutePath)
         val intentFilters = manifestParser.componentIntentFilters(reference)
-        getPackageDetails(
+        appDetailMapper.getPackageDetails(
             analysisMode = AppDetail.AnalysisMode.ApkFile,
             packageInfo = packageManager.getPackageArchiveInfoWithCorrectPath(accessibleFile.absolutePath, analysisFlags)
                 ?: error("Cannot parse APK file: ${accessibleFile.absolutePath}"),
@@ -112,8 +118,16 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             areIntentFiltersAvailable = intentFilters.isSuccess,
         )
     }
+}
 
-    private fun getPackageDetails(
+private class AppDetailMapper(
+    private val packageManager: PackageManager,
+    private val sdkVersionResolver: SdkVersionResolver,
+    private val installSourceResolver: InstallSourceResolver,
+    private val certificateExtractor: CertificateExtractor,
+) {
+
+    fun getPackageDetails(
         analysisMode: AppDetail.AnalysisMode,
         packageInfo: PackageInfo,
         intentFiltersByComponent: Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>,
@@ -247,7 +261,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     private fun getDefinedPermissions(packageInfo: PackageInfo): List<Permission> = packageInfo.permissions.orEmpty().map {
         Permission(
             name = it.name,
-            details = it.toDetails(),
+            details = it.toDetails(packageManager),
         )
     }
 
@@ -262,20 +276,12 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             UsedPermission(
                 permissionData = Permission(
                     name = name,
-                    details = permissionInfo?.toDetails(),
+                    details = permissionInfo?.toDetails(packageManager),
                 ),
                 isGranted = (grantedFlags?.getOrNull(index) ?: 0) and PackageInfo.REQUESTED_PERMISSION_GRANTED != 0,
             )
         }
     }
-
-    private fun PermissionInfo.toDetails() = PermissionDetails(
-        groupName = group,
-        protectionLevel = resolveProtectionLevel(protection),
-        protectionFlags = resolveProtectionFlags(protectionFlags),
-        description = loadDescription(packageManager)?.toString(),
-        declaringPackage = PackageName(packageName),
-    )
 
     private fun getFeatures(packageInfo: PackageInfo): List<Feature> = packageInfo.reqFeatures.orEmpty().map { featureInfo ->
         val isRequired = (featureInfo.flags and FeatureInfo.FLAG_REQUIRED) > 0
@@ -284,19 +290,25 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             else -> Feature.Hardware(name = name, version = featureInfo.version, isRequired = isRequired)
         }
     }
-
-    private fun ApplicationInfo?.hasFlag(flag: Int): Boolean = this?.flags?.and(flag) != 0
-
-    private fun PackageManager.getPackageArchiveInfoWithCorrectPath(pathToPackage: String, flags: Int): PackageInfo? {
-        val packageInfo = getPackageArchiveInfo(pathToPackage, flags)
-        packageInfo?.applicationInfo?.sourceDir = pathToPackage
-        packageInfo?.applicationInfo?.publicSourceDir = pathToPackage
-        return packageInfo
-    }
-
-    companion object {
-        private const val TAG = "AppDetailRepositoryImpl"
-
-        private val launcherCategories = listOf(Intent.CATEGORY_LAUNCHER, Intent.CATEGORY_LEANBACK_LAUNCHER)
-    }
 }
+
+private fun PermissionInfo.toDetails(packageManager: PackageManager) = PermissionDetails(
+    groupName = group,
+    protectionLevel = resolveProtectionLevel(protection),
+    protectionFlags = resolveProtectionFlags(protectionFlags),
+    description = loadDescription(packageManager)?.toString(),
+    declaringPackage = PackageName(packageName),
+)
+
+private fun ApplicationInfo?.hasFlag(flag: Int): Boolean = this?.flags?.and(flag) != 0
+
+private fun PackageManager.getPackageArchiveInfoWithCorrectPath(pathToPackage: String, flags: Int): PackageInfo? {
+    val packageInfo = getPackageArchiveInfo(pathToPackage, flags)
+    packageInfo?.applicationInfo?.sourceDir = pathToPackage
+    packageInfo?.applicationInfo?.publicSourceDir = pathToPackage
+    return packageInfo
+}
+
+private const val TAG = "AppDetailRepositoryImpl"
+
+private val launcherCategories = listOf(Intent.CATEGORY_LAUNCHER, Intent.CATEGORY_LEANBACK_LAUNCHER)

@@ -14,7 +14,12 @@ complexity:
   NestedBlockDepth:
     severity: error
   TooManyFunctions:
-    active: false
+    active: true
+    allowedFunctionsPerFile: 20
+    ignoreAnnotatedFunctions:
+      - 'Binds'
+      - 'Preview'
+      - 'Provides'
 
 coroutines:
   GlobalCoroutineUsage:
