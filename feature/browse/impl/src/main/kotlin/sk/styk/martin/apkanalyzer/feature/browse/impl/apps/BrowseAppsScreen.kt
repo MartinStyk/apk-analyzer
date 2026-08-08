@@ -130,6 +130,7 @@ private fun BrowseAppsList(
             SearchBarActive(
                 query = state.query,
                 placeholder = pluralStringResource(R.plurals.browse_apps_filter_hint, state.totalApps, state.totalApps),
+                sharedElementKey = null,
                 onQueryChange = { onAction(BrowseAppsAction.ChangeQuery(it)) },
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             )

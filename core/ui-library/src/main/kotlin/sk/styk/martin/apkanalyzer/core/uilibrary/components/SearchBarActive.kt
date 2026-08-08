@@ -26,12 +26,14 @@ fun SearchBarActive(
     query: String,
     placeholder: String,
     modifier: Modifier = Modifier,
+    sharedElementKey: Any? = "search-bar",
     onQueryChange: (String) -> Unit = {},
 ) {
+    val sharedElementModifier = if (sharedElementKey == null) modifier else modifier.sharedElement(key = sharedElementKey)
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .sharedElement(key = "search-bar")
+        modifier = sharedElementModifier
             .fillMaxWidth()
             .heightIn(min = 48.dp)
             .background(
