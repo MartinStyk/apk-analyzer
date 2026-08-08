@@ -7,7 +7,8 @@ import org.gradle.api.provider.Provider
 
 internal fun DependencyHandler.implementation(dependencyNotation: Any): Dependency? = add("implementation", dependencyNotation)
 
-internal fun DependencyHandler.implementation(dependencyNotation: Provider<*>, configuration: Action<*>) = addProvider("implementation", dependencyNotation, configuration)
+internal fun DependencyHandler.implementation(dependencyNotation: Provider<*>, configuration: Action<*>) =
+    addProvider("implementation", dependencyNotation, configuration)
 
 internal fun DependencyHandler.api(dependencyNotation: Any): Dependency? = add("api", dependencyNotation)
 

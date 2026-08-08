@@ -24,21 +24,22 @@ internal class ManifestParserImpl @Inject constructor(
         is AppReference.ApkFile -> apkFileManifest(reference.path)
     }
 
-    override suspend fun componentIntentFilters(reference: AppReference): Result<Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>> = withContext(dispatcherProvider.io()) {
-        runCatchingCancellable {
-            when (reference) {
-                is AppReference.InstalledPackage -> installedComponentIntentFilters(reference.packageName)
-                is AppReference.ApkFile -> componentManifestParser.parse(resourcesForApk(reference.path))
+    override suspend fun componentIntentFilters(reference: AppReference): Result<Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>> =
+        withContext(dispatcherProvider.io()) {
+            runCatchingCancellable {
+                when (reference) {
+                    is AppReference.InstalledPackage -> installedComponentIntentFilters(reference.packageName)
+                    is AppReference.ApkFile -> componentManifestParser.parse(resourcesForApk(reference.path))
+                }
+                    .groupBy(
+                        keySelector = { it.first },
+                        valueTransform = { it.second },
+                    )
+                    .mapValues { (_, filters) -> filters.distinct() }
+            }.onFailure {
+                Logger.e(TAG, it, "Can not read component intent filters from $reference")
             }
-                .groupBy(
-                    keySelector = { it.first },
-                    valueTransform = { it.second },
-                )
-                .mapValues { (_, filters) -> filters.distinct() }
-        }.onFailure {
-            Logger.e(TAG, it, "Can not read component intent filters from $reference")
         }
-    }
 
     private suspend fun installedPackageManifest(packageName: PackageName): Result<ParsedManifest> = withContext(dispatcherProvider.io()) {
         runCatchingCancellable {

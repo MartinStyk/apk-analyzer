@@ -82,7 +82,8 @@ private fun PermissionRationaleBottomSheetPreview() {
     ApkAnalyzerTheme {
         PermissionRationaleBottomSheet(
             title = "Allow usage access",
-            description = "These filters check when you last opened each app. Grant usage access in Settings so the app can identify recently active and idle apps.",
+            description = "These filters check when you last opened each app. " +
+                "Grant usage access in Settings so the app can identify recently active and idle apps.",
             openSettingsLabel = "Open settings",
             onOpenSettings = {},
             onDismiss = {},

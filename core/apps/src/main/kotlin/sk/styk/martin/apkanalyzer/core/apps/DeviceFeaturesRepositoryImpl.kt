@@ -12,7 +12,10 @@ import javax.inject.Singleton
 private const val TAG = "DeviceFeaturesRepositoryImpl"
 
 @Singleton
-internal class DeviceFeaturesRepositoryImpl @Inject constructor(private val packageManager: PackageManager, private val dispatcherProvider: DispatcherProvider) : DeviceFeaturesRepository {
+internal class DeviceFeaturesRepositoryImpl @Inject constructor(
+    private val packageManager: PackageManager,
+    private val dispatcherProvider: DispatcherProvider,
+) : DeviceFeaturesRepository {
 
     private val cachedDeviceFeatures: DeviceFeatures by lazy { readDeviceFeatures() }
 

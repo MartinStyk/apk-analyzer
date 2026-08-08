@@ -53,7 +53,7 @@ The following snapshot was taken on 2026-08-08.
 
 - Spotless does not cover root Gradle scripts or `build-logic` sources.
 - Kotlin files are targeted by both the Kotlin and Kotlin Gradle Spotless steps.
-- `.editorconfig` selects `intellij_idea` style and allows lines up to 240 characters.
+- `.editorconfig` selects `intellij_idea` style and allows lines up to 160 characters.
 - There is no Detekt configuration.
 - Kotlin compiler warnings are not treated as errors.
 - Android Lint warnings do not fail CI. Module reports contain 73 warnings in aggregate:
@@ -74,7 +74,7 @@ The repository contains 255 Kotlin files and approximately 18,924 Kotlin lines:
 | Lines over 160 characters | 12 |
 | Lines over 240 characters | 0 |
 
-The current 240-character limit therefore rejects no existing Kotlin line. Large screen files also
+The current 160-character limit rejects the longest existing Kotlin lines. Large screen files also
 show why formatting alone cannot maintain readable Kotlin: ktlint can format a 1,000-line file but
 cannot identify that it needs decomposition.
 
@@ -119,7 +119,7 @@ combined with Detekt-driven refactoring.
 **Changes**
 
 - Keep `ktlint_code_style = intellij_idea`.
-- Reduce `max_line_length` from 240 to 160.
+- Set `max_line_length` to 160.
 - Keep the existing intentional Compose rule exceptions.
 - Apply the resulting mechanical formatting in this pull request only.
 

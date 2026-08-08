@@ -109,7 +109,8 @@ internal interface AppsModule {
 
         @Provides
         @Singleton
-        fun provideUsageStatsManager(@ApplicationContext context: Context): UsageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+        fun provideUsageStatsManager(@ApplicationContext context: Context): UsageStatsManager =
+            context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
 
         @Provides
         @Singleton

@@ -36,9 +36,10 @@ internal class ComponentManifestParserImpl @Inject constructor() : ComponentMani
         return manifests.values.flatMap { it.filters }
     }
 
-    override fun parse(resources: Resources): List<Pair<ComponentIntentFilterKey, ComponentIntentFilter>> = resources.assets.openXmlResourceParser(MANIFEST_FILE_NAME).use { parser ->
-        parse(parser, resources).filters
-    }
+    override fun parse(resources: Resources): List<Pair<ComponentIntentFilterKey, ComponentIntentFilter>> =
+        resources.assets.openXmlResourceParser(MANIFEST_FILE_NAME).use { parser ->
+            parse(parser, resources).filters
+        }
 
     private fun parseInstalled(resources: Resources, cookie: Int): ParsedComponentManifest? = try {
         resources.assets.openXmlResourceParser(cookie, MANIFEST_FILE_NAME).use { parser ->

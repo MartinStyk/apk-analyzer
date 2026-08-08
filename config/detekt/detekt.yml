@@ -69,7 +69,7 @@ style:
     active: true
     severity: info
   MaxLineLength:
-    maxLineLength: 240
+    maxLineLength: 160
   ReturnCount:
     severity: warning
   ThrowsCount:
