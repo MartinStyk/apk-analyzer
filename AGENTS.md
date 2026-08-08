@@ -77,7 +77,8 @@ is the authoritative list.
 ### Data Layer
 
 * Repositories and Managers are a public `interface` plus an `internal` `Impl` in the same module,
-  bound with Hilt `@Binds` and scoped `@Singleton`.
+  bound with Hilt `@Binds` and scoped `@Singleton`. Keep the interface and implementation in
+  separate files. Models declared alongside the interface stay in the interface file.
 * Interface methods never throw. Return `Result<T>`, a nullable `T?`, or an empty collection.
 * Inject `DispatcherProvider` and switch with `flowOn(dispatcherProvider.default())` or
   `withContext(dispatcherProvider.io())`. Never hardcode `Dispatchers.IO`.
