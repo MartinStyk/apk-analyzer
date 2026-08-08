@@ -24,5 +24,6 @@ internal class InstallSourceResolverImpl @Inject constructor(private val package
         }
     }.getOrNull()?.let(::PackageName)
 
-    override fun isSystemInstalledApp(packageInfo: PackageInfo): Boolean = packageInfo.applicationInfo?.let { it.flags and ApplicationInfo.FLAG_SYSTEM != 0 } ?: false
+    override fun isSystemInstalledApp(packageInfo: PackageInfo): Boolean =
+        packageInfo.applicationInfo?.let { it.flags and ApplicationInfo.FLAG_SYSTEM != 0 } ?: false
 }

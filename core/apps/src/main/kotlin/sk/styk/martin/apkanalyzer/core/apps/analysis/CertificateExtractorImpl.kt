@@ -84,7 +84,9 @@ internal class CertificateExtractorImpl @Inject constructor(private val digestMa
         country = getField("C=([^,]*)"),
     )
 
-    private fun X500Principal.getField(pattern: String): String? = getName(RFC1779).takeUnless { it.isNullOrBlank() }?.let { Regex(pattern).find(it)?.groupValues?.get(1) }
+    private fun X500Principal.getField(pattern: String): String? = getName(RFC1779).takeUnless {
+        it.isNullOrBlank()
+    }?.let { Regex(pattern).find(it)?.groupValues?.get(1) }
 
     private fun resolveTrustLevel(certificate: X509Certificate): CertificateTrustLevel {
         val issuerDn = certificate.issuerX500Principal.name

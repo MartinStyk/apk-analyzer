@@ -11,6 +11,8 @@ complexity:
     severity: error
   CyclomaticComplexMethod:
     allowedComplexity: 24
+  LongParameterList:
+    active: false
   LongMethod:
     severity: info
   NestedBlockDepth:
@@ -67,11 +69,7 @@ style:
     active: true
     severity: info
   MaxLineLength:
-    active: false
-  ModifierOrder:
-    active: false
-  NewLineAtEndOfFile:
-    active: false
+    maxLineLength: 160
   ReturnCount:
     severity: warning
   ThrowsCount:
@@ -80,8 +78,6 @@ style:
     allowedNames: '.*Preview'
   UnusedPrivateProperty:
     active: true
-  WildcardImport:
-    active: false
 
 naming:
   FunctionNaming:

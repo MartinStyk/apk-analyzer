@@ -1,3 +1,5 @@
+import dev.detekt.gradle.extensions.FailOnSeverity
+
 plugins {
     `kotlin-dsl`
     alias(libs.plugins.detekt)
@@ -22,6 +24,7 @@ detekt {
     config.setFrom(layout.projectDirectory.file("../../config/detekt/detekt.yml"))
     basePath.set(layout.projectDirectory.dir("../.."))
     parallel.set(true)
+    failOnSeverity.set(FailOnSeverity.Warning)
 }
 
 gradlePlugin {

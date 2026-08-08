@@ -20,6 +20,7 @@ abstract class ClipboardModule {
 
     companion object {
         @Provides
-        fun provideAndroidClipboardManager(@ApplicationContext context: Context): AndroidClipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as AndroidClipboardManager
+        fun provideAndroidClipboardManager(@ApplicationContext context: Context): AndroidClipboardManager =
+            context.getSystemService(Context.CLIPBOARD_SERVICE) as AndroidClipboardManager
     }
 }

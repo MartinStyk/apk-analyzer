@@ -15,7 +15,7 @@ class DetektPlugin : Plugin<Project> {
             config.setFrom(rootProject.layout.projectDirectory.file("config/detekt/detekt.yml"))
             basePath.set(rootProject.layout.projectDirectory)
             parallel.set(true)
-            failOnSeverity.set(FailOnSeverity.Error)
+            failOnSeverity.set(FailOnSeverity.Warning)
         }
     }
 }

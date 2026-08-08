@@ -37,8 +37,10 @@ data class AppFilterState(
     val isSystemFilterActive: Boolean get() = AppSource.SystemPreinstalled in selectedSources
     val isGooglePlayFilterActive: Boolean get() = AppSource.GooglePlay in selectedSources
     val isSideloadedFilterActive: Boolean get() = AppSource.Unknown in selectedSources
-    val isRecentInstallActive: Boolean get() = installTimeRange?.start != null && installTimeRange.start > Instant.now() - AppClassificationThresholds.RECENT_PERIOD - 1.days.toJavaDuration()
-    val isRecentUpdateActive: Boolean get() = updateTimeRange?.start != null && updateTimeRange.start > Instant.now() - AppClassificationThresholds.RECENT_PERIOD - 1.days.toJavaDuration()
+    val isRecentInstallActive: Boolean get() = installTimeRange?.start != null &&
+        installTimeRange.start > Instant.now() - AppClassificationThresholds.RECENT_PERIOD - 1.days.toJavaDuration()
+    val isRecentUpdateActive: Boolean get() = updateTimeRange?.start != null &&
+        updateTimeRange.start > Instant.now() - AppClassificationThresholds.RECENT_PERIOD - 1.days.toJavaDuration()
     val isUnusedFilterActive: Boolean get() = unusedPeriod != null
     val isRecentlyUsedActive: Boolean get() = recentlyUsedDays != null
     val isSensitivePermissionsFilterActive: Boolean get() = PermissionPreset.Sensitive.permissions.all { it in selectedPermissions }

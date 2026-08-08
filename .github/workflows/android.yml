@@ -19,6 +19,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
 
     steps:
       - uses: actions/checkout@v7
@@ -50,7 +53,43 @@ jobs:
         run: ./gradlew spotlessCheck
 
       - name: Detekt check
-        run: ./gradlew detektDebug :build-logic:convention:detektMain
+        run: ./gradlew detektDebug :build-logic:convention:detektMain --continue
+
+      - name: Collect Detekt SARIF reports
+        if: always()
+        run: |
+          mkdir -p build/reports/detekt-sarif
+          find . -type f -path '*/build/reports/detekt/*.sarif' -print0 |
+            while IFS= read -r -d '' report; do
+              destination="build/reports/detekt-sarif/${report#./}"
+              mkdir -p "$(dirname "$destination")"
+              cp "$report" "$destination"
+            done
+          mapfile -d '' reports < <(find build/reports/detekt-sarif -type f -name '*.sarif' -print0 | sort -z)
+          if (( ${#reports[@]} == 0 )); then
+            echo "No Detekt SARIF reports found" >&2
+            exit 1
+          fi
+          jq -s '
+            . as $reports
+            | $reports[0] as $first
+            | (
+                $first.runs[0]
+                | .tool.driver.rules = ([$reports[].runs[0].tool.driver.rules[]?] | unique_by(.id))
+                | .results = [$reports[].runs[0].results[]?]
+              ) as $run
+            | {
+                "$schema": $first["$schema"],
+                "version": $first.version,
+                "runs": [$run]
+              }
+          ' "${reports[@]}" > build/reports/detekt.sarif
+
+      - name: Upload Detekt SARIF reports
+        if: ${{ always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: build/reports/detekt.sarif
 
       - name: Lint check
         run: ./gradlew lintDebug

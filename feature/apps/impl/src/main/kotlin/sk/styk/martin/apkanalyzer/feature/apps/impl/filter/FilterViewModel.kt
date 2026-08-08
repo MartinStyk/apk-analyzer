@@ -148,7 +148,10 @@ class FilterViewModel @Inject constructor(
 
             FilterAction.SaveAndClose -> saveAndClose()
 
-            FilterAction.DiscardChanges -> discardChanges()
+            FilterAction.DiscardChanges -> {
+                showUnsavedChangesSheet.value = false
+                eventChannel.trySend(FilterEvent.NavigateBack)
+            }
 
             FilterAction.DismissUnsavedChangesSheet -> showUnsavedChangesSheet.value = false
         }
@@ -234,11 +237,6 @@ class FilterViewModel @Inject constructor(
     private fun saveAndClose() {
         showUnsavedChangesSheet.value = false
         appFilterRepository.update(localFilter.value)
-        eventChannel.trySend(FilterEvent.NavigateBack)
-    }
-
-    private fun discardChanges() {
-        showUnsavedChangesSheet.value = false
         eventChannel.trySend(FilterEvent.NavigateBack)
     }
 
