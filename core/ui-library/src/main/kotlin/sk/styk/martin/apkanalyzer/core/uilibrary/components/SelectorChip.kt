@@ -25,6 +25,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 
+@Suppress("LongParameterList")
 @Composable
 fun <T> SelectorChip(
     sheetTitle: String,

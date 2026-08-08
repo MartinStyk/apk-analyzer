@@ -50,6 +50,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.impl.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionLoading
 
+@Suppress("LongParameterList")
 @Composable
 internal fun IntentFiltersScreen(
     appDetailInput: AppDetailInput,

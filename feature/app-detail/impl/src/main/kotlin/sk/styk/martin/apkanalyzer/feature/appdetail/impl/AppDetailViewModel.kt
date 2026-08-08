@@ -43,7 +43,10 @@ import kotlin.time.toJavaDuration
 private const val TAG = "AppDetailViewModel"
 
 @HiltViewModel(assistedFactory = AppDetailViewModel.Factory::class)
-internal class AppDetailViewModel @AssistedInject constructor(
+internal class AppDetailViewModel
+@Suppress("LongParameterList")
+@AssistedInject
+constructor(
     @Assisted private val appDetailInput: AppDetailInput,
     private val appDetailRepository: AppDetailRepository,
     private val appExportManager: AppExportManager,

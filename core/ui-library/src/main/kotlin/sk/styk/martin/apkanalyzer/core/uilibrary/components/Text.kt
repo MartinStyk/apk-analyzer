@@ -9,6 +9,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import androidx.compose.material3.Text as MaterialText
 
+@Suppress("LongParameterList")
 @Composable
 fun Text(
     text: String,

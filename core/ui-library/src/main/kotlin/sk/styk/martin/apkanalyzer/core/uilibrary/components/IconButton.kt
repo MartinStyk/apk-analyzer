@@ -25,6 +25,7 @@ enum class IconButtonStyle {
     Highlighted,
 }
 
+@Suppress("LongParameterList")
 @Composable
 fun IconButton(
     imageVector: ImageVector,

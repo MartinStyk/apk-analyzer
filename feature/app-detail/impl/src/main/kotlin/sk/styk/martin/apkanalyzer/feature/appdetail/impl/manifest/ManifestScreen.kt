@@ -203,6 +203,7 @@ private fun ManifestLoadedContent(
     }
 }
 
+@Suppress("LongParameterList")
 @Composable
 private fun ManifestDocumentCard(
     state: ManifestState.Loaded,

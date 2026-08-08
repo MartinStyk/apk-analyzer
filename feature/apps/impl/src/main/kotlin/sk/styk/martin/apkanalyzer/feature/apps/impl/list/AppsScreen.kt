@@ -73,6 +73,7 @@ import sk.styk.martin.apkanalyzer.feature.apps.impl.components.appitem.AppListIt
 import sk.styk.martin.apkanalyzer.feature.apps.impl.components.quickfilter.QuickFilterRow
 import java.time.Instant
 
+@Suppress("LongParameterList")
 @Composable
 internal fun AppsScreen(
     onAppDetails: (PackageName) -> Unit,
@@ -239,6 +240,7 @@ private fun LazyListScope.recentsSectionItems(
     }
 }
 
+@Suppress("LongParameterList")
 private fun LazyListScope.appsSectionItems(
     apps: AppListState,
     isFiltering: Boolean,

@@ -20,6 +20,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 
+@Suppress("LongParameterList")
 @Composable
 internal fun SectionCard(
     title: String,

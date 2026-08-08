@@ -27,7 +27,10 @@ import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
-class AppsViewModel @Inject constructor(
+class AppsViewModel
+@Suppress("LongParameterList")
+@Inject
+constructor(
     installedAppsRepository: InstalledAppsRepository,
     private val recentlyViewedAppsRepository: RecentlyViewedAppsRepository,
     private val appFilterRepository: AppFilterRepository,

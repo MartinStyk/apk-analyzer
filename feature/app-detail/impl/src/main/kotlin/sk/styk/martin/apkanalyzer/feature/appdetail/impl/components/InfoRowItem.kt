@@ -25,6 +25,7 @@ internal data class InfoRow(
     val rationale: String,
 )
 
+@Suppress("LongParameterList")
 @Composable
 internal fun InfoRowItem(
     label: String,

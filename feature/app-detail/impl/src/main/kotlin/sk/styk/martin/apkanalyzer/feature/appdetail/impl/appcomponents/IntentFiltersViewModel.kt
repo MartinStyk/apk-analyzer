@@ -34,7 +34,10 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.impl.toAppReference
 private const val TAG = "IntentFiltersViewModel"
 
 @HiltViewModel(assistedFactory = IntentFiltersViewModel.Factory::class)
-internal class IntentFiltersViewModel @AssistedInject constructor(
+internal class IntentFiltersViewModel
+@Suppress("LongParameterList")
+@AssistedInject
+constructor(
     @Assisted private val appDetailInput: AppDetailInput,
     @Assisted private val componentName: String,
     @Assisted private val componentType: ComponentType,

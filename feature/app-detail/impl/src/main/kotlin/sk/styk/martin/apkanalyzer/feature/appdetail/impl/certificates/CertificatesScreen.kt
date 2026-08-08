@@ -208,6 +208,7 @@ private fun LoadedContent(
     }
 }
 
+@Suppress("LongParameterList")
 @Composable
 private fun CertificateCard(
     certificate: CertificateItem,
@@ -454,6 +455,7 @@ private fun ValiditySection(
     }
 }
 
+@Suppress("LongParameterList")
 @Composable
 private fun SigningSection(
     signerCount: Int,
@@ -491,6 +493,7 @@ private fun SigningSection(
     }
 }
 
+@Suppress("LongParameterList")
 @Composable
 private fun InfoFact(
     label: String,
@@ -680,6 +683,7 @@ private fun FingerprintSection(
     }
 }
 
+@Suppress("LongParameterList")
 @Composable
 private fun FingerprintBoxes(
     sha256: String,

@@ -74,6 +74,7 @@ import java.util.Locale
 private const val APK_MIME_TYPE = "application/vnd.android.package-archive"
 private const val ICON_MIME_TYPE = "image/png"
 
+@Suppress("LongParameterList")
 @Composable
 internal fun AppDetailScreen(
     appDetailInput: AppDetailInput,

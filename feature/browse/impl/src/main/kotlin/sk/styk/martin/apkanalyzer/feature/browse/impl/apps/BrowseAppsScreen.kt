@@ -49,6 +49,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.browse.impl.R
 import sk.styk.martin.apkanalyzer.feature.browse.impl.model.BrowseDimension
 
+@Suppress("LongParameterList")
 @Composable
 internal fun BrowseAppsScreen(
     dimension: BrowseDimension,

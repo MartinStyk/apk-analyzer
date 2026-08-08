@@ -24,7 +24,10 @@ import javax.inject.Inject
 
 internal const val INSTALLED_APPS = "InstalledApps"
 
-internal class InstalledAppsRepositoryImpl @Inject constructor(
+internal class InstalledAppsRepositoryImpl
+@Suppress("LongParameterList")
+@Inject
+constructor(
     private val packageManager: PackageManager,
     private val installSourceResolver: InstallSourceResolver,
     private val packageChangesObserver: PackageChangesObserver,

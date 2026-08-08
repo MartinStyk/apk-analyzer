@@ -46,7 +46,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class AppDetailRepositoryImpl @Inject constructor(
+internal class AppDetailRepositoryImpl
+@Suppress("LongParameterList")
+@Inject
+constructor(
     private val packageManager: PackageManager,
     private val sdkVersionResolver: SdkVersionResolver,
     private val installSourceResolver: InstallSourceResolver,
@@ -91,12 +94,14 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             val packageInfo = packageManager.getPackageInfo(packageName.value, analysisFlags)
             val intentFilters = manifestParser.componentIntentFilters(reference)
             getPackageDetails(
-                analysisMode = AppDetail.AnalysisMode.InstalledPackage,
-                packageInfo = packageInfo,
-                intentFiltersByComponent = intentFilters.getOrDefault(emptyMap()),
-                areIntentFiltersAvailable = intentFilters.isSuccess,
-                totalSize = storageStatsRepository.queryTotalSize(packageName),
-                lastUsedTime = usageStatsRepository.queryLastUsedTime(packageName),
+                PackageDetailsInput(
+                    analysisMode = AppDetail.AnalysisMode.InstalledPackage,
+                    packageInfo = packageInfo,
+                    intentFiltersByComponent = intentFilters.getOrDefault(emptyMap()),
+                    areIntentFiltersAvailable = intentFilters.isSuccess,
+                    totalSize = storageStatsRepository.queryTotalSize(packageName),
+                    lastUsedTime = usageStatsRepository.queryLastUsedTime(packageName),
+                ),
             )
         }.onSuccess { cache[packageName] = it }
     }
@@ -105,40 +110,37 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         val reference = AppReference.ApkFile(accessibleFile.absolutePath)
         val intentFilters = manifestParser.componentIntentFilters(reference)
         getPackageDetails(
-            analysisMode = AppDetail.AnalysisMode.ApkFile,
-            packageInfo = packageManager.getPackageArchiveInfoWithCorrectPath(accessibleFile.absolutePath, analysisFlags)
-                ?: error("Cannot parse APK file: ${accessibleFile.absolutePath}"),
-            intentFiltersByComponent = intentFilters.getOrDefault(emptyMap()),
-            areIntentFiltersAvailable = intentFilters.isSuccess,
+            PackageDetailsInput(
+                analysisMode = AppDetail.AnalysisMode.ApkFile,
+                packageInfo = packageManager.getPackageArchiveInfoWithCorrectPath(accessibleFile.absolutePath, analysisFlags)
+                    ?: error("Cannot parse APK file: ${accessibleFile.absolutePath}"),
+                intentFiltersByComponent = intentFilters.getOrDefault(emptyMap()),
+                areIntentFiltersAvailable = intentFilters.isSuccess,
+            ),
         )
     }
 
-    private fun getPackageDetails(
-        analysisMode: AppDetail.AnalysisMode,
-        packageInfo: PackageInfo,
-        intentFiltersByComponent: Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>,
-        areIntentFiltersAvailable: Boolean,
-        totalSize: AppSize? = null,
-        lastUsedTime: Instant? = null,
-    ) = AppDetail(
-        analysisMode = analysisMode,
-        info = getGeneralData(packageInfo, totalSize, lastUsedTime),
-        signing = certificateExtractor.getAppSigning(packageInfo),
-        activities = getActivities(
-            packageInfo = packageInfo,
-            launcherActivityNames = when (analysisMode) {
-                AppDetail.AnalysisMode.InstalledPackage -> queryLauncherActivityNames(PackageName(packageInfo.packageName))
-                AppDetail.AnalysisMode.ApkFile -> null
-            },
-            intentFiltersByComponent = intentFiltersByComponent,
-        ),
-        services = getServices(packageInfo, intentFiltersByComponent),
-        contentProviders = getContentProviders(packageInfo, intentFiltersByComponent),
-        receivers = getBroadcastReceivers(packageInfo, intentFiltersByComponent),
-        permissions = getPermissions(packageInfo),
-        features = getFeatures(packageInfo),
-        areComponentIntentFiltersAvailable = areIntentFiltersAvailable,
-    )
+    private fun getPackageDetails(input: PackageDetailsInput) = with(input) {
+        AppDetail(
+            analysisMode = analysisMode,
+            info = getGeneralData(packageInfo, totalSize, lastUsedTime),
+            signing = certificateExtractor.getAppSigning(packageInfo),
+            activities = getActivities(
+                packageInfo = packageInfo,
+                launcherActivityNames = when (analysisMode) {
+                    AppDetail.AnalysisMode.InstalledPackage -> queryLauncherActivityNames(PackageName(packageInfo.packageName))
+                    AppDetail.AnalysisMode.ApkFile -> null
+                },
+                intentFiltersByComponent = intentFiltersByComponent,
+            ),
+            services = getServices(packageInfo, intentFiltersByComponent),
+            contentProviders = getContentProviders(packageInfo, intentFiltersByComponent),
+            receivers = getBroadcastReceivers(packageInfo, intentFiltersByComponent),
+            permissions = getPermissions(packageInfo),
+            features = getFeatures(packageInfo),
+            areComponentIntentFiltersAvailable = areIntentFiltersAvailable,
+        )
+    }
 
     private fun getGeneralData(
         packageInfo: PackageInfo,
@@ -176,6 +178,15 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             lastUsedTime = lastUsedTime,
         )
     }
+
+    private data class PackageDetailsInput(
+        val analysisMode: AppDetail.AnalysisMode,
+        val packageInfo: PackageInfo,
+        val intentFiltersByComponent: Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>,
+        val areIntentFiltersAvailable: Boolean,
+        val totalSize: AppSize? = null,
+        val lastUsedTime: Instant? = null,
+    )
 
     private fun getActivities(
         packageInfo: PackageInfo,

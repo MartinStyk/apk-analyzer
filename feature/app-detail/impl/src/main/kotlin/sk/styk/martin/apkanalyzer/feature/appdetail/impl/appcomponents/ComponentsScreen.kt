@@ -67,6 +67,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.ListSectionH
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionLoading
 
+@Suppress("LongParameterList")
 @Composable
 internal fun ComponentsScreen(
     appDetailInput: AppDetailInput,

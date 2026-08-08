@@ -33,6 +33,7 @@ sealed interface ChipVariant {
     data object Negative : ChipVariant
 }
 
+@Suppress("LongParameterList")
 @Composable
 fun Chip(
     label: String,
@@ -106,6 +107,7 @@ fun Chip(
     }
 }
 
+@Suppress("LongParameterList")
 @Composable
 fun Chip(
     label: String,
@@ -184,6 +186,7 @@ private fun ChipVariant.colors() = when (this) {
     ChipVariant.Negative -> AppTheme.colors.negativeContainer to AppTheme.colors.negative
 }
 
+@Suppress("LongParameterList")
 @Composable
 fun OutlinedChip(
     label: String,

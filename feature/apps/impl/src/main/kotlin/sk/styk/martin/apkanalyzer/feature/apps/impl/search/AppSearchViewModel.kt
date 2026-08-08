@@ -27,7 +27,10 @@ import sk.styk.martin.apkanalyzer.feature.apps.impl.search.domain.SearchAppsUseC
 import javax.inject.Inject
 
 @HiltViewModel
-class AppSearchViewModel @Inject constructor(
+class AppSearchViewModel
+@Suppress("LongParameterList")
+@Inject
+constructor(
     installedAppsRepository: InstalledAppsRepository,
     private val recentlyViewedAppsRepository: RecentlyViewedAppsRepository,
     private val searchHistoryRepository: SearchHistoryRepository,
