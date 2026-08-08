@@ -41,8 +41,7 @@ filter/
     PermissionFilterState/Action/Event/ViewModel.kt - Own State/Action/Event/ViewModel
 components/
   apkfilepicker/                     - Reusable APK document-picker button with its own MVI ViewModel and temporary-file ownership
-  AppDataPermission.kt              - Permission prerequisite type (UsageAccess, StorageAccess — NOT an enum)
-  PermissionRationaleBottomSheet.kt - Permission rationale bottom sheet UI
+  AppDataPermission.kt              - Permission prerequisite type (UsageAccess, StorageAccess — NOT an enum) + rationale bottom sheet UI
   AppsSkeletons.kt         - Loading skeleton placeholders
   appitem/AppListItemRow.kt - Single app row in the list
   quickfilter/QuickFilterRow*.kt - Quick-filter chip row

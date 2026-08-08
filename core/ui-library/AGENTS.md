@@ -20,7 +20,7 @@ icons/
 animation/
   NavEntryTransitions.kt - bottomEntryMetadata(), slideFromEndEntryMetadata()
 lazylist/
-  ItemsPositioned.kt, ListItemPosition.kt - LazyList item helper carrying first/middle/last position
+  ListItemPosition.kt - LazyList item helper carrying first/middle/last position
 modifier/
   CardModifier.kt, CollapsingHeaderState.kt, CollapsingToolbarState.kt, Shimmer.kt,
   SharedTransitionModifier.kt (LocalSharedTransitionScope)
@@ -39,10 +39,10 @@ name** — check here before calling one:
 | `BottomSheet` | `BottomSheet.kt` |
 | `Button`, `TextButton` | `Button.kt` |
 | `Checkbox` | `Checkbox.kt` |
-| `Chip`, `OutlinedChip` | `Chip.kt` |
+| `Chip`, `OutlinedChip` (+ `ChipVariant`) | `ChipVariant.kt` |
 | `DateRangePickerDialog` | `DateRangePickerDialog.kt` |
 | `Icon` | `Icon.kt` |
-| `IconButton` | `IconButton.kt` |
+| `IconButton` (+ `IconButtonStyle`) | `IconButtonStyle.kt` |
 | `LoadingSpinner` | `LoadingSpinner.kt` |
 | `MultiSelectorChip` | `MultiSelectorChip.kt` |
 | `NavigationBar` (+ `NavigationBarItem` data class) | `NavigationBar.kt` |
