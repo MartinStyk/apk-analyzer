@@ -154,7 +154,7 @@ private fun SearchResults(results: ImmutableList<AppListItem>, onAppClick: (AppL
     ) {
         itemsPositioned(
             items = results,
-            key = { _, app -> app.packageName },
+            key = { _, app -> app.packageName.value },
         ) { position, app ->
             AppListItemRow(
                 app = app,
