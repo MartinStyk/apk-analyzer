@@ -69,11 +69,7 @@ style:
     active: true
     severity: info
   MaxLineLength:
-    active: false
-  ModifierOrder:
-    active: false
-  NewLineAtEndOfFile:
-    active: false
+    maxLineLength: 240
   ReturnCount:
     severity: warning
   ThrowsCount:
@@ -82,8 +78,6 @@ style:
     allowedNames: '.*Preview'
   UnusedPrivateProperty:
     active: true
-  WildcardImport:
-    active: false
 
 naming:
   FunctionNaming:
