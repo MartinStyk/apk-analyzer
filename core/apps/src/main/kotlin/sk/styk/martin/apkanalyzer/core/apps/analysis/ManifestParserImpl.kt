@@ -71,14 +71,8 @@ internal class ManifestParserImpl @Inject constructor(private val packageManager
         val manifests = mutableMapOf<String, ParsedComponentManifest>()
 
         for (cookie in 1..MAX_ASSET_COOKIE) {
-            val parsedManifest = try {
-                resources.assets.openXmlResourceParser(cookie, MANIFEST_FILE_NAME).use { parser ->
-                    readComponentManifest(parser, resources)
-                }
-            } catch (_: FileNotFoundException) {
-                continue
-            }
-            if (parsedManifest.packageName == packageName.value) {
+            val parsedManifest = readInstalledComponentManifest(resources, cookie)
+            if (parsedManifest?.packageName == packageName.value) {
                 manifests.putIfAbsent(parsedManifest.splitName.orEmpty(), parsedManifest)
                 if (manifests.size == expectedManifestCount) break
             }
@@ -88,6 +82,14 @@ internal class ManifestParserImpl @Inject constructor(private val packageManager
             "Read ${manifests.size} of $expectedManifestCount installed manifests for $packageName"
         }
         return manifests.values.flatMap { it.filters }
+    }
+
+    private fun readInstalledComponentManifest(resources: Resources, cookie: Int): ParsedComponentManifest? = try {
+        resources.assets.openXmlResourceParser(cookie, MANIFEST_FILE_NAME).use { parser ->
+            readComponentManifest(parser, resources)
+        }
+    } catch (_: FileNotFoundException) {
+        null
     }
 
     private fun resourcesForApk(apkPath: String): Resources {
@@ -162,20 +164,11 @@ internal class ManifestParserImpl @Inject constructor(private val packageManager
                     CATEGORY_TAG -> parser.resolvedAndroidString(resources, NAME_ATTRIBUTE)?.let { currentFilter?.categories?.add(it) }
 
                     DATA_TAG -> currentFilter?.let { filter ->
-                        val rules = currentUriRelativeGroup?.dataRules ?: filter.dataRules
-                        val host = parser.resolvedAndroidString(resources, IntentFilterDataRuleType.Host.manifestAttribute)
-                        val port = parser.resolvedAndroidString(resources, IntentFilterDataRuleType.Port.manifestAttribute)
-                        if (host != null) {
-                            val authority = if (port != null) "$host:$port" else host
-                            rules.add(IntentFilterDataRule(type = IntentFilterDataRuleType.Host, value = authority))
-                        }
-                        IntentFilterDataRuleType.entries
-                            .filterNot { it == IntentFilterDataRuleType.Host || it == IntentFilterDataRuleType.Port }
-                            .forEach { type ->
-                                parser.resolvedAndroidString(resources, type.manifestAttribute)?.let { value ->
-                                    rules.add(IntentFilterDataRule(type = type, value = value))
-                                }
-                            }
+                        addIntentFilterDataRules(
+                            parser = parser,
+                            resources = resources,
+                            rules = currentUriRelativeGroup?.dataRules ?: filter.dataRules,
+                        )
                     }
                 }
 
@@ -200,6 +193,26 @@ internal class ManifestParserImpl @Inject constructor(private val packageManager
             eventType = parser.next()
         }
         return ParsedComponentManifest(packageName = packageName, splitName = splitName, filters = filters)
+    }
+
+    private fun addIntentFilterDataRules(
+        parser: XmlResourceParser,
+        resources: Resources,
+        rules: MutableList<IntentFilterDataRule>,
+    ) {
+        val host = parser.resolvedAndroidString(resources, IntentFilterDataRuleType.Host.manifestAttribute)
+        val port = parser.resolvedAndroidString(resources, IntentFilterDataRuleType.Port.manifestAttribute)
+        if (host != null) {
+            val authority = if (port != null) "$host:$port" else host
+            rules.add(IntentFilterDataRule(type = IntentFilterDataRuleType.Host, value = authority))
+        }
+        IntentFilterDataRuleType.entries
+            .filterNot { it == IntentFilterDataRuleType.Host || it == IntentFilterDataRuleType.Port }
+            .forEach { type ->
+                parser.resolvedAndroidString(resources, type.manifestAttribute)?.let { value ->
+                    rules.add(IntentFilterDataRule(type = type, value = value))
+                }
+            }
     }
 
     private fun appendStartTag(

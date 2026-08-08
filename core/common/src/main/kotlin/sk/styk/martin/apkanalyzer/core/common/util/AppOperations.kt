@@ -19,7 +19,9 @@ fun Context.openAppSystemPage(packageName: PackageName) {
                 data = "package:$packageName".toUri()
             },
         )
-    } catch (e: Exception) {
+    } catch (e: ActivityNotFoundException) {
+        Logger.e(TAG, e, "Could not open system page for $packageName")
+    } catch (e: SecurityException) {
         Logger.e(TAG, e, "Could not open system page for $packageName")
     }
 }
