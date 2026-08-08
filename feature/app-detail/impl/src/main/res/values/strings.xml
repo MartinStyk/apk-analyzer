@@ -426,6 +426,7 @@
     <string name="intent_filters_purpose_provider_other">Custom provider request</string>
     <string name="intent_filters_tag_verified">Verification requested</string>
     <string name="intent_filters_tag_blocked_rules">Blocks link rules</string>
+    <string name="intent_filters_empty">This component declares no intent filters.</string>
     <string name="intent_filters_empty_query">No intent filter matches \"%1$s\".</string>
     <string name="intent_filters_clear_search">Clear search</string>
     <string name="components_detail_exported">Exported</string>

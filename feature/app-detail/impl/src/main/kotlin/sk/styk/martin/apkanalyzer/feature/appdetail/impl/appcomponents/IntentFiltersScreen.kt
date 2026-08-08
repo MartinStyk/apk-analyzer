@@ -326,16 +326,22 @@ private fun EmptyIntentFilters(
             .padding(horizontal = 32.dp, vertical = 48.dp),
     ) {
         Text(
-            text = stringResource(R.string.intent_filters_empty_query, query),
+            text = if (query.isBlank()) {
+                stringResource(R.string.intent_filters_empty)
+            } else {
+                stringResource(R.string.intent_filters_empty_query, query)
+            },
             style = AppTheme.typography.bodyLarge,
             color = AppTheme.colors.onBackground,
             textAlign = TextAlign.Center,
         )
-        Spacer(modifier = Modifier.height(12.dp))
-        TextButton(
-            text = stringResource(R.string.intent_filters_clear_search),
-            onClick = onClearQuery,
-        )
+        if (query.isNotBlank()) {
+            Spacer(modifier = Modifier.height(12.dp))
+            TextButton(
+                text = stringResource(R.string.intent_filters_clear_search),
+                onClick = onClearQuery,
+            )
+        }
     }
 }
 
