@@ -17,6 +17,7 @@ internal class InstallSourceResolverImpl @Inject constructor(private val package
         else -> AppSource.Unknown
     }
 
+    @Suppress("DEPRECATION")
     override fun appInstallingPackage(packageInfo: PackageInfo): PackageName? = runCatching {
         when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> packageManager.getInstallSourceInfo(packageInfo.packageName).installingPackageName

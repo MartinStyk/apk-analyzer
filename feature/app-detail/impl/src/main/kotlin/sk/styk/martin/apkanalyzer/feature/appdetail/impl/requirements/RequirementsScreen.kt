@@ -156,7 +156,7 @@ private fun LoadedContent(
         }
     }
 
-    if (detailItem != null && detailSection != null) {
+    if (detailItem != null) {
         RequirementDetailBottomSheet(
             item = detailItem,
 

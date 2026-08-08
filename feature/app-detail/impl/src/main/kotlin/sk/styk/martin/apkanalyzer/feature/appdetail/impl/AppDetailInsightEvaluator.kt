@@ -54,6 +54,7 @@ internal object AppDetailInsightEvaluator {
     }
 }
 
+@Suppress("DEPRECATION")
 private val sensitivePermissionGroups = linkedMapOf(
     SensitiveAccess.BackgroundLocation to setOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION),
     SensitiveAccess.Messages to setOf(

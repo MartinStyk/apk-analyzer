@@ -4,6 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.DirectionsRun
 import androidx.compose.material.icons.automirrored.rounded.InsertDriveFile
+import androidx.compose.material.icons.automirrored.rounded.VolumeUp
 import androidx.compose.material.icons.outlined.Apps
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.InsertChart
@@ -33,6 +34,7 @@ import androidx.compose.material.icons.rounded.FullscreenExit
 import androidx.compose.material.icons.rounded.Gamepad
 import androidx.compose.material.icons.rounded.GppBad
 import androidx.compose.material.icons.rounded.GppGood
+import androidx.compose.material.icons.rounded.Group
 import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.HourglassEmpty
 import androidx.compose.material.icons.rounded.Info
@@ -63,10 +65,10 @@ import androidx.compose.material.icons.rounded.Tv
 import androidx.compose.material.icons.rounded.UploadFile
 import androidx.compose.material.icons.rounded.Usb
 import androidx.compose.material.icons.rounded.VerifiedUser
-import androidx.compose.material.icons.rounded.VolumeUp
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material.icons.rounded.Watch
 import androidx.compose.material.icons.rounded.WebAsset
+import androidx.compose.material.icons.rounded.Widgets
 import androidx.compose.material.icons.rounded.Wifi
 
 data object ApkAnalyzerIcons {
@@ -98,6 +100,8 @@ data object ApkAnalyzerIcons {
     val FullscreenExit = Icons.Rounded.FullscreenExit
     val Gamepad = Icons.Rounded.Gamepad
     val Graphics = Icons.Rounded.Animation
+    val Group = Icons.Rounded.Group
+    val Widgets = Icons.Rounded.Widgets
     val HourglassEmpty = Icons.Rounded.HourglassEmpty
     val Info = Icons.Rounded.Info
     val Location = Icons.Rounded.LocationOn
@@ -109,7 +113,7 @@ data object ApkAnalyzerIcons {
     val Print = Icons.Rounded.Print
     val Screen = Icons.Rounded.Smartphone
     val Sensors = Icons.Rounded.Sensors
-    val Speaker = Icons.Rounded.VolumeUp
+    val Speaker = Icons.AutoMirrored.Rounded.VolumeUp
     val Television = Icons.Rounded.Tv
     val Touch = Icons.Rounded.TouchApp
     val Usb = Icons.Rounded.Usb
