@@ -169,11 +169,13 @@ combined with Detekt-driven refactoring.
   - `AppsScreen.kt`.
 - Extract cohesive UI sections and sample preview data into focused files.
 - Promote each complexity rule to blocking after its existing findings are fixed.
+- After all warning findings are resolved, make warning-severity findings fail Detekt.
 
 **Exit criteria**
 
 - No production Kotlin file exceeds the agreed class or method limits.
 - All enabled Detekt rules pass without a baseline.
+- Detekt fails CI for every error- or warning-severity finding.
 - Refactoring does not change user-visible behavior.
 
 ### KQ-05: Make diagnostics blocking
