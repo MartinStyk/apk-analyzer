@@ -31,20 +31,18 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Fetch Firebase google-services.json
+      - name: Write Firebase google-services.json
         env:
-          GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
-          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
-          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
-        run: |
-          rm -f app/google-services.json
-          .github/scripts/run-firebase.sh apps:sdkconfig ANDROID "$FIREBASE_APP_ID" \
-            --project "$FIREBASE_PROJECT_ID" \
-            -o app/google-services.json
+          GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+        run: .github/scripts/write-google-services.sh
 
       - name: Verify release
         run: |
           ./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintRelease --continue
+
+      - name: Remove Firebase google-services.json
+        if: always()
+        run: rm -f app/google-services.json
 
   build-release:
     runs-on: ubuntu-latest
@@ -71,16 +69,10 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Fetch Firebase google-services.json
+      - name: Write Firebase google-services.json
         env:
-          GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
-          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
-          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
-        run: |
-          rm -f app/google-services.json
-          .github/scripts/run-firebase.sh apps:sdkconfig ANDROID "$FIREBASE_APP_ID" \
-            --project "$FIREBASE_PROJECT_ID" \
-            -o app/google-services.json
+          GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+        run: .github/scripts/write-google-services.sh
 
       - name: Compute versionCode from tag
         id: version
@@ -93,6 +85,10 @@ jobs:
           ./gradlew bundleRelease assembleRelease \
             -Pversion.code=${{ steps.version.outputs.code }} \
             -Pversion.name="$GITHUB_REF_NAME"
+
+      - name: Remove Firebase google-services.json
+        if: always()
+        run: rm -f app/google-services.json
 
       - name: Sign AAB
         uses: r0adkll/sign-android-release@v1

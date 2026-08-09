@@ -45,20 +45,18 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Fetch Firebase google-services.json
+      - name: Write Firebase google-services.json
         env:
-          GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
-          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
-          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
-        run: |
-          rm -f app/google-services.json
-          .github/scripts/run-firebase.sh apps:sdkconfig ANDROID "$FIREBASE_APP_ID" \
-            --project "$FIREBASE_PROJECT_ID" \
-            -o app/google-services.json
+          GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+        run: .github/scripts/write-google-services.sh
 
       - name: Verify project
         run: |
           ./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug --continue
+
+      - name: Remove Firebase google-services.json
+        if: always()
+        run: rm -f app/google-services.json
 
       - name: Merge SARIF reports
         if: always()
@@ -92,16 +90,10 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Fetch Firebase google-services.json
+      - name: Write Firebase google-services.json
         env:
-          GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
-          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
-          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
-        run: |
-          rm -f app/google-services.json
-          .github/scripts/run-firebase.sh apps:sdkconfig ANDROID "$FIREBASE_APP_ID" \
-            --project "$FIREBASE_PROJECT_ID" \
-            -o app/google-services.json
+          GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+        run: .github/scripts/write-google-services.sh
 
       - name: Build debug APK
         run: |
@@ -111,6 +103,10 @@ jobs:
             VERSION_NAME="dev.$GITHUB_RUN_NUMBER"
           fi
           ./gradlew :app:assembleDebug -Pversion.name="$VERSION_NAME"
+
+      - name: Remove Firebase google-services.json
+        if: always()
+        run: rm -f app/google-services.json
 
       - name: Rename APK
         run: mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/apk-analyzer.apk
