@@ -48,7 +48,10 @@ jobs:
       - name: Write Firebase google-services.json
         env:
           GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
-        run: .github/scripts/write-google-services.sh
+        run: |
+          umask 077
+          printf '%s' "${GOOGLE_SERVICES:?GOOGLE_SERVICES is required}" > app/google-services.json
+          jq empty app/google-services.json
 
       - name: Verify project
         run: |
@@ -93,7 +96,10 @@ jobs:
       - name: Write Firebase google-services.json
         env:
           GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
-        run: .github/scripts/write-google-services.sh
+        run: |
+          umask 077
+          printf '%s' "${GOOGLE_SERVICES:?GOOGLE_SERVICES is required}" > app/google-services.json
+          jq empty app/google-services.json
 
       - name: Build debug APK
         run: |
