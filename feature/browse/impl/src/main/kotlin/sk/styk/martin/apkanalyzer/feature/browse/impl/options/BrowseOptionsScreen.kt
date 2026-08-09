@@ -50,6 +50,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.browse.impl.R
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.BrowseSubAttribute
+import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.cardLabelRes
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.subAttributes
 import sk.styk.martin.apkanalyzer.feature.browse.impl.model.BrowseDimension
 import sk.styk.martin.apkanalyzer.feature.browse.impl.title
@@ -245,7 +246,7 @@ private fun CertificateHashOptionContent(option: BrowseOption.CertificateHash, m
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
-                text = stringResource(option.algorithm.labelRes),
+                text = stringResource(option.algorithm.cardLabelRes),
                 style = AppTheme.typography.labelMedium,
                 color = AppTheme.colors.onSurfaceVariant,
                 modifier = Modifier.weight(1f),

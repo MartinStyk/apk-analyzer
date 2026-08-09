@@ -36,6 +36,9 @@
     <string name="browse_certificate_attribute_md5">Identity (MD5)</string>
     <string name="browse_certificate_attribute_organization">Publisher name</string>
     <string name="browse_certificate_attribute_country">Country</string>
+    <string name="browse_certificate_hash_sha256">SHA-256</string>
+    <string name="browse_certificate_hash_sha1">SHA-1</string>
+    <string name="browse_certificate_hash_md5">MD5</string>
 
     <plurals name="browse_options_filter_hint">
         <item quantity="one">Filter %1$d option</item>

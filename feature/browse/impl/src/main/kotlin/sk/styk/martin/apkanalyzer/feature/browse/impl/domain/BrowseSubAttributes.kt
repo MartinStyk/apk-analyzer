@@ -44,3 +44,17 @@ internal val BrowseSubAttribute?.isCertificateHash: Boolean
         null,
         -> false
     }
+
+@get:StringRes
+internal val BrowseSubAttribute.cardLabelRes: Int
+    get() = when (this) {
+        BrowseSubAttribute.CertificateSha256 -> R.string.browse_certificate_hash_sha256
+
+        BrowseSubAttribute.CertificateSha1 -> R.string.browse_certificate_hash_sha1
+
+        BrowseSubAttribute.CertificateMd5 -> R.string.browse_certificate_hash_md5
+
+        BrowseSubAttribute.CertificateOrganization,
+        BrowseSubAttribute.CertificateCountry,
+        -> labelRes
+    }
