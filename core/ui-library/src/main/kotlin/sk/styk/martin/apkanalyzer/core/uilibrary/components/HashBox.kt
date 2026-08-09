@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.feature.appdetail.impl.components
+package sk.styk.martin.apkanalyzer.core.uilibrary.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -17,18 +17,16 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
-import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 
 @Composable
-internal fun HashBox(
-    label: String,
+fun HashBox(
     value: String,
     modifier: Modifier = Modifier,
+    label: String? = null,
     copyContentDescription: String? = null,
     onCopy: (() -> Unit)? = null,
 ) {
@@ -43,12 +41,14 @@ internal fun HashBox(
     }
 
     Column(modifier = modifier.fillMaxWidth()) {
-        Text(
-            text = label,
-            style = AppTheme.typography.labelMedium,
-            color = AppTheme.colors.onSurfaceVariant,
-        )
-        Spacer(modifier = Modifier.height(4.dp))
+        if (label != null) {
+            Text(
+                text = label,
+                style = AppTheme.typography.labelMedium,
+                color = AppTheme.colors.onSurfaceVariant,
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+        }
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -57,7 +57,7 @@ internal fun HashBox(
                 .then(copyModifier),
         ) {
             Text(
-                text = value,
+                text = value.replace(":", ":\u200B"),
                 style = AppTheme.typography.monospace,
                 color = AppTheme.colors.onBackground,
                 modifier = Modifier
@@ -86,12 +86,22 @@ internal fun HashBox(
 
 @Preview
 @Composable
-private fun HashBoxPreview() {
+private fun HashBoxDefaultPreview() {
     ApkAnalyzerTheme {
         HashBox(
             label = "SHA-256",
             value = "A1:B2:C3:D4:E5:F6:A7:B8:C9:D0:E1:F2:A3:B4:C5:D6:E7:F8:A9:B0:C1:D2:E3:F4",
             onCopy = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun HashBoxDarkPreview() {
+    ApkAnalyzerTheme(isDarkTheme = true) {
+        HashBox(
+            value = "38:91:8A:45:3D:07:19:93:54:F8:B1:9A:7A:6D:2B:EC:96:5A:21:22",
         )
     }
 }

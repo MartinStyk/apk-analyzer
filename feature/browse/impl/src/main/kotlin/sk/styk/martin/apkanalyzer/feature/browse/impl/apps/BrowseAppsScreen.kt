@@ -47,6 +47,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.browse.impl.R
+import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.BrowseSubAttribute
 import sk.styk.martin.apkanalyzer.feature.browse.impl.model.BrowseDimension
 
 @Composable
@@ -54,7 +55,7 @@ internal fun BrowseAppsScreen(
     dimension: BrowseDimension,
     bucketKey: String,
     bucketLabel: String,
-    subAttribute: String?,
+    subAttribute: BrowseSubAttribute?,
     onBack: () -> Unit,
     onOpenApp: (PackageName) -> Unit,
     modifier: Modifier = Modifier,

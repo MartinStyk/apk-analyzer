@@ -10,8 +10,6 @@ import sk.styk.martin.apkanalyzer.feature.browse.impl.model.BrowseDimension
 import java.util.Locale
 import javax.inject.Inject
 
-private const val FINGERPRINT_LABEL_BYTE_COUNT = 8
-
 internal class BrowseDimensionLabeler @Inject constructor(
     @ApplicationContext private val context: Context,
     private val permissionLabelProvider: PermissionLabelProvider,
@@ -21,7 +19,7 @@ internal class BrowseDimensionLabeler @Inject constructor(
     fun label(
         dimension: BrowseDimension,
         key: String,
-        subKey: String? = null,
+        subAttribute: BrowseSubAttribute? = null,
     ): String = when (dimension) {
         BrowseDimension.Permission -> permissionLabelProvider.getLabel(key)
 
@@ -34,20 +32,25 @@ internal class BrowseDimensionLabeler @Inject constructor(
             else -> context.getString(R.string.browse_source_unknown)
         }
 
-        BrowseDimension.SigningCertificate -> when (subKey) {
-            CERTIFICATE_ORGANIZATION -> key.takeUnless { it == UNKNOWN_SIGNER_KEY } ?: context.getString(R.string.browse_signer_unknown)
+        BrowseDimension.SigningCertificate -> when (subAttribute) {
+            BrowseSubAttribute.CertificateOrganization ->
+                key.takeUnless { it == UNKNOWN_SIGNER_KEY } ?: context.getString(R.string.browse_signer_unknown)
 
-            CERTIFICATE_COUNTRY ->
+            BrowseSubAttribute.CertificateCountry ->
                 key.takeUnless { it == UNKNOWN_COUNTRY_KEY }?.let { countryLabel(it) } ?: context.getString(R.string.browse_country_unknown)
 
-            else -> formatFingerprint(key).splitToChunks(FINGERPRINT_LABEL_BYTE_COUNT)
+            BrowseSubAttribute.CertificateSha256,
+            BrowseSubAttribute.CertificateSha1,
+            BrowseSubAttribute.CertificateMd5,
+            null,
+            -> formatFingerprint(key)
         }
     }
 
     fun rawIdentifier(
         dimension: BrowseDimension,
         key: String,
-        subKey: String? = null,
+        subAttribute: BrowseSubAttribute? = null,
     ): String? = when (dimension) {
         BrowseDimension.Permission -> key
 
@@ -55,10 +58,15 @@ internal class BrowseDimensionLabeler @Inject constructor(
 
         BrowseDimension.InstallSource -> null
 
-        BrowseDimension.SigningCertificate -> when (subKey) {
-            CERTIFICATE_ORGANIZATION -> null
-            CERTIFICATE_COUNTRY -> key.takeUnless { it == UNKNOWN_COUNTRY_KEY }
-            else -> formatFingerprint(key)
+        BrowseDimension.SigningCertificate -> when (subAttribute) {
+            BrowseSubAttribute.CertificateCountry -> key.takeUnless { it == UNKNOWN_COUNTRY_KEY }
+
+            BrowseSubAttribute.CertificateOrganization,
+            BrowseSubAttribute.CertificateSha256,
+            BrowseSubAttribute.CertificateSha1,
+            BrowseSubAttribute.CertificateMd5,
+            null,
+            -> null
         }
     }
 
@@ -69,9 +77,3 @@ internal class BrowseDimensionLabeler @Inject constructor(
 }
 
 private fun formatFingerprint(hex: String): String = hex.uppercase().chunked(2).joinToString(":")
-
-private fun String.splitToChunks(byteCount: Int): String {
-    val bytes = split(":")
-    val shortened = bytes.take(byteCount).joinToString(":")
-    return if (bytes.size > byteCount) "$shortened…" else shortened
-}

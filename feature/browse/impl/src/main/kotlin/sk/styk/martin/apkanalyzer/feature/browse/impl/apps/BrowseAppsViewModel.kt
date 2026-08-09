@@ -21,6 +21,7 @@ import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
+import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.BrowseSubAttribute
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.bucketsFor
 import sk.styk.martin.apkanalyzer.feature.browse.impl.model.BrowseDimension
 
@@ -28,7 +29,7 @@ import sk.styk.martin.apkanalyzer.feature.browse.impl.model.BrowseDimension
 internal class BrowseAppsViewModel @AssistedInject constructor(
     @Assisted private val dimension: BrowseDimension,
     @Assisted("bucketKey") private val bucketKey: String,
-    @Assisted("subAttribute") private val subAttribute: String?,
+    @Assisted("subAttribute") private val subAttribute: BrowseSubAttribute?,
     appIndexRepository: AppIndexRepository,
     installedAppsRepository: InstalledAppsRepository,
     dispatcherProvider: DispatcherProvider,
@@ -39,7 +40,7 @@ internal class BrowseAppsViewModel @AssistedInject constructor(
         fun create(
             dimension: BrowseDimension,
             @Assisted("bucketKey") bucketKey: String,
-            @Assisted("subAttribute") subAttribute: String?,
+            @Assisted("subAttribute") subAttribute: BrowseSubAttribute?,
         ): BrowseAppsViewModel
     }
 

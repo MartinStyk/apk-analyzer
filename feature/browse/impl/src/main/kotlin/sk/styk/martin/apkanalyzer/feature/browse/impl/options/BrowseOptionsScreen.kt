@@ -34,6 +34,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import sk.styk.martin.apkanalyzer.core.uilibrary.components.HashBox
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.LoadingSpinner
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.SearchBarActive
@@ -48,6 +49,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.browse.impl.R
+import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.BrowseSubAttribute
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.subAttributes
 import sk.styk.martin.apkanalyzer.feature.browse.impl.model.BrowseDimension
 import sk.styk.martin.apkanalyzer.feature.browse.impl.title
@@ -56,7 +58,7 @@ import sk.styk.martin.apkanalyzer.feature.browse.impl.title
 internal fun BrowseOptionsScreen(
     dimension: BrowseDimension,
     onBack: () -> Unit,
-    onOpenOption: (bucketKey: String, bucketLabel: String, subAttribute: String?) -> Unit,
+    onOpenOption: (bucketKey: String, bucketLabel: String, subAttribute: BrowseSubAttribute?) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: BrowseOptionsViewModel = hiltViewModel { factory: BrowseOptionsViewModel.Factory -> factory.create(dimension) },
 ) {
@@ -143,13 +145,13 @@ private fun BrowseOptionsList(
                 )
             }
             if (subAttributes.isNotEmpty()) {
-                val selected = subAttributes.firstOrNull { it.key == state.subAttribute } ?: subAttributes.first()
+                val selected = state.subAttribute ?: subAttributes.first()
                 SelectorChip(
                     sheetTitle = stringResource(R.string.browse_sub_attribute_sheet_title),
                     options = subAttributes,
                     selected = selected,
                     label = { stringResource(it.labelRes) },
-                    onSelectOption = { onAction(BrowseOptionsAction.SelectSubAttribute(it.key)) },
+                    onSelectOption = { onAction(BrowseOptionsAction.SelectSubAttribute(it)) },
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
                 )
             }
@@ -191,14 +193,26 @@ private fun BrowseOptionRow(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
+    Column(
         modifier = modifier
             .fillMaxWidth()
             .clip(Shapes.CardShape)
             .background(AppTheme.colors.surface)
             .clickable(onClick = onClick)
             .padding(horizontal = 14.dp, vertical = 12.dp),
+    ) {
+        when (option) {
+            is BrowseOption.Labeled -> LabeledOptionContent(option)
+            is BrowseOption.CertificateHash -> CertificateHashOptionContent(option)
+        }
+    }
+}
+
+@Composable
+private fun LabeledOptionContent(option: BrowseOption.Labeled, modifier: Modifier = Modifier) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier.fillMaxWidth(),
     ) {
         Column(modifier = Modifier.weight(1f)) {
             Text(
@@ -208,10 +222,10 @@ private fun BrowseOptionRow(
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
             )
-            if (option.rawIdentifier != null) {
+            option.rawIdentifier?.let { rawIdentifier ->
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = option.rawIdentifier,
+                    text = rawIdentifier,
                     style = AppTheme.typography.bodySmall,
                     color = AppTheme.colors.onSurfaceVariant,
                     maxLines = 1,
@@ -219,9 +233,39 @@ private fun BrowseOptionRow(
                 )
             }
         }
+        OptionTrailingContent(count = option.count)
+    }
+}
+
+@Composable
+private fun CertificateHashOptionContent(option: BrowseOption.CertificateHash, modifier: Modifier = Modifier) {
+    Column(modifier = modifier.fillMaxWidth()) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text(
+                text = stringResource(option.algorithm.labelRes),
+                style = AppTheme.typography.labelMedium,
+                color = AppTheme.colors.onSurfaceVariant,
+                modifier = Modifier.weight(1f),
+            )
+            OptionTrailingContent(count = option.count)
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        HashBox(value = option.label)
+    }
+}
+
+@Composable
+private fun OptionTrailingContent(count: Int, modifier: Modifier = Modifier) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier,
+    ) {
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = pluralStringResource(R.plurals.browse_apps_count, option.count, option.count),
+            text = pluralStringResource(R.plurals.browse_apps_count, count, count),
             style = AppTheme.typography.labelMedium,
             color = AppTheme.colors.primary,
         )
@@ -257,10 +301,20 @@ private fun BrowseOptionsCertificatePreview() {
         BrowseOptionsContent(
             dimension = BrowseDimension.SigningCertificate,
             state = sampleLoadedState().copy(
-                subAttribute = "fingerprint",
+                subAttribute = BrowseSubAttribute.CertificateSha256,
                 options = persistentListOf(
-                    BrowseOption(key = "a1b2c3", label = "A1:B2:C3:D4:E5:F6:A7:B8…", rawIdentifier = "A1:B2:C3:D4:E5:F6:A7:B8:C9:D0", count = 12),
-                    BrowseOption(key = "f9e8d7", label = "F9:E8:D7:C6:B5:A4:93:82…", rawIdentifier = "F9:E8:D7:C6:B5:A4:93:82:71:60", count = 3),
+                    BrowseOption.CertificateHash(
+                        key = "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2",
+                        label = "A1:B2:C3:D4:E5:F6:A7:B8:C9:D0:E1:F2:A3:B4:C5:D6:E7:F8:A9:B0:C1:D2:E3:F4:A5:B6:C7:D8:E9:F0:A1:B2",
+                        algorithm = BrowseSubAttribute.CertificateSha256,
+                        count = 12,
+                    ),
+                    BrowseOption.CertificateHash(
+                        key = "f9e8d7c6b5a4938271605f4e3d2c1b0a99887766554433221100ffeeddccbbaa",
+                        label = "F9:E8:D7:C6:B5:A4:93:82:71:60:5F:4E:3D:2C:1B:0A:99:88:77:66:55:44:33:22:11:00:FF:EE:DD:CC:BB:AA",
+                        algorithm = BrowseSubAttribute.CertificateSha256,
+                        count = 3,
+                    ),
                 ).toImmutableList(),
             ),
             onAction = {},
@@ -277,9 +331,9 @@ private fun BrowseOptionsNoSearchPreview() {
             dimension = BrowseDimension.InstallSource,
             state = sampleLoadedState().copy(
                 options = persistentListOf(
-                    BrowseOption(key = "GooglePlay", label = "Google Play", rawIdentifier = null, count = 150),
-                    BrowseOption(key = "SystemPreinstalled", label = "System", rawIdentifier = null, count = 30),
-                    BrowseOption(key = "Unknown", label = "Unknown", rawIdentifier = null, count = 7),
+                    BrowseOption.Labeled(key = "GooglePlay", label = "Google Play", rawIdentifier = null, count = 150),
+                    BrowseOption.Labeled(key = "SystemPreinstalled", label = "System", rawIdentifier = null, count = 30),
+                    BrowseOption.Labeled(key = "Unknown", label = "Unknown", rawIdentifier = null, count = 7),
                 ).toImmutableList(),
             ),
             onAction = {},
@@ -306,9 +360,19 @@ private fun sampleLoadedState() = BrowseOptionsState.Loaded(
     subAttribute = null,
     totalOptions = 3,
     options = persistentListOf(
-        BrowseOption(key = "android.permission.INTERNET", label = "Full network access", rawIdentifier = "android.permission.INTERNET", count = 176),
-        BrowseOption(key = "android.permission.CAMERA", label = "Camera", rawIdentifier = "android.permission.CAMERA", count = 24),
-        BrowseOption(
+        BrowseOption.Labeled(
+            key = "android.permission.INTERNET",
+            label = "Full network access",
+            rawIdentifier = "android.permission.INTERNET",
+            count = 176,
+        ),
+        BrowseOption.Labeled(
+            key = "android.permission.CAMERA",
+            label = "Camera",
+            rawIdentifier = "android.permission.CAMERA",
+            count = 24,
+        ),
+        BrowseOption.Labeled(
             key = "android.permission.ACCESS_FINE_LOCATION",
             label = "Precise location",
             rawIdentifier = "android.permission.ACCESS_FINE_LOCATION",

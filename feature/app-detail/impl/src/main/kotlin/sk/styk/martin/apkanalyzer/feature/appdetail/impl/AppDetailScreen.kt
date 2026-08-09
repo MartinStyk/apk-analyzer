@@ -48,6 +48,7 @@ import sk.styk.martin.apkanalyzer.core.apps.model.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
+import sk.styk.martin.apkanalyzer.core.uilibrary.components.HashBox
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.LoadingSpinner
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
@@ -61,7 +62,6 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.AppDetailToolbar
-import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.HashBox
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SplitApkExportBottomSheet
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.permissions.permissionIcon
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.requirements.requirementIcon

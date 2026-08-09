@@ -8,7 +8,9 @@ data class AppAttributeIndex(
     val minSdk: Map<Int, List<PackageName>>,
     val installSource: Map<AppSource, List<PackageName>>,
     val permission: Map<String, List<PackageName>>,
-    val certificateFingerprint: Map<String, List<PackageName>>,
+    val certificateSha256: Map<String, List<PackageName>>,
+    val certificateSha1: Map<String, List<PackageName>>,
+    val certificateMd5: Map<String, List<PackageName>>,
     val certificateOrganization: Map<String?, List<PackageName>>,
     val certificateCountry: Map<String?, List<PackageName>>,
 )

@@ -1,21 +1,28 @@
 package sk.styk.martin.apkanalyzer.feature.browse.impl.domain
 
+import androidx.annotation.StringRes
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.serialization.Serializable
 import sk.styk.martin.apkanalyzer.feature.browse.impl.R
 import sk.styk.martin.apkanalyzer.feature.browse.impl.model.BrowseDimension
 
-internal const val CERTIFICATE_FINGERPRINT = "fingerprint"
-internal const val CERTIFICATE_ORGANIZATION = "organization"
-internal const val CERTIFICATE_COUNTRY = "country"
-
-internal data class BrowseSubAttribute(val key: String, val labelRes: Int)
+@Serializable
+internal enum class BrowseSubAttribute(@StringRes val labelRes: Int) {
+    CertificateSha256(R.string.browse_certificate_attribute_sha256),
+    CertificateSha1(R.string.browse_certificate_attribute_sha1),
+    CertificateMd5(R.string.browse_certificate_attribute_md5),
+    CertificateOrganization(R.string.browse_certificate_attribute_organization),
+    CertificateCountry(R.string.browse_certificate_attribute_country),
+}
 
 internal fun BrowseDimension.subAttributes(): ImmutableList<BrowseSubAttribute> = when (this) {
     BrowseDimension.SigningCertificate -> persistentListOf(
-        BrowseSubAttribute(CERTIFICATE_FINGERPRINT, R.string.browse_certificate_attribute_fingerprint),
-        BrowseSubAttribute(CERTIFICATE_ORGANIZATION, R.string.browse_certificate_attribute_organization),
-        BrowseSubAttribute(CERTIFICATE_COUNTRY, R.string.browse_certificate_attribute_country),
+        BrowseSubAttribute.CertificateSha256,
+        BrowseSubAttribute.CertificateSha1,
+        BrowseSubAttribute.CertificateMd5,
+        BrowseSubAttribute.CertificateOrganization,
+        BrowseSubAttribute.CertificateCountry,
     )
 
     BrowseDimension.Permission,
@@ -24,3 +31,16 @@ internal fun BrowseDimension.subAttributes(): ImmutableList<BrowseSubAttribute> 
     BrowseDimension.InstallSource,
     -> persistentListOf()
 }
+
+internal val BrowseSubAttribute?.isCertificateHash: Boolean
+    get() = when (this) {
+        BrowseSubAttribute.CertificateSha256,
+        BrowseSubAttribute.CertificateSha1,
+        BrowseSubAttribute.CertificateMd5,
+        -> true
+
+        BrowseSubAttribute.CertificateOrganization,
+        BrowseSubAttribute.CertificateCountry,
+        null,
+        -> false
+    }

@@ -27,9 +27,11 @@ object BrowseNavKey : NavKey
 model/
   BrowseDimension.kt        - @Serializable enum: Permission, SigningCertificate, TargetSdk, MinSdk, InstallSource
 domain/
-  BrowseBuckets.kt           - AppAttributeIndex.bucketsFor(dimension): Map<String, List<PackageName>>,
-                                normalizing every dimension's key type (Int, AppSource, String?) to String.
-                                UNKNOWN_SIGNER_KEY is the sentinel for a null certificate organization
+  BrowseBuckets.kt           - AppAttributeIndex.bucketsFor(dimension, subAttribute):
+                                Map<String, List<PackageName>>, normalizing every dimension's key type
+                                (Int, AppSource, String?) to String. Certificate identity can use
+                                SHA-256, SHA-1, or MD5. UNKNOWN_SIGNER_KEY is the sentinel for a null
+                                certificate organization
   BrowseDimensionLabeler.kt  - @Inject; resolves a dimension+key pair to a friendly label and an
                                 optional raw identifier. Wraps PermissionLabelProvider (core:app-permissions)
                                 and SdkVersionResolver (core:apps) for the two dimensions that need a
@@ -41,7 +43,9 @@ BrowseDimensionResources.kt  - Composable-only per-dimension icon/title/subtitle
 BrowseState.kt / BrowseAction.kt / BrowseEvent.kt / BrowseViewModel.kt / BrowseScreen.kt
                               - Hub: dimension cards with a top-labels preview row and an option count,
                                 sourced straight from AppIndexRepository.index() + InstalledAppsRepository.apps()
-options/                      - Bucket list for one dimension (search + sorted-by-count rows)
+options/                      - Shared bucket-list shell (search + sorted-by-count rows) with typed
+                                option models and dimension-specific row content; certificate hash
+                                rows show the complete fingerprint in a monospaced HashBox
 apps/                         - Apps in one tapped bucket (search + app rows), re-derives the bucket's
                                 package set live from the index rather than carrying it through the NavKey
 navigation/
