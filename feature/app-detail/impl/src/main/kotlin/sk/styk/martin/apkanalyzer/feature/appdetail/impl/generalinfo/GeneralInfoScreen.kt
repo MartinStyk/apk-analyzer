@@ -227,7 +227,7 @@ private fun LoadedContent(
         SectionCard(title = stringResource(R.string.general_info_section_installation)) {
             InfoRowItem(
                 label = stringResource(R.string.general_info_app_type),
-                value = if (state.isSystemApp) {
+                value = if (state.installSourceChain.isSystemApp) {
                     stringResource(R.string.general_info_app_type_system)
                 } else {
                     stringResource(R.string.general_info_app_type_user)
@@ -238,7 +238,7 @@ private fun LoadedContent(
             )
             InfoRowItem(
                 label = stringResource(R.string.general_info_install_source),
-                value = state.source.displayName(),
+                value = state.installSourceChain.source.displayName(),
                 rationale = stringResource(R.string.general_info_rationale_install_source),
                 onShowRationale = { rationaleRow = it },
                 onCopy = onCopy,
@@ -492,12 +492,12 @@ private fun sampleGeneralInfoState() = GeneralInfoState.Loaded(
     minSdkLabel = "Android 7.0",
     targetSdkVersion = 35,
     targetSdkLabel = "Android 15",
-    isSystemApp = false,
     isDebuggable = true,
     allowsBackup = false,
     usesCleartextTraffic = true,
-    source = AppSource.GooglePlay,
     installSourceChain = InstallSourceChain(
+        isSystemApp = false,
+        source = AppSource.GooglePlay,
         installingPackage = PackageName("com.android.vending"),
         initiatingPackage = PackageName("com.android.vending"),
         originatingPackage = null,

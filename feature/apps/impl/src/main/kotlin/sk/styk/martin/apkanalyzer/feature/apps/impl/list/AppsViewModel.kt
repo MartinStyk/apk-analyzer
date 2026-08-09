@@ -179,6 +179,6 @@ class AppsViewModel @Inject constructor(
         installTime = installTime,
         lastUpdateTime = lastUpdateTime,
         lastUsedTime = lastUsedTime,
-        source = source,
+        source = installSourceChain.source,
     )
 }

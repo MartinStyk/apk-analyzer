@@ -156,8 +156,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     ): AppInfo {
         val applicationInfo = packageInfo.applicationInfo
         val minSdk = applicationInfo?.minSdkVersion
-        val installSourceChain = installSourceResolver.appInstallSourceChain(packageInfo)
-        val isSystemApp = installSourceResolver.isSystemApp(packageInfo)
+        val installSourceChain = installSourceResolver.resolve(packageInfo)
 
         return AppInfo(
             packageName = PackageName(packageInfo.packageName),
@@ -165,7 +164,6 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             processName = applicationInfo?.processName,
             versionName = packageInfo.versionName,
             versionCode = packageInfo.longVersionCode,
-            isSystemApp = isSystemApp,
             isDebuggable = applicationInfo.hasFlag(ApplicationInfo.FLAG_DEBUGGABLE),
             allowsBackup = applicationInfo.hasFlag(ApplicationInfo.FLAG_ALLOW_BACKUP),
             usesCleartextTraffic = applicationInfo.hasFlag(ApplicationInfo.FLAG_USES_CLEARTEXT_TRAFFIC),
@@ -174,7 +172,6 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             description = applicationInfo?.loadDescription(packageManager)?.toString(),
             apkDirectory = applicationInfo?.sourceDir,
             dataDirectory = applicationInfo?.dataDir,
-            source = installSourceResolver.appSource(installSourceChain, isSystemApp),
             installSourceChain = installSourceChain,
             installLocation = InstallLocation.from(packageInfo.installLocation),
             apkSize = computeApkSize(applicationInfo),

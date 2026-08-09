@@ -72,14 +72,12 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
 
     private fun PackageInfo.toInstalledApp(): InstalledApp {
         val appInfo = applicationInfo
-        val isSystemApp = installSourceResolver.isSystemApp(this)
-        val chain = installSourceResolver.appInstallSourceChain(this)
+        val installSourceChain = installSourceResolver.resolve(this)
         return InstalledApp(
             packageName = PackageName(packageName),
             applicationName = appInfo?.loadLabel(packageManager)?.toString() ?: packageName,
-            isSystemApp = isSystemApp,
+            installSourceChain = installSourceChain,
             version = longVersionCode,
-            source = installSourceResolver.appSource(chain, isSystemApp),
             targetSdk = appInfo?.targetSdkVersion ?: 0,
             minSdk = appInfo?.minSdkVersion ?: 0,
             apkSize = (appInfo?.sourceDir?.let { File(it).length() } ?: 0L).bytes,

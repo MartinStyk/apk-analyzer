@@ -14,27 +14,31 @@ private val GOOGLE_PLAY_INSTALLER = PackageName("com.android.vending")
 internal class InstallSourceResolverImpl @Inject constructor(private val packageManager: PackageManager) : InstallSourceResolver {
 
     @Suppress("DEPRECATION")
-    override fun appInstallSourceChain(packageInfo: PackageInfo): InstallSourceChain {
+    override fun resolve(packageInfo: PackageInfo): InstallSourceChain {
+        val isSystemApp = packageInfo.applicationInfo?.let { it.flags and ApplicationInfo.FLAG_SYSTEM != 0 } ?: false
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            val installingPackage = runCatching { packageManager.getInstallerPackageName(packageInfo.packageName) }.getOrNull()?.let(::PackageName)
             return InstallSourceChain(
-                installingPackage = runCatching { packageManager.getInstallerPackageName(packageInfo.packageName) }.getOrNull()?.let(::PackageName),
+                isSystemApp = isSystemApp,
+                source = appSource(installingPackage, isSystemApp),
+                installingPackage = installingPackage,
                 initiatingPackage = null,
                 originatingPackage = null,
             )
         }
         val installSourceInfo = runCatching { packageManager.getInstallSourceInfo(packageInfo.packageName) }.getOrNull()
+        val installingPackage = installSourceInfo?.installingPackageName?.let(::PackageName)
         return InstallSourceChain(
-            installingPackage = installSourceInfo?.installingPackageName?.let(::PackageName),
+            isSystemApp = isSystemApp,
+            source = appSource(installingPackage, isSystemApp),
+            installingPackage = installingPackage,
             initiatingPackage = installSourceInfo?.initiatingPackageName?.let(::PackageName),
             originatingPackage = installSourceInfo?.originatingPackageName?.let(::PackageName),
         )
     }
 
-    override fun isSystemApp(packageInfo: PackageInfo): Boolean =
-        packageInfo.applicationInfo?.let { it.flags and ApplicationInfo.FLAG_SYSTEM != 0 } ?: false
-
-    override fun appSource(chain: InstallSourceChain, isSystemApp: Boolean): AppSource = when {
-        chain.installingPackage == GOOGLE_PLAY_INSTALLER -> AppSource.GooglePlay
+    private fun appSource(installingPackage: PackageName?, isSystemApp: Boolean): AppSource = when {
+        installingPackage == GOOGLE_PLAY_INSTALLER -> AppSource.GooglePlay
         isSystemApp -> AppSource.SystemPreinstalled
         else -> AppSource.Unknown
     }
