@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.annotation.PluralsRes
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
-import sk.styk.martin.apkanalyzer.core.common.resources.ResourcesManager
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.Date
@@ -25,89 +24,89 @@ internal fun formatTimestamp(instant: Instant): String {
     return dateFormat.format(Date.from(instant))
 }
 
-internal fun AppDetailState.Loaded.toSummaryText(resourcesManager: ResourcesManager): String = buildList {
-    add(resourcesManager.getString(R.string.app_detail_summary_header, appName, packageName.value).toString())
-    add(summaryLine(resourcesManager, R.string.app_detail_version, versionSummary(resourcesManager)))
-    minSdkSummary(resourcesManager)?.let { add(summaryLine(resourcesManager, R.string.general_info_min_sdk, it)) }
-    targetSdkSummary(resourcesManager)?.let { add(summaryLine(resourcesManager, R.string.general_info_target_sdk, it)) }
-    add(summaryLine(resourcesManager, R.string.general_info_install_source, sourceSummary(resourcesManager)))
-    add(summaryLine(resourcesManager, R.string.app_detail_apk_size, apkSize.formatted()))
-    totalSize?.let { add(summaryLine(resourcesManager, R.string.app_detail_total_size, it.formatted())) }
-    signingSummary(resourcesManager)?.let { add(summaryLine(resourcesManager, R.string.app_detail_summary_signing_label, it)) }
-    add(summaryLine(resourcesManager, R.string.app_detail_permissions_section, permissionsSummary(resourcesManager)))
+internal fun AppDetailState.Loaded.toSummaryText(context: Context): String = buildList {
+    add(context.getString(R.string.app_detail_summary_header, appName, packageName.value))
+    add(summaryLine(context, R.string.app_detail_version, versionSummary(context)))
+    minSdkSummary(context)?.let { add(summaryLine(context, R.string.general_info_min_sdk, it)) }
+    targetSdkSummary(context)?.let { add(summaryLine(context, R.string.general_info_target_sdk, it)) }
+    add(summaryLine(context, R.string.general_info_install_source, sourceSummary(context)))
+    add(summaryLine(context, R.string.app_detail_apk_size, apkSize.formatted()))
+    totalSize?.let { add(summaryLine(context, R.string.app_detail_total_size, it.formatted())) }
+    signingSummary(context)?.let { add(summaryLine(context, R.string.app_detail_summary_signing_label, it)) }
+    add(summaryLine(context, R.string.app_detail_permissions_section, permissionsSummary(context)))
 }.joinToString("\n")
 
 private fun summaryLine(
-    resourcesManager: ResourcesManager,
+    context: Context,
     labelRes: Int,
     value: String,
-): String = resourcesManager.getString(R.string.app_detail_summary_line, resourcesManager.getString(labelRes), value).toString()
+): String = context.getString(R.string.app_detail_summary_line, context.getString(labelRes), value)
 
-private fun AppDetailState.Loaded.versionSummary(resourcesManager: ResourcesManager): String =
-    versionName?.let { resourcesManager.getString(R.string.app_detail_summary_version, it, versionCode).toString() }
+private fun AppDetailState.Loaded.versionSummary(context: Context): String =
+    versionName?.let { context.getString(R.string.app_detail_summary_version, it, versionCode) }
         ?: versionCode.toString()
 
-private fun AppDetailState.Loaded.minSdkSummary(resourcesManager: ResourcesManager): String? = when {
+private fun AppDetailState.Loaded.minSdkSummary(context: Context): String? = when {
     minSdkLabel != null -> minSdkLabel
-    minSdkVersion != null -> resourcesManager.getString(R.string.app_detail_sdk_version_no_label, minSdkVersion).toString()
+    minSdkVersion != null -> context.getString(R.string.app_detail_sdk_version_no_label, minSdkVersion)
     else -> null
 }
 
-private fun AppDetailState.Loaded.targetSdkSummary(resourcesManager: ResourcesManager): String? = when {
+private fun AppDetailState.Loaded.targetSdkSummary(context: Context): String? = when {
     targetSdkLabel != null -> targetSdkLabel
-    targetSdkVersion != null -> resourcesManager.getString(R.string.app_detail_sdk_version_no_label, targetSdkVersion).toString()
+    targetSdkVersion != null -> context.getString(R.string.app_detail_sdk_version_no_label, targetSdkVersion)
     else -> null
 }
 
-private fun AppDetailState.Loaded.sourceSummary(resourcesManager: ResourcesManager): String = when (AppSource.valueOf(source)) {
-    AppSource.GooglePlay -> resourcesManager.getString(R.string.general_info_install_source_google_play)
-    AppSource.SystemPreinstalled -> resourcesManager.getString(R.string.general_info_install_source_system)
-    AppSource.Unknown -> resourcesManager.getString(R.string.general_info_install_source_unknown)
-}.toString()
+private fun AppDetailState.Loaded.sourceSummary(context: Context): String = when (AppSource.valueOf(source)) {
+    AppSource.GooglePlay -> context.getString(R.string.general_info_install_source_google_play)
+    AppSource.SystemPreinstalled -> context.getString(R.string.general_info_install_source_system)
+    AppSource.Unknown -> context.getString(R.string.general_info_install_source_unknown)
+}
 
-private fun AppDetailState.Loaded.signingSummary(resourcesManager: ResourcesManager): String? {
+private fun AppDetailState.Loaded.signingSummary(context: Context): String? {
     val cert = certificate ?: return null
     return when (cert.trustLevel) {
-        CertificateTrustLevel.Debug -> resourcesManager.getString(R.string.app_detail_certificate_debug).toString()
-        CertificateTrustLevel.Valid -> cert.signerDisplayName ?: resourcesManager.getString(R.string.certificates_self_signed).toString()
+        CertificateTrustLevel.Debug -> context.getString(R.string.app_detail_certificate_debug)
+        CertificateTrustLevel.Valid -> cert.signerDisplayName ?: context.getString(R.string.certificates_self_signed)
     }
 }
 
-private fun AppDetailState.Loaded.permissionsSummary(resourcesManager: ResourcesManager): String = grantedDangerousPermissionsCount?.let { granted ->
-    resourcesManager.getString(
+private fun AppDetailState.Loaded.permissionsSummary(context: Context): String = grantedDangerousPermissionsCount?.let { granted ->
+    context.getString(
         R.string.app_detail_summary_permissions_granted,
         permissionCountSummary(
-            resourcesManager = resourcesManager,
+            context = context,
             count = totalPermissionsCount,
             pluralsRes = R.plurals.app_detail_summary_permissions_requested,
         ),
         permissionCountSummary(
-            resourcesManager = resourcesManager,
+            context = context,
             count = dangerousPermissionsCount,
             pluralsRes = R.plurals.app_detail_summary_permissions_dangerous,
         ),
         permissionCountSummary(
-            resourcesManager = resourcesManager,
+            context = context,
             count = granted,
             pluralsRes = R.plurals.app_detail_summary_permissions_granted_count,
         ),
-    ).toString()
-} ?: resourcesManager.getString(
+    )
+} ?: context.getString(
     R.string.app_detail_summary_permissions,
     permissionCountSummary(
-        resourcesManager = resourcesManager,
+        context = context,
         count = totalPermissionsCount,
         pluralsRes = R.plurals.app_detail_summary_permissions_requested,
     ),
     permissionCountSummary(
-        resourcesManager = resourcesManager,
+        context = context,
         count = dangerousPermissionsCount,
         pluralsRes = R.plurals.app_detail_summary_permissions_dangerous,
     ),
-).toString()
+)
 
 private fun permissionCountSummary(
-    resourcesManager: ResourcesManager,
+    context: Context,
     count: Int,
     @PluralsRes pluralsRes: Int,
-): String = resourcesManager.getQuantityString(pluralsRes, count, count).toString()
+): String = context.resources.getQuantityString(pluralsRes, count, count)

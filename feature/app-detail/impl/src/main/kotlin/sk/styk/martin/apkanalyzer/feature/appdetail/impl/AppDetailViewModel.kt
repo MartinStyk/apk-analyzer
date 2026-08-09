@@ -1,5 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl
 
+import android.content.Context
 import android.net.Uri
 import android.os.Build
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,7 +38,6 @@ import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
-import sk.styk.martin.apkanalyzer.core.common.resources.ResourcesManager
 import sk.styk.martin.apkanalyzer.core.userpreferences.RecentlyViewedAppsRepository
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.ApkFileLifetime
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
@@ -58,7 +59,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
     private val temporaryApkManager: TemporaryApkManager,
     private val recentlyViewedAppsRepository: RecentlyViewedAppsRepository,
     private val clipboardManager: ClipboardManager,
-    private val resourcesManager: ResourcesManager,
+    @ApplicationContext private val context: Context,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -167,8 +168,8 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
     private fun copySummary() {
         withLoadedState { state ->
-            val summary = state.toSummaryText(resourcesManager)
-            val label = resourcesManager.getString(R.string.app_detail_summary_clip_label, state.appName).toString()
+            val summary = state.toSummaryText(context)
+            val label = context.getString(R.string.app_detail_summary_clip_label, state.appName)
             if (clipboardManager.copy(label, summary) == CopyResult.FeedbackNotShown) {
                 sendEvent(AppDetailEvent.ShowFeedback(AppDetailFeedback.SummaryCopied))
             }
@@ -177,7 +178,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
     private fun shareSummary() {
         withLoadedState { state ->
-            sendEvent(AppDetailEvent.ShareSummary(state.toSummaryText(resourcesManager)))
+            sendEvent(AppDetailEvent.ShareSummary(state.toSummaryText(context)))
         }
     }
 
