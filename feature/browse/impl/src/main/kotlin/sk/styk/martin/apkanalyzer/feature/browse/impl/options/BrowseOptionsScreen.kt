@@ -254,7 +254,7 @@ private fun CertificateHashOptionContent(option: BrowseOption.CertificateHash, m
             OptionTrailingContent(count = option.count)
         }
         Spacer(modifier = Modifier.height(8.dp))
-        HashBox(value = option.label)
+        HashBox(value = option.key)
     }
 }
 

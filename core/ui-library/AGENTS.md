@@ -44,6 +44,7 @@ name** — check here before calling one:
 | `HashBox` | `HashBox.kt` |
 | `Icon` | `Icon.kt` |
 | `IconButton` | `IconButton.kt` |
+| `LabeledHashBox` | `LabeledHashBox.kt` |
 | `LoadingSpinner` | `LoadingSpinner.kt` |
 | `MultiSelectorChip` | `MultiSelectorChip.kt` |
 | `NavigationBar` (+ `NavigationBarItem` data class) | `NavigationBar.kt` |

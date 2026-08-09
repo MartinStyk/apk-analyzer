@@ -48,8 +48,8 @@ import sk.styk.martin.apkanalyzer.core.apps.model.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
-import sk.styk.martin.apkanalyzer.core.uilibrary.components.HashBox
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
+import sk.styk.martin.apkanalyzer.core.uilibrary.components.LabeledHashBox
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.LoadingSpinner
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.TextButton
@@ -695,7 +695,7 @@ private fun CertificateSignatureSection(
             )
         }
         Spacer(modifier = Modifier.height(12.dp))
-        HashBox(
+        LabeledHashBox(
             label = stringResource(R.string.app_detail_certificate_sha256_fingerprint),
             value = cert.sha256Fingerprint,
         )

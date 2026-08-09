@@ -42,8 +42,8 @@ import sk.styk.martin.apkanalyzer.core.apps.model.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.apps.model.SignatureAlgorithmAssessment
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Chip
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.ChipVariant
-import sk.styk.martin.apkanalyzer.core.uilibrary.components.HashBox
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
+import sk.styk.martin.apkanalyzer.core.uilibrary.components.LabeledHashBox
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
@@ -697,19 +697,19 @@ private fun FingerprintBoxes(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier.fillMaxWidth(),
     ) {
-        HashBox(
+        LabeledHashBox(
             label = sha256Label,
             value = sha256,
             copyContentDescription = copyDescription,
             onCopy = { onCopy(sha256Label, sha256) },
         )
-        HashBox(
+        LabeledHashBox(
             label = sha1Label,
             value = sha1,
             copyContentDescription = copyDescription,
             onCopy = { onCopy(sha1Label, sha1) },
         )
-        HashBox(
+        LabeledHashBox(
             label = md5Label,
             value = md5,
             copyContentDescription = copyDescription,

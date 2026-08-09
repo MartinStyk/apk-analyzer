@@ -3,10 +3,7 @@ package sk.styk.martin.apkanalyzer.core.uilibrary.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -21,12 +18,12 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
+import java.util.Locale
 
 @Composable
 fun HashBox(
     value: String,
     modifier: Modifier = Modifier,
-    label: String? = null,
     copyContentDescription: String? = null,
     onCopy: (() -> Unit)? = null,
 ) {
@@ -40,56 +37,50 @@ fun HashBox(
             }
     }
 
-    Column(modifier = modifier.fillMaxWidth()) {
-        if (label != null) {
-            Text(
-                text = label,
-                style = AppTheme.typography.labelMedium,
-                color = AppTheme.colors.onSurfaceVariant,
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-        }
-        Box(
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(Shapes.CardShape)
+            .background(AppTheme.colors.surfaceVariant)
+            .then(copyModifier),
+    ) {
+        Text(
+            text = value.toDisplayFingerprint(),
+            style = AppTheme.typography.monospace,
+            color = AppTheme.colors.onBackground,
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(Shapes.CardShape)
-                .background(AppTheme.colors.surfaceVariant)
-                .then(copyModifier),
-        ) {
-            Text(
-                text = value.replace(":", ":\u200B"),
-                style = AppTheme.typography.monospace,
-                color = AppTheme.colors.onBackground,
+                .padding(
+                    start = 12.dp,
+                    top = 12.dp,
+                    end = if (onCopy == null) 12.dp else 52.dp,
+                    bottom = 12.dp,
+                ),
+        )
+        if (onCopy != null) {
+            Icon(
+                imageVector = ApkAnalyzerIcons.Copy,
+                contentDescription = null,
+                tint = AppTheme.colors.onSurfaceVariant,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        start = 12.dp,
-                        top = 12.dp,
-                        end = if (onCopy == null) 12.dp else 52.dp,
-                        bottom = 12.dp,
-                    ),
+                    .align(Alignment.TopEnd)
+                    .padding(12.dp)
+                    .size(18.dp),
             )
-            if (onCopy != null) {
-                Icon(
-                    imageVector = ApkAnalyzerIcons.Copy,
-                    contentDescription = null,
-                    tint = AppTheme.colors.onSurfaceVariant,
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(12.dp)
-                        .size(18.dp),
-                )
-            }
         }
     }
 }
+
+private fun String.toDisplayFingerprint(): String = replace(":", "")
+    .uppercase(Locale.ROOT)
+    .chunked(2)
+    .joinToString(":\u200B")
 
 @Preview
 @Composable
 private fun HashBoxDefaultPreview() {
     ApkAnalyzerTheme {
         HashBox(
-            label = "SHA-256",
             value = "A1:B2:C3:D4:E5:F6:A7:B8:C9:D0:E1:F2:A3:B4:C5:D6:E7:F8:A9:B0:C1:D2:E3:F4",
             onCopy = {},
         )
