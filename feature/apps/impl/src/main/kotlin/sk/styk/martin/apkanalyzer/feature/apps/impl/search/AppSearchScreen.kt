@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -260,7 +261,7 @@ private fun EmptySearchContent(totalAppCount: Int, modifier: Modifier = Modifier
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = stringResource(R.string.search_apps_empty, totalAppCount),
+            text = pluralStringResource(R.plurals.search_apps_empty, totalAppCount, totalAppCount),
             style = AppTheme.typography.bodyMedium,
             color = AppTheme.colors.onSurfaceVariant,
         )
