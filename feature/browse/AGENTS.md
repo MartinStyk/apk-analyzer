@@ -25,7 +25,7 @@ object BrowseNavKey : NavKey
 
 ```
 model/
-  BrowseDimension.kt        - @Serializable enum: Permission, SigningCertificate, TargetSdk, MinSdk, InstallSource
+  BrowseDimension.kt        - @Serializable enum: Permission, SigningCertificate, TargetSdk, MinSdk, InstallSource, SharedUserId, AppCategory
 domain/
   BrowseBuckets.kt           - AppAttributeIndex.bucketsFor(dimension, subAttribute):
                                 Map<String, List<PackageName>>, normalizing every dimension's key type
@@ -35,10 +35,14 @@ domain/
   BrowseDimensionLabeler.kt  - @Inject; resolves a dimension+key pair to a friendly label and an
                                 optional raw identifier. Wraps PermissionLabelProvider (core:app-permissions)
                                 and SdkVersionResolver (core:apps) for the two dimensions that need a
-                                real lookup; the enum-backed dimensions (install source, unknown signer)
-                                resolve directly from this module's own strings.xml via Context.getString
-                                — deliberately not through Compose stringResource, since this runs outside
-                                a @Composable in the ViewModel/domain layer
+                                real lookup; the enum-backed dimensions (install source, app category,
+                                unknown signer) resolve directly from this module's own strings.xml via
+                                Context.getString — deliberately not through Compose stringResource,
+                                since this runs outside a @Composable in the ViewModel/domain layer.
+                                Shared UID has no friendlier form than the declared string itself, so its
+                                label is the raw key with no lookup at all. Each enum-backed dimension's
+                                mapping is a separate private function (see `categoryLabel`), not one
+                                growing `when` in `label()` — Detekt's cyclomatic-complexity limit is why
 BrowseDimensionResources.kt  - Composable-only per-dimension icon/title/subtitle, shared by all three screens
 BrowseState.kt / BrowseAction.kt / BrowseEvent.kt / BrowseViewModel.kt / BrowseScreen.kt
                               - Hub: dimension cards with a top-labels preview row and an option count,

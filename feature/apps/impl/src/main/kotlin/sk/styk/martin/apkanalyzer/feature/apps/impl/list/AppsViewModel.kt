@@ -29,7 +29,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AppsViewModel @Inject constructor(
     installedAppsRepository: InstalledAppsRepository,
-    private val recentlyViewedAppsRepository: RecentlyViewedAppsRepository,
+    recentlyViewedAppsRepository: RecentlyViewedAppsRepository,
     private val appFilterRepository: AppFilterRepository,
     filterApps: FilterAppsUseCase,
     private val usageStatsRepository: UsageStatsRepository,
@@ -114,7 +114,6 @@ class AppsViewModel @Inject constructor(
             }
 
             is AppsAction.AppClicked -> {
-                viewModelScope.launch { recentlyViewedAppsRepository.addRecent(action.packageName) }
                 eventChannel.trySend(AppsEvent.NavigateToAppDetail(action.packageName))
             }
 

@@ -2,6 +2,7 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.impl.generalinfo
 
 import androidx.compose.runtime.Immutable
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
+import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import java.time.Instant
 
@@ -15,6 +16,7 @@ sealed interface GeneralInfoState {
         val packageName: PackageName,
         val processName: String?,
         val uid: Int?,
+        val sharedUserId: String?,
         val description: String?,
         val versionName: String?,
         val versionCode: Long,
@@ -26,7 +28,7 @@ sealed interface GeneralInfoState {
         val isDebuggable: Boolean,
         val allowsBackup: Boolean,
         val usesCleartextTraffic: Boolean,
-        val source: String,
+        val source: AppSource,
         val appInstaller: PackageName?,
         val firstInstallTime: Instant?,
         val lastUpdateTime: Instant?,

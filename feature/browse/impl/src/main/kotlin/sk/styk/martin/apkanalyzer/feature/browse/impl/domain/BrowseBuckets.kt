@@ -17,6 +17,10 @@ internal fun AppAttributeIndex.bucketsFor(dimension: BrowseDimension, subAttribu
 
         BrowseDimension.InstallSource -> installSource.mapKeys { it.key.name }
 
+        BrowseDimension.SharedUserId -> sharedUserId
+
+        BrowseDimension.AppCategory -> appCategory.mapKeys { it.key.name }
+
         BrowseDimension.SigningCertificate -> when (subAttribute) {
             BrowseSubAttribute.CertificateSha1 -> certificateSha1
             BrowseSubAttribute.CertificateMd5 -> certificateMd5

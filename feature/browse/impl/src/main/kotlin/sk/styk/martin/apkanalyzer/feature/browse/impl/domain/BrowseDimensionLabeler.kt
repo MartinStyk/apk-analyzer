@@ -4,6 +4,7 @@ import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import sk.styk.martin.apkanalyzer.core.apppermissions.PermissionLabelProvider
 import sk.styk.martin.apkanalyzer.core.apps.analysis.SdkVersionResolver
+import sk.styk.martin.apkanalyzer.core.apps.model.AppCategory
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.feature.browse.impl.R
 import sk.styk.martin.apkanalyzer.feature.browse.impl.model.BrowseDimension
@@ -32,6 +33,10 @@ internal class BrowseDimensionLabeler @Inject constructor(
             else -> context.getString(R.string.browse_source_unknown)
         }
 
+        BrowseDimension.SharedUserId -> key
+
+        BrowseDimension.AppCategory -> categoryLabel(AppCategory.valueOf(key))
+
         BrowseDimension.SigningCertificate -> when (subAttribute) {
             BrowseSubAttribute.CertificateOrganization ->
                 key.takeUnless { it == UNKNOWN_SIGNER_KEY } ?: context.getString(R.string.browse_signer_unknown)
@@ -58,6 +63,10 @@ internal class BrowseDimensionLabeler @Inject constructor(
 
         BrowseDimension.InstallSource -> null
 
+        BrowseDimension.SharedUserId -> null
+
+        BrowseDimension.AppCategory -> null
+
         BrowseDimension.SigningCertificate -> when (subAttribute) {
             BrowseSubAttribute.CertificateCountry -> key.takeUnless { it == UNKNOWN_COUNTRY_KEY }
 
@@ -73,6 +82,19 @@ internal class BrowseDimensionLabeler @Inject constructor(
     private fun countryLabel(countryCode: String): String {
         val displayName = runCatching { Locale.Builder().setRegion(countryCode).build().displayCountry }.getOrNull()
         return displayName?.takeIf { it.isNotBlank() && !it.equals(countryCode, ignoreCase = true) } ?: countryCode
+    }
+
+    private fun categoryLabel(category: AppCategory): String = when (category) {
+        AppCategory.Undefined -> context.getString(R.string.browse_category_undefined)
+        AppCategory.Game -> context.getString(R.string.browse_category_game)
+        AppCategory.Audio -> context.getString(R.string.browse_category_audio)
+        AppCategory.Video -> context.getString(R.string.browse_category_video)
+        AppCategory.Image -> context.getString(R.string.browse_category_image)
+        AppCategory.Social -> context.getString(R.string.browse_category_social)
+        AppCategory.News -> context.getString(R.string.browse_category_news)
+        AppCategory.Maps -> context.getString(R.string.browse_category_maps)
+        AppCategory.Productivity -> context.getString(R.string.browse_category_productivity)
+        AppCategory.Accessibility -> context.getString(R.string.browse_category_accessibility)
     }
 }
 

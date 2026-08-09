@@ -29,6 +29,8 @@ internal fun BrowseDimension.subAttributes(): ImmutableList<BrowseSubAttribute> 
     BrowseDimension.TargetSdk,
     BrowseDimension.MinSdk,
     BrowseDimension.InstallSource,
+    BrowseDimension.SharedUserId,
+    BrowseDimension.AppCategory,
     -> persistentListOf()
 }
 

@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -125,8 +126,14 @@ private fun PermissionFilterContent(
         val activePresetCount = state.presets.count { it.isSelected }
         val presetsLabel = when (activePresetCount) {
             0 -> stringResource(R.string.filter_permissions_chip_presets)
+
             1 -> state.presets.first { it.isSelected }.preset.displayLabel()
-            else -> stringResource(R.string.filter_permissions_chip_presets_count, activePresetCount)
+
+            else -> pluralStringResource(
+                R.plurals.filter_permissions_chip_presets_count,
+                activePresetCount,
+                activePresetCount,
+            )
         }
 
         Row(

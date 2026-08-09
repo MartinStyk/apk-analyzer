@@ -797,9 +797,17 @@ private fun PermissionsSection(
             Text(
                 text = if (state.dangerousPermissionsCount > 0) {
                     stringResource(
-                        R.string.app_detail_permissions_counts,
-                        state.totalPermissionsCount,
-                        state.dangerousPermissionsCount,
+                        R.string.app_detail_count_pair,
+                        pluralStringResource(
+                            R.plurals.app_detail_permissions_requested_count,
+                            state.totalPermissionsCount,
+                            state.totalPermissionsCount,
+                        ),
+                        pluralStringResource(
+                            R.plurals.app_detail_permissions_sensitive_count,
+                            state.dangerousPermissionsCount,
+                            state.dangerousPermissionsCount,
+                        ),
                     )
                 } else {
                     pluralStringResource(
@@ -945,9 +953,17 @@ private fun RequirementsSection(
         Spacer(modifier = Modifier.height(6.dp))
         Text(
             text = stringResource(
-                R.string.app_detail_features_counts,
-                state.requiredFeaturesCount,
-                state.optionalFeaturesCount,
+                R.string.app_detail_count_pair,
+                pluralStringResource(
+                    R.plurals.app_detail_features_required_count,
+                    state.requiredFeaturesCount,
+                    state.requiredFeaturesCount,
+                ),
+                pluralStringResource(
+                    R.plurals.app_detail_features_optional_count,
+                    state.optionalFeaturesCount,
+                    state.optionalFeaturesCount,
+                ),
             ),
             style = AppTheme.typography.bodySmall,
             color = AppTheme.colors.onSurfaceVariant,

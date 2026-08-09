@@ -17,6 +17,10 @@
     <string name="browse_dimension_min_sdk_subtitle">See the oldest Android version each app still supports</string>
     <string name="browse_dimension_install_source_title">Install source</string>
     <string name="browse_dimension_install_source_subtitle">See where each app came from</string>
+    <string name="browse_dimension_shared_user_id_title">Shared identity</string>
+    <string name="browse_dimension_shared_user_id_subtitle">Find apps that run under the same device identity and can access each other\'s data</string>
+    <string name="browse_dimension_app_category_title">App category</string>
+    <string name="browse_dimension_app_category_subtitle">See what kind of app each one declares itself to be</string>
     <plurals name="browse_dimension_option_count">
         <item quantity="one">%1$d option</item>
         <item quantity="other">%1$d options</item>
@@ -29,6 +33,16 @@
     <string name="browse_source_unknown">Unknown</string>
     <string name="browse_signer_unknown">Unknown signer</string>
     <string name="browse_country_unknown">Unknown country</string>
+    <string name="browse_category_undefined">Uncategorized</string>
+    <string name="browse_category_game">Games</string>
+    <string name="browse_category_audio">Audio</string>
+    <string name="browse_category_video">Video</string>
+    <string name="browse_category_image">Image</string>
+    <string name="browse_category_social">Social</string>
+    <string name="browse_category_news">News &amp; magazines</string>
+    <string name="browse_category_maps">Maps &amp; navigation</string>
+    <string name="browse_category_productivity">Productivity</string>
+    <string name="browse_category_accessibility">Accessibility</string>
 
     <string name="browse_sub_attribute_sheet_title">Group by</string>
     <string name="browse_certificate_attribute_sha256">Identity (SHA-256)</string>

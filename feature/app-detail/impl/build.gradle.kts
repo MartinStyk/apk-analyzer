@@ -11,6 +11,7 @@ dependencies {
     implementation(projects.core.apkFiles)
     implementation(projects.core.apps)
     implementation(projects.core.appPermissions)
+    implementation(projects.core.userPreferences)
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.coil.compose)
 }

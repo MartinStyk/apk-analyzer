@@ -70,7 +70,6 @@ name** — check here before calling one:
 ## Dependencies
 
 - `androidx.compose.material3`
-- `androidx.compose.ui:ui-text-google-fonts`
 - `androidx.compose.material:material-icons-extended`
 - `kotlinx-collections-immutable`
 - `coil-compose`, `coil-core`

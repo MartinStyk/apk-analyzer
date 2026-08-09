@@ -215,5 +215,6 @@ before adding one.
 - `core:apk-files` (TemporaryApkManager)
 - `core:apps` (AppDetailRepository)
 - `core:app-permissions` (PermissionLabelProvider)
+- `core:user-preferences` (RecentlyViewedAppsRepository)
 - `kotlinx-collections-immutable`
 - `coil-compose`
