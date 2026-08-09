@@ -17,8 +17,6 @@ import sk.styk.martin.apkanalyzer.core.apps.analysis.InstallSourceResolver
 import sk.styk.martin.apkanalyzer.core.apps.analysis.ManifestParser
 import sk.styk.martin.apkanalyzer.core.apps.analysis.SdkVersionResolver
 import sk.styk.martin.apkanalyzer.core.apps.analysis.computeApkSize
-import sk.styk.martin.apkanalyzer.core.apps.analysis.isSystemInstalledApp
-import sk.styk.martin.apkanalyzer.core.apps.analysis.resolveAppInstallSource
 import sk.styk.martin.apkanalyzer.core.apps.analysis.resolvePathPermissions
 import sk.styk.martin.apkanalyzer.core.apps.analysis.resolveProtectionFlags
 import sk.styk.martin.apkanalyzer.core.apps.analysis.resolveProtectionLevel
@@ -159,7 +157,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         val applicationInfo = packageInfo.applicationInfo
         val minSdk = applicationInfo?.minSdkVersion
         val installSourceChain = installSourceResolver.appInstallSourceChain(packageInfo)
-        val isSystemApp = isSystemInstalledApp(packageInfo)
+        val isSystemApp = installSourceResolver.isSystemApp(packageInfo)
 
         return AppInfo(
             packageName = PackageName(packageInfo.packageName),
@@ -176,7 +174,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             description = applicationInfo?.loadDescription(packageManager)?.toString(),
             apkDirectory = applicationInfo?.sourceDir,
             dataDirectory = applicationInfo?.dataDir,
-            source = resolveAppInstallSource(installSourceChain.installingPackage, isSystemApp),
+            source = installSourceResolver.appSource(packageInfo),
             installSourceChain = installSourceChain,
             installLocation = InstallLocation.from(packageInfo.installLocation),
             apkSize = computeApkSize(applicationInfo),

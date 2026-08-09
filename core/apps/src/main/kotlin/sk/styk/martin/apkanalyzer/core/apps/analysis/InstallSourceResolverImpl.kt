@@ -1,11 +1,15 @@
 package sk.styk.martin.apkanalyzer.core.apps.analysis
 
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import sk.styk.martin.apkanalyzer.core.apps.model.InstallSourceChain
+import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import javax.inject.Inject
+
+private val GOOGLE_PLAY_INSTALLER = PackageName("com.android.vending")
 
 internal class InstallSourceResolverImpl @Inject constructor(private val packageManager: PackageManager) : InstallSourceResolver {
 
@@ -24,5 +28,17 @@ internal class InstallSourceResolverImpl @Inject constructor(private val package
             initiatingPackage = installSourceInfo?.initiatingPackageName?.let(::PackageName),
             originatingPackage = installSourceInfo?.originatingPackageName?.let(::PackageName),
         )
+    }
+
+    override fun isSystemApp(packageInfo: PackageInfo): Boolean =
+        packageInfo.applicationInfo?.let { it.flags and ApplicationInfo.FLAG_SYSTEM != 0 } ?: false
+
+    override fun appSource(packageInfo: PackageInfo): AppSource {
+        val chain = appInstallSourceChain(packageInfo)
+        return when {
+            chain.installingPackage == GOOGLE_PLAY_INSTALLER -> AppSource.GooglePlay
+            isSystemApp(packageInfo) -> AppSource.SystemPreinstalled
+            else -> AppSource.Unknown
+        }
     }
 }

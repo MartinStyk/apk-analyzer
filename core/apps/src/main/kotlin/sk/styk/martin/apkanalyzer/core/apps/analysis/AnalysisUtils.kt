@@ -1,7 +1,6 @@
 package sk.styk.martin.apkanalyzer.core.apps.analysis
 
 import android.content.pm.ApplicationInfo
-import android.content.pm.PackageInfo
 import android.content.pm.PathPermission
 import android.content.pm.PermissionInfo
 import android.os.PatternMatcher
@@ -11,26 +10,13 @@ import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.apps.model.ProviderPathMatchType
 import sk.styk.martin.apkanalyzer.core.apps.model.ProviderPathPermission
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
-import sk.styk.martin.apkanalyzer.core.common.model.AppSource
-import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import java.io.File
-
-private val GOOGLE_PLAY_INSTALLER = PackageName("com.android.vending")
 
 fun computeApkSize(applicationInfo: ApplicationInfo?): AppSize {
     val baseApkSize = applicationInfo?.sourceDir?.let { File(it).length() } ?: 0L
     val splitApksSize = applicationInfo?.splitSourceDirs.orEmpty().sumOf { File(it).length() }
     return (baseApkSize + splitApksSize).bytes
-}
-
-internal fun isSystemInstalledApp(packageInfo: PackageInfo): Boolean =
-    packageInfo.applicationInfo?.let { it.flags and ApplicationInfo.FLAG_SYSTEM != 0 } ?: false
-
-internal fun resolveAppInstallSource(installingPackage: PackageName?, isSystemApp: Boolean): AppSource = when {
-    installingPackage == GOOGLE_PLAY_INSTALLER -> AppSource.GooglePlay
-    isSystemApp -> AppSource.SystemPreinstalled
-    else -> AppSource.Unknown
 }
 
 @Suppress("DEPRECATION")
