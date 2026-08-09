@@ -662,10 +662,15 @@ private fun AppSource.displayName(): String = when (this) {
 
 @Composable
 private fun UnusedAppsPeriod.label(): String = when (this) {
-    UnusedAppsPeriod.ONE_MONTH -> pluralStringResource(R.plurals.filter_unused_months_count, 1, 1)
-    UnusedAppsPeriod.TWO_MONTHS -> pluralStringResource(R.plurals.filter_unused_months_count, 2, 2)
-    UnusedAppsPeriod.THREE_MONTHS -> pluralStringResource(R.plurals.filter_unused_months_count, 3, 3)
-    UnusedAppsPeriod.SIX_MONTHS -> pluralStringResource(R.plurals.filter_unused_months_count, 6, 6)
+    UnusedAppsPeriod.ONE_MONTH,
+    UnusedAppsPeriod.TWO_MONTHS,
+    UnusedAppsPeriod.THREE_MONTHS,
+    UnusedAppsPeriod.SIX_MONTHS,
+    -> {
+        val monthCount = days / UnusedAppsPeriod.ONE_MONTH.days
+        pluralStringResource(R.plurals.filter_unused_months_count, monthCount, monthCount)
+    }
+
     UnusedAppsPeriod.ONE_YEAR -> stringResource(R.string.filter_unused_year)
 }
 
