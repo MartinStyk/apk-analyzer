@@ -6,6 +6,7 @@ import sk.styk.martin.apkanalyzer.core.apps.model.AppSigning
 import sk.styk.martin.apkanalyzer.core.apps.model.Certificate
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificateTrustLevel
+import sk.styk.martin.apkanalyzer.core.apps.model.SigningSchemeVersion
 import sk.styk.martin.apkanalyzer.core.common.digest.DigestManager
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import java.io.ByteArrayInputStream
@@ -24,8 +25,9 @@ internal class CertificateExtractorImpl @Inject constructor(private val digestMa
 
     override fun getAppSigning(packageInfo: PackageInfo): AppSigning {
         val signingInfo = packageInfo.signingInfo ?: return AppSigning()
+        val hasMultipleSigners = signingInfo.hasMultipleSigners()
         val currentSignatures = signingInfo.apkContentsSigners.orEmpty()
-        val pastSignatures = if (signingInfo.hasMultipleSigners()) {
+        val pastSignatures = if (hasMultipleSigners) {
             emptyList()
         } else {
             val currentSignerSet = currentSignatures.toSet()
@@ -35,7 +37,16 @@ internal class CertificateExtractorImpl @Inject constructor(private val digestMa
         return AppSigning(
             currentCertificates = currentSignatures.toList().toCertificates(packageInfo.packageName),
             pastCertificates = pastSignatures.toCertificates(packageInfo.packageName),
+            hasMultipleSigners = hasMultipleSigners,
+            hasRotatedSigningKey = signingInfo.hasPastSigningCertificates(),
         )
+    }
+
+    override fun resolveSigningSchemeVersions(packageInfo: PackageInfo): List<SigningSchemeVersion>? {
+        val apkPath = packageInfo.applicationInfo?.sourceDir ?: return null
+        return runCatching { ApkSigningBlockAnalyzer.detectSchemeVersions(apkPath) }
+            .onFailure { Logger.e(TAG, it, "Could not determine signing scheme for ${packageInfo.packageName}") }
+            .getOrNull()
     }
 
     private fun List<Signature>.toCertificates(packageName: String) = mapNotNull { signature ->

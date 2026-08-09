@@ -132,7 +132,8 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     ) = AppDetail(
         analysisMode = analysisMode,
         info = getGeneralData(packageInfo, totalSize, lastUsedTime),
-        signing = certificateExtractor.getAppSigning(packageInfo),
+        signing = certificateExtractor.getAppSigning(packageInfo)
+            .copy(signingSchemeVersions = certificateExtractor.resolveSigningSchemeVersions(packageInfo)),
         activities = getActivities(
             packageInfo = packageInfo,
             launcherActivityNames = when (analysisMode) {
