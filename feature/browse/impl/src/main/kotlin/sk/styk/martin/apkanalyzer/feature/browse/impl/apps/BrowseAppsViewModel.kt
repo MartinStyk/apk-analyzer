@@ -15,14 +15,12 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.appindex.AppIndexRepository
 import sk.styk.martin.apkanalyzer.core.appindex.model.AppIndexStatus
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
-import sk.styk.martin.apkanalyzer.core.userpreferences.RecentlyViewedAppsRepository
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.bucketsFor
 import sk.styk.martin.apkanalyzer.feature.browse.impl.model.BrowseDimension
 
@@ -33,7 +31,6 @@ internal class BrowseAppsViewModel @AssistedInject constructor(
     @Assisted("subAttribute") private val subAttribute: String?,
     appIndexRepository: AppIndexRepository,
     installedAppsRepository: InstalledAppsRepository,
-    private val recentlyViewedAppsRepository: RecentlyViewedAppsRepository,
     dispatcherProvider: DispatcherProvider,
 ) : ViewModel() {
 
@@ -62,11 +59,7 @@ internal class BrowseAppsViewModel @AssistedInject constructor(
     fun onAction(action: BrowseAppsAction) {
         when (action) {
             is BrowseAppsAction.ChangeQuery -> query.value = action.query
-
-            is BrowseAppsAction.AppClicked -> {
-                viewModelScope.launch { recentlyViewedAppsRepository.addRecent(action.packageName) }
-                eventChannel.trySend(BrowseAppsEvent.NavigateToAppDetail(action.packageName))
-            }
+            is BrowseAppsAction.AppClicked -> eventChannel.trySend(BrowseAppsEvent.NavigateToAppDetail(action.packageName))
         }
     }
 

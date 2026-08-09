@@ -18,7 +18,6 @@ import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.core.userpreferences.RecentlyViewedAppsRepository
 import sk.styk.martin.apkanalyzer.core.userpreferences.SearchHistoryRepository
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppFilterRepository
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.FilterAppsUseCase
@@ -29,7 +28,6 @@ import javax.inject.Inject
 @HiltViewModel
 class AppSearchViewModel @Inject constructor(
     installedAppsRepository: InstalledAppsRepository,
-    private val recentlyViewedAppsRepository: RecentlyViewedAppsRepository,
     private val searchHistoryRepository: SearchHistoryRepository,
     private val appFilterRepository: AppFilterRepository,
     filterApps: FilterAppsUseCase,
@@ -76,7 +74,6 @@ class AppSearchViewModel @Inject constructor(
             is AppSearchAction.AppClicked -> {
                 val currentQuery = query.value
                 viewModelScope.launch {
-                    recentlyViewedAppsRepository.addRecent(action.app.packageName)
                     if (currentQuery.length >= MIN_QUERY_LENGTH) {
                         searchHistoryRepository.addQuery(currentQuery)
                     }

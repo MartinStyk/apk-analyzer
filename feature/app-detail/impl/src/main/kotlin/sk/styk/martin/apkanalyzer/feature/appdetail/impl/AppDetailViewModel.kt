@@ -32,7 +32,9 @@ import sk.styk.martin.apkanalyzer.core.apps.model.FeatureAvailability
 import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
+import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
+import sk.styk.martin.apkanalyzer.core.userpreferences.RecentlyViewedAppsRepository
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.ApkFileLifetime
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.AppDetailBadge
@@ -51,6 +53,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
     private val permissionLabelProvider: PermissionLabelProvider,
     private val dispatcherProvider: DispatcherProvider,
     private val temporaryApkManager: TemporaryApkManager,
+    private val recentlyViewedAppsRepository: RecentlyViewedAppsRepository,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -209,11 +212,12 @@ internal class AppDetailViewModel @AssistedInject constructor(
         source.value = AppDetailSource.Loading
         viewModelScope.launch {
             val deviceFeatures = deviceFeaturesRepository.deviceFeatures()
-            source.value = withContext(dispatcherProvider.default()) {
+            val detailResult = withContext(dispatcherProvider.default()) {
                 appDetailRepository.details(appReference)
             }.onFailure {
                 Logger.e(TAG, it, "Can not load app detail for $appDetailInput")
-            }.fold(
+            }
+            source.value = detailResult.fold(
                 onSuccess = { detail ->
                     AppDetailSource.Ready(
                         detail.toLoadedState(permissionLabelProvider, deviceFeatures)
@@ -222,6 +226,9 @@ internal class AppDetailViewModel @AssistedInject constructor(
                 },
                 onFailure = { AppDetailSource.Error },
             )
+            if (detailResult.isSuccess && appReference is AppReference.InstalledPackage) {
+                recentlyViewedAppsRepository.addRecent(appReference.packageName)
+            }
         }
     }
 }

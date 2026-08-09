@@ -114,7 +114,6 @@ class AppsViewModel @Inject constructor(
             }
 
             is AppsAction.AppClicked -> {
-                viewModelScope.launch { recentlyViewedAppsRepository.addRecent(action.packageName) }
                 eventChannel.trySend(AppsEvent.NavigateToAppDetail(action.packageName))
             }
 
