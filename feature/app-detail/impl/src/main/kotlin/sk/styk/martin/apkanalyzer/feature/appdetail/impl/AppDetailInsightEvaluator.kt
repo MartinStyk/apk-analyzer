@@ -1,6 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl
 
 import android.Manifest
+import android.annotation.SuppressLint
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import sk.styk.martin.apkanalyzer.core.apps.AppClassificationThresholds
@@ -55,6 +56,7 @@ internal object AppDetailInsightEvaluator {
 }
 
 @Suppress("DEPRECATION")
+@SuppressLint("InlinedApi")
 private val sensitivePermissionGroups = linkedMapOf(
     SensitiveAccess.BackgroundLocation to setOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION),
     SensitiveAccess.Messages to setOf(

@@ -1,5 +1,6 @@
 package sk.styk.martin.apkanalyzer.core.apps
 
+import android.annotation.SuppressLint
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
@@ -64,6 +65,7 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
 
     override fun apps(): Flow<List<InstalledApp>> = cachedApps
 
+    @SuppressLint("QueryPermissionsNeeded")
     private fun loadAllApps(): List<InstalledApp> = packageManager.getInstalledPackages(PackageManager.GET_PERMISSIONS).mapNotNull { packageInfo ->
         packageInfo.applicationInfo?.let { packageInfo.toInstalledApp() }
     }

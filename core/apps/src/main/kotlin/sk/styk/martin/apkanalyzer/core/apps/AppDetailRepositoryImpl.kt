@@ -1,5 +1,6 @@
 package sk.styk.martin.apkanalyzer.core.apps
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.FeatureInfo
@@ -198,6 +199,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         )
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     private fun queryLauncherActivityNames(packageName: PackageName): Set<String> = launcherCategories
         .flatMap { category ->
             val intent = Intent(Intent.ACTION_MAIN).addCategory(category).setPackage(packageName.value)

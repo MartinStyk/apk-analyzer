@@ -66,7 +66,7 @@ potential-bugs:
 
 style:
   MagicNumber:
-    active: true
+    active: false
     severity: info
   MaxLineLength:
     maxLineLength: 160

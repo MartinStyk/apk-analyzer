@@ -36,7 +36,9 @@
         <item>Android 12L</item>
         <item>Android 13</item>
         <item>Android 14</item>
+        <item>Android 15</item>
+        <item>Android 16</item>
+        <item>Android 17</item>
     </string-array>
 
 </resources>
-
