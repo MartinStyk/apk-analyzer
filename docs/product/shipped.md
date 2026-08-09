@@ -53,5 +53,5 @@ FR-28 Theme / color scheme setting · FR-29 Settings screen · FR-30 Usage-acces
 
 ## 1.8 Data Gaps
 
-FR-32 Manifest security flags · FR-34 Split APKs / config splits · FR-35 Shared UID group ·
+FR-32 Manifest security flags · FR-33 Native libraries / ABIs · FR-34 Split APKs / config splits · FR-35 Shared UID group ·
 FR-39 App category · EX-07 Component intent filters · EX-08 Content-provider path permissions

@@ -10,6 +10,7 @@ data class AppDetail(
     val receivers: List<BroadcastReceiver>,
     val permissions: Permissions,
     val features: List<Feature>,
+    val nativeLibraries: NativeLibraries,
     val areComponentIntentFiltersAvailable: Boolean,
 ) {
     enum class AnalysisMode {
