@@ -1,6 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl.generalinfo
 
 import androidx.compose.runtime.Immutable
+import sk.styk.martin.apkanalyzer.core.apps.model.InstallSourceChain
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
@@ -29,9 +30,7 @@ sealed interface GeneralInfoState {
         val allowsBackup: Boolean,
         val usesCleartextTraffic: Boolean,
         val source: AppSource,
-        val appInstaller: PackageName?,
-        val installInitiatingPackage: PackageName?,
-        val installOriginatingPackage: PackageName?,
+        val installSourceChain: InstallSourceChain,
         val firstInstallTime: Instant?,
         val lastUpdateTime: Instant?,
         val lastUsedTime: Instant?,

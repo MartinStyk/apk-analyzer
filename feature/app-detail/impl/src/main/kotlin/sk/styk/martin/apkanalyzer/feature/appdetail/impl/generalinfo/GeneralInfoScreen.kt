@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import sk.styk.martin.apkanalyzer.core.apps.model.InstallSourceChain
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
@@ -241,7 +242,7 @@ private fun LoadedContent(
                 onShowRationale = { rationaleRow = it },
                 onCopy = onCopy,
             )
-            state.appInstaller?.let { value ->
+            state.installSourceChain.installingPackage?.let { value ->
                 InfoRowItem(
                     label = stringResource(R.string.general_info_installer_package),
                     value = value.value,
@@ -250,7 +251,7 @@ private fun LoadedContent(
                     onCopy = onCopy,
                 )
             }
-            state.installInitiatingPackage?.let { value ->
+            state.installSourceChain.initiatingPackage?.let { value ->
                 InfoRowItem(
                     label = stringResource(R.string.general_info_install_initiator),
                     value = value.value,
@@ -259,7 +260,7 @@ private fun LoadedContent(
                     onCopy = onCopy,
                 )
             }
-            state.installOriginatingPackage?.let { value ->
+            state.installSourceChain.originatingPackage?.let { value ->
                 InfoRowItem(
                     label = stringResource(R.string.general_info_install_originator),
                     value = value.value,
@@ -482,9 +483,11 @@ private fun sampleGeneralInfoState() = GeneralInfoState.Loaded(
     allowsBackup = false,
     usesCleartextTraffic = true,
     source = AppSource.GooglePlay,
-    appInstaller = PackageName("com.android.vending"),
-    installInitiatingPackage = PackageName("com.android.vending"),
-    installOriginatingPackage = null,
+    installSourceChain = InstallSourceChain(
+        installingPackage = PackageName("com.android.vending"),
+        initiatingPackage = PackageName("com.android.vending"),
+        originatingPackage = null,
+    ),
     firstInstallTime = Instant.ofEpochMilli(1_736_640_000_000),
     lastUpdateTime = Instant.ofEpochMilli(1_748_736_000_000),
     lastUsedTime = Instant.ofEpochMilli(1_749_600_000_000),

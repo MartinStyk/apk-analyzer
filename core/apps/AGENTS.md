@@ -25,7 +25,11 @@ analysis/
   CertificateExtractor.kt / Impl    - APK signing certificate extraction
   ManifestParser.kt / Impl           - Installed/APK AndroidManifest.xml parsing into readable namespaced XML
                                        and component intent filters
-  InstallSourceResolver.kt / Impl   - Determine app install source (Play Store, sideload, etc.)
+  InstallSourceResolver.kt / Impl   - Single method, `appInstallSourceChain()`, returning the raw
+                                       `InstallSourceChain`. `AppSource` classification (Play Store,
+                                       sideload, etc.) and `isSystemInstalledApp()` are pure functions
+                                       in `AnalysisUtils.kt`, not resolver methods — neither needs
+                                       `PackageManager` once given the chain/flags they're derived from
   SdkVersionResolver.kt             - SDK version to Android name mapping
   AnalysisUtils.kt                   - Shared analysis helpers, incl. permission protection decoding
 model/
@@ -64,6 +68,9 @@ model/
                             device's GL ES version. `supports()` returns `null` for unknown, never
                             `false` — an unreadable package manager must not read as "missing"
   InstallLocation.kt      - Install location enum
+  InstallSourceChain.kt   - Installing/initiating/originating package, one nested fact on `AppInfo`
+                            rather than three flat fields — mirrors how `AppSigning` and
+                            `CertificatePrincipal` group related facts instead of flattening them
 di/                       - Hilt module bindings
 ```
 

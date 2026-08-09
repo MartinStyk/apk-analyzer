@@ -298,7 +298,7 @@ private fun AppDetail.toLoadedState(permissionLabelProvider: PermissionLabelProv
         minSdkVersion = info.minSdkVersion,
         minSdkLabel = info.minSdkLabel,
         installLocation = info.installLocation.name,
-        appInstaller = info.appInstaller,
+        appInstaller = info.installSourceChain.installingPackage,
         firstInstallTime = info.firstInstallTime,
         lastUpdateTime = info.lastUpdateTime,
         totalPermissionsCount = permissions.used.size,

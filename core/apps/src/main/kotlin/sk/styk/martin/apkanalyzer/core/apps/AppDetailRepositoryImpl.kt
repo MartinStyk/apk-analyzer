@@ -17,6 +17,8 @@ import sk.styk.martin.apkanalyzer.core.apps.analysis.InstallSourceResolver
 import sk.styk.martin.apkanalyzer.core.apps.analysis.ManifestParser
 import sk.styk.martin.apkanalyzer.core.apps.analysis.SdkVersionResolver
 import sk.styk.martin.apkanalyzer.core.apps.analysis.computeApkSize
+import sk.styk.martin.apkanalyzer.core.apps.analysis.isSystemInstalledApp
+import sk.styk.martin.apkanalyzer.core.apps.analysis.resolveAppInstallSource
 import sk.styk.martin.apkanalyzer.core.apps.analysis.resolvePathPermissions
 import sk.styk.martin.apkanalyzer.core.apps.analysis.resolveProtectionFlags
 import sk.styk.martin.apkanalyzer.core.apps.analysis.resolveProtectionLevel
@@ -157,6 +159,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         val applicationInfo = packageInfo.applicationInfo
         val minSdk = applicationInfo?.minSdkVersion
         val installSourceChain = installSourceResolver.appInstallSourceChain(packageInfo)
+        val isSystemApp = isSystemInstalledApp(packageInfo)
 
         return AppInfo(
             packageName = PackageName(packageInfo.packageName),
@@ -164,7 +167,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             processName = applicationInfo?.processName,
             versionName = packageInfo.versionName,
             versionCode = packageInfo.longVersionCode,
-            isSystemApp = installSourceResolver.isSystemInstalledApp(packageInfo),
+            isSystemApp = isSystemApp,
             isDebuggable = applicationInfo.hasFlag(ApplicationInfo.FLAG_DEBUGGABLE),
             allowsBackup = applicationInfo.hasFlag(ApplicationInfo.FLAG_ALLOW_BACKUP),
             usesCleartextTraffic = applicationInfo.hasFlag(ApplicationInfo.FLAG_USES_CLEARTEXT_TRAFFIC),
@@ -173,10 +176,8 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             description = applicationInfo?.loadDescription(packageManager)?.toString(),
             apkDirectory = applicationInfo?.sourceDir,
             dataDirectory = applicationInfo?.dataDir,
-            source = installSourceResolver.getAppInstallSource(packageInfo),
-            appInstaller = installSourceChain.installingPackage,
-            installInitiatingPackage = installSourceChain.initiatingPackage,
-            installOriginatingPackage = installSourceChain.originatingPackage,
+            source = resolveAppInstallSource(installSourceChain.installingPackage, isSystemApp),
+            installSourceChain = installSourceChain,
             installLocation = InstallLocation.from(packageInfo.installLocation),
             apkSize = computeApkSize(applicationInfo?.sourceDir),
             firstInstallTime = if (packageInfo.firstInstallTime > 0) Instant.ofEpochMilli(packageInfo.firstInstallTime) else null,
