@@ -10,7 +10,6 @@ android {
 
 dependencies {
     implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.ui.text.google.fonts)
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.coil.core)
