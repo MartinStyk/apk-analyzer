@@ -3,10 +3,11 @@
 **Roadmap:** [FR-10 … FR-18](../roadmap.md#12-app-detail), [FR-25](../roadmap.md#15-export--share), plus [EX-07, EX-08](../roadmap.md#18-data-gaps--extraction-that-doesnt-exist-yet) · R0
 **Status:** Shipped. [All six implementation steps](#implementation-order) are built and wired,
 including Requirements and the polish pass. Two pieces described below are still open: the
-Requirements `Libraries` scope, blocked on roadmap data-extraction item `FR-44`; and exported-
-component risk interpretation on the hub, which now has all its data (`EX-07` and `EX-08` have both
-landed and back the Components screen's filter and item sheet) but still needs a deliberate hub rule
-rather than more extraction — see `RI-03`.
+Requirements `Libraries` scope, which needed roadmap data-extraction item `FR-44` — now backlogged
+as low-value, so the screen stays Hardware-only for the foreseeable future; and exported-component
+risk interpretation on the hub, which now has all its data (`EX-07` and `EX-08` have both landed and
+back the Components screen's filter and item sheet) but still needs a deliberate hub rule rather than
+more extraction — see `RI-03`.
 **Scope:** surface everything `AppDetail` holds inside `feature:app-detail`, provide a readable
 manifest, and finish base-APK and icon export.
 
@@ -479,8 +480,10 @@ supplies?"), and `org.apache.http.legacy` on a modern app says something the har
 will. Libraries carry the same required/optional split, from `android:required`, and the same
 device check — a declared library either resolves on this device or does not.
 
-The library list needs extraction that does not exist yet; it depends on roadmap `FR-44`. If that
-slips, the scope chip does not render and the screen is hardware-only, exactly as it is today.
+The library list needs extraction that does not exist yet — roadmap `FR-44`, now backlogged as
+low-value (most apps declare zero `<uses-library>` entries, and the ones that do are boilerplate or
+legacy trivia). Until that's revisited, the scope chip does not render and the screen stays
+hardware-only, exactly as it is today.
 
 ---
 
@@ -587,7 +590,7 @@ Screen work:
 - Certificate fingerprint group open with all three hashes; public key fingerprint group in an
   expander, collapsed by default, same three hashes and same treatment inside.
 
-### Step 4 — Requirements screen — Shipped, Libraries scope pending `FR-44`
+### Step 4 — Requirements screen — Shipped, Libraries scope backlogged (`FR-44`)
 
 - **Split `Feature` into a sealed interface** — `Hardware(name)` and `OpenGlEs(version)` — and stop
   writing `name = it.name ?: it.glEsVersion` in `AppDetailRepositoryImpl.getFeatures`. Keep the raw
@@ -609,10 +612,9 @@ Screen work:
 - Mark misses only, count them into the summary line, and soften the wording for optional misses.
   Runs in both analysis modes — see the [screen notes](#requirements-features) for why an installed
   app can still miss.
-- **Libraries scope**, only if `FR-44` has landed: reuse `SelectorChip` from Step 1, apply the
-  same required/optional split and the same device check to declared `<uses-library>` entries. If
-  `FR-44` has not landed, skip this bullet — the chip does not render and nothing else changes.
-  **Not yet built** — `FR-44` hasn't landed, so the screen remains Hardware-only.
+- **Libraries scope**, only if `FR-44` is picked back up: reuse `SelectorChip` from Step 1, apply
+  the same required/optional split and the same device check to declared `<uses-library>` entries.
+  **Not planned** — `FR-44` is backlogged as low-value, so the screen remains Hardware-only.
 
 ### Step 5 — Hub rework — Shipped
 
@@ -667,15 +669,12 @@ Screen work:
 
 ## Open questions
 
-- **Repeated loading on APK-file input only.** `AppDetailRepositoryImpl` is `@Singleton` and holds a
-  `ConcurrentHashMap<String, AppDetail>` keyed by package name, invalidated by
-  `PackageChangesObserver`. Installed packages are parsed once and every section ViewModel after
-  that is a map lookup — no problem there. But `details(AppReference.ApkFile(...))` has **no
-  cache**: each call runs `getPackageArchiveInfo` plus certificate extraction against the file
-  again. With five
-  section screens, opening an APK re-parses the archive on every navigation. Fix is small — key the
-  same cache by file path plus last-modified — but decide whether it belongs in this work or as a
-  separate `:core:apps` change.
+- ~~**Repeated loading on APK-file input only.**~~ **Fixed.** `AppDetailRepositoryImpl`'s cache key
+  is now a `CacheKey` sealed type — `InstalledPackage(packageName)` or
+  `ApkFile(path, lastModified)` — instead of a bare `PackageName`, so `details(AppReference.ApkFile(...))`
+  hits the same cache installed packages already used. `lastModified` in the key means a changed file
+  on disk naturally misses instead of serving a stale parse; the whole map is still cleared by
+  `PackageChangesObserver` on any package change, same as before.
 - **Permission descriptions on APK-file input.** `loadDescription()` resolves against the system
   package manager, so platform permissions work, but permissions declared by a not-installed app
   have no system description. The declaring-package fallback covers that case (see Step 1).
