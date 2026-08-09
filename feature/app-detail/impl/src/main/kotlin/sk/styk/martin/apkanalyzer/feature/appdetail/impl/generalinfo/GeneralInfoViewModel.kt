@@ -1,11 +1,13 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl.generalinfo
 
+import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -98,4 +100,10 @@ private fun AppDetail.toGeneralInfoState() = GeneralInfoState.Loaded(
     installLocation = info.installLocation.name,
     apkSize = info.apkSize,
     totalSize = info.totalSize,
+    nativeLibraryAbis = nativeLibraries.abis.toImmutableList(),
+    nativeLibraryNames = nativeLibraries.libraryNames.toImmutableList(),
+    deviceSupportedAbis = Build.SUPPORTED_ABIS.toList().toImmutableList(),
+    isNativeLibraryDeviceIncompatible = nativeLibraries.hasNativeCode &&
+        nativeLibraries.abis.none { it in Build.SUPPORTED_ABIS },
+    additionalInstalledSplits = info.additionalInstalledSplits,
 )
