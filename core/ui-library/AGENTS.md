@@ -41,8 +41,10 @@ name** — check here before calling one:
 | `Checkbox` | `Checkbox.kt` |
 | `Chip`, `OutlinedChip` | `Chip.kt` |
 | `DateRangePickerDialog` | `DateRangePickerDialog.kt` |
+| `HashBox` | `HashBox.kt` |
 | `Icon` | `Icon.kt` |
 | `IconButton` | `IconButton.kt` |
+| `LabeledHashBox` | `LabeledHashBox.kt` |
 | `LoadingSpinner` | `LoadingSpinner.kt` |
 | `MultiSelectorChip` | `MultiSelectorChip.kt` |
 | `NavigationBar` (+ `NavigationBarItem` data class) | `NavigationBar.kt` |

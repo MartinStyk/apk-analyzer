@@ -17,7 +17,7 @@ import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.BrowseDimensionLabeler
-import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.CERTIFICATE_ORGANIZATION
+import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.BrowseSubAttribute
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.bucketsFor
 import sk.styk.martin.apkanalyzer.feature.browse.impl.model.BrowseDimension
 import javax.inject.Inject
@@ -54,15 +54,16 @@ internal class BrowseViewModel @Inject constructor(
         is AppIndexStatus.Data -> BrowseState.Loaded(
             totalApps = apps.size,
             dimensions = BrowseDimension.entries.map { dimension ->
-                val previewSubKey = if (dimension == BrowseDimension.SigningCertificate) CERTIFICATE_ORGANIZATION else null
-                val buckets = index.bucketsFor(dimension, previewSubKey)
+                val previewSubAttribute =
+                    if (dimension == BrowseDimension.SigningCertificate) BrowseSubAttribute.CertificateOrganization else null
+                val buckets = index.bucketsFor(dimension, previewSubAttribute)
                 DimensionSummary(
                     dimension = dimension,
                     optionCount = index.bucketsFor(dimension).size,
                     topLabels = buckets.entries
                         .sortedByDescending { it.value.size }
                         .take(TOP_LABELS_COUNT)
-                        .map { labeler.label(dimension, it.key, previewSubKey) }
+                        .map { labeler.label(dimension, it.key, previewSubAttribute) }
                         .toImmutableList(),
                 )
             }.toImmutableList(),

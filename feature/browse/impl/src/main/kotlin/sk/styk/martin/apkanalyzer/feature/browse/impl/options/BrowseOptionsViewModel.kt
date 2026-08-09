@@ -22,7 +22,9 @@ import sk.styk.martin.apkanalyzer.core.appindex.model.AppAttributeIndex
 import sk.styk.martin.apkanalyzer.core.appindex.model.AppIndexStatus
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.BrowseDimensionLabeler
+import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.BrowseSubAttribute
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.bucketsFor
+import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.isCertificateHash
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.subAttributes
 import sk.styk.martin.apkanalyzer.feature.browse.impl.model.BrowseDimension
 
@@ -39,7 +41,8 @@ internal class BrowseOptionsViewModel @AssistedInject constructor(
         fun create(dimension: BrowseDimension): BrowseOptionsViewModel
     }
 
-    private val subAttributeKeys = dimension.subAttributes().map { it.key }.ifEmpty { listOf(null) }
+    private val subAttributes: List<BrowseSubAttribute?> =
+        dimension.subAttributes().takeIf { it.isNotEmpty() } ?: listOf(null)
 
     private val narrowing = MutableStateFlow(Narrowing())
 
@@ -63,7 +66,7 @@ internal class BrowseOptionsViewModel @AssistedInject constructor(
         when (action) {
             is BrowseOptionsAction.ChangeQuery -> narrowing.update { it.copy(query = action.query) }
 
-            is BrowseOptionsAction.SelectSubAttribute -> narrowing.update { it.copy(subAttribute = action.key) }
+            is BrowseOptionsAction.SelectSubAttribute -> narrowing.update { it.copy(subAttribute = action.subAttribute) }
 
             is BrowseOptionsAction.SelectOption -> {
                 val loaded = state.value as? BrowseOptionsState.Loaded
@@ -82,28 +85,38 @@ internal class BrowseOptionsViewModel @AssistedInject constructor(
         AppIndexStatus.Loading -> OptionsSource.Loading
 
         is AppIndexStatus.Data -> OptionsSource.Ready(
-            optionsBySubAttribute = subAttributeKeys.associateWith { key -> index.buildOptions(key) },
+            optionsBySubAttribute = subAttributes.associateWith { subAttribute -> index.buildOptions(subAttribute) },
         )
     }
 
-    private fun AppAttributeIndex.buildOptions(subKey: String?): List<BrowseOption> = bucketsFor(dimension, subKey)
+    private fun AppAttributeIndex.buildOptions(subAttribute: BrowseSubAttribute?): List<BrowseOption> = bucketsFor(dimension, subAttribute)
         .map { (key, packages) ->
-            BrowseOption(
-                key = key,
-                label = labeler.label(dimension, key, subKey),
-                rawIdentifier = labeler.rawIdentifier(dimension, key, subKey),
-                count = packages.size,
-            )
+            val label = labeler.label(dimension, key, subAttribute)
+            if (subAttribute.isCertificateHash) {
+                BrowseOption.CertificateHash(
+                    key = key,
+                    label = label,
+                    algorithm = requireNotNull(subAttribute),
+                    count = packages.size,
+                )
+            } else {
+                BrowseOption.Labeled(
+                    key = key,
+                    label = label,
+                    rawIdentifier = labeler.rawIdentifier(dimension, key, subAttribute),
+                    count = packages.size,
+                )
+            }
         }
         .sortedWith(compareByDescending<BrowseOption> { it.count }.thenBy { it.label })
 }
 
-private data class Narrowing(val query: String = "", val subAttribute: String? = null)
+private data class Narrowing(val query: String = "", val subAttribute: BrowseSubAttribute? = null)
 
 private sealed interface OptionsSource {
     data object Loading : OptionsSource
 
-    data class Ready(val optionsBySubAttribute: Map<String?, List<BrowseOption>>) : OptionsSource
+    data class Ready(val optionsBySubAttribute: Map<BrowseSubAttribute?, List<BrowseOption>>) : OptionsSource
 }
 
 private fun OptionsSource.Ready.narrowedBy(narrowing: Narrowing): BrowseOptionsState.Loaded {
@@ -120,5 +133,6 @@ private fun OptionsSource.Ready.narrowedBy(narrowing: Narrowing): BrowseOptionsS
 }
 
 private fun BrowseOption.matches(query: String): Boolean = query.isBlank() ||
+    key.contains(query, ignoreCase = true) ||
     label.contains(query, ignoreCase = true) ||
-    rawIdentifier?.contains(query, ignoreCase = true) == true
+    (this as? BrowseOption.Labeled)?.rawIdentifier?.contains(query, ignoreCase = true) == true
