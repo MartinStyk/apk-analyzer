@@ -38,6 +38,7 @@ sealed interface GeneralInfoState {
         val installLocation: String,
         val apkSize: AppSize,
         val totalSize: AppSize?,
+        val additionalInstalledSplits: Int,
     ) : GeneralInfoState
 
     data object Error : GeneralInfoState
