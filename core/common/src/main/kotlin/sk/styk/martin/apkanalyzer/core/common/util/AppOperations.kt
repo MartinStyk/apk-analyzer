@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.provider.Settings
 import androidx.core.net.toUri
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
@@ -50,7 +49,7 @@ fun Context.sendForeignBroadcast(packageName: PackageName, receiverName: String)
 
 fun Context.openBrowser(url: String) {
     try {
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+        startActivity(Intent(Intent.ACTION_VIEW, url.toUri()))
     } catch (e: ActivityNotFoundException) {
         Logger.w(TAG, e, "No browser available to open $url")
     }
