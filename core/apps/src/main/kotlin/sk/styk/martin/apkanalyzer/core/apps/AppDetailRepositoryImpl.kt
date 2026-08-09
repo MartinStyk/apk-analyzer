@@ -174,7 +174,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             description = applicationInfo?.loadDescription(packageManager)?.toString(),
             apkDirectory = applicationInfo?.sourceDir,
             dataDirectory = applicationInfo?.dataDir,
-            source = installSourceResolver.appSource(packageInfo),
+            source = installSourceResolver.appSource(installSourceChain, isSystemApp),
             installSourceChain = installSourceChain,
             installLocation = InstallLocation.from(packageInfo.installLocation),
             apkSize = computeApkSize(applicationInfo),

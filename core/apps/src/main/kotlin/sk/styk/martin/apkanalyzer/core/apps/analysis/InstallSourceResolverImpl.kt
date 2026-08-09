@@ -33,12 +33,9 @@ internal class InstallSourceResolverImpl @Inject constructor(private val package
     override fun isSystemApp(packageInfo: PackageInfo): Boolean =
         packageInfo.applicationInfo?.let { it.flags and ApplicationInfo.FLAG_SYSTEM != 0 } ?: false
 
-    override fun appSource(packageInfo: PackageInfo): AppSource {
-        val chain = appInstallSourceChain(packageInfo)
-        return when {
-            chain.installingPackage == GOOGLE_PLAY_INSTALLER -> AppSource.GooglePlay
-            isSystemApp(packageInfo) -> AppSource.SystemPreinstalled
-            else -> AppSource.Unknown
-        }
+    override fun appSource(chain: InstallSourceChain, isSystemApp: Boolean): AppSource = when {
+        chain.installingPackage == GOOGLE_PLAY_INSTALLER -> AppSource.GooglePlay
+        isSystemApp -> AppSource.SystemPreinstalled
+        else -> AppSource.Unknown
     }
 }
