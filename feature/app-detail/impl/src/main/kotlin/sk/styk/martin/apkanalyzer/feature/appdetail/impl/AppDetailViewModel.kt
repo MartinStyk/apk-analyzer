@@ -30,10 +30,13 @@ import sk.styk.martin.apkanalyzer.core.apps.model.DeviceFeatures
 import sk.styk.martin.apkanalyzer.core.apps.model.Feature
 import sk.styk.martin.apkanalyzer.core.apps.model.FeatureAvailability
 import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
+import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
+import sk.styk.martin.apkanalyzer.core.common.resources.ResourcesManager
 import sk.styk.martin.apkanalyzer.core.userpreferences.RecentlyViewedAppsRepository
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.ApkFileLifetime
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
@@ -54,6 +57,8 @@ internal class AppDetailViewModel @AssistedInject constructor(
     private val dispatcherProvider: DispatcherProvider,
     private val temporaryApkManager: TemporaryApkManager,
     private val recentlyViewedAppsRepository: RecentlyViewedAppsRepository,
+    private val clipboardManager: ClipboardManager,
+    private val resourcesManager: ResourcesManager,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -93,6 +98,12 @@ internal class AppDetailViewModel @AssistedInject constructor(
             is AppDetailAction.ExportApk -> requestDocument(AppDetailExport.Apk)
 
             is AppDetailAction.SaveIcon -> requestDocument(AppDetailExport.Icon)
+
+            is AppDetailAction.CopySummary -> copySummary()
+
+            is AppDetailAction.ShareSummary -> shareSummary()
+
+            is AppDetailAction.ShareSummaryUnavailable -> sendEvent(AppDetailEvent.ShowFeedback(AppDetailFeedback.ShareUnavailable))
 
             is AppDetailAction.OpenPlayStore -> withLoadedState { sendEvent(AppDetailEvent.OpenPlayStore(it.packageName)) }
 
@@ -151,6 +162,22 @@ internal class AppDetailViewModel @AssistedInject constructor(
             val extension = if (export == AppDetailExport.Apk) "apk" else "png"
             exportInProgress.value = export
             sendEvent(AppDetailEvent.CreateDocument(export, "${state.packageName}.$extension"))
+        }
+    }
+
+    private fun copySummary() {
+        withLoadedState { state ->
+            val summary = state.toSummaryText(resourcesManager)
+            val label = resourcesManager.getString(R.string.app_detail_summary_clip_label, state.appName).toString()
+            if (clipboardManager.copy(label, summary) == CopyResult.FeedbackNotShown) {
+                sendEvent(AppDetailEvent.ShowFeedback(AppDetailFeedback.SummaryCopied))
+            }
+        }
+    }
+
+    private fun shareSummary() {
+        withLoadedState { state ->
+            sendEvent(AppDetailEvent.ShareSummary(state.toSummaryText(resourcesManager)))
         }
     }
 

@@ -7,6 +7,9 @@ internal sealed interface AppDetailAction {
     data object ViewManifest : AppDetailAction
     data object ExportApk : AppDetailAction
     data object SaveIcon : AppDetailAction
+    data object CopySummary : AppDetailAction
+    data object ShareSummary : AppDetailAction
+    data object ShareSummaryUnavailable : AppDetailAction
     data object OpenPlayStore : AppDetailAction
     data object OpenAppInfo : AppDetailAction
     data object NavigateGeneralDetails : AppDetailAction

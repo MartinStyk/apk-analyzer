@@ -1,6 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl
 
 import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -129,6 +130,18 @@ internal fun AppDetailScreen(
                         }
                     } catch (_: ActivityNotFoundException) {
                         viewModel.onAction(AppDetailAction.DocumentPickerUnavailable(event.export))
+                    }
+                }
+
+                is AppDetailEvent.ShareSummary -> {
+                    try {
+                        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                            type = "text/plain"
+                            putExtra(Intent.EXTRA_TEXT, event.text)
+                        }
+                        context.startActivity(Intent.createChooser(shareIntent, null))
+                    } catch (_: ActivityNotFoundException) {
+                        viewModel.onAction(AppDetailAction.ShareSummaryUnavailable)
                     }
                 }
 
@@ -560,6 +573,16 @@ private fun ActionsSection(
                 },
                 onClick = { onAction(AppDetailAction.SaveIcon) },
                 enabled = state.exportInProgress == null,
+            )
+            ActionItem(
+                icon = ApkAnalyzerIcons.Copy,
+                label = stringResource(R.string.app_detail_action_copy_summary),
+                onClick = { onAction(AppDetailAction.CopySummary) },
+            )
+            ActionItem(
+                icon = ApkAnalyzerIcons.Share,
+                label = stringResource(R.string.app_detail_action_share_summary),
+                onClick = { onAction(AppDetailAction.ShareSummary) },
             )
             ActionItem(
                 icon = ApkAnalyzerIcons.Apps,
