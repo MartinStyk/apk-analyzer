@@ -61,7 +61,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     dispatcherProvider: DispatcherProvider,
 ) : AppDetailRepository {
 
-    private val cache = ConcurrentHashMap<PackageName, AppDetail>()
+    private val cache = ConcurrentHashMap<CacheKey, AppDetail>()
 
     private val analysisFlags = PackageManager.GET_SIGNING_CERTIFICATES or
         PackageManager.GET_ACTIVITIES or
@@ -86,7 +86,8 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     }
 
     private suspend fun installedPackageDetails(packageName: PackageName): Result<AppDetail> {
-        cache[packageName]?.let { return Result.success(it) }
+        val cacheKey = CacheKey.InstalledPackage(packageName)
+        cache[cacheKey]?.let { return Result.success(it) }
         Logger.d(TAG, "Loading details of $packageName")
         return runCatchingCancellable {
             val reference = AppReference.InstalledPackage(packageName)
@@ -100,19 +101,24 @@ internal class AppDetailRepositoryImpl @Inject constructor(
                 totalSize = storageStatsRepository.queryTotalSize(packageName),
                 lastUsedTime = usageStatsRepository.queryLastUsedTime(packageName),
             )
-        }.onSuccess { cache[packageName] = it }
+        }.onSuccess { cache[cacheKey] = it }
     }
 
-    private suspend fun apkFilePackageDetails(accessibleFile: File): Result<AppDetail> = runCatchingCancellable {
-        val reference = AppReference.ApkFile(accessibleFile.absolutePath)
-        val intentFilters = manifestParser.componentIntentFilters(reference)
-        getPackageDetails(
-            analysisMode = AppDetail.AnalysisMode.ApkFile,
-            packageInfo = packageManager.getPackageArchiveInfoWithCorrectPath(accessibleFile.absolutePath, analysisFlags)
-                ?: error("Cannot parse APK file: ${accessibleFile.absolutePath}"),
-            intentFiltersByComponent = intentFilters.getOrDefault(emptyMap()),
-            areIntentFiltersAvailable = intentFilters.isSuccess,
-        )
+    private suspend fun apkFilePackageDetails(accessibleFile: File): Result<AppDetail> {
+        val cacheKey = CacheKey.ApkFile(accessibleFile.absolutePath, accessibleFile.lastModified())
+        cache[cacheKey]?.let { return Result.success(it) }
+        Logger.d(TAG, "Loading details of ${accessibleFile.absolutePath}")
+        return runCatchingCancellable {
+            val reference = AppReference.ApkFile(accessibleFile.absolutePath)
+            val intentFilters = manifestParser.componentIntentFilters(reference)
+            getPackageDetails(
+                analysisMode = AppDetail.AnalysisMode.ApkFile,
+                packageInfo = packageManager.getPackageArchiveInfoWithCorrectPath(accessibleFile.absolutePath, analysisFlags)
+                    ?: error("Cannot parse APK file: ${accessibleFile.absolutePath}"),
+                intentFiltersByComponent = intentFilters.getOrDefault(emptyMap()),
+                areIntentFiltersAvailable = intentFilters.isSuccess,
+            )
+        }.onSuccess { cache[cacheKey] = it }
     }
 
     private fun getPackageDetails(
@@ -303,6 +309,11 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         packageInfo?.applicationInfo?.sourceDir = pathToPackage
         packageInfo?.applicationInfo?.publicSourceDir = pathToPackage
         return packageInfo
+    }
+
+    private sealed interface CacheKey {
+        data class InstalledPackage(val packageName: PackageName) : CacheKey
+        data class ApkFile(val path: String, val lastModified: Long) : CacheKey
     }
 
     companion object {

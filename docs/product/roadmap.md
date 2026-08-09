@@ -99,7 +99,7 @@ What Changed tab in R1.
 | FR-12 | Permissions view (per app)          | Done    | `feature:app-detail` → `permissions`; scope selector, filter chips, protection-level sections, item sheet |
 | FR-13 | Components views                    | Done    | One searchable/filterable screen for activities, services, receivers, and providers |
 | FR-14 | Certificate detail view             | Done    | Full signer, validity, signing status, serial, certificate fingerprints, and expandable public-key fingerprints |
-| FR-15 | Features (uses-feature) view        | Done    | `feature:app-detail` → `requirements`; required/optional split, per-device check, dedicated GL ES handling. `Libraries` scope still needs `FR-44` |
+| FR-15 | Features (uses-feature) view        | Done    | `feature:app-detail` → `requirements`; required/optional split, per-device check, dedicated GL ES handling. `Libraries` scope needs `FR-44`, now backlogged — screen stays Hardware-only |
 | FR-16 | Manifest viewer                     | Done    | Readable namespaced XML with line-based search for installed packages and APK files |
 | FR-17 | Exported components view            | Partial | Exported/Unprotected filter chips ship in the Components screen (`FR-13`), backed by both intent filters (`EX-07`) and content-provider path permissions (`EX-08`), both done. Still a technical filter, not a risk verdict — needs a deliberate hub rule (see `RI-03`) before exposure becomes a "Worth knowing" finding |
 | FR-18 | Custom permission audit             | Partial | Permissions screen's `Defined` scope lists the app's declared permissions with full detail sheets; no audit judgment (e.g. protection-level risk) applied yet |
@@ -160,9 +160,9 @@ doing in R0 rather than later.
 | FR-39 | App category                      | Done   | `InstalledApp.category` (`AppCategory` enum) from `ApplicationInfo.category`; feeds the `FR-43` browse dimension |
 | EX-07 | Component intent filters          | Done   | What an exported component actually responds to. Backs `ComponentIntentFilterKey` / `IntentFiltersScreen` in the Components screen (`FR-13`) and is available for `RI-03`. `EX-08` is the remaining half `FR-17` needs before exposure becomes a hub finding |
 | EX-08 | Content-provider path permissions | Done   | `<path-permission>` read/write grants per path, read straight off `ProviderInfo.pathPermissions` (already fetched via `GET_PROVIDERS`, no manifest parsing needed). Feeds the Components screen's `Unprotected` filter and item sheet; hub interpretation still needs a rule, tracked under `RI-03` |
-| FR-44 | Declared `<uses-library>` entries  | Todo   | Name and `android:required`, from the manifest for APK files and `sharedLibraryFiles` for installed apps. The platform-library half of device requirements — `org.apache.http.legacy` on a modern app is a signal the hardware list cannot give |
+| FR-44 | Declared `<uses-library>` entries  | Backlog | Name and `android:required`, from the manifest for APK files and `sharedLibraryFiles` for installed apps. Deprioritized: most apps declare zero entries, and the ones that do are boilerplate (`android.test.runner`) or legacy trivia (`org.apache.http.legacy`) — the value is screen completeness, not a real finding. Revisit if a concrete tracker/risk signal ends up needing it |
 
-**R0 scope:** CE-01, CE-05, FR-08 … FR-21, FR-24 … FR-44, EX-07, EX-08. Excludes the retired FR-22/FR-23 and the backlogged CE-06.
+**R0 scope:** CE-01, CE-05, FR-08 … FR-21, FR-24 … FR-43, EX-07, EX-08. Excludes the retired FR-22/FR-23 and the backlogged CE-06/FR-44.
 **R0 estimate: ~7–8 weeks** (was ~4, which assumed the ported items were already present).
 Retiring the statistics screen roughly pays for the browse screen — one surface instead of two,
 against an index that is already two-thirds built.
@@ -351,7 +351,7 @@ entry points were retired with the statistics screen — see §1.4.)*
 
 | ID | Release         | Contents                                                       | Duration     | Cumulative |
 |----|-----------------|-----------------------------------------------------------------|--------------|------------|
-| R0 | Free Rework     | CE-01, CE-05, FR-08 … FR-21, FR-24 … FR-44, EX-07, EX-08, plus `EN`    | ~7–8 weeks   | Week 8     |
+| R0 | Free Rework     | CE-01, CE-05, FR-08 … FR-21, FR-24 … FR-43, EX-07, EX-08, plus `EN`    | ~7–8 weeks   | Week 8     |
 | R1 | Pro Launch      | `HI`, `RI`, `TR`, `RP`, `CP`                                    | ~5.5–6.5 weeks | Week 15  |
 | R2 | Bulk Tools      | `BX`                                                            | ~1.5–2 weeks | Week 17    |
 | R3 | Optional polish | OP-01 … OP-03                                                   | as-needed    | Ongoing    |
