@@ -175,7 +175,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             source = installSourceResolver.getAppInstallSource(packageInfo),
             appInstaller = installSourceResolver.appInstallingPackage(packageInfo),
             installLocation = InstallLocation.from(packageInfo.installLocation),
-            apkSize = computeApkSize(applicationInfo?.sourceDir),
+            apkSize = computeApkSize(applicationInfo),
             firstInstallTime = if (packageInfo.firstInstallTime > 0) Instant.ofEpochMilli(packageInfo.firstInstallTime) else null,
             lastUpdateTime = if (packageInfo.lastUpdateTime > 0) Instant.ofEpochMilli(packageInfo.lastUpdateTime) else null,
             minSdkVersion = minSdk,
@@ -184,6 +184,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             targetSdkLabel = sdkVersionResolver.resolveVersion(applicationInfo?.targetSdkVersion),
             totalSize = totalSize,
             lastUsedTime = lastUsedTime,
+            additionalInstalledSplits = applicationInfo?.splitSourceDirs.orEmpty().size,
         )
     }
 

@@ -236,6 +236,11 @@
     <string name="general_info_data_directory">Data Directory</string>
     <string name="general_info_install_location">Install Location</string>
     <string name="general_info_apk_size">APK Size</string>
+    <string name="general_info_split_apks">Split APKs</string>
+    <plurals name="general_info_split_apks_value">
+        <item quantity="one">Installed as %1$d split APK</item>
+        <item quantity="other">Installed as %1$d split APKs</item>
+    </plurals>
     <string name="general_info_total_size">Total Size</string>
 
     <!-- General Info: Rationale Descriptions -->
@@ -264,7 +269,8 @@
     <string name="general_info_rationale_apk_directory">The file system path where the APK file is stored on the device.</string>
     <string name="general_info_rationale_data_directory">The file system path where the app stores its private data, databases, and shared preferences.</string>
     <string name="general_info_rationale_install_location">The preferred storage location declared by the developer — internal storage, external storage, or automatic.</string>
-    <string name="general_info_rationale_apk_size">The size of the APK file on disk, excluding app data, caches, and runtime-generated files.</string>
+    <string name="general_info_rationale_apk_size">The combined size of the installed APK files on disk, excluding app data, caches, and runtime-generated files. Most apps installed from Google Play are split into a base APK plus additional APKs for your device\'s language and screen density; this total covers all of them.</string>
+    <string name="general_info_rationale_split_apks">This app was installed as a base APK plus additional split APKs, a delivery format Google Play uses to send only the code and resources your device needs. The APK size above already adds them all together.</string>
     <string name="general_info_rationale_total_size">The combined size of the APK, app data, and cached files. Requires usage access permission.</string>
 
     <string name="permissions_title">Permissions</string>

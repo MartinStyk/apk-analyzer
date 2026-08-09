@@ -13,7 +13,11 @@ import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import java.io.File
 
-fun computeApkSize(sourceDir: String?): AppSize = (sourceDir?.let { File(it).length() } ?: 0L).bytes
+fun computeApkSize(applicationInfo: ApplicationInfo?): AppSize {
+    val baseApkSize = applicationInfo?.sourceDir?.let { File(it).length() } ?: 0L
+    val splitApksSize = applicationInfo?.splitSourceDirs.orEmpty().sumOf { File(it).length() }
+    return (baseApkSize + splitApksSize).bytes
+}
 
 @Suppress("DEPRECATION")
 internal fun resolveProtectionLevel(protection: Int): ProtectionLevel = when (protection) {
