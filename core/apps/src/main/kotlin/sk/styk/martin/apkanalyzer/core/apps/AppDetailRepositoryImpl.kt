@@ -156,6 +156,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     ): AppInfo {
         val applicationInfo = packageInfo.applicationInfo
         val minSdk = applicationInfo?.minSdkVersion
+        val installSourceChain = installSourceResolver.appInstallSourceChain(packageInfo)
 
         return AppInfo(
             packageName = PackageName(packageInfo.packageName),
@@ -173,7 +174,9 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             apkDirectory = applicationInfo?.sourceDir,
             dataDirectory = applicationInfo?.dataDir,
             source = installSourceResolver.getAppInstallSource(packageInfo),
-            appInstaller = installSourceResolver.appInstallingPackage(packageInfo),
+            appInstaller = installSourceChain.installingPackage,
+            installInitiatingPackage = installSourceChain.initiatingPackage,
+            installOriginatingPackage = installSourceChain.originatingPackage,
             installLocation = InstallLocation.from(packageInfo.installLocation),
             apkSize = computeApkSize(applicationInfo?.sourceDir),
             firstInstallTime = if (packageInfo.firstInstallTime > 0) Instant.ofEpochMilli(packageInfo.firstInstallTime) else null,

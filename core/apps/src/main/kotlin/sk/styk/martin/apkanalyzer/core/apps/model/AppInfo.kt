@@ -24,6 +24,8 @@ data class AppInfo(
     val dataDirectory: String? = null,
     val installLocation: InstallLocation,
     val appInstaller: PackageName? = null,
+    val installInitiatingPackage: PackageName? = null,
+    val installOriginatingPackage: PackageName? = null,
     val apkSize: AppSize = 0.bytes,
     val firstInstallTime: Instant? = null,
     val lastUpdateTime: Instant? = null,

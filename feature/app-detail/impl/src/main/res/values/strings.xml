@@ -229,6 +229,8 @@
     <string name="general_info_install_source_system">System</string>
     <string name="general_info_install_source_unknown">Unknown</string>
     <string name="general_info_installer_package">Installer Package</string>
+    <string name="general_info_install_initiator">Install Initiator</string>
+    <string name="general_info_install_originator">APK Origin Package</string>
     <string name="general_info_first_installed">First Installed</string>
     <string name="general_info_last_updated">Last Updated</string>
     <string name="general_info_last_used">Last Used</string>
@@ -258,6 +260,8 @@
     <string name="general_info_rationale_app_type">Whether the app is a pre-installed system app or a user-installed app. System apps have elevated privileges and cannot be fully uninstalled.</string>
     <string name="general_info_rationale_install_source">Where the app was installed from — Google Play, another store, or sideloaded manually.</string>
     <string name="general_info_rationale_installer_package">The package name of the app that performed the installation, such as \"com.android.vending\" for Google Play.</string>
+    <string name="general_info_rationale_install_initiator">The app that started the installation, such as a browser or file manager for a sideloaded app, or an app store for a store install. This can differ from the installer package above.</string>
+    <string name="general_info_rationale_install_originator">The package that provided the APK file, when Android reports it separately from the app that started the installation. Most installs leave this blank.</string>
     <string name="general_info_rationale_first_installed">The date and time this app was first installed on the device.</string>
     <string name="general_info_rationale_last_updated">The date and time of the most recent update to this app.</string>
     <string name="general_info_rationale_last_used">The approximate date and time this app was last opened by the user.</string>

@@ -25,6 +25,22 @@ internal class InstallSourceResolverImpl @Inject constructor(private val package
         }
     }.getOrNull()?.let(::PackageName)
 
+    override fun appInstallSourceChain(packageInfo: PackageInfo): InstallSourceChain {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            return InstallSourceChain(
+                installingPackage = appInstallingPackage(packageInfo),
+                initiatingPackage = null,
+                originatingPackage = null,
+            )
+        }
+        val installSourceInfo = runCatching { packageManager.getInstallSourceInfo(packageInfo.packageName) }.getOrNull()
+        return InstallSourceChain(
+            installingPackage = installSourceInfo?.installingPackageName?.let(::PackageName),
+            initiatingPackage = installSourceInfo?.initiatingPackageName?.let(::PackageName),
+            originatingPackage = installSourceInfo?.originatingPackageName?.let(::PackageName),
+        )
+    }
+
     override fun isSystemInstalledApp(packageInfo: PackageInfo): Boolean =
         packageInfo.applicationInfo?.let { it.flags and ApplicationInfo.FLAG_SYSTEM != 0 } ?: false
 }

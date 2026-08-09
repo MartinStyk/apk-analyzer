@@ -250,6 +250,24 @@ private fun LoadedContent(
                     onCopy = onCopy,
                 )
             }
+            state.installInitiatingPackage?.let { value ->
+                InfoRowItem(
+                    label = stringResource(R.string.general_info_install_initiator),
+                    value = value.value,
+                    rationale = stringResource(R.string.general_info_rationale_install_initiator),
+                    onShowRationale = { rationaleRow = it },
+                    onCopy = onCopy,
+                )
+            }
+            state.installOriginatingPackage?.let { value ->
+                InfoRowItem(
+                    label = stringResource(R.string.general_info_install_originator),
+                    value = value.value,
+                    rationale = stringResource(R.string.general_info_rationale_install_originator),
+                    onShowRationale = { rationaleRow = it },
+                    onCopy = onCopy,
+                )
+            }
             state.firstInstallTime?.let { instant ->
                 InfoRowItem(
                     label = stringResource(R.string.general_info_first_installed),
@@ -465,6 +483,8 @@ private fun sampleGeneralInfoState() = GeneralInfoState.Loaded(
     usesCleartextTraffic = true,
     source = AppSource.GooglePlay,
     appInstaller = PackageName("com.android.vending"),
+    installInitiatingPackage = PackageName("com.android.vending"),
+    installOriginatingPackage = null,
     firstInstallTime = Instant.ofEpochMilli(1_736_640_000_000),
     lastUpdateTime = Instant.ofEpochMilli(1_748_736_000_000),
     lastUsedTime = Instant.ofEpochMilli(1_749_600_000_000),

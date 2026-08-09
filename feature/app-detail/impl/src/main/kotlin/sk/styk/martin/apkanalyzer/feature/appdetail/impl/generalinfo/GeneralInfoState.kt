@@ -30,6 +30,8 @@ sealed interface GeneralInfoState {
         val usesCleartextTraffic: Boolean,
         val source: AppSource,
         val appInstaller: PackageName?,
+        val installInitiatingPackage: PackageName?,
+        val installOriginatingPackage: PackageName?,
         val firstInstallTime: Instant?,
         val lastUpdateTime: Instant?,
         val lastUsedTime: Instant?,
