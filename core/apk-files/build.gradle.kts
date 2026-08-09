@@ -6,9 +6,7 @@ plugins {
 android {
     namespace = "sk.styk.martin.apkanalyzer.core.apkfiles"
 
-    buildFeatures {
-        androidResources = false
-    }
+    androidResources.enable = false
 }
 
 dependencies {

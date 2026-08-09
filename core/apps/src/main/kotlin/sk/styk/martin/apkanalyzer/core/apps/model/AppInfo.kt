@@ -33,4 +33,5 @@ data class AppInfo(
     val targetSdkLabel: String? = null,
     val totalSize: AppSize? = null,
     val lastUsedTime: Instant? = null,
+    val additionalInstalledSplits: Int = 0,
 )

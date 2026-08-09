@@ -314,6 +314,19 @@ private fun LoadedContent(
                 onShowRationale = { rationaleRow = it },
                 onCopy = onCopy,
             )
+            if (state.additionalInstalledSplits > 0) {
+                InfoRowItem(
+                    label = stringResource(R.string.general_info_split_apks),
+                    value = pluralStringResource(
+                        R.plurals.general_info_split_apks_value,
+                        state.additionalInstalledSplits,
+                        state.additionalInstalledSplits,
+                    ),
+                    rationale = stringResource(R.string.general_info_rationale_split_apks),
+                    onShowRationale = { rationaleRow = it },
+                    onCopy = onCopy,
+                )
+            }
             state.totalSize?.let { size ->
                 InfoRowItem(
                     label = stringResource(R.string.general_info_total_size),
@@ -551,6 +564,7 @@ private fun sampleGeneralInfoState() = GeneralInfoState.Loaded(
     nativeLibraryNames = persistentListOf("libapp.so", "libcrashlytics.so", "libcrypto.so"),
     deviceSupportedAbis = persistentListOf("arm64-v8a", "armeabi-v7a"),
     isNativeLibraryDeviceIncompatible = false,
+    additionalInstalledSplits = 3,
 )
 
 @Composable

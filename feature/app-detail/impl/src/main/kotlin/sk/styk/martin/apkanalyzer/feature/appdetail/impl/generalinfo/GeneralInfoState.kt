@@ -43,6 +43,7 @@ sealed interface GeneralInfoState {
         val nativeLibraryNames: ImmutableList<String>,
         val deviceSupportedAbis: ImmutableList<String>,
         val isNativeLibraryDeviceIncompatible: Boolean,
+        val additionalInstalledSplits: Int,
     ) : GeneralInfoState
 
     data object Error : GeneralInfoState

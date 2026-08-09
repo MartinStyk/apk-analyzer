@@ -20,7 +20,11 @@ private const val TAG = "AnalysisUtils"
 
 private val nativeLibraryEntryRegex = Regex("""^lib/([^/]+)/([^/]+\.so)$""")
 
-fun computeApkSize(sourceDir: String?): AppSize = (sourceDir?.let { File(it).length() } ?: 0L).bytes
+fun computeApkSize(applicationInfo: ApplicationInfo?): AppSize {
+    val baseApkSize = applicationInfo?.sourceDir?.let { File(it).length() } ?: 0L
+    val splitApksSize = applicationInfo?.splitSourceDirs.orEmpty().sumOf { File(it).length() }
+    return (baseApkSize + splitApksSize).bytes
+}
 
 fun readNativeLibraries(sourceDir: String?): NativeLibraries {
     if (sourceDir == null) return NativeLibraries.Empty

@@ -105,4 +105,5 @@ private fun AppDetail.toGeneralInfoState() = GeneralInfoState.Loaded(
     deviceSupportedAbis = Build.SUPPORTED_ABIS.toList().toImmutableList(),
     isNativeLibraryDeviceIncompatible = nativeLibraries.hasNativeCode &&
         nativeLibraries.abis.none { it in Build.SUPPORTED_ABIS },
+    additionalInstalledSplits = info.additionalInstalledSplits,
 )
