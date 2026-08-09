@@ -9,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.provider.OpenableColumns
+import androidx.core.graphics.createBitmap
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
@@ -152,7 +153,7 @@ internal class AppExportManagerImpl @Inject constructor(
         }
         val width = intrinsicWidth.takeIf { it > 0 } ?: DEFAULT_ICON_SIZE
         val height = intrinsicHeight.takeIf { it > 0 } ?: DEFAULT_ICON_SIZE
-        return Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888).also { bitmap ->
+        return createBitmap(width, height).also { bitmap ->
             val previousBounds = android.graphics.Rect(bounds)
             setBounds(0, 0, width, height)
             draw(Canvas(bitmap))

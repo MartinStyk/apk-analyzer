@@ -1,7 +1,6 @@
 package sk.styk.martin.apkanalyzer.core.uilibrary.icons.app
 
 import android.content.pm.PackageManager
-import android.graphics.drawable.BitmapDrawable
 import androidx.core.graphics.drawable.toBitmap
 import coil3.ImageLoader
 import coil3.asImage
@@ -55,7 +54,7 @@ internal class PackageIconFetcher(private val data: AppReference, private val pa
 
         val bitmap = drawable.toBitmap()
         return ImageFetchResult(
-            image = BitmapDrawable(null, bitmap).asImage(),
+            image = bitmap.asImage(),
             isSampled = false,
             dataSource = DataSource.MEMORY,
         )
