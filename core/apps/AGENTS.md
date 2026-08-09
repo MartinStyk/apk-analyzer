@@ -32,6 +32,8 @@ analysis/
                                        `PackageManager` once given the chain/flags they're derived from
   SdkVersionResolver.kt             - SDK version to Android name mapping
   AnalysisUtils.kt                   - Shared analysis helpers, incl. permission protection decoding
+                                        and `readNativeLibraries()`, which opens the APK's `sourceDir`
+                                        as a zip and reads `lib/<abi>/*.so` entries directly
 model/
   InstalledApp.kt         - Basic installed app info (packageName, name, sizes, times, source,
                             targetSdk, minSdk, sharedUserId, category)
@@ -67,6 +69,9 @@ model/
   DeviceFeatures.kt       - The device side of that comparison: available feature names plus the
                             device's GL ES version. `supports()` returns `null` for unknown, never
                             `false` — an unreadable package manager must not read as "missing"
+  NativeLibraries.kt      - ABI folders and distinct `.so` filenames an APK actually ships, read from
+                            its zip entries rather than trusted from `primaryCpuAbi`/`secondaryCpuAbi`,
+                            which describe what the device picked, not what the APK contains
   InstallLocation.kt      - Install location enum
   InstallSourceChain.kt   - Installing/initiating/originating package, one nested fact on `AppInfo`
                             rather than three flat fields — mirrors how `AppSigning` and
@@ -116,6 +121,11 @@ them apart: `AppDetailRepositoryImpl` caches `AppDetail` keyed by package and in
 `PackageChangesObserver`, so folding device state into it would make cached entries depend on a
 second input the key does not mention and the invalidation does not track. Consumers inject both
 repositories and combine them while mapping to state.
+
+`NativeLibraries` follows the same split: it holds only what the APK ships (ABIs, `.so` filenames).
+`Build.SUPPORTED_ABIS` is read where it's consumed (see `GeneralInfoViewModel`), not folded into the
+cached model — it's a plain static field, not an expensive call, so it doesn't warrant a repository
+the way `DeviceFeaturesRepository` does for `getSystemAvailableFeatures()`.
 
 ## Component Intent Filters
 

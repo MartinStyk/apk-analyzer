@@ -17,6 +17,7 @@ import sk.styk.martin.apkanalyzer.core.apps.analysis.InstallSourceResolver
 import sk.styk.martin.apkanalyzer.core.apps.analysis.ManifestParser
 import sk.styk.martin.apkanalyzer.core.apps.analysis.SdkVersionResolver
 import sk.styk.martin.apkanalyzer.core.apps.analysis.computeApkSize
+import sk.styk.martin.apkanalyzer.core.apps.analysis.readNativeLibraries
 import sk.styk.martin.apkanalyzer.core.apps.analysis.resolvePathPermissions
 import sk.styk.martin.apkanalyzer.core.apps.analysis.resolveProtectionFlags
 import sk.styk.martin.apkanalyzer.core.apps.analysis.resolveProtectionLevel
@@ -146,6 +147,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         receivers = getBroadcastReceivers(packageInfo, intentFiltersByComponent),
         permissions = getPermissions(packageInfo),
         features = getFeatures(packageInfo),
+        nativeLibraries = readNativeLibraries(packageInfo.applicationInfo?.sourceDir),
         areComponentIntentFiltersAvailable = areIntentFiltersAvailable,
     )
 

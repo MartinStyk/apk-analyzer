@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.apps.model.InstallSourceChain
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
@@ -356,6 +357,12 @@ private fun LoadedContent(
             }
         }
 
+        NativeLibrariesSection(
+            state = state,
+            onShowRationale = { rationaleRow = it },
+            onCopy = onCopy,
+        )
+
         Spacer(modifier = Modifier.height(4.dp))
     }
 
@@ -438,6 +445,72 @@ private fun SecuritySettingsSection(
     }
 }
 
+@Composable
+private fun NativeLibrariesSection(
+    state: GeneralInfoState.Loaded,
+    onShowRationale: (InfoRow) -> Unit,
+    onCopy: (label: String, value: String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    SectionCard(
+        title = stringResource(R.string.general_info_section_native_libraries),
+        modifier = modifier,
+    ) {
+        val abisValue = if (state.nativeLibraryAbis.isNotEmpty()) {
+            state.nativeLibraryAbis.joinToString()
+        } else {
+            stringResource(R.string.general_info_native_library_abis_none)
+        }
+        val abisRationale = buildString {
+            append(stringResource(R.string.general_info_rationale_native_library_abis))
+            append(' ')
+            append(
+                stringResource(
+                    R.string.general_info_native_library_device_support,
+                    state.deviceSupportedAbis.joinToString(),
+                ),
+            )
+            if (state.isNativeLibraryDeviceIncompatible) {
+                append(' ')
+                append(stringResource(R.string.general_info_native_library_incompatible))
+            }
+        }
+        InfoRowItem(
+            label = stringResource(R.string.general_info_native_library_abis),
+            value = abisValue,
+            rationale = abisRationale,
+            onShowRationale = onShowRationale,
+            onCopy = onCopy,
+        )
+
+        val fileCount = state.nativeLibraryNames.size
+        val filesValue = if (fileCount > 0) {
+            pluralStringResource(R.plurals.general_info_native_library_file_count, fileCount, fileCount)
+        } else {
+            stringResource(R.string.general_info_native_library_files_none)
+        }
+        val filesRationale = buildString {
+            append(stringResource(R.string.general_info_rationale_native_library_files))
+            if (fileCount > 0) {
+                append(' ')
+                append(
+                    stringResource(
+                        R.string.general_info_native_library_file_list,
+                        state.nativeLibraryNames.joinToString(),
+                    ),
+                )
+            }
+        }
+        InfoRowItem(
+            label = stringResource(R.string.general_info_native_library_files),
+            value = filesValue,
+            rationale = filesRationale,
+            onShowRationale = onShowRationale,
+            onCopy = onCopy,
+        )
+    }
+}
+
 private fun formatTimestamp(instant: Instant): String {
     val dateFormat = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
     return dateFormat.format(Date.from(instant))
@@ -510,6 +583,10 @@ private fun sampleGeneralInfoState() = GeneralInfoState.Loaded(
     installLocation = "Internal",
     apkSize = 152.megabytes,
     totalSize = 510.megabytes,
+    nativeLibraryAbis = persistentListOf("arm64-v8a", "armeabi-v7a"),
+    nativeLibraryNames = persistentListOf("libapp.so", "libcrashlytics.so", "libcrypto.so"),
+    deviceSupportedAbis = persistentListOf("arm64-v8a", "armeabi-v7a"),
+    isNativeLibraryDeviceIncompatible = false,
     additionalInstalledSplits = 3,
 )
 

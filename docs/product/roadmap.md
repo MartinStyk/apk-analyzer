@@ -59,6 +59,8 @@ section has shipped except:
 |-------|-------------------------------------|---------|-------------------------------------------------------------------------------------|
 | FR-17 | Exported components view            | Partial | Exported/Unprotected filter chips ship in the Components screen (`FR-13`), backed by both intent filters (`EX-07`) and content-provider path permissions (`EX-08`), both done. Still a technical filter, not a risk verdict — needs a deliberate hub rule (see `RI-03`) before exposure becomes a "Worth knowing" finding |
 | FR-18 | Custom permission audit             | Partial | Permissions screen's `Defined` scope lists the app's declared permissions with full detail sheets; no audit judgment (e.g. protection-level risk) applied yet |
+| FR-45 | Split APK files screen              | Todo    | Full-screen list of every split/config APK with file name and size, one tap down from General Info's "Split APKs" row (`FR-34`) — same pattern as Components' Intent Filters screen (search + full list, tap into detail) |
+| FR-46 | Native libraries screen             | Todo    | Full-screen list of every bundled native library (`.so`) file name, one tap down from General Info's "Native libraries" row (`FR-33`) — same pattern as Components' Intent Filters screen |
 
 ### 1.5 Export & Share
 
@@ -81,13 +83,12 @@ doing in R0 rather than later.
 
 | ID    | Item                              | Status  | Why it matters                                                                                       |
 |-------|-----------------------------------|---------|---------------------------------------------------------------------------------------------------------|
-| FR-33 | Native libraries / ABIs           | Todo    | Was in the Pro backlog; it's raw data, so free. Also the cheapest tracker-detection signal (`TR-03`) |
 | FR-36 | Signing scheme version & signers  | Todo    | v1–v4, multi-signer, rotation history — feeds `CE-02` / `CE-03`                                       |
 | FR-37 | Storage breakdown                 | Todo    | `StorageStats` already gives app/data/cache; only the total is used                                  |
 | FR-44 | Declared `<uses-library>` entries | Backlog | Name and `android:required`, from the manifest for APK files and `sharedLibraryFiles` for installed apps. Deprioritized: most apps declare zero entries, and the ones that do are boilerplate (`android.test.runner`) or legacy trivia (`org.apache.http.legacy`) — the value is screen completeness, not a real finding. Revisit if a concrete tracker/risk signal ends up needing it |
 
 **R0 remaining:** FR-17, FR-18 (Partial — blocked on `RI-03`, a Pro/R1 item), CE-06 (Backlog),
-FR-26, FR-27, FR-31 (blocked on `OQ-01`), FR-33, FR-36, FR-37, FR-44 (Backlog), plus `EN`.
+FR-26, FR-27, FR-31 (blocked on `OQ-01`), FR-36, FR-37, FR-44 (Backlog), plus `EN`.
 Everything else originally scoped for R0 has shipped — see [shipped.md](shipped.md).
 
 ---
@@ -263,7 +264,7 @@ interpretation (that's `RP`) but *tedium removed*: nobody opens 300 app reports 
 
 | ID | Release         | Contents                                                                              | Duration       | Cumulative |
 |----|-----------------|-----------------------------------------------------------------------------------------|----------------|------------|
-| R0 | Free Rework     | Remaining: FR-17, FR-18, CE-06, FR-26, FR-27, FR-31, FR-33, FR-36, FR-37, FR-44, plus `EN` — rest shipped, see [shipped.md](shipped.md) | ~7–8 weeks     | Week 8     |
+| R0 | Free Rework     | Remaining: FR-45, FR-46, FR-17, FR-18, CE-06, FR-26, FR-27, FR-31, FR-36, FR-37, FR-44, plus `EN` — rest shipped, see [shipped.md](shipped.md) | ~7–8 weeks     | Week 8     |
 | R1 | Pro Launch      | `HI`, `RI`, `TR`, `RP`, `CP`                                                             | ~5.5–6.5 weeks | Week 15    |
 | R2 | Bulk Tools      | `BX`                                                                                     | ~1.5–2 weeks   | Week 17    |
 | R3 | Optional polish | OP-01 … OP-03                                                                            | as-needed      | Ongoing    |
