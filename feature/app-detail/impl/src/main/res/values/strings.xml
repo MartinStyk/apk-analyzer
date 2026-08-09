@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="content_description_back">Back</string>
     <string name="app_detail_title">App Detail</string>
     <string name="app_detail_system_app">System Application</string>
@@ -63,7 +63,15 @@
         <item quantity="one">%1$d permission requested in total</item>
         <item quantity="other">%1$d permissions requested in total</item>
     </plurals>
-    <string name="app_detail_permissions_counts" tools:ignore="PluralsCandidate">%1$d requested · %2$d sensitive</string>
+    <plurals name="app_detail_permissions_requested_count">
+        <item quantity="one">%d permission requested</item>
+        <item quantity="other">%d permissions requested</item>
+    </plurals>
+    <plurals name="app_detail_permissions_sensitive_count">
+        <item quantity="one">%d sensitive permission</item>
+        <item quantity="other">%d sensitive permissions</item>
+    </plurals>
+    <string name="app_detail_count_pair">%1$s · %2$s</string>
     <string name="app_detail_components_section">Components</string>
     <string name="app_detail_activities">Activities</string>
     <string name="app_detail_services">Services</string>
@@ -73,7 +81,14 @@
     <string name="app_detail_certificates_count">Certificates</string>
     <string name="app_detail_view_details">View Details</string>
     <string name="app_detail_features_section">Device requirements</string>
-    <string name="app_detail_features_counts" tools:ignore="PluralsCandidate">%1$d required · %2$d optional</string>
+    <plurals name="app_detail_features_required_count">
+        <item quantity="one">%d required feature</item>
+        <item quantity="other">%d required features</item>
+    </plurals>
+    <plurals name="app_detail_features_optional_count">
+        <item quantity="one">%d optional feature</item>
+        <item quantity="other">%d optional features</item>
+    </plurals>
     <string name="app_detail_features_all_met">This device meets everything the app requires</string>
     <string name="app_detail_features_none">This app declares no device requirements</string>
     <plurals name="app_detail_features_unmet">
