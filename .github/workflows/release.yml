@@ -33,12 +33,12 @@ jobs:
 
       - name: Fetch Firebase google-services.json
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
           FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
         run: |
           rm -f app/google-services.json
-          npx --yes firebase-tools@15.26.0 apps:sdkconfig ANDROID "$FIREBASE_APP_ID" \
+          .github/scripts/run-firebase.sh apps:sdkconfig ANDROID "$FIREBASE_APP_ID" \
             --project "$FIREBASE_PROJECT_ID" \
             -o app/google-services.json
 
@@ -73,12 +73,12 @@ jobs:
 
       - name: Fetch Firebase google-services.json
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
           FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
         run: |
           rm -f app/google-services.json
-          npx --yes firebase-tools@15.26.0 apps:sdkconfig ANDROID "$FIREBASE_APP_ID" \
+          .github/scripts/run-firebase.sh apps:sdkconfig ANDROID "$FIREBASE_APP_ID" \
             --project "$FIREBASE_PROJECT_ID" \
             -o app/google-services.json
 
@@ -208,6 +208,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v7
+
       - name: Download APK artifact
         uses: actions/download-artifact@v4
         with:
@@ -216,10 +218,10 @@ jobs:
 
       - name: Distribute APK to Firebase App Distribution
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
         run: |
-          npx --yes firebase-tools@15.26.0 appdistribution:distribute "artifacts/${{ needs['build-release'].outputs.apk_name }}" \
+          .github/scripts/run-firebase.sh appdistribution:distribute "artifacts/${{ needs['build-release'].outputs.apk_name }}" \
             --app "$FIREBASE_APP_ID" \
             --groups "internal-testers" \
             --release-notes "${{ github.ref_name }}"
