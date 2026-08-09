@@ -46,4 +46,14 @@ printf '%s' "${GOOGLE_SERVICE_ACCOUNT:?GOOGLE_SERVICE_ACCOUNT is required}" > "$
 export GOOGLE_APPLICATION_CREDENTIALS="$credentials_file"
 unset GOOGLE_SERVICE_ACCOUNT
 
-"$firebase_bin" "$@"
+firebase_exit=0
+"$firebase_bin" "$@" || firebase_exit=$?
+
+if ((firebase_exit != 0)) && [[ -f firebase-debug.log ]]; then
+  api_status="$(sed -n 's/.*\[apiv2\]\[status\].* \([0-9][0-9][0-9]\)$/\1/p' firebase-debug.log | tail -n 1)"
+  if [[ -n "$api_status" ]]; then
+    echo "Firebase API request failed with HTTP ${api_status}" >&2
+  fi
+fi
+
+exit "$firebase_exit"
