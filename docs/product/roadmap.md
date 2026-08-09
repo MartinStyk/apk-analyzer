@@ -31,57 +31,25 @@ dropped, its ID is retired.
 | **Retired**  | Deliberately dropped or absorbed by another item. ID kept so old references resolve |
 | **Backlog**  | Wanted, not scheduled. The Notes column names the trigger to revisit it             |
 
+**This file tracks open work only.** Once an item reaches Done or Retired, its row moves to
+[shipped.md](shipped.md) so this document doesn't fill up with finished work — look there for an ID
+that isn't listed here. Section numbers can skip (there's no `1.1`, `1.3`, `1.4`, or `1.6` below)
+because those sections shipped in full and moved out entirely; numbers never get reassigned to keep
+cross-references stable.
+
 ---
 
 ## Part 1 — Free Tier
 
-### 1.1 Inventory & Browse
-
-| ID    | Item                                     | Status  | Notes                                                                       |
-|-------|------------------------------------------|---------|------------------------------------------------------------------------------|
-| FR-01 | Installed app list                       | Done    | `feature:apps` — live flow, package-change observer                         |
-| FR-02 | Search with history                      | Done    | `SearchAppsUseCase`, `SearchHistoryRepository`                              |
-| FR-03 | Advanced filter sheet                    | Done    | Source, SDK, APK/total size, install & update date, unused, recently used   |
-| FR-04 | Quick filter chips                       | Done    | 9 presets incl. sideloaded / system / Play                                  |
-| FR-05 | Sorting                                  | Done    | Name, APK size, total size, install date, target SDK, last update, last use |
-| FR-06 | Recently viewed apps                     | Done    | `RecentlyViewedAppsRepository`, toggleable in settings                      |
-| FR-07 | Install source filter                    | Done    | Folded into FR-03/FR-04; was listed as "New" before                         |
-
 ### 1.1b Browse by Attribute — *the replacement for the statistics screen*
 
-One index, one screen, N dimensions. Pick a dimension → get its buckets with counts → tap a bucket
-→ get the apps. This subsumes both the browse-by-permission feature **and** device statistics: a
-distribution *is* the bucket counts of an index, and rendering it this way makes every number a
-door instead of a dead end.
-
-`core:app-index` builds the `attribute → apps` side of this today — target SDK, min SDK, install
-source, permission, and signing certificate (fingerprint, organization, country), each a
-`Map<attributeValue, List<packageName>>`. The first four come straight from `InstalledAppsRepository`,
-no device scan. Certificate comes from a new `AppSigningRepository` in `core:apps` — a real, general-
-purpose repository (not an indexing-only scanner), `Lazily` shared since its per-app X.509
-parse/digest/verify work is genuinely heavier than the free dimensions. The old `core:app-statistics`
-module (and its `MathStatistics` half — mean/median APK size, average component counts — which was
-low-value trivia) is deleted rather than repurposed; it was fully dead code with no live consumers and
-several known bugs. Uses-feature grouping is still deferred — it would need a new `PackageManager`
-flag (`GET_CONFIGURATIONS`) with no other `core:apps` consumer yet, unlike certificate. See
-`core/app-index/AGENTS.md`.
+`core:app-index` builds the `attribute → apps` side of Browse — target SDK, min SDK, install
+source, permission, and signing certificate. See `core/app-index/AGENTS.md`. Everything in this
+section has shipped except:
 
 | ID    | Item                                | Status  | Notes                                                                                     |
 |-------|-------------------------------------|---------|--------------------------------------------------------------------------------------------|
-| CE-01 | Attribute index infrastructure      | Done    | `core:app-index` ships target SDK, min SDK, install source, permission, certificate, consumed end to end by `CE-05` |
-| CE-05 | Browse screen                       | Done    | `feature:browse` — dimension cards (hub) → bucket list with counts (options) → app list (apps) → `feature:app-detail`. One screen shape serves every dimension |
-| FR-08 | ↳ dimension: permission             | Done    | Bucket label from `PermissionLabelProvider` (`core:app-permissions`); raw permission name shown as the identifier |
-| FR-09 | ↳ dimension: signing certificate    | Done    | Bucketed by signer organization (`certificateOrganization`); fingerprint and country stay indexed in `core:app-index` but are not separate browse dimensions in this pass |
-| FR-40 | ↳ dimension: target SDK / min SDK   | Done    | Bucket label from `SdkVersionResolver` (`core:apps`), e.g. "Android 14"; raw API level shown as the identifier |
-| FR-41 | ↳ dimension: install source         | Done    | Google Play / System / Unknown, three buckets                                             |
-| FR-42 | ↳ dimension: shared UID             | Done    | `BrowseDimension.SharedUserId`; only apps declaring `android:sharedUserId` are bucketed, no "unshared" sentinel |
-| FR-43 | ↳ dimension: app category           | Done    | `BrowseDimension.AppCategory`; `AppCategory.Undefined` is a real bucket, not dropped               |
 | CE-06 | "Also signed with this certificate" | Backlog | The other installed apps sharing this signer, listed on the app detail certificate screen. Data is already extracted; it needs a fingerprint-keyed lookup instead of `CE-05`'s organization-keyed bucket. **Revisit when that lookup is built** — see [features/app-detail.md](features/app-detail.md#deferred) |
-
-**Module consolidation: done.** `feature:permissions` and `feature:statistics` — both placeholder
-screens each holding a top-level nav slot — are deleted and collapsed into one `feature:browse`,
-now fully implemented per `CE-05`. That frees a bottom-nav slot — the natural home for Pillar 1's
-What Changed tab in R1.
 
 ### 1.2 App Detail
 
@@ -89,47 +57,15 @@ What Changed tab in R1.
 
 | ID    | Item                                | Status  | Notes                                                                              |
 |-------|-------------------------------------|---------|-------------------------------------------------------------------------------------|
-| FR-10 | Detail overview + badges            | Done    | Evidence-based findings, deep links, and permission/component/certificate previews |
-| FR-11 | General info screen                 | Done    | `feature:app-detail` → `generalinfo`                                               |
-| FR-12 | Permissions view (per app)          | Done    | `feature:app-detail` → `permissions`; scope selector, filter chips, protection-level sections, item sheet |
-| FR-13 | Components views                    | Done    | One searchable/filterable screen for activities, services, receivers, and providers |
-| FR-14 | Certificate detail view             | Done    | Full signer, validity, signing status, serial, certificate fingerprints, and expandable public-key fingerprints |
-| FR-15 | Features (uses-feature) view        | Done    | `feature:app-detail` → `requirements`; required/optional split, per-device check, dedicated GL ES handling. `Libraries` scope needs `FR-44`, now backlogged — screen stays Hardware-only |
-| FR-16 | Manifest viewer                     | Done    | Readable namespaced XML with line-based search for installed packages and APK files |
 | FR-17 | Exported components view            | Partial | Exported/Unprotected filter chips ship in the Components screen (`FR-13`), backed by both intent filters (`EX-07`) and content-provider path permissions (`EX-08`), both done. Still a technical filter, not a risk verdict — needs a deliberate hub rule (see `RI-03`) before exposure becomes a "Worth knowing" finding |
 | FR-18 | Custom permission audit             | Partial | Permissions screen's `Defined` scope lists the app's declared permissions with full detail sheets; no audit judgment (e.g. protection-level risk) applied yet |
-
-### 1.3 APK File Analysis
-
-| ID    | Item                                 | Status  | Notes                                                                        |
-|-------|--------------------------------------|---------|-------------------------------------------------------------------------------|
-| FR-19 | Open `.apk` from another app         | Done    | `ExternalApkActivity` — `VIEW` / `INSTALL_PACKAGE` intent filter, exported, isolated document task |
-| FR-20 | Pick an `.apk` from storage          | Done    | `ApkFilePickerButton` (`ACTION_OPEN_DOCUMENT`) wired into `AppsScreen`; copies via `TemporaryApkManager`, opens app detail |
-| FR-21 | Recent APK files                     | Retired | Picked files are temp copies released after use, and the original source can be deleted or moved outside the app's control — a "recent" list would routinely point at files that no longer exist. Not worth building dangling-entry handling for |
-
-### 1.4 Device Statistics — **retired**
-
-| ID    | Item                        | Status  | Notes                                                                            |
-|-------|-----------------------------|---------|-----------------------------------------------------------------------------------|
-| FR-22 | Device statistics screen    | Retired | Superseded by §1.1b. A chart of "how many apps target API 30" is the bucket counts of the target-SDK index, rendered without a way to act on it |
-| FR-23 | Chart → filtered list jumps | Retired | Not a feature — it's what an attribute index does natively. It only existed as a task because statistics and browse were separate screens |
 
 ### 1.5 Export & Share
 
 | ID    | Item                        | Status | Notes                                                    |
 |-------|-----------------------------|--------|-----------------------------------------------------------|
-| FR-24 | APK export / share          | Done   | SAF base-APK export; warns when split APKs make it incomplete    |
-| FR-25 | Icon export                 | Done   | SAF PNG export at natural resolution for installed and APK inputs |
 | FR-26 | Copy / share app summary    | Todo   | `ClipboardManager` already in `core:common`              |
-| FR-27 | Launch a component          | Todo   | `startForeignActivity` exists and is unused              |
-
-### 1.6 App & UI
-
-| ID    | Item                            | Status | Notes                                        |
-|-------|---------------------------------|--------|-----------------------------------------------|
-| FR-28 | Theme / color scheme setting    | Done   | `ColorAppScheme`, follow-system default      |
-| FR-29 | Settings screen                 | Done   | `feature:settings`                            |
-| FR-30 | Usage-access permission flow    | Done   | Rationale sheet + settings deep link          |
+| FR-27 | Launch a component          | Todo   | `startForeignActivity` exists and is unused               |
 
 ### 1.7 Invisible Infrastructure
 
@@ -143,24 +79,18 @@ These are raw-data items the app *could* read from `PackageManager` today but do
 tier by Principle 1, and every one of them also feeds a Pro pillar — which is why they're worth
 doing in R0 rather than later.
 
-| ID    | Item                              | Status | Why it matters                                                                                       |
-|-------|-----------------------------------|--------|-------------------------------------------------------------------------------------------------------|
-| FR-32 | Manifest security flags           | Done   | `debuggable`, `allowBackup`, and `usesCleartextTraffic` from public `ApplicationInfo`; custom network config deferred |
-| FR-33 | Native libraries / ABIs           | Todo   | Was in the Pro backlog; it's raw data, so free. Also the cheapest tracker-detection signal (`TR-03`) |
-| FR-34 | Split APKs / config splits        | Todo   | Most modern installs are splits; APK size and "what's installed" are both wrong without it           |
-| FR-35 | Shared UID group                  | Done   | `InstalledApp.sharedUserId` from `PackageInfo.sharedUserId`; feeds the `FR-42` browse dimension       |
-| FR-36 | Signing scheme version & signers  | Todo   | v1–v4, multi-signer, rotation history — feeds `CE-02` / `CE-03`                                       |
-| FR-37 | Storage breakdown                 | Todo   | `StorageStats` already gives app/data/cache; only the total is used                                  |
-| FR-38 | Full install-source chain         | Todo   | Only `installingPackageName` is read; initiating + originating package are what actually distinguish a sideload from a store install |
-| FR-39 | App category                      | Done   | `InstalledApp.category` (`AppCategory` enum) from `ApplicationInfo.category`; feeds the `FR-43` browse dimension |
-| EX-07 | Component intent filters          | Done   | What an exported component actually responds to. Backs `ComponentIntentFilterKey` / `IntentFiltersScreen` in the Components screen (`FR-13`) and is available for `RI-03`. `EX-08` is the remaining half `FR-17` needs before exposure becomes a hub finding |
-| EX-08 | Content-provider path permissions | Done   | `<path-permission>` read/write grants per path, read straight off `ProviderInfo.pathPermissions` (already fetched via `GET_PROVIDERS`, no manifest parsing needed). Feeds the Components screen's `Unprotected` filter and item sheet; hub interpretation still needs a rule, tracked under `RI-03` |
-| FR-44 | Declared `<uses-library>` entries  | Backlog | Name and `android:required`, from the manifest for APK files and `sharedLibraryFiles` for installed apps. Deprioritized: most apps declare zero entries, and the ones that do are boilerplate (`android.test.runner`) or legacy trivia (`org.apache.http.legacy`) — the value is screen completeness, not a real finding. Revisit if a concrete tracker/risk signal ends up needing it |
+| ID    | Item                              | Status  | Why it matters                                                                                       |
+|-------|-----------------------------------|---------|---------------------------------------------------------------------------------------------------------|
+| FR-33 | Native libraries / ABIs           | Todo    | Was in the Pro backlog; it's raw data, so free. Also the cheapest tracker-detection signal (`TR-03`) |
+| FR-34 | Split APKs / config splits        | Todo    | Most modern installs are splits; APK size and "what's installed" are both wrong without it           |
+| FR-36 | Signing scheme version & signers  | Todo    | v1–v4, multi-signer, rotation history — feeds `CE-02` / `CE-03`                                       |
+| FR-37 | Storage breakdown                 | Todo    | `StorageStats` already gives app/data/cache; only the total is used                                  |
+| FR-38 | Full install-source chain         | Todo    | Only `installingPackageName` is read; initiating + originating package are what actually distinguish a sideload from a store install |
+| FR-44 | Declared `<uses-library>` entries | Backlog | Name and `android:required`, from the manifest for APK files and `sharedLibraryFiles` for installed apps. Deprioritized: most apps declare zero entries, and the ones that do are boilerplate (`android.test.runner`) or legacy trivia (`org.apache.http.legacy`) — the value is screen completeness, not a real finding. Revisit if a concrete tracker/risk signal ends up needing it |
 
-**R0 scope:** CE-01, CE-05, FR-08 … FR-20, FR-24 … FR-43, EX-07, EX-08. Excludes the retired FR-21/FR-22/FR-23 and the backlogged CE-06/FR-44.
-**R0 estimate: ~7–8 weeks** (was ~4, which assumed the ported items were already present).
-Retiring the statistics screen roughly pays for the browse screen — one surface instead of two,
-against an index that is already two-thirds built.
+**R0 remaining:** FR-17, FR-18 (Partial — blocked on `RI-03`, a Pro/R1 item), CE-06 (Backlog),
+FR-26, FR-27, FR-31 (blocked on `OQ-01`), FR-33, FR-34, FR-36 … FR-38, FR-44 (Backlog), plus `EN`.
+Everything else originally scoped for R0 has shipped — see [shipped.md](shipped.md).
 
 ---
 
@@ -179,12 +109,6 @@ ID prefix rather than a letter, so an item keeps its ID if it moves.
 | `RP` — Per-App Security Report    | 2                | `feature:security-report`          |
 | `BX` — Device-Wide Audit & Export | 3                | `feature:bulk-audit`               |
 | `CP` — Content Distribution       | 2                | build + backend                    |
-
-**Two areas from the previous revision dissolved.** *Static Analysis Extraction* had one
-tracker-only item (`EX-06`, now inside `TR`) and one free-tier item (`EX-07`, now in §1.8).
-*Certificate Intelligence* was three different things wearing one hat: the index is free-tier
-browse (`CE-01`), the clone verdict is a risk rule (`CE-02`), and the trust checks are risk rules
-(`CE-03`, `CE-04`). No IDs were reused or renumbered.
 
 ### `EN` — Entitlement & Billing
 
@@ -273,7 +197,7 @@ Per Principle 2 the gate is a sample, not a wall: the report opens for everyone 
 highest-severity finding in full; the remaining findings are Pro.
 
 | ID    | Task                         | Detail                                                       | Size |
-|-------|------------------------------|---------------------------------------------------------------|------|
+|-------|------------------------------|-----------------------------------------------------------------|------|
 | RP-01 | Report screen                | One app, expandable section per category                      | M    |
 | RP-02 | Shared components            | Severity badge, finding row, expandable card                  | S    |
 | RP-03 | Per-finding explanation copy | The actual product — the interpretation people pay for        | M    |
@@ -288,8 +212,6 @@ highest-severity finding in full; the remaining findings are Pro.
 **Scope: every installed app at once.** Same rules, same findings, same severities as `RP` — the
 difference is orchestration, a sortable cross-app summary, and export. The value here is not
 interpretation (that's `RP`) but *tedium removed*: nobody opens 300 app reports by hand.
-
-
 
 | ID    | Task                  | Detail                                                    | Size |
 |-------|-----------------------|------------------------------------------------------------|------|
@@ -326,9 +248,6 @@ interpretation (that's `RP`) but *tedium removed*: nobody opens 300 app reports 
 | OP-02 | Custom / exportable report templates | Polish on `BX` exports                                                        |
 | OP-03 | Per-app risk score history        | `HI` × `RI` — "this app got riskier" is a stronger hook than either alone         |
 
-*(The old backlog entry for a native-library inspector moved to the free tier as `FR-33`. Chart
-entry points were retired with the statistics screen — see §1.4.)*
-
 ---
 
 ## Backlog
@@ -344,12 +263,12 @@ entry points were retired with the statistics screen — see §1.4.)*
 
 ## Release Plan
 
-| ID | Release         | Contents                                                       | Duration     | Cumulative |
-|----|-----------------|-----------------------------------------------------------------|--------------|------------|
-| R0 | Free Rework     | CE-01, CE-05, FR-08 … FR-20, FR-24 … FR-43, EX-07, EX-08, plus `EN`    | ~7–8 weeks   | Week 8     |
-| R1 | Pro Launch      | `HI`, `RI`, `TR`, `RP`, `CP`                                    | ~5.5–6.5 weeks | Week 15  |
-| R2 | Bulk Tools      | `BX`                                                            | ~1.5–2 weeks | Week 17    |
-| R3 | Optional polish | OP-01 … OP-03                                                   | as-needed    | Ongoing    |
+| ID | Release         | Contents                                                                              | Duration       | Cumulative |
+|----|-----------------|-----------------------------------------------------------------------------------------|----------------|------------|
+| R0 | Free Rework     | Remaining: FR-17, FR-18, CE-06, FR-26, FR-27, FR-31, FR-33 … FR-38, FR-44, plus `EN` — rest shipped, see [shipped.md](shipped.md) | ~7–8 weeks     | Week 8     |
+| R1 | Pro Launch      | `HI`, `RI`, `TR`, `RP`, `CP`                                                             | ~5.5–6.5 weeks | Week 15    |
+| R2 | Bulk Tools      | `BX`                                                                                     | ~1.5–2 weeks   | Week 17    |
+| R3 | Optional polish | OP-01 … OP-03                                                                            | as-needed      | Ongoing    |
 
 **Committed roadmap (R0–R2): ~15–17 weeks**
 

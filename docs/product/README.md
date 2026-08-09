@@ -2,14 +2,16 @@
 
 ```
 docs/product/
-  roadmap.md          what we are building and in what order — the single source of scope
+  roadmap.md          what remains to be built and in what order — the single source of open scope
+  shipped.md          terse archive of Done/Retired IDs, so cross-references still resolve
   features/           one design doc per feature, written before it is implemented
 ```
 
 ## The split
 
-**`roadmap.md` owns scope and sequencing.** Every line item has a stable ID (`FR-12`, `HI-03`,
-`RI-02`) and a status. It says *what* and *when*, never *how*.
+**`roadmap.md` owns open scope and sequencing.** Every line item has a stable ID (`FR-12`, `HI-03`,
+`RI-02`) and a status. It says *what* and *when*, never *how*. Once an ID reaches Done or Retired,
+its row moves to `shipped.md` — `roadmap.md` only tracks work that isn't finished yet.
 
 **A feature doc owns design.** It says *how* one feature works and why it works that way —
 interaction model, screen structure, edge cases, implementation steps. It covers a set of roadmap
@@ -53,8 +55,8 @@ Two conventions worth keeping, both from `features/app-detail.md`:
 
 ## Status
 
-When a feature ships, update the roadmap status for its IDs and mark the feature doc's header
-`Implemented`. Keep the doc — it's the record of why the design is the way it is.
+When a feature ships, move its IDs from `roadmap.md` to `shipped.md` and mark the feature doc's
+header `Implemented`. Keep the doc — it's the record of why the design is the way it is.
 
 ## Index
 

@@ -1,6 +1,6 @@
     # App Detail — Full Data Presentation
 
-**Roadmap:** [FR-10 … FR-18](../roadmap.md#12-app-detail), [FR-25](../roadmap.md#15-export--share), plus [EX-07, EX-08](../roadmap.md#18-data-gaps--extraction-that-doesnt-exist-yet) · R0
+**Roadmap:** [FR-10 … FR-16](../shipped.md#12-app-detail), [FR-17, FR-18](../roadmap.md#12-app-detail), [FR-25](../shipped.md#15-export--share), plus [EX-07, EX-08](../shipped.md#18-data-gaps) · R0
 **Status:** Shipped. [All six implementation steps](#implementation-order) are built and wired,
 including Requirements and the polish pass. Two pieces described below are still open: the
 Requirements `Libraries` scope, which needed roadmap data-extraction item `FR-44` — now backlogged

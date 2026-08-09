@@ -5,7 +5,7 @@ Bottom-navigation top-level destination for "Browse by Attribute" (tab label "Br
 `CE-05`: pick a dimension, see its bucket counts, tap a bucket to see the apps in it. Three depths,
 one screen each: hub (dimension cards) → options (bucket list for the chosen dimension) → apps
 (the apps in the tapped bucket) → `feature:app-detail`. Replaces the former `feature:permissions` and
-`feature:statistics` stub tabs, per `docs/product/roadmap.md` §1.1b's module consolidation note.
+`feature:statistics` stub tabs, per `docs/product/shipped.md` §1.1b's module consolidation note.
 
 ## Sub-modules
 - `api` — Contains `BrowseNavKey` (top-level destination) and the "Browse" string resource used as
