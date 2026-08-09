@@ -17,7 +17,7 @@ compose-bom = "2026.06.01"
 compose-foundation = "1.11.4"
 
 # Navigation
-navigation3 = "1.1.4"
+navigation3 = "1.1.5"
 lifecycle-viewmodel-nav3 = "2.11.0"
 hilt-navigation-compose = "1.4.0"
 
@@ -25,7 +25,7 @@ hilt-navigation-compose = "1.4.0"
 hilt = "2.60.1"
 
 # Firebase
-firebase-bom = "34.16.0"
+firebase-bom = "34.17.0"
 firebase-crashlytics-plugin = "3.0.7"
 firebase-perf-plugin = "2.0.2"
 google-services = "4.5.0"
@@ -35,7 +35,7 @@ timber = "5.0.1"
 leakcanary = "2.14"
 coil = "3.5.0"
 spotless = "8.9.0"
-compose-rules-ktlint = "0.6.3"
+compose-rules-ktlint = "0.6.4"
 detekt = "2.0.0-alpha.6"
 
 [libraries]

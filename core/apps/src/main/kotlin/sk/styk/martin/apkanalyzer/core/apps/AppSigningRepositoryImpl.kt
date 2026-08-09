@@ -1,5 +1,6 @@
 package sk.styk.martin.apkanalyzer.core.apps
 
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -30,6 +31,7 @@ internal class AppSigningRepositoryImpl @Inject constructor(
 
     override fun signing(): Flow<Map<PackageName, AppSigning>> = cachedSigning
 
+    @SuppressLint("QueryPermissionsNeeded")
     private fun loadAllSigning(): Map<PackageName, AppSigning> = packageManager.getInstalledPackages(PackageManager.GET_SIGNING_CERTIFICATES)
         .associate { PackageName(it.packageName) to certificateExtractor.getAppSigning(it) }
 }
