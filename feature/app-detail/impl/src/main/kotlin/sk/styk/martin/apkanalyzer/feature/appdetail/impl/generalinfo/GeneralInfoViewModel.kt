@@ -76,6 +76,7 @@ private fun AppDetail.toGeneralInfoState() = GeneralInfoState.Loaded(
     packageName = info.packageName,
     processName = info.processName,
     uid = info.uid,
+    sharedUserId = info.sharedUserId,
     description = info.description,
     versionName = info.versionName,
     versionCode = info.versionCode,

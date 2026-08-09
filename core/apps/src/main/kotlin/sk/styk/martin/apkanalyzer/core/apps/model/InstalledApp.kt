@@ -20,4 +20,6 @@ data class InstalledApp(
     val requestedPermissions: List<String> = emptyList(),
     val totalSize: AppSize? = null,
     val lastUsedTime: Instant? = null,
+    val sharedUserId: String? = null,
+    val category: AppCategory = AppCategory.Undefined,
 )

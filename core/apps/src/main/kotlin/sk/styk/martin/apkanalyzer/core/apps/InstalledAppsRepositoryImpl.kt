@@ -1,5 +1,6 @@
 package sk.styk.martin.apkanalyzer.core.apps
 
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import kotlinx.coroutines.CoroutineScope
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import sk.styk.martin.apkanalyzer.core.apps.analysis.InstallSourceResolver
+import sk.styk.martin.apkanalyzer.core.apps.analysis.resolveAppCategory
 import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
@@ -81,6 +83,8 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
             installTime = Instant.ofEpochMilli(firstInstallTime),
             lastUpdateTime = Instant.ofEpochMilli(lastUpdateTime),
             requestedPermissions = requestedPermissions?.toList().orEmpty(),
+            sharedUserId = sharedUserId,
+            category = resolveAppCategory(appInfo?.category ?: ApplicationInfo.CATEGORY_UNDEFINED),
         )
     }
 }

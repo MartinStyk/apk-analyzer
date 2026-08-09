@@ -15,6 +15,7 @@ sealed interface GeneralInfoState {
         val packageName: PackageName,
         val processName: String?,
         val uid: Int?,
+        val sharedUserId: String?,
         val description: String?,
         val versionName: String?,
         val versionCode: Long,

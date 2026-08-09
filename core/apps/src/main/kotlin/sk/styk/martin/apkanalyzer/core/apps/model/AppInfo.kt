@@ -17,6 +17,7 @@ data class AppInfo(
     val allowsBackup: Boolean = false,
     val usesCleartextTraffic: Boolean = false,
     val uid: Int? = null,
+    val sharedUserId: String? = null,
     val description: String? = null,
     val source: AppSource = AppSource.Unknown,
     val apkDirectory: String? = null,
