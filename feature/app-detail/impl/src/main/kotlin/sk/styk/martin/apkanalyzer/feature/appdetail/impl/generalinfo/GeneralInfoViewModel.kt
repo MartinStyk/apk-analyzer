@@ -98,4 +98,5 @@ private fun AppDetail.toGeneralInfoState() = GeneralInfoState.Loaded(
     installLocation = info.installLocation.name,
     apkSize = info.apkSize,
     totalSize = info.totalSize,
+    additionalInstalledSplits = info.additionalInstalledSplits,
 )

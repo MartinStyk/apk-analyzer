@@ -18,7 +18,11 @@ import java.io.File
 
 private val GOOGLE_PLAY_INSTALLER = PackageName("com.android.vending")
 
-fun computeApkSize(sourceDir: String?): AppSize = (sourceDir?.let { File(it).length() } ?: 0L).bytes
+fun computeApkSize(applicationInfo: ApplicationInfo?): AppSize {
+    val baseApkSize = applicationInfo?.sourceDir?.let { File(it).length() } ?: 0L
+    val splitApksSize = applicationInfo?.splitSourceDirs.orEmpty().sumOf { File(it).length() }
+    return (baseApkSize + splitApksSize).bytes
+}
 
 internal fun isSystemInstalledApp(packageInfo: PackageInfo): Boolean =
     packageInfo.applicationInfo?.let { it.flags and ApplicationInfo.FLAG_SYSTEM != 0 } ?: false

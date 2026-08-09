@@ -120,7 +120,7 @@ jobs:
           mv "${{ steps.sign_apk.outputs.signedReleaseFile }}" "app/build/outputs/apk/release/apk-analyzer-${{ github.ref_name }}.apk"
 
       - name: Upload AAB artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: apk-analyzer-aab
           path: app/build/outputs/bundle/release/apk-analyzer-${{ github.ref_name }}.aab
@@ -128,7 +128,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: apk-analyzer-apk
           path: app/build/outputs/apk/release/apk-analyzer-${{ github.ref_name }}.apk
@@ -136,7 +136,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload mapping file artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: apk-analyzer-mapping
           path: app/build/outputs/mapping/release/mapping.txt
@@ -154,7 +154,7 @@ jobs:
           fetch-depth: 0
 
       - name: Download APK artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: apk-analyzer-apk
           path: artifacts
@@ -182,13 +182,13 @@ jobs:
 
     steps:
       - name: Download AAB artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: apk-analyzer-aab
           path: artifacts
 
       - name: Download mapping file artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: apk-analyzer-mapping
           path: artifacts
@@ -209,7 +209,7 @@ jobs:
 
     steps:
       - name: Download APK artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: apk-analyzer-apk
           path: artifacts
