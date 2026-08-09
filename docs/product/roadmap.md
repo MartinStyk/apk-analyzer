@@ -31,11 +31,6 @@ dropped, its ID is retired.
 | **Retired**  | Deliberately dropped or absorbed by another item. ID kept so old references resolve |
 | **Backlog**  | Wanted, not scheduled. The Notes column names the trigger to revisit it             |
 
-> **Important:** the previous revision of this document marked several items "Existing". That was
-> true of the *shipped legacy app*, not of the rewrite this roadmap builds on. Eight shipped
-> features still need porting (`FR-12` … `FR-16`, `FR-19`, `FR-24`, `FR-25`), and the R0 estimate
-> has been reworked to account for them.
-
 ---
 
 ## Part 1 — Free Tier
@@ -108,9 +103,9 @@ What Changed tab in R1.
 
 | ID    | Item                                 | Status  | Notes                                                                        |
 |-------|--------------------------------------|---------|-------------------------------------------------------------------------------|
-| FR-19 | Open `.apk` from another app         | Port    | `VIEW` / `INSTALL_PACKAGE` intent filter is **commented out** in the manifest |
-| FR-20 | Pick an `.apk` from storage          | Todo    | `AppDetailInput.ApkFile` and `FileUtil.copyUriToCache` exist; no entry point  |
-| FR-21 | Recent APK files                     | Todo    | Cheap once FR-19/FR-20 land                                                  |
+| FR-19 | Open `.apk` from another app         | Done    | `ExternalApkActivity` — `VIEW` / `INSTALL_PACKAGE` intent filter, exported, isolated document task |
+| FR-20 | Pick an `.apk` from storage          | Done    | `ApkFilePickerButton` (`ACTION_OPEN_DOCUMENT`) wired into `AppsScreen`; copies via `TemporaryApkManager`, opens app detail |
+| FR-21 | Recent APK files                     | Retired | Picked files are temp copies released after use, and the original source can be deleted or moved outside the app's control — a "recent" list would routinely point at files that no longer exist. Not worth building dangling-entry handling for |
 
 ### 1.4 Device Statistics — **retired**
 
@@ -162,7 +157,7 @@ doing in R0 rather than later.
 | EX-08 | Content-provider path permissions | Done   | `<path-permission>` read/write grants per path, read straight off `ProviderInfo.pathPermissions` (already fetched via `GET_PROVIDERS`, no manifest parsing needed). Feeds the Components screen's `Unprotected` filter and item sheet; hub interpretation still needs a rule, tracked under `RI-03` |
 | FR-44 | Declared `<uses-library>` entries  | Backlog | Name and `android:required`, from the manifest for APK files and `sharedLibraryFiles` for installed apps. Deprioritized: most apps declare zero entries, and the ones that do are boilerplate (`android.test.runner`) or legacy trivia (`org.apache.http.legacy`) — the value is screen completeness, not a real finding. Revisit if a concrete tracker/risk signal ends up needing it |
 
-**R0 scope:** CE-01, CE-05, FR-08 … FR-21, FR-24 … FR-43, EX-07, EX-08. Excludes the retired FR-22/FR-23 and the backlogged CE-06/FR-44.
+**R0 scope:** CE-01, CE-05, FR-08 … FR-20, FR-24 … FR-43, EX-07, EX-08. Excludes the retired FR-21/FR-22/FR-23 and the backlogged CE-06/FR-44.
 **R0 estimate: ~7–8 weeks** (was ~4, which assumed the ported items were already present).
 Retiring the statistics screen roughly pays for the browse screen — one surface instead of two,
 against an index that is already two-thirds built.
@@ -351,7 +346,7 @@ entry points were retired with the statistics screen — see §1.4.)*
 
 | ID | Release         | Contents                                                       | Duration     | Cumulative |
 |----|-----------------|-----------------------------------------------------------------|--------------|------------|
-| R0 | Free Rework     | CE-01, CE-05, FR-08 … FR-21, FR-24 … FR-43, EX-07, EX-08, plus `EN`    | ~7–8 weeks   | Week 8     |
+| R0 | Free Rework     | CE-01, CE-05, FR-08 … FR-20, FR-24 … FR-43, EX-07, EX-08, plus `EN`    | ~7–8 weeks   | Week 8     |
 | R1 | Pro Launch      | `HI`, `RI`, `TR`, `RP`, `CP`                                    | ~5.5–6.5 weeks | Week 15  |
 | R2 | Bulk Tools      | `BX`                                                            | ~1.5–2 weeks | Week 17    |
 | R3 | Optional polish | OP-01 … OP-03                                                   | as-needed    | Ongoing    |
