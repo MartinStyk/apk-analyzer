@@ -53,8 +53,20 @@
     <string name="app_detail_summary_header">%1$s (%2$s)</string>
     <string name="app_detail_summary_version">%1$s (%2$d)</string>
     <string name="app_detail_summary_signing_label">Signing</string>
-    <string name="app_detail_summary_permissions">%1$d requested · %2$d dangerous</string>
-    <string name="app_detail_summary_permissions_granted">%1$d requested · %2$d dangerous · %3$d granted</string>
+    <string name="app_detail_summary_permissions">%1$s · %2$s</string>
+    <string name="app_detail_summary_permissions_granted">%1$s · %2$s · %3$s</string>
+    <plurals name="app_detail_summary_permissions_requested">
+        <item quantity="one">%1$d requested permission</item>
+        <item quantity="other">%1$d requested permissions</item>
+    </plurals>
+    <plurals name="app_detail_summary_permissions_dangerous">
+        <item quantity="one">%1$d dangerous permission</item>
+        <item quantity="other">%1$d dangerous permissions</item>
+    </plurals>
+    <plurals name="app_detail_summary_permissions_granted_count">
+        <item quantity="one">%1$d granted permission</item>
+        <item quantity="other">%1$d granted permissions</item>
+    </plurals>
     <string name="app_detail_permissions_section">Permissions</string>
     <string name="app_detail_total_permissions">Total Permissions</string>
     <string name="app_detail_dangerous_permissions">Dangerous Permissions</string>

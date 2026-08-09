@@ -1,6 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl
 
 import android.content.Context
+import androidx.annotation.PluralsRes
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.resources.ResourcesManager
@@ -75,12 +76,38 @@ private fun AppDetailState.Loaded.signingSummary(resourcesManager: ResourcesMana
 private fun AppDetailState.Loaded.permissionsSummary(resourcesManager: ResourcesManager): String = grantedDangerousPermissionsCount?.let { granted ->
     resourcesManager.getString(
         R.string.app_detail_summary_permissions_granted,
-        totalPermissionsCount,
-        dangerousPermissionsCount,
-        granted,
+        permissionCountSummary(
+            resourcesManager = resourcesManager,
+            count = totalPermissionsCount,
+            pluralsRes = R.plurals.app_detail_summary_permissions_requested,
+        ),
+        permissionCountSummary(
+            resourcesManager = resourcesManager,
+            count = dangerousPermissionsCount,
+            pluralsRes = R.plurals.app_detail_summary_permissions_dangerous,
+        ),
+        permissionCountSummary(
+            resourcesManager = resourcesManager,
+            count = granted,
+            pluralsRes = R.plurals.app_detail_summary_permissions_granted_count,
+        ),
     ).toString()
 } ?: resourcesManager.getString(
     R.string.app_detail_summary_permissions,
-    totalPermissionsCount,
-    dangerousPermissionsCount,
+    permissionCountSummary(
+        resourcesManager = resourcesManager,
+        count = totalPermissionsCount,
+        pluralsRes = R.plurals.app_detail_summary_permissions_requested,
+    ),
+    permissionCountSummary(
+        resourcesManager = resourcesManager,
+        count = dangerousPermissionsCount,
+        pluralsRes = R.plurals.app_detail_summary_permissions_dangerous,
+    ),
 ).toString()
+
+private fun permissionCountSummary(
+    resourcesManager: ResourcesManager,
+    count: Int,
+    @PluralsRes pluralsRes: Int,
+): String = resourcesManager.getQuantityString(pluralsRes, count, count).toString()
