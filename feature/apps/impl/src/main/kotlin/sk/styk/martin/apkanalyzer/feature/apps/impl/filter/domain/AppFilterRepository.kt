@@ -109,16 +109,16 @@ class AppFilterRepository @Inject constructor() {
             },
         )
     }
-
-    private fun deriveActiveQuickFilters(state: AppFilterState): ImmutableSet<QuickFilter> = buildList {
-        if (state.isSensitivePermissionsFilterActive) add(QuickFilter.SensitivePermissions)
-        if (state.isLargeTotalFilterActive) add(QuickFilter.Large)
-        if (state.isRecentlyUsedActive) add(QuickFilter.RecentlyUsed)
-        if (state.isUnusedFilterActive) add(QuickFilter.Unused)
-        if (state.isSystemFilterActive) add(QuickFilter.System)
-        if (state.isGooglePlayFilterActive) add(QuickFilter.GooglePlay)
-        if (state.isSideloadedFilterActive) add(QuickFilter.Sideloaded)
-        if (state.isRecentInstallActive) add(QuickFilter.RecentlyInstalled)
-        if (state.isRecentUpdateActive) add(QuickFilter.RecentlyUpdated)
-    }.toPersistentSet()
 }
+
+private fun deriveActiveQuickFilters(state: AppFilterState): ImmutableSet<QuickFilter> = buildList {
+    if (state.isSensitivePermissionsFilterActive) add(QuickFilter.SensitivePermissions)
+    if (state.isLargeTotalFilterActive) add(QuickFilter.Large)
+    if (state.isRecentlyUsedActive) add(QuickFilter.RecentlyUsed)
+    if (state.isUnusedFilterActive) add(QuickFilter.Unused)
+    if (state.isSystemFilterActive) add(QuickFilter.System)
+    if (state.isGooglePlayFilterActive) add(QuickFilter.GooglePlay)
+    if (state.isSideloadedFilterActive) add(QuickFilter.Sideloaded)
+    if (state.isRecentInstallActive) add(QuickFilter.RecentlyInstalled)
+    if (state.isRecentUpdateActive) add(QuickFilter.RecentlyUpdated)
+}.toPersistentSet()
