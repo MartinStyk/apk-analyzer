@@ -5,6 +5,7 @@ import kotlinx.collections.immutable.ImmutableList
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.apps.model.SignatureAlgorithmAssessment
+import sk.styk.martin.apkanalyzer.core.apps.model.SigningSchemeVersion
 import java.time.Instant
 
 internal enum class CertificateValidity {
@@ -40,5 +41,10 @@ internal sealed interface CertificatesState {
     data object Error : CertificatesState
 
     @Immutable
-    data class Loaded(val currentCertificates: ImmutableList<CertificateItem>, val pastCertificates: ImmutableList<CertificateItem>) : CertificatesState
+    data class Loaded(
+        val currentCertificates: ImmutableList<CertificateItem>,
+        val pastCertificates: ImmutableList<CertificateItem>,
+        val hasMultipleSigners: Boolean,
+        val signingSchemeVersions: ImmutableList<SigningSchemeVersion>?,
+    ) : CertificatesState
 }

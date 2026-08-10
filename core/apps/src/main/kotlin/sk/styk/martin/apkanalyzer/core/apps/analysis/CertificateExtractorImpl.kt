@@ -24,8 +24,9 @@ internal class CertificateExtractorImpl @Inject constructor(private val digestMa
 
     override fun getAppSigning(packageInfo: PackageInfo): AppSigning {
         val signingInfo = packageInfo.signingInfo ?: return AppSigning()
+        val hasMultipleSigners = signingInfo.hasMultipleSigners()
         val currentSignatures = signingInfo.apkContentsSigners.orEmpty()
-        val pastSignatures = if (signingInfo.hasMultipleSigners()) {
+        val pastSignatures = if (hasMultipleSigners) {
             emptyList()
         } else {
             val currentSignerSet = currentSignatures.toSet()
@@ -35,6 +36,7 @@ internal class CertificateExtractorImpl @Inject constructor(private val digestMa
         return AppSigning(
             currentCertificates = currentSignatures.toList().toCertificates(packageInfo.packageName),
             pastCertificates = pastSignatures.toCertificates(packageInfo.packageName),
+            hasMultipleSigners = hasMultipleSigners,
         )
     }
 

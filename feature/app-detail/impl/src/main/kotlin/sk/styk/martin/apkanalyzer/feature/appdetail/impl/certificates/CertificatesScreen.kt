@@ -36,10 +36,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.apps.model.SignatureAlgorithmAssessment
+import sk.styk.martin.apkanalyzer.core.apps.model.SigningSchemeVersion
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Chip
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.ChipVariant
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
@@ -153,7 +155,9 @@ private fun LoadedContent(
             ) { index, certificate ->
                 CertificateCard(
                     certificate = certificate,
-                    currentSignerCount = state.currentCertificates.size.takeIf { index == 0 },
+                    showSigningFacts = index == 0,
+                    hasMultipleSigners = state.hasMultipleSigners,
+                    signingSchemeVersions = state.signingSchemeVersions,
                     label = if (state.currentCertificates.size > 1) {
                         stringResource(R.string.certificates_signer_position, index + 1, state.currentCertificates.size)
                     } else {
@@ -187,7 +191,7 @@ private fun LoadedContent(
                 }
                 CertificateCard(
                     certificate = certificate,
-                    currentSignerCount = null,
+                    showSigningFacts = false,
                     label = if (state.pastCertificates.size == 1) {
                         role
                     } else {
@@ -211,11 +215,13 @@ private fun LoadedContent(
 @Composable
 private fun CertificateCard(
     certificate: CertificateItem,
-    currentSignerCount: Int?,
+    showSigningFacts: Boolean,
     label: String?,
     onCopy: (label: String, value: String) -> Unit,
     onShowRationale: (InfoRow) -> Unit,
     modifier: Modifier = Modifier,
+    hasMultipleSigners: Boolean = false,
+    signingSchemeVersions: ImmutableList<SigningSchemeVersion>? = null,
 ) {
     val serialLabel = stringResource(R.string.certificates_serial)
     val selfSignedLabel = stringResource(R.string.certificates_self_signed)
@@ -257,20 +263,23 @@ private fun CertificateCard(
                 onShowRationale = onShowRationale,
                 onCopy = onCopy,
             )
-            currentSignerCount?.let { signerCount ->
+            if (showSigningFacts) {
                 SigningSection(
-                    signerCount = signerCount,
+                    hasMultipleSigners = hasMultipleSigners,
+                    signingSchemeVersions = signingSchemeVersions,
                     algorithm = certificate.signAlgorithm,
                     algorithmAssessment = certificate.signatureAlgorithmAssessment,
                     onShowRationale = onShowRationale,
                     onCopy = onCopy,
                 )
-            } ?: AlgorithmFact(
-                algorithm = certificate.signAlgorithm,
-                assessment = certificate.signatureAlgorithmAssessment,
-                onShowRationale = onShowRationale,
-                onCopy = onCopy,
-            )
+            } else {
+                AlgorithmFact(
+                    algorithm = certificate.signAlgorithm,
+                    assessment = certificate.signatureAlgorithmAssessment,
+                    onShowRationale = onShowRationale,
+                    onCopy = onCopy,
+                )
+            }
             InfoFact(
                 label = serialLabel,
                 value = certificate.serialNumber,
@@ -456,19 +465,20 @@ private fun ValiditySection(
 
 @Composable
 private fun SigningSection(
-    signerCount: Int,
+    hasMultipleSigners: Boolean,
     algorithm: String,
     algorithmAssessment: SignatureAlgorithmAssessment,
+    signingSchemeVersions: ImmutableList<SigningSchemeVersion>?,
     onShowRationale: (InfoRow) -> Unit,
     onCopy: (label: String, value: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val signerState = if (signerCount > 1) {
+    val signerState = if (hasMultipleSigners) {
         stringResource(R.string.certificates_multiple_signers)
     } else {
         stringResource(R.string.certificates_single_signer)
     }
-    val signerRationale = if (signerCount > 1) {
+    val signerRationale = if (hasMultipleSigners) {
         stringResource(R.string.certificates_multiple_signers_explanation)
     } else {
         stringResource(R.string.certificates_single_signer_explanation)
@@ -482,12 +492,55 @@ private fun SigningSection(
             onShowRationale = onShowRationale,
             onCopy = onCopy,
         )
+        if (!signingSchemeVersions.isNullOrEmpty()) {
+            SchemeFact(
+                versions = signingSchemeVersions,
+                onShowRationale = onShowRationale,
+                onCopy = onCopy,
+            )
+        }
         AlgorithmFact(
             algorithm = algorithm,
             assessment = algorithmAssessment,
             onShowRationale = onShowRationale,
             onCopy = onCopy,
         )
+    }
+}
+
+@Composable
+private fun SchemeFact(
+    versions: ImmutableList<SigningSchemeVersion>,
+    onShowRationale: (InfoRow) -> Unit,
+    onCopy: (label: String, value: String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val label = stringResource(R.string.certificates_scheme)
+    val value = schemeVersionLabels(versions).joinToString(", ")
+
+    InfoFact(
+        label = label,
+        value = value,
+        onCopy = onCopy,
+        rationale = stringResource(R.string.certificates_scheme_explanation),
+        onShowRationale = onShowRationale,
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun schemeVersionLabels(versions: ImmutableList<SigningSchemeVersion>): List<String> {
+    val v1 = stringResource(R.string.certificates_scheme_v1)
+    val v2 = stringResource(R.string.certificates_scheme_v2)
+    val v3 = stringResource(R.string.certificates_scheme_v3)
+    val v31 = stringResource(R.string.certificates_scheme_v3_1)
+    return versions.map {
+        when (it) {
+            SigningSchemeVersion.V1 -> v1
+            SigningSchemeVersion.V2 -> v2
+            SigningSchemeVersion.V3 -> v3
+            SigningSchemeVersion.V3_1 -> v31
+        }
     }
 }
 
@@ -789,6 +842,8 @@ private fun CertificatesRotationHistoryPreview() {
                     ),
                 ),
                 pastCertificates = persistentListOf(sampleCertificate()),
+                hasMultipleSigners = false,
+                signingSchemeVersions = persistentListOf(SigningSchemeVersion.V2, SigningSchemeVersion.V3),
             ),
             onAction = {},
             onBack = {},
@@ -828,6 +883,8 @@ private fun CertificatesEmptyPreview() {
             state = CertificatesState.Loaded(
                 currentCertificates = persistentListOf(),
                 pastCertificates = persistentListOf(),
+                hasMultipleSigners = false,
+                signingSchemeVersions = null,
             ),
             onAction = {},
             onBack = {},
@@ -838,6 +895,8 @@ private fun CertificatesEmptyPreview() {
 private fun sampleLoadedState(certificate: CertificateItem = sampleCertificate()) = CertificatesState.Loaded(
     currentCertificates = persistentListOf(certificate),
     pastCertificates = persistentListOf(),
+    hasMultipleSigners = false,
+    signingSchemeVersions = persistentListOf(SigningSchemeVersion.V2, SigningSchemeVersion.V3),
 )
 
 private fun sampleCertificate() = CertificateItem(

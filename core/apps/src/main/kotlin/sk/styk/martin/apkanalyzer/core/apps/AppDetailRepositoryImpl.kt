@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.plus
+import sk.styk.martin.apkanalyzer.core.apps.analysis.ApkSigningBlockAnalyzer
 import sk.styk.martin.apkanalyzer.core.apps.analysis.CertificateExtractor
 import sk.styk.martin.apkanalyzer.core.apps.analysis.InstallSourceResolver
 import sk.styk.martin.apkanalyzer.core.apps.analysis.ManifestParser
@@ -55,6 +56,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     private val sdkVersionResolver: SdkVersionResolver,
     private val installSourceResolver: InstallSourceResolver,
     private val certificateExtractor: CertificateExtractor,
+    private val apkSigningBlockAnalyzer: ApkSigningBlockAnalyzer,
     private val manifestParser: ManifestParser,
     private val storageStatsRepository: StorageStatsRepository,
     private val usageStatsRepository: UsageStatsRepository,
@@ -133,7 +135,11 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     ) = AppDetail(
         analysisMode = analysisMode,
         info = getGeneralData(packageInfo, totalSize, lastUsedTime),
-        signing = certificateExtractor.getAppSigning(packageInfo),
+        signing = certificateExtractor.getAppSigning(packageInfo)
+            .copy(
+                signingSchemeVersions = packageInfo.applicationInfo?.sourceDir
+                    ?.let(apkSigningBlockAnalyzer::detectSchemeVersions),
+            ),
         activities = getActivities(
             packageInfo = packageInfo,
             launcherActivityNames = when (analysisMode) {
