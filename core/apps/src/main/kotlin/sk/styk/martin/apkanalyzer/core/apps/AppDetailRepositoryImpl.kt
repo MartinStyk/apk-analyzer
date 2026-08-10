@@ -97,6 +97,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         is AppReference.ApkFile -> apkFilePackageDetails(File(reference.path))
     }
 
+    @Suppress("SuspendFunSwallowedCancellation")
     private suspend fun installedPackageDetails(packageName: PackageName): Result<AppDetail> {
         val requestId = nextOperationRequest()
         val context = "mode=installed package=${packageName.value}"
@@ -178,6 +179,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         }
     }
 
+    @Suppress("SuspendFunSwallowedCancellation")
     private suspend fun apkFilePackageDetails(accessibleFile: File): Result<AppDetail> {
         val requestId = nextOperationRequest()
         val context = "mode=apk_file apk_path=${accessibleFile.absolutePath}"

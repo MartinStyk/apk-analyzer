@@ -9,10 +9,7 @@ private const val OPERATION = "navigation"
 
 internal fun logScreenOpened(key: NavKey, resolveScreenOpenEvent: (NavKey) -> ScreenOpenEvent?) {
     val event = resolveScreenOpenEvent(key) ?: return
-    val message = if (event.context != null) {
-        "operation=$OPERATION event=screen_opened screen=${event.screen} ${event.context}"
-    } else {
-        "operation=$OPERATION event=screen_opened screen=${event.screen}"
-    }
+    val baseMessage = "operation=$OPERATION event=screen_opened screen=${event.screen}"
+    val message = event.context?.let { "$baseMessage $it" } ?: baseMessage
     Logger.i(TAG, message)
 }

@@ -29,6 +29,7 @@ internal class AppSigningRepositoryImpl @Inject constructor(
     appScope: CoroutineScope,
 ) : AppSigningRepository {
 
+    @Suppress("TooGenericExceptionCaught")
     private val cachedSigning = packageChangesObserver.observe()
         .onStart { emit(Unit) }
         .mapLatest {
