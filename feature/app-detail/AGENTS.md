@@ -158,7 +158,13 @@ section follows only when Android provides a verified rotation chain; previous k
 newest-to-oldest and the original key is identified explicitly. Certificate fingerprints are
 always visible in SHA-256, SHA-1, MD5 order; public-key fingerprints use the same shared `HashBox`
 component but remain collapsed until requested. Signing multiplicity and key-rotation data come
-from the explicit current and past certificate lists in `AppDetail.signing`.
+from the explicit current and past certificate lists in `AppDetail.signing`, and the "Current
+signers" fact uses `AppSigning.hasMultipleSigners` directly rather than re-deriving it from the
+certificate list size, so there is one predicate for that fact. The SCHEME row, adjacent to
+ALGORITHM in the first current-certificate card, shows `AppSigning.signingSchemeVersions`
+(`core:apps`'s `ApkSigningBlockAnalyzer` interface, roadmap `FR-36`) and is omitted entirely when that list is
+null — an unparseable or ambiguous signing block never renders a version list, per the module's
+"omit rather than guess" rule for this fact.
 
 ### `requirements/`
 

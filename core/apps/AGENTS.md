@@ -23,6 +23,8 @@ AppClassificationThresholds.kt      - Constants for "large app", "recently insta
 AppExportManager.kt / Impl          - SAF-backed base APK and full-resolution icon export
 analysis/
   CertificateExtractor.kt / Impl    - APK signing certificate extraction
+  ApkSigningBlockAnalyzer.kt / Impl - Verifies v1 signing and coordinates scheme detection
+  ApkSigningBlockParser.kt / Impl   - Parses the raw APK Signing Block for v2/v3/v3.1 ID-value pairs
   ManifestParser.kt / Impl           - Installed/APK AndroidManifest.xml parsing into readable namespaced XML
                                        and component intent filters
   InstallSourceResolver.kt / Impl   - Single method, `resolve()`, returning the raw
@@ -64,7 +66,11 @@ model/
   CertificatePrincipal.kt - Issuer/subject info
   CertificateTrustLevel.kt - Trust classification enum
   SignatureAlgorithmAssessment.kt - Signing digest security assessment
-  AppSigning.kt           - Current certificates and verified signing-key history
+  AppSigning.kt           - Current certificates and verified signing-key history, plus
+                            `hasMultipleSigners` (free from `SigningInfo`) and the nullable
+                            `signingSchemeVersions` (requires parsing the APK Signing Block; null
+                            when it can't be read confidently)
+  SigningSchemeVersion.kt - v1 (legacy JAR signing) / v2 / v3 / v3.1 detected from the APK itself
   Feature.kt              - Sealed: `Hardware(name)` for a `uses-feature` name, `OpenGlEs(reqGlEsVersion)`
                             for a GL ES version requirement. A GL ES `FeatureInfo` carries a null
                             `name` and a `reqGlEsVersion`, so the two are different kinds of fact and
@@ -121,6 +127,16 @@ di/                       - Hilt module bindings
 - Assess recognized signature algorithms in the certificate domain model. The assessment covers
   the digest only; unsupported names remain unknown, and overall security also depends on key type
   and size. Feature ViewModels may map the typed result but must not duplicate its policy.
+- `PackageManager`'s `SigningInfo` does not expose which signing scheme(s) an APK uses.
+  `ApkSigningBlockAnalyzer` is an injected interface whose implementation reads the APK file directly
+  (`applicationInfo.sourceDir`, which `AppDetailRepositoryImpl` already sets correctly for both
+  installed packages and APK files). It verifies v1 by reading the signed manifest through
+  `JarFile`'s verifier, then locates the APK Signing Block immediately before the ZIP End Of Central
+  Directory record and reads its known v2/v3/v3.1 ID-value pairs. Every step is defensive: any
+  structural surprise or verification failure yields `null` rather than a guessed version list, per
+  this module's "never throw" rule. `AppDetailRepositoryImpl` invokes it only in the single-app flow,
+  not from the bulk `AppSigningRepositoryImpl` scan, so the extra file I/O is not paid for every
+  installed app merely to populate the device-wide certificate index.
 
 ## Device Requirement Semantics
 

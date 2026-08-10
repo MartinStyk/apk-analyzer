@@ -82,6 +82,8 @@ private fun AppDetail.toCertificatesState(): CertificatesState.Loaded {
     return CertificatesState.Loaded(
         currentCertificates = signing.currentCertificates.map { it.toCertificateItem(now) }.toImmutableList(),
         pastCertificates = signing.pastCertificates.reversed().map { it.toCertificateItem(now) }.toImmutableList(),
+        hasMultipleSigners = signing.hasMultipleSigners,
+        signingSchemeVersions = signing.signingSchemeVersions?.toImmutableList(),
     )
 }
 

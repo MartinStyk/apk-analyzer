@@ -218,6 +218,12 @@
     <string name="certificates_multiple_signers">Multiple signers</string>
     <string name="certificates_single_signer_explanation">This app is currently signed by one certificate. If the developer rotates the signing key again, Android verifies the change against this app\'s trusted signing history.</string>
     <string name="certificates_multiple_signers_explanation">This app is currently signed by multiple certificates. Android requires updates to use the same signer set.</string>
+    <string name="certificates_scheme">Scheme</string>
+    <string name="certificates_scheme_v1">v1</string>
+    <string name="certificates_scheme_v2">v2</string>
+    <string name="certificates_scheme_v3">v3</string>
+    <string name="certificates_scheme_v3_1">v3.1</string>
+    <string name="certificates_scheme_explanation">The scheme is the signature format Android used to verify this APK. Newer schemes (v2 and later) also protect the whole file, not just individual entries, so a modern app signed only with v1 is worth a second look. The algorithm below describes how the signing certificate itself was signed, not the APK signing scheme.</string>
     <string name="certificates_algorithm">Algorithm</string>
     <string name="certificates_algorithm_strong">Strong</string>
     <string name="certificates_algorithm_weak">Weak</string>

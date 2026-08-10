@@ -380,11 +380,13 @@ real signal; SHA-1 versus SHA-256 in the algorithm row mostly is not. The ⓘ ex
 between the two rows, which is the entire reason to show them adjacent.
 
 Scheme is **not a field read** — the public `SigningInfo` API does not expose it, so it requires
-parsing the APK signing block and depends on roadmap `FR-36`. What is free from `SigningInfo`
-today, and shows regardless of whether `FR-36` lands: `hasMultipleSigners()` and
-`hasPastSigningCertificates()`, the latter meaning the signing key was rotated. If `FR-36` slips,
-the row shows rotation and multi-signer state and omits the version list rather than blocking the
-screen.
+parsing the APK signing block, which `FR-36` has now landed: the `ApkSigningBlockAnalyzer` interface
+in `core:apps` is backed by an injected implementation that reads the APK Signing Block directly for
+v2/v3/v3.1 and cryptographically verifies the signed manifest for legacy v1. `SigningInfo` provides
+`hasMultipleSigners()` directly, which backs the "Current signers" fact next to the SCHEME row.
+Version detection is defensive: anything structurally
+unexpected about the signing block yields `null` rather than a guessed version, and the row is
+omitted entirely in that case rather than blocking the screen.
 
 "Self-signed" carries an ⓘ because it looks alarming and is completely normal on Android. Same for
 an expired signing certificate on an already-installed app, which is harmless. Multiple
@@ -580,10 +582,10 @@ Screen work:
   wrong for any serial above 32 bits, which is most of them. Change the field to `String` and format
   it once in the extractor as uppercase colon-separated hex, matching `keytool` and the fingerprint
   convention. Do this before rendering the row — the display is what exposes the defect.
-- Signing scheme: read `signingInfo.hasMultipleSigners()` and `hasPastSigningCertificates()`, which
-  are available now, and the `v1 … v4` version list from `FR-36` if it has landed. Model the version
-  list as nullable and omit that part of the row when it is absent, so the screen does not block on
-  `FR-36`.
+- Signing scheme: `signingInfo.hasMultipleSigners()` and `hasPastSigningCertificates()` back the
+  "Current signers" fact, and the `v1 … v3.1` version list comes from `FR-36`'s
+  `ApkSigningBlockAnalyzer`. The version list is modeled as nullable and the SCHEME row is omitted
+  when it is absent, so a signing block that can't be parsed confidently never blocks the screen.
 - `CertificatesNavKey`, ViewModel, state carrying all 13 certificate fields.
 - Self-signed detection (issuer equals subject) and expiry evaluation against today.
 - Debug-certificate banner, signer / validity / scheme / algorithm / serial blocks.
