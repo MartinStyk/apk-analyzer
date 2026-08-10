@@ -5,15 +5,46 @@ import android.content.pm.PathPermission
 import android.content.pm.PermissionInfo
 import android.os.PatternMatcher
 import sk.styk.martin.apkanalyzer.core.apps.model.AppCategory
+import sk.styk.martin.apkanalyzer.core.apps.model.NativeLibraries
 import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionFlag
 import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.apps.model.ProviderPathMatchType
 import sk.styk.martin.apkanalyzer.core.apps.model.ProviderPathPermission
+import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import java.io.File
+import java.util.zip.ZipFile
 
-fun computeApkSize(sourceDir: String?): AppSize = (sourceDir?.let { File(it).length() } ?: 0L).bytes
+private const val TAG = "AnalysisUtils"
+
+private val nativeLibraryEntryRegex = Regex("""^lib/([^/]+)/([^/]+\.so)$""")
+
+fun computeApkSize(applicationInfo: ApplicationInfo?): AppSize {
+    val baseApkSize = applicationInfo?.sourceDir?.let { File(it).length() } ?: 0L
+    val splitApksSize = applicationInfo?.splitSourceDirs.orEmpty().sumOf { File(it).length() }
+    return (baseApkSize + splitApksSize).bytes
+}
+
+fun readNativeLibraries(sourceDir: String?): NativeLibraries {
+    if (sourceDir == null) return NativeLibraries.Empty
+    return runCatching {
+        ZipFile(sourceDir).use { zip ->
+            val abis = mutableSetOf<String>()
+            val libraryNames = mutableSetOf<String>()
+            zip.entries().asSequence()
+                .mapNotNull { nativeLibraryEntryRegex.matchEntire(it.name) }
+                .forEach { match ->
+                    abis += match.groupValues[1]
+                    libraryNames += match.groupValues[2]
+                }
+            NativeLibraries(abis = abis.sorted(), libraryNames = libraryNames.sorted())
+        }
+    }.getOrElse {
+        Logger.w(TAG, it, "Can not read native libraries from $sourceDir")
+        NativeLibraries.Empty
+    }
+}
 
 @Suppress("DEPRECATION")
 internal fun resolveProtectionLevel(protection: Int): ProtectionLevel = when (protection) {
