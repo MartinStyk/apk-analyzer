@@ -5,7 +5,6 @@ import androidx.annotation.ArrayRes
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.Dimension
-import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.ColorUtils
@@ -16,9 +15,6 @@ class ResourcesManager
 @Inject
 constructor(@ApplicationContext val context: Context) {
     fun getString(@StringRes stringRes: Int, vararg args: Any): CharSequence = context.getString(stringRes, *args)
-
-    fun getQuantityString(@PluralsRes pluralsRes: Int, quantity: Int, vararg args: Any): CharSequence =
-        context.resources.getQuantityString(pluralsRes, quantity, *args)
 
     fun getStringArray(@ArrayRes stringArrayRes: Int): Array<String> = context.resources.getStringArray(stringArrayRes)
 
