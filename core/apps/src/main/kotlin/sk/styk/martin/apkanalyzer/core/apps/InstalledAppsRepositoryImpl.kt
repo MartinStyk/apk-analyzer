@@ -47,6 +47,7 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
     appScope: CoroutineScope,
 ) : InstalledAppsRepository {
 
+    @Suppress("TooGenericExceptionCaught")
     private val cachedApps = packageChangesObserver.observe()
         .onStart { emit(Unit) }
         .mapLatest {

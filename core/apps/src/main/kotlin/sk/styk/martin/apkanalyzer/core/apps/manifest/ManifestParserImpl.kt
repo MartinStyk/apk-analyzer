@@ -31,6 +31,7 @@ internal class ManifestParserImpl @Inject constructor(
         is AppReference.ApkFile -> apkFileManifest(reference.path)
     }
 
+    @Suppress("SuspendFunSwallowedCancellation")
     override suspend fun componentIntentFilters(reference: AppReference): Result<Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>> {
         val requestId = nextOperationRequest()
         Logger.d(TAG, operationLogMessage(OPERATION_COMPONENT_INTENT_FILTERS, requestId, event = "started"))
@@ -62,6 +63,7 @@ internal class ManifestParserImpl @Inject constructor(
         }
     }
 
+    @Suppress("SuspendFunSwallowedCancellation")
     private suspend fun installedPackageManifest(packageName: PackageName): Result<ParsedManifest> {
         val requestId = nextOperationRequest()
         Logger.d(TAG, operationLogMessage(OPERATION_MANIFEST, requestId, event = "started", context = "mode=installed package=${packageName.value}"))
@@ -85,6 +87,7 @@ internal class ManifestParserImpl @Inject constructor(
         }
     }
 
+    @Suppress("SuspendFunSwallowedCancellation")
     private suspend fun apkFileManifest(apkPath: String): Result<ParsedManifest> {
         val requestId = nextOperationRequest()
         Logger.d(TAG, operationLogMessage(OPERATION_MANIFEST, requestId, event = "started", context = "mode=apk_file apk_path=$apkPath"))
