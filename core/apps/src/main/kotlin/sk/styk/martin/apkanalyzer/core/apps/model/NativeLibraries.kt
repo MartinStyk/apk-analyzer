@@ -1,10 +1,20 @@
 package sk.styk.martin.apkanalyzer.core.apps.model
 
-data class NativeLibraries(val abis: List<String>, val libraryNames: List<String>) {
-    val hasNativeCode: Boolean
-        get() = abis.isNotEmpty()
+import sk.styk.martin.apkanalyzer.core.common.model.AppSize
+
+data class NativeLibraries(val files: List<NativeLibraryFile>) {
+    val abis: List<String> get() = files.map { it.abi }.distinct().sorted()
+    val libraryNames: List<String> get() = files.map { it.name }.distinct().sorted()
+    val hasNativeCode: Boolean get() = files.isNotEmpty()
 
     companion object {
-        val Empty = NativeLibraries(abis = emptyList(), libraryNames = emptyList())
+        val Empty = NativeLibraries(files = emptyList())
     }
 }
+
+data class NativeLibraryFile(
+    val name: String,
+    val abi: String,
+    val size: AppSize,
+    val containingApkFileName: String,
+)

@@ -10,11 +10,21 @@ import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.AppDetailBadge
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.insight.AppDetailInsight
 import java.time.Instant
 
 internal enum class AppDetailExport {
     Apk,
     Icon,
+}
+
+internal enum class OverviewHighlight {
+    None,
+    InstallDate,
+    InstallHistory,
+    NativeLibraries,
+    NetworkSecurity,
+    SplitApks,
 }
 
 @Immutable
@@ -46,6 +56,9 @@ internal sealed interface AppDetailState {
         val firstInstallTime: Instant?,
         val lastUpdateTime: Instant?,
         val lastUsedTime: Instant? = null,
+        val installedSplitsCount: Int = 0,
+        val hasNativeLibraries: Boolean = false,
+        val usesCleartextTraffic: Boolean = false,
         val totalPermissionsCount: Int,
         val dangerousPermissionsCount: Int,
         val grantedDangerousPermissionsCount: Int?,
@@ -68,6 +81,36 @@ internal sealed interface AppDetailState {
     ) : AppDetailState {
         val isTargetSdkOutdated: Boolean
             get() = insights.any { it is AppDetailInsight.OutdatedTargetSdk }
+
+        val additionalGeneralInfoCount: Int
+            get() {
+                val optionalDetailsCount = listOfNotNull(
+                    processName,
+                    uid,
+                    description,
+                    appInstaller,
+                    firstInstallTime,
+                    lastUsedTime,
+                    apkDirectory,
+                    dataDirectory,
+                    minSdkVersion,
+                ).size
+                val installLocationRow = 1
+                val securitySectionRows = 2
+                val nativeLibrarySectionRows = 2
+                val splitApksRow = if (installedSplitsCount > 0) 1 else 0
+                return optionalDetailsCount + installLocationRow + securitySectionRows + nativeLibrarySectionRows + splitApksRow
+            }
+
+        val overviewHighlight: OverviewHighlight
+            get() = when {
+                installedSplitsCount > 0 -> OverviewHighlight.SplitApks
+                usesCleartextTraffic -> OverviewHighlight.NetworkSecurity
+                hasNativeLibraries -> OverviewHighlight.NativeLibraries
+                firstInstallTime != null && lastUsedTime != null -> OverviewHighlight.InstallHistory
+                firstInstallTime != null || lastUsedTime != null -> OverviewHighlight.InstallDate
+                else -> OverviewHighlight.None
+            }
 
         @Immutable
         data class CertificateState(

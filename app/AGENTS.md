@@ -5,18 +5,14 @@ The top-level Android application module. No business logic of its own — wires
 
 ## Package: `sk.styk.martin.apkanalyzer` (root — no module suffix, unlike `core.*`/`feature.*`)
 
-Sub-packages: `.dependencyinjection`, `.manager.analytics`, `.ui` (`.externalapk`, `.navigation`), `.util.file`.
+Sub-packages: `.dependencyinjection`, `.ui` (`.externalapk`, `.navigation`), `.util.file`.
 
 ## Structure
 
 ```
 ApkAnalyzer.kt                          - Application class (@HiltAndroidApp); Coil SingletonImageLoader.Factory; registers injected Set<DefaultLifecycleObserver> multibindings onto ProcessLifecycleOwner
 dependencyinjection/
-  ApplicationModule.kt                  - @InstallIn(SingletonComponent) @Module: app-scoped CoroutineScope and FirebaseAnalytics
-  ActivityCommonModule.kt               - @InstallIn(ActivityComponent) @Module @ActivityScoped: Activity Context and ComponentActivity
-manager/
-  analytics/
-    AnalyticsTracker.kt                 - Wraps FirebaseAnalytics; AppAction enum (SHOW_MANIFEST, EXPORT_APK, SAVE_ICON, OPEN_SYSTEM_ABOUT, OPEN_GOOGLE_PLAY) + trackScreenView()
+  ApplicationModule.kt                  - @InstallIn(SingletonComponent) @Module: app-scoped CoroutineScope
 ui/
   ApkAnalyzerActivity.kt                - @AndroidEntryPoint launcher Activity; observes ApkAnalyzerViewModel.state for color scheme and hosts ApkAnalyzerApp
   ApkAnalyzerThemeHost.kt               - Shared Compose theme/night-mode host used by both activities
@@ -26,10 +22,8 @@ ui/
   ApkAnalyzerViewModel.kt               - @HiltViewModel; maps PersistenceRepository.observe(Key.ColorScheme) into ApkAnalyzerState via stateIn(WhileSubscribed(5000)) — exists solely so the Activity can drive day/night mode before the Compose theme renders
   navigation/
     TopLevelDestinations.kt             - internal TOP_LEVEL_DESTINATIONS (persistentListOf<NavigationBarItem>): Apps, Browse tabs with icons/titles; internal TOP_LEVEL_KEYS
-util/
-  ViewModelExtensions.kt                - Legacy pre-Hilt ViewModelProvider.Factory helper extensions
-  file/
-    GenericFileProvider.kt              - FileProvider subclass; companion AUTHORITY = "sk.styk.martin.apkanalyzer" (wired as ${applicationId} in the manifest)
+util/file/
+  GenericFileProvider.kt                - FileProvider subclass wired through ${applicationId} in the manifest
 ```
 
 ## How `ApkAnalyzerApp.kt` wires every feature together
@@ -82,7 +76,7 @@ navigates *out* to another feature — all four registered here do (browse navig
 - **Launcher activity:** `.ui.ApkAnalyzerActivity` — `exported=true`, `windowSoftInputMode=adjustResize`, `MAIN`/`LAUNCHER`.
 - **External APK activity:** `.ui.externalapk.ExternalApkActivity` — `exported=true`, `documentLaunchMode=always`, excluded from recents, and handles `VIEW`/`INSTALL_PACKAGE` for `.apk` files in an isolated document task.
 - **Provider:** `.util.file.GenericFileProvider`, authority `${applicationId}`, `exported=false`, `grantUriPermissions=true`.
-- **Meta-data:** `google_analytics_automatic_screen_reporting_enabled = false` — screen views are tracked manually via `AnalyticsTracker.trackScreenView`, not GA's automatic tracking.
+- **Meta-data:** `google_analytics_automatic_screen_reporting_enabled = false`.
 
 ## Dependencies
 

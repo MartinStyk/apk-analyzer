@@ -26,7 +26,7 @@ implemented per `CE-05`. That freed the bottom-nav slot Pillar 1's What Changed 
 
 FR-10 Detail overview + badges · FR-11 General info screen · FR-12 Permissions view (per app) ·
 FR-13 Components views · FR-14 Certificate detail view · FR-15 Features (uses-feature) view ·
-FR-16 Manifest viewer
+FR-16 Manifest viewer · FR-45 Split APK files screen · FR-46 Native libraries screen
 
 ## 1.3 APK File Analysis
 
@@ -54,5 +54,6 @@ FR-28 Theme / color scheme setting · FR-29 Settings screen · FR-30 Usage-acces
 ## 1.8 Data Gaps
 
 FR-32 Manifest security flags · FR-33 Native libraries / ABIs · FR-34 Split APKs / config splits ·
-FR-35 Shared UID group · FR-36 Signing scheme version & signers ·
-FR-39 App category · EX-07 Component intent filters · EX-08 Content-provider path permissions
+FR-35 Shared UID group · FR-36 Signing scheme version & signers · FR-38 Full install-source chain ·
+FR-39 App category · EX-07 Component intent filters ·
+EX-08 Content-provider path permissions

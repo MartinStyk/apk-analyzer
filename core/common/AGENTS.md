@@ -23,7 +23,11 @@ settings/
   Key.kt                           - Preference key definitions (includes ColorAppScheme)
 model/
   AppReference.kt         - Installed-package or APK-file reference shared across analysis and UI
-  AppSource.kt            - Enum: GooglePlay, Amazon, Huawei, Samsung, Unknown, etc.
+  AppSource.kt            - Enum: GooglePlay, SamsungGalaxyStore, AmazonAppstore, HuaweiAppGallery,
+                            XiaomiGetApps, FDroid, AuroraStore, Sideloaded, LocalInstall,
+                            SystemPreinstalled, Unknown. `isSideloaded` groups Sideloaded/LocalInstall/
+                            Unknown — the "not from a store, not system" cluster the Filter and
+                            App detail screens key their "Sideloaded" quick filter/badge off of
   AppSize.kt              - Value class for file sizes with formatting
 clipboard/                - Clipboard access utilities
 digest/                   - Hash/digest utilities

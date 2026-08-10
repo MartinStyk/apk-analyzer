@@ -139,6 +139,7 @@ private fun FilterContent(
             Spacer(modifier = Modifier.height(4.dp))
 
             SourceSection(
+                availableSources = state.availableSources,
                 selectedSources = state.filter.selectedSources,
                 onSourceToggle = { source, selected -> onAction(FilterAction.SourceToggled(source, selected)) },
             )
@@ -219,10 +220,13 @@ private fun FilterContent(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun SourceSection(
+    availableSources: ImmutableList<AppSource>,
     selectedSources: ImmutableSet<AppSource>,
     onSourceToggle: (AppSource, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    if (availableSources.isEmpty()) return
+
     FilterSection(
         title = stringResource(R.string.filter_source_section),
         modifier = modifier,
@@ -230,7 +234,7 @@ private fun SourceSection(
         FlowRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            AppSource.entries.forEach { source ->
+            availableSources.forEach { source ->
                 val isSelected = source in selectedSources
                 Chip(
                     label = source.displayName(),
@@ -656,6 +660,14 @@ private fun UnsavedChangesBottomSheet(
 @Composable
 private fun AppSource.displayName(): String = when (this) {
     AppSource.GooglePlay -> stringResource(R.string.filter_source_google_play)
+    AppSource.SamsungGalaxyStore -> stringResource(R.string.filter_source_samsung_galaxy_store)
+    AppSource.AmazonAppstore -> stringResource(R.string.filter_source_amazon_appstore)
+    AppSource.HuaweiAppGallery -> stringResource(R.string.filter_source_huawei_app_gallery)
+    AppSource.XiaomiGetApps -> stringResource(R.string.filter_source_xiaomi_get_apps)
+    AppSource.FDroid -> stringResource(R.string.filter_source_fdroid)
+    AppSource.AuroraStore -> stringResource(R.string.filter_source_aurora_store)
+    AppSource.Sideloaded -> stringResource(R.string.filter_source_sideloaded)
+    AppSource.LocalInstall -> stringResource(R.string.filter_source_local_install)
     AppSource.SystemPreinstalled -> stringResource(R.string.filter_source_system)
     AppSource.Unknown -> stringResource(R.string.filter_source_unknown)
 }
@@ -710,6 +722,7 @@ private fun FilterContentDefaultPreview() {
                 totalSizeSectionState = TotalSizeSectionState.PermissionMissing,
                 unusedAppsSectionState = UnusedAppsSectionState.PermissionMissing,
                 availableSdkVersions = persistentListOf(35, 34, 33, 31, 30, 29, 28),
+                availableSources = persistentListOf(AppSource.GooglePlay, AppSource.SystemPreinstalled, AppSource.Sideloaded, AppSource.Unknown),
             ),
             onAction = {},
         )
@@ -735,6 +748,7 @@ private fun FilterContentPreview() {
                 totalSizeSectionState = TotalSizeSectionState.RangeAvailable(AppSizeRange(1.megabytes, 2048.megabytes)),
                 unusedAppsSectionState = UnusedAppsSectionState.Available,
                 availableSdkVersions = persistentListOf(35, 34, 33, 31, 30, 29, 28),
+                availableSources = persistentListOf(AppSource.GooglePlay, AppSource.SystemPreinstalled, AppSource.Sideloaded, AppSource.Unknown),
             ),
             onAction = {},
         )
@@ -752,6 +766,7 @@ private fun FilterContentWithPermissionsPreview() {
                 totalSizeSectionState = TotalSizeSectionState.PermissionMissing,
                 unusedAppsSectionState = UnusedAppsSectionState.PermissionMissing,
                 availableSdkVersions = persistentListOf(35, 34),
+                availableSources = persistentListOf(AppSource.GooglePlay, AppSource.SystemPreinstalled),
                 activePermissionPresets = persistentListOf(
                     PermissionPreset.Camera,
                     PermissionPreset.Location,

@@ -18,6 +18,7 @@ import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.apps.StorageStatsRepository
 import sk.styk.martin.apkanalyzer.core.apps.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.combine
+import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppFilterRepository
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppFilterState
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppSizeRange
@@ -57,6 +58,7 @@ class FilterViewModel @Inject constructor(
     private val appsMetadata = installedAppsRepository.apps()
         .map { apps ->
             val sdkVersions = apps.distinctBy { it.targetSdk }.map { it.targetSdk }.sortedDescending()
+            val sources = apps.distinctBy { it.source }.map { it.source }.sortedBy { it.ordinal }
             val apkSizeRange = apps.minOfOrNull { it.apkSize }?.let { min ->
                 apps.maxOfOrNull { it.apkSize }?.let { max -> AppSizeRange(min, max) }
             }
@@ -64,7 +66,7 @@ class FilterViewModel @Inject constructor(
             val totalSizeRange = totalSizes.minOrNull()?.let { min ->
                 totalSizes.maxOrNull()?.let { max -> AppSizeRange(min, max) }
             }
-            AppsMetadata(sdkVersions, apkSizeRange, totalSizeRange)
+            AppsMetadata(sdkVersions, sources, apkSizeRange, totalSizeRange)
         }
 
     val state = combine(
@@ -105,6 +107,7 @@ class FilterViewModel @Inject constructor(
                 else -> UnusedAppsSectionState.Available
             },
             availableSdkVersions = metadata.sdkVersions.toImmutableList(),
+            availableSources = metadata.sources.toImmutableList(),
             activePermissionPresets = activePresets,
             extraPermissionCount = extraPermissionCount,
             showUnsavedChangesSheet = showSheet,
@@ -242,6 +245,7 @@ class FilterViewModel @Inject constructor(
 
     private data class AppsMetadata(
         val sdkVersions: List<Int>,
+        val sources: List<AppSource>,
         val apkSizeRange: AppSizeRange?,
         val totalSizeRange: AppSizeRange?,
     )

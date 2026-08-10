@@ -39,6 +39,7 @@ import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.HourglassEmpty
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.InsertChart
+import androidx.compose.material.icons.rounded.Language
 import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.Memory
@@ -105,6 +106,7 @@ data object ApkAnalyzerIcons {
     val Widgets = Icons.Rounded.Widgets
     val HourglassEmpty = Icons.Rounded.HourglassEmpty
     val Info = Icons.Rounded.Info
+    val Language = Icons.Rounded.Language
     val Location = Icons.Rounded.LocationOn
     val Memory = Icons.Rounded.Memory
     val Microphone = Icons.Rounded.Mic

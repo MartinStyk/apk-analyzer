@@ -12,6 +12,30 @@
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_updated">Updated</string>
+    <plurals name="app_detail_overview_more_details">
+        <item quantity="one">+%1$d more detail in General information</item>
+        <item quantity="other">+%1$d more details in General information</item>
+    </plurals>
+    <plurals name="app_detail_overview_more_details_with_date">
+        <item quantity="one">+%1$d more detail in General information, including install date</item>
+        <item quantity="other">+%1$d more details in General information, including install date</item>
+    </plurals>
+    <plurals name="app_detail_overview_more_details_with_history">
+        <item quantity="one">+%1$d more detail in General information, including install history</item>
+        <item quantity="other">+%1$d more details in General information, including install history</item>
+    </plurals>
+    <plurals name="app_detail_overview_more_details_with_native_libraries">
+        <item quantity="one">+%1$d more detail in General information, including native libraries</item>
+        <item quantity="other">+%1$d more details in General information, including native libraries</item>
+    </plurals>
+    <plurals name="app_detail_overview_more_details_with_network_security">
+        <item quantity="one">+%1$d more detail in General information, including network security settings</item>
+        <item quantity="other">+%1$d more details in General information, including network security settings</item>
+    </plurals>
+    <plurals name="app_detail_overview_more_details_with_split_apks">
+        <item quantity="one">+%1$d more detail in General information, including split APKs</item>
+        <item quantity="other">+%1$d more details in General information, including split APKs</item>
+    </plurals>
     <string name="app_detail_yes">Yes</string>
     <string name="app_detail_no">No</string>
     <string name="app_detail_unknown">Unknown</string>
@@ -258,9 +282,19 @@
     <string name="general_info_app_type_user">User</string>
     <string name="general_info_install_source">Install Source</string>
     <string name="general_info_install_source_google_play">Google Play</string>
+    <string name="general_info_install_source_samsung_galaxy_store">Samsung Galaxy Store</string>
+    <string name="general_info_install_source_amazon_appstore">Amazon Appstore</string>
+    <string name="general_info_install_source_huawei_app_gallery">Huawei AppGallery</string>
+    <string name="general_info_install_source_xiaomi_get_apps">Xiaomi GetApps</string>
+    <string name="general_info_install_source_fdroid">F-Droid</string>
+    <string name="general_info_install_source_aurora_store">Aurora Store</string>
+    <string name="general_info_install_source_sideloaded">Installed from a file</string>
+    <string name="general_info_install_source_local_install">Installed from a connected computer</string>
     <string name="general_info_install_source_system">System</string>
     <string name="general_info_install_source_unknown">Unknown</string>
     <string name="general_info_installer_package">Installer Package</string>
+    <string name="general_info_install_initiator">Install Initiator</string>
+    <string name="general_info_install_originator">APK Origin Package</string>
     <string name="general_info_first_installed">First Installed</string>
     <string name="general_info_last_updated">Last Updated</string>
     <string name="general_info_last_used">Last Used</string>
@@ -301,8 +335,20 @@
     <string name="general_info_rationale_cleartext_allowed">The app\'s general manifest setting allows network connections without encryption. Custom network security rules can override this setting. This does not prove the app sends unencrypted data.</string>
     <string name="general_info_rationale_cleartext_blocked">The app\'s general manifest setting disables network connections without encryption. Custom network security rules and some networking libraries can behave differently.</string>
     <string name="general_info_rationale_app_type">Whether the app is a pre-installed system app or a user-installed app. System apps have elevated privileges and cannot be fully uninstalled.</string>
-    <string name="general_info_rationale_install_source">Where the app was installed from — Google Play, another store, or sideloaded manually.</string>
+    <string name="general_info_rationale_install_source_google_play">This app was downloaded and installed through Google Play, which screens apps before publishing them.</string>
+    <string name="general_info_rationale_install_source_samsung_galaxy_store">This app was downloaded and installed through Samsung\'s Galaxy Store, the manufacturer\'s own app store.</string>
+    <string name="general_info_rationale_install_source_amazon_appstore">This app was downloaded and installed through the Amazon Appstore.</string>
+    <string name="general_info_rationale_install_source_huawei_app_gallery">This app was downloaded and installed through Huawei\'s AppGallery, the manufacturer\'s own app store.</string>
+    <string name="general_info_rationale_install_source_xiaomi_get_apps">This app was downloaded and installed through Xiaomi\'s GetApps store, the manufacturer\'s own app store.</string>
+    <string name="general_info_rationale_install_source_fdroid">This app was downloaded and installed through F-Droid, a store that only distributes apps built from public, open-source code.</string>
+    <string name="general_info_rationale_install_source_aurora_store">This app was downloaded and installed through Aurora Store, an alternative app for browsing and installing Google Play apps.</string>
+    <string name="general_info_rationale_install_source_sideloaded">This app was installed manually from a downloaded APK file rather than through an app store, so it hasn\'t gone through a store\'s review process.</string>
+    <string name="general_info_rationale_install_source_local_install">This app was installed directly from a connected computer, typically using a developer tool such as ADB, rather than through an app store.</string>
+    <string name="general_info_rationale_install_source_system">This app came preinstalled on the device as part of the operating system or manufacturer software.</string>
+    <string name="general_info_rationale_install_source_unknown">Android could not report where this app was installed from. This can happen after restoring a device backup or with some manufacturer-specific installers.</string>
     <string name="general_info_rationale_installer_package">The package name of the app that performed the installation, such as \"com.android.vending\" for Google Play.</string>
+    <string name="general_info_rationale_install_initiator">The app that started the installation, such as a browser or file manager for a sideloaded app, or an app store for a store install. This can differ from the installer package above.</string>
+    <string name="general_info_rationale_install_originator">The package that provided the APK file, when Android reports it separately from the app that started the installation. Most installs leave this blank.</string>
     <string name="general_info_rationale_first_installed">The date and time this app was first installed on the device.</string>
     <string name="general_info_rationale_last_updated">The date and time of the most recent update to this app.</string>
     <string name="general_info_rationale_last_used">The approximate date and time this app was last opened by the user.</string>
@@ -310,13 +356,10 @@
     <string name="general_info_rationale_data_directory">The file system path where the app stores its private data, databases, and shared preferences.</string>
     <string name="general_info_rationale_install_location">The preferred storage location declared by the developer — internal storage, external storage, or automatic.</string>
     <string name="general_info_rationale_apk_size">The combined size of the installed APK files on disk, excluding app data, caches, and runtime-generated files. Most apps installed from Google Play are split into a base APK plus additional APKs for your device\'s language and screen density; this total covers all of them.</string>
-    <string name="general_info_rationale_split_apks">This app was installed as a base APK plus additional split APKs, a delivery format Google Play uses to send only the code and resources your device needs. The APK size above already adds them all together.</string>
     <string name="general_info_rationale_total_size">The combined size of the APK, app data, and cached files. Requires usage access permission.</string>
     <string name="general_info_rationale_native_library_abis">The processor types this app includes compiled native code for, read from the APK\'s own files rather than what this device reports.</string>
     <string name="general_info_native_library_device_support">This device supports: %1$s.</string>
     <string name="general_info_native_library_incompatible">None of those processor types match what this device supports, so this app\'s native code likely won\'t run here.</string>
-    <string name="general_info_rationale_native_library_files">The distinct native code files bundled in the app, counted once even when repeated across multiple processor architectures.</string>
-    <string name="general_info_native_library_file_list">Bundled files: %1$s.</string>
 
     <string name="permissions_title">Permissions</string>
     <string name="permissions_error">Could not read the permissions of this app.</string>
@@ -689,4 +732,65 @@
     <string name="requirement_backup">System backup</string>
     <string name="requirement_sip_voip">Internet calling</string>
     <string name="requirement_connection_service">Calling app integration</string>
+    <string name="splitapks_title">Split APKs</string>
+    <plurals name="splitapks_heading">
+        <item quantity="one">%1$d split APK installed</item>
+        <item quantity="other">%1$d split APKs installed</item>
+    </plurals>
+    <string name="splitapks_explanation">This app was installed as a base APK plus these additional split APKs, a delivery format Google Play uses to send only the code and resources your device needs.</string>
+    <plurals name="splitapks_search_hint">
+        <item quantity="one">Search %1$d split</item>
+        <item quantity="other">Search %1$d splits</item>
+    </plurals>
+    <string name="splitapks_error">Failed to load split APKs</string>
+    <string name="splitapks_empty">This app has no split APKs installed.</string>
+    <string name="splitapks_empty_query">No split APK matches \"%1$s\".</string>
+    <string name="splitapks_clear_search">Clear search</string>
+    <string name="splitapks_kind_feature">Feature module</string>
+    <string name="splitapks_kind_abi">CPU architecture</string>
+    <string name="splitapks_kind_density">Screen density</string>
+    <string name="splitapks_kind_language">Language</string>
+    <string name="splitapks_detail_type">Type</string>
+    <string name="splitapks_detail_identifier">Identifier</string>
+    <string name="splitapks_detail_file_name">File name</string>
+    <string name="splitapks_detail_size">Size</string>
+    <string name="splitapks_detail_path">Full path</string>
+    <string name="splitapks_abi_arm64_v8a">ARM64 (64-bit)</string>
+    <string name="splitapks_abi_armeabi_v7a">ARM (32-bit)</string>
+    <string name="splitapks_abi_armeabi">ARM (legacy, 32-bit)</string>
+    <string name="splitapks_abi_x86_64">Intel x86 (64-bit)</string>
+    <string name="splitapks_abi_x86">Intel x86 (32-bit)</string>
+    <string name="splitapks_abi_mips64">MIPS (64-bit)</string>
+    <string name="splitapks_abi_mips">MIPS (32-bit)</string>
+    <string name="splitapks_density_ldpi">Low density screens</string>
+    <string name="splitapks_density_mdpi">Medium density screens</string>
+    <string name="splitapks_density_tvdpi">TV density screens</string>
+    <string name="splitapks_density_hdpi">High density screens</string>
+    <string name="splitapks_density_xhdpi">Extra-high density screens</string>
+    <string name="splitapks_density_xxhdpi">Extra-extra-high density screens</string>
+    <string name="splitapks_density_xxxhdpi">Extra-extra-extra-high density screens</string>
+    <string name="splitapks_density_nodpi">Density-independent resources</string>
+    <string name="splitapks_density_anydpi">Any density (vector resources)</string>
+    <string name="nativelibraries_title">Native library files</string>
+    <plurals name="nativelibraries_heading">
+        <item quantity="one">%1$d native library bundled</item>
+        <item quantity="other">%1$d native libraries bundled</item>
+    </plurals>
+    <string name="nativelibraries_explanation">Every distinct native code file this app ships, one row per file name even when the same library is built for multiple processor architectures.</string>
+    <plurals name="nativelibraries_search_hint">
+        <item quantity="one">Search %1$d library</item>
+        <item quantity="other">Search %1$d libraries</item>
+    </plurals>
+    <string name="nativelibraries_error">Failed to load native libraries</string>
+    <string name="nativelibraries_empty">This app has no bundled native libraries.</string>
+    <string name="nativelibraries_empty_query">No native library matches \"%1$s\".</string>
+    <string name="nativelibraries_clear_search">Clear search</string>
+    <string name="nativelibraries_supported">Supported on this device</string>
+    <string name="nativelibraries_not_supported">Not supported on this device</string>
+    <string name="nativelibraries_not_supported_explanation">None of the processor types this library was built for match what this device supports, so this code likely won\'t run here.</string>
+    <string name="nativelibraries_detail_device_support">On this device</string>
+    <string name="nativelibraries_detail_abis">Built for</string>
+    <string name="nativelibraries_detail_total_size">Total size</string>
+    <string name="nativelibraries_detail_section_variants">Per processor type</string>
+    <string name="nativelibraries_detail_variant_source">Bundled in %1$s</string>
 </resources>

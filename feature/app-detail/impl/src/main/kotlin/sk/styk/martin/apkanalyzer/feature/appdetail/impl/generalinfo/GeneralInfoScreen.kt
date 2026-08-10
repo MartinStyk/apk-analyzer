@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
+import sk.styk.martin.apkanalyzer.core.apps.model.InstallSourceChain
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
@@ -38,6 +39,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.InfoRow
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.InfoRowItem
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.NavigableInfoRowItem
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.RationaleBottomSheet
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionCard
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionError
@@ -51,6 +53,8 @@ import java.util.Locale
 internal fun GeneralInfoScreen(
     appDetailInput: AppDetailInput,
     onBack: () -> Unit,
+    onNavigateToSplitApks: () -> Unit,
+    onNavigateToNativeLibraries: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: GeneralInfoViewModel = hiltViewModel { factory: GeneralInfoViewModel.Factory ->
         factory.create(appDetailInput)
@@ -71,6 +75,8 @@ internal fun GeneralInfoScreen(
         state = state,
         onAction = viewModel::onAction,
         onBack = onBack,
+        onNavigateToSplitApks = onNavigateToSplitApks,
+        onNavigateToNativeLibraries = onNavigateToNativeLibraries,
         modifier = modifier,
     )
 }
@@ -80,6 +86,8 @@ private fun GeneralInfoContent(
     state: GeneralInfoState,
     onAction: (GeneralInfoAction) -> Unit,
     onBack: () -> Unit,
+    onNavigateToSplitApks: () -> Unit,
+    onNavigateToNativeLibraries: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -93,8 +101,15 @@ private fun GeneralInfoContent(
         )
         when (state) {
             is GeneralInfoState.Loading -> SectionLoading()
+
             is GeneralInfoState.Error -> SectionError(message = stringResource(R.string.general_info_error))
-            is GeneralInfoState.Loaded -> LoadedContent(state = state, onAction = onAction)
+
+            is GeneralInfoState.Loaded -> LoadedContent(
+                state = state,
+                onAction = onAction,
+                onNavigateToSplitApks = onNavigateToSplitApks,
+                onNavigateToNativeLibraries = onNavigateToNativeLibraries,
+            )
         }
     }
 }
@@ -103,6 +118,8 @@ private fun GeneralInfoContent(
 private fun LoadedContent(
     state: GeneralInfoState.Loaded,
     onAction: (GeneralInfoAction) -> Unit,
+    onNavigateToSplitApks: () -> Unit,
+    onNavigateToNativeLibraries: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var rationaleRow by remember { mutableStateOf<InfoRow?>(null) }
@@ -239,15 +256,33 @@ private fun LoadedContent(
             InfoRowItem(
                 label = stringResource(R.string.general_info_install_source),
                 value = state.source.displayName(),
-                rationale = stringResource(R.string.general_info_rationale_install_source),
+                rationale = state.source.installSourceRationale(),
                 onShowRationale = { rationaleRow = it },
                 onCopy = onCopy,
             )
-            state.appInstaller?.let { value ->
+            state.installSourceChain.installingPackage?.let { value ->
                 InfoRowItem(
                     label = stringResource(R.string.general_info_installer_package),
                     value = value.value,
                     rationale = stringResource(R.string.general_info_rationale_installer_package),
+                    onShowRationale = { rationaleRow = it },
+                    onCopy = onCopy,
+                )
+            }
+            state.installSourceChain.initiatingPackage?.let { value ->
+                InfoRowItem(
+                    label = stringResource(R.string.general_info_install_initiator),
+                    value = value.value,
+                    rationale = stringResource(R.string.general_info_rationale_install_initiator),
+                    onShowRationale = { rationaleRow = it },
+                    onCopy = onCopy,
+                )
+            }
+            state.installSourceChain.originatingPackage?.let { value ->
+                InfoRowItem(
+                    label = stringResource(R.string.general_info_install_originator),
+                    value = value.value,
+                    rationale = stringResource(R.string.general_info_rationale_install_originator),
                     onShowRationale = { rationaleRow = it },
                     onCopy = onCopy,
                 )
@@ -314,16 +349,15 @@ private fun LoadedContent(
                 onShowRationale = { rationaleRow = it },
                 onCopy = onCopy,
             )
-            if (state.additionalInstalledSplits > 0) {
-                InfoRowItem(
+            if (state.installedSplitsCount > 0) {
+                NavigableInfoRowItem(
                     label = stringResource(R.string.general_info_split_apks),
                     value = pluralStringResource(
                         R.plurals.general_info_split_apks_value,
-                        state.additionalInstalledSplits,
-                        state.additionalInstalledSplits,
+                        state.installedSplitsCount,
+                        state.installedSplitsCount,
                     ),
-                    rationale = stringResource(R.string.general_info_rationale_split_apks),
-                    onShowRationale = { rationaleRow = it },
+                    onClick = onNavigateToSplitApks,
                     onCopy = onCopy,
                 )
             }
@@ -342,6 +376,7 @@ private fun LoadedContent(
             state = state,
             onShowRationale = { rationaleRow = it },
             onCopy = onCopy,
+            onNavigateToNativeLibraries = onNavigateToNativeLibraries,
         )
 
         Spacer(modifier = Modifier.height(4.dp))
@@ -431,6 +466,7 @@ private fun NativeLibrariesSection(
     state: GeneralInfoState.Loaded,
     onShowRationale: (InfoRow) -> Unit,
     onCopy: (label: String, value: String) -> Unit,
+    onNavigateToNativeLibraries: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     SectionCard(
@@ -470,23 +506,10 @@ private fun NativeLibrariesSection(
         } else {
             stringResource(R.string.general_info_native_library_files_none)
         }
-        val filesRationale = buildString {
-            append(stringResource(R.string.general_info_rationale_native_library_files))
-            if (fileCount > 0) {
-                append(' ')
-                append(
-                    stringResource(
-                        R.string.general_info_native_library_file_list,
-                        state.nativeLibraryNames.joinToString(),
-                    ),
-                )
-            }
-        }
-        InfoRowItem(
+        NavigableInfoRowItem(
             label = stringResource(R.string.general_info_native_library_files),
             value = filesValue,
-            rationale = filesRationale,
-            onShowRationale = onShowRationale,
+            onClick = onNavigateToNativeLibraries,
             onCopy = onCopy,
         )
     }
@@ -505,6 +528,8 @@ private fun GeneralInfoLoadingPreview() {
             state = GeneralInfoState.Loading,
             onAction = {},
             onBack = {},
+            onNavigateToSplitApks = {},
+            onNavigateToNativeLibraries = {},
         )
     }
 }
@@ -517,6 +542,8 @@ private fun GeneralInfoErrorPreview() {
             state = GeneralInfoState.Error,
             onAction = {},
             onBack = {},
+            onNavigateToSplitApks = {},
+            onNavigateToNativeLibraries = {},
         )
     }
 }
@@ -529,6 +556,8 @@ private fun GeneralInfoLoadedPreview() {
             state = sampleGeneralInfoState(),
             onAction = {},
             onBack = {},
+            onNavigateToSplitApks = {},
+            onNavigateToNativeLibraries = {},
         )
     }
 }
@@ -551,7 +580,11 @@ private fun sampleGeneralInfoState() = GeneralInfoState.Loaded(
     allowsBackup = false,
     usesCleartextTraffic = true,
     source = AppSource.GooglePlay,
-    appInstaller = PackageName("com.android.vending"),
+    installSourceChain = InstallSourceChain(
+        installingPackage = PackageName("com.android.vending"),
+        initiatingPackage = PackageName("com.android.vending"),
+        originatingPackage = null,
+    ),
     firstInstallTime = Instant.ofEpochMilli(1_736_640_000_000),
     lastUpdateTime = Instant.ofEpochMilli(1_748_736_000_000),
     lastUsedTime = Instant.ofEpochMilli(1_749_600_000_000),
@@ -564,12 +597,35 @@ private fun sampleGeneralInfoState() = GeneralInfoState.Loaded(
     nativeLibraryNames = persistentListOf("libapp.so", "libcrashlytics.so", "libcrypto.so"),
     deviceSupportedAbis = persistentListOf("arm64-v8a", "armeabi-v7a"),
     isNativeLibraryDeviceIncompatible = false,
-    additionalInstalledSplits = 3,
+    installedSplitsCount = 3,
 )
 
 @Composable
 private fun AppSource.displayName(): String = when (this) {
     AppSource.GooglePlay -> stringResource(R.string.general_info_install_source_google_play)
+    AppSource.SamsungGalaxyStore -> stringResource(R.string.general_info_install_source_samsung_galaxy_store)
+    AppSource.AmazonAppstore -> stringResource(R.string.general_info_install_source_amazon_appstore)
+    AppSource.HuaweiAppGallery -> stringResource(R.string.general_info_install_source_huawei_app_gallery)
+    AppSource.XiaomiGetApps -> stringResource(R.string.general_info_install_source_xiaomi_get_apps)
+    AppSource.FDroid -> stringResource(R.string.general_info_install_source_fdroid)
+    AppSource.AuroraStore -> stringResource(R.string.general_info_install_source_aurora_store)
+    AppSource.Sideloaded -> stringResource(R.string.general_info_install_source_sideloaded)
+    AppSource.LocalInstall -> stringResource(R.string.general_info_install_source_local_install)
     AppSource.SystemPreinstalled -> stringResource(R.string.general_info_install_source_system)
     AppSource.Unknown -> stringResource(R.string.general_info_install_source_unknown)
+}
+
+@Composable
+private fun AppSource.installSourceRationale(): String = when (this) {
+    AppSource.GooglePlay -> stringResource(R.string.general_info_rationale_install_source_google_play)
+    AppSource.SamsungGalaxyStore -> stringResource(R.string.general_info_rationale_install_source_samsung_galaxy_store)
+    AppSource.AmazonAppstore -> stringResource(R.string.general_info_rationale_install_source_amazon_appstore)
+    AppSource.HuaweiAppGallery -> stringResource(R.string.general_info_rationale_install_source_huawei_app_gallery)
+    AppSource.XiaomiGetApps -> stringResource(R.string.general_info_rationale_install_source_xiaomi_get_apps)
+    AppSource.FDroid -> stringResource(R.string.general_info_rationale_install_source_fdroid)
+    AppSource.AuroraStore -> stringResource(R.string.general_info_rationale_install_source_aurora_store)
+    AppSource.Sideloaded -> stringResource(R.string.general_info_rationale_install_source_sideloaded)
+    AppSource.LocalInstall -> stringResource(R.string.general_info_rationale_install_source_local_install)
+    AppSource.SystemPreinstalled -> stringResource(R.string.general_info_rationale_install_source_system)
+    AppSource.Unknown -> stringResource(R.string.general_info_rationale_install_source_unknown)
 }
