@@ -1,5 +1,6 @@
 package sk.styk.martin.apkanalyzer.core.apps.model
 
+import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceChain
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName

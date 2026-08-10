@@ -7,90 +7,106 @@ Core domain module for app analysis. Provides repositories and utilities for que
 
 ## Structure
 
+Package-by-domain: each concept below is a self-contained folder holding its own repository
+interface, impl, models, and (where it needs Hilt-injected internals) analysis engine — open one
+folder to understand one concept end-to-end. `di/AppsModule.kt` stays a single file with all
+bindings, grouped by the same domains.
+
 ```
 InstalledAppsRepository.kt / Impl    - Flow of all installed apps
-AppDetailRepository.kt / Impl        - Full app detail (installed package or APK file)
-AppSigningRepository.kt / Impl       - Flow<Map<packageName, AppSigning>> for every installed app, one
-                                        bulk GET_SIGNING_CERTIFICATES query + CertificateExtractor per
-                                        entry. Lazily shared (unlike InstalledAppsRepository's Eagerly)
-                                        since the per-cert digest/verify work only matters once a real
-                                        consumer subscribes
-DeviceFeaturesRepository.kt / Impl   - What *this device* provides, for checking an app's requirements
-StorageStatsRepository.kt / Impl     - App storage size stats (requires USAGE_STATS permission)
-UsageStatsRepository.kt / Impl       - App usage time/frequency stats
+AppDetailRepository.kt / Impl        - Full app detail (installed package or APK file); orchestrates
+                                        signing, permissions, components, manifest, and install-source
 PackageChangesObserver.kt / Impl     - BroadcastReceiver-based package install/uninstall listener
 AppClassificationThresholds.kt      - Constants for "large app", "recently installed", "unused" thresholds
-AppExportManager.kt / Impl          - SAF-backed base APK and full-resolution icon export
-analysis/
-  CertificateExtractor.kt / Impl    - APK signing certificate extraction
-  ApkSigningBlockAnalyzer.kt / Impl - Verifies v1 signing and coordinates scheme detection
-  ApkSigningBlockParser.kt / Impl   - Parses the raw APK Signing Block for v2/v3/v3.1 ID-value pairs
-  ManifestParser.kt / Impl           - Installed/APK AndroidManifest.xml parsing into readable namespaced XML
-                                       and component intent filters
-  InstallSourceResolver.kt / Impl   - Single method, `resolve()`, returning the raw
-                                       `InstallSourceChain`. `AppSource` classification (Play Store,
-                                       sideload, etc.) and `isSystemInstalledApp()` are pure functions
-                                       in `AnalysisUtils.kt`, not resolver methods — neither needs
-                                       `PackageManager` once given the chain/flags they're derived from
-  SdkVersionResolver.kt             - SDK version to Android name mapping
-  AnalysisUtils.kt                   - Shared analysis helpers, incl. permission protection decoding,
-                                        `readNativeLibraries()`, which opens the base APK and every
-                                        installed split as a zip and reads `lib/<abi>/*.so` entries
-                                        directly, and `readInstalledSplits()`, which `computeApkSize()`
-                                        also sums so the two never diverge on what counts as an
-                                        installed split
 model/
-  InstalledApp.kt         - Basic installed app info (packageName, name, sizes, times, source,
-                            targetSdk, minSdk, sharedUserId, category)
-  AppCategory.kt          - `ApplicationInfo.category` int decoded to a domain enum; `Undefined` is
-                            the untagged case (most third-party apps), not an error
-  AppDetail.kt            - Complete app detail (info, permissions, activities, services, etc.)
-  AppInfo.kt              - Core app metadata, including public manifest security flags from `ApplicationInfo`
+  InstalledApp.kt   - Basic installed app info (packageName, name, sizes, times, source, targetSdk,
+                      minSdk, sharedUserId, category)
+  AppCategory.kt    - `ApplicationInfo.category` int decoded to a domain enum (`resolveAppCategory`
+                      lives here too); `Undefined` is the untagged case, not an error
+  AppDetail.kt      - Complete app detail (info, permissions, activities, services, etc.), composing
+                      types from the domain packages below
+  AppInfo.kt        - Core app metadata, including public manifest security flags from `ApplicationInfo`
+  InstallLocation.kt - Install location enum
+signing/
+  AppSigningRepository.kt / Impl    - Flow<Map<packageName, AppSigning>> for every installed app, one
+                                      bulk GET_SIGNING_CERTIFICATES query + CertificateExtractor per
+                                      entry. Lazily shared (unlike InstalledAppsRepository's Eagerly)
+                                      since the per-cert digest/verify work only matters once a real
+                                      consumer subscribes
+  CertificateExtractor.kt / Impl (internal)    - APK signing certificate extraction
+  ApkSigningBlockAnalyzer.kt / Impl (internal) - Verifies v1 signing and coordinates scheme detection
+  ApkSigningBlockParser.kt / Impl (internal)   - Parses the raw APK Signing Block for v2/v3/v3.1 ID-value pairs
+  AppSigning.kt, Certificate.kt, CertificatePrincipal.kt, CertificateTrustLevel.kt,
+  SignatureAlgorithmAssessment.kt, SigningSchemeVersion.kt - signing domain models
+permissions/                        - APK-declared permissions (distinct from the device-wide
+                                       aggregation in :core:app-permissions)
   Permission.kt           - Single permission: name plus `details`, which is null when the device
                             can't resolve the permission (declaring app not installed)
   PermissionDetails.kt    - Resolved permission details; `protectionLevel` and `protectionFlags` are
                             domain enums, never raw `PermissionInfo` ints
-  ProtectionLevel.kt      - Base protection level enum
-  ProtectionFlag.kt       - Additional protection flags enum
+  ProtectionLevel.kt, ProtectionFlag.kt - protection domain enums
   Permissions.kt          - Used + defined permissions container
   UsedPermission.kt       - Permission with grant status
+  ProtectionResolvers.kt (internal) - `resolveProtectionLevel`/`resolveProtectionFlags` from raw
+                                       `PermissionInfo` ints
+components/
   Activity.kt             - Activity component info. `isLauncher` is nullable: it is resolved from
                             `queryIntentActivities` for an installed package, and is `null` for an
                             APK file, where launcher resolution is unavailable — null means unknown,
                             never "not a launcher"
   Service.kt              - Service component info
   BroadcastReceiver.kt    - Receiver component info
+  ComponentIntentFilter.kt - Intent filter model, incl. `ComponentIntentFilterKey`, `ComponentKind`,
+                             `IntentFilterDataRule(Type)`, `IntentFilterUriRelativeGroup`
   ContentProvider.kt      - Provider component info, incl. `ProviderPathPermission` (`<path-permission>`
                             entries) and the `ProviderPathMatchType` enum for `PatternMatcher`'s int type
-  Certificate.kt          - Certificate details
-  CertificatePrincipal.kt - Issuer/subject info
-  CertificateTrustLevel.kt - Trust classification enum
-  SignatureAlgorithmAssessment.kt - Signing digest security assessment
-  AppSigning.kt           - Current certificates and verified signing-key history, plus
-                            `hasMultipleSigners` (free from `SigningInfo`) and the nullable
-                            `signingSchemeVersions` (requires parsing the APK Signing Block; null
-                            when it can't be read confidently)
-  SigningSchemeVersion.kt - v1 (legacy JAR signing) / v2 / v3 / v3.1 detected from the APK itself
+  ContentProviderPathPermissions.kt (internal) - `resolvePathPermissions` mapping raw `PathPermission`s
+manifest/                           - the XML-parsing engine that produces component data above
+  ManifestParser.kt / Impl           - Installed/APK AndroidManifest.xml parsing into readable namespaced XML
+                                       and component intent filters
+  ManifestXmlRenderer.kt / Impl (internal)      - Renders parsed manifest XML for display
+  ComponentManifestParser.kt / Impl (internal)  - Intent-filter extraction engine `ManifestParser` delegates to
+installsource/
+  InstallSourceChain.kt   - Installing/initiating/originating package, one nested fact on `AppInfo`
+                            rather than three flat fields — mirrors how `AppSigning` and
+                            `CertificatePrincipal` group related facts instead of flattening them
+  InstallSourceResolver.kt / Impl (internal) - Single method, `resolve()`, returning the raw
+                                       `InstallSourceChain`. `AppSource` classification (Play Store,
+                                       sideload, etc.) and `isSystemInstalledApp()` are pure functions
+                                       in `InstallSourceClassification.kt`, not resolver methods —
+                                       neither needs `PackageManager` once given the chain/flags
+                                       they're derived from
+devicefeatures/
+  DeviceFeaturesRepository.kt / Impl - What *this device* provides, for checking an app's requirements
+  DeviceFeatures.kt       - The device side of that comparison: available feature names plus the
+                            device's GL ES version. `supports()` returns `null` for unknown, never
+                            `false` — an unreadable package manager must not read as "missing"
   Feature.kt              - Sealed: `Hardware(name)` for a `uses-feature` name, `OpenGlEs(reqGlEsVersion)`
                             for a GL ES version requirement. A GL ES `FeatureInfo` carries a null
                             `name` and a `reqGlEsVersion`, so the two are different kinds of fact and
                             must not be collapsed into one string field
-  DeviceFeatures.kt       - The device side of that comparison: available feature names plus the
-                            device's GL ES version. `supports()` returns `null` for unknown, never
-                            `false` — an unreadable package manager must not read as "missing"
+  FeatureAvailability.kt  - Pairing of a `Feature` with this device's support for it
+packaging/                          - what the APK/splits actually ship
+  InstalledSplitApk.kt    - One installed split/config APK: file name, path, size, and a `SplitApkKind`
+                            (DynamicFeature/Abi/ScreenDensity/Language) classified from the file name
+                            alone
   NativeLibraries.kt      - Every `.so` file the app ships, one `NativeLibraryFile` per (name, abi)
                             pair read from the zip entries of the base APK and every installed split —
                             not trusted from `primaryCpuAbi`/`secondaryCpuAbi`, which describe what the
                             device picked, not what the APK contains. `abis` and `libraryNames` are
                             derived (distinct/sorted) from `files`, never stored separately
-  InstallLocation.kt      - Install location enum
-  InstallSourceChain.kt   - Installing/initiating/originating package, one nested fact on `AppInfo`
-                            rather than three flat fields — mirrors how `AppSigning` and
-                            `CertificatePrincipal` group related facts instead of flattening them
-  InstalledSplitApk.kt    - One installed split/config APK: file name, path, size, and a `SplitApkKind`
-                            (DynamicFeature/Abi/ScreenDensity/Language) classified from the file name
-                            alone — see `readInstalledSplits()` in `AnalysisUtils.kt`
-di/                       - Hilt module bindings
+  ApkPackagingAnalysis.kt - `computeApkSize()`/`readInstalledSplits()`/`readNativeLibraries()`;
+                            `readInstalledSplits()` is what `computeApkSize()` also sums so the two
+                            never diverge on what counts as an installed split
+usagestats/
+  UsageStatsRepository.kt / Impl - App usage time/frequency stats
+storagestats/
+  StorageStatsRepository.kt / Impl - App storage size stats (requires USAGE_STATS permission)
+export/
+  AppExportManager.kt / Impl - SAF-backed base APK and full-resolution icon export
+sdkversion/
+  SdkVersionResolver.kt   - SDK version to Android name mapping
+di/                       - Hilt module bindings (single `AppsModule.kt`, grouped by domain)
 ```
 
 ## Key Interfaces
@@ -189,7 +205,8 @@ the way `DeviceFeaturesRepository` does for `getSystemAvailableFeatures()`.
 
 - `ProviderInfo.pathPermissions` is populated by `PackageManager` whenever `GET_PROVIDERS` is
   queried — unlike intent filters, no manifest parsing is needed, and the flag was already in use.
-  `AnalysisUtils.resolvePathPermissions()` maps it to `ProviderPathPermission`, and `PathPermission`'s
+  `resolvePathPermissions()` in `components/ContentProviderPathPermissions.kt` maps it to
+  `ProviderPathPermission`, and `PathPermission`'s
   `type` int becomes the typed `ProviderPathMatchType` enum.
 - A `<path-permission>` can carve out access that the provider's top-level `readPermission` /
   `writePermission` does not grant: an entry with neither permission set opens that specific path

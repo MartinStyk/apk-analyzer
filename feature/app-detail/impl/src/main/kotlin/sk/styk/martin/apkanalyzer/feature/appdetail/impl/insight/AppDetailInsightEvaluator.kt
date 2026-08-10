@@ -6,8 +6,8 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import sk.styk.martin.apkanalyzer.core.apps.AppClassificationThresholds
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
-import sk.styk.martin.apkanalyzer.core.apps.model.CertificateTrustLevel
-import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
 import java.time.Instant
 
 internal object AppDetailInsightEvaluator {

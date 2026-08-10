@@ -49,8 +49,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
-import sk.styk.martin.apkanalyzer.core.apps.model.CertificatePrincipal
-import sk.styk.martin.apkanalyzer.core.apps.model.CertificateTrustLevel
+import sk.styk.martin.apkanalyzer.core.apps.signing.CertificatePrincipal
+import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName

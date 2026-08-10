@@ -156,6 +156,31 @@ The root `AGENTS.md` does not list individual modules, so there is nothing to up
 - Use `DispatcherProvider` for all dispatcher switching — never hardcode `Dispatchers.IO`.
 - Define an interface + `Impl` class for all repositories and managers.
 
+## When the module grows a second repository/manager family
+
+Steps 2-4 above put everything at the package root — that's correct for a module with **one**
+repository/manager family. The moment a **second**, unrelated family joins it (e.g. the module
+gains `<Other>Repository` alongside `<Name>Repository`), stop adding to the flat root/`model`/`util`
+buckets and restructure by domain instead:
+
+- Give each family its own subpackage (e.g. `<domain>/`) holding that family's interface, impl,
+  models, and any private supporting types (parsers, analyzers, resolvers) together.
+- Keep only the handful of models every family composes into at the module's `model/` root — not
+  every data class the module has ever defined.
+- Dissolve any grab-bag `util`/`analysis`/`helpers` file: move each function next to the model or
+  domain it produces, not into one shared file.
+- Mark a family's supporting interfaces `internal` unless another module genuinely consumes them
+  directly (grep before assuming) — `internal` is module-wide, so this is independent of which
+  subpackage the type lives in.
+- Keep Hilt DI as a single `di/<Name>Module.kt` with `@Binds` grouped by domain via comments; don't
+  fragment it into one `@Module` per subpackage.
+
+`core:apps` is the worked example — see its `AGENTS.md` "Structure" section and the `signing/`,
+`permissions/`, `components/`, `manifest/`, `installsource/`, `devicefeatures/`, `packaging/`,
+`usagestats/`, `storagestats/`, `export/`, `sdkversion/` packages. A module with exactly one
+repository/manager family (`core:app-permissions`, `core:app-index`, `core:apk-files`) stays flat —
+don't restructure ahead of need.
+
 ## Namespace Mapping Reference
 
 | Directory | namespace value |

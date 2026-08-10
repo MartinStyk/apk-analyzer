@@ -3,8 +3,8 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.impl.appcomponents
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
-import sk.styk.martin.apkanalyzer.core.apps.model.IntentFilterDataRuleType
-import sk.styk.martin.apkanalyzer.core.apps.model.ProviderPathMatchType
+import sk.styk.martin.apkanalyzer.core.apps.components.IntentFilterDataRuleType
+import sk.styk.martin.apkanalyzer.core.apps.components.ProviderPathMatchType
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.R
 

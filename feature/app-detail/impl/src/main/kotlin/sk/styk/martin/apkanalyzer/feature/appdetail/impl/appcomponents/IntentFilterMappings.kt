@@ -1,7 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl.appcomponents
 
 import kotlinx.collections.immutable.toImmutableList
-import sk.styk.martin.apkanalyzer.core.apps.model.ComponentIntentFilter
+import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
 
 internal fun List<ComponentIntentFilter>.toItems() = mapIndexed { index, filter ->
     ComponentIntentFilterItem(

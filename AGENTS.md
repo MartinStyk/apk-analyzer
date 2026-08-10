@@ -146,6 +146,17 @@ is the authoritative list.
   `core:apps` are the worked examples — both replaced exactly that shape.
 * **Extract a shared helper when the second consumer appears — and grep for a third before writing
   your own.** Duplicated composables here have reached three identical copies before anyone noticed.
+* **A core module packages by domain once it holds more than one repository/manager family, not by
+  layer.** A flat root full of repositories, a flat `model/` holding every data class, and a flat
+  `analysis`/`util` grab-bag for internals is the shape to avoid — it forces you to open three
+  unrelated folders to understand one concept. Once a second repository/manager family shows up,
+  give each family its own subpackage holding its interface, impl, models, and any private
+  supporting types together; keep only the handful of models every family composes into at the
+  module's `model/` root. `core:apps`'s `signing/`, `permissions/`, `components/`, `manifest/`,
+  `installsource/`, `devicefeatures/`, `packaging/`, `usagestats/`, `storagestats/`, `export/`, and
+  `sdkversion/` packages are the worked example. A module with exactly one repository/manager family
+  (e.g. `core:app-permissions`, `core:app-index`, `core:apk-files`) has no reason to do this yet —
+  don't pre-split a module that hasn't earned it.
 * No wildcard imports.
 * Prefer `private`; `internal` for module-visible; `public` only for actual public API.
 * `Logger` from `core.common.logger`, never raw Timber: `Logger.d("Tag", "msg")`,

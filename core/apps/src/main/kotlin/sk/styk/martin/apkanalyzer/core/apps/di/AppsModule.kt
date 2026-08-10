@@ -16,39 +16,41 @@ import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
 import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepositoryImpl
-import sk.styk.martin.apkanalyzer.core.apps.AppExportManager
-import sk.styk.martin.apkanalyzer.core.apps.AppExportManagerImpl
-import sk.styk.martin.apkanalyzer.core.apps.AppSigningRepository
-import sk.styk.martin.apkanalyzer.core.apps.AppSigningRepositoryImpl
-import sk.styk.martin.apkanalyzer.core.apps.DeviceFeaturesRepository
-import sk.styk.martin.apkanalyzer.core.apps.DeviceFeaturesRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apps.PackageChangesObserver
 import sk.styk.martin.apkanalyzer.core.apps.PackageChangesObserverImpl
-import sk.styk.martin.apkanalyzer.core.apps.StorageStatsRepository
-import sk.styk.martin.apkanalyzer.core.apps.StorageStatsRepositoryImpl
-import sk.styk.martin.apkanalyzer.core.apps.UsageStatsRepository
-import sk.styk.martin.apkanalyzer.core.apps.UsageStatsRepositoryImpl
-import sk.styk.martin.apkanalyzer.core.apps.analysis.ApkSigningBlockAnalyzer
-import sk.styk.martin.apkanalyzer.core.apps.analysis.ApkSigningBlockAnalyzerImpl
-import sk.styk.martin.apkanalyzer.core.apps.analysis.ApkSigningBlockParser
-import sk.styk.martin.apkanalyzer.core.apps.analysis.ApkSigningBlockParserImpl
-import sk.styk.martin.apkanalyzer.core.apps.analysis.CertificateExtractor
-import sk.styk.martin.apkanalyzer.core.apps.analysis.CertificateExtractorImpl
-import sk.styk.martin.apkanalyzer.core.apps.analysis.ComponentManifestParser
-import sk.styk.martin.apkanalyzer.core.apps.analysis.ComponentManifestParserImpl
-import sk.styk.martin.apkanalyzer.core.apps.analysis.InstallSourceResolver
-import sk.styk.martin.apkanalyzer.core.apps.analysis.InstallSourceResolverImpl
-import sk.styk.martin.apkanalyzer.core.apps.analysis.ManifestParser
-import sk.styk.martin.apkanalyzer.core.apps.analysis.ManifestParserImpl
-import sk.styk.martin.apkanalyzer.core.apps.analysis.ManifestXmlRenderer
-import sk.styk.martin.apkanalyzer.core.apps.analysis.ManifestXmlRendererImpl
+import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.DeviceFeaturesRepository
+import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.DeviceFeaturesRepositoryImpl
+import sk.styk.martin.apkanalyzer.core.apps.export.AppExportManager
+import sk.styk.martin.apkanalyzer.core.apps.export.AppExportManagerImpl
+import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceResolver
+import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceResolverImpl
+import sk.styk.martin.apkanalyzer.core.apps.manifest.ComponentManifestParser
+import sk.styk.martin.apkanalyzer.core.apps.manifest.ComponentManifestParserImpl
+import sk.styk.martin.apkanalyzer.core.apps.manifest.ManifestParser
+import sk.styk.martin.apkanalyzer.core.apps.manifest.ManifestParserImpl
+import sk.styk.martin.apkanalyzer.core.apps.manifest.ManifestXmlRenderer
+import sk.styk.martin.apkanalyzer.core.apps.manifest.ManifestXmlRendererImpl
+import sk.styk.martin.apkanalyzer.core.apps.signing.ApkSigningBlockAnalyzer
+import sk.styk.martin.apkanalyzer.core.apps.signing.ApkSigningBlockAnalyzerImpl
+import sk.styk.martin.apkanalyzer.core.apps.signing.ApkSigningBlockParser
+import sk.styk.martin.apkanalyzer.core.apps.signing.ApkSigningBlockParserImpl
+import sk.styk.martin.apkanalyzer.core.apps.signing.AppSigningRepository
+import sk.styk.martin.apkanalyzer.core.apps.signing.AppSigningRepositoryImpl
+import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateExtractor
+import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateExtractorImpl
+import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepository
+import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepositoryImpl
+import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
+import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepositoryImpl
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
 internal interface AppsModule {
+
+    // root
     @Binds
     @Singleton
     fun bindInstalledAppsRepository(impl: InstalledAppsRepositoryImpl): InstalledAppsRepository
@@ -61,16 +63,10 @@ internal interface AppsModule {
     @Singleton
     fun bindAppDetailRepository(impl: AppDetailRepositoryImpl): AppDetailRepository
 
-    @Binds
-    @Singleton
-    fun bindDeviceFeaturesRepository(impl: DeviceFeaturesRepositoryImpl): DeviceFeaturesRepository
-
+    // signing
     @Binds
     @Singleton
     fun bindAppSigningRepository(impl: AppSigningRepositoryImpl): AppSigningRepository
-
-    @Binds
-    fun bindInstallSourceResolver(impl: InstallSourceResolverImpl): InstallSourceResolver
 
     @Binds
     fun bindCertificateExtractor(impl: CertificateExtractorImpl): CertificateExtractor
@@ -83,6 +79,7 @@ internal interface AppsModule {
     @Singleton
     fun bindApkSigningBlockParser(impl: ApkSigningBlockParserImpl): ApkSigningBlockParser
 
+    // manifest
     @Binds
     fun bindManifestParser(impl: ManifestParserImpl): ManifestParser
 
@@ -92,10 +89,16 @@ internal interface AppsModule {
     @Binds
     fun bindManifestXmlRenderer(impl: ManifestXmlRendererImpl): ManifestXmlRenderer
 
+    // installsource
+    @Binds
+    fun bindInstallSourceResolver(impl: InstallSourceResolverImpl): InstallSourceResolver
+
+    // devicefeatures
     @Binds
     @Singleton
-    fun bindAppExportManager(impl: AppExportManagerImpl): AppExportManager
+    fun bindDeviceFeaturesRepository(impl: DeviceFeaturesRepositoryImpl): DeviceFeaturesRepository
 
+    // usagestats
     @Binds
     @Singleton
     fun bindUsageStatsRepository(impl: UsageStatsRepositoryImpl): UsageStatsRepository
@@ -105,6 +108,7 @@ internal interface AppsModule {
     @Singleton
     fun bindUsageStatsAsLifecycleObserver(impl: UsageStatsRepositoryImpl): DefaultLifecycleObserver
 
+    // storagestats
     @Binds
     @Singleton
     fun bindStorageStatsRepository(impl: StorageStatsRepositoryImpl): StorageStatsRepository
@@ -113,6 +117,11 @@ internal interface AppsModule {
     @IntoSet
     @Singleton
     fun bindStorageStatsAsLifecycleObserver(impl: StorageStatsRepositoryImpl): DefaultLifecycleObserver
+
+    // export
+    @Binds
+    @Singleton
+    fun bindAppExportManager(impl: AppExportManagerImpl): AppExportManager
 
     companion object {
         @Provides

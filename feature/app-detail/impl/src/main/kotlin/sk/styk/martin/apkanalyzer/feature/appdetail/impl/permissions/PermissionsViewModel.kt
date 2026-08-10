@@ -23,8 +23,8 @@ import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.apppermissions.PermissionLabelProvider
 import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
-import sk.styk.martin.apkanalyzer.core.apps.model.Permission
-import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.apps.permissions.Permission
+import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider

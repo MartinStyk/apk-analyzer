@@ -14,11 +14,11 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
-import sk.styk.martin.apkanalyzer.core.apps.DeviceFeaturesRepository
+import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.DeviceFeatures
+import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.DeviceFeaturesRepository
+import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Feature
+import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.FeatureAvailability
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
-import sk.styk.martin.apkanalyzer.core.apps.model.DeviceFeatures
-import sk.styk.martin.apkanalyzer.core.apps.model.Feature
-import sk.styk.martin.apkanalyzer.core.apps.model.FeatureAvailability
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider

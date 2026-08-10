@@ -17,8 +17,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.styk.martin.apkanalyzer.core.apps.model.Feature
-import sk.styk.martin.apkanalyzer.core.apps.model.FeatureAvailability
+import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Feature
+import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.FeatureAvailability
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.BottomSheet
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text

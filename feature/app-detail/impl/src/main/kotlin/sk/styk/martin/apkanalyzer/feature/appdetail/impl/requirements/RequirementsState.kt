@@ -2,7 +2,7 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.impl.requirements
 
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
-import sk.styk.martin.apkanalyzer.core.apps.model.FeatureAvailability
+import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.FeatureAvailability
 
 @Immutable
 sealed interface RequirementsState {

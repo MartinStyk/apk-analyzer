@@ -5,8 +5,8 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.Serializable
-import sk.styk.martin.apkanalyzer.core.apps.model.IntentFilterDataRuleType
-import sk.styk.martin.apkanalyzer.core.apps.model.ProviderPathMatchType
+import sk.styk.martin.apkanalyzer.core.apps.components.IntentFilterDataRuleType
+import sk.styk.martin.apkanalyzer.core.apps.components.ProviderPathMatchType
 
 @Serializable
 internal enum class ComponentScope {
