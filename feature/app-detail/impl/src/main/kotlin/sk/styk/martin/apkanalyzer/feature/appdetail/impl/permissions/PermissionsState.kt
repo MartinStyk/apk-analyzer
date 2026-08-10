@@ -3,8 +3,8 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.impl.permissions
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
-import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionFlag
-import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionFlag
+import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 
 internal enum class PermissionScope {

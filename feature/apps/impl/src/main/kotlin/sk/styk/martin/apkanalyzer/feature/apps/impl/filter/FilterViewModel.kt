@@ -15,8 +15,8 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
-import sk.styk.martin.apkanalyzer.core.apps.StorageStatsRepository
-import sk.styk.martin.apkanalyzer.core.apps.UsageStatsRepository
+import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepository
+import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.combine
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppFilterRepository

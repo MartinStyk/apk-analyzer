@@ -1,6 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl.permissions
 
-import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
 
 internal sealed interface PermissionsAction {
     data object Retry : PermissionsAction

@@ -3,8 +3,8 @@ package sk.styk.martin.apkanalyzer.feature.browse.impl.domain
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import sk.styk.martin.apkanalyzer.core.apppermissions.PermissionLabelProvider
-import sk.styk.martin.apkanalyzer.core.apps.analysis.SdkVersionResolver
 import sk.styk.martin.apkanalyzer.core.apps.model.AppCategory
+import sk.styk.martin.apkanalyzer.core.apps.sdkversion.SdkVersionResolver
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.feature.browse.impl.R
 import sk.styk.martin.apkanalyzer.feature.browse.impl.model.BrowseDimension

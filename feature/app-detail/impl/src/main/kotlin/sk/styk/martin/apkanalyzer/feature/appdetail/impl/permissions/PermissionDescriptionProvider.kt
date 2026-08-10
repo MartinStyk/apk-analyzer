@@ -2,7 +2,7 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.impl.permissions
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
-import sk.styk.martin.apkanalyzer.core.apps.model.Permission
+import sk.styk.martin.apkanalyzer.core.apps.permissions.Permission
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.R
 import javax.inject.Inject
 import javax.inject.Singleton

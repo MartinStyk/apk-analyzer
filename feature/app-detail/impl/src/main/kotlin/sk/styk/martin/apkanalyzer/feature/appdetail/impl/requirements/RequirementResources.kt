@@ -2,7 +2,7 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.impl.requirements
 
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
-import sk.styk.martin.apkanalyzer.core.apps.model.FeatureAvailability
+import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.FeatureAvailability
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.R
 

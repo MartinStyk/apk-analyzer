@@ -40,8 +40,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
-import sk.styk.martin.apkanalyzer.core.apps.model.InstalledSplitApk
-import sk.styk.martin.apkanalyzer.core.apps.model.SplitApkKind
+import sk.styk.martin.apkanalyzer.core.apps.packaging.InstalledSplitApk
+import sk.styk.martin.apkanalyzer.core.apps.packaging.SplitApkKind
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.SearchBarActive

@@ -36,8 +36,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
-import sk.styk.martin.apkanalyzer.core.apps.model.Feature
-import sk.styk.martin.apkanalyzer.core.apps.model.FeatureAvailability
+import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Feature
+import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.FeatureAvailability
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Toolbar

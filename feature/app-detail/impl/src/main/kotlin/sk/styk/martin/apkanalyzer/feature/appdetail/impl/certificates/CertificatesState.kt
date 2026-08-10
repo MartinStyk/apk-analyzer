@@ -2,10 +2,10 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.impl.certificates
 
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
-import sk.styk.martin.apkanalyzer.core.apps.model.CertificatePrincipal
-import sk.styk.martin.apkanalyzer.core.apps.model.CertificateTrustLevel
-import sk.styk.martin.apkanalyzer.core.apps.model.SignatureAlgorithmAssessment
-import sk.styk.martin.apkanalyzer.core.apps.model.SigningSchemeVersion
+import sk.styk.martin.apkanalyzer.core.apps.signing.CertificatePrincipal
+import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
+import sk.styk.martin.apkanalyzer.core.apps.signing.SignatureAlgorithmAssessment
+import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeVersion
 import java.time.Instant
 
 internal enum class CertificateValidity {

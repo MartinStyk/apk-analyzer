@@ -2,7 +2,7 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.impl.splitapks
 
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
-import sk.styk.martin.apkanalyzer.core.apps.model.InstalledSplitApk
+import sk.styk.martin.apkanalyzer.core.apps.packaging.InstalledSplitApk
 
 @Immutable
 internal sealed interface SplitApksState {

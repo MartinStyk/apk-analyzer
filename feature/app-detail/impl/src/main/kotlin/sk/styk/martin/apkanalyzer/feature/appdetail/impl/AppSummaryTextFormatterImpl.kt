@@ -3,7 +3,7 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.impl
 import android.content.Context
 import androidx.annotation.PluralsRes
 import dagger.hilt.android.qualifiers.ApplicationContext
-import sk.styk.martin.apkanalyzer.core.apps.model.CertificateTrustLevel
+import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import javax.inject.Inject
 

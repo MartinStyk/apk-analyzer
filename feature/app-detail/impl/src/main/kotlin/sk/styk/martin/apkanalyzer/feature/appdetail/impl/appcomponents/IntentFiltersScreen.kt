@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
-import sk.styk.martin.apkanalyzer.core.apps.model.IntentFilterDataRuleType
+import sk.styk.martin.apkanalyzer.core.apps.components.IntentFilterDataRuleType
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.SearchBarActive
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Tag
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
