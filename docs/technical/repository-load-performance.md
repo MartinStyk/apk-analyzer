@@ -1,6 +1,6 @@
 # App Loading Observability
 
-**Status:** Proposed
+**Status:** OBS-01 through OBS-03 implemented; later rollout stages proposed
 **Scope:** Production logging and performance measurement for navigation, app discovery, app
 analysis, and their supporting repository operations
 
@@ -222,8 +222,8 @@ Requirements for the adapter and contract:
   closes the handle when the block returns, throws, or is cancelled.
 - Each emitting repository owns private trace, metric, and attribute names that satisfy Firebase
   naming limits. Duration metrics end in `_us` because Firebase custom metrics do not carry a unit.
-- Introduce monotonic stage timing with the first repository instrumentation rather than keeping an
-  unused shared timing abstraction.
+- Use `measureTimedValue` beside each emitting repository and store whole microseconds rather than
+  introducing a shared timing abstraction.
 - Callers record the parent outcome attribute inside the `use` block before it returns or throws.
 - Instrumentation must not change repository results, cache semantics, dispatcher selection, or
   cancellation propagation.
@@ -321,6 +321,14 @@ Add these traces after the three primary traces use the same infrastructure succ
 | `storage_stats_load` | `permission_check_us`, `stats_query_us`, `requested_count`, `loaded_count` | `outcome`, `permission`, `trigger` |
 | `usage_stats_load` | `permission_check_us`, `usage_query_us`, `usage_mapping_us`, `loaded_count` | `outcome`, `permission`, `trigger` |
 | `device_features_load` | `feature_query_us`, `feature_mapping_us`, `feature_count` | `outcome` |
+
+The current enrichment entry points do not carry the installed-list trigger through their public
+repository APIs. Storage reports `trigger=installed_apps` for list-driven requests and
+`trigger=lifecycle_start` for foreground refreshes. Usage has no list-driven bulk refresh and reports
+`trigger=lifecycle_start`; its single-package query remains part of app-detail work. These values
+describe the trigger that each repository can observe without changing its API, cache, flow, or
+dispatcher behavior. Both enrichment traces report `permission=granted|denied` and use
+`outcome=degraded` when permission is missing or a permission/query race yields partial data.
 
 Do not emit one remote trace or non-fatal per installed app from bulk operations. One parent trace
 contains aggregate counts and total stage durations. Per-app failures are accumulated into a bounded

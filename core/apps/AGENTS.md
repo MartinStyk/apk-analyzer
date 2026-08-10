@@ -54,6 +54,20 @@ Attach a throwable only for unexpected recoverable degradation or terminal failu
 layer that owns that outcome. Let coroutine cancellation propagate without logging it. Package names
 and APK file paths are valid diagnostic context.
 
+## Performance Traces
+
+`InstalledAppsRepositoryImpl` owns `installed_apps_load` around package querying and basic
+`InstalledApp` mapping only. Storage and usage enrichment must not extend this trace.
+
+`StorageStatsRepositoryImpl` owns `storage_stats_load`; its bounded trigger is `installed_apps` for
+list-driven requests or `lifecycle_start` for foreground refreshes. `UsageStatsRepositoryImpl` owns
+`usage_stats_load` for lifecycle refreshes. Single-package detail queries are outside both bulk
+traces.
+
+Keep trace, metric, and attribute names private beside the emitting repository. Scope every trace
+with `use`, record one terminal outcome, preserve cancellation, and aggregate bulk counts and
+durations rather than creating per-app traces.
+
 ## Signing Semantics
 
 * `apkContentsSigners` is the current signer set. Multiple current signers form one package identity
