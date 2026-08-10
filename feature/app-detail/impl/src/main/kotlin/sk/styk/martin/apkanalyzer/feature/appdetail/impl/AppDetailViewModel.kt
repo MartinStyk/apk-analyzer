@@ -46,6 +46,7 @@ import kotlin.time.toJavaDuration
 
 private const val TAG = "AppDetailViewModel"
 
+@Suppress("TooManyFunctions")
 @HiltViewModel(assistedFactory = AppDetailViewModel.Factory::class)
 internal class AppDetailViewModel @AssistedInject constructor(
     @Assisted private val appDetailInput: AppDetailInput,
@@ -88,6 +89,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
         loadDetail()
     }
 
+    @Suppress("CyclomaticComplexMethod")
     fun onAction(action: AppDetailAction) {
         when (action) {
             is AppDetailAction.Retry -> loadDetail()

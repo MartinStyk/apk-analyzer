@@ -73,6 +73,7 @@ import java.time.Instant
 private const val APK_MIME_TYPE = "application/vnd.android.package-archive"
 private const val ICON_MIME_TYPE = "image/png"
 
+@Suppress("CyclomaticComplexMethod")
 @Composable
 internal fun AppDetailScreen(
     appDetailInput: AppDetailInput,
