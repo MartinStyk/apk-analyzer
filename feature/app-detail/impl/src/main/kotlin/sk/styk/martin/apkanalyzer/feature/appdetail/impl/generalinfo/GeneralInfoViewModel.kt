@@ -19,11 +19,8 @@ import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.toAppReference
-
-private const val TAG = "GeneralInfoViewModel"
 
 @HiltViewModel(assistedFactory = GeneralInfoViewModel.Factory::class)
 internal class GeneralInfoViewModel @AssistedInject constructor(
@@ -63,8 +60,6 @@ internal class GeneralInfoViewModel @AssistedInject constructor(
         viewModelScope.launch {
             state.value = withContext(dispatcherProvider.default()) {
                 appDetailRepository.details(appDetailInput.toAppReference())
-            }.onFailure {
-                Logger.e(TAG, it, "Can not load general info for $appDetailInput")
             }.fold(
                 onSuccess = { it.toGeneralInfoState() },
                 onFailure = { GeneralInfoState.Error },

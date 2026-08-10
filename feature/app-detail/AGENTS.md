@@ -30,6 +30,8 @@ sealed interface AppDetailInput {
 ```
 navigation/
   AppDetailEntryProvider.kt  - appDetailEntries(navigator)
+  ScreenNames.kt             - public screenOpenEvent(key: NavKey): ScreenOpenEvent? resolver consumed
+                               by app's centralized screen-opening breadcrumb logging
   GeneralInfoNavKey.kt       - Internal nav key for general info sub-screen
   PermissionsNavKey.kt       - Internal nav key for the permissions sub-screen
   ComponentsNavKey.kt        - Internal nav key for the components sub-screen

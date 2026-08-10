@@ -11,8 +11,15 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import sk.styk.martin.apkanalyzer.core.apps.PackageChangesObserver
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.common.logger.Logger
+import sk.styk.martin.apkanalyzer.core.common.logger.nextOperationRequest
+import sk.styk.martin.apkanalyzer.core.common.logger.operationLogMessage
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
+
+private const val TAG = "AppSigningRepositoryImpl"
+private const val OPERATION = "device_signing"
 
 internal class AppSigningRepositoryImpl @Inject constructor(
     private val packageManager: PackageManager,
@@ -24,7 +31,21 @@ internal class AppSigningRepositoryImpl @Inject constructor(
 
     private val cachedSigning = packageChangesObserver.observe()
         .onStart { emit(Unit) }
-        .mapLatest { loadAllSigning() }
+        .mapLatest {
+            val requestId = nextOperationRequest()
+            Logger.d(TAG, operationLogMessage(OPERATION, requestId, event = "started"))
+            try {
+                val result = loadAllSigning()
+                Logger.i(TAG, operationLogMessage(OPERATION, requestId, event = "succeeded", context = "app_count=${result.size}"))
+                result
+            } catch (cancellation: CancellationException) {
+                Logger.d(TAG, operationLogMessage(OPERATION, requestId, event = "cancelled"))
+                throw cancellation
+            } catch (failure: Throwable) {
+                Logger.e(TAG, failure, operationLogMessage(OPERATION, requestId, event = "failed"))
+                throw failure
+            }
+        }
         .flowOn(dispatcherProvider.io())
         .shareIn(appScope, SharingStarted.Lazily, replay = 1)
 

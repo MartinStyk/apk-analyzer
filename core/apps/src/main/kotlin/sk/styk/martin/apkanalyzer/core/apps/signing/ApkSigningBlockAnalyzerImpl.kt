@@ -18,7 +18,7 @@ internal class ApkSigningBlockAnalyzerImpl @Inject constructor(private val signi
             .takeIf { it.isNotEmpty() }
             ?.sorted()
     }.onFailure {
-        Logger.e(TAG, it, "Could not determine APK signing schemes")
+        Logger.w(TAG, it, "Could not determine APK signing schemes")
     }.getOrNull()
 
     private fun hasVerifiedJarSignature(apkPath: String): Boolean = JarFile(apkPath, true).use { jarFile ->

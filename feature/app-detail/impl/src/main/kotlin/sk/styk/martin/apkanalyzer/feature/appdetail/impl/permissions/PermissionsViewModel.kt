@@ -28,12 +28,9 @@ import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.toAppReference
-
-private const val TAG = "PermissionsViewModel"
 
 @HiltViewModel(assistedFactory = PermissionsViewModel.Factory::class)
 internal class PermissionsViewModel @AssistedInject constructor(
@@ -102,9 +99,7 @@ internal class PermissionsViewModel @AssistedInject constructor(
         source.value = PermissionsSource.Loading
         viewModelScope.launch {
             source.value = withContext(dispatcherProvider.default()) {
-                appDetailRepository.details(appDetailInput.toAppReference()).onFailure {
-                    Logger.e(TAG, it, "Can not load permissions for $appDetailInput")
-                }.fold(
+                appDetailRepository.details(appDetailInput.toAppReference()).fold(
                     onSuccess = { it.toSource() },
                     onFailure = { PermissionsSource.Error },
                 )

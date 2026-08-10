@@ -23,11 +23,8 @@ import sk.styk.martin.apkanalyzer.core.apps.packaging.InstalledSplitApk
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.toAppReference
-
-private const val TAG = "SplitApksViewModel"
 
 @HiltViewModel(assistedFactory = SplitApksViewModel.Factory::class)
 internal class SplitApksViewModel @AssistedInject constructor(
@@ -84,9 +81,7 @@ internal class SplitApksViewModel @AssistedInject constructor(
         source.value = SplitApksSource.Loading
         viewModelScope.launch {
             source.value = withContext(dispatcherProvider.default()) {
-                appDetailRepository.details(appDetailInput.toAppReference()).onFailure {
-                    Logger.e(TAG, it, "Can not load split APKs for $appDetailInput")
-                }.fold(
+                appDetailRepository.details(appDetailInput.toAppReference()).fold(
                     onSuccess = { detail -> SplitApksSource.Ready(detail.info.installedSplits.sortedForDisplay().toImmutableList()) },
                     onFailure = { SplitApksSource.Error },
                 )

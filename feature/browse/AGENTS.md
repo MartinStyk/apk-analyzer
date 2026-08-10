@@ -55,6 +55,8 @@ apps/                         - Apps in one tapped bucket (search + app rows), r
 navigation/
   BrowseEntryProvider.kt      - browseEntries(navigator): registers BrowseNavKey, BrowseOptionsNavKey,
                                 BrowseAppsNavKey; the apps screen navigates out to AppDetailNavKey
+  ScreenNames.kt              - public screenOpenEvent(key: NavKey): ScreenOpenEvent? resolver consumed
+                                by app's centralized screen-opening breadcrumb logging
   BrowseOptionsNavKey.kt      - Internal: dimension
   BrowseAppsNavKey.kt         - Internal: dimension, bucketKey, bucketLabel
 ```

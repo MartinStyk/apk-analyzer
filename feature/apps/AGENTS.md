@@ -14,6 +14,7 @@ The primary feature — displays the list of installed apps with filtering, sort
 ```
 navigation/
   AppEntryProvider.kt      - appEntries(navigator) - registers AppsNavKey, AppSearchNavKey, AppFilterNavKey, PermissionFilterNavKey
+  ScreenNames.kt           - public screenOpenEvent(key: NavKey): ScreenOpenEvent? resolver consumed by app's centralized screen-opening breadcrumb logging
   AppFilterNavKey.kt       - Internal nav key for filter screen
   AppSearchNavKey.kt       - Internal nav key for search screen
   PermissionFilterNavKey.kt - Internal nav key for permission filter

@@ -22,6 +22,7 @@ ui/
   ApkAnalyzerViewModel.kt               - @HiltViewModel; maps PersistenceRepository.observe(Key.ColorScheme) into ApkAnalyzerState via stateIn(WhileSubscribed(5000)) — exists solely so the Activity can drive day/night mode before the Compose theme renders
   navigation/
     TopLevelDestinations.kt             - internal TOP_LEVEL_DESTINATIONS (persistentListOf<NavigationBarItem>): Apps, Browse tabs with icons/titles; internal TOP_LEVEL_KEYS
+    ScreenOpenLogging.kt                - internal logScreenOpened(key, resolveScreenOpenEvent): centralized INFO screen-opening breadcrumb, shared by ApkAnalyzerApp and the external-APK navigation host
 util/file/
   GenericFileProvider.kt                - FileProvider subclass wired through ${applicationId} in the manifest
 ```
@@ -68,6 +69,17 @@ internal fun ApkAnalyzerApp() {
 navigates *out* to another feature — all four registered here do (browse navigates into
 `feature:app-detail` from its apps screen). **Adding a new feature/screen means adding its
 `*Entries()` call here** — see the `create-feature-module` and `implement-navigation` skills.
+
+`ApkAnalyzerApp` and the external-APK navigation host each run a `LaunchedEffect` that observes
+`snapshotFlow { navigationState.currentKey }.distinctUntilChanged()` and calls
+`logScreenOpened(key, ::resolveScreenOpenEvent)` to emit one centralized INFO
+`operation=navigation event=screen_opened screen=<name> <context>` breadcrumb per distinct
+destination, including the initial/restored one. Each feature owns a `navigation/ScreenNames.kt`
+with a public `screenOpenEvent(key: NavKey): ScreenOpenEvent?` resolver next to its `NavKey`
+declarations (internal `NavKey`s can't be pattern-matched from `app`, so each feature module exposes
+its own resolver rather than a single `when` living here); `resolveScreenOpenEvent` in
+`ApkAnalyzerApp.kt` chains all of them. Screen names are stable identifiers derived from the `NavKey`
+type, never `NavKey.toString()`.
 
 ## Manifest Highlights (`app/src/main/AndroidManifest.xml`)
 

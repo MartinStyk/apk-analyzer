@@ -11,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -18,6 +19,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
+import kotlinx.coroutines.flow.distinctUntilChanged
 import sk.styk.martin.apkanalyzer.R
 import sk.styk.martin.apkanalyzer.core.navigation.Navigator
 import sk.styk.martin.apkanalyzer.core.navigation.rememberNavigationState
@@ -28,6 +30,8 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailNavKey
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.navigation.appDetailEntries
+import sk.styk.martin.apkanalyzer.ui.navigation.logScreenOpened
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.navigation.screenOpenEvent as appDetailScreenOpenEvent
 
 @Composable
 internal fun ExternalApkApp(
@@ -79,6 +83,12 @@ private fun ExternalApkNavigation(
             navigationState = navigationState,
             onBackAtRoot = onClose,
         )
+    }
+
+    LaunchedEffect(navigationState) {
+        snapshotFlow { navigationState.currentKey }
+            .distinctUntilChanged()
+            .collect { key -> logScreenOpened(key, ::appDetailScreenOpenEvent) }
     }
 
     Scaffold(modifier = modifier) { paddings ->

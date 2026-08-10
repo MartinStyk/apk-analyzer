@@ -22,12 +22,9 @@ import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.toAppReference
 import java.util.Locale
-
-private const val TAG = "RequirementsViewModel"
 
 @HiltViewModel(assistedFactory = RequirementsViewModel.Factory::class)
 internal class RequirementsViewModel @AssistedInject constructor(
@@ -71,8 +68,6 @@ internal class RequirementsViewModel @AssistedInject constructor(
             val deviceFeatures = deviceFeaturesRepository.deviceFeatures()
             state.value = withContext(dispatcherProvider.default()) {
                 appDetailRepository.details(appDetailInput.toAppReference())
-            }.onFailure {
-                Logger.e(TAG, it, "Can not load requirements for $appDetailInput")
             }.fold(
                 onSuccess = { it.toRequirementsState(deviceFeatures) },
                 onFailure = { RequirementsState.Error },

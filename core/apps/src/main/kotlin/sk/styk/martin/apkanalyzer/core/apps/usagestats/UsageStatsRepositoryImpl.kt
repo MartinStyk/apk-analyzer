@@ -12,15 +12,19 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import sk.styk.martin.apkanalyzer.core.apps.INSTALLED_APPS
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
+import sk.styk.martin.apkanalyzer.core.common.logger.nextOperationRequest
+import sk.styk.martin.apkanalyzer.core.common.logger.operationLogMessage
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.time.Duration.Companion.days
 import kotlin.time.toJavaDuration
+
+private const val TAG = "UsageStatsRepositoryImpl"
+private const val OPERATION = "usage_stats"
 
 @Singleton
 internal class UsageStatsRepositoryImpl @Inject constructor(
@@ -54,15 +58,20 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
     }
 
     private fun fetchUsageTimes() {
+        val requestId = nextOperationRequest()
         val hasPermission = checkPermission()
         isPermissionGranted.value = hasPermission
-        if (!hasPermission) return
+        if (!hasPermission) {
+            Logger.w(TAG, operationLogMessage(OPERATION, requestId, event = "degraded", context = "reason=permission_missing"))
+            return
+        }
 
-        Logger.d(INSTALLED_APPS, "Load apps last used time")
-        lastUsedTimes.value = queryRawUsageStats()
+        Logger.d(TAG, operationLogMessage(OPERATION, requestId, event = "started"))
+        val usages = queryRawUsageStats()
             .groupBy { PackageName(it.packageName) }
             .mapValues { (_, usages) -> Instant.ofEpochMilli(usages.maxOf { it.lastTimeUsed }) }
-        Logger.d(INSTALLED_APPS, "Apps last used time loaded")
+        lastUsedTimes.value = usages
+        Logger.i(TAG, operationLogMessage(OPERATION, requestId, event = "succeeded", context = "loaded_count=${usages.size}"))
     }
 
     @SuppressLint("MissingPermission")

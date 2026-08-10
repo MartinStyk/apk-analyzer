@@ -26,6 +26,12 @@ Imperative navigation controller wrapping `NavigationState`.
 - `goBack()` - Pop current sub-stack, go back to the previous top-level tab, or invoke the host's
   `onBackAtRoot` callback from the start destination.
 
+### `ScreenOpenEvent`
+`data class ScreenOpenEvent(val screen: String, val context: String? = null)`. Shared return type for
+per-feature `screenOpenEvent(key: NavKey): ScreenOpenEvent?` resolvers used to log centralized
+screen-opening breadcrumbs from the navigation hosts in `app`. Carries a stable screen name and
+optional diagnostic context, kept separate from `NavKey.toString()`.
+
 ## Usage Pattern
 ```kotlin
 val navigationState = rememberNavigationState(startKey = AppsNavKey, topLevelKeys = TOP_LEVEL_KEYS)

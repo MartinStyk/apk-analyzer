@@ -22,6 +22,7 @@ Note: `data object`, unlike `feature:permissions`/`feature:statistics` which use
 ```
 navigation/
   SettingsEntryProvider.kt  - settingsEntries(navigator: Navigator): EntryProviderScope<NavKey> extension; registers SettingsNavKey -> SettingsScreen(onBack = { navigator.goBack() })
+  ScreenNames.kt            - public screenOpenEvent(key: NavKey): ScreenOpenEvent? resolver consumed by app's centralized screen-opening breadcrumb logging
 SettingsAction.kt           - sealed interface: ColorSchemeSelected, RecentlyViewedAppsToggled, NavigateBack
 SettingsEvent.kt            - sealed interface: NavigateBack (one-shot)
 SettingsState.kt            - @Immutable data class: colorScheme, recentlyViewedAppsEnabled

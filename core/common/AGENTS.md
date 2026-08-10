@@ -14,6 +14,9 @@ coroutines/
   RunCatching.kt          - Result capture for suspend code that rethrows cancellation
 logger/
   Logger.kt               - Timber + Firebase Crashlytics logging wrapper (object)
+  OperationLog.kt         - `nextOperationRequest()` process-local request-id counter and
+                            `operationLogMessage(...)` shared `operation=<op> request=<n> [stage=<s>]
+                            event=<e> [context]` message-shape formatter for load-operation logging
 resources/
   ResourcesManager.kt     - Android resources access (strings, colors, dimensions)
 settings/
@@ -38,6 +41,8 @@ util/                     - General Android and formatting utilities
 
 - `DispatcherProvider` - Inject in ViewModels/Repositories for coroutine dispatching
 - `Logger` - Static logging: `Logger.d("Tag", "msg")`, `Logger.e("Tag", throwable, "msg")`
+- `nextOperationRequest()` / `operationLogMessage(...)` - Consistent operation/stage/event logging
+  convention for public load operations across repositories
 - `ResourcesManager` - Injectable Android resources access
 - `PersistenceRepository` - DataStore preferences abstraction
 - `AppSource` - App install source classification
