@@ -275,6 +275,18 @@ returns a complete or degraded `AppDetail`, an error, or cancellation.
 
 An optional sub-operation that fails while `AppDetail` remains usable produces `outcome=degraded`.
 Availability attributes allow degraded requests to be filtered away from complete requests.
+The trace intentionally has no custom stage metrics: Firebase already measures the total request, and
+the existing chronological logs identify internal stages without adding permanent remote telemetry.
+
+OBS-04 uses the two availability facts persisted in `AppDetail` to classify complete versus degraded
+results: component intent filters and signing schemes. Storage size and last-used time remain nullable
+domain values that currently combine permission denial, query failure or race, and legitimate absence,
+so they cannot safely affect the parent outcome or be reconstructed on a cache hit. Likewise,
+`NativeLibraries.Empty` combines an APK with no native libraries and a handled ZIP-read failure, while
+certificate extraction exposes an empty result for both legitimate absence and handled failure.
+`ApkSigningBlockAnalyzer` returns `null` for both no detectable supported scheme and analyzer failure;
+therefore `signing_schemes=unavailable` is an availability statement, not a failure diagnosis. OBS-04
+does not speculate beyond these APIs or change their established result behavior.
 
 ### `manifest_load`
 
@@ -326,6 +338,8 @@ If a parent trace is slow, use the chronological stage logs and local profiling 
 cause. Add a remote custom metric only after a concrete production question justifies its code cost.
 
 ## Rollout
+
+OBS-01 through OBS-04 are implemented. OBS-05 and later stages remain deferred.
 
 ### OBS-01: Make logging consistent
 

@@ -48,6 +48,10 @@ import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTrace
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
+import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
+import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
 import java.io.File
 import java.time.Instant
 import java.util.concurrent.ConcurrentHashMap
@@ -68,6 +72,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     packageChangesObserver: PackageChangesObserver,
     appScope: CoroutineScope,
     dispatcherProvider: DispatcherProvider,
+    private val performanceTracker: PerformanceTracker,
 ) : AppDetailRepository {
 
     private val cache = ConcurrentHashMap<CacheKey, AppDetail>()
@@ -89,22 +94,39 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             .launchIn(appScope + dispatcherProvider.default())
     }
 
-    override suspend fun details(reference: AppReference): Result<AppDetail> = when (reference) {
-        is AppReference.InstalledPackage -> installedPackageDetails(reference.packageName)
-        is AppReference.ApkFile -> apkFilePackageDetails(File(reference.path))
+    override suspend fun details(reference: AppReference): Result<AppDetail> = runCatchingCancellable {
+        performanceTracker.startCancellableTrace(APP_DETAIL_LOAD_TRACE) { trace ->
+            trace[ANALYSIS_MODE_ATTRIBUTE] = reference.analysisModeAttribute
+            val result = when (reference) {
+                is AppReference.InstalledPackage -> installedPackageDetails(reference.packageName, trace)
+                is AppReference.ApkFile -> apkFilePackageDetails(File(reference.path), trace)
+            }
+            result.fold(
+                onSuccess = { detail ->
+                    trace.recordResult(detail)
+                    detail
+                },
+                onFailure = { failure ->
+                    trace.recordErrorPreserving(failure)
+                    throw failure
+                },
+            )
+        }
     }
 
-    private suspend fun installedPackageDetails(packageName: PackageName): Result<AppDetail> {
+    private suspend fun installedPackageDetails(packageName: PackageName, trace: PerformanceTrace): Result<AppDetail> {
         val context = "mode=installed package=${packageName.value}"
         val cacheKey = CacheKey.InstalledPackage(packageName)
         Logger.d(TAG, "App detail loading started: $context")
         Logger.d(TAG, "App detail cache lookup started: $context")
-        cache[cacheKey]?.let {
+        val cachedDetail = cache[cacheKey]
+        trace[CACHE_HIT_ATTRIBUTE] = cachedDetail?.let { ATTRIBUTE_TRUE } ?: ATTRIBUTE_FALSE
+        cachedDetail?.let {
             Logger.d(TAG, "App detail cache lookup finished: cache hit, $context")
-            if (it.areComponentIntentFiltersAvailable) {
+            if (!it.isPerformanceDegraded) {
                 Logger.i(TAG, "App detail loading finished: cache hit, $context")
             } else {
-                Logger.w(TAG, "App detail loading degraded: component intent filters unavailable, cache hit, $context")
+                Logger.w(TAG, "App detail loading degraded: optional analysis unavailable, cache hit, $context")
             }
             return Result.success(it)
         }
@@ -148,27 +170,29 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             )
         }.onSuccess { detail ->
             cache[cacheKey] = detail
-            if (detail.areComponentIntentFiltersAvailable) {
+            if (!detail.isPerformanceDegraded) {
                 Logger.i(TAG, "App detail loading finished: $context")
             } else {
-                Logger.w(TAG, "App detail loading degraded: component intent filters unavailable, $context")
+                Logger.w(TAG, "App detail loading degraded: optional analysis unavailable, $context")
             }
         }.onFailure {
             Logger.e(TAG, it, "App detail loading failed: $context")
         }
     }
 
-    private suspend fun apkFilePackageDetails(accessibleFile: File): Result<AppDetail> {
+    private suspend fun apkFilePackageDetails(accessibleFile: File, trace: PerformanceTrace): Result<AppDetail> {
         val context = "mode=apk_file apk_path=${accessibleFile.absolutePath}"
         val cacheKey = CacheKey.ApkFile(accessibleFile.absolutePath, accessibleFile.lastModified())
         Logger.d(TAG, "App detail loading started: $context")
         Logger.d(TAG, "App detail cache lookup started: $context")
-        cache[cacheKey]?.let {
+        val cachedDetail = cache[cacheKey]
+        trace[CACHE_HIT_ATTRIBUTE] = cachedDetail?.let { ATTRIBUTE_TRUE } ?: ATTRIBUTE_FALSE
+        cachedDetail?.let {
             Logger.d(TAG, "App detail cache lookup finished: cache hit, $context")
-            if (it.areComponentIntentFiltersAvailable) {
+            if (!it.isPerformanceDegraded) {
                 Logger.i(TAG, "App detail loading finished: cache hit, $context")
             } else {
-                Logger.w(TAG, "App detail loading degraded: component intent filters unavailable, cache hit, $context")
+                Logger.w(TAG, "App detail loading degraded: optional analysis unavailable, cache hit, $context")
             }
             return Result.success(it)
         }
@@ -198,10 +222,10 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             )
         }.onSuccess { detail ->
             cache[cacheKey] = detail
-            if (detail.areComponentIntentFiltersAvailable) {
+            if (!detail.isPerformanceDegraded) {
                 Logger.i(TAG, "App detail loading finished: $context")
             } else {
-                Logger.w(TAG, "App detail loading degraded: component intent filters unavailable, $context")
+                Logger.w(TAG, "App detail loading degraded: optional analysis unavailable, $context")
             }
         }.onFailure {
             Logger.e(TAG, it, "App detail loading failed: $context")
@@ -465,3 +489,39 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         private val launcherCategories = listOf(Intent.CATEGORY_LAUNCHER, Intent.CATEGORY_LEANBACK_LAUNCHER)
     }
 }
+
+private val AppReference.analysisModeAttribute: String
+    get() = when (this) {
+        is AppReference.InstalledPackage -> ANALYSIS_MODE_INSTALLED
+        is AppReference.ApkFile -> ANALYSIS_MODE_APK_FILE
+    }
+
+private val AppDetail.isPerformanceDegraded: Boolean
+    get() = !areComponentIntentFiltersAvailable || signing.signingSchemeVersions == null
+
+private fun PerformanceTrace.recordResult(detail: AppDetail) {
+    this[INTENT_FILTERS_ATTRIBUTE] = if (detail.areComponentIntentFiltersAvailable) AVAILABILITY_AVAILABLE else AVAILABILITY_UNAVAILABLE
+    this[SIGNING_SCHEMES_ATTRIBUTE] = if (detail.signing.signingSchemeVersions != null) AVAILABILITY_AVAILABLE else AVAILABILITY_UNAVAILABLE
+    setOutcome(if (detail.isPerformanceDegraded) TraceOutcome.Degraded else TraceOutcome.Success)
+}
+
+private fun PerformanceTrace.recordErrorPreserving(failure: Throwable) {
+    val telemetryFailure = runCatching {
+        setOutcome(TraceOutcome.Error)
+    }.exceptionOrNull()
+    if (telemetryFailure != null && telemetryFailure !== failure) {
+        failure.addSuppressed(telemetryFailure)
+    }
+}
+
+private const val APP_DETAIL_LOAD_TRACE = "app_detail_load"
+private const val ANALYSIS_MODE_ATTRIBUTE = "analysis_mode"
+private const val CACHE_HIT_ATTRIBUTE = "cache_hit"
+private const val INTENT_FILTERS_ATTRIBUTE = "intent_filters"
+private const val SIGNING_SCHEMES_ATTRIBUTE = "signing_schemes"
+private const val ANALYSIS_MODE_INSTALLED = "installed"
+private const val ANALYSIS_MODE_APK_FILE = "apk_file"
+private const val ATTRIBUTE_TRUE = "true"
+private const val ATTRIBUTE_FALSE = "false"
+private const val AVAILABILITY_AVAILABLE = "available"
+private const val AVAILABILITY_UNAVAILABLE = "unavailable"

@@ -54,6 +54,15 @@ Attach a throwable only for unexpected recoverable degradation or terminal failu
 layer that owns that outcome. Let coroutine cancellation propagate without logging it. Package names
 and APK file paths are valid diagnostic context.
 
+`AppDetailRepositoryImpl` owns one `app_detail_load` trace around the complete public request,
+including cache hits. Record only bounded analysis mode, cache result, availability, and terminal
+outcome attributes; package names and APK paths remain local log context. The parent trace already
+measures total duration, so add a custom stage metric only for a concrete production question.
+
+Use `startCancellableTrace` for trace lifetime and cancellation outcome. Classify cached and uncached
+results from facts persisted in `AppDetail`; nullable storage, usage, certificate, and packaging data
+must not be promoted into guessed telemetry outcomes.
+
 ## Signing Semantics
 
 * `apkContentsSigners` is the current signer set. Multiple current signers form one package identity
