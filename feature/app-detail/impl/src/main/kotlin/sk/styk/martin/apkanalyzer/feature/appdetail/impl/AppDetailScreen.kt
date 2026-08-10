@@ -2,6 +2,7 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.impl
 
 import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -66,6 +67,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.AppDetailToolbar
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.AppSummaryBottomSheet
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SplitApkExportBottomSheet
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.insight.AppDetailInsight
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.insight.SensitiveAccess
@@ -79,6 +81,7 @@ import java.util.Locale
 private const val APK_MIME_TYPE = "application/vnd.android.package-archive"
 private const val ICON_MIME_TYPE = "image/png"
 
+@Suppress("CyclomaticComplexMethod")
 @Composable
 internal fun AppDetailScreen(
     appDetailInput: AppDetailInput,
@@ -104,6 +107,7 @@ internal fun AppDetailScreen(
     val context = LocalContext.current
     val appReference = appDetailInput.toAppReference()
     var splitApkExportName by rememberSaveable { mutableStateOf<String?>(null) }
+    var summaryPreview by rememberSaveable { mutableStateOf<String?>(null) }
     val apkDocumentLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.CreateDocument(APK_MIME_TYPE),
     ) { destination ->
@@ -138,6 +142,20 @@ internal fun AppDetailScreen(
                         }
                     } catch (_: ActivityNotFoundException) {
                         viewModel.onAction(AppDetailAction.DocumentPickerUnavailable(event.export))
+                    }
+                }
+
+                is AppDetailEvent.ShowSummaryPreview -> summaryPreview = event.text
+
+                is AppDetailEvent.ShareSummary -> {
+                    try {
+                        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                            type = "text/plain"
+                            putExtra(Intent.EXTRA_TEXT, event.text)
+                        }
+                        context.startActivity(Intent.createChooser(shareIntent, null))
+                    } catch (_: ActivityNotFoundException) {
+                        viewModel.onAction(AppDetailAction.ShareSummaryUnavailable)
                     }
                 }
 
@@ -184,6 +202,20 @@ internal fun AppDetailScreen(
         SplitApkExportBottomSheet(
             displayName = displayName,
             onDismiss = { splitApkExportName = null },
+        )
+    }
+    summaryPreview?.let { summary ->
+        AppSummaryBottomSheet(
+            summary = summary,
+            onCopy = {
+                viewModel.onAction(AppDetailAction.CopySummary)
+                summaryPreview = null
+            },
+            onShare = {
+                viewModel.onAction(AppDetailAction.ShareSummary)
+                summaryPreview = null
+            },
+            onDismiss = { summaryPreview = null },
         )
     }
 }
@@ -543,6 +575,11 @@ private fun ActionsSection(
                 },
                 onClick = { onAction(AppDetailAction.SaveIcon) },
                 enabled = state.exportInProgress == null,
+            )
+            ActionItem(
+                icon = ApkAnalyzerIcons.Share,
+                label = stringResource(R.string.app_detail_action_summary),
+                onClick = { onAction(AppDetailAction.ViewSummary) },
             )
             ActionItem(
                 icon = ApkAnalyzerIcons.Apps,
@@ -1028,6 +1065,8 @@ private fun AppDetailFeedback.message(context: Context): String = when (this) {
     AppDetailFeedback.ApkSaveFailed -> context.getString(R.string.app_detail_apk_save_failed)
     AppDetailFeedback.IconSaveFailed -> context.getString(R.string.app_detail_icon_save_failed)
     AppDetailFeedback.DocumentPickerUnavailable -> context.getString(R.string.app_detail_document_picker_unavailable)
+    AppDetailFeedback.SummaryCopied -> context.getString(R.string.app_detail_summary_copied)
+    AppDetailFeedback.ShareUnavailable -> context.getString(R.string.app_detail_share_unavailable)
 }
 
 private fun formatTimestamp(instant: Instant): String {

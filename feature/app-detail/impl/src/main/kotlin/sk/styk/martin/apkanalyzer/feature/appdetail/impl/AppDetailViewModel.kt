@@ -30,6 +30,8 @@ import sk.styk.martin.apkanalyzer.core.apps.model.DeviceFeatures
 import sk.styk.martin.apkanalyzer.core.apps.model.Feature
 import sk.styk.martin.apkanalyzer.core.apps.model.FeatureAvailability
 import sk.styk.martin.apkanalyzer.core.apps.model.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
+import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
@@ -47,6 +49,7 @@ import kotlin.time.toJavaDuration
 
 private const val TAG = "AppDetailViewModel"
 
+@Suppress("TooManyFunctions")
 @HiltViewModel(assistedFactory = AppDetailViewModel.Factory::class)
 internal class AppDetailViewModel @AssistedInject constructor(
     @Assisted private val appDetailInput: AppDetailInput,
@@ -57,6 +60,8 @@ internal class AppDetailViewModel @AssistedInject constructor(
     private val dispatcherProvider: DispatcherProvider,
     private val temporaryApkManager: TemporaryApkManager,
     private val recentlyViewedAppsRepository: RecentlyViewedAppsRepository,
+    private val clipboardManager: ClipboardManager,
+    private val summaryTextFormatter: AppSummaryTextFormatter,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -87,6 +92,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
         loadDetail()
     }
 
+    @Suppress("CyclomaticComplexMethod")
     fun onAction(action: AppDetailAction) {
         when (action) {
             is AppDetailAction.Retry -> loadDetail()
@@ -96,6 +102,14 @@ internal class AppDetailViewModel @AssistedInject constructor(
             is AppDetailAction.ExportApk -> requestDocument(AppDetailExport.Apk)
 
             is AppDetailAction.SaveIcon -> requestDocument(AppDetailExport.Icon)
+
+            is AppDetailAction.ViewSummary -> viewSummary()
+
+            is AppDetailAction.CopySummary -> copySummary()
+
+            is AppDetailAction.ShareSummary -> shareSummary()
+
+            is AppDetailAction.ShareSummaryUnavailable -> sendEvent(AppDetailEvent.ShowFeedback(AppDetailFeedback.ShareUnavailable))
 
             is AppDetailAction.OpenPlayStore -> withLoadedState { sendEvent(AppDetailEvent.OpenPlayStore(it.packageName)) }
 
@@ -154,6 +168,28 @@ internal class AppDetailViewModel @AssistedInject constructor(
             val extension = if (export == AppDetailExport.Apk) "apk" else "png"
             exportInProgress.value = export
             sendEvent(AppDetailEvent.CreateDocument(export, "${state.packageName}.$extension"))
+        }
+    }
+
+    private fun viewSummary() {
+        withLoadedState { state ->
+            sendEvent(AppDetailEvent.ShowSummaryPreview(summaryTextFormatter.summary(state)))
+        }
+    }
+
+    private fun copySummary() {
+        withLoadedState { state ->
+            val summary = summaryTextFormatter.summary(state)
+            val label = summaryTextFormatter.clipLabel(state.appName)
+            if (clipboardManager.copy(label, summary) == CopyResult.FeedbackNotShown) {
+                sendEvent(AppDetailEvent.ShowFeedback(AppDetailFeedback.SummaryCopied))
+            }
+        }
+    }
+
+    private fun shareSummary() {
+        withLoadedState { state ->
+            sendEvent(AppDetailEvent.ShareSummary(summaryTextFormatter.summary(state)))
         }
     }
 

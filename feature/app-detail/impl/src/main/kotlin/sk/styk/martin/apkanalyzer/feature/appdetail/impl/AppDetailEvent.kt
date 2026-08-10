@@ -6,6 +6,8 @@ internal sealed interface AppDetailEvent {
     data class OpenPlayStore(val packageName: PackageName) : AppDetailEvent
     data class OpenAppInfo(val packageName: PackageName) : AppDetailEvent
     data class CreateDocument(val export: AppDetailExport, val suggestedName: String) : AppDetailEvent
+    data class ShowSummaryPreview(val text: String) : AppDetailEvent
+    data class ShareSummary(val text: String) : AppDetailEvent
     data class ShowFeedback(val feedback: AppDetailFeedback) : AppDetailEvent
     data object NavigateToManifest : AppDetailEvent
     data object NavigateToGeneralDetails : AppDetailEvent
@@ -25,4 +27,6 @@ internal sealed interface AppDetailFeedback {
     data object ApkSaveFailed : AppDetailFeedback
     data object IconSaveFailed : AppDetailFeedback
     data object DocumentPickerUnavailable : AppDetailFeedback
+    data object SummaryCopied : AppDetailFeedback
+    data object ShareUnavailable : AppDetailFeedback
 }

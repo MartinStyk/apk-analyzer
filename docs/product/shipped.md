@@ -45,7 +45,7 @@ natively once statistics and browse stopped being separate screens.
 
 ## 1.5 Export & Share
 
-FR-24 APK export / share · FR-25 Icon export
+FR-24 APK export / share · FR-25 Icon export · FR-26 Copy / share app summary
 
 ## 1.6 App & UI
 
