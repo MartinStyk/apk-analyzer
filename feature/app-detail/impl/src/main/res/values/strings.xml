@@ -20,8 +20,10 @@
     <string name="app_detail_action_manifest">Manifest</string>
     <string name="app_detail_action_export_apk">Export APK</string>
     <string name="app_detail_action_save_icon">Save Icon</string>
-    <string name="app_detail_action_copy_summary">Copy Summary</string>
-    <string name="app_detail_action_share_summary">Share Summary</string>
+    <string name="app_detail_action_summary">Summary</string>
+    <string name="app_detail_action_copy_summary">Copy</string>
+    <string name="app_detail_action_share_summary">Share</string>
+    <string name="app_detail_summary_sheet_title">App summary</string>
     <string name="app_detail_action_play_store">Play Store</string>
     <string name="app_detail_action_app_info">App Info</string>
     <string name="app_detail_action_saving">Saving…</string>

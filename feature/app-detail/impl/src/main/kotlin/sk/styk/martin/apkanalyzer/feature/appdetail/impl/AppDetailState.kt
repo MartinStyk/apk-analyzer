@@ -7,6 +7,7 @@ import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
+import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.AppDetailBadge
 import java.time.Instant
@@ -31,7 +32,7 @@ internal sealed interface AppDetailState {
         val uid: Int?,
         val description: String?,
         val isSystemApp: Boolean,
-        val source: String,
+        val source: AppSource,
         val apkDirectory: String?,
         val dataDirectory: String?,
         val apkSize: AppSize,

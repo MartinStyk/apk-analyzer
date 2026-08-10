@@ -1,6 +1,5 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl
 
-import android.content.Context
 import android.net.Uri
 import android.os.Build
 import androidx.lifecycle.ViewModel
@@ -9,7 +8,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -59,7 +57,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
     private val temporaryApkManager: TemporaryApkManager,
     private val recentlyViewedAppsRepository: RecentlyViewedAppsRepository,
     private val clipboardManager: ClipboardManager,
-    @ApplicationContext private val context: Context,
+    private val summaryTextFormatter: AppSummaryTextFormatter,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -99,6 +97,8 @@ internal class AppDetailViewModel @AssistedInject constructor(
             is AppDetailAction.ExportApk -> requestDocument(AppDetailExport.Apk)
 
             is AppDetailAction.SaveIcon -> requestDocument(AppDetailExport.Icon)
+
+            is AppDetailAction.ViewSummary -> viewSummary()
 
             is AppDetailAction.CopySummary -> copySummary()
 
@@ -166,10 +166,16 @@ internal class AppDetailViewModel @AssistedInject constructor(
         }
     }
 
+    private fun viewSummary() {
+        withLoadedState { state ->
+            sendEvent(AppDetailEvent.ShowSummaryPreview(summaryTextFormatter.summary(state)))
+        }
+    }
+
     private fun copySummary() {
         withLoadedState { state ->
-            val summary = state.toSummaryText(context)
-            val label = context.getString(R.string.app_detail_summary_clip_label, state.appName)
+            val summary = summaryTextFormatter.summary(state)
+            val label = summaryTextFormatter.clipLabel(state.appName)
             if (clipboardManager.copy(label, summary) == CopyResult.FeedbackNotShown) {
                 sendEvent(AppDetailEvent.ShowFeedback(AppDetailFeedback.SummaryCopied))
             }
@@ -178,7 +184,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
     private fun shareSummary() {
         withLoadedState { state ->
-            sendEvent(AppDetailEvent.ShareSummary(state.toSummaryText(context)))
+            sendEvent(AppDetailEvent.ShareSummary(summaryTextFormatter.summary(state)))
         }
     }
 
@@ -272,7 +278,7 @@ private const val MAX_REQUIREMENT_PREVIEWS = 6
 
 private fun AppDetailState.Loaded.withComputedBadges(now: Instant): AppDetailState.Loaded = copy(
     badges = buildList {
-        if (source == AppSource.Unknown.name) add(AppDetailBadge.Sideloaded)
+        if (source == AppSource.Unknown) add(AppDetailBadge.Sideloaded)
         if (insights.any { it is AppDetailInsight.SensitivePermission }) add(AppDetailBadge.DangerousPermissions)
         lastUsedTime?.let { lastUsed ->
             if (lastUsed.isBefore(now.minus(AppClassificationThresholds.UNUSED_PERIOD))) add(AppDetailBadge.Unused)
@@ -289,7 +295,7 @@ private fun AppDetailState.Loaded.withComputedBadges(now: Instant): AppDetailSta
         lastUsedTime?.let { lastUsed ->
             if (lastUsed.isAfter(now.minus(AppClassificationThresholds.RECENTLY_USED_DAYS.days.toJavaDuration()))) add(AppDetailBadge.RecentlyUsed)
         }
-        if (source == AppSource.GooglePlay.name) add(AppDetailBadge.GooglePlay)
+        if (source == AppSource.GooglePlay) add(AppDetailBadge.GooglePlay)
     }.take(MAX_BADGES).toImmutableList(),
 )
 
@@ -317,7 +323,7 @@ private fun AppDetail.toLoadedState(permissionLabelProvider: PermissionLabelProv
         uid = info.uid,
         description = info.description,
         isSystemApp = info.isSystemApp,
-        source = info.source.name,
+        source = info.source,
         apkDirectory = info.apkDirectory,
         dataDirectory = info.dataDirectory,
         apkSize = info.apkSize,
