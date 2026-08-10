@@ -12,6 +12,8 @@ internal fun AppDetailFeedback.message(context: Context): String = when (this) {
     AppDetailFeedback.ApkSaveFailed -> context.getString(R.string.app_detail_apk_save_failed)
     AppDetailFeedback.IconSaveFailed -> context.getString(R.string.app_detail_icon_save_failed)
     AppDetailFeedback.DocumentPickerUnavailable -> context.getString(R.string.app_detail_document_picker_unavailable)
+    AppDetailFeedback.SummaryCopied -> context.getString(R.string.app_detail_summary_copied)
+    AppDetailFeedback.ShareUnavailable -> context.getString(R.string.app_detail_share_unavailable)
 }
 
 internal fun formatTimestamp(instant: Instant): String {

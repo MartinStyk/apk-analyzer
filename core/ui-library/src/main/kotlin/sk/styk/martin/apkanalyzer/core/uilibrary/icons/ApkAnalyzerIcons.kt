@@ -55,6 +55,7 @@ import androidx.compose.material.icons.rounded.Security
 import androidx.compose.material.icons.rounded.Sensors
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.SettingsInputAntenna
+import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.Smartphone
 import androidx.compose.material.icons.rounded.Sms
 import androidx.compose.material.icons.rounded.Storage
@@ -133,6 +134,7 @@ data object ApkAnalyzerIcons {
     val Lock = Icons.Rounded.Lock
     val Search = Icons.Rounded.Search
     val Settings = Icons.Rounded.Settings
+    val Share = Icons.Rounded.Share
     val Sort = Icons.Rounded.SwapVert
     val Sync = Icons.Rounded.Sync
     val FileUpload = Icons.Rounded.UploadFile
