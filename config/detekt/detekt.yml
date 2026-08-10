@@ -14,7 +14,7 @@ complexity:
   LongParameterList:
     active: false
   LongMethod:
-    severity: info
+    active: false
   NestedBlockDepth:
     severity: error
   TooManyFunctions:
