@@ -40,6 +40,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import sk.styk.martin.apkanalyzer.core.common.model.AppDataPermission
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
@@ -51,6 +52,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.IconButton
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.IconButtonStyle
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.InactiveSearchBar
+import sk.styk.martin.apkanalyzer.core.uilibrary.components.PermissionRationaleBottomSheet
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.navigationBarContentPadding
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
@@ -64,9 +66,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.apps.impl.R
-import sk.styk.martin.apkanalyzer.feature.apps.impl.components.AppDataPermission
 import sk.styk.martin.apkanalyzer.feature.apps.impl.components.AppListItemRowSkeleton
-import sk.styk.martin.apkanalyzer.feature.apps.impl.components.PermissionRationaleBottomSheet
 import sk.styk.martin.apkanalyzer.feature.apps.impl.components.RecentAppsRowSkeleton
 import sk.styk.martin.apkanalyzer.feature.apps.impl.components.apkfilepicker.ApkFilePickerButton
 import sk.styk.martin.apkanalyzer.feature.apps.impl.components.appitem.AppListItemRow

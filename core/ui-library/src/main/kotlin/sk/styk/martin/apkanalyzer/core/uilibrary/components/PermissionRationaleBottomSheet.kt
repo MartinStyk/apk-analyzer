@@ -1,6 +1,4 @@
-@file:Suppress("MatchingDeclarationName")
-
-package sk.styk.martin.apkanalyzer.feature.apps.impl.components
+package sk.styk.martin.apkanalyzer.core.uilibrary.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,34 +9,24 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.styk.martin.apkanalyzer.core.uilibrary.components.BottomSheet
-import sk.styk.martin.apkanalyzer.core.uilibrary.components.Button
-import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
-import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 
-@Immutable
-sealed interface AppDataPermission {
-    data object UsageAccess : AppDataPermission
-    data object StorageAccess : AppDataPermission
-}
-
 @Composable
-internal fun PermissionRationaleBottomSheet(
+fun PermissionRationaleBottomSheet(
     title: String,
     description: String,
     openSettingsLabel: String,
     onOpenSettings: () -> Unit,
     onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    BottomSheet(onDismiss = onDismiss) {
+    BottomSheet(onDismiss = onDismiss, modifier = modifier) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()

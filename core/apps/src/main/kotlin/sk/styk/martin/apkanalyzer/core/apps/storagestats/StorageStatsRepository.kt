@@ -8,5 +8,5 @@ interface StorageStatsRepository {
     val isPermissionGranted: StateFlow<Boolean>
     val totalSizes: StateFlow<Map<PackageName, AppSize>>
     fun requestTotalSizes(packageNames: List<PackageName>)
-    suspend fun queryTotalSize(packageName: PackageName): AppSize?
+    suspend fun queryBreakdown(packageName: PackageName): StorageBreakdown?
 }

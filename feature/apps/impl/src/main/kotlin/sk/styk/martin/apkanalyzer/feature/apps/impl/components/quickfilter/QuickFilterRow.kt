@@ -19,13 +19,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.persistentSetOf
+import sk.styk.martin.apkanalyzer.core.common.model.AppDataPermission
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Chip
+import sk.styk.martin.apkanalyzer.core.uilibrary.components.PermissionRationaleBottomSheet
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.sharedElement
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.feature.apps.impl.R
-import sk.styk.martin.apkanalyzer.feature.apps.impl.components.AppDataPermission
-import sk.styk.martin.apkanalyzer.feature.apps.impl.components.PermissionRationaleBottomSheet
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.QuickFilter
 
 @Composable

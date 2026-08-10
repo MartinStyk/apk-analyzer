@@ -74,6 +74,7 @@ internal class GeneralInfoViewModel @AssistedInject constructor(
 }
 
 private fun AppDetail.toGeneralInfoState() = GeneralInfoState.Loaded(
+    analysisMode = analysisMode,
     applicationName = info.applicationName,
     packageName = info.packageName,
     processName = info.processName,
@@ -99,7 +100,7 @@ private fun AppDetail.toGeneralInfoState() = GeneralInfoState.Loaded(
     dataDirectory = info.dataDirectory,
     installLocation = info.installLocation.name,
     apkSize = info.apkSize,
-    totalSize = info.totalSize,
+    totalSize = info.storageBreakdown?.total,
     nativeLibraryAbis = nativeLibraries.abis.toImmutableList(),
     nativeLibraryNames = nativeLibraries.libraryNames.toImmutableList(),
     deviceSupportedAbis = Build.SUPPORTED_ABIS.toList().toImmutableList(),

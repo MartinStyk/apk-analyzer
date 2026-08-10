@@ -48,9 +48,11 @@ name** — check here before calling one:
 | `LoadingSpinner` | `LoadingSpinner.kt` |
 | `MultiSelectorChip` | `MultiSelectorChip.kt` |
 | `NavigationBar` (+ `NavigationBarItem` data class) | `NavigationBar.kt` |
+| `PermissionRationaleBottomSheet` | `PermissionRationaleBottomSheet.kt` |
 | `RangeSlider` | `RangeSlider.kt` |
 | `SearchBarActive` | `SearchBarActive.kt` |
 | **`InactiveSearchBar`** — note the inverted name | `SearchBarInactive.kt` |
+| `SegmentedBarChart` (+ `BarChartSegment` data class) | `SegmentedBarChart.kt` |
 | `SelectorChip` | `SelectorChip.kt` |
 | `SkeletonBox` | `SkeletonBox.kt` |
 | `Switch` | `Switch.kt` |

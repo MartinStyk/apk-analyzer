@@ -2,6 +2,7 @@ package sk.styk.martin.apkanalyzer.core.apps.model
 
 import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceChain
 import sk.styk.martin.apkanalyzer.core.apps.packaging.InstalledSplitApk
+import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageBreakdown
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
@@ -33,7 +34,7 @@ data class AppInfo(
     val minSdkLabel: String? = null,
     val targetSdkVersion: Int? = null,
     val targetSdkLabel: String? = null,
-    val totalSize: AppSize? = null,
+    val storageBreakdown: StorageBreakdown? = null,
     val lastUsedTime: Instant? = null,
     val installedSplits: List<InstalledSplitApk> = emptyList(),
 )

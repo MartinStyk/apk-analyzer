@@ -28,6 +28,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceChain
+import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
@@ -55,6 +56,7 @@ internal fun GeneralInfoScreen(
     onBack: () -> Unit,
     onNavigateToSplitApks: () -> Unit,
     onNavigateToNativeLibraries: () -> Unit,
+    onNavigateToStorage: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: GeneralInfoViewModel = hiltViewModel { factory: GeneralInfoViewModel.Factory ->
         factory.create(appDetailInput)
@@ -77,6 +79,7 @@ internal fun GeneralInfoScreen(
         onBack = onBack,
         onNavigateToSplitApks = onNavigateToSplitApks,
         onNavigateToNativeLibraries = onNavigateToNativeLibraries,
+        onNavigateToStorage = onNavigateToStorage,
         modifier = modifier,
     )
 }
@@ -88,6 +91,7 @@ private fun GeneralInfoContent(
     onBack: () -> Unit,
     onNavigateToSplitApks: () -> Unit,
     onNavigateToNativeLibraries: () -> Unit,
+    onNavigateToStorage: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -109,6 +113,7 @@ private fun GeneralInfoContent(
                 onAction = onAction,
                 onNavigateToSplitApks = onNavigateToSplitApks,
                 onNavigateToNativeLibraries = onNavigateToNativeLibraries,
+                onNavigateToStorage = onNavigateToStorage,
             )
         }
     }
@@ -120,6 +125,7 @@ private fun LoadedContent(
     onAction: (GeneralInfoAction) -> Unit,
     onNavigateToSplitApks: () -> Unit,
     onNavigateToNativeLibraries: () -> Unit,
+    onNavigateToStorage: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var rationaleRow by remember { mutableStateOf<InfoRow?>(null) }
@@ -349,6 +355,14 @@ private fun LoadedContent(
                 onShowRationale = { rationaleRow = it },
                 onCopy = onCopy,
             )
+            if (state.analysisMode == AppDetail.AnalysisMode.InstalledPackage) {
+                NavigableInfoRowItem(
+                    label = stringResource(R.string.general_info_storage),
+                    value = state.totalSize?.formatted() ?: stringResource(R.string.general_info_storage_permission_needed),
+                    onClick = onNavigateToStorage,
+                    onCopy = onCopy,
+                )
+            }
             if (state.installedSplitsCount > 0) {
                 NavigableInfoRowItem(
                     label = stringResource(R.string.general_info_split_apks),
@@ -358,15 +372,6 @@ private fun LoadedContent(
                         state.installedSplitsCount,
                     ),
                     onClick = onNavigateToSplitApks,
-                    onCopy = onCopy,
-                )
-            }
-            state.totalSize?.let { size ->
-                InfoRowItem(
-                    label = stringResource(R.string.general_info_total_size),
-                    value = size.formatted(),
-                    rationale = stringResource(R.string.general_info_rationale_total_size),
-                    onShowRationale = { rationaleRow = it },
                     onCopy = onCopy,
                 )
             }
@@ -530,6 +535,7 @@ private fun GeneralInfoLoadingPreview() {
             onBack = {},
             onNavigateToSplitApks = {},
             onNavigateToNativeLibraries = {},
+            onNavigateToStorage = {},
         )
     }
 }
@@ -544,6 +550,7 @@ private fun GeneralInfoErrorPreview() {
             onBack = {},
             onNavigateToSplitApks = {},
             onNavigateToNativeLibraries = {},
+            onNavigateToStorage = {},
         )
     }
 }
@@ -558,11 +565,13 @@ private fun GeneralInfoLoadedPreview() {
             onBack = {},
             onNavigateToSplitApks = {},
             onNavigateToNativeLibraries = {},
+            onNavigateToStorage = {},
         )
     }
 }
 
 private fun sampleGeneralInfoState() = GeneralInfoState.Loaded(
+    analysisMode = AppDetail.AnalysisMode.InstalledPackage,
     applicationName = "Spotify",
     packageName = PackageName("com.spotify.music"),
     processName = "com.spotify.music",

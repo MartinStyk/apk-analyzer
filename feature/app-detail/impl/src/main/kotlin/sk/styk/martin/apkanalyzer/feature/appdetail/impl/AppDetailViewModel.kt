@@ -382,7 +382,7 @@ private fun AppDetail.toLoadedState(permissionLabelProvider: PermissionLabelProv
                 trustLevel = cert.trustLevel,
             )
         },
-        totalSize = info.totalSize,
+        totalSize = info.storageBreakdown?.total,
         lastUsedTime = info.lastUsedTime,
         installedSplitsCount = info.installedSplits.size,
         hasNativeLibraries = nativeLibraries.hasNativeCode,
