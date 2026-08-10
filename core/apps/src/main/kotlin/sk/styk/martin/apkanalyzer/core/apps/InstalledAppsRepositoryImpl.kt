@@ -176,14 +176,6 @@ private enum class InstalledAppsLoadTrigger(val attributeValue: String) {
     PackageChange(TRIGGER_PACKAGE_CHANGE),
 }
 
-private fun appCountBucket(appCount: Int): String = when (appCount) {
-    in 0..49 -> "0_49"
-    in 50..99 -> "50_99"
-    in 100..199 -> "100_199"
-    in 200..399 -> "200_399"
-    else -> "400_plus"
-}
-
 private const val OUTCOME_SUCCESS = "success"
 private const val OUTCOME_ERROR = "error"
 private const val OUTCOME_CANCELLED = "cancelled"

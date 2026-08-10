@@ -1,6 +1,6 @@
 # App Loading Observability
 
-**Status:** Proposed
+**Status:** Implemented through OBS-05
 **Scope:** Production logging and performance measurement for navigation, app discovery, app
 analysis, and their supporting repository operations
 
@@ -372,6 +372,15 @@ This trace measures the complete readable-manifest request from `ManifestParser.
 If the current renderer cannot expose parsing separately from rendering without duplicating work,
 first refactor it into explicit parse and render stages while preserving output.
 
+OBS-05 refactors the internal renderer into one binary-parser pass that produces an in-memory event
+document, followed by a separate string-rendering pass over that document. `manifest_parse_us`
+therefore includes opening and walking the binary XML parser plus resolving attribute resource names;
+`xml_render_us` includes only namespaced text construction and escaping. The readable XML output and
+resource lookup sequence are unchanged, and no parser work is repeated. `split_count` and
+`split_count_bucket` are recorded after resource lookup succeeds. A failed installed-package lookup
+cannot reveal its real split count, so those fields are absent rather than reported as a fabricated
+zero.
+
 ## Supporting Trace Design
 
 Add these traces after the three primary traces use the same infrastructure successfully:
@@ -395,6 +404,54 @@ Do not emit one remote trace or non-fatal per installed app from bulk operations
 contains aggregate counts and total stage durations. Per-app failures are accumulated into a bounded
 failure count; one non-fatal may be recorded for the operation only when the failure is
 unexpected and materially degrades the result.
+
+OBS-05 uses `trigger=initial|package_change` for `app_signing_index_load`. `certificate_count` is the
+number of current plus historical certificates present in the returned index. The existing
+`CertificateExtractor` owns recoverable malformed-certificate non-fatals and drops those individual
+certificates without exposing a failure count. The aggregate repository therefore cannot truthfully
+reconstruct a degraded outcome: a completed index is `success`, a propagated failure is `error`, and
+cancellation is `cancelled`. No per-app Performance traces are emitted.
+
+`device_features_load` wraps only the first lazy platform load; later reads return the process cache
+without starting empty traces. A thrown or null platform feature query returns the established
+`DeviceFeatures.Unknown` fallback with `outcome=degraded` and `feature_count=0`. A mapping failure is
+`error`, cancellation is rethrown as `cancelled`, and successful mapping reports the named feature
+count. The OpenGL ES pseudo-feature remains represented separately and is not included in
+`feature_count`.
+
+## Public Core Load-Entry Inventory
+
+This inventory covers every public repository or manager surface under `core/*`. “Covered by parent”
+means the work is timed inside an owning trace rather than receiving another remote trace. “Excluded”
+means the entry is intentionally outside repository-load telemetry because it is a state accessor,
+bounded deterministic transformation, settings access, or transfer/write operation.
+
+| Module and public entry point | Classification | Rationale |
+|---|---|---|
+| `core:apps` `InstalledAppsRepository.apps()` | Instrumented | `installed_apps_load` measures each initial or package-change package query and basic mapping; storage and usage enrichment use their own traces. |
+| `core:apps` `AppDetailRepository.details(reference)` | Instrumented | `app_detail_load` owns cache lookup and every miss-stage metric for installed and APK-file analysis. |
+| `core:apps` `ManifestParser.manifest(reference)` | Instrumented | `manifest_load` owns resource lookup, one binary parse, XML rendering, mode, split count, and terminal outcome. This parser is included because it is a required public load boundary even though its type is not named Repository or Manager. |
+| `core:apps` `ManifestParser.componentIntentFilters(reference)` | Covered by parent | Public app-detail calls time this work as `intent_filters_us`; adding another trace would double-count the same manifest parsing. |
+| `core:apps` `AppSigningRepository.signing()` | Instrumented | `app_signing_index_load` measures one aggregate initial/package-change query and certificate mapping pass when the lazily shared flow loads. |
+| `core:apps` `DeviceFeaturesRepository.deviceFeatures()` | Instrumented | `device_features_load` measures the first lazy query and mapping; cache reads deliberately emit no trace. |
+| `core:apps` `StorageStatsRepository.requestTotalSizes(...)` | Instrumented | `storage_stats_load` owns list-driven and lifecycle refreshes with permission, query, and aggregate count metrics. |
+| `core:apps` `StorageStatsRepository.queryTotalSize(packageName)` | Covered by parent | Single-package work is timed as `storage_stats_us` by `app_detail_load`; a child remote trace would duplicate it. |
+| `core:apps` `StorageStatsRepository.isPermissionGranted`, `totalSizes` | Excluded: state accessors | Reading already-held `StateFlow` references performs no load; the operations that populate them are instrumented. |
+| `core:apps` `UsageStatsRepository.queryLastUsedTime(packageName)` | Covered by parent | Single-package work is timed as `usage_stats_us` by `app_detail_load`. |
+| `core:apps` `UsageStatsRepository.isPermissionGranted`, `lastUsedTimes` | Instrumented population; accessor excluded | `usage_stats_load` measures lifecycle population; obtaining the existing `StateFlow` references is not a load. |
+| `core:apps` `AppExportManager.exportApk(...)`, `exportIcon(...)` | Excluded: transfer/write operations | These SAF exports write user-selected documents and are not repository data availability. They need a separate export-observability design if required. |
+| `core:app-index` `AppIndexRepository.index()` | Excluded: deterministic derived load | The lazily shared CPU transform has no platform I/O; its installed-app and certificate sources are instrumented. The grouping itself is not claimed as covered by those upstream durations. |
+| `core:app-permissions` `DevicePermissionsRepository.permissions()` | Excluded: deterministic derived load | The lazily shared flow deduplicates and labels permissions after `InstalledAppsRepository` emits. It is outside the owning installed-list duration and does not justify another OBS-05 trace. |
+| `core:user-preferences` `RecentlyViewedAppsRepository.recents()`, `hasRecents()` | Excluded: small bounded settings reads | At most eight persisted package names are joined to the instrumented installed-app stream; the DataStore reads are low-volume preference access. |
+| `core:user-preferences` `RecentlyViewedAppsRepository.addRecent(...)` | Excluded: mutation | This bounded MRU update is a preference write, not a load operation. |
+| `core:user-preferences` `SearchHistoryRepository.queries()` | Excluded: small bounded settings read | The flow reads at most 15 persisted query strings and has no platform/package analysis. |
+| `core:user-preferences` `SearchHistoryRepository.addQuery(...)`, `removeQuery(...)`, `clearAll()` | Excluded: mutations | These are bounded preference updates, not load operations. |
+| `core:common` `PersistenceRepository.observe(...)`, `get(...)` | Excluded: small generic settings reads | One-key DataStore access is infrastructure for bounded preferences, not an app-loading operation; tracing each key would create noisy low-value volume. |
+| `core:common` `PersistenceRepository.save(...)` | Excluded: mutation | Saving a preference is not a load operation. |
+| `core:common` `DigestManager` digest and hex methods | Covered by parent when used by loads | Certificate digest work is included in `app_detail_load.certificate_us` and `app_signing_index_load.certificate_mapping_us`; the methods are deterministic CPU primitives and need no nested trace. |
+| `core:common` `ResourcesManager` getters and `luminance(...)` | Excluded: small/deterministic | These are direct resource/display lookups or pure color math, not repository loads. |
+| `core:common` `ClipboardManager.copy(...)` | Excluded: write operation | Clipboard mutation has no data-load result. |
+| `core:apk-files` `TemporaryApkManager.copy(...)`, `release(...)` | Excluded: transfer/cleanup operations | URI materialization and task-cache cleanup are file lifecycle operations, not repository analysis loads; they require separate import observability if needed. |
 
 ## Reading the Results
 
@@ -423,7 +480,7 @@ attributes on one custom trace. Every proposed trace remains below both limits.
 
 ## Rollout
 
-OBS-01 through OBS-04 are implemented. OBS-05 and later stages remain deferred.
+OBS-01 through OBS-05 are implemented. OBS-06 and OBS-07 remain deferred.
 
 ### OBS-01: Make logging consistent
 
@@ -464,6 +521,9 @@ OBS-01 through OBS-04 are implemented. OBS-05 and later stages remain deferred.
 - Add `manifest_load` for readable manifests.
 - Add the signing-index and device-feature traces.
 - Complete the public repository/manager load-entry inventory and document every exclusion.
+
+Implemented as the final currently authorized implementation layer. It does not establish production
+baselines, alerts, or UI/navigation timing.
 
 ### OBS-06: Establish baselines and alerts
 

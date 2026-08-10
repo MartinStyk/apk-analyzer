@@ -6,35 +6,52 @@ import javax.inject.Inject
 
 internal class ManifestXmlRendererImpl @Inject constructor() : ManifestXmlRenderer {
 
-    override fun render(resources: Resources): String {
-        val output = StringBuilder()
+    override fun parse(resources: Resources): ManifestXmlDocument {
+        val nodes = mutableListOf<ManifestXmlNode>()
         resources.assets.openXmlResourceParser(MANIFEST_FILE_NAME).use { parser ->
             var eventType = parser.eventType
             while (eventType != XmlResourceParser.END_DOCUMENT) {
                 when (eventType) {
-                    XmlResourceParser.START_TAG -> appendStartTag(output, parser, resources)
-                    XmlResourceParser.END_TAG -> appendEndTag(output, parser)
-                    XmlResourceParser.TEXT -> appendText(output, parser)
+                    XmlResourceParser.START_TAG -> nodes += parser.toStartTag(resources)
+
+                    XmlResourceParser.END_TAG -> nodes += ManifestXmlNode.EndTag(
+                        depth = parser.depth,
+                        name = parser.name,
+                    )
+
+                    XmlResourceParser.TEXT ->
+                        parser.text
+                            ?.trim()
+                            ?.takeIf { it.isNotEmpty() }
+                            ?.let { nodes += ManifestXmlNode.Text(depth = parser.depth, value = it) }
                 }
                 eventType = parser.next()
+            }
+        }
+        return ManifestXmlDocument(nodes)
+    }
+
+    override fun render(document: ManifestXmlDocument): String {
+        val output = StringBuilder()
+        document.nodes.forEach { node ->
+            when (node) {
+                is ManifestXmlNode.StartTag -> appendStartTag(output, node)
+                is ManifestXmlNode.EndTag -> appendEndTag(output, node)
+                is ManifestXmlNode.Text -> appendText(output, node)
             }
         }
         return output.toString().trim().takeIf { it.isNotEmpty() }
             ?: error("Manifest is empty")
     }
 
-    private fun appendStartTag(
-        output: StringBuilder,
-        parser: XmlResourceParser,
-        resources: Resources,
-    ) {
-        output.appendIndent(parser.depth - 1)
+    private fun appendStartTag(output: StringBuilder, node: ManifestXmlNode.StartTag) {
+        output.appendIndent(node.depth - 1)
             .append('<')
-            .append(parser.name)
+            .append(node.name)
 
-        if (parser.depth == 1) {
+        if (node.depth == 1) {
             output.append("\n")
-                .appendIndent(parser.depth)
+                .appendIndent(node.depth)
                 .append("xmlns:")
                 .append(ANDROID_PREFIX)
                 .append("=\"")
@@ -42,49 +59,52 @@ internal class ManifestXmlRendererImpl @Inject constructor() : ManifestXmlRender
                 .append('"')
         }
 
-        for (index in 0 until parser.attributeCount) {
+        node.attributes.forEach { attribute ->
             output.append("\n")
-                .appendIndent(parser.depth)
+                .appendIndent(node.depth)
                 .appendQualifiedName(
-                    prefix = ANDROID_PREFIX.takeIf { parser.getAttributeNameResource(index) != 0 },
-                    name = parser.getAttributeName(index),
+                    prefix = attribute.prefix,
+                    name = attribute.name,
                 )
                 .append("=\"")
-                .append(attributeValue(parser, resources, index).escapeXml())
+                .append(attribute.value.escapeXml())
                 .append('"')
         }
         output.append(">\n")
     }
 
-    private fun appendEndTag(output: StringBuilder, parser: XmlResourceParser) {
-        output.appendIndent(parser.depth - 1)
+    private fun appendEndTag(output: StringBuilder, node: ManifestXmlNode.EndTag) {
+        output.appendIndent(node.depth - 1)
             .append("</")
-            .append(parser.name)
+            .append(node.name)
             .append(">\n")
     }
 
-    private fun appendText(output: StringBuilder, parser: XmlResourceParser) {
-        parser.text
-            ?.trim()
-            ?.takeIf { it.isNotEmpty() }
-            ?.let {
-                output.appendIndent(parser.depth)
-                    .append(it.escapeXml())
-                    .append('\n')
-            }
+    private fun appendText(output: StringBuilder, node: ManifestXmlNode.Text) {
+        output.appendIndent(node.depth)
+            .append(node.value.escapeXml())
+            .append('\n')
     }
 
-    private fun attributeValue(
-        parser: XmlResourceParser,
-        resources: Resources,
-        index: Int,
-    ): String {
-        val resourceId = parser.getAttributeResourceValue(index, 0)
+    private fun XmlResourceParser.toStartTag(resources: Resources): ManifestXmlNode.StartTag = ManifestXmlNode.StartTag(
+        depth = depth,
+        name = name,
+        attributes = List(attributeCount) { index ->
+            ManifestXmlAttribute(
+                prefix = ANDROID_PREFIX.takeIf { getAttributeNameResource(index) != 0 },
+                name = getAttributeName(index),
+                value = attributeValue(resources, index),
+            )
+        },
+    )
+
+    private fun XmlResourceParser.attributeValue(resources: Resources, index: Int): String {
+        val resourceId = getAttributeResourceValue(index, 0)
         if (resourceId != 0) {
             return runCatching { "@${resources.getResourceName(resourceId)}" }
-                .getOrDefault(parser.getAttributeValue(index))
+                .getOrDefault(getAttributeValue(index))
         }
-        return parser.getAttributeValue(index)
+        return getAttributeValue(index)
     }
 }
 

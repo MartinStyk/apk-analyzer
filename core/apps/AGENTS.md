@@ -62,9 +62,11 @@ components/
                             entries) and the `ProviderPathMatchType` enum for `PatternMatcher`'s int type
   ContentProviderPathPermissions.kt (internal) - `resolvePathPermissions` mapping raw `PathPermission`s
 manifest/                           - the XML-parsing engine that produces component data above
-  ManifestParser.kt / Impl           - Installed/APK AndroidManifest.xml parsing into readable namespaced XML
+  ManifestParser.kt / Impl           - Installed/APK AndroidManifest.xml parsing into readable namespaced XML;
+                                       owns manifest_load resource/parse/render stage timing
                                        and component intent filters
-  ManifestXmlRenderer.kt / Impl (internal)      - Renders parsed manifest XML for display
+  ManifestXmlRenderer.kt / Impl (internal)      - Parses binary XML once into an internal event document,
+                                                  then renders that document for display
   ComponentManifestParser.kt / Impl (internal)  - Intent-filter extraction engine `ManifestParser` delegates to
 installsource/
   InstallSourceChain.kt   - Installing/initiating/originating package, one nested fact on `AppInfo`
@@ -140,6 +142,15 @@ di/                       - Hilt module bindings (single `AppsModule.kt`, groupe
   signing-scheme, installed-only launcher, component, permission, feature, and packaging metrics.
   `outcome=degraded` is based only on the intent-filter and signing-scheme availability facts persisted
   in `AppDetail`, so cached and uncached classification stays consistent.
+- `ManifestParserImpl` owns `manifest_load` for both installed and APK-file readable manifests.
+  Resource lookup, the single binary-parser pass, and XML string rendering are sequential and
+  non-overlapping. Split metrics are emitted only after the real split count is available.
+- `AppSigningRepositoryImpl` owns one aggregate `app_signing_index_load` for each initial or
+  package-change reload. Package querying and certificate mapping are separate stages; app and
+  returned-certificate counts are aggregate metrics, never per-app traces.
+- `DeviceFeaturesRepositoryImpl` owns `device_features_load` around its one lazy platform query and
+  mapping pass. A query failure retains the existing `DeviceFeatures.Unknown` fallback and reports a
+  degraded trace; cache reads do not emit empty traces.
 - Every trace records one terminal outcome and stops in `finally`. Bulk operations aggregate counts
   and durations; never create a trace per installed app.
 
