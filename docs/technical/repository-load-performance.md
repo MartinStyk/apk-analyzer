@@ -246,6 +246,43 @@ Requirements for the adapter and shared helpers:
 
 No Firebase Performance type may appear outside `app`.
 
+### Local monitoring validation
+
+The `monitoringValidation` build type derives from `debug`, enables Crashlytics and Performance
+collection, and includes an adb-only broadcast receiver. Normal `debug` builds disable both SDKs,
+`release` builds enable both, and neither includes the receiver.
+
+Install the validation build and enable Firebase Performance logcat output:
+
+```text
+.\gradlew.bat :app:installMonitoringValidation
+adb logcat -c
+```
+
+Emit a custom validation trace, then inspect `adb logcat -s FirebasePerformance` for
+`monitoring_validation`:
+
+```text
+adb shell am broadcast --include-stopped-packages -n sk.styk.martin.apkanalyzer/sk.styk.martin.apkanalyzer.monitoring.MonitoringValidationReceiver --es signal performance
+adb logcat -s FirebasePerformance
+```
+
+Record exactly one intentional non-fatal and confirm it in Crashlytics:
+
+```text
+adb shell am broadcast --include-stopped-packages -n sk.styk.martin.apkanalyzer/sk.styk.martin.apkanalyzer.monitoring.MonitoringValidationReceiver --es signal non_fatal
+```
+
+Run the intentional crash separately and last, then relaunch the app so Crashlytics can upload the
+pending report:
+
+```text
+adb shell am broadcast --include-stopped-packages -n sk.styk.martin.apkanalyzer/sk.styk.martin.apkanalyzer.monitoring.MonitoringValidationReceiver --es signal crash
+adb shell monkey -p sk.styk.martin.apkanalyzer 1
+```
+
+The receiver has no launcher entry or UI and is compiled only into `monitoringValidation`.
+
 ## Primary Trace Design
 
 ### `installed_apps_load`

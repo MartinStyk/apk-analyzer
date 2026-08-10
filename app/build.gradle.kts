@@ -14,9 +14,24 @@ android {
     defaultConfig {
         applicationId = "sk.styk.martin.apkanalyzer"
         proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        manifestPlaceholders["firebaseCollectionEnabled"] = false
+        manifestPlaceholders["firebasePerformanceLogcatEnabled"] = false
 
         versionCode = (project.findProperty("version.code") as String).toInt()
         versionName = project.findProperty("version.name") as String
+    }
+
+    buildTypes {
+        getByName("release") {
+            manifestPlaceholders["firebaseCollectionEnabled"] = true
+        }
+        create("monitoringValidation") {
+            initWith(getByName("debug"))
+            matchingFallbacks += "debug"
+            signingConfig = signingConfigs.getByName("debug")
+            manifestPlaceholders["firebaseCollectionEnabled"] = true
+            manifestPlaceholders["firebasePerformanceLogcatEnabled"] = true
+        }
     }
 
     buildFeatures {

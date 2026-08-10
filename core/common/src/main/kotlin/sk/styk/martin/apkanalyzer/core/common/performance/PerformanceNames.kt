@@ -1,0 +1,56 @@
+package sk.styk.martin.apkanalyzer.core.common.performance
+
+object PerformanceTraceName {
+    const val INSTALLED_APPS_LOAD = "installed_apps_load"
+    const val APP_DETAIL_LOAD = "app_detail_load"
+    const val MANIFEST_LOAD = "manifest_load"
+    const val APP_SIGNING_INDEX_LOAD = "app_signing_index_load"
+    const val STORAGE_STATS_LOAD = "storage_stats_load"
+    const val USAGE_STATS_LOAD = "usage_stats_load"
+    const val DEVICE_FEATURES_LOAD = "device_features_load"
+}
+
+object PerformanceMetricName {
+    const val PACKAGE_QUERY_US = "package_query_us"
+    const val APP_MAPPING_US = "app_mapping_us"
+    const val APP_COUNT = "app_count"
+    const val CACHE_LOOKUP_US = "cache_lookup_us"
+    const val INTENT_FILTERS_US = "intent_filters_us"
+    const val STORAGE_STATS_US = "storage_stats_us"
+    const val USAGE_STATS_US = "usage_stats_us"
+    const val GENERAL_INFO_US = "general_info_us"
+    const val CERTIFICATE_US = "certificate_us"
+    const val SIGNING_SCHEMES_US = "signing_schemes_us"
+    const val LAUNCHER_QUERY_US = "launcher_query_us"
+    const val COMPONENTS_US = "components_us"
+    const val PERMISSIONS_US = "permissions_us"
+    const val FEATURES_US = "features_us"
+    const val PACKAGING_US = "packaging_us"
+    const val RESOURCE_LOOKUP_US = "resource_lookup_us"
+    const val MANIFEST_PARSE_US = "manifest_parse_us"
+    const val XML_RENDER_US = "xml_render_us"
+    const val SPLIT_COUNT = "split_count"
+    const val CERTIFICATE_MAPPING_US = "certificate_mapping_us"
+    const val CERTIFICATE_COUNT = "certificate_count"
+    const val PERMISSION_CHECK_US = "permission_check_us"
+    const val STATS_QUERY_US = "stats_query_us"
+    const val REQUESTED_COUNT = "requested_count"
+    const val LOADED_COUNT = "loaded_count"
+    const val USAGE_QUERY_US = "usage_query_us"
+    const val USAGE_MAPPING_US = "usage_mapping_us"
+    const val FEATURE_QUERY_US = "feature_query_us"
+    const val FEATURE_MAPPING_US = "feature_mapping_us"
+    const val FEATURE_COUNT = "feature_count"
+}
+
+object PerformanceAttributeName {
+    const val OUTCOME = "outcome"
+    const val TRIGGER = "trigger"
+    const val APP_COUNT_BUCKET = "app_count_bucket"
+    const val ANALYSIS_MODE = "analysis_mode"
+    const val CACHE_HIT = "cache_hit"
+    const val INTENT_FILTERS = "intent_filters"
+    const val SIGNING_SCHEMES = "signing_schemes"
+    const val SPLIT_COUNT_BUCKET = "split_count_bucket"
+    const val PERMISSION = "permission"
+}

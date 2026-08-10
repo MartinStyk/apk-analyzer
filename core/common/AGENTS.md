@@ -17,6 +17,10 @@ logger/
   OperationLog.kt         - `nextOperationRequest()` process-local request-id counter and
                             `operationLogMessage(...)` shared `operation=<op> request=<n> [stage=<s>]
                             event=<e> [context]` message-shape formatter for load-operation logging
+performance/
+  PerformanceTracker.kt   - Firebase-free parent-trace and trace-handle contracts
+  PerformanceTiming.kt    - Elapsed-realtime nanosecond clock and sync/suspend stage timing helpers
+  PerformanceNames.kt     - Central low-cardinality trace, metric, and attribute names
 resources/
   ResourcesManager.kt     - Android resources access (strings, colors, dimensions)
 settings/
@@ -43,6 +47,11 @@ util/                     - General Android and formatting utilities
 - `Logger` - Static logging: `Logger.d("Tag", "msg")`, `Logger.e("Tag", throwable, "msg")`
 - `nextOperationRequest()` / `operationLogMessage(...)` - Consistent operation/stage/event logging
   convention for public load operations across repositories
+- `PerformanceTracker` / `PerformanceTrace` - Firebase-free performance instrumentation contracts
+- `measureStage(...)` / `measureSuspendStage(...)` - Exception- and cancellation-safe whole-microsecond
+  stage timing with a monotonic nanosecond clock
+- `PerformanceTraceName` / `PerformanceMetricName` / `PerformanceAttributeName` - Fixed production
+  telemetry names
 - `ResourcesManager` - Injectable Android resources access
 - `PersistenceRepository` - DataStore preferences abstraction
 - `AppSource` - App install source classification

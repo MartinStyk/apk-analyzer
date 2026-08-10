@@ -13,6 +13,10 @@ Sub-packages: `.dependencyinjection`, `.ui` (`.externalapk`, `.navigation`), `.u
 ApkAnalyzer.kt                          - Application class (@HiltAndroidApp); Coil SingletonImageLoader.Factory; registers injected Set<DefaultLifecycleObserver> multibindings onto ProcessLifecycleOwner
 dependencyinjection/
   ApplicationModule.kt                  - @InstallIn(SingletonComponent) @Module: app-scoped CoroutineScope
+performance/
+  FirebasePerformanceTracker.kt         - Safe Firebase Performance adapter with independent,
+                                          thread-safe, idempotently stopped trace handles
+  PerformanceModule.kt                  - Singleton Hilt binding for the core:common PerformanceTracker
 ui/
   ApkAnalyzerActivity.kt                - @AndroidEntryPoint launcher Activity; observes ApkAnalyzerViewModel.state for color scheme and hosts ApkAnalyzerApp
   ApkAnalyzerThemeHost.kt               - Shared Compose theme/night-mode host used by both activities
@@ -26,6 +30,10 @@ ui/
 util/file/
   GenericFileProvider.kt                - FileProvider subclass wired through ${applicationId} in the manifest
 ```
+
+`monitoringValidation` is a debug-derived local-only build type that enables Crashlytics and
+Performance collection and adds an adb-driven `MonitoringValidationReceiver`. Normal `debug` builds
+disable both SDKs, `release` builds enable both, and the validation receiver is absent from both.
 
 ## How `ApkAnalyzerApp.kt` wires every feature together
 
