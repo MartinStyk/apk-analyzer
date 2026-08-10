@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl.certificates
 
 import android.widget.Toast

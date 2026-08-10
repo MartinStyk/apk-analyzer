@@ -23,8 +23,8 @@ AppClassificationThresholds.kt      - Constants for "large app", "recently insta
 AppExportManager.kt / Impl          - SAF-backed base APK and full-resolution icon export
 analysis/
   CertificateExtractor.kt / Impl    - APK signing certificate extraction
-  ApkSigningBlockAnalyzer.kt / Impl - Verifies v1 signing and parses the raw APK Signing Block
-                                       for v2/v3/v3.1 ID-value pairs
+  ApkSigningBlockAnalyzer.kt / Impl - Verifies v1 signing and coordinates scheme detection
+  ApkSigningBlockParser.kt / Impl   - Parses the raw APK Signing Block for v2/v3/v3.1 ID-value pairs
   ManifestParser.kt / Impl           - Installed/APK AndroidManifest.xml parsing into readable namespaced XML
                                        and component intent filters
   InstallSourceResolver.kt / Impl   - Single method, `resolve()`, returning the raw

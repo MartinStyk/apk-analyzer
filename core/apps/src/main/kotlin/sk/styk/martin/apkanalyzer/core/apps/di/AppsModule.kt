@@ -32,6 +32,8 @@ import sk.styk.martin.apkanalyzer.core.apps.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.apps.UsageStatsRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apps.analysis.ApkSigningBlockAnalyzer
 import sk.styk.martin.apkanalyzer.core.apps.analysis.ApkSigningBlockAnalyzerImpl
+import sk.styk.martin.apkanalyzer.core.apps.analysis.ApkSigningBlockParser
+import sk.styk.martin.apkanalyzer.core.apps.analysis.ApkSigningBlockParserImpl
 import sk.styk.martin.apkanalyzer.core.apps.analysis.CertificateExtractor
 import sk.styk.martin.apkanalyzer.core.apps.analysis.CertificateExtractorImpl
 import sk.styk.martin.apkanalyzer.core.apps.analysis.ComponentManifestParser
@@ -76,6 +78,10 @@ internal interface AppsModule {
     @Binds
     @Singleton
     fun bindApkSigningBlockAnalyzer(impl: ApkSigningBlockAnalyzerImpl): ApkSigningBlockAnalyzer
+
+    @Binds
+    @Singleton
+    fun bindApkSigningBlockParser(impl: ApkSigningBlockParserImpl): ApkSigningBlockParser
 
     @Binds
     fun bindManifestParser(impl: ManifestParserImpl): ManifestParser
