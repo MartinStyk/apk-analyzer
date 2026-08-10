@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -27,6 +28,11 @@ import sk.styk.martin.apkanalyzer.core.common.logger.nextOperationRequest
 import sk.styk.martin.apkanalyzer.core.common.logger.operationLogMessage
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceAttributeName
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceMetricName
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTraceName
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
+import sk.styk.martin.apkanalyzer.core.common.performance.measureStage
 import java.io.File
 import java.time.Instant
 import javax.inject.Inject
@@ -45,16 +51,18 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
     storageStatsRepository: StorageStatsRepository,
     usageStatsRepository: UsageStatsRepository,
     appScope: CoroutineScope,
+    private val performanceTracker: PerformanceTracker,
 ) : InstalledAppsRepository {
 
     @Suppress("TooGenericExceptionCaught")
     private val cachedApps = packageChangesObserver.observe()
-        .onStart { emit(Unit) }
-        .mapLatest {
+        .map { InstalledAppsLoadTrigger.PackageChange }
+        .onStart { emit(InstalledAppsLoadTrigger.Initial) }
+        .mapLatest { trigger ->
             val requestId = nextOperationRequest()
             Logger.d(INSTALLED_APPS, operationLogMessage(OPERATION_INSTALLED_APPS, requestId, event = "started"))
             try {
-                val apps = loadAllApps(requestId)
+                val apps = loadAllApps(requestId, trigger)
                 Logger.i(
                     INSTALLED_APPS,
                     operationLogMessage(OPERATION_INSTALLED_APPS, requestId, event = "succeeded", context = "count=${apps.size}"),
@@ -92,21 +100,51 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
     override fun apps(): Flow<List<InstalledApp>> = cachedApps
 
     @SuppressLint("QueryPermissionsNeeded")
-    private fun loadAllApps(requestId: Long): List<InstalledApp> {
-        Logger.d(INSTALLED_APPS, operationLogMessage(OPERATION_INSTALLED_APPS, requestId, stage = STAGE_PACKAGE_QUERY, event = "started"))
-        val packages = packageManager.getInstalledPackages(PackageManager.GET_PERMISSIONS)
-        Logger.d(
-            INSTALLED_APPS,
-            operationLogMessage(OPERATION_INSTALLED_APPS, requestId, stage = STAGE_PACKAGE_QUERY, event = "succeeded", context = "count=${packages.size}"),
-        )
+    private fun loadAllApps(requestId: Long, trigger: InstalledAppsLoadTrigger): List<InstalledApp> {
+        val trace = performanceTracker.startTrace(PerformanceTraceName.INSTALLED_APPS_LOAD)
+        trace.putAttribute(PerformanceAttributeName.TRIGGER, trigger.attributeValue)
+        var outcome = OUTCOME_ERROR
+        try {
+            Logger.d(INSTALLED_APPS, operationLogMessage(OPERATION_INSTALLED_APPS, requestId, stage = STAGE_PACKAGE_QUERY, event = "started"))
+            val packages = trace.measureStage(PerformanceMetricName.PACKAGE_QUERY_US) {
+                packageManager.getInstalledPackages(PackageManager.GET_PERMISSIONS)
+            }
+            Logger.d(
+                INSTALLED_APPS,
+                operationLogMessage(
+                    OPERATION_INSTALLED_APPS,
+                    requestId,
+                    stage = STAGE_PACKAGE_QUERY,
+                    event = "succeeded",
+                    context = "count=${packages.size}",
+                ),
+            )
 
-        Logger.d(INSTALLED_APPS, operationLogMessage(OPERATION_INSTALLED_APPS, requestId, stage = STAGE_APP_MAPPING, event = "started"))
-        val apps = packages.mapNotNull { packageInfo -> packageInfo.applicationInfo?.let { packageInfo.toInstalledApp() } }
-        Logger.d(
-            INSTALLED_APPS,
-            operationLogMessage(OPERATION_INSTALLED_APPS, requestId, stage = STAGE_APP_MAPPING, event = "succeeded", context = "count=${apps.size}"),
-        )
-        return apps
+            Logger.d(INSTALLED_APPS, operationLogMessage(OPERATION_INSTALLED_APPS, requestId, stage = STAGE_APP_MAPPING, event = "started"))
+            val apps = trace.measureStage(PerformanceMetricName.APP_MAPPING_US) {
+                packages.mapNotNull { packageInfo -> packageInfo.applicationInfo?.let { packageInfo.toInstalledApp() } }
+            }
+            Logger.d(
+                INSTALLED_APPS,
+                operationLogMessage(
+                    OPERATION_INSTALLED_APPS,
+                    requestId,
+                    stage = STAGE_APP_MAPPING,
+                    event = "succeeded",
+                    context = "count=${apps.size}",
+                ),
+            )
+            trace.putMetric(PerformanceMetricName.APP_COUNT, apps.size.toLong())
+            trace.putAttribute(PerformanceAttributeName.APP_COUNT_BUCKET, appCountBucket(apps.size))
+            outcome = OUTCOME_SUCCESS
+            return apps
+        } catch (cancellation: CancellationException) {
+            outcome = OUTCOME_CANCELLED
+            throw cancellation
+        } finally {
+            trace.putAttribute(PerformanceAttributeName.OUTCOME, outcome)
+            trace.stop()
+        }
     }
 
     private fun PackageInfo.toInstalledApp(): InstalledApp {
@@ -132,3 +170,22 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
         )
     }
 }
+
+private enum class InstalledAppsLoadTrigger(val attributeValue: String) {
+    Initial(TRIGGER_INITIAL),
+    PackageChange(TRIGGER_PACKAGE_CHANGE),
+}
+
+private fun appCountBucket(appCount: Int): String = when (appCount) {
+    in 0..49 -> "0_49"
+    in 50..99 -> "50_99"
+    in 100..199 -> "100_199"
+    in 200..399 -> "200_399"
+    else -> "400_plus"
+}
+
+private const val OUTCOME_SUCCESS = "success"
+private const val OUTCOME_ERROR = "error"
+private const val OUTCOME_CANCELLED = "cancelled"
+private const val TRIGGER_INITIAL = "initial"
+private const val TRIGGER_PACKAGE_CHANGE = "package_change"

@@ -373,6 +373,14 @@ Add these traces after the three primary traces use the same infrastructure succ
 | `usage_stats_load` | `permission_check_us`, `usage_query_us`, `usage_mapping_us`, `loaded_count` | `outcome`, `permission`, `trigger` |
 | `device_features_load` | `feature_query_us`, `feature_mapping_us`, `feature_count` | `outcome` |
 
+The current enrichment entry points do not carry the installed-list trigger through their public
+repository APIs. Storage reports `trigger=installed_apps` for list-driven requests and
+`trigger=lifecycle_start` for foreground refreshes. Usage has no list-driven bulk refresh and reports
+`trigger=lifecycle_start`; its single-package query remains part of app-detail work. These values
+describe the trigger that each repository can observe without changing its API, cache, flow, or
+dispatcher behavior. Both enrichment traces report `permission=granted|denied` and use
+`outcome=degraded` when permission is missing or a permission/query race yields partial data.
+
 Do not emit one remote trace or non-fatal per installed app from bulk operations. One parent trace
 contains aggregate counts and total stage durations. Per-app failures are accumulated into a bounded
 failure count; one non-fatal may be recorded for the operation only when the failure is

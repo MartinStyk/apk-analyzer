@@ -126,6 +126,17 @@ di/                       - Hilt module bindings (single `AppsModule.kt`, groupe
 - `StorageStatsRepository.isPermissionGranted: StateFlow<Boolean>` - Usage access permission state
 - `UsageStatsRepository.isPermissionGranted: StateFlow<Boolean>` - Usage stats permission state
 
+## Performance Traces
+
+- `InstalledAppsRepositoryImpl` owns one `installed_apps_load` trace around the package query and
+  basic `InstalledApp` mapping only. Storage and usage enrichment must never extend this trace.
+- `StorageStatsRepositoryImpl` owns `storage_stats_load`; its observable triggers are
+  `installed_apps` for list-driven requests and `lifecycle_start` for foreground refreshes.
+- `UsageStatsRepositoryImpl` owns `usage_stats_load` for its lifecycle refresh. Single-package
+  `queryLastUsedTime` calls belong to app-detail work and are not part of this trace.
+- Every trace records one terminal outcome and stops in `finally`. Bulk operations aggregate counts
+  and durations; never create a trace per installed app.
+
 ## Signing Certificate Semantics
 
 - `SigningInfo.apkContentsSigners` contains the current signer set. Multiple current signers are one

@@ -21,9 +21,15 @@ import sk.styk.martin.apkanalyzer.core.common.logger.operationLogMessage
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceAttributeName
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceMetricName
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTraceName
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
+import sk.styk.martin.apkanalyzer.core.common.performance.measureStage
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.cancellation.CancellationException
 
 private const val TAG = "StorageStatsRepositoryImpl"
 private const val OPERATION = "storage_stats"
@@ -35,6 +41,7 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
     private val appOpsManager: AppOpsManager,
     private val dispatcherProvider: DispatcherProvider,
     private val applicationScope: CoroutineScope,
+    private val performanceTracker: PerformanceTracker,
 ) : StorageStatsRepository,
     DefaultLifecycleObserver {
 
@@ -48,7 +55,7 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
 
     override fun onStart(owner: LifecycleOwner) {
         applicationScope.launch(dispatcherProvider.io()) {
-            fetchTotalSizes(packageNames)
+            fetchTotalSizes(packageNames, TRIGGER_LIFECYCLE_START)
         }
     }
 
@@ -64,7 +71,7 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
     override fun requestTotalSizes(packageNames: List<PackageName>) {
         this.packageNames = packageNames
         applicationScope.launch(dispatcherProvider.io()) {
-            fetchTotalSizes(packageNames)
+            fetchTotalSizes(packageNames, TRIGGER_INSTALLED_APPS)
         }
     }
 
@@ -94,58 +101,85 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
         null
     }
 
-    private fun fetchTotalSizes(packageNames: List<PackageName>) {
+    private fun fetchTotalSizes(packageNames: List<PackageName>, trigger: String) {
         val requestId = nextOperationRequest()
-        val hasPermission = checkPermission()
-        isPermissionGranted.value = hasPermission
-        if (!hasPermission) {
-            Logger.w(TAG, operationLogMessage(OPERATION, requestId, event = "degraded", context = "reason=permission_missing"))
-            return
-        }
-
-        Logger.d(TAG, operationLogMessage(OPERATION, requestId, event = "started", context = "requested_count=${packageNames.size}"))
-        val user = UserHandle.getUserHandleForUid(Process.myUid())
-        var uninstallRaceCount = 0
-        var permissionRaceCount = 0
-        var queryFailureCount = 0
-        var lastQueryFailure: IOException? = null
-        val sizes = packageNames.mapNotNull { packageName ->
-            when (val result = queryPackageSize(user, packageName)) {
-                is SizeQueryResult.Success -> packageName to result.size
-
-                SizeQueryResult.UninstallRace -> {
-                    uninstallRaceCount++
-                    null
-                }
-
-                SizeQueryResult.PermissionRace -> {
-                    permissionRaceCount++
-                    null
-                }
-
-                is SizeQueryResult.Failure -> {
-                    queryFailureCount++
-                    lastQueryFailure = result.error
-                    null
-                }
+        val trace = performanceTracker.startTrace(PerformanceTraceName.STORAGE_STATS_LOAD)
+        trace.putAttribute(PerformanceAttributeName.TRIGGER, trigger)
+        trace.putMetric(PerformanceMetricName.REQUESTED_COUNT, packageNames.size.toLong())
+        var outcome = OUTCOME_ERROR
+        try {
+            val hasPermission = trace.measureStage(PerformanceMetricName.PERMISSION_CHECK_US) {
+                checkPermission()
             }
-        }.toMap()
-        totalSizes.value = sizes
+            trace.putAttribute(PerformanceAttributeName.PERMISSION, if (hasPermission) PERMISSION_GRANTED else PERMISSION_DENIED)
+            isPermissionGranted.value = hasPermission
+            if (!hasPermission) {
+                trace.putMetric(PerformanceMetricName.LOADED_COUNT, 0)
+                Logger.w(TAG, operationLogMessage(OPERATION, requestId, event = "degraded", context = "reason=permission_missing"))
+                outcome = OUTCOME_DEGRADED
+                return
+            }
 
-        if (uninstallRaceCount > 0) {
-            Logger.w(TAG, operationLogMessage(OPERATION, requestId, event = "degraded", context = "reason=uninstall_race skipped_count=$uninstallRaceCount"))
+            Logger.d(TAG, operationLogMessage(OPERATION, requestId, event = "started", context = "requested_count=${packageNames.size}"))
+            val user = UserHandle.getUserHandleForUid(Process.myUid())
+            var uninstallRaceCount = 0
+            var permissionRaceCount = 0
+            var queryFailureCount = 0
+            var lastQueryFailure: IOException? = null
+            val sizes = trace.measureStage(PerformanceMetricName.STATS_QUERY_US) {
+                packageNames.mapNotNull { packageName ->
+                    when (val result = queryPackageSize(user, packageName)) {
+                        is SizeQueryResult.Success -> packageName to result.size
+
+                        SizeQueryResult.UninstallRace -> {
+                            uninstallRaceCount++
+                            null
+                        }
+
+                        SizeQueryResult.PermissionRace -> {
+                            permissionRaceCount++
+                            null
+                        }
+
+                        is SizeQueryResult.Failure -> {
+                            queryFailureCount++
+                            lastQueryFailure = result.error
+                            null
+                        }
+                    }
+                }.toMap()
+            }
+            totalSizes.value = sizes
+            trace.putMetric(PerformanceMetricName.LOADED_COUNT, sizes.size.toLong())
+
+            if (uninstallRaceCount > 0) {
+                Logger.w(
+                    TAG,
+                    operationLogMessage(OPERATION, requestId, event = "degraded", context = "reason=uninstall_race skipped_count=$uninstallRaceCount"),
+                )
+            }
+            if (permissionRaceCount > 0) {
+                Logger.w(
+                    TAG,
+                    operationLogMessage(OPERATION, requestId, event = "degraded", context = "reason=permission_race skipped_count=$permissionRaceCount"),
+                )
+            }
+            lastQueryFailure?.let {
+                Logger.w(
+                    TAG,
+                    it,
+                    operationLogMessage(OPERATION, requestId, event = "degraded", context = "reason=stats_query_failed failed_count=$queryFailureCount"),
+                )
+            }
+            Logger.i(TAG, operationLogMessage(OPERATION, requestId, event = "succeeded", context = "loaded_count=${sizes.size}"))
+            outcome = if (uninstallRaceCount > 0 || permissionRaceCount > 0 || queryFailureCount > 0) OUTCOME_DEGRADED else OUTCOME_SUCCESS
+        } catch (cancellation: CancellationException) {
+            outcome = OUTCOME_CANCELLED
+            throw cancellation
+        } finally {
+            trace.putAttribute(PerformanceAttributeName.OUTCOME, outcome)
+            trace.stop()
         }
-        if (permissionRaceCount > 0) {
-            Logger.w(TAG, operationLogMessage(OPERATION, requestId, event = "degraded", context = "reason=permission_race skipped_count=$permissionRaceCount"))
-        }
-        lastQueryFailure?.let {
-            Logger.w(
-                TAG,
-                it,
-                operationLogMessage(OPERATION, requestId, event = "degraded", context = "reason=stats_query_failed failed_count=$queryFailureCount"),
-            )
-        }
-        Logger.i(TAG, operationLogMessage(OPERATION, requestId, event = "succeeded", context = "loaded_count=${sizes.size}"))
     }
 
     private fun queryPackageSize(user: UserHandle, packageName: PackageName): SizeQueryResult = try {
@@ -166,3 +200,12 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
         data class Failure(val error: IOException) : SizeQueryResult
     }
 }
+
+private const val OUTCOME_SUCCESS = "success"
+private const val OUTCOME_DEGRADED = "degraded"
+private const val OUTCOME_ERROR = "error"
+private const val OUTCOME_CANCELLED = "cancelled"
+private const val PERMISSION_GRANTED = "granted"
+private const val PERMISSION_DENIED = "denied"
+private const val TRIGGER_LIFECYCLE_START = "lifecycle_start"
+private const val TRIGGER_INSTALLED_APPS = "installed_apps"
