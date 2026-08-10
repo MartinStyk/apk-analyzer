@@ -5,10 +5,13 @@ import android.content.pm.PackageManager
 import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
+import sk.styk.martin.apkanalyzer.core.common.logger.nextOperationRequest
+import sk.styk.martin.apkanalyzer.core.common.logger.operationLogMessage
 import javax.inject.Inject
 import javax.inject.Singleton
 
 private const val TAG = "DeviceFeaturesRepositoryImpl"
+private const val OPERATION = "device_features"
 
 @Singleton
 internal class DeviceFeaturesRepositoryImpl @Inject constructor(
@@ -21,8 +24,10 @@ internal class DeviceFeaturesRepositoryImpl @Inject constructor(
     override suspend fun deviceFeatures(): DeviceFeatures = withContext(dispatcherProvider.io()) { cachedDeviceFeatures }
 
     private fun readDeviceFeatures(): DeviceFeatures {
+        val requestId = nextOperationRequest()
+        Logger.d(TAG, operationLogMessage(OPERATION, requestId, event = "started"))
         val systemFeatures = runCatching { packageManager.systemAvailableFeatures }
-            .onFailure { Logger.e(TAG, it, "Can not read device features") }
+            .onFailure { Logger.w(TAG, it, operationLogMessage(OPERATION, requestId, event = "degraded", context = "reason=feature_query_failed")) }
             .getOrNull()
             ?: return DeviceFeatures.Unknown
 
@@ -33,6 +38,8 @@ internal class DeviceFeaturesRepositoryImpl @Inject constructor(
             openGlEsVersion = systemFeatures
                 .firstOrNull { it.name == null && it.reqGlEsVersion != FeatureInfo.GL_ES_VERSION_UNDEFINED }
                 ?.reqGlEsVersion,
-        )
+        ).also {
+            Logger.i(TAG, operationLogMessage(OPERATION, requestId, event = "succeeded", context = "feature_count=${it.featureVersions.size}"))
+        }
     }
 }

@@ -8,12 +8,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
+import kotlinx.coroutines.flow.distinctUntilChanged
 import sk.styk.martin.apkanalyzer.core.navigation.Navigator
+import sk.styk.martin.apkanalyzer.core.navigation.ScreenOpenEvent
 import sk.styk.martin.apkanalyzer.core.navigation.rememberNavigationState
 import sk.styk.martin.apkanalyzer.core.navigation.toEntries
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.NavigationBar
@@ -25,6 +30,11 @@ import sk.styk.martin.apkanalyzer.feature.browse.impl.navigation.browseEntries
 import sk.styk.martin.apkanalyzer.feature.settings.impl.navigation.settingsEntries
 import sk.styk.martin.apkanalyzer.ui.navigation.TOP_LEVEL_DESTINATIONS
 import sk.styk.martin.apkanalyzer.ui.navigation.TOP_LEVEL_KEYS
+import sk.styk.martin.apkanalyzer.ui.navigation.logScreenOpened
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.navigation.screenOpenEvent as appDetailScreenOpenEvent
+import sk.styk.martin.apkanalyzer.feature.apps.impl.navigation.screenOpenEvent as appsScreenOpenEvent
+import sk.styk.martin.apkanalyzer.feature.browse.impl.navigation.screenOpenEvent as browseScreenOpenEvent
+import sk.styk.martin.apkanalyzer.feature.settings.impl.navigation.screenOpenEvent as settingsScreenOpenEvent
 
 @Composable
 internal fun ApkAnalyzerApp() {
@@ -34,6 +44,12 @@ internal fun ApkAnalyzerApp() {
     )
     val navigator = remember {
         Navigator(navigationState)
+    }
+
+    LaunchedEffect(navigationState) {
+        snapshotFlow { navigationState.currentKey }
+            .distinctUntilChanged()
+            .collect { key -> logScreenOpened(key, ::resolveScreenOpenEvent) }
     }
 
     Scaffold { paddings ->
@@ -65,3 +81,8 @@ internal fun ApkAnalyzerApp() {
         }
     }
 }
+
+private fun resolveScreenOpenEvent(key: NavKey): ScreenOpenEvent? = appsScreenOpenEvent(key)
+    ?: appDetailScreenOpenEvent(key)
+    ?: browseScreenOpenEvent(key)
+    ?: settingsScreenOpenEvent(key)

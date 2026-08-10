@@ -253,8 +253,6 @@ internal class AppDetailViewModel @AssistedInject constructor(
             val deviceFeatures = deviceFeaturesRepository.deviceFeatures()
             val detailResult = withContext(dispatcherProvider.default()) {
                 appDetailRepository.details(appReference)
-            }.onFailure {
-                Logger.e(TAG, it, "Can not load app detail for $appDetailInput")
             }
             source.value = detailResult.fold(
                 onSuccess = { detail ->

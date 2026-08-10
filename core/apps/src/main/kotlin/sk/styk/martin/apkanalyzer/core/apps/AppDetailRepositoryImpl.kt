@@ -45,6 +45,8 @@ import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
+import sk.styk.martin.apkanalyzer.core.common.logger.nextOperationRequest
+import sk.styk.martin.apkanalyzer.core.common.logger.operationLogMessage
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
@@ -53,6 +55,7 @@ import java.time.Instant
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.cancellation.CancellationException
 
 @Suppress("TooManyFunctions")
 @Singleton
@@ -95,72 +98,217 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     }
 
     private suspend fun installedPackageDetails(packageName: PackageName): Result<AppDetail> {
+        val requestId = nextOperationRequest()
+        val context = "mode=installed package=${packageName.value}"
         val cacheKey = CacheKey.InstalledPackage(packageName)
-        cache[cacheKey]?.let { return Result.success(it) }
-        Logger.d(TAG, "Loading details of $packageName")
-        return runCatchingCancellable {
-            val reference = AppReference.InstalledPackage(packageName)
-            val packageInfo = packageManager.getPackageInfo(packageName.value, analysisFlags)
-            val intentFilters = manifestParser.componentIntentFilters(reference)
-            getPackageDetails(
-                analysisMode = AppDetail.AnalysisMode.InstalledPackage,
-                packageInfo = packageInfo,
-                intentFiltersByComponent = intentFilters.getOrDefault(emptyMap()),
-                areIntentFiltersAvailable = intentFilters.isSuccess,
-                totalSize = storageStatsRepository.queryTotalSize(packageName),
-                lastUsedTime = usageStatsRepository.queryLastUsedTime(packageName),
-            )
-        }.onSuccess { cache[cacheKey] = it }
+        Logger.d(TAG, operationLogMessage(OPERATION, requestId, event = "started", context = context))
+        Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_CACHE_LOOKUP, event = "started", context = context))
+        cache[cacheKey]?.let {
+            Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_CACHE_LOOKUP, event = "succeeded", context = "cache_hit=true $context"))
+            val event = if (it.areComponentIntentFiltersAvailable) "succeeded" else "degraded"
+            Logger.i(TAG, operationLogMessage(OPERATION, requestId, event = event, context = "cache_hit=true $context"))
+            return Result.success(it)
+        }
+
+        Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_CACHE_LOOKUP, event = "succeeded", context = "cache_hit=false $context"))
+        return try {
+            runCatchingCancellable {
+                val reference = AppReference.InstalledPackage(packageName)
+
+                Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_PACKAGE_QUERY, event = "started", context = context))
+                val packageInfo = packageManager.getPackageInfo(packageName.value, analysisFlags)
+                Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_PACKAGE_QUERY, event = "succeeded", context = context))
+
+                val intentFilters = manifestParser.componentIntentFilters(reference)
+                Logger.d(
+                    TAG,
+                    operationLogMessage(
+                        OPERATION,
+                        requestId,
+                        stage = STAGE_INTENT_FILTERS,
+                        event = if (intentFilters.isSuccess) "succeeded" else "degraded",
+                        context = context,
+                    ),
+                )
+
+                val totalSize = storageStatsRepository.queryTotalSize(packageName)
+                Logger.d(
+                    TAG,
+                    operationLogMessage(
+                        OPERATION,
+                        requestId,
+                        stage = STAGE_STORAGE_STATS,
+                        event = if (totalSize != null) "succeeded" else "degraded",
+                        context = "available=${totalSize != null} $context",
+                    ),
+                )
+
+                val lastUsedTime = usageStatsRepository.queryLastUsedTime(packageName)
+                Logger.d(
+                    TAG,
+                    operationLogMessage(
+                        OPERATION,
+                        requestId,
+                        stage = STAGE_USAGE_STATS,
+                        event = if (lastUsedTime != null) "succeeded" else "degraded",
+                        context = "available=${lastUsedTime != null} $context",
+                    ),
+                )
+
+                getPackageDetails(
+                    requestId = requestId,
+                    context = context,
+                    analysisMode = AppDetail.AnalysisMode.InstalledPackage,
+                    packageInfo = packageInfo,
+                    intentFiltersByComponent = intentFilters.getOrDefault(emptyMap()),
+                    areIntentFiltersAvailable = intentFilters.isSuccess,
+                    totalSize = totalSize,
+                    lastUsedTime = lastUsedTime,
+                )
+            }.onSuccess { detail ->
+                cache[cacheKey] = detail
+                val event = if (detail.areComponentIntentFiltersAvailable) "succeeded" else "degraded"
+                Logger.i(TAG, operationLogMessage(OPERATION, requestId, event = event, context = context))
+            }.onFailure {
+                Logger.e(TAG, it, operationLogMessage(OPERATION, requestId, event = "failed", context = context))
+            }
+        } catch (cancellation: CancellationException) {
+            Logger.d(TAG, operationLogMessage(OPERATION, requestId, event = "cancelled", context = context))
+            throw cancellation
+        }
     }
 
     private suspend fun apkFilePackageDetails(accessibleFile: File): Result<AppDetail> {
+        val requestId = nextOperationRequest()
+        val context = "mode=apk_file apk_path=${accessibleFile.absolutePath}"
         val cacheKey = CacheKey.ApkFile(accessibleFile.absolutePath, accessibleFile.lastModified())
-        cache[cacheKey]?.let { return Result.success(it) }
-        Logger.d(TAG, "Loading details of ${accessibleFile.absolutePath}")
-        return runCatchingCancellable {
-            val reference = AppReference.ApkFile(accessibleFile.absolutePath)
-            val intentFilters = manifestParser.componentIntentFilters(reference)
-            getPackageDetails(
-                analysisMode = AppDetail.AnalysisMode.ApkFile,
-                packageInfo = packageManager.getPackageArchiveInfoWithCorrectPath(accessibleFile.absolutePath, analysisFlags)
-                    ?: error("Cannot parse APK file: ${accessibleFile.absolutePath}"),
-                intentFiltersByComponent = intentFilters.getOrDefault(emptyMap()),
-                areIntentFiltersAvailable = intentFilters.isSuccess,
-            )
-        }.onSuccess { cache[cacheKey] = it }
+        Logger.d(TAG, operationLogMessage(OPERATION, requestId, event = "started", context = context))
+        Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_CACHE_LOOKUP, event = "started", context = context))
+        cache[cacheKey]?.let {
+            Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_CACHE_LOOKUP, event = "succeeded", context = "cache_hit=true $context"))
+            val event = if (it.areComponentIntentFiltersAvailable) "succeeded" else "degraded"
+            Logger.i(TAG, operationLogMessage(OPERATION, requestId, event = event, context = "cache_hit=true $context"))
+            return Result.success(it)
+        }
+
+        Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_CACHE_LOOKUP, event = "succeeded", context = "cache_hit=false $context"))
+        return try {
+            runCatchingCancellable {
+                val reference = AppReference.ApkFile(accessibleFile.absolutePath)
+
+                Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_PACKAGE_QUERY, event = "started", context = context))
+                val packageInfo = packageManager.getPackageArchiveInfoWithCorrectPath(accessibleFile.absolutePath, analysisFlags)
+                    ?: error("Cannot parse APK file: ${accessibleFile.absolutePath}")
+                Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_PACKAGE_QUERY, event = "succeeded", context = context))
+
+                val intentFilters = manifestParser.componentIntentFilters(reference)
+                Logger.d(
+                    TAG,
+                    operationLogMessage(
+                        OPERATION,
+                        requestId,
+                        stage = STAGE_INTENT_FILTERS,
+                        event = if (intentFilters.isSuccess) "succeeded" else "degraded",
+                        context = context,
+                    ),
+                )
+
+                getPackageDetails(
+                    requestId = requestId,
+                    context = context,
+                    analysisMode = AppDetail.AnalysisMode.ApkFile,
+                    packageInfo = packageInfo,
+                    intentFiltersByComponent = intentFilters.getOrDefault(emptyMap()),
+                    areIntentFiltersAvailable = intentFilters.isSuccess,
+                )
+            }.onSuccess { detail ->
+                cache[cacheKey] = detail
+                val event = if (detail.areComponentIntentFiltersAvailable) "succeeded" else "degraded"
+                Logger.i(TAG, operationLogMessage(OPERATION, requestId, event = event, context = context))
+            }.onFailure {
+                Logger.e(TAG, it, operationLogMessage(OPERATION, requestId, event = "failed", context = context))
+            }
+        } catch (cancellation: CancellationException) {
+            Logger.d(TAG, operationLogMessage(OPERATION, requestId, event = "cancelled", context = context))
+            throw cancellation
+        }
     }
 
     private fun getPackageDetails(
+        requestId: Long,
+        context: String,
         analysisMode: AppDetail.AnalysisMode,
         packageInfo: PackageInfo,
         intentFiltersByComponent: Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>,
         areIntentFiltersAvailable: Boolean,
         totalSize: AppSize? = null,
         lastUsedTime: Instant? = null,
-    ) = AppDetail(
-        analysisMode = analysisMode,
-        info = getGeneralData(packageInfo, totalSize, lastUsedTime),
-        signing = certificateExtractor.getAppSigning(packageInfo)
-            .copy(
-                signingSchemeVersions = packageInfo.applicationInfo?.sourceDir
-                    ?.let(apkSigningBlockAnalyzer::detectSchemeVersions),
+    ): AppDetail {
+        Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_GENERAL_INFO, event = "started", context = context))
+        val info = getGeneralData(packageInfo, totalSize, lastUsedTime)
+        Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_GENERAL_INFO, event = "succeeded", context = context))
+
+        Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_CERTIFICATES, event = "started", context = context))
+        val signing = certificateExtractor.getAppSigning(packageInfo)
+        Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_CERTIFICATES, event = "succeeded", context = context))
+
+        Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_SIGNING_SCHEMES, event = "started", context = context))
+        val signingSchemeVersions = packageInfo.applicationInfo?.sourceDir?.let(apkSigningBlockAnalyzer::detectSchemeVersions)
+        Logger.d(
+            TAG,
+            operationLogMessage(
+                OPERATION,
+                requestId,
+                stage = STAGE_SIGNING_SCHEMES,
+                event = if (signingSchemeVersions != null) "succeeded" else "degraded",
+                context = context,
             ),
-        activities = getActivities(
-            packageInfo = packageInfo,
-            launcherActivityNames = when (analysisMode) {
-                AppDetail.AnalysisMode.InstalledPackage -> queryLauncherActivityNames(PackageName(packageInfo.packageName))
-                AppDetail.AnalysisMode.ApkFile -> null
-            },
-            intentFiltersByComponent = intentFiltersByComponent,
-        ),
-        services = getServices(packageInfo, intentFiltersByComponent),
-        contentProviders = getContentProviders(packageInfo, intentFiltersByComponent),
-        receivers = getBroadcastReceivers(packageInfo, intentFiltersByComponent),
-        permissions = getPermissions(packageInfo),
-        features = getFeatures(packageInfo),
-        nativeLibraries = readNativeLibraries(packageInfo.applicationInfo),
-        areComponentIntentFiltersAvailable = areIntentFiltersAvailable,
-    )
+        )
+
+        val launcherActivityNames = when (analysisMode) {
+            AppDetail.AnalysisMode.InstalledPackage -> {
+                Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_LAUNCHER_QUERY, event = "started", context = context))
+                queryLauncherActivityNames(PackageName(packageInfo.packageName)).also {
+                    Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_LAUNCHER_QUERY, event = "succeeded", context = context))
+                }
+            }
+
+            AppDetail.AnalysisMode.ApkFile -> null
+        }
+
+        Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_COMPONENT_MAPPING, event = "started", context = context))
+        val activities = getActivities(packageInfo, launcherActivityNames, intentFiltersByComponent)
+        val services = getServices(packageInfo, intentFiltersByComponent)
+        val contentProviders = getContentProviders(packageInfo, intentFiltersByComponent)
+        val receivers = getBroadcastReceivers(packageInfo, intentFiltersByComponent)
+        Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_COMPONENT_MAPPING, event = "succeeded", context = context))
+
+        Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_PERMISSIONS, event = "started", context = context))
+        val permissions = getPermissions(packageInfo)
+        Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_PERMISSIONS, event = "succeeded", context = context))
+
+        Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_FEATURES, event = "started", context = context))
+        val features = getFeatures(packageInfo)
+        Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_FEATURES, event = "succeeded", context = context))
+
+        Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_PACKAGING, event = "started", context = context))
+        val nativeLibraries = readNativeLibraries(packageInfo.applicationInfo)
+        Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_PACKAGING, event = "succeeded", context = context))
+
+        return AppDetail(
+            analysisMode = analysisMode,
+            info = info,
+            signing = signing.copy(signingSchemeVersions = signingSchemeVersions),
+            activities = activities,
+            services = services,
+            contentProviders = contentProviders,
+            receivers = receivers,
+            permissions = permissions,
+            features = features,
+            nativeLibraries = nativeLibraries,
+            areComponentIntentFiltersAvailable = areIntentFiltersAvailable,
+        )
+    }
 
     private fun getGeneralData(
         packageInfo: PackageInfo,
@@ -226,7 +374,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         .flatMap { category ->
             val intent = Intent(Intent.ACTION_MAIN).addCategory(category).setPackage(packageName.value)
             runCatching { packageManager.queryIntentActivities(intent, 0) }
-                .onFailure { Logger.w(TAG, "Can not resolve launcher activities of $packageName") }
+                .onFailure { Logger.w(TAG, it, "Can not resolve launcher activities of $packageName") }
                 .getOrDefault(emptyList())
                 .map { it.activityInfo.name }
         }
@@ -336,6 +484,20 @@ internal class AppDetailRepositoryImpl @Inject constructor(
 
     companion object {
         private const val TAG = "AppDetailRepositoryImpl"
+        private const val OPERATION = "app_detail"
+        private const val STAGE_CACHE_LOOKUP = "cache_lookup"
+        private const val STAGE_PACKAGE_QUERY = "package_query"
+        private const val STAGE_INTENT_FILTERS = "intent_filters"
+        private const val STAGE_STORAGE_STATS = "storage_stats"
+        private const val STAGE_USAGE_STATS = "usage_stats"
+        private const val STAGE_GENERAL_INFO = "general_info"
+        private const val STAGE_CERTIFICATES = "certificates"
+        private const val STAGE_SIGNING_SCHEMES = "signing_schemes"
+        private const val STAGE_LAUNCHER_QUERY = "launcher_query"
+        private const val STAGE_COMPONENT_MAPPING = "component_mapping"
+        private const val STAGE_PERMISSIONS = "permissions"
+        private const val STAGE_FEATURES = "features"
+        private const val STAGE_PACKAGING = "packaging"
 
         private val launcherCategories = listOf(Intent.CATEGORY_LAUNCHER, Intent.CATEGORY_LEANBACK_LAUNCHER)
     }
