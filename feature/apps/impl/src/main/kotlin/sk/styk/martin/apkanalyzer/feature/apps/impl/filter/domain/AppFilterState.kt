@@ -6,6 +6,7 @@ import kotlinx.collections.immutable.persistentSetOf
 import sk.styk.martin.apkanalyzer.core.apps.AppClassificationThresholds
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
+import sk.styk.martin.apkanalyzer.core.common.model.isSideloaded
 import java.time.Instant
 import kotlin.time.Duration.Companion.days
 import kotlin.time.toJavaDuration
@@ -36,7 +37,7 @@ data class AppFilterState(
     val isLargeTotalFilterActive: Boolean get() = totalSizeRange?.min != null && totalSizeRange.min >= AppClassificationThresholds.LARGE_SIZE
     val isSystemFilterActive: Boolean get() = AppSource.SystemPreinstalled in selectedSources
     val isGooglePlayFilterActive: Boolean get() = AppSource.GooglePlay in selectedSources
-    val isSideloadedFilterActive: Boolean get() = AppSource.Unknown in selectedSources
+    val isSideloadedFilterActive: Boolean get() = selectedSources.any { it.isSideloaded }
     val isRecentInstallActive: Boolean get() = installTimeRange?.start != null &&
         installTimeRange.start > Instant.now() - AppClassificationThresholds.RECENT_PERIOD - 1.days.toJavaDuration()
     val isRecentUpdateActive: Boolean get() = updateTimeRange?.start != null &&

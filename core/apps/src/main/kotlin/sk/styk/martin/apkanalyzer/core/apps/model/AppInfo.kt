@@ -1,6 +1,7 @@
 package sk.styk.martin.apkanalyzer.core.apps.model
 
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
+import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import java.time.Instant
@@ -11,12 +12,14 @@ data class AppInfo(
     val processName: String? = null,
     val versionName: String? = null,
     val versionCode: Long = 0,
+    val isSystemApp: Boolean = false,
     val isDebuggable: Boolean = false,
     val allowsBackup: Boolean = false,
     val usesCleartextTraffic: Boolean = false,
     val uid: Int? = null,
     val sharedUserId: String? = null,
     val description: String? = null,
+    val source: AppSource = AppSource.Unknown,
     val apkDirectory: String? = null,
     val dataDirectory: String? = null,
     val installLocation: InstallLocation,
@@ -30,5 +33,5 @@ data class AppInfo(
     val targetSdkLabel: String? = null,
     val totalSize: AppSize? = null,
     val lastUsedTime: Instant? = null,
-    val additionalInstalledSplits: Int = 0,
+    val installedSplits: List<InstalledSplitApk> = emptyList(),
 )

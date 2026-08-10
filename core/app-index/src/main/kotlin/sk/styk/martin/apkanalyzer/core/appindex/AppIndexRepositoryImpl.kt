@@ -53,7 +53,7 @@ internal class AppIndexRepositoryImpl @Inject constructor(
 
     private fun List<InstalledApp>.byMinSdk() = groupBy(InstalledApp::minSdk, InstalledApp::packageName)
 
-    private fun List<InstalledApp>.byInstallSource() = groupBy({ it.installSourceChain.source }, InstalledApp::packageName)
+    private fun List<InstalledApp>.byInstallSource() = groupBy(InstalledApp::source, InstalledApp::packageName)
 
     private fun List<InstalledApp>.byPermission() = flatMap { app -> app.requestedPermissions.map { it to app.packageName } }
         .groupBy({ it.first }, { it.second })

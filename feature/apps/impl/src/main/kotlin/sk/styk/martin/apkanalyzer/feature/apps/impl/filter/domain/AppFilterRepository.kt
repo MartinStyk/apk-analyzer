@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.update
 import sk.styk.martin.apkanalyzer.core.apps.AppClassificationThresholds
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
+import sk.styk.martin.apkanalyzer.core.common.model.isSideloaded
 import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -41,7 +42,7 @@ class AppFilterRepository @Inject constructor() {
                 QuickFilter.Unused -> toggleUnused(current)
                 QuickFilter.System -> toggleSource(current, AppSource.SystemPreinstalled)
                 QuickFilter.GooglePlay -> toggleSource(current, AppSource.GooglePlay)
-                QuickFilter.Sideloaded -> toggleSource(current, AppSource.Unknown)
+                QuickFilter.Sideloaded -> toggleSideloadedSources(current)
                 QuickFilter.RecentlyInstalled -> toggleRecentInstall(current)
                 QuickFilter.RecentlyUpdated -> toggleRecentUpdate(current)
             }
@@ -59,6 +60,14 @@ class AppFilterRepository @Inject constructor() {
 
     private fun toggleSource(current: AppFilterState, source: AppSource): AppFilterState = current.copy(
         selectedSources = if (source in current.selectedSources) persistentSetOf() else persistentSetOf(source),
+    )
+
+    private fun toggleSideloadedSources(current: AppFilterState): AppFilterState = current.copy(
+        selectedSources = if (current.isSideloadedFilterActive) {
+            persistentSetOf()
+        } else {
+            AppSource.entries.filter { it.isSideloaded }.toPersistentSet()
+        },
     )
 
     private fun toggleLargeTotal(current: AppFilterState): AppFilterState = if (current.isLargeTotalFilterActive) {

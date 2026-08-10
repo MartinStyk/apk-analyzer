@@ -111,7 +111,7 @@ class AppSearchViewModel @Inject constructor(
         installTime = installTime,
         lastUpdateTime = lastUpdateTime,
         lastUsedTime = lastUsedTime,
-        source = installSourceChain.source,
+        source = source,
     )
 
     private companion object {

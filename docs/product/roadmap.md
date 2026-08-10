@@ -59,8 +59,6 @@ section has shipped except:
 |-------|-------------------------------------|---------|-------------------------------------------------------------------------------------|
 | FR-17 | Exported components view            | Partial | Exported/Unprotected filter chips ship in the Components screen (`FR-13`), backed by both intent filters (`EX-07`) and content-provider path permissions (`EX-08`), both done. Still a technical filter, not a risk verdict — needs a deliberate hub rule (see `RI-03`) before exposure becomes a "Worth knowing" finding |
 | FR-18 | Custom permission audit             | Partial | Permissions screen's `Defined` scope lists the app's declared permissions with full detail sheets; no audit judgment (e.g. protection-level risk) applied yet |
-| FR-45 | Split APK files screen              | Todo    | Full-screen list of every split/config APK with file name and size, one tap down from General Info's "Split APKs" row (`FR-34`) — same pattern as Components' Intent Filters screen (search + full list, tap into detail) |
-| FR-46 | Native libraries screen             | Todo    | Full-screen list of every bundled native library (`.so`) file name, one tap down from General Info's "Native libraries" row (`FR-33`) — same pattern as Components' Intent Filters screen |
 
 ### 1.5 Export & Share
 

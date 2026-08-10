@@ -17,7 +17,10 @@ import sk.styk.martin.apkanalyzer.core.apps.analysis.InstallSourceResolver
 import sk.styk.martin.apkanalyzer.core.apps.analysis.ManifestParser
 import sk.styk.martin.apkanalyzer.core.apps.analysis.SdkVersionResolver
 import sk.styk.martin.apkanalyzer.core.apps.analysis.computeApkSize
+import sk.styk.martin.apkanalyzer.core.apps.analysis.isSystemInstalledApp
+import sk.styk.martin.apkanalyzer.core.apps.analysis.readInstalledSplits
 import sk.styk.martin.apkanalyzer.core.apps.analysis.readNativeLibraries
+import sk.styk.martin.apkanalyzer.core.apps.analysis.resolveAppInstallSource
 import sk.styk.martin.apkanalyzer.core.apps.analysis.resolvePathPermissions
 import sk.styk.martin.apkanalyzer.core.apps.analysis.resolveProtectionFlags
 import sk.styk.martin.apkanalyzer.core.apps.analysis.resolveProtectionLevel
@@ -147,7 +150,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         receivers = getBroadcastReceivers(packageInfo, intentFiltersByComponent),
         permissions = getPermissions(packageInfo),
         features = getFeatures(packageInfo),
-        nativeLibraries = readNativeLibraries(packageInfo.applicationInfo?.sourceDir),
+        nativeLibraries = readNativeLibraries(packageInfo.applicationInfo),
         areComponentIntentFiltersAvailable = areIntentFiltersAvailable,
     )
 
@@ -159,6 +162,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         val applicationInfo = packageInfo.applicationInfo
         val minSdk = applicationInfo?.minSdkVersion
         val installSourceChain = installSourceResolver.resolve(packageInfo)
+        val isSystemApp = isSystemInstalledApp(packageInfo)
 
         return AppInfo(
             packageName = PackageName(packageInfo.packageName),
@@ -166,12 +170,14 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             processName = applicationInfo?.processName,
             versionName = packageInfo.versionName,
             versionCode = packageInfo.longVersionCode,
+            isSystemApp = isSystemApp,
             isDebuggable = applicationInfo.hasFlag(ApplicationInfo.FLAG_DEBUGGABLE),
             allowsBackup = applicationInfo.hasFlag(ApplicationInfo.FLAG_ALLOW_BACKUP),
             usesCleartextTraffic = applicationInfo.hasFlag(ApplicationInfo.FLAG_USES_CLEARTEXT_TRAFFIC),
             uid = applicationInfo?.uid,
             sharedUserId = packageInfo.sharedUserId,
             description = applicationInfo?.loadDescription(packageManager)?.toString(),
+            source = resolveAppInstallSource(installSourceChain, isSystemApp),
             apkDirectory = applicationInfo?.sourceDir,
             dataDirectory = applicationInfo?.dataDir,
             installSourceChain = installSourceChain,
@@ -185,7 +191,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             targetSdkLabel = sdkVersionResolver.resolveVersion(applicationInfo?.targetSdkVersion),
             totalSize = totalSize,
             lastUsedTime = lastUsedTime,
-            additionalInstalledSplits = applicationInfo?.splitSourceDirs.orEmpty().size,
+            installedSplits = readInstalledSplits(applicationInfo),
         )
     }
 

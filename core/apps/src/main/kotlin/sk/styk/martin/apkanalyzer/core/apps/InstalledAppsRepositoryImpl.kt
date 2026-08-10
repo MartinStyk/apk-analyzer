@@ -15,7 +15,9 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import sk.styk.martin.apkanalyzer.core.apps.analysis.InstallSourceResolver
+import sk.styk.martin.apkanalyzer.core.apps.analysis.isSystemInstalledApp
 import sk.styk.martin.apkanalyzer.core.apps.analysis.resolveAppCategory
+import sk.styk.martin.apkanalyzer.core.apps.analysis.resolveAppInstallSource
 import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
@@ -73,11 +75,14 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
     private fun PackageInfo.toInstalledApp(): InstalledApp {
         val appInfo = applicationInfo
         val installSourceChain = installSourceResolver.resolve(this)
+        val isSystemApp = isSystemInstalledApp(this)
         return InstalledApp(
             packageName = PackageName(packageName),
             applicationName = appInfo?.loadLabel(packageManager)?.toString() ?: packageName,
+            isSystemApp = isSystemApp,
             installSourceChain = installSourceChain,
             version = longVersionCode,
+            source = resolveAppInstallSource(installSourceChain, isSystemApp),
             targetSdk = appInfo?.targetSdkVersion ?: 0,
             minSdk = appInfo?.minSdkVersion ?: 0,
             apkSize = (appInfo?.sourceDir?.let { File(it).length() } ?: 0L).bytes,

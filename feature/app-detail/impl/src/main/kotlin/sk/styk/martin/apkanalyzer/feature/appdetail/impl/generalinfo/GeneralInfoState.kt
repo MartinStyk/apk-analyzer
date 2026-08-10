@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
 import sk.styk.martin.apkanalyzer.core.apps.model.InstallSourceChain
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
+import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import java.time.Instant
 
@@ -25,9 +26,11 @@ sealed interface GeneralInfoState {
         val minSdkLabel: String?,
         val targetSdkVersion: Int?,
         val targetSdkLabel: String?,
+        val isSystemApp: Boolean,
         val isDebuggable: Boolean,
         val allowsBackup: Boolean,
         val usesCleartextTraffic: Boolean,
+        val source: AppSource,
         val installSourceChain: InstallSourceChain,
         val firstInstallTime: Instant?,
         val lastUpdateTime: Instant?,
@@ -41,7 +44,7 @@ sealed interface GeneralInfoState {
         val nativeLibraryNames: ImmutableList<String>,
         val deviceSupportedAbis: ImmutableList<String>,
         val isNativeLibraryDeviceIncompatible: Boolean,
-        val additionalInstalledSplits: Int,
+        val installedSplitsCount: Int,
     ) : GeneralInfoState
 
     data object Error : GeneralInfoState

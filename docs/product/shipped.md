@@ -26,7 +26,7 @@ implemented per `CE-05`. That freed the bottom-nav slot Pillar 1's What Changed 
 
 FR-10 Detail overview + badges · FR-11 General info screen · FR-12 Permissions view (per app) ·
 FR-13 Components views · FR-14 Certificate detail view · FR-15 Features (uses-feature) view ·
-FR-16 Manifest viewer
+FR-16 Manifest viewer · FR-45 Split APK files screen · FR-46 Native libraries screen
 
 ## 1.3 APK File Analysis
 

@@ -16,7 +16,7 @@ class FilterAppsUseCase @Inject constructor() {
 
     private fun AppFilterState.toPredicates(): List<(InstalledApp) -> Boolean> = buildList {
         if (selectedSources.isNotEmpty()) {
-            add { it.installSourceChain.source in selectedSources }
+            add { it.source in selectedSources }
         }
         if (selectedSdkVersions.isNotEmpty()) {
             add { it.targetSdk in selectedSdkVersions }

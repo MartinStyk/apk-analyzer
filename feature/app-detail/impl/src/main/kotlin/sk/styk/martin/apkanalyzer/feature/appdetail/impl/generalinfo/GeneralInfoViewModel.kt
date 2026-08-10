@@ -86,9 +86,11 @@ private fun AppDetail.toGeneralInfoState() = GeneralInfoState.Loaded(
     minSdkLabel = info.minSdkLabel,
     targetSdkVersion = info.targetSdkVersion,
     targetSdkLabel = info.targetSdkLabel,
+    isSystemApp = info.isSystemApp,
     isDebuggable = info.isDebuggable,
     allowsBackup = info.allowsBackup,
     usesCleartextTraffic = info.usesCleartextTraffic,
+    source = info.source,
     installSourceChain = info.installSourceChain,
     firstInstallTime = info.firstInstallTime,
     lastUpdateTime = info.lastUpdateTime,
@@ -103,5 +105,5 @@ private fun AppDetail.toGeneralInfoState() = GeneralInfoState.Loaded(
     deviceSupportedAbis = Build.SUPPORTED_ABIS.toList().toImmutableList(),
     isNativeLibraryDeviceIncompatible = nativeLibraries.hasNativeCode &&
         nativeLibraries.abis.none { it in Build.SUPPORTED_ABIS },
-    additionalInstalledSplits = info.additionalInstalledSplits,
+    installedSplitsCount = info.installedSplits.size,
 )

@@ -1,6 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl
 
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -12,9 +13,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -46,6 +49,7 @@ import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.model.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
+import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
@@ -63,9 +67,14 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.AppDetailToolbar
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SplitApkExportBottomSheet
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.insight.AppDetailInsight
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.insight.SensitiveAccess
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.permissions.permissionIcon
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.requirements.requirementIcon
+import java.text.SimpleDateFormat
 import java.time.Instant
+import java.util.Date
+import java.util.Locale
 
 private const val APK_MIME_TYPE = "application/vnd.android.package-archive"
 private const val ICON_MIME_TYPE = "image/png"
@@ -355,49 +364,6 @@ private fun SectionHeader(title: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun NavigableRow(
-    label: String,
-    value: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp)
-            .clip(Shapes.CardShape)
-            .clickable(onClick = onClick)
-            .padding(horizontal = 8.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            text = label,
-            style = AppTheme.typography.bodyMedium,
-            color = AppTheme.colors.onSurfaceVariant,
-            modifier = Modifier.weight(0.4f),
-        )
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.weight(0.6f),
-            horizontalArrangement = Arrangement.End,
-        ) {
-            Text(
-                text = value,
-                style = AppTheme.typography.bodyMedium,
-                color = AppTheme.colors.onBackground,
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            Icon(
-                imageVector = ApkAnalyzerIcons.ChevronRight,
-                tint = AppTheme.colors.onSurfaceVariant,
-                modifier = Modifier.size(20.dp),
-            )
-        }
-    }
-}
-
-@Composable
 private fun SectionCard(
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
@@ -485,6 +451,23 @@ private fun OverviewSection(
                 modifier = Modifier.weight(1f),
             )
         }
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            text = pluralStringResource(
+                when (state.overviewHighlight) {
+                    OverviewHighlight.SplitApks -> R.plurals.app_detail_overview_more_details_with_split_apks
+                    OverviewHighlight.NetworkSecurity -> R.plurals.app_detail_overview_more_details_with_network_security
+                    OverviewHighlight.NativeLibraries -> R.plurals.app_detail_overview_more_details_with_native_libraries
+                    OverviewHighlight.InstallHistory -> R.plurals.app_detail_overview_more_details_with_history
+                    OverviewHighlight.InstallDate -> R.plurals.app_detail_overview_more_details_with_date
+                    OverviewHighlight.None -> R.plurals.app_detail_overview_more_details
+                },
+                state.additionalGeneralInfoCount,
+                state.additionalGeneralInfoCount,
+            ),
+            style = AppTheme.typography.bodySmall,
+            color = AppTheme.colors.onSurfaceVariant,
+        )
     }
 }
 
@@ -604,6 +587,7 @@ private fun ActionItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    badgeCount: Int? = null,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -613,17 +597,37 @@ private fun ActionItem(
             .then(if (enabled) Modifier.clickable(onClick = onClick) else Modifier)
             .padding(horizontal = 8.dp, vertical = 10.dp),
     ) {
-        Box(
-            modifier = Modifier
-                .size(44.dp)
-                .background(AppTheme.colors.surfaceVariant, CircleShape),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                imageVector = icon,
-                tint = if (enabled) AppTheme.colors.primary else AppTheme.colors.onSurfaceVariant,
-                modifier = Modifier.size(22.dp),
-            )
+        Box {
+            Box(
+                modifier = Modifier
+                    .size(44.dp)
+                    .background(AppTheme.colors.surfaceVariant, CircleShape),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    imageVector = icon,
+                    tint = if (enabled) AppTheme.colors.primary else AppTheme.colors.onSurfaceVariant,
+                    modifier = Modifier.size(22.dp),
+                )
+            }
+            if (badgeCount != null) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .offset(x = 2.dp, y = (-2).dp)
+                        .defaultMinSize(minWidth = 18.dp, minHeight = 18.dp)
+                        .clip(CircleShape)
+                        .background(AppTheme.colors.primary)
+                        .padding(horizontal = 4.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = badgeCount.toString(),
+                        style = AppTheme.typography.labelSmall,
+                        color = AppTheme.colors.onPrimary,
+                    )
+                }
+            }
         }
         Spacer(modifier = Modifier.height(6.dp))
         Text(
@@ -832,14 +836,18 @@ private fun ComponentsSection(
     onAction: (AppDetailAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    SectionCard(
-        modifier = modifier,
-        onClick = { onAction(AppDetailAction.NavigateComponents) },
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .clip(Shapes.CardShape)
+            .background(AppTheme.colors.surface)
+            .clickable { onAction(AppDetailAction.NavigateComponents) },
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(start = 16.dp, top = 16.dp, end = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -850,27 +858,39 @@ private fun ComponentsSection(
                 modifier = Modifier.size(20.dp),
             )
         }
-        Spacer(modifier = Modifier.height(8.dp))
-        NavigableRow(
-            label = stringResource(R.string.app_detail_activities),
-            value = state.activitiesCount.toString(),
-            onClick = { onAction(AppDetailAction.NavigateActivities) },
-        )
-        NavigableRow(
-            label = stringResource(R.string.app_detail_services),
-            value = state.servicesCount.toString(),
-            onClick = { onAction(AppDetailAction.NavigateServices) },
-        )
-        NavigableRow(
-            label = stringResource(R.string.app_detail_broadcast_receivers),
-            value = state.broadcastReceiversCount.toString(),
-            onClick = { onAction(AppDetailAction.NavigateReceivers) },
-        )
-        NavigableRow(
-            label = stringResource(R.string.app_detail_content_providers),
-            value = state.contentProvidersCount.toString(),
-            onClick = { onAction(AppDetailAction.NavigateProviders) },
-        )
+        Spacer(modifier = Modifier.height(6.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+        ) {
+            ActionItem(
+                icon = ApkAnalyzerIcons.ComponentActivity,
+                label = stringResource(R.string.app_detail_activities),
+                badgeCount = state.activitiesCount,
+                onClick = { onAction(AppDetailAction.NavigateActivities) },
+            )
+            ActionItem(
+                icon = ApkAnalyzerIcons.ComponentService,
+                label = stringResource(R.string.app_detail_services),
+                badgeCount = state.servicesCount,
+                onClick = { onAction(AppDetailAction.NavigateServices) },
+            )
+            ActionItem(
+                icon = ApkAnalyzerIcons.ComponentReceiver,
+                label = stringResource(R.string.app_detail_broadcast_receivers),
+                badgeCount = state.broadcastReceiversCount,
+                onClick = { onAction(AppDetailAction.NavigateReceivers) },
+            )
+            ActionItem(
+                icon = ApkAnalyzerIcons.ComponentProvider,
+                label = stringResource(R.string.app_detail_content_providers),
+                badgeCount = state.contentProvidersCount,
+                onClick = { onAction(AppDetailAction.NavigateProviders) },
+            )
+        }
+        Spacer(modifier = Modifier.height(2.dp))
     }
 }
 
@@ -1002,6 +1022,19 @@ private fun ErrorContent(onAction: (AppDetailAction) -> Unit, modifier: Modifier
     }
 }
 
+private fun AppDetailFeedback.message(context: Context): String = when (this) {
+    is AppDetailFeedback.ApkSaved -> context.getString(R.string.app_detail_apk_saved, displayName)
+    is AppDetailFeedback.IconSaved -> context.getString(R.string.app_detail_icon_saved, displayName)
+    AppDetailFeedback.ApkSaveFailed -> context.getString(R.string.app_detail_apk_save_failed)
+    AppDetailFeedback.IconSaveFailed -> context.getString(R.string.app_detail_icon_save_failed)
+    AppDetailFeedback.DocumentPickerUnavailable -> context.getString(R.string.app_detail_document_picker_unavailable)
+}
+
+private fun formatTimestamp(instant: Instant): String {
+    val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+    return dateFormat.format(Date.from(instant))
+}
+
 @Preview
 @Composable
 private fun AppDetailLoadingPreview() {
@@ -1041,7 +1074,7 @@ private fun AppDetailLoadedPreview() {
         uid = 10234,
         description = null,
         isSystemApp = false,
-        source = "GooglePlay",
+        source = AppSource.GooglePlay,
         apkDirectory = "/example/app/com.spotify.music/base.apk",
         dataDirectory = "/example/user/0/com.spotify.music",
         apkSize = 152.megabytes,

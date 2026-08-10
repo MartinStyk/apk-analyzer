@@ -25,15 +25,18 @@ analysis/
   CertificateExtractor.kt / Impl    - APK signing certificate extraction
   ManifestParser.kt / Impl           - Installed/APK AndroidManifest.xml parsing into readable namespaced XML
                                        and component intent filters
-  InstallSourceResolver.kt / Impl   - Single method, `appInstallSourceChain()`, returning the raw
+  InstallSourceResolver.kt / Impl   - Single method, `resolve()`, returning the raw
                                        `InstallSourceChain`. `AppSource` classification (Play Store,
                                        sideload, etc.) and `isSystemInstalledApp()` are pure functions
                                        in `AnalysisUtils.kt`, not resolver methods — neither needs
                                        `PackageManager` once given the chain/flags they're derived from
   SdkVersionResolver.kt             - SDK version to Android name mapping
-  AnalysisUtils.kt                   - Shared analysis helpers, incl. permission protection decoding
-                                        and `readNativeLibraries()`, which opens the APK's `sourceDir`
-                                        as a zip and reads `lib/<abi>/*.so` entries directly
+  AnalysisUtils.kt                   - Shared analysis helpers, incl. permission protection decoding,
+                                        `readNativeLibraries()`, which opens the base APK and every
+                                        installed split as a zip and reads `lib/<abi>/*.so` entries
+                                        directly, and `readInstalledSplits()`, which `computeApkSize()`
+                                        also sums so the two never diverge on what counts as an
+                                        installed split
 model/
   InstalledApp.kt         - Basic installed app info (packageName, name, sizes, times, source,
                             targetSdk, minSdk, sharedUserId, category)
@@ -69,13 +72,18 @@ model/
   DeviceFeatures.kt       - The device side of that comparison: available feature names plus the
                             device's GL ES version. `supports()` returns `null` for unknown, never
                             `false` — an unreadable package manager must not read as "missing"
-  NativeLibraries.kt      - ABI folders and distinct `.so` filenames an APK actually ships, read from
-                            its zip entries rather than trusted from `primaryCpuAbi`/`secondaryCpuAbi`,
-                            which describe what the device picked, not what the APK contains
+  NativeLibraries.kt      - Every `.so` file the app ships, one `NativeLibraryFile` per (name, abi)
+                            pair read from the zip entries of the base APK and every installed split —
+                            not trusted from `primaryCpuAbi`/`secondaryCpuAbi`, which describe what the
+                            device picked, not what the APK contains. `abis` and `libraryNames` are
+                            derived (distinct/sorted) from `files`, never stored separately
   InstallLocation.kt      - Install location enum
   InstallSourceChain.kt   - Installing/initiating/originating package, one nested fact on `AppInfo`
                             rather than three flat fields — mirrors how `AppSigning` and
                             `CertificatePrincipal` group related facts instead of flattening them
+  InstalledSplitApk.kt    - One installed split/config APK: file name, path, size, and a `SplitApkKind`
+                            (DynamicFeature/Abi/ScreenDensity/Language) classified from the file name
+                            alone — see `readInstalledSplits()` in `AnalysisUtils.kt`
 di/                       - Hilt module bindings
 ```
 

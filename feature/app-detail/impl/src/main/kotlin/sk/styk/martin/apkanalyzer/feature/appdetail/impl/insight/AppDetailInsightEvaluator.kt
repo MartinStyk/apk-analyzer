@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.feature.appdetail.impl
+package sk.styk.martin.apkanalyzer.feature.appdetail.impl.insight
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -29,7 +29,7 @@ internal object AppDetailInsightEvaluator {
                 add(AppDetailInsight.CertificateNotYetValid)
             }
             val targetSdk = info.targetSdkVersion
-            if (!info.installSourceChain.isSystemApp && targetSdk != null && deviceSdk - targetSdk >= AppClassificationThresholds.OUTDATED_TARGET_SDK_RELEASE_GAP) {
+            if (!info.isSystemApp && targetSdk != null && deviceSdk - targetSdk >= AppClassificationThresholds.OUTDATED_TARGET_SDK_RELEASE_GAP) {
                 add(
                     AppDetailInsight.OutdatedTargetSdk(
                         targetSdk = targetSdk,

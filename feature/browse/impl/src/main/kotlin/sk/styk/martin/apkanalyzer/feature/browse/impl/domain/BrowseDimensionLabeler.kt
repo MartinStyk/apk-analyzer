@@ -27,15 +27,11 @@ internal class BrowseDimensionLabeler @Inject constructor(
         BrowseDimension.TargetSdk, BrowseDimension.MinSdk ->
             sdkVersionResolver.resolveVersion(key.toIntOrNull()) ?: context.getString(R.string.browse_sdk_unknown, key)
 
-        BrowseDimension.InstallSource -> when (key) {
-            AppSource.GooglePlay.name -> context.getString(R.string.browse_source_google_play)
-            AppSource.SystemPreinstalled.name -> context.getString(R.string.browse_source_system)
-            else -> context.getString(R.string.browse_source_unknown)
-        }
+        BrowseDimension.InstallSource -> AppSource.valueOf(key).installSourceLabel()
 
         BrowseDimension.SharedUserId -> key
 
-        BrowseDimension.AppCategory -> categoryLabel(AppCategory.valueOf(key))
+        BrowseDimension.AppCategory -> AppCategory.valueOf(key).categoryLabel()
 
         BrowseDimension.SigningCertificate -> when (subAttribute) {
             BrowseSubAttribute.CertificateOrganization ->
@@ -84,7 +80,21 @@ internal class BrowseDimensionLabeler @Inject constructor(
         return displayName?.takeIf { it.isNotBlank() && !it.equals(countryCode, ignoreCase = true) } ?: countryCode
     }
 
-    private fun categoryLabel(category: AppCategory): String = when (category) {
+    private fun AppSource.installSourceLabel(): String = when (this) {
+        AppSource.GooglePlay -> context.getString(R.string.browse_source_google_play)
+        AppSource.SamsungGalaxyStore -> context.getString(R.string.browse_source_samsung_galaxy_store)
+        AppSource.AmazonAppstore -> context.getString(R.string.browse_source_amazon_appstore)
+        AppSource.HuaweiAppGallery -> context.getString(R.string.browse_source_huawei_app_gallery)
+        AppSource.XiaomiGetApps -> context.getString(R.string.browse_source_xiaomi_get_apps)
+        AppSource.FDroid -> context.getString(R.string.browse_source_fdroid)
+        AppSource.AuroraStore -> context.getString(R.string.browse_source_aurora_store)
+        AppSource.Sideloaded -> context.getString(R.string.browse_source_sideloaded)
+        AppSource.LocalInstall -> context.getString(R.string.browse_source_local_install)
+        AppSource.SystemPreinstalled -> context.getString(R.string.browse_source_system)
+        AppSource.Unknown -> context.getString(R.string.browse_source_unknown)
+    }
+
+    private fun AppCategory.categoryLabel(): String = when (this) {
         AppCategory.Undefined -> context.getString(R.string.browse_category_undefined)
         AppCategory.Game -> context.getString(R.string.browse_category_game)
         AppCategory.Audio -> context.getString(R.string.browse_category_audio)

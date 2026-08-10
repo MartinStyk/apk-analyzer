@@ -15,8 +15,10 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.impl.appcomponents.IntentFil
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.certificates.CertificatesScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.generalinfo.GeneralInfoScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.manifest.ManifestScreen
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.nativelibraries.NativeLibrariesScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.permissions.PermissionsScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.requirements.RequirementsScreen
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.splitapks.SplitApksScreen
 
 fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
     entry<AppDetailNavKey>(
@@ -45,6 +47,26 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
         metadata = slideFromEndEntryMetadata(),
     ) { key ->
         GeneralInfoScreen(
+            appDetailInput = key.detailInput,
+            onBack = { navigator.goBack() },
+            onNavigateToSplitApks = { navigator.navigate(SplitApksNavKey(key.detailInput)) },
+            onNavigateToNativeLibraries = { navigator.navigate(NativeLibrariesNavKey(key.detailInput)) },
+        )
+    }
+
+    entry<SplitApksNavKey>(
+        metadata = slideFromEndEntryMetadata(),
+    ) { key ->
+        SplitApksScreen(
+            appDetailInput = key.detailInput,
+            onBack = { navigator.goBack() },
+        )
+    }
+
+    entry<NativeLibrariesNavKey>(
+        metadata = slideFromEndEntryMetadata(),
+    ) { key ->
+        NativeLibrariesScreen(
             appDetailInput = key.detailInput,
             onBack = { navigator.goBack() },
         )

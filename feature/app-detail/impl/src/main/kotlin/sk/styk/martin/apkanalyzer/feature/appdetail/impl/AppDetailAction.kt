@@ -1,6 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl
 
 import android.net.Uri
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.insight.AppDetailInsight
 
 internal sealed interface AppDetailAction {
     data object Retry : AppDetailAction
