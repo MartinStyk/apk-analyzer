@@ -342,6 +342,16 @@ An optional sub-operation that fails while `AppDetail` remains usable produces `
 The trace must retain the stage duration and availability attribute so degraded requests can be
 filtered away from complete requests.
 
+OBS-04 uses the two availability facts persisted in `AppDetail` to classify complete versus degraded
+results: component intent filters and signing schemes. Storage size and last-used time remain nullable
+domain values that currently combine permission denial, query failure or race, and legitimate absence,
+so they cannot safely affect the parent outcome or be reconstructed on a cache hit. Likewise,
+`NativeLibraries.Empty` combines an APK with no native libraries and a handled ZIP-read failure, while
+certificate extraction exposes an empty result for both legitimate absence and handled failure.
+`ApkSigningBlockAnalyzer` returns `null` for both no detectable supported scheme and analyzer failure;
+therefore `signing_schemes=unavailable` is an availability statement, not a failure diagnosis. OBS-04
+does not speculate beyond these APIs or change their established result behavior.
+
 ### `manifest_load`
 
 This trace measures the complete readable-manifest request from `ManifestParser.manifest`.
@@ -412,6 +422,8 @@ Firebase currently permits 32 metrics including the default duration metric and 
 attributes on one custom trace. Every proposed trace remains below both limits.
 
 ## Rollout
+
+OBS-01 through OBS-04 are implemented. OBS-05 and later stages remain deferred.
 
 ### OBS-01: Make logging consistent
 

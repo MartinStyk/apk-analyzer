@@ -134,8 +134,20 @@ di/                       - Hilt module bindings (single `AppsModule.kt`, groupe
   `installed_apps` for list-driven requests and `lifecycle_start` for foreground refreshes.
 - `UsageStatsRepositoryImpl` owns `usage_stats_load` for its lifecycle refresh. Single-package
   `queryLastUsedTime` calls belong to app-detail work and are not part of this trace.
+- `AppDetailRepositoryImpl` owns one `app_detail_load` trace from public `details()` entry through
+  cache lookup and miss processing. Cache hits record only `cache_lookup_us`; misses record sequential,
+  non-overlapping package, intent-filter, installed-only storage/usage, general-info, certificate,
+  signing-scheme, installed-only launcher, component, permission, feature, and packaging metrics.
+  `outcome=degraded` is based only on the intent-filter and signing-scheme availability facts persisted
+  in `AppDetail`, so cached and uncached classification stays consistent.
 - Every trace records one terminal outcome and stops in `finally`. Bulk operations aggregate counts
   and durations; never create a trace per installed app.
+
+`AppDetail` cannot currently distinguish missing storage/usage permission or query failure from a
+legitimate nullable value. `NativeLibraries.Empty` cannot distinguish an APK with no libraries from a
+handled ZIP-read failure, certificate extraction has the same empty-result ambiguity, and a null
+signing-scheme list combines no detected supported scheme with analyzer failure. Performance attributes
+must describe these as availability only and must not infer a failure reason.
 
 ## Signing Certificate Semantics
 

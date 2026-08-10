@@ -28,6 +28,8 @@ import sk.styk.martin.apkanalyzer.core.apps.manifest.ManifestParser
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.model.AppInfo
 import sk.styk.martin.apkanalyzer.core.apps.model.InstallLocation
+import sk.styk.martin.apkanalyzer.core.apps.packaging.InstalledSplitApk
+import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraries
 import sk.styk.martin.apkanalyzer.core.apps.packaging.computeApkSize
 import sk.styk.martin.apkanalyzer.core.apps.packaging.readInstalledSplits
 import sk.styk.martin.apkanalyzer.core.apps.packaging.readNativeLibraries
@@ -50,6 +52,13 @@ import sk.styk.martin.apkanalyzer.core.common.logger.operationLogMessage
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceAttributeName
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceMetricName
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTrace
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTraceName
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
+import sk.styk.martin.apkanalyzer.core.common.performance.measureStage
+import sk.styk.martin.apkanalyzer.core.common.performance.measureSuspendStage
 import java.io.File
 import java.time.Instant
 import java.util.concurrent.ConcurrentHashMap
@@ -71,6 +80,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     packageChangesObserver: PackageChangesObserver,
     appScope: CoroutineScope,
     dispatcherProvider: DispatcherProvider,
+    private val performanceTracker: PerformanceTracker,
 ) : AppDetailRepository {
 
     private val cache = ConcurrentHashMap<CacheKey, AppDetail>()
@@ -92,21 +102,42 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             .launchIn(appScope + dispatcherProvider.default())
     }
 
-    override suspend fun details(reference: AppReference): Result<AppDetail> = when (reference) {
-        is AppReference.InstalledPackage -> installedPackageDetails(reference.packageName)
-        is AppReference.ApkFile -> apkFilePackageDetails(File(reference.path))
+    override suspend fun details(reference: AppReference): Result<AppDetail> {
+        val trace = performanceTracker.startTrace(PerformanceTraceName.APP_DETAIL_LOAD)
+        trace.putAttribute(PerformanceAttributeName.ANALYSIS_MODE, reference.analysisModeAttribute)
+        var outcome = OUTCOME_ERROR
+        try {
+            val result = when (reference) {
+                is AppReference.InstalledPackage -> installedPackageDetails(reference.packageName, trace)
+                is AppReference.ApkFile -> apkFilePackageDetails(File(reference.path), trace)
+            }
+            result.onSuccess(trace::putAvailabilityAttributes)
+            outcome = result.fold(
+                onSuccess = { detail -> if (detail.isPerformanceDegraded) OUTCOME_DEGRADED else OUTCOME_SUCCESS },
+                onFailure = { OUTCOME_ERROR },
+            )
+            return result
+        } catch (cancellation: CancellationException) {
+            outcome = OUTCOME_CANCELLED
+            throw cancellation
+        } finally {
+            trace.putAttribute(PerformanceAttributeName.OUTCOME, outcome)
+            trace.stop()
+        }
     }
 
     @Suppress("SuspendFunSwallowedCancellation")
-    private suspend fun installedPackageDetails(packageName: PackageName): Result<AppDetail> {
+    private suspend fun installedPackageDetails(packageName: PackageName, trace: PerformanceTrace): Result<AppDetail> {
         val requestId = nextOperationRequest()
         val context = "mode=installed package=${packageName.value}"
         val cacheKey = CacheKey.InstalledPackage(packageName)
         Logger.d(TAG, operationLogMessage(OPERATION, requestId, event = "started", context = context))
         Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_CACHE_LOOKUP, event = "started", context = context))
-        cache[cacheKey]?.let {
+        val cachedDetail = trace.measureStage(PerformanceMetricName.CACHE_LOOKUP_US) { cache[cacheKey] }
+        trace.putAttribute(PerformanceAttributeName.CACHE_HIT, cachedDetail?.let { ATTRIBUTE_TRUE } ?: ATTRIBUTE_FALSE)
+        cachedDetail?.let {
             Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_CACHE_LOOKUP, event = "succeeded", context = "cache_hit=true $context"))
-            val event = if (it.areComponentIntentFiltersAvailable) "succeeded" else "degraded"
+            val event = if (it.isPerformanceDegraded) "degraded" else "succeeded"
             Logger.i(TAG, operationLogMessage(OPERATION, requestId, event = event, context = "cache_hit=true $context"))
             return Result.success(it)
         }
@@ -117,10 +148,18 @@ internal class AppDetailRepositoryImpl @Inject constructor(
                 val reference = AppReference.InstalledPackage(packageName)
 
                 Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_PACKAGE_QUERY, event = "started", context = context))
-                val packageInfo = packageManager.getPackageInfo(packageName.value, analysisFlags)
+                val packageInfo = trace.measureStage(PerformanceMetricName.PACKAGE_QUERY_US) {
+                    packageManager.getPackageInfo(packageName.value, analysisFlags)
+                }
                 Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_PACKAGE_QUERY, event = "succeeded", context = context))
 
-                val intentFilters = manifestParser.componentIntentFilters(reference)
+                val intentFilters = trace.measureSuspendStage(PerformanceMetricName.INTENT_FILTERS_US) {
+                    manifestParser.componentIntentFilters(reference)
+                }
+                trace.putAttribute(
+                    PerformanceAttributeName.INTENT_FILTERS,
+                    if (intentFilters.isSuccess) AVAILABILITY_AVAILABLE else AVAILABILITY_UNAVAILABLE,
+                )
                 Logger.d(
                     TAG,
                     operationLogMessage(
@@ -132,7 +171,9 @@ internal class AppDetailRepositoryImpl @Inject constructor(
                     ),
                 )
 
-                val totalSize = storageStatsRepository.queryTotalSize(packageName)
+                val totalSize = trace.measureSuspendStage(PerformanceMetricName.STORAGE_STATS_US) {
+                    storageStatsRepository.queryTotalSize(packageName)
+                }
                 Logger.d(
                     TAG,
                     operationLogMessage(
@@ -144,7 +185,9 @@ internal class AppDetailRepositoryImpl @Inject constructor(
                     ),
                 )
 
-                val lastUsedTime = usageStatsRepository.queryLastUsedTime(packageName)
+                val lastUsedTime = trace.measureSuspendStage(PerformanceMetricName.USAGE_STATS_US) {
+                    usageStatsRepository.queryLastUsedTime(packageName)
+                }
                 Logger.d(
                     TAG,
                     operationLogMessage(
@@ -165,10 +208,11 @@ internal class AppDetailRepositoryImpl @Inject constructor(
                     areIntentFiltersAvailable = intentFilters.isSuccess,
                     totalSize = totalSize,
                     lastUsedTime = lastUsedTime,
+                    trace = trace,
                 )
             }.onSuccess { detail ->
                 cache[cacheKey] = detail
-                val event = if (detail.areComponentIntentFiltersAvailable) "succeeded" else "degraded"
+                val event = if (detail.isPerformanceDegraded) "degraded" else "succeeded"
                 Logger.i(TAG, operationLogMessage(OPERATION, requestId, event = event, context = context))
             }.onFailure {
                 Logger.e(TAG, it, operationLogMessage(OPERATION, requestId, event = "failed", context = context))
@@ -180,15 +224,17 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     }
 
     @Suppress("SuspendFunSwallowedCancellation")
-    private suspend fun apkFilePackageDetails(accessibleFile: File): Result<AppDetail> {
+    private suspend fun apkFilePackageDetails(accessibleFile: File, trace: PerformanceTrace): Result<AppDetail> {
         val requestId = nextOperationRequest()
         val context = "mode=apk_file apk_path=${accessibleFile.absolutePath}"
         val cacheKey = CacheKey.ApkFile(accessibleFile.absolutePath, accessibleFile.lastModified())
         Logger.d(TAG, operationLogMessage(OPERATION, requestId, event = "started", context = context))
         Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_CACHE_LOOKUP, event = "started", context = context))
-        cache[cacheKey]?.let {
+        val cachedDetail = trace.measureStage(PerformanceMetricName.CACHE_LOOKUP_US) { cache[cacheKey] }
+        trace.putAttribute(PerformanceAttributeName.CACHE_HIT, cachedDetail?.let { ATTRIBUTE_TRUE } ?: ATTRIBUTE_FALSE)
+        cachedDetail?.let {
             Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_CACHE_LOOKUP, event = "succeeded", context = "cache_hit=true $context"))
-            val event = if (it.areComponentIntentFiltersAvailable) "succeeded" else "degraded"
+            val event = if (it.isPerformanceDegraded) "degraded" else "succeeded"
             Logger.i(TAG, operationLogMessage(OPERATION, requestId, event = event, context = "cache_hit=true $context"))
             return Result.success(it)
         }
@@ -199,11 +245,19 @@ internal class AppDetailRepositoryImpl @Inject constructor(
                 val reference = AppReference.ApkFile(accessibleFile.absolutePath)
 
                 Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_PACKAGE_QUERY, event = "started", context = context))
-                val packageInfo = packageManager.getPackageArchiveInfoWithCorrectPath(accessibleFile.absolutePath, analysisFlags)
-                    ?: error("Cannot parse APK file: ${accessibleFile.absolutePath}")
+                val packageInfo = trace.measureStage(PerformanceMetricName.PACKAGE_QUERY_US) {
+                    packageManager.getPackageArchiveInfoWithCorrectPath(accessibleFile.absolutePath, analysisFlags)
+                        ?: error("Cannot parse APK file: ${accessibleFile.absolutePath}")
+                }
                 Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_PACKAGE_QUERY, event = "succeeded", context = context))
 
-                val intentFilters = manifestParser.componentIntentFilters(reference)
+                val intentFilters = trace.measureSuspendStage(PerformanceMetricName.INTENT_FILTERS_US) {
+                    manifestParser.componentIntentFilters(reference)
+                }
+                trace.putAttribute(
+                    PerformanceAttributeName.INTENT_FILTERS,
+                    if (intentFilters.isSuccess) AVAILABILITY_AVAILABLE else AVAILABILITY_UNAVAILABLE,
+                )
                 Logger.d(
                     TAG,
                     operationLogMessage(
@@ -222,10 +276,11 @@ internal class AppDetailRepositoryImpl @Inject constructor(
                     packageInfo = packageInfo,
                     intentFiltersByComponent = intentFilters.getOrDefault(emptyMap()),
                     areIntentFiltersAvailable = intentFilters.isSuccess,
+                    trace = trace,
                 )
             }.onSuccess { detail ->
                 cache[cacheKey] = detail
-                val event = if (detail.areComponentIntentFiltersAvailable) "succeeded" else "degraded"
+                val event = if (detail.isPerformanceDegraded) "degraded" else "succeeded"
                 Logger.i(TAG, operationLogMessage(OPERATION, requestId, event = event, context = context))
             }.onFailure {
                 Logger.e(TAG, it, operationLogMessage(OPERATION, requestId, event = "failed", context = context))
@@ -245,17 +300,28 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         areIntentFiltersAvailable: Boolean,
         totalSize: AppSize? = null,
         lastUsedTime: Instant? = null,
+        trace: PerformanceTrace,
     ): AppDetail {
         Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_GENERAL_INFO, event = "started", context = context))
-        val info = getGeneralData(packageInfo, totalSize, lastUsedTime)
+        val info = trace.measureStage(PerformanceMetricName.GENERAL_INFO_US) {
+            getGeneralData(packageInfo, totalSize, lastUsedTime)
+        }
         Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_GENERAL_INFO, event = "succeeded", context = context))
 
         Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_CERTIFICATES, event = "started", context = context))
-        val signing = certificateExtractor.getAppSigning(packageInfo)
+        val signing = trace.measureStage(PerformanceMetricName.CERTIFICATE_US) {
+            certificateExtractor.getAppSigning(packageInfo)
+        }
         Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_CERTIFICATES, event = "succeeded", context = context))
 
         Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_SIGNING_SCHEMES, event = "started", context = context))
-        val signingSchemeVersions = packageInfo.applicationInfo?.sourceDir?.let(apkSigningBlockAnalyzer::detectSchemeVersions)
+        val signingSchemeVersions = trace.measureStage(PerformanceMetricName.SIGNING_SCHEMES_US) {
+            packageInfo.applicationInfo?.sourceDir?.let(apkSigningBlockAnalyzer::detectSchemeVersions)
+        }
+        trace.putAttribute(
+            PerformanceAttributeName.SIGNING_SCHEMES,
+            if (signingSchemeVersions != null) AVAILABILITY_AVAILABLE else AVAILABILITY_UNAVAILABLE,
+        )
         Logger.d(
             TAG,
             operationLogMessage(
@@ -270,44 +336,60 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         val launcherActivityNames = when (analysisMode) {
             AppDetail.AnalysisMode.InstalledPackage -> {
                 Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_LAUNCHER_QUERY, event = "started", context = context))
-                queryLauncherActivityNames(PackageName(packageInfo.packageName)).also {
-                    Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_LAUNCHER_QUERY, event = "succeeded", context = context))
+                trace.measureStage(PerformanceMetricName.LAUNCHER_QUERY_US) {
+                    queryLauncherActivityNames(PackageName(packageInfo.packageName))
                 }
+                    .also {
+                        Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_LAUNCHER_QUERY, event = "succeeded", context = context))
+                    }
             }
 
             AppDetail.AnalysisMode.ApkFile -> null
         }
 
         Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_COMPONENT_MAPPING, event = "started", context = context))
-        val activities = getActivities(packageInfo, launcherActivityNames, intentFiltersByComponent)
-        val services = getServices(packageInfo, intentFiltersByComponent)
-        val contentProviders = getContentProviders(packageInfo, intentFiltersByComponent)
-        val receivers = getBroadcastReceivers(packageInfo, intentFiltersByComponent)
+        val components = trace.measureStage(PerformanceMetricName.COMPONENTS_US) {
+            AppComponents(
+                activities = getActivities(packageInfo, launcherActivityNames, intentFiltersByComponent),
+                services = getServices(packageInfo, intentFiltersByComponent),
+                contentProviders = getContentProviders(packageInfo, intentFiltersByComponent),
+                receivers = getBroadcastReceivers(packageInfo, intentFiltersByComponent),
+            )
+        }
         Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_COMPONENT_MAPPING, event = "succeeded", context = context))
 
         Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_PERMISSIONS, event = "started", context = context))
-        val permissions = getPermissions(packageInfo)
+        val permissions = trace.measureStage(PerformanceMetricName.PERMISSIONS_US) {
+            getPermissions(packageInfo)
+        }
         Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_PERMISSIONS, event = "succeeded", context = context))
 
         Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_FEATURES, event = "started", context = context))
-        val features = getFeatures(packageInfo)
+        val features = trace.measureStage(PerformanceMetricName.FEATURES_US) {
+            getFeatures(packageInfo)
+        }
         Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_FEATURES, event = "succeeded", context = context))
 
         Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_PACKAGING, event = "started", context = context))
-        val nativeLibraries = readNativeLibraries(packageInfo.applicationInfo)
+        val packaging = trace.measureStage(PerformanceMetricName.PACKAGING_US) {
+            getPackaging(packageInfo.applicationInfo)
+        }
         Logger.d(TAG, operationLogMessage(OPERATION, requestId, stage = STAGE_PACKAGING, event = "succeeded", context = context))
 
         return AppDetail(
             analysisMode = analysisMode,
-            info = info,
+            info = info.copy(
+                apkSize = packaging.apkSize,
+                installedSplits = packaging.installedSplits,
+            ),
             signing = signing.copy(signingSchemeVersions = signingSchemeVersions),
-            activities = activities,
-            services = services,
-            contentProviders = contentProviders,
-            receivers = receivers,
+            activities = components.activities,
+            services = components.services,
+            contentProviders = components.contentProviders,
+            receivers = components.receivers,
             permissions = permissions,
             features = features,
-            nativeLibraries = nativeLibraries,
+            nativeLibraries = packaging.nativeLibraries,
             areComponentIntentFiltersAvailable = areIntentFiltersAvailable,
         )
     }
@@ -340,7 +422,6 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             dataDirectory = applicationInfo?.dataDir,
             installSourceChain = installSourceChain,
             installLocation = InstallLocation.from(packageInfo.installLocation),
-            apkSize = computeApkSize(applicationInfo),
             firstInstallTime = if (packageInfo.firstInstallTime > 0) Instant.ofEpochMilli(packageInfo.firstInstallTime) else null,
             lastUpdateTime = if (packageInfo.lastUpdateTime > 0) Instant.ofEpochMilli(packageInfo.lastUpdateTime) else null,
             minSdkVersion = minSdk,
@@ -349,9 +430,14 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             targetSdkLabel = sdkVersionResolver.resolveVersion(applicationInfo?.targetSdkVersion),
             totalSize = totalSize,
             lastUsedTime = lastUsedTime,
-            installedSplits = readInstalledSplits(applicationInfo),
         )
     }
+
+    private fun getPackaging(applicationInfo: ApplicationInfo?): AppPackaging = AppPackaging(
+        apkSize = computeApkSize(applicationInfo),
+        installedSplits = readInstalledSplits(applicationInfo),
+        nativeLibraries = readNativeLibraries(applicationInfo),
+    )
 
     private fun getActivities(
         packageInfo: PackageInfo,
@@ -484,6 +570,19 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         data class ApkFile(val path: String, val lastModified: Long) : CacheKey
     }
 
+    private data class AppComponents(
+        val activities: List<Activity>,
+        val services: List<Service>,
+        val contentProviders: List<ContentProvider>,
+        val receivers: List<BroadcastReceiver>,
+    )
+
+    private data class AppPackaging(
+        val apkSize: AppSize,
+        val installedSplits: List<InstalledSplitApk>,
+        val nativeLibraries: NativeLibraries,
+    )
+
     companion object {
         private const val TAG = "AppDetailRepositoryImpl"
         private const val OPERATION = "app_detail"
@@ -504,3 +603,34 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         private val launcherCategories = listOf(Intent.CATEGORY_LAUNCHER, Intent.CATEGORY_LEANBACK_LAUNCHER)
     }
 }
+
+private val AppReference.analysisModeAttribute: String
+    get() = when (this) {
+        is AppReference.InstalledPackage -> ANALYSIS_MODE_INSTALLED
+        is AppReference.ApkFile -> ANALYSIS_MODE_APK_FILE
+    }
+
+private val AppDetail.isPerformanceDegraded: Boolean
+    get() = !areComponentIntentFiltersAvailable || signing.signingSchemeVersions == null
+
+private fun PerformanceTrace.putAvailabilityAttributes(detail: AppDetail) {
+    putAttribute(
+        PerformanceAttributeName.INTENT_FILTERS,
+        if (detail.areComponentIntentFiltersAvailable) AVAILABILITY_AVAILABLE else AVAILABILITY_UNAVAILABLE,
+    )
+    putAttribute(
+        PerformanceAttributeName.SIGNING_SCHEMES,
+        if (detail.signing.signingSchemeVersions != null) AVAILABILITY_AVAILABLE else AVAILABILITY_UNAVAILABLE,
+    )
+}
+
+private const val OUTCOME_SUCCESS = "success"
+private const val OUTCOME_DEGRADED = "degraded"
+private const val OUTCOME_ERROR = "error"
+private const val OUTCOME_CANCELLED = "cancelled"
+private const val ANALYSIS_MODE_INSTALLED = "installed"
+private const val ANALYSIS_MODE_APK_FILE = "apk_file"
+private const val ATTRIBUTE_TRUE = "true"
+private const val ATTRIBUTE_FALSE = "false"
+private const val AVAILABILITY_AVAILABLE = "available"
+private const val AVAILABILITY_UNAVAILABLE = "unavailable"
