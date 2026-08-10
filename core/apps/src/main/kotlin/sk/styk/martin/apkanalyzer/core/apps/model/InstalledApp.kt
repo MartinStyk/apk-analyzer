@@ -9,6 +9,7 @@ data class InstalledApp(
     val packageName: PackageName,
     val applicationName: String,
     val isSystemApp: Boolean,
+    val installSourceChain: InstallSourceChain,
     val version: Long,
     val source: AppSource,
     val targetSdk: Int,

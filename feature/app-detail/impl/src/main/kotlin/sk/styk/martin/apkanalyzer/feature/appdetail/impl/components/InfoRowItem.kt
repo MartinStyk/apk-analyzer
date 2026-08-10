@@ -4,20 +4,26 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.impl.components
 
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.BottomSheet
+import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
+import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
@@ -59,6 +65,49 @@ internal fun InfoRowItem(
             text = value,
             style = AppTheme.typography.titleSmall,
             color = AppTheme.colors.onBackground,
+        )
+    }
+}
+
+@Composable
+internal fun NavigableInfoRowItem(
+    label: String,
+    value: String,
+    onClick: () -> Unit,
+    onCopy: (label: String, value: String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 2.dp)
+            .clip(Shapes.CardShape)
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = { onCopy(label, value) },
+            )
+            .padding(horizontal = 14.dp, vertical = 10.dp),
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = label.uppercase(),
+                style = AppTheme.typography.labelMedium,
+                color = AppTheme.colors.onSurfaceVariant,
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = value,
+                style = AppTheme.typography.titleSmall,
+                color = AppTheme.colors.onBackground,
+            )
+        }
+        Spacer(modifier = Modifier.width(4.dp))
+        Icon(
+            imageVector = ApkAnalyzerIcons.ChevronRight,
+            contentDescription = null,
+            tint = AppTheme.colors.onSurfaceVariant,
+            modifier = Modifier.size(20.dp),
         )
     }
 }
@@ -106,6 +155,19 @@ private fun InfoRowItemPreview() {
             value = "com.spotify.music",
             rationale = "The unique identifier of the app on this device.",
             onShowRationale = {},
+            onCopy = { _, _ -> },
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun NavigableInfoRowItemPreview() {
+    ApkAnalyzerTheme {
+        NavigableInfoRowItem(
+            label = "Split APKs",
+            value = "Installed as 6 split APKs",
+            onClick = {},
             onCopy = { _, _ -> },
         )
     }

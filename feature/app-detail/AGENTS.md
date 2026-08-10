@@ -36,11 +36,11 @@ navigation/
   CertificatesNavKey.kt      - Internal nav key for the certificates sub-screen
   RequirementsNavKey.kt      - Internal nav key for the device requirements sub-screen
   ManifestNavKey.kt          - Internal nav key for the readable Android manifest
+  SplitApksNavKey.kt         - Internal nav key for the split APK files sub-screen
+  NativeLibrariesNavKey.kt   - Internal nav key for the native library files sub-screen
 AppDetailScreen.kt           - Main detail screen Composable
 AppDetailViewModel.kt        - Uses @HiltViewModel with AssistedFactory for AppDetailInput
 AppDetailState.kt            - Loading/Loaded/Error states with full app detail data
-AppDetailInsight.kt          - Feature-owned finding model
-AppDetailInsightEvaluator.kt - Pure policy evaluator for "Worth knowing" findings
 AppDetailAction.kt           - User actions (retry, view manifest, export, navigate sections)
 AppDetailEvent.kt            - Navigation/system events
 AppDetailInputAdapters.kt    - Maps the navigation DTO to shared `AppReference`
@@ -52,6 +52,9 @@ components/
   DetailField.kt             - The labelled, tap-to-copy field every item bottom sheet is built from.
                                Use it; do not add a private copy — there were three before it was extracted
   SplitApkExportBottomSheet.kt - Persistent explanation after exporting only the base of a split app
+insight/
+  AppDetailInsight.kt          - Feature-owned "Worth knowing" finding model, plus the `SensitiveAccess` enum
+  AppDetailInsightEvaluator.kt - Pure policy evaluator that turns an `AppDetail` into a list of insights
 generalinfo/                 - General info sub-screen
 permissions/                 - Permissions sub-screen (see below)
 appcomponents/               - Components sub-screen (see below). Named `appcomponents`, not
@@ -59,6 +62,8 @@ appcomponents/               - Components sub-screen (see below). Named `appcomp
 certificates/                - Signing certificate detail sub-screen
 requirements/                - Device requirements (uses-feature) sub-screen (see below)
 manifest/                    - Searchable readable Android manifest for installed and APK inputs
+splitapks/                   - Split APK files sub-screen (see below)
+nativelibraries/             - Native library files sub-screen (see below)
 ```
 
 Each sub-screen directory carries its own State/Action/Event/ViewModel/Screen set, same MVI shape
@@ -179,6 +184,53 @@ install time, so a sideloaded app can sit on a device that cannot satisfy its ow
 
 There is no search and no scope selector. The `Libraries` scope from the design doc needs
 `<uses-library>` extraction (roadmap `FR-44`), which does not exist yet.
+
+### `splitapks/`
+
+```
+SplitApksScreen.kt              - Pinned toolbar, collapsing search header, flat list sorted by kind
+SplitApkDetailBottomSheet.kt    - The item sheet: type, identifier, file name, size, full path
+SplitApkResources.kt            - SplitApkKind -> icon/label mapping, plus the ABI/density lookup
+                                   tables and the `java.util.Locale`-backed language display name
+SplitApksViewModel.kt           - Assisted-injected; combines the loaded split list with the active
+                                   search query
+SplitApksState.kt               - Loading/Error/Loaded plus search query and item list
+SplitApksAction.kt / SplitApksEvent.kt
+```
+
+One tap down from General Info's "Split APKs" row (`core:apps`'s `readInstalledSplits()` backs both).
+Every installed split/config APK is classified by file-name convention alone: AGP only ever splits a
+config APK along ABI, screen density, or language, so a `split_config.<qualifier>` file whose
+qualifier isn't a known ABI or density code is a language split by elimination, and anything without
+that prefix is a dynamic feature module. Friendly ABI/density names come from a fixed lookup table;
+language qualifiers resolve through `java.util.Locale`, falling back to the raw qualifier when it
+can't be parsed. This is best-effort labeling for a Storage-adjacent screen, not a verdict — an
+unrecognized qualifier degrades to its raw string rather than guessing.
+
+### `nativelibraries/`
+
+```
+NativeLibrariesScreen.kt            - Pinned toolbar, collapsing search header, list grouped by
+                                       library name
+NativeLibraryDetailBottomSheet.kt   - The item sheet: device support, built-for ABIs, total size,
+                                       and a per-ABI breakdown (size + which APK it's bundled in)
+NativeLibrariesViewModel.kt         - Assisted-injected; groups `AppDetail.nativeLibraries.files`
+                                       (one row per (name, abi) pair) into one list item per distinct
+                                       library name, then combines with the active search query
+NativeLibrariesState.kt             - Loading/Error/Loaded plus `NativeLibraryItem` (grouped) and
+                                       `NativeLibraryVariant` (one ABI's copy of that library)
+NativeLibrariesAction.kt / NativeLibrariesEvent.kt
+```
+
+One tap down from General Info's "Native library files" row (`core:apps`'s `readNativeLibraries()`
+backs both — see `core/apps/AGENTS.md`). The grouping mirrors the row it replaces: General Info has
+always counted a library once even when the same file ships for multiple processor architectures, so
+the full list keeps that grouping and pushes the per-architecture detail (size, which APK it's
+bundled in) into the item sheet rather than flattening it into one row per architecture. Device
+compatibility is computed the same way `GeneralInfoViewModel`'s app-wide
+`isNativeLibraryDeviceIncompatible` is (against `Build.SUPPORTED_ABIS`), just per library instead of
+per app — a library whose ABIs don't intersect the device's is tagged **only** on the row that misses,
+following the same "only misses are marked" convention as `requirements/`.
 
 ## Key Patterns
 - Uses **Assisted Injection** (`@HiltViewModel(assistedFactory = ...)`) because the ViewModel requires `AppDetailInput` at creation time.

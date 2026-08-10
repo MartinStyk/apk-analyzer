@@ -44,6 +44,14 @@ internal class AppSummaryTextFormatterImpl @Inject constructor(@ApplicationConte
 
     private fun AppDetailState.Loaded.sourceSummary(): String = when (source) {
         AppSource.GooglePlay -> context.getString(R.string.general_info_install_source_google_play)
+        AppSource.SamsungGalaxyStore -> context.getString(R.string.general_info_install_source_samsung_galaxy_store)
+        AppSource.AmazonAppstore -> context.getString(R.string.general_info_install_source_amazon_appstore)
+        AppSource.HuaweiAppGallery -> context.getString(R.string.general_info_install_source_huawei_app_gallery)
+        AppSource.XiaomiGetApps -> context.getString(R.string.general_info_install_source_xiaomi_get_apps)
+        AppSource.FDroid -> context.getString(R.string.general_info_install_source_fdroid)
+        AppSource.AuroraStore -> context.getString(R.string.general_info_install_source_aurora_store)
+        AppSource.Sideloaded -> context.getString(R.string.general_info_install_source_sideloaded)
+        AppSource.LocalInstall -> context.getString(R.string.general_info_install_source_local_install)
         AppSource.SystemPreinstalled -> context.getString(R.string.general_info_install_source_system)
         AppSource.Unknown -> context.getString(R.string.general_info_install_source_unknown)
     }

@@ -36,10 +36,13 @@ import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
+import sk.styk.martin.apkanalyzer.core.common.model.isSideloaded
 import sk.styk.martin.apkanalyzer.core.userpreferences.RecentlyViewedAppsRepository
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.ApkFileLifetime
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.AppDetailBadge
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.insight.AppDetailInsight
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.insight.AppDetailInsightEvaluator
 import java.time.Instant
 import kotlin.time.Duration.Companion.days
 import kotlin.time.toJavaDuration
@@ -280,7 +283,7 @@ private const val MAX_REQUIREMENT_PREVIEWS = 6
 
 private fun AppDetailState.Loaded.withComputedBadges(now: Instant): AppDetailState.Loaded = copy(
     badges = buildList {
-        if (source == AppSource.Unknown) add(AppDetailBadge.Sideloaded)
+        if (source.isSideloaded) add(AppDetailBadge.Sideloaded)
         if (insights.any { it is AppDetailInsight.SensitivePermission }) add(AppDetailBadge.DangerousPermissions)
         lastUsedTime?.let { lastUsed ->
             if (lastUsed.isBefore(now.minus(AppClassificationThresholds.UNUSED_PERIOD))) add(AppDetailBadge.Unused)
@@ -334,7 +337,7 @@ private fun AppDetail.toLoadedState(permissionLabelProvider: PermissionLabelProv
         minSdkVersion = info.minSdkVersion,
         minSdkLabel = info.minSdkLabel,
         installLocation = info.installLocation.name,
-        appInstaller = info.appInstaller,
+        appInstaller = info.installSourceChain.installingPackage,
         firstInstallTime = info.firstInstallTime,
         lastUpdateTime = info.lastUpdateTime,
         totalPermissionsCount = permissions.used.size,
@@ -381,6 +384,9 @@ private fun AppDetail.toLoadedState(permissionLabelProvider: PermissionLabelProv
         },
         totalSize = info.totalSize,
         lastUsedTime = info.lastUsedTime,
+        installedSplitsCount = info.installedSplits.size,
+        hasNativeLibraries = nativeLibraries.hasNativeCode,
+        usesCleartextTraffic = info.usesCleartextTraffic,
         insights = insights,
     )
 }

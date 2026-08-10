@@ -66,6 +66,14 @@
     <string name="filter_date_range">%1$s\u2013%2$s</string>
     <string name="filter_size_range">%1$s\u2013%2$s</string>
     <string name="filter_source_google_play">Google Play</string>
+    <string name="filter_source_samsung_galaxy_store">Galaxy Store</string>
+    <string name="filter_source_amazon_appstore">Amazon Appstore</string>
+    <string name="filter_source_huawei_app_gallery">AppGallery</string>
+    <string name="filter_source_xiaomi_get_apps">GetApps</string>
+    <string name="filter_source_fdroid">F-Droid</string>
+    <string name="filter_source_aurora_store">Aurora Store</string>
+    <string name="filter_source_sideloaded">Installed from a file</string>
+    <string name="filter_source_local_install">Installed via computer</string>
     <string name="filter_source_system">System</string>
     <string name="filter_source_unknown">Unknown</string>
     <string name="filter_unused_section">Unused Apps</string>

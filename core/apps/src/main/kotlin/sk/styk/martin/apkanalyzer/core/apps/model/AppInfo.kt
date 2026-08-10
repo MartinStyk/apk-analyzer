@@ -23,7 +23,7 @@ data class AppInfo(
     val apkDirectory: String? = null,
     val dataDirectory: String? = null,
     val installLocation: InstallLocation,
-    val appInstaller: PackageName? = null,
+    val installSourceChain: InstallSourceChain = InstallSourceChain(),
     val apkSize: AppSize = 0.bytes,
     val firstInstallTime: Instant? = null,
     val lastUpdateTime: Instant? = null,
@@ -33,5 +33,5 @@ data class AppInfo(
     val targetSdkLabel: String? = null,
     val totalSize: AppSize? = null,
     val lastUsedTime: Instant? = null,
-    val additionalInstalledSplits: Int = 0,
+    val installedSplits: List<InstalledSplitApk> = emptyList(),
 )

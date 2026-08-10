@@ -91,7 +91,7 @@ private fun AppDetail.toGeneralInfoState() = GeneralInfoState.Loaded(
     allowsBackup = info.allowsBackup,
     usesCleartextTraffic = info.usesCleartextTraffic,
     source = info.source,
-    appInstaller = info.appInstaller,
+    installSourceChain = info.installSourceChain,
     firstInstallTime = info.firstInstallTime,
     lastUpdateTime = info.lastUpdateTime,
     lastUsedTime = info.lastUsedTime,
@@ -105,5 +105,5 @@ private fun AppDetail.toGeneralInfoState() = GeneralInfoState.Loaded(
     deviceSupportedAbis = Build.SUPPORTED_ABIS.toList().toImmutableList(),
     isNativeLibraryDeviceIncompatible = nativeLibraries.hasNativeCode &&
         nativeLibraries.abis.none { it in Build.SUPPORTED_ABIS },
-    additionalInstalledSplits = info.additionalInstalledSplits,
+    installedSplitsCount = info.installedSplits.size,
 )

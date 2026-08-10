@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.feature.appdetail.impl
+package sk.styk.martin.apkanalyzer.feature.appdetail.impl.insight
 
 import androidx.compose.runtime.Immutable
 
