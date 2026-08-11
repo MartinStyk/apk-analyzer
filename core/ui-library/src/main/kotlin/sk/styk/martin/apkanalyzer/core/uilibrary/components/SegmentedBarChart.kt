@@ -1,3 +1,5 @@
+@file:Suppress("MatchingDeclarationName")
+
 package sk.styk.martin.apkanalyzer.core.uilibrary.components
 
 import androidx.compose.animation.core.Animatable
