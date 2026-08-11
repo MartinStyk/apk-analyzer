@@ -40,13 +40,13 @@ import sk.styk.martin.apkanalyzer.core.apps.permissions.resolveProtectionLevel
 import sk.styk.martin.apkanalyzer.core.apps.sdkversion.SdkVersionResolver
 import sk.styk.martin.apkanalyzer.core.apps.signing.ApkSigningBlockAnalyzer
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateExtractor
+import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageBreakdown
 import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepository
 import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
-import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import java.io.File
 import java.time.Instant
@@ -96,7 +96,9 @@ internal class AppDetailRepositoryImpl @Inject constructor(
 
     private suspend fun installedPackageDetails(packageName: PackageName): Result<AppDetail> {
         val cacheKey = CacheKey.InstalledPackage(packageName)
-        cache[cacheKey]?.let { return Result.success(it) }
+        cache[cacheKey]?.let { cached ->
+            return Result.success(cached.withStorageBreakdown(storageStatsRepository.queryBreakdown(packageName)))
+        }
         Logger.d(TAG, "Loading details of $packageName")
         return runCatchingCancellable {
             val reference = AppReference.InstalledPackage(packageName)
@@ -107,7 +109,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
                 packageInfo = packageInfo,
                 intentFiltersByComponent = intentFilters.getOrDefault(emptyMap()),
                 areIntentFiltersAvailable = intentFilters.isSuccess,
-                totalSize = storageStatsRepository.queryTotalSize(packageName),
+                storageBreakdown = storageStatsRepository.queryBreakdown(packageName),
                 lastUsedTime = usageStatsRepository.queryLastUsedTime(packageName),
             )
         }.onSuccess { cache[cacheKey] = it }
@@ -135,11 +137,11 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         packageInfo: PackageInfo,
         intentFiltersByComponent: Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>,
         areIntentFiltersAvailable: Boolean,
-        totalSize: AppSize? = null,
+        storageBreakdown: StorageBreakdown? = null,
         lastUsedTime: Instant? = null,
     ) = AppDetail(
         analysisMode = analysisMode,
-        info = getGeneralData(packageInfo, totalSize, lastUsedTime),
+        info = getGeneralData(packageInfo, storageBreakdown, lastUsedTime),
         signing = certificateExtractor.getAppSigning(packageInfo)
             .copy(
                 signingSchemeVersions = packageInfo.applicationInfo?.sourceDir
@@ -164,7 +166,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
 
     private fun getGeneralData(
         packageInfo: PackageInfo,
-        totalSize: AppSize? = null,
+        storageBreakdown: StorageBreakdown? = null,
         lastUsedTime: Instant? = null,
     ): AppInfo {
         val applicationInfo = packageInfo.applicationInfo
@@ -197,7 +199,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             minSdkLabel = sdkVersionResolver.resolveVersion(minSdk),
             targetSdkVersion = applicationInfo?.targetSdkVersion,
             targetSdkLabel = sdkVersionResolver.resolveVersion(applicationInfo?.targetSdkVersion),
-            totalSize = totalSize,
+            storageBreakdown = storageBreakdown,
             lastUsedTime = lastUsedTime,
             installedSplits = readInstalledSplits(applicationInfo),
         )
@@ -319,6 +321,8 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             else -> Feature.Hardware(name = name, version = featureInfo.version, isRequired = isRequired)
         }
     }
+
+    private fun AppDetail.withStorageBreakdown(breakdown: StorageBreakdown?): AppDetail = copy(info = info.copy(storageBreakdown = breakdown))
 
     private fun ApplicationInfo?.hasFlag(flag: Int): Boolean = this?.flags?.and(flag) != 0
 

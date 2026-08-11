@@ -64,8 +64,8 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun queryTotalSize(packageName: PackageName): AppSize? = totalSizes.value[packageName] ?: if (checkPermission()) {
-        queryPackageSize(UserHandle.getUserHandleForUid(Process.myUid()), packageName)
+    override suspend fun queryBreakdown(packageName: PackageName): StorageBreakdown? = if (checkPermission()) {
+        queryPackageBreakdown(UserHandle.getUserHandleForUid(Process.myUid()), packageName)
     } else {
         null
     }
@@ -78,14 +78,18 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
         Logger.d(INSTALLED_APPS, "Load apps total size")
         val user = UserHandle.getUserHandleForUid(Process.myUid())
         totalSizes.value = packageNames.mapNotNull { packageName ->
-            queryPackageSize(user, packageName)?.let { packageName to it }
+            queryPackageBreakdown(user, packageName)?.let { packageName to it.total }
         }.toMap()
         Logger.d(INSTALLED_APPS, "Apps total size loaded")
     }
 
-    private fun queryPackageSize(user: UserHandle, packageName: PackageName): AppSize? = try {
+    private fun queryPackageBreakdown(user: UserHandle, packageName: PackageName): StorageBreakdown? = try {
         val stats = storageStatsManager.queryStatsForPackage(StorageManager.UUID_DEFAULT, packageName.value, user)
-        stats.appBytes.bytes + stats.dataBytes.bytes + stats.cacheBytes.bytes
+        StorageBreakdown(
+            appBytes = stats.appBytes.bytes,
+            dataBytes = stats.dataBytes.bytes,
+            cacheBytes = stats.cacheBytes.bytes,
+        )
     } catch (_: PackageManager.NameNotFoundException) {
         null
     } catch (_: IOException) {

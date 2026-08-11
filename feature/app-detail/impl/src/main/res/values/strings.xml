@@ -307,7 +307,8 @@
         <item quantity="one">Installed as %1$d split APK</item>
         <item quantity="other">Installed as %1$d split APKs</item>
     </plurals>
-    <string name="general_info_total_size">Total Size</string>
+    <string name="general_info_storage">Storage</string>
+    <string name="general_info_storage_permission_needed">Usage access needed</string>
     <string name="general_info_native_library_abis">CPU architectures</string>
     <string name="general_info_native_library_abis_none">No native code</string>
     <string name="general_info_native_library_files">Native library files</string>
@@ -356,7 +357,6 @@
     <string name="general_info_rationale_data_directory">The file system path where the app stores its private data, databases, and shared preferences.</string>
     <string name="general_info_rationale_install_location">The preferred storage location declared by the developer — internal storage, external storage, or automatic.</string>
     <string name="general_info_rationale_apk_size">The combined size of the installed APK files on disk, excluding app data, caches, and runtime-generated files. Most apps installed from Google Play are split into a base APK plus additional APKs for your device\'s language and screen density; this total covers all of them.</string>
-    <string name="general_info_rationale_total_size">The combined size of the APK, app data, and cached files. Requires usage access permission.</string>
     <string name="general_info_rationale_native_library_abis">The processor types this app includes compiled native code for, read from the APK\'s own files rather than what this device reports.</string>
     <string name="general_info_native_library_device_support">This device supports: %1$s.</string>
     <string name="general_info_native_library_incompatible">None of those processor types match what this device supports, so this app\'s native code likely won\'t run here.</string>
@@ -793,4 +793,18 @@
     <string name="nativelibraries_detail_total_size">Total size</string>
     <string name="nativelibraries_detail_section_variants">Per processor type</string>
     <string name="nativelibraries_detail_variant_source">Bundled in %1$s</string>
+
+    <string name="storage_title">Storage</string>
+    <string name="storage_explanation">How this app\'s total size on this device splits between the installed package, saved data, and cache.</string>
+    <string name="storage_error">Failed to load storage details</string>
+    <string name="storage_legend_app">App</string>
+    <string name="storage_legend_data">Data</string>
+    <string name="storage_legend_cache">Cache</string>
+    <string name="storage_legend_value">%1$s · %2$d%%</string>
+    <string name="storage_rationale_app">The size of the installed APK files on disk — the app itself, before it stores any data.</string>
+    <string name="storage_rationale_data">Files, databases, and settings the app has saved while running, such as downloads, drafts, and accounts.</string>
+    <string name="storage_rationale_cache">Temporary files the app can regenerate on demand, such as downloaded images. Android may clear this automatically when storage runs low.</string>
+    <string name="storage_permission_title">Allow usage access</string>
+    <string name="storage_permission_description">This breakdown measures the app\'s full footprint — installer, stored data, and cache combined. Grant usage access in Settings to see it.</string>
+    <string name="storage_permission_open_settings">Open settings</string>
 </resources>

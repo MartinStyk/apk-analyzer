@@ -19,6 +19,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.impl.nativelibraries.NativeL
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.permissions.PermissionsScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.requirements.RequirementsScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.splitapks.SplitApksScreen
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.storage.StorageScreen
 
 fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
     entry<AppDetailNavKey>(
@@ -51,6 +52,16 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
             onBack = { navigator.goBack() },
             onNavigateToSplitApks = { navigator.navigate(SplitApksNavKey(key.detailInput)) },
             onNavigateToNativeLibraries = { navigator.navigate(NativeLibrariesNavKey(key.detailInput)) },
+            onNavigateToStorage = { navigator.navigate(StorageNavKey(key.detailInput)) },
+        )
+    }
+
+    entry<StorageNavKey>(
+        metadata = slideFromEndEntryMetadata(),
+    ) { key ->
+        StorageScreen(
+            appDetailInput = key.detailInput,
+            onBack = { navigator.goBack() },
         )
     }
 

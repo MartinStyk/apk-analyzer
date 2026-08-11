@@ -33,7 +33,7 @@ dropped, its ID is retired.
 
 **This file tracks open work only.** Once an item reaches Done or Retired, its row moves to
 [shipped.md](shipped.md) so this document doesn't fill up with finished work — look there for an ID
-that isn't listed here. Section numbers can skip (there's no `1.1`, `1.3`, `1.4`, or `1.6` below)
+that isn't listed here. Section numbers can skip (there's no `1.1`, `1.3`, `1.4`, `1.5`, or `1.6` below)
 because those sections shipped in full and moved out entirely; numbers never get reassigned to keep
 cross-references stable.
 
@@ -60,12 +60,6 @@ section has shipped except:
 | FR-17 | Exported components view            | Partial | Exported/Unprotected filter chips ship in the Components screen (`FR-13`), backed by both intent filters (`EX-07`) and content-provider path permissions (`EX-08`), both done. Still a technical filter, not a risk verdict — needs a deliberate hub rule (see `RI-03`) before exposure becomes a "Worth knowing" finding |
 | FR-18 | Custom permission audit             | Partial | Permissions screen's `Defined` scope lists the app's declared permissions with full detail sheets; no audit judgment (e.g. protection-level risk) applied yet |
 
-### 1.5 Export & Share
-
-| ID    | Item                        | Status | Notes                                                    |
-|-------|-----------------------------|--------|-----------------------------------------------------------|
-| FR-27 | Launch a component          | Todo   | `startForeignActivity` exists and is unused               |
-
 ### 1.7 Invisible Infrastructure
 
 | ID    | Item                                | Status | Notes                                                                                                          |
@@ -80,11 +74,10 @@ doing in R0 rather than later.
 
 | ID    | Item                              | Status  | Why it matters                                                                                       |
 |-------|-----------------------------------|---------|---------------------------------------------------------------------------------------------------------|
-| FR-37 | Storage breakdown                 | Todo    | `StorageStats` already gives app/data/cache; only the total is used                                  |
 | FR-44 | Declared `<uses-library>` entries | Backlog | Name and `android:required`, from the manifest for APK files and `sharedLibraryFiles` for installed apps. Deprioritized: most apps declare zero entries, and the ones that do are boilerplate (`android.test.runner`) or legacy trivia (`org.apache.http.legacy`) — the value is screen completeness, not a real finding. Revisit if a concrete tracker/risk signal ends up needing it |
 
 **R0 remaining:** FR-17, FR-18 (Partial — blocked on `RI-03`, a Pro/R1 item), CE-06 (Backlog),
-FR-27, FR-31 (blocked on `OQ-01`), FR-37, FR-44 (Backlog), plus `EN`.
+FR-31 (blocked on `OQ-01`), FR-44 (Backlog), plus `EN`.
 Everything else originally scoped for R0 has shipped — see [shipped.md](shipped.md).
 
 ---
@@ -260,7 +253,7 @@ interpretation (that's `RP`) but *tedium removed*: nobody opens 300 app reports 
 
 | ID | Release         | Contents                                                                              | Duration       | Cumulative |
 |----|-----------------|-----------------------------------------------------------------------------------------|----------------|------------|
-| R0 | Free Rework     | Remaining: FR-17, FR-18, CE-06, FR-27, FR-31, FR-37, FR-44, plus `EN` — rest shipped, see [shipped.md](shipped.md) | ~7–8 weeks     | Week 8     |
+| R0 | Free Rework     | Remaining: FR-17, FR-18, CE-06, FR-31, FR-44, plus `EN` — rest shipped, see [shipped.md](shipped.md) | ~7–8 weeks     | Week 8     |
 | R1 | Pro Launch      | `HI`, `RI`, `TR`, `RP`, `CP`                                                             | ~5.5–6.5 weeks | Week 15    |
 | R2 | Bulk Tools      | `BX`                                                                                     | ~1.5–2 weeks   | Week 17    |
 | R3 | Optional polish | OP-01 … OP-03                                                                            | as-needed      | Ongoing    |

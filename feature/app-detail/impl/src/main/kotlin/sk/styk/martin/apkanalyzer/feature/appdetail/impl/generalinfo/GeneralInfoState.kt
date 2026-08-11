@@ -3,6 +3,7 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.impl.generalinfo
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
 import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceChain
+import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
@@ -14,6 +15,7 @@ sealed interface GeneralInfoState {
 
     @Immutable
     data class Loaded(
+        val analysisMode: AppDetail.AnalysisMode,
         val applicationName: String,
         val packageName: PackageName,
         val processName: String?,

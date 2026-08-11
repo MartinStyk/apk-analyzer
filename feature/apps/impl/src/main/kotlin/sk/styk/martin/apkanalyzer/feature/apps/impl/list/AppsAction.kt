@@ -1,7 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.apps.impl.list
 
+import sk.styk.martin.apkanalyzer.core.common.model.AppDataPermission
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
-import sk.styk.martin.apkanalyzer.feature.apps.impl.components.AppDataPermission
 
 sealed interface AppsAction {
     data class SortTypeSelected(val sortType: SortType) : AppsAction

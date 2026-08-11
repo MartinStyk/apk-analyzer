@@ -2,10 +2,10 @@ package sk.styk.martin.apkanalyzer.feature.apps.impl.list
 
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
+import sk.styk.martin.apkanalyzer.core.common.model.AppDataPermission
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
-import sk.styk.martin.apkanalyzer.feature.apps.impl.components.AppDataPermission
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppFilterState
 import java.time.Instant
 
