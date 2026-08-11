@@ -18,6 +18,10 @@ top-level keys define the independent bottom-navigation stacks.
 The external-APK Activity has its own Navigation 3 host and document task. Keep its temporary APK
 ownership and back-stack lifecycle independent from the launcher Activity.
 
+Both navigation hosts log `navigationState.currentKey` directly at INFO whenever the visible
+destination changes. Keep navigation keys readable as data classes or data objects; do not add a
+screen-name mapping layer.
+
 Both activities use the shared theme host so the persisted color scheme is applied before feature
 content renders. Material3 is allowed directly here only for app-shell plumbing such as `Scaffold`
 and theme hosting.

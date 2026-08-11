@@ -23,6 +23,10 @@ logic do not belong here.
 * Cancellation-safe result helpers must rethrow coroutine cancellation rather than convert it into
   a failure value.
 * Use `Logger`, never Timber or Crashlytics directly outside this module.
+* Use severity-specific `Logger` methods with plain, readable messages. Do not add typed logging
+  events, formatter helpers, or logging-only wrapper functions.
+* Throwable-bearing WARN and ERROR logs record Crashlytics non-fatals. Attach the throwable once at
+  the boundary that owns the degraded result or terminal failure.
 * `AppReference` is the shared type-safe distinction between an installed package and an APK file.
 * `AppSource.isSideloaded` intentionally groups sideloaded, local-install, and unknown sources while
   excluding recognized stores and system-preinstalled apps.
