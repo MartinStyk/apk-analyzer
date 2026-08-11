@@ -38,10 +38,9 @@ internal fun ApkAnalyzerApp() {
     val navigator = remember {
         Navigator(navigationState)
     }
-    val currentKey = navigationState.currentKey
 
-    LaunchedEffect(currentKey) {
-        Logger.log("Navigation", LogEvent.ScreenOpen(currentKey))
+    LaunchedEffect(navigationState.currentKey) {
+        Logger.log("Navigation", LogEvent.ScreenOpen(navigationState.currentKey))
     }
 
     Scaffold { paddings ->
