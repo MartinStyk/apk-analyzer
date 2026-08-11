@@ -19,7 +19,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import sk.styk.martin.apkanalyzer.R
-import sk.styk.martin.apkanalyzer.core.common.logger.LogEvent
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.navigation.Navigator
 import sk.styk.martin.apkanalyzer.core.navigation.rememberNavigationState
@@ -84,7 +83,7 @@ private fun ExternalApkNavigation(
     }
 
     LaunchedEffect(navigationState.currentKey) {
-        Logger.log("Navigation", LogEvent.ScreenOpen(navigationState.currentKey))
+        Logger.i("Navigation", "Screen opened: ${navigationState.currentKey}")
     }
 
     Scaffold(modifier = modifier) { paddings ->

@@ -15,9 +15,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.core.common.logger.LogEvent.Operation
-import sk.styk.martin.apkanalyzer.core.common.logger.LogEvent.Operation.State
-import sk.styk.martin.apkanalyzer.core.common.logger.LogRequest
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
@@ -27,7 +24,6 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 private const val TAG = "StorageStatsRepositoryImpl"
-private const val OPERATION = "storage_stats"
 
 @Singleton
 internal class StorageStatsRepositoryImpl @Inject constructor(
@@ -78,16 +74,7 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
             SizeQueryResult.PermissionRace -> null
 
             is SizeQueryResult.Failure -> {
-                Logger.log(
-                    TAG,
-                    Operation(
-                        name = OPERATION,
-                        request = LogRequest(),
-                        state = State.Degraded,
-                        context = "reason=stats_query_failed package=${packageName.value}",
-                    ),
-                    result.error,
-                )
+                Logger.w(TAG, result.error, "Storage stats loading degraded: query failed for ${packageName.value}")
                 null
             }
         }
@@ -96,15 +83,14 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
     }
 
     private fun fetchTotalSizes(packageNames: List<PackageName>) {
-        val request = LogRequest()
         val hasPermission = checkPermission()
         isPermissionGranted.value = hasPermission
         if (!hasPermission) {
-            Logger.log(TAG, Operation(OPERATION, request, State.Degraded, context = "reason=permission_missing"))
+            Logger.w(TAG, "Storage stats loading degraded: permission missing")
             return
         }
 
-        Logger.log(TAG, Operation(OPERATION, request, State.Started, context = "requested_count=${packageNames.size}"))
+        Logger.d(TAG, "Storage stats loading started: ${packageNames.size} apps requested")
         val user = UserHandle.getUserHandleForUid(Process.myUid())
         var uninstallRaceCount = 0
         var permissionRaceCount = 0
@@ -134,19 +120,15 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
         totalSizes.value = sizes
 
         if (uninstallRaceCount > 0) {
-            Logger.log(TAG, Operation(OPERATION, request, State.Degraded, context = "reason=uninstall_race skipped_count=$uninstallRaceCount"))
+            Logger.w(TAG, "Storage stats loading degraded: $uninstallRaceCount uninstalled apps skipped")
         }
         if (permissionRaceCount > 0) {
-            Logger.log(TAG, Operation(OPERATION, request, State.Degraded, context = "reason=permission_race skipped_count=$permissionRaceCount"))
+            Logger.w(TAG, "Storage stats loading degraded: $permissionRaceCount apps skipped after permission changed")
         }
         lastQueryFailure?.let {
-            Logger.log(
-                TAG,
-                Operation(OPERATION, request, State.Degraded, context = "reason=stats_query_failed failed_count=$queryFailureCount"),
-                it,
-            )
+            Logger.w(TAG, it, "Storage stats loading degraded: $queryFailureCount app queries failed")
         }
-        Logger.log(TAG, Operation(OPERATION, request, State.Succeeded, context = "loaded_count=${sizes.size}"))
+        Logger.i(TAG, "Storage stats loading finished: ${sizes.size} apps loaded")
     }
 
     private fun queryPackageSize(user: UserHandle, packageName: PackageName): SizeQueryResult = try {

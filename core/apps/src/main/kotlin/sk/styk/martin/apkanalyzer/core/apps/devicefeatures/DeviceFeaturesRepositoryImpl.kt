@@ -4,15 +4,11 @@ import android.content.pm.FeatureInfo
 import android.content.pm.PackageManager
 import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.core.common.logger.LogEvent.Operation
-import sk.styk.martin.apkanalyzer.core.common.logger.LogEvent.Operation.State
-import sk.styk.martin.apkanalyzer.core.common.logger.LogRequest
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import javax.inject.Inject
 import javax.inject.Singleton
 
 private const val TAG = "DeviceFeaturesRepositoryImpl"
-private const val OPERATION = "device_features"
 
 @Singleton
 internal class DeviceFeaturesRepositoryImpl @Inject constructor(
@@ -25,10 +21,9 @@ internal class DeviceFeaturesRepositoryImpl @Inject constructor(
     override suspend fun deviceFeatures(): DeviceFeatures = withContext(dispatcherProvider.io()) { cachedDeviceFeatures }
 
     private fun readDeviceFeatures(): DeviceFeatures {
-        val request = LogRequest()
-        Logger.log(TAG, Operation(OPERATION, request, State.Started))
+        Logger.d(TAG, "Device features loading started")
         val systemFeatures = runCatching { packageManager.systemAvailableFeatures }
-            .onFailure { Logger.log(TAG, Operation(OPERATION, request, State.Degraded, context = "reason=feature_query_failed"), it) }
+            .onFailure { Logger.w(TAG, it, "Device features loading degraded: feature query failed") }
             .getOrNull()
             ?: return DeviceFeatures.Unknown
 
@@ -40,7 +35,7 @@ internal class DeviceFeaturesRepositoryImpl @Inject constructor(
                 .firstOrNull { it.name == null && it.reqGlEsVersion != FeatureInfo.GL_ES_VERSION_UNDEFINED }
                 ?.reqGlEsVersion,
         ).also {
-            Logger.log(TAG, Operation(OPERATION, request, State.Succeeded, context = "feature_count=${it.featureVersions.size}"))
+            Logger.i(TAG, "Device features loading finished: ${it.featureVersions.size} features loaded")
         }
     }
 }

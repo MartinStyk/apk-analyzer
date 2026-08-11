@@ -7,17 +7,12 @@ import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
 import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilterKey
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
-import sk.styk.martin.apkanalyzer.core.common.logger.LogEvent.Operation
-import sk.styk.martin.apkanalyzer.core.common.logger.LogEvent.Operation.State
-import sk.styk.martin.apkanalyzer.core.common.logger.LogRequest
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import javax.inject.Inject
 
 private const val TAG = "ManifestParser"
-private const val OPERATION_MANIFEST = "manifest"
-private const val OPERATION_COMPONENT_INTENT_FILTERS = "component_intent_filters"
 
 internal class ManifestParserImpl @Inject constructor(
     private val packageManager: PackageManager,
@@ -32,12 +27,11 @@ internal class ManifestParserImpl @Inject constructor(
     }
 
     override suspend fun componentIntentFilters(reference: AppReference): Result<Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>> {
-        val request = LogRequest()
         val context = when (reference) {
             is AppReference.InstalledPackage -> "mode=installed package=${reference.packageName.value}"
             is AppReference.ApkFile -> "mode=apk_file apk_path=${reference.path}"
         }
-        Logger.log(TAG, Operation(OPERATION_COMPONENT_INTENT_FILTERS, request, State.Started))
+        Logger.d(TAG, "Component intent filters loading started: $context")
         return withContext(dispatcherProvider.io()) {
             runCatchingCancellable {
                 when (reference) {
@@ -50,17 +44,16 @@ internal class ManifestParserImpl @Inject constructor(
                     )
                     .mapValues { (_, filters) -> filters.distinct() }
             }
-        }.also { result ->
-            val state = if (result.isSuccess) State.Succeeded else State.Degraded
-            val resultContext = result.getOrNull()?.let { "count=${it.size}" } ?: context
-            Logger.log(TAG, Operation(OPERATION_COMPONENT_INTENT_FILTERS, request, state, context = resultContext), result.exceptionOrNull())
+        }.onSuccess {
+            Logger.d(TAG, "Component intent filters loading finished: ${it.size} components loaded, $context")
+        }.onFailure {
+            Logger.w(TAG, it, "Component intent filters loading degraded: $context")
         }
     }
 
     private suspend fun installedPackageManifest(packageName: PackageName): Result<ParsedManifest> {
-        val request = LogRequest()
         val context = "mode=installed package=${packageName.value}"
-        Logger.log(TAG, Operation(OPERATION_MANIFEST, request, State.Started, context = context))
+        Logger.d(TAG, "Manifest loading started: $context")
         return withContext(dispatcherProvider.io()) {
             runCatchingCancellable {
                 val applicationInfo = packageManager.getApplicationInfo(packageName.value, 0)
@@ -69,16 +62,16 @@ internal class ManifestParserImpl @Inject constructor(
                     additionalInstalledSplits = applicationInfo.splitSourceDirs.orEmpty().size,
                 )
             }
-        }.also { result ->
-            val state = if (result.isSuccess) State.Succeeded else State.Failed
-            Logger.log(TAG, Operation(OPERATION_MANIFEST, request, state, context = context), result.exceptionOrNull())
+        }.onSuccess {
+            Logger.i(TAG, "Manifest loading finished: $context")
+        }.onFailure {
+            Logger.e(TAG, it, "Manifest loading failed: $context")
         }
     }
 
     private suspend fun apkFileManifest(apkPath: String): Result<ParsedManifest> {
-        val request = LogRequest()
         val context = "mode=apk_file apk_path=$apkPath"
-        Logger.log(TAG, Operation(OPERATION_MANIFEST, request, State.Started, context = context))
+        Logger.d(TAG, "Manifest loading started: $context")
         return withContext(dispatcherProvider.io()) {
             runCatchingCancellable {
                 ParsedManifest(
@@ -86,9 +79,10 @@ internal class ManifestParserImpl @Inject constructor(
                     additionalInstalledSplits = 0,
                 )
             }
-        }.also { result ->
-            val state = if (result.isSuccess) State.Succeeded else State.Failed
-            Logger.log(TAG, Operation(OPERATION_MANIFEST, request, state, context = context), result.exceptionOrNull())
+        }.onSuccess {
+            Logger.i(TAG, "Manifest loading finished: $context")
+        }.onFailure {
+            Logger.e(TAG, it, "Manifest loading failed: $context")
         }
     }
 

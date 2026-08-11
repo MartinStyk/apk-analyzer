@@ -22,9 +22,6 @@ import sk.styk.martin.apkanalyzer.core.apps.model.resolveAppCategory
 import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepository
 import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.core.common.logger.LogEvent.Operation
-import sk.styk.martin.apkanalyzer.core.common.logger.LogEvent.Operation.State
-import sk.styk.martin.apkanalyzer.core.common.logger.LogRequest
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
@@ -34,9 +31,6 @@ import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
 internal const val INSTALLED_APPS = "InstalledApps"
-private const val OPERATION_INSTALLED_APPS = "installed_apps"
-private const val STAGE_PACKAGE_QUERY = "package_query"
-private const val STAGE_APP_MAPPING = "app_mapping"
 
 internal class InstalledAppsRepositoryImpl @Inject constructor(
     private val packageManager: PackageManager,
@@ -52,18 +46,14 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
     private val cachedApps = packageChangesObserver.observe()
         .onStart { emit(Unit) }
         .mapLatest {
-            val request = LogRequest()
-            Logger.log(INSTALLED_APPS, Operation(OPERATION_INSTALLED_APPS, request, State.Started))
+            Logger.d(INSTALLED_APPS, "Installed apps loading started")
             try {
-                val apps = loadAllApps(request)
-                Logger.log(
-                    INSTALLED_APPS,
-                    Operation(OPERATION_INSTALLED_APPS, request, State.Succeeded, context = "count=${apps.size}"),
-                )
+                val apps = loadAllApps()
+                Logger.i(INSTALLED_APPS, "Installed apps loading finished: ${apps.size} apps loaded")
                 apps
             } catch (failure: Throwable) {
                 if (failure !is CancellationException) {
-                    Logger.log(INSTALLED_APPS, Operation(OPERATION_INSTALLED_APPS, request, State.Failed), failure)
+                    Logger.e(INSTALLED_APPS, failure, "Installed apps loading failed")
                 }
                 throw failure
             }
@@ -92,20 +82,14 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
     override fun apps(): Flow<List<InstalledApp>> = cachedApps
 
     @SuppressLint("QueryPermissionsNeeded")
-    private fun loadAllApps(request: LogRequest): List<InstalledApp> {
-        Logger.log(INSTALLED_APPS, Operation(OPERATION_INSTALLED_APPS, request, State.Started, stage = STAGE_PACKAGE_QUERY))
+    private fun loadAllApps(): List<InstalledApp> {
+        Logger.d(INSTALLED_APPS, "Installed apps package query started")
         val packages = packageManager.getInstalledPackages(PackageManager.GET_PERMISSIONS)
-        Logger.log(
-            INSTALLED_APPS,
-            Operation(OPERATION_INSTALLED_APPS, request, State.Succeeded, stage = STAGE_PACKAGE_QUERY, context = "count=${packages.size}"),
-        )
+        Logger.d(INSTALLED_APPS, "Installed apps package query finished: ${packages.size} packages found")
 
-        Logger.log(INSTALLED_APPS, Operation(OPERATION_INSTALLED_APPS, request, State.Started, stage = STAGE_APP_MAPPING))
+        Logger.d(INSTALLED_APPS, "Installed apps mapping started")
         val apps = packages.mapNotNull { packageInfo -> packageInfo.applicationInfo?.let { packageInfo.toInstalledApp() } }
-        Logger.log(
-            INSTALLED_APPS,
-            Operation(OPERATION_INSTALLED_APPS, request, State.Succeeded, stage = STAGE_APP_MAPPING, context = "count=${apps.size}"),
-        )
+        Logger.d(INSTALLED_APPS, "Installed apps mapping finished: ${apps.size} apps mapped")
         return apps
     }
 

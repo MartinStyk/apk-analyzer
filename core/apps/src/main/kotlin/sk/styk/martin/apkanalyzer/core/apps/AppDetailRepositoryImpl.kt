@@ -44,9 +44,6 @@ import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepository
 import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
-import sk.styk.martin.apkanalyzer.core.common.logger.LogEvent.Operation
-import sk.styk.martin.apkanalyzer.core.common.logger.LogEvent.Operation.State
-import sk.styk.martin.apkanalyzer.core.common.logger.LogRequest
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
@@ -98,63 +95,49 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     }
 
     private suspend fun installedPackageDetails(packageName: PackageName): Result<AppDetail> {
-        val request = LogRequest()
         val context = "mode=installed package=${packageName.value}"
         val cacheKey = CacheKey.InstalledPackage(packageName)
-        Logger.log(TAG, Operation(OPERATION, request, State.Started, context = context))
-        Logger.log(TAG, Operation(OPERATION, request, State.Started, stage = STAGE_CACHE_LOOKUP, context = context))
+        Logger.d(TAG, "App detail loading started: $context")
+        Logger.d(TAG, "App detail cache lookup started: $context")
         cache[cacheKey]?.let {
-            Logger.log(TAG, Operation(OPERATION, request, State.Succeeded, stage = STAGE_CACHE_LOOKUP, context = "cache_hit=true $context"))
-            val state = if (it.areComponentIntentFiltersAvailable) State.Succeeded else State.Degraded
-            Logger.log(TAG, Operation(OPERATION, request, state, context = "cache_hit=true $context"))
+            Logger.d(TAG, "App detail cache lookup finished: cache hit, $context")
+            if (it.areComponentIntentFiltersAvailable) {
+                Logger.i(TAG, "App detail loading finished: cache hit, $context")
+            } else {
+                Logger.w(TAG, "App detail loading degraded: component intent filters unavailable, cache hit, $context")
+            }
             return Result.success(it)
         }
-        Logger.log(TAG, Operation(OPERATION, request, State.Succeeded, stage = STAGE_CACHE_LOOKUP, context = "cache_hit=false $context"))
+        Logger.d(TAG, "App detail cache lookup finished: cache miss, $context")
         return runCatchingCancellable {
             val reference = AppReference.InstalledPackage(packageName)
 
-            Logger.log(TAG, Operation(OPERATION, request, State.Started, stage = STAGE_PACKAGE_QUERY, context = context))
+            Logger.d(TAG, "App detail package query started: $context")
             val packageInfo = packageManager.getPackageInfo(packageName.value, analysisFlags)
-            Logger.log(TAG, Operation(OPERATION, request, State.Succeeded, stage = STAGE_PACKAGE_QUERY, context = context))
+            Logger.d(TAG, "App detail package query finished: $context")
 
             val intentFilters = manifestParser.componentIntentFilters(reference)
-            Logger.log(
-                TAG,
-                Operation(
-                    name = OPERATION,
-                    request = request,
-                    state = if (intentFilters.isSuccess) State.Succeeded else State.Degraded,
-                    stage = STAGE_INTENT_FILTERS,
-                    context = context,
-                ),
-            )
+            if (intentFilters.isSuccess) {
+                Logger.d(TAG, "App detail intent filters loading finished: $context")
+            } else {
+                Logger.w(TAG, "App detail intent filters loading degraded: $context")
+            }
 
             val totalSize = storageStatsRepository.queryTotalSize(packageName)
-            Logger.log(
-                TAG,
-                Operation(
-                    name = OPERATION,
-                    request = request,
-                    state = if (totalSize != null) State.Succeeded else State.Degraded,
-                    stage = STAGE_STORAGE_STATS,
-                    context = "available=${totalSize != null} $context",
-                ),
-            )
+            if (totalSize != null) {
+                Logger.d(TAG, "App detail storage stats loading finished: $context")
+            } else {
+                Logger.w(TAG, "App detail storage stats loading degraded: data unavailable, $context")
+            }
 
             val lastUsedTime = usageStatsRepository.queryLastUsedTime(packageName)
-            Logger.log(
-                TAG,
-                Operation(
-                    name = OPERATION,
-                    request = request,
-                    state = if (lastUsedTime != null) State.Succeeded else State.Degraded,
-                    stage = STAGE_USAGE_STATS,
-                    context = "available=${lastUsedTime != null} $context",
-                ),
-            )
+            if (lastUsedTime != null) {
+                Logger.d(TAG, "App detail usage stats loading finished: $context")
+            } else {
+                Logger.w(TAG, "App detail usage stats loading degraded: data unavailable, $context")
+            }
 
             getPackageDetails(
-                request = request,
                 context = context,
                 analysisMode = AppDetail.AnalysisMode.InstalledPackage,
                 packageInfo = packageInfo,
@@ -163,78 +146,69 @@ internal class AppDetailRepositoryImpl @Inject constructor(
                 totalSize = totalSize,
                 lastUsedTime = lastUsedTime,
             )
-        }.also { result ->
-            val detail = result.getOrNull()
-            if (detail != null) {
-                cache[cacheKey] = detail
+        }.onSuccess { detail ->
+            cache[cacheKey] = detail
+            if (detail.areComponentIntentFiltersAvailable) {
+                Logger.i(TAG, "App detail loading finished: $context")
+            } else {
+                Logger.w(TAG, "App detail loading degraded: component intent filters unavailable, $context")
             }
-            val state = when {
-                result.isFailure -> State.Failed
-                detail?.areComponentIntentFiltersAvailable == true -> State.Succeeded
-                else -> State.Degraded
-            }
-            Logger.log(TAG, Operation(OPERATION, request, state, context = context), result.exceptionOrNull())
+        }.onFailure {
+            Logger.e(TAG, it, "App detail loading failed: $context")
         }
     }
 
     private suspend fun apkFilePackageDetails(accessibleFile: File): Result<AppDetail> {
-        val request = LogRequest()
         val context = "mode=apk_file apk_path=${accessibleFile.absolutePath}"
         val cacheKey = CacheKey.ApkFile(accessibleFile.absolutePath, accessibleFile.lastModified())
-        Logger.log(TAG, Operation(OPERATION, request, State.Started, context = context))
-        Logger.log(TAG, Operation(OPERATION, request, State.Started, stage = STAGE_CACHE_LOOKUP, context = context))
+        Logger.d(TAG, "App detail loading started: $context")
+        Logger.d(TAG, "App detail cache lookup started: $context")
         cache[cacheKey]?.let {
-            Logger.log(TAG, Operation(OPERATION, request, State.Succeeded, stage = STAGE_CACHE_LOOKUP, context = "cache_hit=true $context"))
-            val state = if (it.areComponentIntentFiltersAvailable) State.Succeeded else State.Degraded
-            Logger.log(TAG, Operation(OPERATION, request, state, context = "cache_hit=true $context"))
+            Logger.d(TAG, "App detail cache lookup finished: cache hit, $context")
+            if (it.areComponentIntentFiltersAvailable) {
+                Logger.i(TAG, "App detail loading finished: cache hit, $context")
+            } else {
+                Logger.w(TAG, "App detail loading degraded: component intent filters unavailable, cache hit, $context")
+            }
             return Result.success(it)
         }
 
-        Logger.log(TAG, Operation(OPERATION, request, State.Succeeded, stage = STAGE_CACHE_LOOKUP, context = "cache_hit=false $context"))
+        Logger.d(TAG, "App detail cache lookup finished: cache miss, $context")
         return runCatchingCancellable {
             val reference = AppReference.ApkFile(accessibleFile.absolutePath)
 
-            Logger.log(TAG, Operation(OPERATION, request, State.Started, stage = STAGE_PACKAGE_QUERY, context = context))
+            Logger.d(TAG, "App detail package query started: $context")
             val packageInfo = packageManager.getPackageArchiveInfoWithCorrectPath(accessibleFile.absolutePath, analysisFlags)
                 ?: error("Cannot parse APK file: ${accessibleFile.absolutePath}")
-            Logger.log(TAG, Operation(OPERATION, request, State.Succeeded, stage = STAGE_PACKAGE_QUERY, context = context))
+            Logger.d(TAG, "App detail package query finished: $context")
 
             val intentFilters = manifestParser.componentIntentFilters(reference)
-            Logger.log(
-                TAG,
-                Operation(
-                    name = OPERATION,
-                    request = request,
-                    state = if (intentFilters.isSuccess) State.Succeeded else State.Degraded,
-                    stage = STAGE_INTENT_FILTERS,
-                    context = context,
-                ),
-            )
+            if (intentFilters.isSuccess) {
+                Logger.d(TAG, "App detail intent filters loading finished: $context")
+            } else {
+                Logger.w(TAG, "App detail intent filters loading degraded: $context")
+            }
 
             getPackageDetails(
-                request = request,
                 context = context,
                 analysisMode = AppDetail.AnalysisMode.ApkFile,
                 packageInfo = packageInfo,
                 intentFiltersByComponent = intentFilters.getOrDefault(emptyMap()),
                 areIntentFiltersAvailable = intentFilters.isSuccess,
             )
-        }.also { result ->
-            val detail = result.getOrNull()
-            if (detail != null) {
-                cache[cacheKey] = detail
+        }.onSuccess { detail ->
+            cache[cacheKey] = detail
+            if (detail.areComponentIntentFiltersAvailable) {
+                Logger.i(TAG, "App detail loading finished: $context")
+            } else {
+                Logger.w(TAG, "App detail loading degraded: component intent filters unavailable, $context")
             }
-            val state = when {
-                result.isFailure -> State.Failed
-                detail?.areComponentIntentFiltersAvailable == true -> State.Succeeded
-                else -> State.Degraded
-            }
-            Logger.log(TAG, Operation(OPERATION, request, state, context = context), result.exceptionOrNull())
+        }.onFailure {
+            Logger.e(TAG, it, "App detail loading failed: $context")
         }
     }
 
     private fun getPackageDetails(
-        request: LogRequest,
         context: String,
         analysisMode: AppDetail.AnalysisMode,
         packageInfo: PackageInfo,
@@ -243,56 +217,60 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         totalSize: AppSize? = null,
         lastUsedTime: Instant? = null,
     ): AppDetail {
-        Logger.log(TAG, Operation(OPERATION, request, State.Started, stage = STAGE_GENERAL_INFO, context = context))
+        Logger.d(TAG, "App detail general information loading started: $context")
         val info = getGeneralData(packageInfo, totalSize, lastUsedTime)
-        Logger.log(TAG, Operation(OPERATION, request, State.Succeeded, stage = STAGE_GENERAL_INFO, context = context))
+        Logger.d(TAG, "App detail general information loading finished: $context")
 
-        Logger.log(TAG, Operation(OPERATION, request, State.Started, stage = STAGE_CERTIFICATES, context = context))
+        Logger.d(TAG, "App detail certificates loading started: $context")
         val signing = certificateExtractor.getAppSigning(packageInfo)
-        Logger.log(TAG, Operation(OPERATION, request, State.Succeeded, stage = STAGE_CERTIFICATES, context = context))
-
-        Logger.log(TAG, Operation(OPERATION, request, State.Started, stage = STAGE_SIGNING_SCHEMES, context = context))
-        val signingSchemeVersions = packageInfo.applicationInfo?.sourceDir?.let(apkSigningBlockAnalyzer::detectSchemeVersions)
-        Logger.log(
+        Logger.d(
             TAG,
-            Operation(
-                name = OPERATION,
-                request = request,
-                state = if (signingSchemeVersions != null) State.Succeeded else State.Degraded,
-                stage = STAGE_SIGNING_SCHEMES,
-                context = context,
-            ),
+            "App detail certificates loading finished: ${signing.currentCertificates.size + signing.pastCertificates.size} certificates loaded, $context",
         )
+
+        Logger.d(TAG, "App detail signing schemes loading started: $context")
+        val signingSchemeVersions = packageInfo.applicationInfo?.sourceDir?.let(apkSigningBlockAnalyzer::detectSchemeVersions)
+        if (signingSchemeVersions != null) {
+            Logger.d(TAG, "App detail signing schemes loading finished: ${signingSchemeVersions.size} schemes loaded, $context")
+        } else {
+            Logger.w(TAG, "App detail signing schemes loading degraded: data unavailable, $context")
+        }
 
         val launcherActivityNames = when (analysisMode) {
             AppDetail.AnalysisMode.InstalledPackage -> {
-                Logger.log(TAG, Operation(OPERATION, request, State.Started, stage = STAGE_LAUNCHER_QUERY, context = context))
+                Logger.d(TAG, "App detail launcher activities loading started: $context")
                 queryLauncherActivityNames(PackageName(packageInfo.packageName)).also {
-                    Logger.log(TAG, Operation(OPERATION, request, State.Succeeded, stage = STAGE_LAUNCHER_QUERY, context = context))
+                    Logger.d(TAG, "App detail launcher activities loading finished: ${it.size} activities loaded, $context")
                 }
             }
 
             AppDetail.AnalysisMode.ApkFile -> null
         }
 
-        Logger.log(TAG, Operation(OPERATION, request, State.Started, stage = STAGE_COMPONENT_MAPPING, context = context))
+        Logger.d(TAG, "App detail components loading started: $context")
         val activities = getActivities(packageInfo, launcherActivityNames, intentFiltersByComponent)
         val services = getServices(packageInfo, intentFiltersByComponent)
         val contentProviders = getContentProviders(packageInfo, intentFiltersByComponent)
         val receivers = getBroadcastReceivers(packageInfo, intentFiltersByComponent)
-        Logger.log(TAG, Operation(OPERATION, request, State.Succeeded, stage = STAGE_COMPONENT_MAPPING, context = context))
+        Logger.d(
+            TAG,
+            "App detail components loading finished: ${activities.size + services.size + contentProviders.size + receivers.size} components loaded, $context",
+        )
 
-        Logger.log(TAG, Operation(OPERATION, request, State.Started, stage = STAGE_PERMISSIONS, context = context))
+        Logger.d(TAG, "App detail permissions loading started: $context")
         val permissions = getPermissions(packageInfo)
-        Logger.log(TAG, Operation(OPERATION, request, State.Succeeded, stage = STAGE_PERMISSIONS, context = context))
+        Logger.d(
+            TAG,
+            "App detail permissions loading finished: ${permissions.used.size + permissions.defined.size} permissions loaded, $context",
+        )
 
-        Logger.log(TAG, Operation(OPERATION, request, State.Started, stage = STAGE_FEATURES, context = context))
+        Logger.d(TAG, "App detail features loading started: $context")
         val features = getFeatures(packageInfo)
-        Logger.log(TAG, Operation(OPERATION, request, State.Succeeded, stage = STAGE_FEATURES, context = context))
+        Logger.d(TAG, "App detail features loading finished: ${features.size} features loaded, $context")
 
-        Logger.log(TAG, Operation(OPERATION, request, State.Started, stage = STAGE_PACKAGING, context = context))
+        Logger.d(TAG, "App detail packaging loading started: $context")
         val nativeLibraries = readNativeLibraries(packageInfo.applicationInfo)
-        Logger.log(TAG, Operation(OPERATION, request, State.Succeeded, stage = STAGE_PACKAGING, context = context))
+        Logger.d(TAG, "App detail packaging loading finished: ${nativeLibraries.files.size} native libraries loaded, $context")
 
         return AppDetail(
             analysisMode = analysisMode,
@@ -483,20 +461,6 @@ internal class AppDetailRepositoryImpl @Inject constructor(
 
     companion object {
         private const val TAG = "AppDetailRepositoryImpl"
-        private const val OPERATION = "app_detail"
-        private const val STAGE_CACHE_LOOKUP = "cache_lookup"
-        private const val STAGE_PACKAGE_QUERY = "package_query"
-        private const val STAGE_INTENT_FILTERS = "intent_filters"
-        private const val STAGE_STORAGE_STATS = "storage_stats"
-        private const val STAGE_USAGE_STATS = "usage_stats"
-        private const val STAGE_GENERAL_INFO = "general_info"
-        private const val STAGE_CERTIFICATES = "certificates"
-        private const val STAGE_SIGNING_SCHEMES = "signing_schemes"
-        private const val STAGE_LAUNCHER_QUERY = "launcher_query"
-        private const val STAGE_COMPONENT_MAPPING = "component_mapping"
-        private const val STAGE_PERMISSIONS = "permissions"
-        private const val STAGE_FEATURES = "features"
-        private const val STAGE_PACKAGING = "packaging"
 
         private val launcherCategories = listOf(Intent.CATEGORY_LAUNCHER, Intent.CATEGORY_LEANBACK_LAUNCHER)
     }

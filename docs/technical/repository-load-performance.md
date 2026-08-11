@@ -47,8 +47,7 @@ attributes, and stage metrics associated with one operation and avoid an unmanag
 - Logs may contain the package name for an installed app and the APK path for APK-file analysis.
 - Do not add a sanitization abstraction or rewrite existing diagnostic context in this rollout.
 - Raw throwables may be reported when their failure qualifies as a non-fatal under the logging policy.
-- Do not use a user ID. A per-process request number may appear in local and Crashlytics breadcrumbs
-  to correlate overlapping operations, but it must not become a Performance attribute or custom key.
+- Do not use a user ID.
 - Performance trace names, metrics, and attributes remain low-cardinality. Package names, APK paths,
   screen parameters, and other request identities must not become Performance attributes because
   they fragment aggregate distributions.
@@ -63,16 +62,13 @@ attributes, and stage metrics associated with one operation and avoid an unmanag
 
 ### Message shape
 
-Call `Logger.log(tag, LogEvent.Operation(...))`. `Logger` renders a consistent shape for loading
-logs and selects the level from the typed operation state:
+Use short human-readable messages directly with the severity-specific `Logger` method:
 
 ```text
-operation=<operation> request=<process-local-number> stage=<stage> event=<event> <context>
+<Operation or stage> loading <started|finished|degraded|failed>: <result or context>
 ```
 
-Allowed events are `started`, `succeeded`, `degraded`, and `failed`. Context may include
-values such as `mode=installed`, `cache_hit=true`, `count=143`, `reason=permission_missing`,
-`package=<package-name>`, or `apk_path=<path>`.
+Context may include analysis mode, cache state, bounded counts, package name, or APK path.
 
 Every parent operation logs one start and exactly one terminal event. A stage logs a start and one
 terminal event when it performs meaningful I/O, parsing, cryptography, or bulk mapping. Do not log
@@ -130,10 +126,8 @@ Performance trace is not justified.
 Observe the visible destination once in each app navigation host:
 
 ```kotlin
-val currentKey = navigationState.currentKey
-
-LaunchedEffect(currentKey) {
-    Logger.log(TAG, LogEvent.ScreenOpen(currentKey))
+LaunchedEffect(navigationState.currentKey) {
+    Logger.i("Navigation", "Screen opened: ${navigationState.currentKey}")
 }
 ```
 
@@ -144,7 +138,7 @@ the destination and includes its diagnostic parameters without a separate resolv
 Emit one `INFO` breadcrumb in this shape:
 
 ```text
-event=screen_opened key=<NavKey>
+Screen opened: <NavKey>
 ```
 
 Cover both the main `ApkAnalyzerApp` host and the external-APK navigation host. This phase adds
@@ -364,7 +358,7 @@ attributes on one custom trace. Every proposed trace remains below both limits.
 
 ### OBS-01: Make logging consistent
 
-- Add the operation/stage/event message convention.
+- Add the direct human-readable loading message convention.
 - Apply the log-level and single-owner non-fatal rules to current load paths.
 - Add missing start, success, degraded, and failure logs to the required operation
   coverage.
