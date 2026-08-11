@@ -22,9 +22,10 @@ import sk.styk.martin.apkanalyzer.core.apps.model.resolveAppCategory
 import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepository
 import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.common.logger.LogEvent.Operation
+import sk.styk.martin.apkanalyzer.core.common.logger.LogEvent.Operation.State
+import sk.styk.martin.apkanalyzer.core.common.logger.LogRequest
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
-import sk.styk.martin.apkanalyzer.core.common.logger.nextOperationRequest
-import sk.styk.martin.apkanalyzer.core.common.logger.operationLogMessage
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import java.io.File
@@ -51,20 +52,19 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
     private val cachedApps = packageChangesObserver.observe()
         .onStart { emit(Unit) }
         .mapLatest {
-            val requestId = nextOperationRequest()
-            Logger.d(INSTALLED_APPS, operationLogMessage(OPERATION_INSTALLED_APPS, requestId, event = "started"))
+            val request = LogRequest()
+            Logger.log(INSTALLED_APPS, Operation(OPERATION_INSTALLED_APPS, request, State.Started))
             try {
-                val apps = loadAllApps(requestId)
-                Logger.i(
+                val apps = loadAllApps(request)
+                Logger.log(
                     INSTALLED_APPS,
-                    operationLogMessage(OPERATION_INSTALLED_APPS, requestId, event = "succeeded", context = "count=${apps.size}"),
+                    Operation(OPERATION_INSTALLED_APPS, request, State.Succeeded, context = "count=${apps.size}"),
                 )
                 apps
-            } catch (cancellation: CancellationException) {
-                Logger.d(INSTALLED_APPS, operationLogMessage(OPERATION_INSTALLED_APPS, requestId, event = "cancelled"))
-                throw cancellation
             } catch (failure: Throwable) {
-                Logger.e(INSTALLED_APPS, failure, operationLogMessage(OPERATION_INSTALLED_APPS, requestId, event = "failed"))
+                if (failure !is CancellationException) {
+                    Logger.log(INSTALLED_APPS, Operation(OPERATION_INSTALLED_APPS, request, State.Failed), failure)
+                }
                 throw failure
             }
         }
@@ -92,19 +92,19 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
     override fun apps(): Flow<List<InstalledApp>> = cachedApps
 
     @SuppressLint("QueryPermissionsNeeded")
-    private fun loadAllApps(requestId: Long): List<InstalledApp> {
-        Logger.d(INSTALLED_APPS, operationLogMessage(OPERATION_INSTALLED_APPS, requestId, stage = STAGE_PACKAGE_QUERY, event = "started"))
+    private fun loadAllApps(request: LogRequest): List<InstalledApp> {
+        Logger.log(INSTALLED_APPS, Operation(OPERATION_INSTALLED_APPS, request, State.Started, stage = STAGE_PACKAGE_QUERY))
         val packages = packageManager.getInstalledPackages(PackageManager.GET_PERMISSIONS)
-        Logger.d(
+        Logger.log(
             INSTALLED_APPS,
-            operationLogMessage(OPERATION_INSTALLED_APPS, requestId, stage = STAGE_PACKAGE_QUERY, event = "succeeded", context = "count=${packages.size}"),
+            Operation(OPERATION_INSTALLED_APPS, request, State.Succeeded, stage = STAGE_PACKAGE_QUERY, context = "count=${packages.size}"),
         )
 
-        Logger.d(INSTALLED_APPS, operationLogMessage(OPERATION_INSTALLED_APPS, requestId, stage = STAGE_APP_MAPPING, event = "started"))
+        Logger.log(INSTALLED_APPS, Operation(OPERATION_INSTALLED_APPS, request, State.Started, stage = STAGE_APP_MAPPING))
         val apps = packages.mapNotNull { packageInfo -> packageInfo.applicationInfo?.let { packageInfo.toInstalledApp() } }
-        Logger.d(
+        Logger.log(
             INSTALLED_APPS,
-            operationLogMessage(OPERATION_INSTALLED_APPS, requestId, stage = STAGE_APP_MAPPING, event = "succeeded", context = "count=${apps.size}"),
+            Operation(OPERATION_INSTALLED_APPS, request, State.Succeeded, stage = STAGE_APP_MAPPING, context = "count=${apps.size}"),
         )
         return apps
     }

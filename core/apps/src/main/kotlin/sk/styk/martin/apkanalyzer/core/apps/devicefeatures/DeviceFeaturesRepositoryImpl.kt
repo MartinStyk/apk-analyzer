@@ -4,9 +4,10 @@ import android.content.pm.FeatureInfo
 import android.content.pm.PackageManager
 import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.common.logger.LogEvent.Operation
+import sk.styk.martin.apkanalyzer.core.common.logger.LogEvent.Operation.State
+import sk.styk.martin.apkanalyzer.core.common.logger.LogRequest
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
-import sk.styk.martin.apkanalyzer.core.common.logger.nextOperationRequest
-import sk.styk.martin.apkanalyzer.core.common.logger.operationLogMessage
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -24,10 +25,10 @@ internal class DeviceFeaturesRepositoryImpl @Inject constructor(
     override suspend fun deviceFeatures(): DeviceFeatures = withContext(dispatcherProvider.io()) { cachedDeviceFeatures }
 
     private fun readDeviceFeatures(): DeviceFeatures {
-        val requestId = nextOperationRequest()
-        Logger.d(TAG, operationLogMessage(OPERATION, requestId, event = "started"))
+        val request = LogRequest()
+        Logger.log(TAG, Operation(OPERATION, request, State.Started))
         val systemFeatures = runCatching { packageManager.systemAvailableFeatures }
-            .onFailure { Logger.w(TAG, it, operationLogMessage(OPERATION, requestId, event = "degraded", context = "reason=feature_query_failed")) }
+            .onFailure { Logger.log(TAG, Operation(OPERATION, request, State.Degraded, context = "reason=feature_query_failed"), it) }
             .getOrNull()
             ?: return DeviceFeatures.Unknown
 
@@ -39,7 +40,7 @@ internal class DeviceFeaturesRepositoryImpl @Inject constructor(
                 .firstOrNull { it.name == null && it.reqGlEsVersion != FeatureInfo.GL_ES_VERSION_UNDEFINED }
                 ?.reqGlEsVersion,
         ).also {
-            Logger.i(TAG, operationLogMessage(OPERATION, requestId, event = "succeeded", context = "feature_count=${it.featureVersions.size}"))
+            Logger.log(TAG, Operation(OPERATION, request, State.Succeeded, context = "feature_count=${it.featureVersions.size}"))
         }
     }
 }

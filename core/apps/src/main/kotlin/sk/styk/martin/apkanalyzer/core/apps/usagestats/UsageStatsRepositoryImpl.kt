@@ -13,9 +13,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.common.logger.LogEvent.Operation
+import sk.styk.martin.apkanalyzer.core.common.logger.LogEvent.Operation.State
+import sk.styk.martin.apkanalyzer.core.common.logger.LogRequest
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
-import sk.styk.martin.apkanalyzer.core.common.logger.nextOperationRequest
-import sk.styk.martin.apkanalyzer.core.common.logger.operationLogMessage
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import java.time.Instant
 import javax.inject.Inject
@@ -58,20 +59,20 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
     }
 
     private fun fetchUsageTimes() {
-        val requestId = nextOperationRequest()
+        val request = LogRequest()
         val hasPermission = checkPermission()
         isPermissionGranted.value = hasPermission
         if (!hasPermission) {
-            Logger.w(TAG, operationLogMessage(OPERATION, requestId, event = "degraded", context = "reason=permission_missing"))
+            Logger.log(TAG, Operation(OPERATION, request, State.Degraded, context = "reason=permission_missing"))
             return
         }
 
-        Logger.d(TAG, operationLogMessage(OPERATION, requestId, event = "started"))
+        Logger.log(TAG, Operation(OPERATION, request, State.Started))
         val usages = queryRawUsageStats()
             .groupBy { PackageName(it.packageName) }
             .mapValues { (_, usages) -> Instant.ofEpochMilli(usages.maxOf { it.lastTimeUsed }) }
         lastUsedTimes.value = usages
-        Logger.i(TAG, operationLogMessage(OPERATION, requestId, event = "succeeded", context = "loaded_count=${usages.size}"))
+        Logger.log(TAG, Operation(OPERATION, request, State.Succeeded, context = "loaded_count=${usages.size}"))
     }
 
     @SuppressLint("MissingPermission")

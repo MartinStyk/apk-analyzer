@@ -7,13 +7,13 @@ import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
 import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilterKey
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
+import sk.styk.martin.apkanalyzer.core.common.logger.LogEvent.Operation
+import sk.styk.martin.apkanalyzer.core.common.logger.LogEvent.Operation.State
+import sk.styk.martin.apkanalyzer.core.common.logger.LogRequest
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
-import sk.styk.martin.apkanalyzer.core.common.logger.nextOperationRequest
-import sk.styk.martin.apkanalyzer.core.common.logger.operationLogMessage
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import javax.inject.Inject
-import kotlin.coroutines.cancellation.CancellationException
 
 private const val TAG = "ManifestParser"
 private const val OPERATION_MANIFEST = "manifest"
@@ -31,82 +31,64 @@ internal class ManifestParserImpl @Inject constructor(
         is AppReference.ApkFile -> apkFileManifest(reference.path)
     }
 
-    @Suppress("SuspendFunSwallowedCancellation")
     override suspend fun componentIntentFilters(reference: AppReference): Result<Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>> {
-        val requestId = nextOperationRequest()
-        Logger.d(TAG, operationLogMessage(OPERATION_COMPONENT_INTENT_FILTERS, requestId, event = "started"))
-        return try {
-            withContext(dispatcherProvider.io()) {
-                runCatchingCancellable {
-                    when (reference) {
-                        is AppReference.InstalledPackage -> installedComponentIntentFilters(reference.packageName)
-                        is AppReference.ApkFile -> componentManifestParser.parse(resourcesForApk(reference.path))
-                    }
-                        .groupBy(
-                            keySelector = { it.first },
-                            valueTransform = { it.second },
-                        )
-                        .mapValues { (_, filters) -> filters.distinct() }
+        val request = LogRequest()
+        val context = when (reference) {
+            is AppReference.InstalledPackage -> "mode=installed package=${reference.packageName.value}"
+            is AppReference.ApkFile -> "mode=apk_file apk_path=${reference.path}"
+        }
+        Logger.log(TAG, Operation(OPERATION_COMPONENT_INTENT_FILTERS, request, State.Started))
+        return withContext(dispatcherProvider.io()) {
+            runCatchingCancellable {
+                when (reference) {
+                    is AppReference.InstalledPackage -> installedComponentIntentFilters(reference.packageName)
+                    is AppReference.ApkFile -> componentManifestParser.parse(resourcesForApk(reference.path))
                 }
-            }.onSuccess {
-                Logger.d(TAG, operationLogMessage(OPERATION_COMPONENT_INTENT_FILTERS, requestId, event = "succeeded", context = "count=${it.size}"))
-            }.onFailure {
-                Logger.w(
-                    TAG,
-                    it,
-                    operationLogMessage(OPERATION_COMPONENT_INTENT_FILTERS, requestId, event = "degraded", context = reference.diagnosticContext()),
+                    .groupBy(
+                        keySelector = { it.first },
+                        valueTransform = { it.second },
+                    )
+                    .mapValues { (_, filters) -> filters.distinct() }
+            }
+        }.also { result ->
+            val state = if (result.isSuccess) State.Succeeded else State.Degraded
+            val resultContext = result.getOrNull()?.let { "count=${it.size}" } ?: context
+            Logger.log(TAG, Operation(OPERATION_COMPONENT_INTENT_FILTERS, request, state, context = resultContext), result.exceptionOrNull())
+        }
+    }
+
+    private suspend fun installedPackageManifest(packageName: PackageName): Result<ParsedManifest> {
+        val request = LogRequest()
+        val context = "mode=installed package=${packageName.value}"
+        Logger.log(TAG, Operation(OPERATION_MANIFEST, request, State.Started, context = context))
+        return withContext(dispatcherProvider.io()) {
+            runCatchingCancellable {
+                val applicationInfo = packageManager.getApplicationInfo(packageName.value, 0)
+                ParsedManifest(
+                    xml = manifestXmlRenderer.render(resourcesForApk(applicationInfo.sourceDir)),
+                    additionalInstalledSplits = applicationInfo.splitSourceDirs.orEmpty().size,
                 )
             }
-        } catch (cancellation: CancellationException) {
-            Logger.d(TAG, operationLogMessage(OPERATION_COMPONENT_INTENT_FILTERS, requestId, event = "cancelled"))
-            throw cancellation
+        }.also { result ->
+            val state = if (result.isSuccess) State.Succeeded else State.Failed
+            Logger.log(TAG, Operation(OPERATION_MANIFEST, request, state, context = context), result.exceptionOrNull())
         }
     }
 
-    @Suppress("SuspendFunSwallowedCancellation")
-    private suspend fun installedPackageManifest(packageName: PackageName): Result<ParsedManifest> {
-        val requestId = nextOperationRequest()
-        Logger.d(TAG, operationLogMessage(OPERATION_MANIFEST, requestId, event = "started", context = "mode=installed package=${packageName.value}"))
-        return try {
-            withContext(dispatcherProvider.io()) {
-                runCatchingCancellable {
-                    val applicationInfo = packageManager.getApplicationInfo(packageName.value, 0)
-                    ParsedManifest(
-                        xml = manifestXmlRenderer.render(resourcesForApk(applicationInfo.sourceDir)),
-                        additionalInstalledSplits = applicationInfo.splitSourceDirs.orEmpty().size,
-                    )
-                }
-            }.onSuccess {
-                Logger.i(TAG, operationLogMessage(OPERATION_MANIFEST, requestId, event = "succeeded", context = "mode=installed package=${packageName.value}"))
-            }.onFailure {
-                Logger.e(TAG, it, operationLogMessage(OPERATION_MANIFEST, requestId, event = "failed", context = "mode=installed package=${packageName.value}"))
-            }
-        } catch (cancellation: CancellationException) {
-            Logger.d(TAG, operationLogMessage(OPERATION_MANIFEST, requestId, event = "cancelled", context = "mode=installed package=${packageName.value}"))
-            throw cancellation
-        }
-    }
-
-    @Suppress("SuspendFunSwallowedCancellation")
     private suspend fun apkFileManifest(apkPath: String): Result<ParsedManifest> {
-        val requestId = nextOperationRequest()
-        Logger.d(TAG, operationLogMessage(OPERATION_MANIFEST, requestId, event = "started", context = "mode=apk_file apk_path=$apkPath"))
-        return try {
-            withContext(dispatcherProvider.io()) {
-                runCatchingCancellable {
-                    ParsedManifest(
-                        xml = manifestXmlRenderer.render(resourcesForApk(apkPath)),
-                        additionalInstalledSplits = 0,
-                    )
-                }
-            }.onSuccess {
-                Logger.i(TAG, operationLogMessage(OPERATION_MANIFEST, requestId, event = "succeeded", context = "mode=apk_file apk_path=$apkPath"))
-            }.onFailure {
-                Logger.e(TAG, it, operationLogMessage(OPERATION_MANIFEST, requestId, event = "failed", context = "mode=apk_file apk_path=$apkPath"))
+        val request = LogRequest()
+        val context = "mode=apk_file apk_path=$apkPath"
+        Logger.log(TAG, Operation(OPERATION_MANIFEST, request, State.Started, context = context))
+        return withContext(dispatcherProvider.io()) {
+            runCatchingCancellable {
+                ParsedManifest(
+                    xml = manifestXmlRenderer.render(resourcesForApk(apkPath)),
+                    additionalInstalledSplits = 0,
+                )
             }
-        } catch (cancellation: CancellationException) {
-            Logger.d(TAG, operationLogMessage(OPERATION_MANIFEST, requestId, event = "cancelled", context = "mode=apk_file apk_path=$apkPath"))
-            throw cancellation
+        }.also { result ->
+            val state = if (result.isSuccess) State.Succeeded else State.Failed
+            Logger.log(TAG, Operation(OPERATION_MANIFEST, request, state, context = context), result.exceptionOrNull())
         }
     }
 
@@ -130,9 +112,4 @@ internal class ManifestParserImpl @Inject constructor(
         applicationInfo.splitPublicSourceDirs = null
         return packageManager.getResourcesForApplication(applicationInfo)
     }
-}
-
-private fun AppReference.diagnosticContext(): String = when (this) {
-    is AppReference.InstalledPackage -> "mode=installed package=${packageName.value}"
-    is AppReference.ApkFile -> "mode=apk_file apk_path=$path"
 }
