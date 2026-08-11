@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.ApplicationExtension
+
 plugins {
     alias(libs.plugins.apkanalyzer.application)
     alias(libs.plugins.apkanalyzer.hilt)
@@ -12,16 +14,8 @@ android {
     defaultConfig {
         applicationId = "sk.styk.martin.apkanalyzer"
         proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        manifestPlaceholders["firebasePerformanceLogcatEnabled"] = false
-
         versionCode = (project.findProperty("version.code") as String).toInt()
         versionName = project.findProperty("version.name") as String
-    }
-
-    buildTypes {
-        getByName("debug") {
-            manifestPlaceholders["firebasePerformanceLogcatEnabled"] = true
-        }
     }
 
     buildFeatures {

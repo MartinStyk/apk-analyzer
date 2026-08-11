@@ -43,7 +43,7 @@ import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateExtractor
 import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepository
 import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.core.common.coroutines.runSuspendCatchingCancellable
+import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
@@ -109,7 +109,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             return Result.success(it)
         }
         Logger.d(TAG, "App detail cache lookup finished: cache miss, $context")
-        return runSuspendCatchingCancellable {
+        return runCatchingCancellable {
             val reference = AppReference.InstalledPackage(packageName)
 
             Logger.d(TAG, "App detail package query started: $context")
@@ -174,7 +174,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         }
 
         Logger.d(TAG, "App detail cache lookup finished: cache miss, $context")
-        return runSuspendCatchingCancellable {
+        return runCatchingCancellable {
             val reference = AppReference.ApkFile(accessibleFile.absolutePath)
 
             Logger.d(TAG, "App detail package query started: $context")

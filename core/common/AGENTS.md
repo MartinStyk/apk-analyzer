@@ -12,8 +12,7 @@ logic do not belong here.
 
 * `coroutines/` - injectable dispatchers, flow helpers, and cancellation-safe result capture.
 * `logger/` - the repository logging facade.
-* `performance/` - performance instrumentation contracts, the internal Firebase adapter,
-  stage-timing helpers, and centralized telemetry names.
+* `performance/` - performance instrumentation contracts and the internal Firebase adapter.
 * `settings/` - generic typed DataStore persistence and preference keys.
 * `model/` - genuinely cross-module value types such as app references, source classification, and
   file sizes.
@@ -31,10 +30,8 @@ logic do not belong here.
   the boundary that owns the degraded result or terminal failure.
 * `PerformanceTracker.startTrace(name)` returns an `AutoCloseable` `PerformanceTrace`. Always scope
   it with `use` so it closes on success, failure, and cancellation.
-* `measureStage(...)` / `measureSuspendStage(...)` record a whole-microsecond stage metric on a
-  `PerformanceTrace` using a monotonic nanosecond clock, regardless of how the timed block completes.
-* `PerformanceTraceName` / `PerformanceMetricName` / `PerformanceAttributeName` are the only source of
-  telemetry name strings; do not inline new trace, metric, or attribute names elsewhere.
+* Keep trace, metric, and attribute names private beside the repository that emits them. Suffix
+  duration metric names with `_us` because Firebase custom metrics do not carry a unit.
 * Firebase Performance imports stay inside the internal adapter in this infrastructure module.
   Domain core modules and feature modules depend only on `PerformanceTracker` and
   `PerformanceTrace`. This module already owns the Firebase-backed logging facade, while the app
