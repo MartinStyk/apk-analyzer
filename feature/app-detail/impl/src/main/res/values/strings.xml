@@ -2,6 +2,7 @@
 <resources>
     <string name="content_description_back">Back</string>
     <string name="app_detail_title">App Detail</string>
+    <string name="app_detail_ai_summary_title">AI Summary</string>
     <string name="app_detail_system_app">System Application</string>
     <string name="app_detail_overview_section">Overview</string>
     <string name="app_detail_actions_section">Quick Actions</string>

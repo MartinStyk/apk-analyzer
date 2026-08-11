@@ -10,6 +10,7 @@ dependencies {
     api(projects.feature.appDetail.api)
     implementation(projects.core.apkFiles)
     implementation(projects.core.apps)
+    implementation(projects.core.appAiDescription)
     implementation(projects.core.appPermissions)
     implementation(projects.core.userPreferences)
     implementation(libs.kotlinx.collections.immutable)

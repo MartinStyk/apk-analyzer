@@ -30,6 +30,12 @@ firebase-crashlytics-plugin = "3.0.7"
 firebase-perf-plugin = "2.0.2"
 google-services = "4.5.0"
 
+# Persistence
+room = "2.8.4"
+
+# On-device AI
+mlkit-genai-prompt = "1.0.0-beta2"
+
 # Third-party
 timber = "5.0.1"
 leakcanary = "2.14"
@@ -81,6 +87,14 @@ firebase-performance = { module = "com.google.firebase:firebase-perf" }
 # Kotlin
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
 
+# Persistence
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+
+# On-device AI
+mlkit-genai-prompt = { module = "com.google.mlkit:genai-prompt", version.ref = "mlkit-genai-prompt" }
+
 # Third-party
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanary" }
@@ -118,6 +132,7 @@ apkanalyzer-spotless = { id = "apkanalyzer.spotless" }
 apkanalyzer-detekt = { id = "apkanalyzer.detekt" }
 apkanalyzer-sarif-merge = { id = "apkanalyzer.sarif-merge" }
 apkanalyzer-compose = { id = "apkanalyzer.compose" }
+apkanalyzer-room = { id = "apkanalyzer.room" }
 
 [bundles]
 compose = ["androidx-compose-ui", "androidx-compose-ui-tooling", "androidx-compose-foundation", "androidx-compose-foundation-layout"]
