@@ -1,73 +1,38 @@
 # feature:apps Module
 
 ## Purpose
-The primary feature — displays the list of installed apps with filtering, sorting, searching, and recently-viewed apps. This is the start destination of the app.
 
-## Sub-modules
-- `api` - Contains `AppsNavKey` (top-level destination)
-- `impl` - Full implementation
+The start destination for browsing installed apps, searching, filtering, sorting, opening APK files,
+and navigating to app details or settings.
 
-## Package: `sk.styk.martin.apkanalyzer.feature.apps.impl`
+The API module exposes only the top-level navigation key. Implementation code uses the package
+`sk.styk.martin.apkanalyzer.feature.apps.impl`.
 
-## Structure
+## Package Map
 
-```
-navigation/
-  AppEntryProvider.kt      - appEntries(navigator) - registers AppsNavKey, AppSearchNavKey, AppFilterNavKey, PermissionFilterNavKey
-  ScreenNames.kt           - public screenOpenEvent(key: NavKey): ScreenOpenEvent? resolver consumed by app's centralized screen-opening breadcrumb logging
-  AppFilterNavKey.kt       - Internal nav key for filter screen
-  AppSearchNavKey.kt       - Internal nav key for search screen
-  PermissionFilterNavKey.kt - Internal nav key for permission filter
-list/
-  AppsScreen.kt            - Main app list Composable
-  AppsViewModel.kt         - @HiltViewModel, combines installed apps + filter + sort + recents
-  AppsState.kt             - AppsState, AppListState, RecentsState, AppListItem, SortType
-  AppsAction.kt            - User actions (sort, click, filter, search, settings)
-  AppsEvent.kt             - Navigation events
-search/
-  AppSearchScreen.kt       - Search overlay screen
-  AppSearchState/Action/Event/ViewModel.kt - Own State/Action/Event/ViewModel, same MVI shape as list/
-  domain/
-    SearchAppsUseCase.kt   - Applies search query to app list
-filter/
-  FilterScreen.kt          - Filter bottom sheet / screen
-  FilterState/Action/Event/ViewModel.kt - Own State/Action/Event/ViewModel, same MVI shape as list/
-  domain/
-    AppFilterRepository.kt - In-memory filter state management
-    AppFilterState.kt      - Filter criteria data class
-    FilterAppsUseCase.kt   - Applies filter to app list
-    PermissionFilterCoordinator.kt, PermissionPreset.kt, QuickFilter.kt, UnusedAppsPeriod.kt - Supporting filter domain types
-  permission/
-    PermissionFilterScreen.kt - Permission-based filtering
-    PermissionFilterState/Action/Event/ViewModel.kt - Own State/Action/Event/ViewModel
-components/
-  apkfilepicker/                     - Reusable APK document-picker button with its own MVI ViewModel and temporary-file ownership
-  PermissionRationaleBottomSheet.kt - Defines AppDataPermission (sealed interface: UsageAccess, StorageAccess — NOT an enum) + the rationale bottom sheet UI
-  AppsSkeletons.kt         - Loading skeleton placeholders
-  appitem/AppListItemRow.kt - Single app row in the list
-  quickfilter/QuickFilterRow*.kt - Quick-filter chip row
-  (other shared components)
-```
+* `list/` - the installed-app list and recently viewed section.
+* `search/` - app search and search-history interaction.
+* `filter/` - in-memory filter state, quick filters, and permission selection.
+* `components/` - feature-owned reusable UI, including APK document selection and app rows.
+* `navigation/` - the top-level and internal Navigation 3 destinations.
 
-Every sub-screen (`list/`, `search/`, `filter/`, `filter/permission/`) follows the same
-State/Action/Event/ViewModel MVI shape as the top-level `AppsViewModel` — not just a single
-screen with helper composables.
+Each user-visible destination owns its State/Action/Event/ViewModel set. Do not centralize search,
+filter, and permission-filter state into the list ViewModel.
 
-## Key Dependencies
-- `core:apk-files` (TemporaryApkManager)
-- `core:apps` (InstalledAppsRepository, StorageStatsRepository, UsageStatsRepository)
-- `core:user-preferences` (RecentlyViewedAppsRepository)
-- `core:app-permissions` (for permission filter)
-- `feature:settings:api` (SettingsNavKey for navigation)
-- `feature:app-detail:api` (AppDetailNavKey, AppDetailInput for navigation)
-- `kotlinx-collections-immutable`
-- `coil-compose`
+## Navigation Topology
 
-## Navigation Flow
-```
-AppsNavKey → AppSearchNavKey (fade out transition)
-AppsNavKey → AppFilterNavKey (bottom entry)
-AppFilterNavKey → PermissionFilterNavKey (slide from end)
-AppsNavKey → AppDetailNavKey (via navigator)
-AppsNavKey → SettingsNavKey (via navigator)
-```
+The apps destination opens search and filter internally. Filter opens permission selection. App
+details and settings are cross-feature destinations and must use their API modules.
+
+Register all internal destinations through this feature's entry provider, then register that provider
+once in the app host.
+
+## State and Ownership Rules
+
+* Filtering and sorting happen before the UI receives list state.
+* Filter state is an in-memory domain repository shared by the feature's filter surfaces.
+* Recently viewed data remains optional and comes from `core:user-preferences`.
+* The APK picker owns temporary-file acquisition until ownership transfers to app detail. Preserve
+  release behavior for cancellation, failed navigation, and Activity teardown.
+* Usage and storage permission rationale state is modeled by distinct sealed variants because the
+  system settings destinations and explanations differ.

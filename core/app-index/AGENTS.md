@@ -1,76 +1,34 @@
 # core:app-index Module
 
-## Purpose
-Builds `attribute → apps` indexes across every installed app — target SDK, min SDK, install source,
-permission, shared UID, app category, and signing certificate (SHA-256, SHA-1, MD5, organization,
-country) — for the `feature:browse` "Browse by Attribute" screen (roadmap `CE-01`). A pure bucketing
-layer: it holds no `PackageManager` access of its own and reaches only two public `core:apps`
-repositories (`InstalledAppsRepository`, `AppSigningRepository`), never `analysis/` internals
-(`CertificateExtractor`, `InstallSourceResolver`) directly.
+## Purpose and Boundary
 
-## Package: `sk.styk.martin.apkanalyzer.core.appindex`
+Builds device-wide `attribute -> apps` indexes for `feature:browse`. The package is
+`sk.styk.martin.apkanalyzer.core.appindex`.
 
-## Structure
+This is a pure bucketing layer over public `core:apps` repositories. It owns no `PackageManager`
+access and must never reach into analysis internals.
 
-```
-AppIndexRepository.kt / Impl  - Flow of AppIndexStatus; Impl combines InstalledAppsRepository.apps()
-                                and AppSigningRepository.signing(), and holds the
-                                (List<InstalledApp>, Map<packageName, AppSigning>) -> AppAttributeIndex
-                                transform as private functions (one groupBy helper per dimension) —
-                                inlined rather than a separate object since it has exactly one caller
-model/
-  AppAttributeIndex.kt         - targetSdk / minSdk / installSource / permission / sharedUserId /
-                                 appCategory / certificateSha256 / certificateSha1 / certificateMd5 /
-                                 certificateOrganization / certificateCountry buckets, each
-                                 Map<value, List<packageName>>
-  AppIndexStatus.kt            - sealed: Loading | Data(index) - Loading before the first combined emission
-di/
-  AppIndexModule.kt            - Hilt @Binds for AppIndexRepository
-```
+## Index Semantics
 
-## Key Interface
+The index covers target SDK, minimum SDK, install source, requested permission, shared UID, app
+category, and current-signing-certificate identity and subject attributes.
 
-```kotlin
-interface AppIndexRepository {
-    fun index(): Flow<AppIndexStatus>
-}
-```
+* Apps without a shared UID are omitted from that dimension; do not create an "unshared" bucket.
+* `AppCategory.Undefined` is a real bucket because an undeclared category is meaningful.
+* Multi-signer apps appear under every current signer.
+* Certificate fingerprint dimensions use certificate hashes, not signature algorithms.
+* Organization and country come from the certificate subject, matching app-detail terminology.
 
-Recomputes whenever `InstalledAppsRepository.apps()` or `AppSigningRepository.signing()` emits — no
-separate `PackageChangesObserver` subscription. Grouping is CPU-bound, not I/O, so the combine step
-runs on `dispatcherProvider.default()` — the certificate digest/verify work itself happens upstream in
-`AppSigningRepositoryImpl`, on `dispatcherProvider.io()`. The combined result is `shareIn(appScope,
-SharingStarted.Lazily, replay = 1)`, matching `AppSigningRepositoryImpl`'s reasoning: the grouping work
-only matters once a real consumer (a browse screen) subscribes, and multiple simultaneous subscribers
-must not each redo it.
+The first dimensions reuse data already present on `InstalledApp`. Certificate grouping consumes the
+heavier `AppSigningRepository` output.
 
-## Dimensions, and why the first six are cheaper than certificate grouping
+## Execution and Lifecycle
 
-`targetSdk`, `minSdk`, `installSource`, `permission`, `sharedUserId`, `appCategory` are all already on
-`InstalledApp` — no new query. `sharedUserId` is the one dimension that legitimately drops apps: only
-those declaring `android:sharedUserId` are indexed (`bySharedUserId` `mapNotNull`s the null case away),
-matching `byPermission`'s existing "no signal, no bucket" shape rather than inventing an "unshared"
-sentinel bucket that would just be most of the device. `appCategory` keeps `AppCategory.Undefined` as
-a real, groupable bucket instead, because most third-party apps genuinely declare no category and
-that absence is itself the fact worth counting.
-The certificate hash, organization, and country indexes come from
-`AppSigningRepository`, which runs a real X.509 parse, six digest computations, and a signature-verify
-per certificate — genuinely heavier, which is why that repository is `Lazily` shared (see
-`core/apps/AGENTS.md`) rather than computed unconditionally like `InstalledAppsRepository`. A
-multi-signer app is indexed under every current signer, not an arbitrary "first" one
-(`byCertificate` `flatMap`s over `AppSigning.currentCertificates`). Fingerprint uses
-`Certificate.certificateHashSha256` per roadmap `FR-09` ("same publisher" — group by fingerprint, not
-signing algorithm); SHA-1 and MD5 are alternate identity groupings for interoperability with tools
-that use those fingerprints. Organization/country come from `Certificate.subject`, matching the
-certificate screen's existing convention for "the signer."
+Recompute from the installed-app and signing flows rather than subscribing separately to package
+changes. Run CPU-bound grouping on `DispatcherProvider.default()`.
 
-**Uses-feature grouping is still deferred** — it would need a new `PackageManager` flag
-(`GET_CONFIGURATIONS`) nothing currently requests. Unlike certificate, no other `core:apps` consumer
-needs a device-wide feature list today, so there's no general-purpose repository to build yet; add one
-the same way `AppSigningRepository` was added — in `core:apps`, not here — when a real second consumer
-appears.
+Share the combined index lazily with one replayed value. Certificate parsing and grouping should not
+run until a real browse consumer subscribes, and concurrent collectors must not duplicate the work.
 
-## Dependencies
-- `implementation(projects.core.apps)` - `InstalledAppsRepository`, `AppSigningRepository`, and their
-  models, public surface only
-- `implementation(projects.core.common)` - `AppSource`, `DispatcherProvider`
+Uses-feature grouping remains out of scope until a real consumer justifies device-wide
+`PackageManager` extraction. Add that source in `core:apps`, not in this module.

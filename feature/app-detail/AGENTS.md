@@ -1,280 +1,147 @@
 # feature:app-detail Module
 
 ## Purpose
-Displays detailed information about a single app (installed package or APK file). Shows general info, permissions, components, certificates, features, with sub-navigation to detail sections.
 
-## Sub-modules
-- `api` - Contains `AppDetailNavKey(detailInput: AppDetailInput)` and `AppDetailInput` sealed interface
-- `impl` - Full implementation
+Displays detailed analysis for an installed package or APK file: general information, permissions,
+components, certificates, device requirements, manifest, split APKs, and native libraries.
 
-## Package: `sk.styk.martin.apkanalyzer.feature.appdetail.impl`
+The API module owns the cross-feature navigation input and distinguishes installed packages from APK
+files. Implementation code uses the package
+`sk.styk.martin.apkanalyzer.feature.appdetail.impl`.
 
-## API Module Key Types
+## Package Map
 
-```kotlin
-@Serializable
-data class AppDetailNavKey(val detailInput: AppDetailInput) : NavKey
+* The root implementation package owns the hub State/Action/Event/ViewModel and input adapters.
+* `components/` owns interaction and loading/error UI shared across detail sections.
+* `insight/` owns the feature-level "Worth knowing" policy.
+* `generalinfo/`, `permissions/`, `appcomponents/`, `certificates/`, `requirements/`, `manifest/`,
+  `splitapks/`, and `nativelibraries/` each own one detail destination.
+* `navigation/` owns the feature entry provider and internal destination keys.
 
-@Serializable
-sealed interface AppDetailInput {
-    @Serializable data class InstalledPackage(val packageName: String) : AppDetailInput
-    @Serializable data class ApkFile(
-        val apkFilePath: String,
-        val lifetime: ApkFileLifetime = ApkFileLifetime.Persistent,
-    ) : AppDetailInput
-}
-```
+Each destination keeps its own State/Action/Event/ViewModel set. Runtime navigation inputs use
+assisted injection and seed ViewModel state exactly once.
 
-## Impl Structure
+## Cross-Cutting Interaction Rules
 
-```
-navigation/
-  AppDetailEntryProvider.kt  - appDetailEntries(navigator)
-  ScreenNames.kt             - public screenOpenEvent(key: NavKey): ScreenOpenEvent? resolver consumed
-                               by app's centralized screen-opening breadcrumb logging
-  GeneralInfoNavKey.kt       - Internal nav key for general info sub-screen
-  PermissionsNavKey.kt       - Internal nav key for the permissions sub-screen
-  ComponentsNavKey.kt        - Internal nav key for the components sub-screen
-  CertificatesNavKey.kt      - Internal nav key for the certificates sub-screen
-  RequirementsNavKey.kt      - Internal nav key for the device requirements sub-screen
-  ManifestNavKey.kt          - Internal nav key for the readable Android manifest
-  SplitApksNavKey.kt         - Internal nav key for the split APK files sub-screen
-  NativeLibrariesNavKey.kt   - Internal nav key for the native library files sub-screen
-AppDetailScreen.kt           - Main detail screen Composable
-AppDetailViewModel.kt        - Uses @HiltViewModel with AssistedFactory for AppDetailInput
-AppDetailState.kt            - Loading/Loaded/Error states with full app detail data
-AppDetailAction.kt           - User actions (retry, view manifest, export, navigate sections)
-AppDetailEvent.kt            - Navigation/system events
-AppDetailInputAdapters.kt    - Maps the navigation DTO to shared `AppReference`
-components/
-  AppDetailBadge.kt          - Badge classification (Sideloaded, DangerousPermissions, Unused, Large, System, etc.)
-  AppDetailToolbar.kt        - Collapsing toolbar for the hub
-  InfoRowItem.kt             - InfoRow + InfoRowItem + RationaleBottomSheet, shared by every sub-screen
-  SectionScaffold.kt         - SectionLoading + SectionError, the Loading/Error branch every sub-screen shares
-  DetailField.kt             - The labelled, tap-to-copy field every item bottom sheet is built from.
-                               Use it; do not add a private copy — there were three before it was extracted
-  SplitApkExportBottomSheet.kt - Persistent explanation after exporting only the base of a split app
-insight/
-  AppDetailInsight.kt          - Feature-owned "Worth knowing" finding model, plus the `SensitiveAccess` enum
-  AppDetailInsightEvaluator.kt - Pure policy evaluator that turns an `AppDetail` into a list of insights
-generalinfo/                 - General info sub-screen
-permissions/                 - Permissions sub-screen (see below)
-appcomponents/               - Components sub-screen (see below). Named `appcomponents`, not
-                               `components`, because `components/` already holds shared UI pieces.
-certificates/                - Signing certificate detail sub-screen
-requirements/                - Device requirements (uses-feature) sub-screen (see below)
-manifest/                    - Searchable readable Android manifest for installed and APK inputs
-splitapks/                   - Split APK files sub-screen (see below)
-nativelibraries/             - Native library files sub-screen (see below)
-```
+Every detail list row follows **tap = explain, long-press = copy**. If a row has no explanation yet,
+add the missing sheet rather than disabling its tap affordance.
 
-Each sub-screen directory carries its own State/Action/Event/ViewModel/Screen set, same MVI shape
-as the hub.
+Use the shared detail-field and section loading/error components. Do not create private copies in a
+sub-screen.
 
-### `permissions/`
+Initial scopes, filters, or focused items belong in assisted constructor state or saveable UI state,
+not a `LaunchedEffect` that can reapply after configuration change and overwrite a user's choice.
 
-```
-PermissionsScreen.kt              - Pinned toolbar, collapsing filter header, sectioned list
-PermissionDetailBottomSheet.kt    - The item sheet: every raw field for one permission, tap a field to copy
-PermissionResources.kt            - Enum -> @StringRes / icon mapping, kept out of the screen,
-                                    incl. `grantExplanationRes` (protection level x grant state)
-PermissionsViewModel.kt           - Assisted-injected; combines a loaded source with the active narrowing
-PermissionsState.kt               - Loading/Error/Loaded plus PermissionItem, PermissionSection,
-                                    PermissionScope / GrantState enums, and multi-select filter state
-PermissionsAction.kt              - Retry, ChangeQuery, SelectScope, property filter toggles, ClearNarrowing, CopyValue
-PermissionsEvent.kt               - ShowCopiedFeedback
-PermissionDescriptionProvider.kt  - @Singleton; curated string -> system loadDescription -> declaring package
-```
+When a verdict and icon describe the same fact, derive both from one predicate.
 
-Narrowing (query, scope, property filters) lives in the ViewModel, not the Composable — the screen
-receives only the already-filtered sections. Scope is a single-choice chip that opens a bottom sheet
-rather than a tab row, and it renders only when the app defines permissions of its own. Protection
-level and grant state use multi-choice selector chips whose empty state applies no filter. Grant
-pills and the grant-state selector render only in `InstalledPackage` mode.
+## Hub and Insight Policy
 
-The sheet explains *why* a permission has its grant state — the answer differs per protection level
-(you allowed it / signing key match / system rules / automatic at install), so `grantExplanationRes`
-keys on protection level x grant state and replaces the generic protection-level explanation. It
-falls back to that generic sentence in `ApkFile` mode, where there is no grant state. A signature
-permission is granted exactly when the keys match, so no certificate comparison is needed; the
-`Privileged` flag is the one case that softens the wording. `PermissionItem.isSelfDeclared` marks
-permissions the analysed app declares itself, which is the common source of granted signature
-permissions.
+The hub presents neutral app facts separately from the deliberately narrow "Worth knowing" policy.
+The insight evaluator currently covers debug access, granted high-impact permissions, questionable
+signing validity or trust, sideloading, and materially old target SDK levels.
 
-### `appcomponents/`
+Do not promote raw component exposure, merely requested dangerous permissions, backup, or cleartext
+flags into findings without an explicit product rule. Camera and microphone remain contextual facts;
+high-impact access is limited to background location, messages, call history, contacts, and calendar.
 
-```
-ComponentsScreen.kt               - Pinned toolbar, collapsing filter header, sectioned list
-ComponentDetailBottomSheet.kt     - The item sheet, per component type
-IntentFiltersScreen.kt            - Searchable filters for one component; each row summarizes one
-                                    filter and opens its full structured detail sheet
-IntentFiltersViewModel.kt         - Assisted-injected with the app input and component class name
-IntentFilterDetailBottomSheet.kt  - Full actions, categories, URI/content rules, and matching metadata
-ComponentResources.kt             - Enum -> @StringRes / icon mapping
-ComponentsViewModel.kt            - Assisted-injected with the initial scope and filters
-ComponentsState.kt                - Loading/Error/Loaded plus ComponentItem, ComponentDetails,
-                                    ComponentScope / ComponentFilter / ComponentType / ComponentFlag
-ComponentsAction.kt / ComponentsEvent.kt
-```
+Badge and filter predicates reuse typed policy from `core:apps`; features must not recreate platform
+classification rules.
 
-One screen for all four component types; the scope selector carries the type, so the hub's four
-component rows deep-link with their scope preselected. Under scope `All` the list is sectioned by
-type. Exported items sort first. `isGuarded` folds a provider's read/write permissions, its
-`<path-permission>` entries, and the other types' single `permission` into one flag, so
-`isUnprotected` (exported and unguarded) means the same thing everywhere. The component sheet shows
-every declared intent filter as the requests, links, and content that can reach that component, plus
-— for providers — every `<path-permission>` entry with its path, match type explanation, and
-per-path read/write permission (`components_detail_section_path_permissions`); a path entry with
-neither permission set is what makes an otherwise-guarded provider `isUnprotected`. It shows only a
-filter count and links to a searchable full-screen list; filter counts do not appear on component
-rows because quantity is not a risk signal. A manifest parsing failure remains explicit in the
-component sheet but does not fail the rest of app detail. Path permissions are extracted and drive
-the Components screen's own filter now, but exposure still does not feed the hub's "Worth knowing"
-card — that needs a deliberate rule, not just accurate raw data.
-`isLaunchable` is deliberately *not* `isUnprotected`: it is exported-and-unguarded (which is exactly
-"we are allowed to start it") in `InstalledPackage` mode, for activities and receivers only. Launcher
-activities are the most launchable thing there is, so reusing `isUnprotected` would hide the run
-button precisely where it is most useful. Services are excluded because background-start restrictions
-make `startService` fail or no-op from a backgrounded app, and providers have nothing to start.
-**A successful `startActivity` only means the intent was accepted** — the target may finish itself
-immediately when it needs extras, so the confirmation says a request was sent, never that something
-opened.
+## Permission Screen Semantics
 
-Launcher activities are excluded from `isUnprotected`: they are exported with no permission guard by
-definition, so warning about them is a false positive that devalues the real ones. They are excluded
-from the `Unprotected` filter for the same reason, and the sheet explains why being exported is
-expected there rather than claiming a permission guards it. APK-file analysis cannot resolve
-launcher status, so its technical `Unprotected` filter may include the launcher; this state does not
-feed the hub's findings.
+Narrowing lives in the ViewModel. The UI receives already-filtered, sectioned data.
 
-**The initial scope and filters are `@Assisted` constructor parameters, not a `LaunchedEffect`.**
-They seed the ViewModel's `narrowing` flow exactly once at construction; the ViewModel survives
-configuration change, so a rotation cannot re-apply them over a choice the user has since made. The
-same trap applies to `PermissionsScreen`'s `focusedPermission`, which is why the open sheet is keyed
-by `rememberSaveable` name rather than restored by an effect.
+* Scope is single-choice and appears only when the app declares permissions.
+* Protection and grant filters are multi-choice; an empty selection means no filtering.
+* Grant state appears only for installed packages.
+* A permission the app declares itself is tracked explicitly because that explains many granted
+  signature permissions.
+* Grant explanations depend on both protection level and grant state. APK-file mode has no grant
+  state and falls back to a protection-level explanation.
 
-### `certificates/`
+Permission rows and their detail sheets expose typed domain values and localized explanations, never
+raw Android protection integers.
 
-The certificate screen shows current signing certificates first. A separate Signing history
-section follows only when Android provides a verified rotation chain; previous keys are displayed
-newest-to-oldest and the original key is identified explicitly. Certificate fingerprints are
-always visible in SHA-256, SHA-1, MD5 order; public-key fingerprints use the same shared `HashBox`
-component but remain collapsed until requested. Signing multiplicity and key-rotation data come
-from the explicit current and past certificate lists in `AppDetail.signing`, and the "Current
-signers" fact uses `AppSigning.hasMultipleSigners` directly rather than re-deriving it from the
-certificate list size, so there is one predicate for that fact. The SCHEME row, adjacent to
-ALGORITHM in the first current-certificate card, shows `AppSigning.signingSchemeVersions`
-(`core:apps`'s `ApkSigningBlockAnalyzer` interface, roadmap `FR-36`) and is omitted entirely when that list is
-null — an unparseable or ambiguous signing block never renders a version list, per the module's
-"omit rather than guess" rule for this fact.
+## Component Screen Semantics
 
-### `requirements/`
+One screen handles activities, services, receivers, and providers. Scope selects the type; "All"
+sections by type. Exported items sort first.
 
-```
-RequirementsScreen.kt             - Pinned toolbar, miss summary, required/optional sections
-RequirementResources.kt           - Feature name -> @StringRes / icon maps, raw-name fallback
-RequirementsViewModel.kt          - Assisted-injected; combines AppDetail with DeviceFeaturesRepository
-RequirementsState.kt              - Loading/Error/Loaded plus RequirementSection, RequirementItem
-                                    (Hardware / OpenGlEs) and RequirementAvailability
-RequirementsAction.kt / RequirementsEvent.kt
-```
+`isUnprotected` means exported and unguarded, with these rules:
 
-The required/optional split is the point of the data, so it is the section structure rather than a
-filter. **Only misses are marked** — a column of green ticks is noise, so `Available` renders no
-marker and a device whose features could not be read yields `Unknown`, which also renders nothing.
-Missing optional requirements are worded more softly than missing required ones: missing an optional
-feature is by definition fine and only explains why part of the app does nothing.
+* Launcher activities are excluded for installed packages because their exported state is expected.
+* Other activities require known non-launcher status and no permission guard.
+* Services and receivers require no permission guard.
+* Providers are unguarded when top-level read or write access is open or a path permission opens a
+  path.
+* APK-file launcher status is unknown, so its technical filter may include the launcher. Do not turn
+  that uncertainty into a hub finding.
 
-OpenGL ES is a version comparison, not a set lookup, so its miss names both sides ("Needs 3.1 · this
-device has 3.0") and its raw identifier is the hex the manifest's `android:glEsVersion` actually
-contains. The check runs in **both** analysis modes: the platform does not enforce `uses-feature` at
-install time, so a sideloaded app can sit on a device that cannot satisfy its own requirements.
+`isLaunchable` is a different predicate. It means an installed activity or receiver can receive the
+requested launch intent. Do not derive it from `isUnprotected`: launcher activities are expected to
+be launchable. Services and providers are excluded.
 
-There is no search and no scope selector. The `Libraries` scope from the design doc needs
-`<uses-library>` extraction (roadmap `FR-44`), which does not exist yet.
+A successful `startActivity` means Android accepted the request, not that the target stayed open.
+User-facing confirmation must not claim an app or screen opened.
 
-### `splitapks/`
+Component details show complete intent-filter structure and provider path permissions. A manifest
+parsing failure remains explicit in the sheet but does not fail the rest of app detail.
 
-```
-SplitApksScreen.kt              - Pinned toolbar, collapsing search header, flat list sorted by kind
-SplitApkDetailBottomSheet.kt    - The item sheet: type, identifier, file name, size, full path
-SplitApkResources.kt            - SplitApkKind -> icon/label mapping, plus the ABI/density lookup
-                                   tables and the `java.util.Locale`-backed language display name
-SplitApksViewModel.kt           - Assisted-injected; combines the loaded split list with the active
-                                   search query
-SplitApksState.kt               - Loading/Error/Loaded plus search query and item list
-SplitApksAction.kt / SplitApksEvent.kt
-```
+## Certificate Screen Semantics
 
-One tap down from General Info's "Split APKs" row (`core:apps`'s `readInstalledSplits()` backs both).
-Every installed split/config APK is classified by file-name convention alone: AGP only ever splits a
-config APK along ABI, screen density, or language, so a `split_config.<qualifier>` file whose
-qualifier isn't a known ABI or density code is a language split by elimination, and anything without
-that prefix is a dynamic feature module. Friendly ABI/density names come from a fixed lookup table;
-language qualifiers resolve through `java.util.Locale`, falling back to the raw qualifier when it
-can't be parsed. This is best-effort labeling for a Storage-adjacent screen, not a verdict — an
-unrecognized qualifier degrades to its raw string rather than guessing.
+Show current signing certificates first. Show verified rotation history separately,
+newest-to-oldest, and identify the original key.
 
-### `nativelibraries/`
+Fingerprints remain visible in SHA-256, SHA-1, then MD5 order. Public-key fingerprints may be
+collapsed but use the shared hash component.
 
-```
-NativeLibrariesScreen.kt            - Pinned toolbar, collapsing search header, list grouped by
-                                       library name
-NativeLibraryDetailBottomSheet.kt   - The item sheet: device support, built-for ABIs, total size,
-                                       and a per-ABI breakdown (size + which APK it's bundled in)
-NativeLibrariesViewModel.kt         - Assisted-injected; groups `AppDetail.nativeLibraries.files`
-                                       (one row per (name, abi) pair) into one list item per distinct
-                                       library name, then combines with the active search query
-NativeLibrariesState.kt             - Loading/Error/Loaded plus `NativeLibraryItem` (grouped) and
-                                       `NativeLibraryVariant` (one ABI's copy of that library)
-NativeLibrariesAction.kt / NativeLibrariesEvent.kt
-```
+Use the domain's current-signer multiplicity and signing-scheme values directly. Do not re-derive
+them from displayed certificate counts. Omit signing-scheme UI when analysis returns unknown; never
+guess.
 
-One tap down from General Info's "Native library files" row (`core:apps`'s `readNativeLibraries()`
-backs both — see `core/apps/AGENTS.md`). The grouping mirrors the row it replaces: General Info has
-always counted a library once even when the same file ships for multiple processor architectures, so
-the full list keeps that grouping and pushes the per-architecture detail (size, which APK it's
-bundled in) into the item sheet rather than flattening it into one row per architecture. Device
-compatibility is computed the same way `GeneralInfoViewModel`'s app-wide
-`isNativeLibraryDeviceIncompatible` is (against `Build.SUPPORTED_ABIS`), just per library instead of
-per app — a library whose ABIs don't intersect the device's is tagged **only** on the row that misses,
-following the same "only misses are marked" convention as `requirements/`.
+## Device Requirements Semantics
 
-## Key Patterns
-- Uses **Assisted Injection** (`@HiltViewModel(assistedFactory = ...)`) because the ViewModel requires `AppDetailInput` at creation time.
-- `AppDetailState.Loaded` is a large data class with all detail fields (no nested loading).
-- Badge computation uses `AppClassificationThresholds` from `core:apps`.
-- Sub-screens follow the `GeneralInfoScreen` idiom: **tap = explain, long-press = copy**.
-- "Worth knowing" excludes component exposure and merely requested dangerous permissions. Component
-  intent filters are available in the component detail sheet, but path-permission evidence is still
-  missing, so the hub does not yet interpret exported components. It surfaces debug access, actually
-  granted high-impact access, debug or not-yet-valid signing, and targets at least four API levels
-  behind the device. Backup and cleartext flags remain neutral facts in General information rather
-  than findings.
-- Granted high-impact access is deliberately narrower than every dangerous permission: background
-  location, messages, call history, contacts, and calendar. Camera and microphone stay in the
-  permission preview because they are common and need app-purpose context before they become a
-  useful finding. Special-access and service capabilities remain out until their grant state is
-  extracted reliably.
-- APK export writes the installed base APK through `ACTION_CREATE_DOCUMENT` and explicitly reports
-  when split APKs mean the result is not a complete install package. APK-file mode hides this
-  redundant action.
-- Icon export supports installed packages and APK files at natural resolution through
-  `ACTION_CREATE_DOCUMENT`.
-- Installed manifest viewing targets the base APK directly. Merged resources can resolve
-  `AndroidManifest.xml` from an arbitrary feature split. The screen reports additional installed
-  split manifests instead of pretending the base document is a merged manifest.
+Keep required and optional features as the section structure rather than adding a scope filter.
+Mark only unavailable requirements. Available and unknown requirements render no success marker.
 
-## Design Doc
+Missing optional requirements use softer wording because they do not prevent installation.
+
+OpenGL ES support is a version comparison, not a feature-name lookup. When unavailable, show both
+required and device versions. Evaluate requirements for installed packages and APK files because
+sideloading can bypass store compatibility checks.
+
+## Split APK Semantics
+
+Show a searchable flat list sorted by split kind. Classification uses installed split filename
+conventions:
+
+* Recognized configuration qualifiers map to ABI or screen density.
+* Other `split_config.<qualifier>` values are treated as language qualifiers.
+* Values without that prefix are dynamic feature modules.
+
+Friendly labels are best effort. Unknown qualifiers fall back to their raw value rather than being
+guessed into another category.
+
+Exporting only the installed base APK is not a complete package when splits exist. Keep that
+limitation explicit after export.
+
+## Native Library Semantics
+
+Group the list by library name, matching the app-level count. Put ABI-specific copies, sizes, and
+containing APKs in the detail sheet rather than flattening them into duplicate rows.
+
+Compare each library's shipped ABIs with `Build.SUPPORTED_ABIS` at the feature layer. Mark only
+incompatible libraries, following the requirements screen's "only misses are marked" convention.
+
+## Manifest and Export Semantics
+
+Installed manifest viewing targets the base APK. Merged resource lookup can resolve an arbitrary
+split, so report additional split manifests rather than presenting the base document as merged.
+
+APK and icon export use system document creation. APK-file mode hides redundant APK export.
+Temporary APK ownership must be released on all terminal lifecycle paths.
+
+## Product Reference
 
 [`docs/product/features/app-detail.md`](../../docs/product/features/app-detail.md) is the approved
-design for the remaining sub-screens (Components, Certificates, Requirements, hub rework). Read it
-before adding one.
-
-## Dependencies
-- `core:apk-files` (TemporaryApkManager)
-- `core:apps` (AppDetailRepository)
-- `core:app-permissions` (PermissionLabelProvider)
-- `core:user-preferences` (RecentlyViewedAppsRepository)
-- `kotlinx-collections-immutable`
-- `coil-compose`
+design reference for remaining app-detail work.

@@ -1,66 +1,44 @@
 # core:common Module
 
-## Purpose
-Foundation module with shared utilities depended on by nearly all other modules. Provides coroutine infrastructure, logging, persistence, resources, and shared models.
+## Purpose and Boundary
 
-## Package: `sk.styk.martin.apkanalyzer.core.common`
+Foundation module for infrastructure and models shared across otherwise independent domains. The
+package is `sk.styk.martin.apkanalyzer.core.common`.
 
-## Structure
+Keep this module small and dependency-safe. Feature-specific policy, UI components, and app-analysis
+logic do not belong here.
 
-```
-coroutines/
-  DispatcherProvider.kt   - Injectable dispatcher provider (main, default, io, unconfined)
-  Flows.kt                - Flow utility extensions
-  RunCatching.kt          - Result capture for suspend code that rethrows cancellation
-logger/
-  Logger.kt               - Timber + Firebase Crashlytics logging wrapper (object)
-  OperationLog.kt         - `nextOperationRequest()` process-local request-id counter and
-                            `operationLogMessage(...)` shared `operation=<op> request=<n> [stage=<s>]
-                            event=<e> [context]` message-shape formatter for load-operation logging
-performance/
-  PerformanceTracker.kt   - Firebase-free parent-trace and trace-handle contracts
-  PerformanceTiming.kt    - Elapsed-realtime nanosecond clock and sync/suspend stage timing helpers
-  PerformanceNames.kt     - Central low-cardinality trace, metric, and attribute names
-resources/
-  ResourcesManager.kt     - Android resources access (strings, colors, dimensions)
-settings/
-  PersistenceRepository.kt        - Interface for DataStore preferences
-  DataStorePersistenceRepository.kt - Implementation
-  PersistenceModule.kt             - Hilt module
-  Key.kt                           - Preference key definitions (includes ColorAppScheme)
-model/
-  AppReference.kt         - Installed-package or APK-file reference shared across analysis and UI
-  AppSource.kt            - Enum: GooglePlay, SamsungGalaxyStore, AmazonAppstore, HuaweiAppGallery,
-                            XiaomiGetApps, FDroid, AuroraStore, Sideloaded, LocalInstall,
-                            SystemPreinstalled, Unknown. `isSideloaded` groups Sideloaded/LocalInstall/
-                            Unknown — the "not from a store, not system" cluster the Filter and
-                            App detail screens key their "Sideloaded" quick filter/badge off of
-  AppSize.kt              - Value class for file sizes with formatting
-clipboard/                - Clipboard access utilities
-digest/                   - Hash/digest utilities
-util/                     - General Android and formatting utilities
-```
+## Package Map
 
-## Key Exports
+* `coroutines/` - injectable dispatchers, flow helpers, and cancellation-safe result capture.
+* `logger/` - the repository logging facade.
+* `performance/` - Firebase-free performance instrumentation contracts, stage-timing helpers, and
+  centralized telemetry names.
+* `settings/` - generic typed DataStore persistence and preference keys.
+* `model/` - genuinely cross-module value types such as app references, source classification, and
+  file sizes.
+* `resources/`, `clipboard/`, and `digest/` - shared platform adapters and focused utilities.
 
-- `DispatcherProvider` - Inject in ViewModels/Repositories for coroutine dispatching
-- `Logger` - Static logging: `Logger.d("Tag", "msg")`, `Logger.e("Tag", throwable, "msg")`
-- `nextOperationRequest()` / `operationLogMessage(...)` - Consistent operation/stage/event logging
-  convention for public load operations across repositories
-- `PerformanceTracker` / `PerformanceTrace` - Firebase-free performance instrumentation contracts
-- `measureStage(...)` / `measureSuspendStage(...)` - Exception- and cancellation-safe whole-microsecond
-  stage timing with a monotonic nanosecond clock
-- `PerformanceTraceName` / `PerformanceMetricName` / `PerformanceAttributeName` - Fixed production
-  telemetry names
-- `ResourcesManager` - Injectable Android resources access
-- `PersistenceRepository` - DataStore preferences abstraction
-- `AppSource` - App install source classification
-- `AppReference` - Type-safe reference to an installed package or an APK file
-- `AppSize` - File size value with display formatting
-- `ColorAppScheme` - Day/Night/FollowSystem enum
+## Durable Contracts
 
-## Dependencies
-- Firebase Crashlytics (for Logger)
-- Timber
-- DataStore Preferences
-- Hilt
+* Inject `DispatcherProvider`; never hardcode a dispatcher.
+* Cancellation-safe result helpers must rethrow coroutine cancellation rather than convert it into
+  a failure value.
+* Use `Logger`, never Timber or Crashlytics directly outside this module.
+* Use severity-specific `Logger` methods with plain, readable messages. Do not add typed logging
+  events, formatter helpers, or logging-only wrapper functions.
+* Throwable-bearing WARN and ERROR logs record Crashlytics non-fatals. Attach the throwable once at
+  the boundary that owns the degraded result or terminal failure.
+* `PerformanceTracker.startTrace(name) { trace -> ... }` runs the block against a `PerformanceTrace`
+  and stops it automatically, including on exceptions or cancellation. Callers only call
+  `putMetric`/`putAttribute` inside the block; they never manage `stop()` themselves.
+* `measureStage(...)` / `measureSuspendStage(...)` record a whole-microsecond stage metric on a
+  `PerformanceTrace` using a monotonic nanosecond clock, regardless of how the timed block completes.
+* `PerformanceTraceName` / `PerformanceMetricName` / `PerformanceAttributeName` are the only source of
+  telemetry name strings; do not inline new trace, metric, or attribute names elsewhere.
+* No Firebase Performance type may appear outside `app`.
+* `AppReference` is the shared type-safe distinction between an installed package and an APK file.
+* `AppSource.isSideloaded` intentionally groups sideloaded, local-install, and unknown sources while
+  excluding recognized stores and system-preinstalled apps.
+* Add preference keys to the typed persistence contract rather than creating feature-local
+  DataStore instances.

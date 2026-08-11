@@ -1,48 +1,23 @@
 # core:navigation Module
 
 ## Purpose
-Provides the custom Navigation 3 infrastructure for multi-stack (bottom-nav style) navigation.
 
-## Package: `sk.styk.martin.apkanalyzer.core.navigation`
+Provides the Navigation 3 infrastructure for independent bottom-navigation stacks. The package is
+`sk.styk.martin.apkanalyzer.core.navigation`.
 
-## Key Classes
+## Navigation Model
 
-### `NavigationState`
-Manages a top-level stack (for bottom nav tabs) and per-tab sub-stacks.
-- `currentTopLevelKey: NavKey` - Currently active top-level tab
-- `currentKey: NavKey` - Currently visible screen (deepest in current sub-stack)
-- `topLevelKeys: Set<NavKey>` - All registered top-level keys
-- `currentSubStack: NavBackStack<NavKey>` - Stack for the current tab
+`NavigationState` owns one stack for top-level history and one sub-stack per top-level key.
+Switching tabs must preserve each tab's sub-stack.
 
-### `rememberNavigationState(startKey: NavKey, topLevelKeys: List<NavKey>): NavigationState`
-Composable factory. Creates one `NavBackStack` per top-level key + one top-level stack.
+`Navigator.navigate()` has three distinct behaviors:
 
-### `NavigationState.toEntries(entryProvider: (NavKey) -> NavEntry<NavKey>): SnapshotStateList<NavEntry<NavKey>>`
-Converts all sub-stacks into decorated nav entries for use with `NavDisplay`.
+* A different top-level key switches to that stack.
+* The current top-level key resets its sub-stack.
+* A non-top-level key is pushed onto the current sub-stack.
 
-### `Navigator`
-Imperative navigation controller wrapping `NavigationState`.
-- `navigate(key: NavKey)` - Smart routing: top-level switch, same-tab reset, or sub-stack push.
-- `goBack()` - Pop current sub-stack, go back to the previous top-level tab, or invoke the host's
-  `onBackAtRoot` callback from the start destination.
+Back navigation first pops the current sub-stack, then returns to the previous top-level stack. At
+the start destination root it invokes the host-provided root-back callback.
 
-### `ScreenOpenEvent`
-`data class ScreenOpenEvent(val screen: String, val context: String? = null)`. Shared return type for
-per-feature `screenOpenEvent(key: NavKey): ScreenOpenEvent?` resolvers used to log centralized
-screen-opening breadcrumbs from the navigation hosts in `app`. Carries a stable screen name and
-optional diagnostic context, kept separate from `NavKey.toString()`.
-
-## Usage Pattern
-```kotlin
-val navigationState = rememberNavigationState(startKey = AppsNavKey, topLevelKeys = TOP_LEVEL_KEYS)
-val navigator = remember { Navigator(navigationState) }
-
-NavDisplay(
-    entries = navigationState.toEntries(entryProvider),
-    onBack = navigator::goBack,
-)
-```
-
-## Dependencies
-- `apkanalyzer.library` + `apkanalyzer.compose` plugins
-- Navigation 3 runtime + UI, lifecycle-viewmodel-navigation3
+Construct state with the complete top-level key set, retain the `Navigator`, and convert state
+through `toEntries()` for `NavDisplay`. Do not reproduce stack management in a feature or app host.

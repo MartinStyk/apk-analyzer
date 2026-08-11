@@ -23,8 +23,6 @@ import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepository
 import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
-import sk.styk.martin.apkanalyzer.core.common.logger.nextOperationRequest
-import sk.styk.martin.apkanalyzer.core.common.logger.operationLogMessage
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import java.io.File
@@ -33,9 +31,6 @@ import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
 internal const val INSTALLED_APPS = "InstalledApps"
-private const val OPERATION_INSTALLED_APPS = "installed_apps"
-private const val STAGE_PACKAGE_QUERY = "package_query"
-private const val STAGE_APP_MAPPING = "app_mapping"
 
 internal class InstalledAppsRepositoryImpl @Inject constructor(
     private val packageManager: PackageManager,
@@ -51,20 +46,15 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
     private val cachedApps = packageChangesObserver.observe()
         .onStart { emit(Unit) }
         .mapLatest {
-            val requestId = nextOperationRequest()
-            Logger.d(INSTALLED_APPS, operationLogMessage(OPERATION_INSTALLED_APPS, requestId, event = "started"))
+            Logger.d(INSTALLED_APPS, "Installed apps loading started")
             try {
-                val apps = loadAllApps(requestId)
-                Logger.i(
-                    INSTALLED_APPS,
-                    operationLogMessage(OPERATION_INSTALLED_APPS, requestId, event = "succeeded", context = "count=${apps.size}"),
-                )
+                val apps = loadAllApps()
+                Logger.i(INSTALLED_APPS, "Installed apps loading finished: ${apps.size} apps loaded")
                 apps
-            } catch (cancellation: CancellationException) {
-                Logger.d(INSTALLED_APPS, operationLogMessage(OPERATION_INSTALLED_APPS, requestId, event = "cancelled"))
-                throw cancellation
             } catch (failure: Throwable) {
-                Logger.e(INSTALLED_APPS, failure, operationLogMessage(OPERATION_INSTALLED_APPS, requestId, event = "failed"))
+                if (failure !is CancellationException) {
+                    Logger.e(INSTALLED_APPS, failure, "Installed apps loading failed")
+                }
                 throw failure
             }
         }
@@ -92,20 +82,14 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
     override fun apps(): Flow<List<InstalledApp>> = cachedApps
 
     @SuppressLint("QueryPermissionsNeeded")
-    private fun loadAllApps(requestId: Long): List<InstalledApp> {
-        Logger.d(INSTALLED_APPS, operationLogMessage(OPERATION_INSTALLED_APPS, requestId, stage = STAGE_PACKAGE_QUERY, event = "started"))
+    private fun loadAllApps(): List<InstalledApp> {
+        Logger.d(INSTALLED_APPS, "Installed apps package query started")
         val packages = packageManager.getInstalledPackages(PackageManager.GET_PERMISSIONS)
-        Logger.d(
-            INSTALLED_APPS,
-            operationLogMessage(OPERATION_INSTALLED_APPS, requestId, stage = STAGE_PACKAGE_QUERY, event = "succeeded", context = "count=${packages.size}"),
-        )
+        Logger.d(INSTALLED_APPS, "Installed apps package query finished: ${packages.size} packages found")
 
-        Logger.d(INSTALLED_APPS, operationLogMessage(OPERATION_INSTALLED_APPS, requestId, stage = STAGE_APP_MAPPING, event = "started"))
+        Logger.d(INSTALLED_APPS, "Installed apps mapping started")
         val apps = packages.mapNotNull { packageInfo -> packageInfo.applicationInfo?.let { packageInfo.toInstalledApp() } }
-        Logger.d(
-            INSTALLED_APPS,
-            operationLogMessage(OPERATION_INSTALLED_APPS, requestId, stage = STAGE_APP_MAPPING, event = "succeeded", context = "count=${apps.size}"),
-        )
+        Logger.d(INSTALLED_APPS, "Installed apps mapping finished: ${apps.size} apps mapped")
         return apps
     }
 

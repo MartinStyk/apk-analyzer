@@ -12,14 +12,17 @@ import javax.inject.Singleton
 internal class FirebasePerformanceTracker
 @Inject
 constructor() : PerformanceTracker {
-    override fun startTrace(name: String): PerformanceTrace {
+    override fun <T> startTrace(name: String, block: (PerformanceTrace) -> T): T {
         val trace = runFirebasePerformanceOperation("start trace name=$name") {
             FirebasePerformance.getInstance().newTrace(name).apply(Trace::start)
         }
-        return if (trace == null) {
-            NoOpPerformanceTrace()
-        } else {
-            FirebasePerformanceTrace(trace)
+        if (trace == null) return block(NoOpPerformanceTrace)
+
+        val performanceTrace = FirebasePerformanceTrace(trace)
+        return try {
+            block(performanceTrace)
+        } finally {
+            performanceTrace.stop()
         }
     }
 }
@@ -46,7 +49,7 @@ private class FirebasePerformanceTrace(private val trace: Trace) : PerformanceTr
         }
     }
 
-    override fun stop() {
+    fun stop() {
         synchronized(lock) {
             if (isStopped) return
             isStopped = true
@@ -57,12 +60,10 @@ private class FirebasePerformanceTrace(private val trace: Trace) : PerformanceTr
     }
 }
 
-private class NoOpPerformanceTrace : PerformanceTrace {
+private data object NoOpPerformanceTrace : PerformanceTrace {
     override fun putMetric(name: String, value: Long) = Unit
 
     override fun putAttribute(name: String, value: String) = Unit
-
-    override fun stop() = Unit
 }
 
 private inline fun <T> runFirebasePerformanceOperation(operation: String, block: () -> T): T? = try {

@@ -1,222 +1,134 @@
 # core:apps Module
 
-## Purpose
-Core domain module for app analysis. Provides repositories and utilities for querying installed apps, app details, storage/usage stats, and APK analysis.
+## Purpose and Boundary
 
-## Package: `sk.styk.martin.apkanalyzer.core.apps`
+Core domain module for installed-app and APK analysis. It owns platform extraction, normalization,
+caching, and the domain models consumed by features. The package is
+`sk.styk.martin.apkanalyzer.core.apps`.
 
-## Structure
+Expose repositories and typed models, not Android framework structures. Features may interpret the
+domain data for presentation but must not repeat extraction or security policy.
 
-Package-by-domain: each concept below is a self-contained folder holding its own repository
-interface, impl, models, and (where it needs Hilt-injected internals) analysis engine — open one
-folder to understand one concept end-to-end. `di/AppsModule.kt` stays a single file with all
-bindings, grouped by the same domains.
+## Domain Package Map
 
-```
-InstalledAppsRepository.kt / Impl    - Flow of all installed apps
-AppDetailRepository.kt / Impl        - Full app detail (installed package or APK file); orchestrates
-                                        signing, permissions, components, manifest, and install-source
-PackageChangesObserver.kt / Impl     - BroadcastReceiver-based package install/uninstall listener
-AppClassificationThresholds.kt      - Constants for "large app", "recently installed", "unused" thresholds
-model/
-  InstalledApp.kt   - Basic installed app info (packageName, name, sizes, times, source, targetSdk,
-                      minSdk, sharedUserId, category)
-  AppCategory.kt    - `ApplicationInfo.category` int decoded to a domain enum (`resolveAppCategory`
-                      lives here too); `Undefined` is the untagged case, not an error
-  AppDetail.kt      - Complete app detail (info, permissions, activities, services, etc.), composing
-                      types from the domain packages below
-  AppInfo.kt        - Core app metadata, including public manifest security flags from `ApplicationInfo`
-  InstallLocation.kt - Install location enum
-signing/
-  AppSigningRepository.kt / Impl    - Flow<Map<packageName, AppSigning>> for every installed app, one
-                                      bulk GET_SIGNING_CERTIFICATES query + CertificateExtractor per
-                                      entry. Lazily shared (unlike InstalledAppsRepository's Eagerly)
-                                      since the per-cert digest/verify work only matters once a real
-                                      consumer subscribes
-  CertificateExtractor.kt / Impl (internal)    - APK signing certificate extraction
-  ApkSigningBlockAnalyzer.kt / Impl (internal) - Verifies v1 signing and coordinates scheme detection
-  ApkSigningBlockParser.kt / Impl (internal)   - Parses the raw APK Signing Block for v2/v3/v3.1 ID-value pairs
-  AppSigning.kt, Certificate.kt, CertificatePrincipal.kt, CertificateTrustLevel.kt,
-  SignatureAlgorithmAssessment.kt, SigningSchemeVersion.kt - signing domain models
-permissions/                        - APK-declared permissions (distinct from the device-wide
-                                       aggregation in :core:app-permissions)
-  Permission.kt           - Single permission: name plus `details`, which is null when the device
-                            can't resolve the permission (declaring app not installed)
-  PermissionDetails.kt    - Resolved permission details; `protectionLevel` and `protectionFlags` are
-                            domain enums, never raw `PermissionInfo` ints
-  ProtectionLevel.kt, ProtectionFlag.kt - protection domain enums
-  Permissions.kt          - Used + defined permissions container
-  UsedPermission.kt       - Permission with grant status
-  ProtectionResolvers.kt (internal) - `resolveProtectionLevel`/`resolveProtectionFlags` from raw
-                                       `PermissionInfo` ints
-components/
-  Activity.kt             - Activity component info. `isLauncher` is nullable: it is resolved from
-                            `queryIntentActivities` for an installed package, and is `null` for an
-                            APK file, where launcher resolution is unavailable — null means unknown,
-                            never "not a launcher"
-  Service.kt              - Service component info
-  BroadcastReceiver.kt    - Receiver component info
-  ComponentIntentFilter.kt - Intent filter model, incl. `ComponentIntentFilterKey`, `ComponentKind`,
-                             `IntentFilterDataRule(Type)`, `IntentFilterUriRelativeGroup`
-  ContentProvider.kt      - Provider component info, incl. `ProviderPathPermission` (`<path-permission>`
-                            entries) and the `ProviderPathMatchType` enum for `PatternMatcher`'s int type
-  ContentProviderPathPermissions.kt (internal) - `resolvePathPermissions` mapping raw `PathPermission`s
-manifest/                           - the XML-parsing engine that produces component data above
-  ManifestParser.kt / Impl           - Installed/APK AndroidManifest.xml parsing into readable namespaced XML
-                                       and component intent filters
-  ManifestXmlRenderer.kt / Impl (internal)      - Renders parsed manifest XML for display
-  ComponentManifestParser.kt / Impl (internal)  - Intent-filter extraction engine `ManifestParser` delegates to
-installsource/
-  InstallSourceChain.kt   - Installing/initiating/originating package, one nested fact on `AppInfo`
-                            rather than three flat fields — mirrors how `AppSigning` and
-                            `CertificatePrincipal` group related facts instead of flattening them
-  InstallSourceResolver.kt / Impl (internal) - Single method, `resolve()`, returning the raw
-                                       `InstallSourceChain`. `AppSource` classification (Play Store,
-                                       sideload, etc.) and `isSystemInstalledApp()` are pure functions
-                                       in `InstallSourceClassification.kt`, not resolver methods —
-                                       neither needs `PackageManager` once given the chain/flags
-                                       they're derived from
-devicefeatures/
-  DeviceFeaturesRepository.kt / Impl - What *this device* provides, for checking an app's requirements
-  DeviceFeatures.kt       - The device side of that comparison: available feature names plus the
-                            device's GL ES version. `supports()` returns `null` for unknown, never
-                            `false` — an unreadable package manager must not read as "missing"
-  Feature.kt              - Sealed: `Hardware(name)` for a `uses-feature` name, `OpenGlEs(reqGlEsVersion)`
-                            for a GL ES version requirement. A GL ES `FeatureInfo` carries a null
-                            `name` and a `reqGlEsVersion`, so the two are different kinds of fact and
-                            must not be collapsed into one string field
-  FeatureAvailability.kt  - Pairing of a `Feature` with this device's support for it
-packaging/                          - what the APK/splits actually ship
-  InstalledSplitApk.kt    - One installed split/config APK: file name, path, size, and a `SplitApkKind`
-                            (DynamicFeature/Abi/ScreenDensity/Language) classified from the file name
-                            alone
-  NativeLibraries.kt      - Every `.so` file the app ships, one `NativeLibraryFile` per (name, abi)
-                            pair read from the zip entries of the base APK and every installed split —
-                            not trusted from `primaryCpuAbi`/`secondaryCpuAbi`, which describe what the
-                            device picked, not what the APK contains. `abis` and `libraryNames` are
-                            derived (distinct/sorted) from `files`, never stored separately
-  ApkPackagingAnalysis.kt - `computeApkSize()`/`readInstalledSplits()`/`readNativeLibraries()`;
-                            `readInstalledSplits()` is what `computeApkSize()` also sums so the two
-                            never diverge on what counts as an installed split
-usagestats/
-  UsageStatsRepository.kt / Impl - App usage time/frequency stats
-storagestats/
-  StorageStatsRepository.kt / Impl - App storage size stats (requires USAGE_STATS permission)
-export/
-  AppExportManager.kt / Impl - SAF-backed base APK and full-resolution icon export
-sdkversion/
-  SdkVersionResolver.kt   - SDK version to Android name mapping
-di/                       - Hilt module bindings (single `AppsModule.kt`, grouped by domain)
-```
+The module uses package-by-domain organization. Each domain package keeps its repository or resolver,
+models, implementation, and private analysis helpers together.
 
-## Key Interfaces
+* `model/` - the small set of app-level models composed across domains.
+* `signing/` - certificates, signer history, trust, algorithms, and signing-scheme inspection.
+* `permissions/` - one app's declared and used permissions and typed protection metadata.
+* `components/` - activities, services, receivers, providers, intent filters, and path permissions.
+* `manifest/` - binary manifest parsing and readable XML rendering.
+* `installsource/` - raw installer chain and source classification.
+* `devicefeatures/` - device capabilities and app/device requirement comparison.
+* `packaging/` - installed splits, native libraries, and APK size.
+* `usagestats/` and `storagestats/` - permission-gated device statistics.
+* `export/` - APK and icon export.
+* `sdkversion/` - Android version labels.
 
-- `InstalledAppsRepository.apps(): Flow<List<InstalledApp>>` - Live list of all installed apps
-- `AppDetailRepository.details(reference: AppReference): Result<AppDetail>` - Full installed-package
-  or APK-file details
-- `DeviceFeaturesRepository.deviceFeatures(): DeviceFeatures` - Memoized once per process from a single
-  `getSystemAvailableFeatures()` call. Device features cannot change without a reboot, so there is no
-  flow, no observer, and no invalidation. Never call `hasSystemFeature` in a loop instead — that is N
-  binder calls for an answer one call already gave
-- `ManifestParser.manifest(reference: AppReference): Result<ParsedManifest>` - Readable manifest.
-  Installed packages parse the base path directly and report additional split count; opening
-  `AndroidManifest.xml` from merged resources can resolve to an arbitrary split.
-- `AppExportManager` - Writes an APK or natural-resolution icon for an `AppReference` to a
-  user-selected document URI
-- `StorageStatsRepository.isPermissionGranted: StateFlow<Boolean>` - Usage access permission state
-- `UsageStatsRepository.isPermissionGranted: StateFlow<Boolean>` - Usage stats permission state
+Keep the Hilt bindings grouped by these domains. A new independent repository family earns its own
+domain package; do not return to flat `analysis/`, `model/`, or `util/` grab-bags.
 
-## Signing Certificate Semantics
+## Repository and Cache Boundaries
 
-- `SigningInfo.apkContentsSigners` contains the current signer set. Multiple current signers are one
-  package identity and cannot use signing-key rotation.
-- For a single signer, `SigningInfo.signingCertificateHistory` is Android's verified rotation
-  lineage in oldest-to-current order; its final entry is the current certificate. Keep current and
-  past certificates as separate lists in `AppSigning` rather than attaching role flags to
-  `Certificate`.
-- Historical certificates identify keys previously trusted for the package. Do not claim they can
-  sign normal updates; update and rollback capabilities depend on Android's lineage capabilities.
-- Preserve X.509 validity as `Instant`. Convert to local dates only for display, and compare the
-  exact instants when determining validity.
-- Equal issuer and subject names mean self-issued, not necessarily self-signed. Label a certificate
-  self-signed only after its signature verifies with its own public key.
-- Assess recognized signature algorithms in the certificate domain model. The assessment covers
-  the digest only; unsupported names remain unknown, and overall security also depends on key type
-  and size. Feature ViewModels may map the typed result but must not duplicate its policy.
-- `PackageManager`'s `SigningInfo` does not expose which signing scheme(s) an APK uses.
-  `ApkSigningBlockAnalyzer` is an injected interface whose implementation reads the APK file directly
-  (`applicationInfo.sourceDir`, which `AppDetailRepositoryImpl` already sets correctly for both
-  installed packages and APK files). It verifies v1 by reading the signed manifest through
-  `JarFile`'s verifier, then locates the APK Signing Block immediately before the ZIP End Of Central
-  Directory record and reads its known v2/v3/v3.1 ID-value pairs. Every step is defensive: any
-  structural surprise or verification failure yields `null` rather than a guessed version list, per
-  this module's "never throw" rule. `AppDetailRepositoryImpl` invokes it only in the single-app flow,
-  not from the bulk `AppSigningRepositoryImpl` scan, so the extra file I/O is not paid for every
-  installed app merely to populate the device-wide certificate index.
+`InstalledAppsRepository` is the live source for installed apps. `AppDetailRepository` orchestrates
+the domain analyzers for one installed package or APK file.
+
+App-detail cache entries describe the app only. Do not fold device-dependent availability into a
+cached `AppDetail`; consumers combine app facts with device repositories separately.
+
+`PackageChangesObserver` invalidates installed-package data. APK-file inputs and device state have
+different lifecycles and must not be smuggled into that cache key.
+
+Expensive device-wide signing work is shared lazily. Single-app signing-scheme inspection stays in
+the app-detail path so merely collecting the device-wide signer index does not read every APK signing
+block.
+
+## Loading Observability
+
+Use direct, readable messages in the form `<operation> loading <started|finished|degraded|failed>`
+with useful result counts or context. DEBUG marks starts and successful internal stages, INFO marks
+successful public-load completion, WARN marks degraded results, and ERROR marks terminal failures.
+
+Attach a throwable only for unexpected recoverable degradation or terminal failure, and only at the
+layer that owns that outcome. Let coroutine cancellation propagate without logging it. Package names
+and APK file paths are valid diagnostic context.
+
+## Signing Semantics
+
+* `apkContentsSigners` is the current signer set. Multiple current signers form one package identity
+  and cannot use signing-key rotation.
+* For one current signer, `signingCertificateHistory` is Android's verified rotation lineage in
+  oldest-to-current order. Keep current and historical certificates as separate lists.
+* Historical certificates are previously trusted keys. Do not claim they can sign normal updates;
+  capabilities depend on lineage metadata Android does not expose here.
+* Preserve X.509 validity as `Instant`. Convert only for display and compare exact instants.
+* Equal issuer and subject means self-issued, not self-signed. Call a certificate self-signed only
+  after verifying its signature with its own public key.
+* Signature-algorithm assessment describes the digest only. Unsupported names stay unknown, and
+  overall security also depends on key type and size.
+* `SigningInfo` does not expose APK signing schemes. Scheme detection reads the APK directly,
+  verifies v1 through the JAR verifier, and parses recognized v2/v3/v3.1 signing-block IDs.
+* Structural ambiguity or verification failure yields unknown scheme data, never a guessed list.
 
 ## Device Requirement Semantics
 
-`AppDetail` describes an app; device availability describes a *pairing* of an app and a device. Keep
-them apart: `AppDetailRepositoryImpl` caches `AppDetail` keyed by package and invalidated by
-`PackageChangesObserver`, so folding device state into it would make cached entries depend on a
-second input the key does not mention and the invalidation does not track. Consumers inject both
-repositories and combine them while mapping to state.
+`AppDetail` describes what an app requires; device features describe what this device provides.
+Consumers combine the two while mapping UI state.
 
-`NativeLibraries` follows the same split: it holds only what the APK ships (ABIs, `.so` filenames).
-`Build.SUPPORTED_ABIS` is read where it's consumed (see `GeneralInfoViewModel`), not folded into the
-cached model — it's a plain static field, not an expensive call, so it doesn't warrant a repository
-the way `DeviceFeaturesRepository` does for `getSystemAvailableFeatures()`.
+Device feature discovery is memoized because the platform feature set cannot change without reboot.
+Read the complete set once rather than calling `hasSystemFeature` repeatedly.
 
-## Component Intent Filters
+Hardware feature names and OpenGL ES versions are different domain variants. Device support can be
+available, unavailable, or unknown; a failed device query must not become "missing."
 
-- `PackageInfo` exposes component metadata but not its declared intent filters.
-- `queryIntentActivities` and the other `queryIntent*` APIs only return filters that match an intent
-  the caller already knows, so they cannot enumerate an app's entry points.
-- `ManifestParser.componentIntentFilters()` reads the base manifest and every installed split manifest
-  with Android's public binary XML resource parser. It normalizes relative component class names before
-  joining filters back to `PackageInfo` components. Component kind is part of the key because Android
-  permits different component types to share the same class name.
-- Every filter preserves its actions, categories, data rules, priority, order, and link-verification
-  request. Multiple `<data>` tags accumulate as rules on one filter, matching Android's semantics.
-  `host` and `port` are the one exception: Android pairs them per `<data>` tag into a single
-  authority match, so they are combined into one `Host` rule (`host:port`) instead of two
-  independently flattened rules — otherwise two `<data>` tags with different host/port combinations
-  would render as an ambiguous cross-product. A `port` without a `host` is dropped, matching
-  Android, which ignores it.
-- Reading every installed split manifest is required, not best-effort: if any split manifest cannot
-  be read, `componentIntentFilters()` fails for the whole package rather than silently returning
-  filters from only the splits it could read. Partial results would understate a component's real
-  entry points and read as "no intent filters" to callers that only check `Result.isSuccess`.
+Native-library data follows the same boundary: the cached app model records what the APK ships.
+Compare it with `Build.SUPPORTED_ABIS` at the consuming layer.
 
-## External Entry Semantics
+## Manifest and Component Semantics
 
-- These rules support the Components screen's technical filter. They are not a risk verdict and do
-  not feed the hub — that needs a deliberate rule set, not just accurate raw data.
-- Exported alone is not a finding. Launcher activities are expected to be exported and are excluded.
-- An activity is unguarded only when launcher status is known to be false and no permission is required.
-- Services and receivers are unguarded when exported without a required permission.
-- An exported provider is unguarded when either its top-level read or write permission is missing, or
-  any `<path-permission>` entry opens a path without one — see Content Provider Path Permissions.
-- APK activities have unknown launcher status. The technical `Unprotected` filter includes exported
-  activities without permission guards and may therefore include the launcher activity; the hub
-  does not interpret this as a finding.
+`PackageInfo` does not enumerate declared intent filters. Query APIs only return filters matching an
+intent the caller already knows, so manifest parsing is required.
 
-## Content Provider Path Permissions
+Parse the base manifest and every installed split manifest. Normalize relative component class names
+before joining filters to `PackageInfo` components, and include component kind in the key because
+different kinds may share a class name.
 
-- `ProviderInfo.pathPermissions` is populated by `PackageManager` whenever `GET_PROVIDERS` is
-  queried — unlike intent filters, no manifest parsing is needed, and the flag was already in use.
-  `resolvePathPermissions()` in `components/ContentProviderPathPermissions.kt` maps it to
-  `ProviderPathPermission`, and `PathPermission`'s
-  `type` int becomes the typed `ProviderPathMatchType` enum.
-- A `<path-permission>` can carve out access that the provider's top-level `readPermission` /
-  `writePermission` does not grant: an entry with neither permission set opens that specific path
-  regardless of what the provider otherwise requires. `ContentProvider.hasUnguardedPathPermission`
-  captures exactly that unambiguous case — it does not attempt to resolve full path-matching
-  precedence when multiple `<path-permission>` entries could overlap.
-- `isExternallyReachableWithoutPermission` folds this in: a provider is reachable without permission
-  if the top level is open **or** any path permission is. It deliberately does not flip the other
-  way — a blank top-level permission still leaves any path not covered by a `<path-permission>` open,
-  so path permissions can only add exposure to the verdict, never resolve it into "guarded."
+Preserve actions, categories, data rules, priority, order, and link-verification requests. Multiple
+`<data>` elements accumulate within one filter. Host and port are one authority rule; flattening them
+independently creates invalid cross-products. Ignore a port without a host, matching Android.
 
-## Dependencies
-- `api(projects.core.common)` - exposes common models and DispatcherProvider
+Split parsing is all-or-nothing. If any required split manifest fails, return failure rather than a
+partial result that callers could misread as "no filters."
+
+## External Reachability Semantics
+
+These are technical facts for component filtering, not a general security verdict.
+
+* Exported alone is not a finding.
+* Launcher activities are expected to be exported and are excluded from the installed-app
+  "unprotected" classification.
+* An installed activity is unguarded only when launcher status is known to be false and no permission
+  is required.
+* Services and receivers are unguarded when exported without a required permission.
+* A provider is unguarded when top-level read or write access is open or any path permission opens a
+  path.
+* APK-file activities have unknown launcher status. Their technical filter may include the launcher;
+  features must not promote that uncertainty into a finding.
+
+`ProviderInfo.pathPermissions` is already available when providers are queried. Model each path,
+match type, and optional read/write permission. A path entry with neither permission opens that path.
+
+Path permissions can add exposure but cannot prove an otherwise open provider is guarded: uncovered
+paths remain subject to the top-level permission.
+
+## Packaging Semantics
+
+Compute installed APK size from the same split list exposed to consumers so totals and breakdowns
+cannot diverge.
+
+Read native libraries from base and split ZIP entries. Keep one file record per library name and ABI;
+derive distinct ABI and library-name summaries rather than storing competing copies.
+
+Install-source models preserve the installing, initiating, and originating chain. Source
+classification is a pure function over that chain and app flags, not another platform resolver call.

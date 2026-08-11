@@ -14,8 +14,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
-import sk.styk.martin.apkanalyzer.core.common.logger.nextOperationRequest
-import sk.styk.martin.apkanalyzer.core.common.logger.operationLogMessage
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import java.time.Instant
 import javax.inject.Inject
@@ -24,7 +22,6 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.toJavaDuration
 
 private const val TAG = "UsageStatsRepositoryImpl"
-private const val OPERATION = "usage_stats"
 
 @Singleton
 internal class UsageStatsRepositoryImpl @Inject constructor(
@@ -58,20 +55,19 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
     }
 
     private fun fetchUsageTimes() {
-        val requestId = nextOperationRequest()
         val hasPermission = checkPermission()
         isPermissionGranted.value = hasPermission
         if (!hasPermission) {
-            Logger.w(TAG, operationLogMessage(OPERATION, requestId, event = "degraded", context = "reason=permission_missing"))
+            Logger.w(TAG, "Usage stats loading degraded: permission missing")
             return
         }
 
-        Logger.d(TAG, operationLogMessage(OPERATION, requestId, event = "started"))
+        Logger.d(TAG, "Usage stats loading started")
         val usages = queryRawUsageStats()
             .groupBy { PackageName(it.packageName) }
             .mapValues { (_, usages) -> Instant.ofEpochMilli(usages.maxOf { it.lastTimeUsed }) }
         lastUsedTimes.value = usages
-        Logger.i(TAG, operationLogMessage(OPERATION, requestId, event = "succeeded", context = "loaded_count=${usages.size}"))
+        Logger.i(TAG, "Usage stats loading finished: ${usages.size} apps loaded")
     }
 
     @SuppressLint("MissingPermission")

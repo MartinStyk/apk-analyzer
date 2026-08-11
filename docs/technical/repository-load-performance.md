@@ -6,8 +6,7 @@ analysis, and their supporting repository operations
 
 ## Requirements
 
-- Log when a loading operation and each meaningful stage starts, succeeds, degrades, is cancelled,
-  or fails.
+- Log when a loading operation and each meaningful stage starts, succeeds, degrades, or fails.
 - Log every screen opening from the visible Navigation 3 destination.
 - Use log levels consistently so Crashlytics records unexpected recoverable and terminal failures as
   non-fatals without turning expected states into errors.
@@ -48,8 +47,7 @@ attributes, and stage metrics associated with one operation and avoid an unmanag
 - Logs may contain the package name for an installed app and the APK path for APK-file analysis.
 - Do not add a sanitization abstraction or rewrite existing diagnostic context in this rollout.
 - Raw throwables may be reported when their failure qualifies as a non-fatal under the logging policy.
-- Do not use a user ID. A per-process request number may appear in local and Crashlytics breadcrumbs
-  to correlate overlapping operations, but it must not become a Performance attribute or custom key.
+- Do not use a user ID.
 - Performance trace names, metrics, and attributes remain low-cardinality. Package names, APK paths,
   screen parameters, and other request identities must not become Performance attributes because
   they fragment aggregate distributions.
@@ -64,15 +62,13 @@ attributes, and stage metrics associated with one operation and avoid an unmanag
 
 ### Message shape
 
-Use a consistent shape for loading logs:
+Use short human-readable messages directly with the severity-specific `Logger` method:
 
 ```text
-operation=<operation> request=<process-local-number> stage=<stage> event=<event> <context>
+<Operation or stage> loading <started|finished|degraded|failed>: <result or context>
 ```
 
-Allowed events are `started`, `succeeded`, `degraded`, `cancelled`, and `failed`. Context may include
-values such as `mode=installed`, `cache_hit=true`, `count=143`, `reason=permission_missing`,
-`package=<package-name>`, or `apk_path=<path>`.
+Context may include analysis mode, cache state, bounded counts, package name, or APK path.
 
 Every parent operation logs one start and exactly one terminal event. A stage logs a start and one
 terminal event when it performs meaningful I/O, parsing, cryptography, or bulk mapping. Do not log
@@ -82,7 +78,7 @@ inside per-item loops; report a bounded count when the stage finishes.
 
 | Level | Use | Crashlytics behavior |
 |---|---|---|
-| `DEBUG` | Operation/stage start, cache hit/miss, cancellation, expected absence, and successful internal stages | Breadcrumb only |
+| `DEBUG` | Operation/stage start, cache hit/miss, expected absence, and successful internal stages | Breadcrumb only |
 | `INFO` | Successful completion of a public repository load or a process-level reload | Breadcrumb only |
 | `WARN` without `Throwable` | Unusual but expected or fully handled state, such as missing usage permission, an uninstall race, unsupported signing data, or unavailable optional metadata | Breadcrumb only |
 | `WARN` with `Throwable` | Unexpected recoverable failure where the operation returns a useful but degraded result | One non-fatal report with diagnostic context |
@@ -130,31 +126,23 @@ Performance trace is not justified.
 Observe the visible destination once in each app navigation host:
 
 ```kotlin
-LaunchedEffect(navigationState) {
-    snapshotFlow { navigationState.currentKey }
-        .distinctUntilChanged()
-        .collect { key -> logScreenOpened(key) }
+LaunchedEffect(navigationState.currentKey) {
+    Logger.i("Navigation", "Screen opened: ${navigationState.currentKey}")
 }
 ```
 
-`snapshotFlow` emits the initially visible destination and every actual `currentKey` change caused by
-a push, back navigation, top-level tab switch, same-tab reset, or restored navigation state.
-`distinctUntilChanged` prevents recomposition from duplicating screen-open logs.
-
-Map each `NavKey` type to a stable screen name such as `apps`, `app_detail`, `manifest`, or
-`certificates`. Do not use `NavKey.toString()` as the screen name because parameterized keys would
-create a different screen identity for each package, APK path, permission, or component. The log may
-include those parameters as diagnostic context separately.
+The effect emits the initially visible destination and restarts for each actual `currentKey` change.
+Log the `NavKey` directly; every key is a data object or data class so its representation identifies
+the destination and includes its diagnostic parameters without a separate resolver.
 
 Emit one `INFO` breadcrumb in this shape:
 
 ```text
-operation=navigation event=screen_opened screen=<stable-name> <optional diagnostic context>
+Screen opened: <NavKey>
 ```
 
-Keep the mapping close to the destination declarations so adding a new `NavKey` requires adding its
-screen name. Cover both the main `ApkAnalyzerApp` host and the external-APK navigation host. This
-phase adds screen-opening logs only; navigation-to-first-content timing remains separate.
+Cover both the main `ApkAnalyzerApp` host and the external-APK navigation host. This phase adds
+screen-opening logs only; navigation-to-first-content timing remains separate.
 
 ## Current Loading Pipelines
 
@@ -215,13 +203,12 @@ Declare the Firebase-free contract in `core:common`:
 
 ```kotlin
 interface PerformanceTracker {
-    fun startTrace(name: String): PerformanceTrace
+    fun <T> startTrace(name: String, block: (PerformanceTrace) -> T): T
 }
 
 interface PerformanceTrace {
     fun putMetric(name: String, value: Long)
     fun putAttribute(name: String, value: String)
-    fun stop()
 }
 ```
 
@@ -231,14 +218,16 @@ contract.
 
 Requirements for the adapter and shared helpers:
 
-- Every `startTrace` call returns an independent handle because repository calls can overlap.
-- `stop()` is idempotent and thread safe.
+- `startTrace` runs `block` against an independent trace handle and stops that handle when `block`
+  returns or throws; repository calls can overlap, and stopping is not the caller's responsibility.
+- Stopping a trace handle is idempotent and thread safe.
 - Fixed trace, metric, and attribute names are declared centrally and satisfy Firebase naming limits.
 - Measure stages with a monotonic clock at nanosecond resolution and record whole microseconds in
   metrics suffixed with `_us`. Do not use wall-clock time.
 - A shared inline/suspend measurement helper records a stage duration even when the measured block
   throws, then rethrows the original exception or cancellation.
-- Parent completion uses `try`/`finally`, records its outcome before stopping, and stops exactly once.
+- Callers record the parent outcome attribute inside the `startTrace` block before it returns or
+  throws; `startTrace` stops the handle exactly once after the block completes.
 - Instrumentation must not change repository results, exception behavior, cache semantics, dispatcher
   selection, or cancellation propagation.
 - Telemetry API failures must be surfaced through the existing safe logging policy but must not turn a
@@ -407,11 +396,11 @@ attributes on one custom trace. Every proposed trace remains below both limits.
 
 ### OBS-01: Make logging consistent
 
-- Add the operation/stage/event message convention.
+- Add the direct human-readable loading message convention.
 - Apply the log-level and single-owner non-fatal rules to current load paths.
-- Add missing start, success, degraded, cancellation, and failure logs to the required operation
+- Add missing start, success, degraded, and failure logs to the required operation
   coverage.
-- Add stable screen-name mappings and observe distinct `currentKey` changes in both navigation hosts.
+- Log each `currentKey` directly from both navigation hosts.
 - Preserve package names and APK paths where they provide useful diagnostic context.
 
 ### OBS-02: Add Performance infrastructure

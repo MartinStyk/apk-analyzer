@@ -23,10 +23,9 @@ internal class MonitoringValidationReceiver : BroadcastReceiver() {
                 "Recording intentional monitoring validation non-fatal",
             )
 
-            SIGNAL_PERFORMANCE -> performanceTracker.startTrace(VALIDATION_TRACE).run {
-                putMetric(VALIDATION_METRIC, 1L)
-                putAttribute(VALIDATION_ATTRIBUTE, VALIDATION_ATTRIBUTE_VALUE)
-                stop()
+            SIGNAL_PERFORMANCE -> performanceTracker.startTrace(VALIDATION_TRACE) { trace ->
+                trace.putMetric(VALIDATION_METRIC, 1L)
+                trace.putAttribute(VALIDATION_ATTRIBUTE, VALIDATION_ATTRIBUTE_VALUE)
             }
 
             else -> Logger.w(TAG, "Unknown monitoring validation signal")
