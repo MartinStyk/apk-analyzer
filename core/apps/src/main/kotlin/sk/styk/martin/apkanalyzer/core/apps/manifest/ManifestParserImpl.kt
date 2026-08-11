@@ -6,7 +6,7 @@ import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
 import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilterKey
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
+import sk.styk.martin.apkanalyzer.core.common.coroutines.runSuspendCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
@@ -26,7 +26,6 @@ internal class ManifestParserImpl @Inject constructor(
         is AppReference.ApkFile -> apkFileManifest(reference.path)
     }
 
-    @Suppress("SuspendFunSwallowedCancellation")
     override suspend fun componentIntentFilters(reference: AppReference): Result<Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>> {
         val context = when (reference) {
             is AppReference.InstalledPackage -> "mode=installed package=${reference.packageName.value}"
@@ -34,7 +33,7 @@ internal class ManifestParserImpl @Inject constructor(
         }
         Logger.d(TAG, "Component intent filters loading started: $context")
         return withContext(dispatcherProvider.io()) {
-            runCatchingCancellable {
+            runSuspendCatchingCancellable {
                 when (reference) {
                     is AppReference.InstalledPackage -> installedComponentIntentFilters(reference.packageName)
                     is AppReference.ApkFile -> componentManifestParser.parse(resourcesForApk(reference.path))
@@ -52,12 +51,11 @@ internal class ManifestParserImpl @Inject constructor(
         }
     }
 
-    @Suppress("SuspendFunSwallowedCancellation")
     private suspend fun installedPackageManifest(packageName: PackageName): Result<ParsedManifest> {
         val context = "mode=installed package=${packageName.value}"
         Logger.d(TAG, "Manifest loading started: $context")
         return withContext(dispatcherProvider.io()) {
-            runCatchingCancellable {
+            runSuspendCatchingCancellable {
                 val applicationInfo = packageManager.getApplicationInfo(packageName.value, 0)
                 ParsedManifest(
                     xml = manifestXmlRenderer.render(resourcesForApk(applicationInfo.sourceDir)),
@@ -71,12 +69,11 @@ internal class ManifestParserImpl @Inject constructor(
         }
     }
 
-    @Suppress("SuspendFunSwallowedCancellation")
     private suspend fun apkFileManifest(apkPath: String): Result<ParsedManifest> {
         val context = "mode=apk_file apk_path=$apkPath"
         Logger.d(TAG, "Manifest loading started: $context")
         return withContext(dispatcherProvider.io()) {
-            runCatchingCancellable {
+            runSuspendCatchingCancellable {
                 ParsedManifest(
                     xml = manifestXmlRenderer.render(resourcesForApk(apkPath)),
                     additionalInstalledSplits = 0,

@@ -12,6 +12,7 @@ android {
 dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.performance)
     implementation(libs.timber)
     implementation(libs.androidx.datastore.preferences)
 }

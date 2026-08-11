@@ -26,12 +26,16 @@ Both activities use the shared theme host so the persisted color scheme is appli
 content renders. Material3 is allowed directly here only for app-shell plumbing such as `Scaffold`
 and theme hosting.
 
-`performance/FirebasePerformanceTracker.kt` is the app-owned Firebase Performance adapter for the
-`core:common` `PerformanceTracker` contract; `performance/PerformanceModule.kt` binds it as a
-singleton. `monitoringValidation` is a debug-derived local-only build type that enables Crashlytics
-and Performance collection and adds an adb-driven `MonitoringValidationReceiver`. Normal `debug`
-builds disable both SDKs, `release` builds enable both, and the validation receiver is absent from
-both.
+Crashlytics and Firebase Performance collection are enabled in both debug and release. Debug also
+enables Firebase Performance logcat output and includes the adb-only
+`MonitoringValidationReceiver`; release must not contain that receiver.
+
+Validate monitoring with `:app:installDebug`, then send
+`adb shell am broadcast --include-stopped-packages -n
+sk.styk.martin.apkanalyzer/sk.styk.martin.apkanalyzer.monitoring.MonitoringValidationReceiver --es
+signal <performance|non_fatal|crash>`. Confirm `monitoring_validation` in `FirebasePerformance`
+logcat output, confirm the non-fatal in Crashlytics, and trigger the intentional crash last before
+relaunching the app to upload it.
 
 ## Manifest Contracts
 

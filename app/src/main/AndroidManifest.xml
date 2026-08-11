@@ -61,10 +61,10 @@
             android:value="false" />
         <meta-data
             android:name="firebase_crashlytics_collection_enabled"
-            android:value="${firebaseCollectionEnabled}" />
+            android:value="true" />
         <meta-data
             android:name="firebase_performance_collection_enabled"
-            android:value="${firebaseCollectionEnabled}" />
+            android:value="true" />
         <meta-data
             android:name="firebase_performance_logcat_enabled"
             android:value="${firebasePerformanceLogcatEnabled}" />

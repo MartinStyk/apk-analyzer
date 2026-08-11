@@ -1,10 +1,10 @@
 package sk.styk.martin.apkanalyzer.core.common.performance
 
 interface PerformanceTracker {
-    fun <T> startTrace(name: String, block: (PerformanceTrace) -> T): T
+    fun startTrace(name: String): PerformanceTrace
 }
 
-interface PerformanceTrace {
+interface PerformanceTrace : AutoCloseable {
     fun putMetric(name: String, value: Long)
 
     fun putAttribute(name: String, value: String)

@@ -13,8 +13,8 @@ analysis, and their supporting repository operations
 - Measure the complete time needed to load an app and attribute that time to non-overlapping stages,
   including manifest parsing, certificate extraction, signing-scheme detection, packaging analysis,
   component mapping, permissions, storage, and usage.
-- Keep Firebase Performance behind an app-owned interface. Domain `core` modules and feature modules
-  must not import Firebase Performance types.
+- Keep Firebase Performance behind a shared infrastructure interface. Domain `core` modules and
+  feature modules must not import Firebase Performance types.
 - Package names may appear in diagnostic logs. APK paths may appear when analyzing an APK file.
   Logging sanitization is outside this rollout.
 
@@ -51,10 +51,8 @@ attributes, and stage metrics associated with one operation and avoid an unmanag
 - Performance trace names, metrics, and attributes remain low-cardinality. Package names, APK paths,
   screen parameters, and other request identities must not become Performance attributes because
   they fragment aggregate distributions.
-- Automatic collection is enabled in the current app for debug and release builds. The implementation
-  should disable Crashlytics and Performance collection in normal debug builds so local development
-  does not pollute production data. Provide an explicit local validation switch or dedicated build
-  configuration that enables both SDKs when verifying instrumentation.
+- Crashlytics and Performance collection are enabled in debug and release builds. Debug additionally
+  enables Firebase Performance logcat output and contains an adb-only validation receiver.
 - Keep Firebase's normal SDK sampling behavior. Do not build a second custom sampling layer until
   production volume demonstrates a need.
 
@@ -203,48 +201,49 @@ Declare the Firebase-free contract in `core:common`:
 
 ```kotlin
 interface PerformanceTracker {
-    fun <T> startTrace(name: String, block: (PerformanceTrace) -> T): T
+    fun startTrace(name: String): PerformanceTrace
 }
 
-interface PerformanceTrace {
+interface PerformanceTrace : AutoCloseable {
     fun putMetric(name: String, value: Long)
     fun putAttribute(name: String, value: String)
 }
 ```
 
-Provide the Firebase implementation and Hilt binding from `app`. Only that adapter imports
-`FirebasePerformance` or `Trace`. Domain modules inject `PerformanceTracker` and know only the
-contract.
+Provide the internal Firebase implementation and Hilt binding from `core:common`. This module is the
+shared infrastructure boundary and already owns the Firebase-backed logging facade; its
+`firebase-performance` dependency is not exposed to consumers. The application convention plugin
+continues to package the SDK and apply Firebase Performance instrumentation. Only the internal
+adapter imports `FirebasePerformance` or `Trace`; domain modules and features inject
+`PerformanceTracker` and know only the contract.
 
 Requirements for the adapter and shared helpers:
 
-- `startTrace` runs `block` against an independent trace handle and stops that handle when `block`
-  returns or throws; repository calls can overlap, and stopping is not the caller's responsibility.
-- Stopping a trace handle is idempotent and thread safe.
+- `startTrace` starts and returns an independent trace handle. Callers scope it with `use`, which
+  closes the handle when the block returns, throws, or is cancelled.
 - Fixed trace, metric, and attribute names are declared centrally and satisfy Firebase naming limits.
 - Measure stages with a monotonic clock at nanosecond resolution and record whole microseconds in
   metrics suffixed with `_us`. Do not use wall-clock time.
-- A shared inline/suspend measurement helper records a stage duration even when the measured block
-  throws, then rethrows the original exception or cancellation.
-- Callers record the parent outcome attribute inside the `startTrace` block before it returns or
-  throws; `startTrace` stops the handle exactly once after the block completes.
-- Instrumentation must not change repository results, exception behavior, cache semantics, dispatcher
-  selection, or cancellation propagation.
-- Telemetry API failures must be surfaced through the existing safe logging policy but must not turn a
-  successful domain operation into a failure.
+- Shared synchronous and suspend measurement helpers record a stage duration even when the measured
+  block throws, then preserve the original exception or cancellation.
+- Callers record the parent outcome attribute inside the `use` block before it returns or throws.
+- Instrumentation must not change repository results, cache semantics, dispatcher selection, or
+  cancellation propagation.
+- The adapter calls Firebase directly. It does not catch SDK `RuntimeException`s or add logging-only
+  wrappers; failures propagate to the operation boundary that owns failure logging.
 
-No Firebase Performance type may appear outside `app`.
+No Firebase Performance type may appear outside the internal `core:common` adapter.
 
 ### Local monitoring validation
 
-The `monitoringValidation` build type derives from `debug`, enables Crashlytics and Performance
-collection, and includes an adb-only broadcast receiver. Normal `debug` builds disable both SDKs,
-`release` builds enable both, and neither includes the receiver.
+Debug and release both enable Crashlytics and Performance collection. Debug additionally enables
+Firebase Performance logcat output and includes an adb-only broadcast receiver. Release does not
+contain the receiver.
 
-Install the validation build and enable Firebase Performance logcat output:
+Install the debug build and clear logcat:
 
 ```text
-.\gradlew.bat :app:installMonitoringValidation
+.\gradlew.bat :app:installDebug
 adb logcat -c
 ```
 
@@ -270,7 +269,7 @@ adb shell am broadcast --include-stopped-packages -n sk.styk.martin.apkanalyzer/
 adb shell monkey -p sk.styk.martin.apkanalyzer 1
 ```
 
-The receiver has no launcher entry or UI and is compiled only into `monitoringValidation`.
+The receiver has no launcher entry or UI and is compiled only into debug.
 
 ## Primary Trace Design
 
@@ -407,11 +406,12 @@ attributes on one custom trace. Every proposed trace remains below both limits.
 
 - Add Firebase-free `PerformanceTracker` and `PerformanceTrace` contracts and monotonic timing helpers
   to `core:common`.
-- Add the Firebase-backed adapter and Hilt binding in `app`.
-- Add build-aware collection control so regular debug builds do not report production telemetry.
-- Confirm independent handles, precise microsecond metrics, idempotent stop, and cancellation safety.
+- Add the internal Firebase-backed adapter and Hilt binding in `core:common`.
+- Enable collection in debug and release while keeping validation entry points debug-only.
+- Confirm independent handles, precise microsecond metrics, `use`-scoped closure, and cancellation
+  safety.
 - Verify Crashlytics with one intentional test crash and one intentional non-fatal in the
-  explicit monitoring-validation build.
+  debug build.
 - Verify Performance using Firebase Performance logcat output before instrumenting repositories.
 
 ### OBS-03: Instrument installed-app loading
@@ -461,10 +461,10 @@ or frame-level regressions. Keep that trace separate from repository traces.
 - Cache hits and misses, installed packages and APK files, and complete and degraded results can be
   compared independently.
 - Stage metrics are non-overlapping and approximately explain parent duration.
-- No Firebase Performance type leaves `app`.
+- No Firebase Performance type leaves the internal `core:common` adapter.
 - Performance attributes contain no package names, APK paths, screen parameters, or other
   high-cardinality request identities.
-- Regular debug builds do not pollute production monitoring.
+- Debug and release builds both collect monitoring data; validation entry points remain debug-only.
 
 ## Deferred
 

@@ -12,8 +12,8 @@ logic do not belong here.
 
 * `coroutines/` - injectable dispatchers, flow helpers, and cancellation-safe result capture.
 * `logger/` - the repository logging facade.
-* `performance/` - Firebase-free performance instrumentation contracts, stage-timing helpers, and
-  centralized telemetry names.
+* `performance/` - performance instrumentation contracts, the internal Firebase adapter,
+  stage-timing helpers, and centralized telemetry names.
 * `settings/` - generic typed DataStore persistence and preference keys.
 * `model/` - genuinely cross-module value types such as app references, source classification, and
   file sizes.
@@ -29,14 +29,16 @@ logic do not belong here.
   events, formatter helpers, or logging-only wrapper functions.
 * Throwable-bearing WARN and ERROR logs record Crashlytics non-fatals. Attach the throwable once at
   the boundary that owns the degraded result or terminal failure.
-* `PerformanceTracker.startTrace(name) { trace -> ... }` runs the block against a `PerformanceTrace`
-  and stops it automatically, including on exceptions or cancellation. Callers only call
-  `putMetric`/`putAttribute` inside the block; they never manage `stop()` themselves.
+* `PerformanceTracker.startTrace(name)` returns an `AutoCloseable` `PerformanceTrace`. Always scope
+  it with `use` so it closes on success, failure, and cancellation.
 * `measureStage(...)` / `measureSuspendStage(...)` record a whole-microsecond stage metric on a
   `PerformanceTrace` using a monotonic nanosecond clock, regardless of how the timed block completes.
 * `PerformanceTraceName` / `PerformanceMetricName` / `PerformanceAttributeName` are the only source of
   telemetry name strings; do not inline new trace, metric, or attribute names elsewhere.
-* No Firebase Performance type may appear outside `app`.
+* Firebase Performance imports stay inside the internal adapter in this infrastructure module.
+  Domain core modules and feature modules depend only on `PerformanceTracker` and
+  `PerformanceTrace`. This module already owns the Firebase-backed logging facade, while the app
+  convention plugin remains responsible for packaging and instrumenting the SDK.
 * `AppReference` is the shared type-safe distinction between an installed package and an APK file.
 * `AppSource.isSideloaded` intentionally groups sideloaded, local-install, and unknown sources while
   excluding recognized stores and system-preinstalled apps.

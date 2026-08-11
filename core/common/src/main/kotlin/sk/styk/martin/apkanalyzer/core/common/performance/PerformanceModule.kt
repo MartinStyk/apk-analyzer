@@ -1,10 +1,9 @@
-package sk.styk.martin.apkanalyzer.performance
+package sk.styk.martin.apkanalyzer.core.common.performance
 
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
 import javax.inject.Singleton
 
 @Module

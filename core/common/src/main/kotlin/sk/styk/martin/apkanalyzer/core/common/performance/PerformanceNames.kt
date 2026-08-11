@@ -8,6 +8,7 @@ object PerformanceTraceName {
     const val STORAGE_STATS_LOAD = "storage_stats_load"
     const val USAGE_STATS_LOAD = "usage_stats_load"
     const val DEVICE_FEATURES_LOAD = "device_features_load"
+    const val MONITORING_VALIDATION = "monitoring_validation"
 }
 
 object PerformanceMetricName {
@@ -41,6 +42,7 @@ object PerformanceMetricName {
     const val FEATURE_QUERY_US = "feature_query_us"
     const val FEATURE_MAPPING_US = "feature_mapping_us"
     const val FEATURE_COUNT = "feature_count"
+    const val VALIDATION_US = "validation_us"
 }
 
 object PerformanceAttributeName {

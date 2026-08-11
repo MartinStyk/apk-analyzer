@@ -10,28 +10,26 @@ data object ElapsedRealtimeMonotonicClock : MonotonicClock {
     override fun nowNanos(): Long = SystemClock.elapsedRealtimeNanos()
 }
 
-inline fun <T> PerformanceTrace.measureStage(
+fun <T> PerformanceTrace.measureStage(
     metricName: String,
     clock: MonotonicClock = ElapsedRealtimeMonotonicClock,
     block: () -> T,
-): T {
-    val startedAtNanos = clock.nowNanos()
-    return try {
-        block()
-    } finally {
-        putMetric(metricName, (clock.nowNanos() - startedAtNanos) / 1_000L)
-    }
-}
+): T = StageMeasurement(this, metricName, clock).use { block() }
 
-suspend inline fun <T> PerformanceTrace.measureSuspendStage(
+suspend fun <T> PerformanceTrace.measureSuspendStage(
     metricName: String,
     clock: MonotonicClock = ElapsedRealtimeMonotonicClock,
     block: suspend () -> T,
-): T {
-    val startedAtNanos = clock.nowNanos()
-    return try {
-        block()
-    } finally {
-        putMetric(metricName, (clock.nowNanos() - startedAtNanos) / 1_000L)
+): T = StageMeasurement(this, metricName, clock).use { block() }
+
+private class StageMeasurement(
+    private val trace: PerformanceTrace,
+    private val metricName: String,
+    private val clock: MonotonicClock,
+) : AutoCloseable {
+    private val startedAtNanos = clock.nowNanos()
+
+    override fun close() {
+        trace.putMetric(metricName, (clock.nowNanos() - startedAtNanos) / 1_000L)
     }
 }
