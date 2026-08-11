@@ -22,6 +22,38 @@ re-deriving the module's structure.
 * **Commits are authored as the human user only.** Never add `Co-Authored-By: Claude`,
   `Claude-Session:`, or any AI co-author trailer. See the `git-commit-author` skill.
 
+## Development Workflow
+
+Before changing code:
+
+1. Understand the requirement and define its acceptance criteria.
+2. Search the repository for existing implementations of similar behavior.
+3. Identify the relevant modules, classes, interfaces, and module-level `AGENTS.md` files.
+4. Understand the existing architecture, patterns, and constraints.
+5. Create a concise implementation plan.
+6. Implement the smallest clean solution that satisfies the requirement and fits the architecture.
+7. Run the relevant build checks from [Verifying a Change](#verifying-a-change).
+8. Inspect the complete Git diff, including changes made earlier in the worktree.
+9. Perform a self-review for correctness, scope, architecture, failure states, and leftover code.
+10. Fix every issue found during self-review.
+11. Run the relevant verification again after the final fix.
+
+Do not start implementing before understanding the existing implementation and patterns. Do not
+introduce a new abstraction, framework, architecture pattern, or utility when an existing solution
+can be reused.
+
+## Engineering Principles
+
+* Prefer existing patterns over introducing new ones.
+* Keep changes focused on the requested behavior and do not modify unrelated files.
+* Prefer simple solutions over clever ones and avoid speculative abstractions.
+* Reuse existing functionality instead of duplicating it.
+* Preserve the architecture. Move or restructure code when necessary for a clean implementation,
+  but ask before making a large architectural change.
+* Consider failure states, empty states, and cancellation paths.
+* Do not hide errors with broad exception handling.
+* Do not leave debug code, temporary logging, or TODOs in production code.
+
 ## Verifying a Change
 
 Move fast: don't run `detektDebug`, `lintDebug`, `spotlessCheck`, or `validateAgentContext` after
@@ -60,9 +92,6 @@ is the authoritative list.
 * A module's package matches its directory with hyphens removed: `core/user-preferences` →
   `core.userpreferences`, `feature/app-detail/impl` → `feature.appdetail.impl`. `app` uses the root
   package `sk.styk.martin.apkanalyzer` with no suffix.
-* `feature:browse` is a **stub** — a placeholder screen with no ViewModel or logic. Don't assume it
-  works.
-
 ## Architecture
 
 ### ViewModels
@@ -190,6 +219,14 @@ tool.
 
 * `AGENTS.md` files are canonical. Put guidance in the closest relevant `AGENTS.md`; never copy it
   into a tool-specific file.
+* Scoped `AGENTS.md` files document durable context that cannot be inferred cheaply: module
+  boundaries, package-level organization, required patterns, non-obvious behavior, and exceptional
+  entry points.
+* Do not maintain exhaustive file trees, copied interfaces, ordinary dependency lists, or
+  implementation summaries that repository search can recover more accurately. Name a specific
+  file only when it is a canonical reference, an assembly point, or misleadingly named.
+* Prefer package or domain maps over source-file inventories. Adding or renaming an ordinary source
+  file should not require an `AGENTS.md` update.
 * `CLAUDE.md` files contain exactly `@AGENTS.md` and nothing else.
 * `.github/copilot-instructions.md` is the Copilot adapter; Copilot also reads nested `AGENTS.md`
   directly. `.claude/skills/` is shared by both tools — never mirror skills into `.github/skills/`,
