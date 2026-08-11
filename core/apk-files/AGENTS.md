@@ -1,33 +1,21 @@
 # core:apk-files Module
 
-## Purpose
-Owns temporary APK materialization and cleanup for APKs supplied through Android content URIs.
+## Purpose and Boundary
 
-## Package: `sk.styk.martin.apkanalyzer.core.apkfiles`
+Owns temporary APK materialization and cleanup for APKs received through Android content URIs. The
+package is `sk.styk.martin.apkanalyzer.core.apkfiles`.
 
-## Structure
+This module owns file lifecycle only. APK parsing and analysis belong in `core:apps`; Activities and
+ViewModels decide when ownership begins and ends.
 
-```
-TemporaryApkManager.kt       - Public task-scoped copy and release contract
-TemporaryApkManagerImpl.kt   - Copies URI streams on IO and removes cache directories for discarded tasks
-di/
-  TemporaryApkModule.kt      - Singleton Hilt binding
-```
+## Storage and Lifecycle Semantics
 
-## Storage Model
+Temporary APKs live under `cacheDir/apk-analysis/task_<taskId>/`, keeping launcher and external
+document tasks isolated. Before copying a new APK, cleanup compares those directories with live
+`ActivityManager.appTasks` so files orphaned by process death are removed after their task is gone.
 
-Temporary APKs live under `cacheDir/apk-analysis/task_<taskId>/`. Before each copy, the manager
-queries `ActivityManager.appTasks` and removes directories whose task no longer exists. Live main
-and external document tasks therefore keep independent files, while files orphaned by process
-death are removed by the next APK analysis after their task is discarded.
+Copies stream on the injected IO dispatcher and are capped at 1 GiB. Never trust a provider-reported
+size because APK intents can originate from arbitrary content providers.
 
-Copies are limited to 1 GiB while streaming. Provider-reported sizes are not trusted because an
-exported intent can receive a URI from an arbitrary content provider.
-
-Call `release(apkFilePath)` when ownership ends. Release is idempotent because both the importing
-ViewModel and app-detail ViewModel may observe the same Activity teardown.
-
-## Dependencies
-
-- `core:common` for `DispatcherProvider` and `Logger`
-- Hilt
+Call `release(apkFilePath)` when ownership ends. Release must remain idempotent because both the
+importing ViewModel and app-detail ViewModel can observe the same Activity teardown.
