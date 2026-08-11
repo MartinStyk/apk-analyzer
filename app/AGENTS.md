@@ -26,6 +26,11 @@ Both activities use the shared theme host so the persisted color scheme is appli
 content renders. Material3 is allowed directly here only for app-shell plumbing such as `Scaffold`
 and theme hosting.
 
+Firebase collection policy belongs in the application manifest, not a library manifest. Crashlytics
+and Firebase Performance collection are enabled in debug and release. Validate real traces and
+non-fatals in Firebase after their repository instrumentation lands; do not keep intentional crash
+entry points in the app.
+
 ## Manifest Contracts
 
 * The launcher Activity is the exported `MAIN`/`LAUNCHER` entry point.

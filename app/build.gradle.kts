@@ -14,7 +14,6 @@ android {
     defaultConfig {
         applicationId = "sk.styk.martin.apkanalyzer"
         proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-
         versionCode = (project.findProperty("version.code") as String).toInt()
         versionName = project.findProperty("version.name") as String
     }

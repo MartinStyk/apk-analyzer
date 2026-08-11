@@ -12,6 +12,7 @@ logic do not belong here.
 
 * `coroutines/` - injectable dispatchers, flow helpers, and cancellation-safe result capture.
 * `logger/` - the repository logging facade.
+* `performance/` - performance instrumentation contracts and the internal Firebase adapter.
 * `settings/` - generic typed DataStore persistence and preference keys.
 * `model/` - genuinely cross-module value types such as app references, source classification, and
   file sizes.
@@ -27,6 +28,14 @@ logic do not belong here.
   events, formatter helpers, or logging-only wrapper functions.
 * Throwable-bearing WARN and ERROR logs record Crashlytics non-fatals. Attach the throwable once at
   the boundary that owns the degraded result or terminal failure.
+* `PerformanceTracker.startTrace(name)` returns an `AutoCloseable` `PerformanceTrace`. Always scope
+  it with `use` so it closes on success, failure, and cancellation.
+* Keep trace, metric, and attribute names private beside the repository that emits them. Suffix
+  duration metric names with `_us` because Firebase custom metrics do not carry a unit.
+* Firebase Performance imports stay inside the internal adapter in this infrastructure module.
+  Domain core modules and feature modules depend only on `PerformanceTracker` and
+  `PerformanceTrace`. This module already owns the Firebase-backed logging facade, while the app
+  convention plugin remains responsible for packaging and instrumenting the SDK.
 * `AppReference` is the shared type-safe distinction between an installed package and an APK file.
 * `AppSource.isSideloaded` intentionally groups sideloaded, local-install, and unknown sources while
   excluding recognized stores and system-preinstalled apps.
