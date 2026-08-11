@@ -44,6 +44,16 @@ Expensive device-wide signing work is shared lazily. Single-app signing-scheme i
 the app-detail path so merely collecting the device-wide signer index does not read every APK signing
 block.
 
+## Loading Observability
+
+Use direct, readable messages in the form `<operation> loading <started|finished|degraded|failed>`
+with useful result counts or context. DEBUG marks starts and successful internal stages, INFO marks
+successful public-load completion, WARN marks degraded results, and ERROR marks terminal failures.
+
+Attach a throwable only for unexpected recoverable degradation or terminal failure, and only at the
+layer that owns that outcome. Let coroutine cancellation propagate without logging it. Package names
+and APK file paths are valid diagnostic context.
+
 ## Signing Semantics
 
 * `apkContentsSigners` is the current signer set. Multiple current signers form one package identity

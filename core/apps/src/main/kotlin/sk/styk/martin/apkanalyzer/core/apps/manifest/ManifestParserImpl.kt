@@ -12,6 +12,8 @@ import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import javax.inject.Inject
 
+private const val TAG = "ManifestParser"
+
 internal class ManifestParserImpl @Inject constructor(
     private val packageManager: PackageManager,
     private val dispatcherProvider: DispatcherProvider,
@@ -24,8 +26,13 @@ internal class ManifestParserImpl @Inject constructor(
         is AppReference.ApkFile -> apkFileManifest(reference.path)
     }
 
-    override suspend fun componentIntentFilters(reference: AppReference): Result<Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>> =
-        withContext(dispatcherProvider.io()) {
+    override suspend fun componentIntentFilters(reference: AppReference): Result<Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>> {
+        val context = when (reference) {
+            is AppReference.InstalledPackage -> "mode=installed package=${reference.packageName.value}"
+            is AppReference.ApkFile -> "mode=apk_file apk_path=${reference.path}"
+        }
+        Logger.d(TAG, "Component intent filters loading started: $context")
+        return withContext(dispatcherProvider.io()) {
             runCatchingCancellable {
                 when (reference) {
                     is AppReference.InstalledPackage -> installedComponentIntentFilters(reference.packageName)
@@ -36,31 +43,46 @@ internal class ManifestParserImpl @Inject constructor(
                         valueTransform = { it.second },
                     )
                     .mapValues { (_, filters) -> filters.distinct() }
-            }.onFailure {
-                Logger.e(TAG, it, "Can not read component intent filters from $reference")
             }
-        }
-
-    private suspend fun installedPackageManifest(packageName: PackageName): Result<ParsedManifest> = withContext(dispatcherProvider.io()) {
-        runCatchingCancellable {
-            val applicationInfo = packageManager.getApplicationInfo(packageName.value, 0)
-            ParsedManifest(
-                xml = manifestXmlRenderer.render(resourcesForApk(applicationInfo.sourceDir)),
-                additionalInstalledSplits = applicationInfo.splitSourceDirs.orEmpty().size,
-            )
+        }.onSuccess {
+            Logger.d(TAG, "Component intent filters loading finished: ${it.size} components loaded, $context")
         }.onFailure {
-            Logger.e(TAG, it, "Can not read manifest for installed package $packageName")
+            Logger.w(TAG, it, "Component intent filters loading degraded: $context")
         }
     }
 
-    private suspend fun apkFileManifest(apkPath: String): Result<ParsedManifest> = withContext(dispatcherProvider.io()) {
-        runCatchingCancellable {
-            ParsedManifest(
-                xml = manifestXmlRenderer.render(resourcesForApk(apkPath)),
-                additionalInstalledSplits = 0,
-            )
+    private suspend fun installedPackageManifest(packageName: PackageName): Result<ParsedManifest> {
+        val context = "mode=installed package=${packageName.value}"
+        Logger.d(TAG, "Manifest loading started: $context")
+        return withContext(dispatcherProvider.io()) {
+            runCatchingCancellable {
+                val applicationInfo = packageManager.getApplicationInfo(packageName.value, 0)
+                ParsedManifest(
+                    xml = manifestXmlRenderer.render(resourcesForApk(applicationInfo.sourceDir)),
+                    additionalInstalledSplits = applicationInfo.splitSourceDirs.orEmpty().size,
+                )
+            }
+        }.onSuccess {
+            Logger.i(TAG, "Manifest loading finished: $context")
         }.onFailure {
-            Logger.e(TAG, it, "Can not read manifest from $apkPath")
+            Logger.e(TAG, it, "Manifest loading failed: $context")
+        }
+    }
+
+    private suspend fun apkFileManifest(apkPath: String): Result<ParsedManifest> {
+        val context = "mode=apk_file apk_path=$apkPath"
+        Logger.d(TAG, "Manifest loading started: $context")
+        return withContext(dispatcherProvider.io()) {
+            runCatchingCancellable {
+                ParsedManifest(
+                    xml = manifestXmlRenderer.render(resourcesForApk(apkPath)),
+                    additionalInstalledSplits = 0,
+                )
+            }
+        }.onSuccess {
+            Logger.i(TAG, "Manifest loading finished: $context")
+        }.onFailure {
+            Logger.e(TAG, it, "Manifest loading failed: $context")
         }
     }
 
@@ -83,9 +105,5 @@ internal class ManifestParserImpl @Inject constructor(
         applicationInfo.splitSourceDirs = null
         applicationInfo.splitPublicSourceDirs = null
         return packageManager.getResourcesForApplication(applicationInfo)
-    }
-
-    companion object {
-        private const val TAG = "ManifestParser"
     }
 }

@@ -8,11 +8,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
+import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.navigation.Navigator
 import sk.styk.martin.apkanalyzer.core.navigation.rememberNavigationState
 import sk.styk.martin.apkanalyzer.core.navigation.toEntries
@@ -34,6 +36,10 @@ internal fun ApkAnalyzerApp() {
     )
     val navigator = remember {
         Navigator(navigationState)
+    }
+
+    LaunchedEffect(navigationState.currentKey) {
+        Logger.i("Navigation", "Screen opened: ${navigationState.currentKey}")
     }
 
     Scaffold { paddings ->

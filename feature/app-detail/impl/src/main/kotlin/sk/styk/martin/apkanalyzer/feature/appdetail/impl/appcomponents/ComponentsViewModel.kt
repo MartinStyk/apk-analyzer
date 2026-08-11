@@ -30,12 +30,9 @@ import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.toAppReference
-
-private const val TAG = "ComponentsViewModel"
 
 @HiltViewModel(assistedFactory = ComponentsViewModel.Factory::class)
 internal class ComponentsViewModel @AssistedInject constructor(
@@ -109,9 +106,7 @@ internal class ComponentsViewModel @AssistedInject constructor(
         source.value = ComponentsSource.Loading
         viewModelScope.launch {
             source.value = withContext(dispatcherProvider.default()) {
-                appDetailRepository.details(appDetailInput.toAppReference()).onFailure {
-                    Logger.e(TAG, it, "Can not load components for $appDetailInput")
-                }.fold(
+                appDetailRepository.details(appDetailInput.toAppReference()).fold(
                     onSuccess = { it.toSource(canLaunch = appDetailInput is AppDetailInput.InstalledPackage) },
                     onFailure = { ComponentsSource.Error },
                 )

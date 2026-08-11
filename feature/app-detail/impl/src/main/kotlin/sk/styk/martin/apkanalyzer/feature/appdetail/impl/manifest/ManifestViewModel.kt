@@ -19,11 +19,8 @@ import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.apps.manifest.ManifestParser
 import sk.styk.martin.apkanalyzer.core.apps.manifest.ParsedManifest
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.toAppReference
-
-private const val TAG = "ManifestViewModel"
 
 @HiltViewModel(assistedFactory = ManifestViewModel.Factory::class)
 internal class ManifestViewModel @AssistedInject constructor(
@@ -67,9 +64,7 @@ internal class ManifestViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val result = manifestParser.manifest(appDetailInput.toAppReference())
             source.value = withContext(dispatcherProvider.default()) {
-                result.onFailure {
-                    Logger.e(TAG, it, "Can not load manifest for $appDetailInput")
-                }.fold(
+                result.fold(
                     onSuccess = { it.toSource() },
                     onFailure = { ManifestSource.Error },
                 )

@@ -38,7 +38,7 @@ internal class CertificateExtractorImpl @Inject constructor(private val digestMa
 
     private fun List<Signature>.toCertificates(packageName: String) = mapNotNull { signature ->
         runCatching { signature.toCertificateData() }
-            .onFailure { Logger.e(TAG, it, "Could not parse certificate for $packageName") }
+            .onFailure { Logger.w(TAG, it, "Could not parse certificate for $packageName") }
             .getOrNull()
     }
 

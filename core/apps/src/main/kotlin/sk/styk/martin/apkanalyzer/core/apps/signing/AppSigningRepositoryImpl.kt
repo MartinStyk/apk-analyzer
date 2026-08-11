@@ -11,8 +11,12 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import sk.styk.martin.apkanalyzer.core.apps.PackageChangesObserver
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
+
+private const val TAG = "AppSigningRepositoryImpl"
 
 internal class AppSigningRepositoryImpl @Inject constructor(
     private val packageManager: PackageManager,
@@ -22,9 +26,22 @@ internal class AppSigningRepositoryImpl @Inject constructor(
     appScope: CoroutineScope,
 ) : AppSigningRepository {
 
+    @Suppress("TooGenericExceptionCaught")
     private val cachedSigning = packageChangesObserver.observe()
         .onStart { emit(Unit) }
-        .mapLatest { loadAllSigning() }
+        .mapLatest {
+            Logger.d(TAG, "App signing index loading started")
+            try {
+                val result = loadAllSigning()
+                Logger.i(TAG, "App signing index loading finished: ${result.size} apps loaded")
+                result
+            } catch (failure: Throwable) {
+                if (failure !is CancellationException) {
+                    Logger.e(TAG, failure, "App signing index loading failed")
+                }
+                throw failure
+            }
+        }
         .flowOn(dispatcherProvider.io())
         .shareIn(appScope, SharingStarted.Lazily, replay = 1)
 

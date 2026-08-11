@@ -26,12 +26,9 @@ import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.toAppReference
-
-private const val TAG = "IntentFiltersViewModel"
 
 @HiltViewModel(assistedFactory = IntentFiltersViewModel.Factory::class)
 internal class IntentFiltersViewModel @AssistedInject constructor(
@@ -96,9 +93,7 @@ internal class IntentFiltersViewModel @AssistedInject constructor(
         source.value = IntentFiltersSource.Loading
         viewModelScope.launch {
             source.value = withContext(dispatcherProvider.default()) {
-                appDetailRepository.details(appDetailInput.toAppReference()).onFailure {
-                    Logger.e(TAG, it, "Can not load intent filters for $componentName")
-                }.fold(
+                appDetailRepository.details(appDetailInput.toAppReference()).fold(
                     onSuccess = { detail ->
                         if (!detail.areComponentIntentFiltersAvailable) {
                             IntentFiltersSource.Unavailable

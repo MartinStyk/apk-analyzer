@@ -21,8 +21,9 @@ internal class DeviceFeaturesRepositoryImpl @Inject constructor(
     override suspend fun deviceFeatures(): DeviceFeatures = withContext(dispatcherProvider.io()) { cachedDeviceFeatures }
 
     private fun readDeviceFeatures(): DeviceFeatures {
+        Logger.d(TAG, "Device features loading started")
         val systemFeatures = runCatching { packageManager.systemAvailableFeatures }
-            .onFailure { Logger.e(TAG, it, "Can not read device features") }
+            .onFailure { Logger.w(TAG, it, "Device features loading degraded: feature query failed") }
             .getOrNull()
             ?: return DeviceFeatures.Unknown
 
@@ -33,6 +34,8 @@ internal class DeviceFeaturesRepositoryImpl @Inject constructor(
             openGlEsVersion = systemFeatures
                 .firstOrNull { it.name == null && it.reqGlEsVersion != FeatureInfo.GL_ES_VERSION_UNDEFINED }
                 ?.reqGlEsVersion,
-        )
+        ).also {
+            Logger.i(TAG, "Device features loading finished: ${it.featureVersions.size} features loaded")
+        }
     }
 }

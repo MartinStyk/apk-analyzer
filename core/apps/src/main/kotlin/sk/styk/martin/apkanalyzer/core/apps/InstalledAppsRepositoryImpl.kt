@@ -28,6 +28,7 @@ import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import java.io.File
 import java.time.Instant
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
 
 internal const val INSTALLED_APPS = "InstalledApps"
 
@@ -41,11 +42,22 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
     appScope: CoroutineScope,
 ) : InstalledAppsRepository {
 
+    @Suppress("TooGenericExceptionCaught")
     private val cachedApps = packageChangesObserver.observe()
         .onStart { emit(Unit) }
-        .onEach { Logger.i(INSTALLED_APPS, "Load apps") }
-        .mapLatest { loadAllApps() }
-        .onEach { Logger.i(INSTALLED_APPS, "Apps loaded: ${it.size}") }
+        .mapLatest {
+            Logger.d(INSTALLED_APPS, "Installed apps loading started")
+            try {
+                val apps = loadAllApps()
+                Logger.i(INSTALLED_APPS, "Installed apps loading finished: ${apps.size} apps loaded")
+                apps
+            } catch (failure: Throwable) {
+                if (failure !is CancellationException) {
+                    Logger.e(INSTALLED_APPS, failure, "Installed apps loading failed")
+                }
+                throw failure
+            }
+        }
         .onEach { apps -> storageStatsRepository.requestTotalSizes(apps.map { it.packageName }) }
         .flatMapLatest { apps ->
             combine(
@@ -58,7 +70,7 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
                             totalSize = totalSizes[app.packageName],
                             lastUsedTime = lastUsedTimes[app.packageName],
                         )
-                    }.also { Logger.i(INSTALLED_APPS, "Enriched ${it.size} apps") }
+                    }
                 } else {
                     apps
                 }
@@ -70,8 +82,15 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
     override fun apps(): Flow<List<InstalledApp>> = cachedApps
 
     @SuppressLint("QueryPermissionsNeeded")
-    private fun loadAllApps(): List<InstalledApp> = packageManager.getInstalledPackages(PackageManager.GET_PERMISSIONS).mapNotNull { packageInfo ->
-        packageInfo.applicationInfo?.let { packageInfo.toInstalledApp() }
+    private fun loadAllApps(): List<InstalledApp> {
+        Logger.d(INSTALLED_APPS, "Installed apps package query started")
+        val packages = packageManager.getInstalledPackages(PackageManager.GET_PERMISSIONS)
+        Logger.d(INSTALLED_APPS, "Installed apps package query finished: ${packages.size} packages found")
+
+        Logger.d(INSTALLED_APPS, "Installed apps mapping started")
+        val apps = packages.mapNotNull { packageInfo -> packageInfo.applicationInfo?.let { packageInfo.toInstalledApp() } }
+        Logger.d(INSTALLED_APPS, "Installed apps mapping finished: ${apps.size} apps mapped")
+        return apps
     }
 
     private fun PackageInfo.toInstalledApp(): InstalledApp {
