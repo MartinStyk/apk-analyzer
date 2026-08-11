@@ -16,9 +16,7 @@ constructor() : PerformanceTracker {
         val trace = runFirebasePerformanceOperation("start trace name=$name") {
             FirebasePerformance.getInstance().newTrace(name).apply(Trace::start)
         }
-        if (trace == null) return block(NoOpPerformanceTrace)
-
-        val performanceTrace = FirebasePerformanceTrace(trace)
+        val performanceTrace: StoppableTrace = if (trace == null) NoOpPerformanceTrace else FirebasePerformanceTrace(trace)
         return try {
             block(performanceTrace)
         } finally {
@@ -27,7 +25,11 @@ constructor() : PerformanceTracker {
     }
 }
 
-private class FirebasePerformanceTrace(private val trace: Trace) : PerformanceTrace {
+private interface StoppableTrace : PerformanceTrace {
+    fun stop()
+}
+
+private class FirebasePerformanceTrace(private val trace: Trace) : StoppableTrace {
     private val lock = Any()
     private var isStopped = false
 
@@ -49,7 +51,7 @@ private class FirebasePerformanceTrace(private val trace: Trace) : PerformanceTr
         }
     }
 
-    fun stop() {
+    override fun stop() {
         synchronized(lock) {
             if (isStopped) return
             isStopped = true
@@ -60,10 +62,12 @@ private class FirebasePerformanceTrace(private val trace: Trace) : PerformanceTr
     }
 }
 
-private data object NoOpPerformanceTrace : PerformanceTrace {
+private data object NoOpPerformanceTrace : StoppableTrace {
     override fun putMetric(name: String, value: Long) = Unit
 
     override fun putAttribute(name: String, value: String) = Unit
+
+    override fun stop() = Unit
 }
 
 private inline fun <T> runFirebasePerformanceOperation(operation: String, block: () -> T): T? = try {
