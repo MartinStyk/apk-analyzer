@@ -15,10 +15,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
+import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
+import sk.styk.martin.apkanalyzer.core.common.performance.TracePermission
+import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -32,6 +37,7 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
     private val appOpsManager: AppOpsManager,
     private val dispatcherProvider: DispatcherProvider,
     private val applicationScope: CoroutineScope,
+    private val performanceTracker: PerformanceTracker,
 ) : StorageStatsRepository,
     DefaultLifecycleObserver {
 
@@ -45,7 +51,7 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
 
     override fun onStart(owner: LifecycleOwner) {
         applicationScope.launch(dispatcherProvider.io()) {
-            fetchTotalSizes(packageNames)
+            fetchTotalSizes(packageNames, "lifecycle_start")
         }
     }
 
@@ -61,7 +67,7 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
     override fun requestTotalSizes(packageNames: List<PackageName>) {
         this.packageNames = packageNames
         applicationScope.launch(dispatcherProvider.io()) {
-            fetchTotalSizes(packageNames)
+            fetchTotalSizes(packageNames, "installed_apps")
         }
     }
 
@@ -82,53 +88,75 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
         null
     }
 
-    private fun fetchTotalSizes(packageNames: List<PackageName>) {
-        val hasPermission = checkPermission()
-        isPermissionGranted.value = hasPermission
-        if (!hasPermission) {
-            Logger.w(TAG, "Storage stats loading degraded: permission missing")
-            return
-        }
+    private suspend fun fetchTotalSizes(packageNames: List<PackageName>, trigger: String) {
+        performanceTracker.startCancellableTrace("storage_stats_load") { trace ->
+            trace["trigger"] = trigger
+            runCatchingCancellable {
+                val hasPermission = checkPermission()
+                trace.setPermission(if (hasPermission) TracePermission.Granted else TracePermission.Denied)
+                isPermissionGranted.value = hasPermission
 
-        Logger.d(TAG, "Storage stats loading started: ${packageNames.size} apps requested")
-        val user = UserHandle.getUserHandleForUid(Process.myUid())
-        var uninstallRaceCount = 0
-        var permissionRaceCount = 0
-        var queryFailureCount = 0
-        var lastQueryFailure: IOException? = null
-        val sizes = packageNames.mapNotNull { packageName ->
-            when (val result = queryPackageSize(user, packageName)) {
-                is SizeQueryResult.Success -> packageName to result.size
+                if (!hasPermission) {
+                    Logger.w(TAG, "Storage stats loading degraded: permission missing")
+                    TraceOutcome.Degraded
+                } else {
+                    Logger.d(TAG, "Storage stats loading started: ${packageNames.size} apps requested")
+                    val user = UserHandle.getUserHandleForUid(Process.myUid())
+                    var uninstallRaceCount = 0
+                    var permissionRaceCount = 0
+                    var queryFailureCount = 0
+                    var lastQueryFailure: IOException? = null
+                    val sizes = packageNames.mapNotNull { packageName ->
+                        when (val queryResult = queryPackageSize(user, packageName)) {
+                            is SizeQueryResult.Success -> packageName to queryResult.size
 
-                SizeQueryResult.UninstallRace -> {
-                    uninstallRaceCount++
-                    null
+                            SizeQueryResult.UninstallRace -> {
+                                uninstallRaceCount++
+                                null
+                            }
+
+                            SizeQueryResult.PermissionRace -> {
+                                permissionRaceCount++
+                                null
+                            }
+
+                            is SizeQueryResult.Failure -> {
+                                queryFailureCount++
+                                lastQueryFailure = queryResult.error
+                                null
+                            }
+                        }
+                    }.toMap()
+                    totalSizes.value = sizes
+
+                    if (uninstallRaceCount > 0) {
+                        Logger.w(TAG, "Storage stats loading degraded: $uninstallRaceCount uninstalled apps skipped")
+                    }
+                    if (permissionRaceCount > 0) {
+                        Logger.w(
+                            TAG,
+                            "Storage stats loading degraded: $permissionRaceCount apps skipped after permission changed",
+                        )
+                    }
+                    lastQueryFailure?.let {
+                        Logger.w(TAG, it, "Storage stats loading degraded: $queryFailureCount app queries failed")
+                    }
+                    Logger.i(TAG, "Storage stats loading finished: ${sizes.size} apps loaded")
+                    if (uninstallRaceCount > 0 || permissionRaceCount > 0 || queryFailureCount > 0) {
+                        TraceOutcome.Degraded
+                    } else {
+                        TraceOutcome.Success
+                    }
                 }
-
-                SizeQueryResult.PermissionRace -> {
-                    permissionRaceCount++
-                    null
-                }
-
-                is SizeQueryResult.Failure -> {
-                    queryFailureCount++
-                    lastQueryFailure = result.error
-                    null
-                }
-            }
-        }.toMap()
-        totalSizes.value = sizes
-
-        if (uninstallRaceCount > 0) {
-            Logger.w(TAG, "Storage stats loading degraded: $uninstallRaceCount uninstalled apps skipped")
+            }.fold(
+                onSuccess = trace::setOutcome,
+                onFailure = { failure ->
+                    trace.setOutcome(TraceOutcome.Error)
+                    Logger.e(TAG, failure, "Storage stats loading failed")
+                    throw failure
+                },
+            )
         }
-        if (permissionRaceCount > 0) {
-            Logger.w(TAG, "Storage stats loading degraded: $permissionRaceCount apps skipped after permission changed")
-        }
-        lastQueryFailure?.let {
-            Logger.w(TAG, it, "Storage stats loading degraded: $queryFailureCount app queries failed")
-        }
-        Logger.i(TAG, "Storage stats loading finished: ${sizes.size} apps loaded")
     }
 
     private fun queryPackageSize(user: UserHandle, packageName: PackageName): SizeQueryResult = try {

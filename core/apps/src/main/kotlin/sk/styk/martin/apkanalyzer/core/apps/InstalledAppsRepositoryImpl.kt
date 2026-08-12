@@ -22,13 +22,17 @@ import sk.styk.martin.apkanalyzer.core.apps.model.resolveAppCategory
 import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepository
 import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
+import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
+import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
 import java.io.File
 import java.time.Instant
 import javax.inject.Inject
-import kotlin.coroutines.cancellation.CancellationException
+import kotlin.time.measureTimedValue
 
 internal const val INSTALLED_APPS = "InstalledApps"
 
@@ -40,24 +44,11 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
     storageStatsRepository: StorageStatsRepository,
     usageStatsRepository: UsageStatsRepository,
     appScope: CoroutineScope,
+    private val performanceTracker: PerformanceTracker,
 ) : InstalledAppsRepository {
-
-    @Suppress("TooGenericExceptionCaught")
     private val cachedApps = packageChangesObserver.observe()
         .onStart { emit(Unit) }
-        .mapLatest {
-            Logger.d(INSTALLED_APPS, "Installed apps loading started")
-            try {
-                val apps = loadAllApps()
-                Logger.i(INSTALLED_APPS, "Installed apps loading finished: ${apps.size} apps loaded")
-                apps
-            } catch (failure: Throwable) {
-                if (failure !is CancellationException) {
-                    Logger.e(INSTALLED_APPS, failure, "Installed apps loading failed")
-                }
-                throw failure
-            }
-        }
+        .mapLatest { loadAllApps() }
         .onEach { apps -> storageStatsRepository.requestTotalSizes(apps.map { it.packageName }) }
         .flatMapLatest { apps ->
             combine(
@@ -82,15 +73,36 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
     override fun apps(): Flow<List<InstalledApp>> = cachedApps
 
     @SuppressLint("QueryPermissionsNeeded")
-    private fun loadAllApps(): List<InstalledApp> {
-        Logger.d(INSTALLED_APPS, "Installed apps package query started")
-        val packages = packageManager.getInstalledPackages(PackageManager.GET_PERMISSIONS)
-        Logger.d(INSTALLED_APPS, "Installed apps package query finished: ${packages.size} packages found")
+    private suspend fun loadAllApps(): List<InstalledApp> = performanceTracker.startCancellableTrace("installed_apps_load") { trace ->
+        Logger.d(INSTALLED_APPS, "Installed apps loading started")
+        runCatchingCancellable {
+            Logger.d(INSTALLED_APPS, "Installed apps package query started")
+            val packageQuery = measureTimedValue {
+                packageManager.getInstalledPackages(PackageManager.GET_PERMISSIONS)
+            }
+            val packages = packageQuery.value
+            trace["package_query_ms"] = packageQuery.duration.inWholeMilliseconds
+            Logger.d(INSTALLED_APPS, "Installed apps package query finished: ${packages.size} packages found")
 
-        Logger.d(INSTALLED_APPS, "Installed apps mapping started")
-        val apps = packages.mapNotNull { packageInfo -> packageInfo.applicationInfo?.let { packageInfo.toInstalledApp() } }
-        Logger.d(INSTALLED_APPS, "Installed apps mapping finished: ${apps.size} apps mapped")
-        return apps
+            Logger.d(INSTALLED_APPS, "Installed apps mapping started")
+            val apps = packages.mapNotNull { packageInfo ->
+                packageInfo.applicationInfo?.let { packageInfo.toInstalledApp() }
+            }
+            trace["app_count"] = apps.size.toLong()
+            Logger.d(INSTALLED_APPS, "Installed apps mapping finished: ${apps.size} apps mapped")
+            apps
+        }.fold(
+            onSuccess = { apps ->
+                trace.setOutcome(TraceOutcome.Success)
+                Logger.i(INSTALLED_APPS, "Installed apps loading finished: ${apps.size} apps loaded")
+                apps
+            },
+            onFailure = { failure ->
+                trace.setOutcome(TraceOutcome.Error)
+                Logger.e(INSTALLED_APPS, failure, "Installed apps loading failed")
+                throw failure
+            },
+        )
     }
 
     private fun PackageInfo.toInstalledApp(): InstalledApp {

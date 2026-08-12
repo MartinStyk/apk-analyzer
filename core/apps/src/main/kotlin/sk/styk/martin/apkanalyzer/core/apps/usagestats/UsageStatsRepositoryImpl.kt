@@ -13,8 +13,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
+import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
+import sk.styk.martin.apkanalyzer.core.common.performance.TracePermission
+import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
 import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -30,6 +35,7 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
     private val appOpsManager: AppOpsManager,
     private val dispatcherProvider: DispatcherProvider,
     private val applicationScope: CoroutineScope,
+    private val performanceTracker: PerformanceTracker,
 ) : UsageStatsRepository,
     DefaultLifecycleObserver {
 
@@ -54,20 +60,34 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
         null
     }
 
-    private fun fetchUsageTimes() {
-        val hasPermission = checkPermission()
-        isPermissionGranted.value = hasPermission
-        if (!hasPermission) {
-            Logger.w(TAG, "Usage stats loading degraded: permission missing")
-            return
-        }
+    private suspend fun fetchUsageTimes() {
+        performanceTracker.startCancellableTrace("usage_stats_load") { trace ->
+            runCatchingCancellable {
+                val hasPermission = checkPermission()
+                trace.setPermission(if (hasPermission) TracePermission.Granted else TracePermission.Denied)
+                isPermissionGranted.value = hasPermission
 
-        Logger.d(TAG, "Usage stats loading started")
-        val usages = queryRawUsageStats()
-            .groupBy { PackageName(it.packageName) }
-            .mapValues { (_, usages) -> Instant.ofEpochMilli(usages.maxOf { it.lastTimeUsed }) }
-        lastUsedTimes.value = usages
-        Logger.i(TAG, "Usage stats loading finished: ${usages.size} apps loaded")
+                if (!hasPermission) {
+                    Logger.w(TAG, "Usage stats loading degraded: permission missing")
+                    TraceOutcome.Degraded
+                } else {
+                    Logger.d(TAG, "Usage stats loading started")
+                    val usages = queryRawUsageStats()
+                        .groupBy { PackageName(it.packageName) }
+                        .mapValues { (_, usages) -> Instant.ofEpochMilli(usages.maxOf { it.lastTimeUsed }) }
+                    lastUsedTimes.value = usages
+                    Logger.i(TAG, "Usage stats loading finished: ${usages.size} apps loaded")
+                    TraceOutcome.Success
+                }
+            }.fold(
+                onSuccess = trace::setOutcome,
+                onFailure = { failure ->
+                    trace.setOutcome(TraceOutcome.Error)
+                    Logger.e(TAG, failure, "Usage stats loading failed")
+                    throw failure
+                },
+            )
+        }
     }
 
     @SuppressLint("MissingPermission")
