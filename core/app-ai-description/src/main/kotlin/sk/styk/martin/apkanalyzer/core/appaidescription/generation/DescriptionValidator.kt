@@ -1,6 +1,8 @@
 package sk.styk.martin.apkanalyzer.core.appaidescription.generation
 
+import sk.styk.martin.apkanalyzer.core.appaidescription.AppAiContext
 import sk.styk.martin.apkanalyzer.core.appaidescription.AppAiDescription
+import sk.styk.martin.apkanalyzer.core.appaidescription.identifiers
 import javax.inject.Inject
 
 private const val MAX_SHORT_WORDS = 25
@@ -19,15 +21,24 @@ private val leakagePhrases = listOf(
 
 internal class DescriptionValidator @Inject constructor() {
 
-    fun isValid(description: AppAiDescription): Boolean =
-        isValidField(description.shortDescription, MAX_SHORT_WORDS) && isValidField(description.longDescription, MAX_LONG_WORDS)
+    fun isValid(description: AppAiDescription, context: AppAiContext): Boolean {
+        val contextIdentifiers = context.identifiers().map { it.lowercase() }
+        return isValidField(description.shortDescription, MAX_SHORT_WORDS, contextIdentifiers) &&
+            isValidField(description.longDescription, MAX_LONG_WORDS, contextIdentifiers)
+    }
 
-    private fun isValidField(text: String, maxWords: Int): Boolean = text.isNotBlank() && wordCount(text) <= maxWords && !containsLeakage(text)
+    private fun isValidField(text: String, maxWords: Int, contextIdentifiers: List<String>): Boolean {
+        val lowercaseText = text.lowercase()
+        return text.isNotBlank() &&
+            wordCount(text) <= maxWords &&
+            !containsLeakage(lowercaseText) &&
+            !containsContextIdentifier(lowercaseText, contextIdentifiers)
+    }
 
     private fun wordCount(text: String): Int = text.trim().split(Regex("\\s+")).size
 
-    private fun containsLeakage(text: String): Boolean {
-        val lower = text.lowercase()
-        return leakagePhrases.any { lower.contains(it) }
-    }
+    private fun containsLeakage(lowercaseText: String): Boolean = leakagePhrases.any { lowercaseText.contains(it) }
+
+    private fun containsContextIdentifier(lowercaseText: String, contextIdentifiers: List<String>): Boolean =
+        contextIdentifiers.any { lowercaseText.contains(it) }
 }

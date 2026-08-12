@@ -7,8 +7,8 @@ import androidx.room.Query
 
 @Dao
 internal interface AppAiDescriptionDao {
-    @Query("SELECT * FROM app_ai_description WHERE packageName = :packageName")
-    suspend fun get(packageName: String): AppAiDescriptionEntity?
+    @Query("SELECT * FROM app_ai_description WHERE packageName = :packageName AND inputHash = :inputHash")
+    suspend fun get(packageName: String, inputHash: String): AppAiDescriptionEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(entity: AppAiDescriptionEntity)

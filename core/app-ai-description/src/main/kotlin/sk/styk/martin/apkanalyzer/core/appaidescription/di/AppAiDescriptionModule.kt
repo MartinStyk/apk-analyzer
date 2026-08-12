@@ -10,12 +10,14 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import sk.styk.martin.apkanalyzer.core.appaidescription.AppAiDescriptionRepository
 import sk.styk.martin.apkanalyzer.core.appaidescription.AppAiDescriptionRepositoryImpl
+import sk.styk.martin.apkanalyzer.core.appaidescription.ai.OnDeviceAiEngine
+import sk.styk.martin.apkanalyzer.core.appaidescription.ai.OnDeviceAiEngineImpl
 import sk.styk.martin.apkanalyzer.core.appaidescription.cache.AppAiDescriptionCache
 import sk.styk.martin.apkanalyzer.core.appaidescription.cache.AppAiDescriptionCacheImpl
 import sk.styk.martin.apkanalyzer.core.appaidescription.cache.AppAiDescriptionDao
 import sk.styk.martin.apkanalyzer.core.appaidescription.cache.AppAiDescriptionDatabase
 import sk.styk.martin.apkanalyzer.core.appaidescription.generation.AiDescriptionGenerator
-import sk.styk.martin.apkanalyzer.core.appaidescription.generation.MlKitAiDescriptionGenerator
+import sk.styk.martin.apkanalyzer.core.appaidescription.generation.AiDescriptionGeneratorImpl
 import sk.styk.martin.apkanalyzer.core.appaidescription.metadata.AppDetailMetadataProviderImpl
 import sk.styk.martin.apkanalyzer.core.appaidescription.metadata.AppMetadataProvider
 import javax.inject.Singleton
@@ -36,7 +38,11 @@ internal interface AppAiDescriptionModule {
 
     @Binds
     @Singleton
-    fun bindAiDescriptionGenerator(impl: MlKitAiDescriptionGenerator): AiDescriptionGenerator
+    fun bindAiDescriptionGenerator(impl: AiDescriptionGeneratorImpl): AiDescriptionGenerator
+
+    @Binds
+    @Singleton
+    fun bindOnDeviceAiEngine(impl: OnDeviceAiEngineImpl): OnDeviceAiEngine
 
     @Binds
     @Singleton

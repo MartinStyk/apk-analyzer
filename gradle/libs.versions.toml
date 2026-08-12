@@ -34,7 +34,7 @@ google-services = "4.5.0"
 room = "2.8.4"
 
 # On-device AI
-mlkit-genai-prompt = "1.0.0-beta2"
+mlkit-genai-prompt = "1.0.0-beta4"
 
 # Third-party
 timber = "5.0.1"

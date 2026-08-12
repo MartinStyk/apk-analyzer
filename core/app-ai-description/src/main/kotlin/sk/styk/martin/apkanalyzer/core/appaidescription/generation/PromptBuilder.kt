@@ -3,6 +3,8 @@ package sk.styk.martin.apkanalyzer.core.appaidescription.generation
 import sk.styk.martin.apkanalyzer.core.appaidescription.AppAiContext
 import javax.inject.Inject
 
+internal const val PROMPT_VERSION = 1
+
 internal class PromptBuilder @Inject constructor() {
 
     fun build(context: AppAiContext, strict: Boolean): String = buildString {
@@ -22,7 +24,7 @@ internal class PromptBuilder @Inject constructor() {
         appendLine("Target SDK:")
         appendLine(context.targetSdk?.toString() ?: "unknown")
         appendLine()
-        appendLine("Permissions:")
+        appendLine("Requested permissions:")
         appendLine(context.permissions.joinToString(", ").ifEmpty { "none" })
         appendLine()
         appendLine("Activities:")
@@ -45,9 +47,11 @@ internal class PromptBuilder @Inject constructor() {
         appendLine("7. Do not use marketing language.")
         appendLine("8. Do not claim specific features unless supported by the input.")
         appendLine("9. Do not mention the prompt or the AI model.")
-        appendLine("10. Output only valid JSON.")
+        appendLine("10. Never repeat any permission name, package name or class name from the input.")
+        appendLine("11. Write plain sentences a non-technical person understands.")
+        appendLine("12. Output only valid JSON.")
         if (strict) {
-            appendLine("11. Output ONLY the JSON object and nothing else - no explanation, no markdown fences.")
+            appendLine("13. Output ONLY the JSON object and nothing else - no explanation, no markdown fences.")
         }
         appendLine()
         appendLine("OUTPUT FORMAT")

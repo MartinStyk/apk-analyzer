@@ -54,9 +54,12 @@ internal class AppAiDescriptionRepositoryImpl @Inject constructor(
     private suspend fun loadDescription(reference: AppReference): AppAiDescription? {
         Logger.d(TAG, "AI description loading started: reference=$reference")
         val context = fetchContext(reference) ?: return null
-        val inputHash = digestManager.sha256Digest(context.serialize())
+        val inputHash = calculateInputHash(context)
         return getCachedDescription(context, inputHash, reference) ?: generateAndCacheDescription(context, inputHash, reference)
     }
+
+    private fun calculateInputHash(context: AppAiContext): String =
+        digestManager.sha256Digest("promptVersion=${generator.promptVersion}\n${context.serialize()}")
 
     private suspend fun fetchContext(reference: AppReference): AppAiContext? {
         val context = metadataProvider.getAppContext(reference)
@@ -71,7 +74,7 @@ internal class AppAiDescriptionRepositoryImpl @Inject constructor(
         inputHash: String,
         reference: AppReference,
     ): AppAiDescription? {
-        val cached = cache.get(context.packageName, context.versionCode, inputHash)
+        val cached = cache.get(context.packageName, inputHash)
         if (cached != null) {
             Logger.d(TAG, "AI description loading finished: cache hit, reference=$reference")
         }
@@ -84,7 +87,7 @@ internal class AppAiDescriptionRepositoryImpl @Inject constructor(
         reference: AppReference,
     ): AppAiDescription? {
         val description = generateIfAvailable(context, reference) ?: return null
-        cache.save(context.packageName, context.versionCode, inputHash, description)
+        cache.save(context.packageName, inputHash, description)
         Logger.i(TAG, "AI description loading finished: generated, reference=$reference")
         return description
     }
@@ -103,11 +106,11 @@ internal class AppAiDescriptionRepositoryImpl @Inject constructor(
 
     private suspend fun generateValidDescription(context: AppAiContext): AppAiDescription? {
         val firstAttempt = generator.generate(context, strict = false)
-        if (firstAttempt != null && validator.isValid(firstAttempt)) {
+        if (firstAttempt != null && validator.isValid(firstAttempt, context)) {
             return firstAttempt
         }
 
         val retryAttempt = generator.generate(context, strict = true)
-        return retryAttempt?.takeIf { validator.isValid(it) }
+        return retryAttempt?.takeIf { validator.isValid(it, context) }
     }
 }
