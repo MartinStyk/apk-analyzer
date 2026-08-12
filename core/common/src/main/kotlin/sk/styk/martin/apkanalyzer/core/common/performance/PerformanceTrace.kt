@@ -1,7 +1,7 @@
 package sk.styk.martin.apkanalyzer.core.common.performance
 
 interface PerformanceTrace : AutoCloseable {
-    fun putMetric(name: String, value: Long)
+    operator fun set(name: String, value: Long)
 
-    fun putAttribute(name: String, value: String)
+    operator fun set(name: String, value: String)
 }

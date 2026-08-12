@@ -21,10 +21,10 @@ import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
+import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.coroutines.cancellation.CancellationException
 import kotlin.time.measureTimedValue
 
 private const val TAG = "StorageStatsRepositoryImpl"
@@ -88,86 +88,78 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
     }
 
     private suspend fun fetchTotalSizes(packageNames: List<PackageName>, trigger: String) {
-        performanceTracker.startTrace(TRACE_STORAGE_STATS_LOAD).use { trace ->
-            trace.putAttribute(ATTRIBUTE_TRIGGER, trigger)
-            trace.putMetric(METRIC_REQUESTED_COUNT, packageNames.size.toLong())
-            val result = try {
-                runCatchingCancellable {
-                    val permissionCheck = measureTimedValue { checkPermission() }
-                    trace.putMetric(METRIC_PERMISSION_CHECK_US, permissionCheck.duration.inWholeMicroseconds)
-                    trace.putAttribute(
-                        ATTRIBUTE_PERMISSION,
-                        if (permissionCheck.value) PERMISSION_GRANTED else PERMISSION_DENIED,
-                    )
-                    isPermissionGranted.value = permissionCheck.value
+        performanceTracker.startCancellableTrace(TRACE_STORAGE_STATS_LOAD) { trace ->
+            trace[ATTRIBUTE_TRIGGER] = trigger
+            trace[METRIC_REQUESTED_COUNT] = packageNames.size.toLong()
+            val result = runCatchingCancellable {
+                val permissionCheck = measureTimedValue { checkPermission() }
+                trace[METRIC_PERMISSION_CHECK_US] = permissionCheck.duration.inWholeMicroseconds
+                trace[ATTRIBUTE_PERMISSION] = if (permissionCheck.value) PERMISSION_GRANTED else PERMISSION_DENIED
+                isPermissionGranted.value = permissionCheck.value
 
-                    if (!permissionCheck.value) {
-                        trace.putMetric(METRIC_LOADED_COUNT, 0)
-                        Logger.w(TAG, "Storage stats loading degraded: permission missing")
+                if (!permissionCheck.value) {
+                    trace[METRIC_LOADED_COUNT] = 0L
+                    Logger.w(TAG, "Storage stats loading degraded: permission missing")
+                    OUTCOME_DEGRADED
+                } else {
+                    Logger.d(TAG, "Storage stats loading started: ${packageNames.size} apps requested")
+                    val user = UserHandle.getUserHandleForUid(Process.myUid())
+                    var uninstallRaceCount = 0
+                    var permissionRaceCount = 0
+                    var queryFailureCount = 0
+                    var lastQueryFailure: IOException? = null
+                    val statsQuery = measureTimedValue {
+                        packageNames.mapNotNull { packageName ->
+                            when (val queryResult = queryPackageSize(user, packageName)) {
+                                is SizeQueryResult.Success -> packageName to queryResult.size
+
+                                SizeQueryResult.UninstallRace -> {
+                                    uninstallRaceCount++
+                                    null
+                                }
+
+                                SizeQueryResult.PermissionRace -> {
+                                    permissionRaceCount++
+                                    null
+                                }
+
+                                is SizeQueryResult.Failure -> {
+                                    queryFailureCount++
+                                    lastQueryFailure = queryResult.error
+                                    null
+                                }
+                            }
+                        }.toMap()
+                    }
+                    trace[METRIC_STATS_QUERY_US] = statsQuery.duration.inWholeMicroseconds
+                    trace[METRIC_LOADED_COUNT] = statsQuery.value.size.toLong()
+                    totalSizes.value = statsQuery.value
+
+                    if (uninstallRaceCount > 0) {
+                        Logger.w(TAG, "Storage stats loading degraded: $uninstallRaceCount uninstalled apps skipped")
+                    }
+                    if (permissionRaceCount > 0) {
+                        Logger.w(
+                            TAG,
+                            "Storage stats loading degraded: $permissionRaceCount apps skipped after permission changed",
+                        )
+                    }
+                    lastQueryFailure?.let {
+                        Logger.w(TAG, it, "Storage stats loading degraded: $queryFailureCount app queries failed")
+                    }
+                    Logger.i(TAG, "Storage stats loading finished: ${statsQuery.value.size} apps loaded")
+                    if (uninstallRaceCount > 0 || permissionRaceCount > 0 || queryFailureCount > 0) {
                         OUTCOME_DEGRADED
                     } else {
-                        Logger.d(TAG, "Storage stats loading started: ${packageNames.size} apps requested")
-                        val user = UserHandle.getUserHandleForUid(Process.myUid())
-                        var uninstallRaceCount = 0
-                        var permissionRaceCount = 0
-                        var queryFailureCount = 0
-                        var lastQueryFailure: IOException? = null
-                        val statsQuery = measureTimedValue {
-                            packageNames.mapNotNull { packageName ->
-                                when (val queryResult = queryPackageSize(user, packageName)) {
-                                    is SizeQueryResult.Success -> packageName to queryResult.size
-
-                                    SizeQueryResult.UninstallRace -> {
-                                        uninstallRaceCount++
-                                        null
-                                    }
-
-                                    SizeQueryResult.PermissionRace -> {
-                                        permissionRaceCount++
-                                        null
-                                    }
-
-                                    is SizeQueryResult.Failure -> {
-                                        queryFailureCount++
-                                        lastQueryFailure = queryResult.error
-                                        null
-                                    }
-                                }
-                            }.toMap()
-                        }
-                        trace.putMetric(METRIC_STATS_QUERY_US, statsQuery.duration.inWholeMicroseconds)
-                        trace.putMetric(METRIC_LOADED_COUNT, statsQuery.value.size.toLong())
-                        totalSizes.value = statsQuery.value
-
-                        if (uninstallRaceCount > 0) {
-                            Logger.w(TAG, "Storage stats loading degraded: $uninstallRaceCount uninstalled apps skipped")
-                        }
-                        if (permissionRaceCount > 0) {
-                            Logger.w(
-                                TAG,
-                                "Storage stats loading degraded: $permissionRaceCount apps skipped after permission changed",
-                            )
-                        }
-                        lastQueryFailure?.let {
-                            Logger.w(TAG, it, "Storage stats loading degraded: $queryFailureCount app queries failed")
-                        }
-                        Logger.i(TAG, "Storage stats loading finished: ${statsQuery.value.size} apps loaded")
-                        if (uninstallRaceCount > 0 || permissionRaceCount > 0 || queryFailureCount > 0) {
-                            OUTCOME_DEGRADED
-                        } else {
-                            OUTCOME_SUCCESS
-                        }
+                        OUTCOME_SUCCESS
                     }
                 }
-            } catch (cancellation: CancellationException) {
-                trace.putAttribute(ATTRIBUTE_OUTCOME, OUTCOME_CANCELLED)
-                throw cancellation
             }
 
             result.fold(
-                onSuccess = { outcome -> trace.putAttribute(ATTRIBUTE_OUTCOME, outcome) },
+                onSuccess = { outcome -> trace[ATTRIBUTE_OUTCOME] = outcome },
                 onFailure = { failure ->
-                    trace.putAttribute(ATTRIBUTE_OUTCOME, OUTCOME_ERROR)
+                    trace[ATTRIBUTE_OUTCOME] = OUTCOME_ERROR
                     Logger.e(TAG, failure, "Storage stats loading failed")
                     throw failure
                 },
@@ -205,7 +197,6 @@ private const val ATTRIBUTE_TRIGGER = "trigger"
 private const val OUTCOME_SUCCESS = "success"
 private const val OUTCOME_DEGRADED = "degraded"
 private const val OUTCOME_ERROR = "error"
-private const val OUTCOME_CANCELLED = "cancelled"
 private const val PERMISSION_GRANTED = "granted"
 private const val PERMISSION_DENIED = "denied"
 private const val TRIGGER_LIFECYCLE_START = "lifecycle_start"

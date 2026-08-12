@@ -64,9 +64,9 @@ list-driven requests or `lifecycle_start` for foreground refreshes. `UsageStatsR
 `usage_stats_load` for lifecycle refreshes. Single-package detail queries are outside both bulk
 traces.
 
-Keep trace, metric, and attribute names private beside the emitting repository. Scope every trace
-with `use`, record one terminal outcome, preserve cancellation, and aggregate bulk counts and
-durations rather than creating per-app traces.
+Keep operation-specific trace, metric, and attribute names private beside the emitting repository.
+Scope every trace with `startCancellableTrace`, record one terminal outcome, preserve cancellation,
+and aggregate bulk counts and durations rather than creating per-app traces.
 
 ## Signing Semantics
 

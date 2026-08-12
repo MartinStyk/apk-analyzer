@@ -204,8 +204,8 @@ interface PerformanceTracker {
 }
 
 interface PerformanceTrace : AutoCloseable {
-    fun putMetric(name: String, value: Long)
-    fun putAttribute(name: String, value: String)
+    operator fun set(name: String, value: Long)
+    operator fun set(name: String, value: String)
 }
 ```
 
@@ -218,8 +218,9 @@ adapter imports `FirebasePerformance` or `Trace`; domain modules and features in
 
 Requirements for the adapter and contract:
 
-- `startTrace` starts and returns an independent trace handle. Callers scope it with `use`, which
-  closes the handle when the block returns, throws, or is cancelled.
+- `startCancellableTrace` starts and scopes an independent trace handle. It records the standard
+  `outcome=cancelled` attribute and closes the handle when the block returns, throws, or is cancelled.
+- `trace[name] = longValue` records a metric, while `trace[name] = stringValue` records an attribute.
 - Each emitting repository owns private trace, metric, and attribute names that satisfy Firebase
   naming limits. Duration metrics end in `_us` because Firebase custom metrics do not carry a unit.
 - Use `measureTimedValue` beside each emitting repository and store whole microseconds rather than

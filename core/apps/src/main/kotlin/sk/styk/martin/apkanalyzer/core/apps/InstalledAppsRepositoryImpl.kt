@@ -28,10 +28,10 @@ import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
+import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
 import java.io.File
 import java.time.Instant
 import javax.inject.Inject
-import kotlin.coroutines.cancellation.CancellationException
 import kotlin.time.measureTimedValue
 
 internal const val INSTALLED_APPS = "InstalledApps"
@@ -79,48 +79,43 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
 
     @SuppressLint("QueryPermissionsNeeded")
     private suspend fun loadAllApps(trigger: InstalledAppsLoadTrigger): List<InstalledApp> =
-        performanceTracker.startTrace(TRACE_INSTALLED_APPS_LOAD).use { trace ->
-            trace.putAttribute(ATTRIBUTE_TRIGGER, trigger.attributeValue)
-            val result = try {
-                runCatchingCancellable {
-                    Logger.d(INSTALLED_APPS, "Installed apps package query started")
-                    val packageQuery = measureTimedValue {
-                        packageManager.getInstalledPackages(PackageManager.GET_PERMISSIONS)
-                    }
-                    trace.putMetric(METRIC_PACKAGE_QUERY_US, packageQuery.duration.inWholeMicroseconds)
-                    Logger.d(
-                        INSTALLED_APPS,
-                        "Installed apps package query finished: ${packageQuery.value.size} packages found",
-                    )
-
-                    Logger.d(INSTALLED_APPS, "Installed apps mapping started")
-                    val appMapping = measureTimedValue {
-                        packageQuery.value.mapNotNull { packageInfo ->
-                            packageInfo.applicationInfo?.let { packageInfo.toInstalledApp() }
-                        }
-                    }
-                    trace.putMetric(METRIC_APP_MAPPING_US, appMapping.duration.inWholeMicroseconds)
-                    trace.putMetric(METRIC_APP_COUNT, appMapping.value.size.toLong())
-                    trace.putAttribute(ATTRIBUTE_APP_COUNT_BUCKET, appCountBucket(appMapping.value.size))
-                    Logger.d(
-                        INSTALLED_APPS,
-                        "Installed apps mapping finished: ${appMapping.value.size} apps mapped",
-                    )
-                    appMapping.value
+        performanceTracker.startCancellableTrace(TRACE_INSTALLED_APPS_LOAD) { trace ->
+            trace[ATTRIBUTE_TRIGGER] = trigger.attributeValue
+            val result = runCatchingCancellable {
+                Logger.d(INSTALLED_APPS, "Installed apps package query started")
+                val packageQuery = measureTimedValue {
+                    packageManager.getInstalledPackages(PackageManager.GET_PERMISSIONS)
                 }
-            } catch (cancellation: CancellationException) {
-                trace.putAttribute(ATTRIBUTE_OUTCOME, OUTCOME_CANCELLED)
-                throw cancellation
+                trace[METRIC_PACKAGE_QUERY_US] = packageQuery.duration.inWholeMicroseconds
+                Logger.d(
+                    INSTALLED_APPS,
+                    "Installed apps package query finished: ${packageQuery.value.size} packages found",
+                )
+
+                Logger.d(INSTALLED_APPS, "Installed apps mapping started")
+                val appMapping = measureTimedValue {
+                    packageQuery.value.mapNotNull { packageInfo ->
+                        packageInfo.applicationInfo?.let { packageInfo.toInstalledApp() }
+                    }
+                }
+                trace[METRIC_APP_MAPPING_US] = appMapping.duration.inWholeMicroseconds
+                trace[METRIC_APP_COUNT] = appMapping.value.size.toLong()
+                trace[ATTRIBUTE_APP_COUNT_BUCKET] = appCountBucket(appMapping.value.size)
+                Logger.d(
+                    INSTALLED_APPS,
+                    "Installed apps mapping finished: ${appMapping.value.size} apps mapped",
+                )
+                appMapping.value
             }
 
             result.fold(
                 onSuccess = { apps ->
-                    trace.putAttribute(ATTRIBUTE_OUTCOME, OUTCOME_SUCCESS)
+                    trace[ATTRIBUTE_OUTCOME] = OUTCOME_SUCCESS
                     Logger.i(INSTALLED_APPS, "Installed apps loading finished: ${apps.size} apps loaded")
                     apps
                 },
                 onFailure = { failure ->
-                    trace.putAttribute(ATTRIBUTE_OUTCOME, OUTCOME_ERROR)
+                    trace[ATTRIBUTE_OUTCOME] = OUTCOME_ERROR
                     Logger.e(INSTALLED_APPS, failure, "Installed apps loading failed")
                     throw failure
                 },
@@ -173,7 +168,6 @@ private const val ATTRIBUTE_TRIGGER = "trigger"
 private const val ATTRIBUTE_APP_COUNT_BUCKET = "app_count_bucket"
 private const val OUTCOME_SUCCESS = "success"
 private const val OUTCOME_ERROR = "error"
-private const val OUTCOME_CANCELLED = "cancelled"
 private const val TRIGGER_INITIAL = "initial"
 private const val TRIGGER_PACKAGE_CHANGE = "package_change"
 private const val APP_COUNT_SMALL_MAX = 49
