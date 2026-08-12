@@ -10,9 +10,7 @@ analysis, and their supporting repository operations
 - Log every screen opening from the visible Navigation 3 destination.
 - Use log levels consistently so Crashlytics records unexpected recoverable and terminal failures as
   non-fatals without turning expected states into errors.
-- Measure the complete time needed to load an app and attribute that time to non-overlapping stages,
-  including manifest parsing, certificate extraction, signing-scheme detection, packaging analysis,
-  component mapping, permissions, storage, and usage.
+- Measure the complete time needed for each top-level load operation.
 - Keep Firebase Performance behind a shared infrastructure interface. Domain `core` modules and
   feature modules must not import Firebase Performance types.
 - Package names may appear in diagnostic logs. APK paths may appear when analyzing an APK file.
@@ -24,8 +22,8 @@ Use two complementary signals:
 
 1. `Logger` and Firebase Crashlytics provide chronological diagnostic breadcrumbs and non-fatal
    reports for unexpected failures.
-2. Firebase Performance custom code traces provide aggregate parent durations and per-stage timing
-   metrics for successful, degraded, failed, and cancelled loads.
+2. Firebase Performance custom code traces provide aggregate duration distributions for successful,
+   degraded, failed, and cancelled loads.
 
 Crashlytics logs are not a general remote log stream. A successful operation log is visible only
 when it is attached to a crash or recorded non-fatal event from that app session. Do not create a
@@ -38,9 +36,9 @@ most likely to regress. Screen-opening logs belong in the app navigation host, w
 Navigation 3 destination can be observed centrally. The initial metrics measure data availability,
 not navigation-to-first-frame latency.
 
-Use one parent trace per public load request and record non-overlapping stage durations as metrics on
-that trace. Do not create one nested Firebase trace per stage. Parent traces keep total duration,
-attributes, and stage metrics associated with one operation and avoid an unmanageable trace list.
+Use one trace per public load request. Firebase records its total duration automatically. Add only
+bounded attributes that materially segment the result; do not time internal calls or stages by
+default. This keeps instrumentation readable and avoids an unmanageable metric list.
 
 ## Logging Payload and Collection
 
@@ -221,11 +219,8 @@ Requirements for the adapter and contract:
 - `startCancellableTrace` starts and scopes an independent trace handle. It records the standard
   `outcome=cancelled` attribute and closes the handle when the block returns, throws, or is cancelled.
 - `trace[name] = longValue` records a metric, while `trace[name] = stringValue` records an attribute.
-- Each emitting repository owns private trace, metric, and attribute names that satisfy Firebase
-  naming limits. Duration metrics end in `_us` because Firebase custom metrics do not carry a unit.
-- Use `measureTimedValue` beside each emitting repository and store whole microseconds rather than
-  introducing a shared timing abstraction.
-- Callers record the parent outcome attribute inside the `use` block before it returns or throws.
+- Each emitting repository owns private operation-specific names that satisfy Firebase naming limits.
+- Callers record the parent outcome attribute inside the trace block before it returns or throws.
 - Instrumentation must not change repository results, cache semantics, dispatcher selection, or
   cancellation propagation.
 - The adapter calls Firebase directly. It does not catch SDK `RuntimeException`s or add logging-only
@@ -238,40 +233,21 @@ No Firebase Performance type may appear outside the internal `core:common` adapt
 ### `installed_apps_load`
 
 Start immediately before querying `PackageManager`. Stop after the basic `InstalledApp` list has
-been produced.
+been produced. The automatic trace duration includes package querying and model mapping.
 
 | Custom metric | Meaning |
 |---|---|
-| `package_query_us` | `PackageManager.getInstalledPackages` duration |
-| `app_mapping_us` | Mapping all returned `PackageInfo` values to `InstalledApp` |
-| `app_count` | Number of successfully mapped apps |
+| `package_query_ms` | `PackageManager.getInstalledPackages` duration in whole milliseconds |
+| `app_count` | Number of successfully mapped installed apps |
 
 | Attribute | Values |
 |---|---|
 | `outcome` | `success`, `error`, `cancelled` |
-| `trigger` | `initial`, `package_change` |
-| `app_count_bucket` | `0_49`, `50_99`, `100_199`, `200_399`, `400_plus` |
 
 ### `app_detail_load`
 
 Start at entry to `AppDetailRepository.details`, before either cache lookup. Stop when the repository
 returns a complete or degraded `AppDetail`, an error, or cancellation.
-
-| Custom metric | Meaning |
-|---|---|
-| `cache_lookup_us` | Installed-package or APK-file cache lookup |
-| `package_query_us` | Installed-package or APK-archive `PackageManager` lookup |
-| `intent_filters_us` | Base and split manifest parsing for component intent filters |
-| `storage_stats_us` | Installed-package storage-size lookup |
-| `usage_stats_us` | Installed-package last-used lookup |
-| `general_info_us` | General metadata and install-source mapping |
-| `certificate_us` | Certificate parsing, digests, trust assessment, and self-signature checks |
-| `signing_schemes_us` | v1 verification and APK Signing Block scheme detection |
-| `launcher_query_us` | Installed-package launcher activity queries |
-| `components_us` | Activity, service, provider, and receiver mapping |
-| `permissions_us` | Used and defined permission mapping and resolution |
-| `features_us` | Required-feature mapping |
-| `packaging_us` | APK size, installed splits, and native-library ZIP analysis |
 
 | Attribute | Values |
 |---|---|
@@ -281,27 +257,12 @@ returns a complete or degraded `AppDetail`, an error, or cancellation.
 | `intent_filters` | `available`, `unavailable` |
 | `signing_schemes` | `available`, `unavailable` |
 
-A cache hit records only `cache_lookup_us` and the attributes available on the cached result. Miss-only
-metrics are absent rather than zero. Installed-only metrics are absent for APK files.
-
-Refactor `getPackageDetails` into named, sequential, behavior-preserving stage calculations before
-constructing `AppDetail`. This is required to prevent overlapping timers and to separate certificate,
-signing-scheme, component, and packaging costs precisely.
-
 An optional sub-operation that fails while `AppDetail` remains usable produces `outcome=degraded`.
-The trace must retain the stage duration and availability attribute so degraded requests can be
-filtered away from complete requests.
+Availability attributes allow degraded requests to be filtered away from complete requests.
 
 ### `manifest_load`
 
 This trace measures the complete readable-manifest request from `ManifestParser.manifest`.
-
-| Custom metric | Meaning |
-|---|---|
-| `resource_lookup_us` | Resolve package/archive information and resources |
-| `manifest_parse_us` | Read and parse binary manifest data |
-| `xml_render_us` | Render readable namespaced XML |
-| `split_count` | Additional installed split count |
 
 | Attribute | Values |
 |---|---|
@@ -309,57 +270,44 @@ This trace measures the complete readable-manifest request from `ManifestParser.
 | `analysis_mode` | `installed`, `apk_file` |
 | `split_count_bucket` | `0`, `1_4`, `5_9`, `10_plus` |
 
-If the current renderer cannot expose parsing separately from rendering without duplicating work,
-first refactor it into explicit parse and render stages while preserving output.
-
 ## Supporting Trace Design
 
 Add these traces after the three primary traces use the same infrastructure successfully:
 
-| Trace | Metrics | Key attributes |
-|---|---|---|
-| `app_signing_index_load` | `package_query_us`, `certificate_mapping_us`, `app_count`, `certificate_count` | `outcome`, `trigger`, `app_count_bucket` |
-| `storage_stats_load` | `permission_check_us`, `stats_query_us`, `requested_count`, `loaded_count` | `outcome`, `permission`, `trigger` |
-| `usage_stats_load` | `permission_check_us`, `usage_query_us`, `usage_mapping_us`, `loaded_count` | `outcome`, `permission`, `trigger` |
-| `device_features_load` | `feature_query_us`, `feature_mapping_us`, `feature_count` | `outcome` |
+| Trace | Key attributes |
+|---|---|
+| `app_signing_index_load` | `outcome`, `trigger` |
+| `storage_stats_load` | `outcome`, `permission`, `trigger` |
+| `usage_stats_load` | `outcome`, `permission` |
+| `device_features_load` | `outcome` |
 
 The current enrichment entry points do not carry the installed-list trigger through their public
 repository APIs. Storage reports `trigger=installed_apps` for list-driven requests and
-`trigger=lifecycle_start` for foreground refreshes. Usage has no list-driven bulk refresh and reports
-`trigger=lifecycle_start`; its single-package query remains part of app-detail work. These values
-describe the trigger that each repository can observe without changing its API, cache, flow, or
-dispatcher behavior. Both enrichment traces report `permission=granted|denied` and use
-`outcome=degraded` when permission is missing or a permission/query race yields partial data.
+`trigger=lifecycle_start` for foreground refreshes. Usage has only lifecycle-driven bulk refreshes,
+so it does not record a constant trigger attribute; its single-package query remains part of
+app-detail work. Both enrichment traces report `permission=granted|denied` and use
+`outcome=degraded` when permission is missing or a storage query yields partial data.
 
-Do not emit one remote trace or non-fatal per installed app from bulk operations. One parent trace
-contains aggregate counts and total stage durations. Per-app failures are accumulated into a bounded
-failure count; one non-fatal may be recorded for the operation only when the failure is
-unexpected and materially degrades the result.
+Do not emit one remote trace or non-fatal per installed app from bulk operations. Per-app failures
+are accumulated for logging; one non-fatal may be recorded for the operation only when the failure
+is unexpected and materially degrades the result.
 
 ## Reading the Results
 
-Firebase Performance automatically records the parent duration. Custom metrics appear alongside it
-as aggregate distributions.
+Firebase Performance automatically records each trace duration. Bounded attributes segment those
+duration distributions.
 
 The console can answer:
 
 - What are p50, p90, and p95 for complete and degraded `app_detail_load` requests?
-- How much time do manifest intent filters, certificates, and signing-scheme detection contribute?
 - How do installed-package and APK-file analysis differ?
 - Are cache misses slower in the latest version?
-- Does installed-app loading degrade as the app-count bucket increases?
+- How much of installed-app loading is spent in the package-manager query?
+- How many installed apps are successfully mapped?
 - Are storage or usage enrichments slow only when permission is available?
 
-The Firebase console does not directly provide a nested waterfall, stacked stage chart, or arbitrary
-formulas across custom metrics. Stage metrics must be non-overlapping so their sum approximately
-explains the parent duration. Small gaps are expected from trace bookkeeping, cache operations,
-coroutine dispatch, object construction, and control flow.
-
-Export Performance data to BigQuery only if per-sample percentages, stacked visualizations, or more
-advanced correlations become necessary.
-
-Firebase currently permits 32 metrics including the default duration metric and five custom
-attributes on one custom trace. Every proposed trace remains below both limits.
+If a parent trace is slow, use the chronological stage logs and local profiling to identify the
+cause. Add a remote custom metric only after a concrete production question justifies its code cost.
 
 ## Rollout
 
@@ -389,7 +337,6 @@ attributes on one custom trace. Every proposed trace remains below both limits.
 ### OBS-04: Instrument app-detail loading
 
 - Add `app_detail_load` around installed-package and APK-file requests.
-- Refactor miss processing into the named non-overlapping stages.
 - Report cache state, analysis mode, optional-stage availability, and outcome.
 - Preserve both cache strategies and cancellation propagation.
 
@@ -402,8 +349,7 @@ attributes on one custom trace. Every proposed trace remains below both limits.
 ### OBS-06: Establish baselines and alerts
 
 - Collect at least one representative production release.
-- Track p50, p90, and p95 parent and stage metrics.
-- Segment app-list results by app-count bucket.
+- Track p50, p90, and p95 trace durations.
 - Segment app-detail results by analysis mode, cache hit, completeness, and signing availability.
 - Review Crashlytics non-fatals for duplicate ownership and noisy expected states.
 - Set regression thresholds and alerts only after observing real distributions.
@@ -421,11 +367,8 @@ or frame-level regressions. Keep that trace separate from repository traces.
 - Expected states and cancellation do not create Crashlytics non-fatals.
 - Every unexpected failure produces at most one non-fatal.
 - Firebase reports duration distributions for all primary and supporting traces.
-- `app_detail_load` separately reports manifest intent filters, certificates, signing schemes,
-  components, permissions, features, and packaging.
 - Cache hits and misses, installed packages and APK files, and complete and degraded results can be
   compared independently.
-- Stage metrics are non-overlapping and approximately explain parent duration.
 - No Firebase Performance type leaves the internal `core:common` adapter.
 - Performance attributes contain no package names, APK paths, screen parameters, or other
   high-cardinality request identities.

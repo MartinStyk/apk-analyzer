@@ -25,7 +25,6 @@ import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.time.measureTimedValue
 
 private const val TAG = "StorageStatsRepositoryImpl"
 
@@ -50,7 +49,7 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
 
     override fun onStart(owner: LifecycleOwner) {
         applicationScope.launch(dispatcherProvider.io()) {
-            fetchTotalSizes(packageNames, TRIGGER_LIFECYCLE_START)
+            fetchTotalSizes(packageNames, "lifecycle_start")
         }
     }
 
@@ -66,7 +65,7 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
     override fun requestTotalSizes(packageNames: List<PackageName>) {
         this.packageNames = packageNames
         applicationScope.launch(dispatcherProvider.io()) {
-            fetchTotalSizes(packageNames, TRIGGER_INSTALLED_APPS)
+            fetchTotalSizes(packageNames, "installed_apps")
         }
     }
 
@@ -88,19 +87,16 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
     }
 
     private suspend fun fetchTotalSizes(packageNames: List<PackageName>, trigger: String) {
-        performanceTracker.startCancellableTrace(TRACE_STORAGE_STATS_LOAD) { trace ->
-            trace[ATTRIBUTE_TRIGGER] = trigger
-            trace[METRIC_REQUESTED_COUNT] = packageNames.size.toLong()
-            val result = runCatchingCancellable {
-                val permissionCheck = measureTimedValue { checkPermission() }
-                trace[METRIC_PERMISSION_CHECK_US] = permissionCheck.duration.inWholeMicroseconds
-                trace[ATTRIBUTE_PERMISSION] = if (permissionCheck.value) PERMISSION_GRANTED else PERMISSION_DENIED
-                isPermissionGranted.value = permissionCheck.value
+        performanceTracker.startCancellableTrace("storage_stats_load") { trace ->
+            trace["trigger"] = trigger
+            runCatchingCancellable {
+                val hasPermission = checkPermission()
+                trace["permission"] = if (hasPermission) "granted" else "denied"
+                isPermissionGranted.value = hasPermission
 
-                if (!permissionCheck.value) {
-                    trace[METRIC_LOADED_COUNT] = 0L
+                if (!hasPermission) {
                     Logger.w(TAG, "Storage stats loading degraded: permission missing")
-                    OUTCOME_DEGRADED
+                    "degraded"
                 } else {
                     Logger.d(TAG, "Storage stats loading started: ${packageNames.size} apps requested")
                     val user = UserHandle.getUserHandleForUid(Process.myUid())
@@ -108,32 +104,28 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
                     var permissionRaceCount = 0
                     var queryFailureCount = 0
                     var lastQueryFailure: IOException? = null
-                    val statsQuery = measureTimedValue {
-                        packageNames.mapNotNull { packageName ->
-                            when (val queryResult = queryPackageSize(user, packageName)) {
-                                is SizeQueryResult.Success -> packageName to queryResult.size
+                    val sizes = packageNames.mapNotNull { packageName ->
+                        when (val queryResult = queryPackageSize(user, packageName)) {
+                            is SizeQueryResult.Success -> packageName to queryResult.size
 
-                                SizeQueryResult.UninstallRace -> {
-                                    uninstallRaceCount++
-                                    null
-                                }
-
-                                SizeQueryResult.PermissionRace -> {
-                                    permissionRaceCount++
-                                    null
-                                }
-
-                                is SizeQueryResult.Failure -> {
-                                    queryFailureCount++
-                                    lastQueryFailure = queryResult.error
-                                    null
-                                }
+                            SizeQueryResult.UninstallRace -> {
+                                uninstallRaceCount++
+                                null
                             }
-                        }.toMap()
-                    }
-                    trace[METRIC_STATS_QUERY_US] = statsQuery.duration.inWholeMicroseconds
-                    trace[METRIC_LOADED_COUNT] = statsQuery.value.size.toLong()
-                    totalSizes.value = statsQuery.value
+
+                            SizeQueryResult.PermissionRace -> {
+                                permissionRaceCount++
+                                null
+                            }
+
+                            is SizeQueryResult.Failure -> {
+                                queryFailureCount++
+                                lastQueryFailure = queryResult.error
+                                null
+                            }
+                        }
+                    }.toMap()
+                    totalSizes.value = sizes
 
                     if (uninstallRaceCount > 0) {
                         Logger.w(TAG, "Storage stats loading degraded: $uninstallRaceCount uninstalled apps skipped")
@@ -147,19 +139,17 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
                     lastQueryFailure?.let {
                         Logger.w(TAG, it, "Storage stats loading degraded: $queryFailureCount app queries failed")
                     }
-                    Logger.i(TAG, "Storage stats loading finished: ${statsQuery.value.size} apps loaded")
+                    Logger.i(TAG, "Storage stats loading finished: ${sizes.size} apps loaded")
                     if (uninstallRaceCount > 0 || permissionRaceCount > 0 || queryFailureCount > 0) {
-                        OUTCOME_DEGRADED
+                        "degraded"
                     } else {
-                        OUTCOME_SUCCESS
+                        "success"
                     }
                 }
-            }
-
-            result.fold(
-                onSuccess = { outcome -> trace[ATTRIBUTE_OUTCOME] = outcome },
+            }.fold(
+                onSuccess = { outcome -> trace["outcome"] = outcome },
                 onFailure = { failure ->
-                    trace[ATTRIBUTE_OUTCOME] = OUTCOME_ERROR
+                    trace["outcome"] = "error"
                     Logger.e(TAG, failure, "Storage stats loading failed")
                     throw failure
                 },
@@ -185,19 +175,3 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
         data class Failure(val error: IOException) : SizeQueryResult
     }
 }
-
-private const val TRACE_STORAGE_STATS_LOAD = "storage_stats_load"
-private const val METRIC_PERMISSION_CHECK_US = "permission_check_us"
-private const val METRIC_STATS_QUERY_US = "stats_query_us"
-private const val METRIC_REQUESTED_COUNT = "requested_count"
-private const val METRIC_LOADED_COUNT = "loaded_count"
-private const val ATTRIBUTE_OUTCOME = "outcome"
-private const val ATTRIBUTE_PERMISSION = "permission"
-private const val ATTRIBUTE_TRIGGER = "trigger"
-private const val OUTCOME_SUCCESS = "success"
-private const val OUTCOME_DEGRADED = "degraded"
-private const val OUTCOME_ERROR = "error"
-private const val PERMISSION_GRANTED = "granted"
-private const val PERMISSION_DENIED = "denied"
-private const val TRIGGER_LIFECYCLE_START = "lifecycle_start"
-private const val TRIGGER_INSTALLED_APPS = "installed_apps"

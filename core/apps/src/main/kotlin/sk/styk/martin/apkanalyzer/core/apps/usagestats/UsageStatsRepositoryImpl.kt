@@ -22,7 +22,6 @@ import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.time.Duration.Companion.days
-import kotlin.time.measureTimedValue
 import kotlin.time.toJavaDuration
 
 private const val TAG = "UsageStatsRepositoryImpl"
@@ -51,7 +50,7 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun queryLastUsedTime(packageName: PackageName): Instant? = lastUsedTimes.value[packageName] ?: if (checkPermission()) {
-        queryRawUsageStats().usages
+        queryRawUsageStats()
             .filter { it.packageName == packageName.value }
             .maxOfOrNull { it.lastTimeUsed }
             ?.let { Instant.ofEpochMilli(it) }
@@ -60,44 +59,28 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
     }
 
     private suspend fun fetchUsageTimes() {
-        performanceTracker.startCancellableTrace(TRACE_USAGE_STATS_LOAD) { trace ->
-            trace[ATTRIBUTE_TRIGGER] = TRIGGER_LIFECYCLE_START
-            val result = runCatchingCancellable {
-                val permissionCheck = measureTimedValue { checkPermission() }
-                trace[METRIC_PERMISSION_CHECK_US] = permissionCheck.duration.inWholeMicroseconds
-                trace[ATTRIBUTE_PERMISSION] = if (permissionCheck.value) PERMISSION_GRANTED else PERMISSION_DENIED
-                isPermissionGranted.value = permissionCheck.value
+        performanceTracker.startCancellableTrace("usage_stats_load") { trace ->
+            runCatchingCancellable {
+                val hasPermission = checkPermission()
+                trace["permission"] = if (hasPermission) "granted" else "denied"
+                isPermissionGranted.value = hasPermission
 
-                if (!permissionCheck.value) {
-                    trace[METRIC_LOADED_COUNT] = 0L
+                if (!hasPermission) {
                     Logger.w(TAG, "Usage stats loading degraded: permission missing")
-                    OUTCOME_DEGRADED
+                    "degraded"
                 } else {
                     Logger.d(TAG, "Usage stats loading started")
-                    val usageQuery = measureTimedValue {
-                        queryRawUsageStats(detectPermissionRace = true)
-                    }
-                    trace[METRIC_USAGE_QUERY_US] = usageQuery.duration.inWholeMicroseconds
-                    val usageMapping = measureTimedValue {
-                        usageQuery.value.usages
-                            .groupBy { PackageName(it.packageName) }
-                            .mapValues { (_, usages) -> Instant.ofEpochMilli(usages.maxOf { it.lastTimeUsed }) }
-                    }
-                    trace[METRIC_USAGE_MAPPING_US] = usageMapping.duration.inWholeMicroseconds
-                    trace[METRIC_LOADED_COUNT] = usageMapping.value.size.toLong()
-                    lastUsedTimes.value = usageMapping.value
-                    if (usageQuery.value.permissionRace) {
-                        trace[ATTRIBUTE_PERMISSION] = PERMISSION_DENIED
-                    }
-                    Logger.i(TAG, "Usage stats loading finished: ${usageMapping.value.size} apps loaded")
-                    if (usageQuery.value.permissionRace) OUTCOME_DEGRADED else OUTCOME_SUCCESS
+                    val usages = queryRawUsageStats()
+                        .groupBy { PackageName(it.packageName) }
+                        .mapValues { (_, usages) -> Instant.ofEpochMilli(usages.maxOf { it.lastTimeUsed }) }
+                    lastUsedTimes.value = usages
+                    Logger.i(TAG, "Usage stats loading finished: ${usages.size} apps loaded")
+                    "success"
                 }
-            }
-
-            result.fold(
-                onSuccess = { outcome -> trace[ATTRIBUTE_OUTCOME] = outcome },
+            }.fold(
+                onSuccess = { outcome -> trace["outcome"] = outcome },
                 onFailure = { failure ->
-                    trace[ATTRIBUTE_OUTCOME] = OUTCOME_ERROR
+                    trace["outcome"] = "error"
                     Logger.e(TAG, failure, "Usage stats loading failed")
                     throw failure
                 },
@@ -106,16 +89,12 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
     }
 
     @SuppressLint("MissingPermission")
-    private fun queryRawUsageStats(detectPermissionRace: Boolean = false): UsageStatsQueryResult = try {
+    private fun queryRawUsageStats() = try {
         val now = Instant.now()
         val yearAgo = now - 365.days.toJavaDuration()
-        val usages = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, yearAgo.toEpochMilli(), now.toEpochMilli())
-        UsageStatsQueryResult(
-            usages = usages,
-            permissionRace = detectPermissionRace && usages.isEmpty() && !checkPermission(),
-        )
+        usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, yearAgo.toEpochMilli(), now.toEpochMilli())
     } catch (_: SecurityException) {
-        UsageStatsQueryResult(usages = emptyList(), permissionRace = true)
+        emptyList()
     }
 
     private fun checkPermission(): Boolean {
@@ -127,21 +106,4 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
 
         return mode == AppOpsManager.MODE_ALLOWED
     }
-
-    private data class UsageStatsQueryResult(val usages: List<android.app.usage.UsageStats>, val permissionRace: Boolean)
 }
-
-private const val TRACE_USAGE_STATS_LOAD = "usage_stats_load"
-private const val METRIC_PERMISSION_CHECK_US = "permission_check_us"
-private const val METRIC_USAGE_QUERY_US = "usage_query_us"
-private const val METRIC_USAGE_MAPPING_US = "usage_mapping_us"
-private const val METRIC_LOADED_COUNT = "loaded_count"
-private const val ATTRIBUTE_OUTCOME = "outcome"
-private const val ATTRIBUTE_PERMISSION = "permission"
-private const val ATTRIBUTE_TRIGGER = "trigger"
-private const val OUTCOME_SUCCESS = "success"
-private const val OUTCOME_DEGRADED = "degraded"
-private const val OUTCOME_ERROR = "error"
-private const val PERMISSION_GRANTED = "granted"
-private const val PERMISSION_DENIED = "denied"
-private const val TRIGGER_LIFECYCLE_START = "lifecycle_start"
