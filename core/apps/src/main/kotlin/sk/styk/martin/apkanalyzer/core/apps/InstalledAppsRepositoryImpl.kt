@@ -27,6 +27,7 @@ import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
+import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
 import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
 import java.io.File
 import java.time.Instant
@@ -92,12 +93,12 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
             apps
         }.fold(
             onSuccess = { apps ->
-                trace["outcome"] = "success"
+                trace.setOutcome(TraceOutcome.Success)
                 Logger.i(INSTALLED_APPS, "Installed apps loading finished: ${apps.size} apps loaded")
                 apps
             },
             onFailure = { failure ->
-                trace["outcome"] = "error"
+                trace.setOutcome(TraceOutcome.Error)
                 Logger.e(INSTALLED_APPS, failure, "Installed apps loading failed")
                 throw failure
             },

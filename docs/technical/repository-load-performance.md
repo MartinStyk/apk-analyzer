@@ -204,6 +204,20 @@ interface PerformanceTracker {
 interface PerformanceTrace : AutoCloseable {
     operator fun set(name: String, value: Long)
     operator fun set(name: String, value: String)
+    fun setOutcome(outcome: TraceOutcome)
+    fun setPermission(permission: TracePermission)
+}
+
+enum class TraceOutcome {
+    Success,
+    Degraded,
+    Error,
+    Cancelled,
+}
+
+enum class TracePermission {
+    Granted,
+    Denied,
 }
 ```
 
@@ -219,6 +233,8 @@ Requirements for the adapter and contract:
 - `startCancellableTrace` starts and scopes an independent trace handle. It records the standard
   `outcome=cancelled` attribute and closes the handle when the block returns, throws, or is cancelled.
 - `trace[name] = longValue` records a metric, while `trace[name] = stringValue` records an attribute.
+- Shared values use typed setters such as `trace.setOutcome(TraceOutcome.Success)` and
+  `trace.setPermission(TracePermission.Granted)`; operation-specific attributes stay local.
 - Each emitting repository owns private operation-specific names that satisfy Firebase naming limits.
 - Callers record the parent outcome attribute inside the trace block before it returns or throws.
 - Instrumentation must not change repository results, cache semantics, dispatcher selection, or

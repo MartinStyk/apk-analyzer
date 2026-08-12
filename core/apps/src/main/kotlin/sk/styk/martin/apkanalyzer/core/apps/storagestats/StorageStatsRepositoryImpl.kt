@@ -21,6 +21,8 @@ import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
+import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
+import sk.styk.martin.apkanalyzer.core.common.performance.TracePermission
 import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
 import java.io.IOException
 import javax.inject.Inject
@@ -91,12 +93,12 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
             trace["trigger"] = trigger
             runCatchingCancellable {
                 val hasPermission = checkPermission()
-                trace["permission"] = if (hasPermission) "granted" else "denied"
+                trace.setPermission(if (hasPermission) TracePermission.Granted else TracePermission.Denied)
                 isPermissionGranted.value = hasPermission
 
                 if (!hasPermission) {
                     Logger.w(TAG, "Storage stats loading degraded: permission missing")
-                    "degraded"
+                    TraceOutcome.Degraded
                 } else {
                     Logger.d(TAG, "Storage stats loading started: ${packageNames.size} apps requested")
                     val user = UserHandle.getUserHandleForUid(Process.myUid())
@@ -141,15 +143,15 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
                     }
                     Logger.i(TAG, "Storage stats loading finished: ${sizes.size} apps loaded")
                     if (uninstallRaceCount > 0 || permissionRaceCount > 0 || queryFailureCount > 0) {
-                        "degraded"
+                        TraceOutcome.Degraded
                     } else {
-                        "success"
+                        TraceOutcome.Success
                     }
                 }
             }.fold(
-                onSuccess = { outcome -> trace["outcome"] = outcome },
+                onSuccess = trace::setOutcome,
                 onFailure = { failure ->
-                    trace["outcome"] = "error"
+                    trace.setOutcome(TraceOutcome.Error)
                     Logger.e(TAG, failure, "Storage stats loading failed")
                     throw failure
                 },

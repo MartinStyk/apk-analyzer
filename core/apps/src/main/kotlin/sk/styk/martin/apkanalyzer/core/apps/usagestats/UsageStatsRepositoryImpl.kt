@@ -17,6 +17,8 @@ import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
+import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
+import sk.styk.martin.apkanalyzer.core.common.performance.TracePermission
 import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
 import java.time.Instant
 import javax.inject.Inject
@@ -62,12 +64,12 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
         performanceTracker.startCancellableTrace("usage_stats_load") { trace ->
             runCatchingCancellable {
                 val hasPermission = checkPermission()
-                trace["permission"] = if (hasPermission) "granted" else "denied"
+                trace.setPermission(if (hasPermission) TracePermission.Granted else TracePermission.Denied)
                 isPermissionGranted.value = hasPermission
 
                 if (!hasPermission) {
                     Logger.w(TAG, "Usage stats loading degraded: permission missing")
-                    "degraded"
+                    TraceOutcome.Degraded
                 } else {
                     Logger.d(TAG, "Usage stats loading started")
                     val usages = queryRawUsageStats()
@@ -75,12 +77,12 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
                         .mapValues { (_, usages) -> Instant.ofEpochMilli(usages.maxOf { it.lastTimeUsed }) }
                     lastUsedTimes.value = usages
                     Logger.i(TAG, "Usage stats loading finished: ${usages.size} apps loaded")
-                    "success"
+                    TraceOutcome.Success
                 }
             }.fold(
-                onSuccess = { outcome -> trace["outcome"] = outcome },
+                onSuccess = trace::setOutcome,
                 onFailure = { failure ->
-                    trace["outcome"] = "error"
+                    trace.setOutcome(TraceOutcome.Error)
                     Logger.e(TAG, failure, "Usage stats loading failed")
                     throw failure
                 },
