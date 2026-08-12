@@ -68,10 +68,10 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
-import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.AiSummaryCard
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.AppDetailToolbar
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.AppSummaryBottomSheet
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SplitApkExportBottomSheet
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.aisummary.AiSummaryCard
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.insight.AppDetailInsight
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.insight.SensitiveAccess
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.permissions.permissionIcon
