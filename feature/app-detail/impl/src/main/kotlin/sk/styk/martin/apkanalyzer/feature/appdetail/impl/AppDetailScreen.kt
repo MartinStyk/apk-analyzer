@@ -71,6 +71,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.AppDetailToolbar
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.AppSummaryBottomSheet
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SplitApkExportBottomSheet
+import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.aisummary.AiSummaryCard
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.insight.AppDetailInsight
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.insight.SensitiveAccess
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.permissions.permissionIcon
@@ -283,6 +284,13 @@ private fun LoadedContent(
                 .verticalScroll(rememberScrollState()),
         ) {
             Spacer(modifier = Modifier.height(8.dp))
+            AiSummaryCard(
+                reference = appReference,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 12.dp),
+            )
             OverviewSection(state = state, onAction = onAction)
             if (state.insights.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(12.dp))

@@ -12,13 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 
 @Composable
-fun Modifier.shimmer(): Modifier {
-    val surface = AppTheme.colors.surface
-    val highlight = AppTheme.colors.surfaceVariant
-
+fun Modifier.shimmer(surfaceColor: Color = AppTheme.colors.surface, highlightColor: Color = AppTheme.colors.surfaceVariant): Modifier {
     val transition = rememberInfiniteTransition(label = "shimmer")
     val progress by transition.animateFloat(
         initialValue = 0f,
@@ -38,7 +36,7 @@ fun Modifier.shimmer(): Modifier {
         val startX = width * progress * 1.4f - shimmerWidth
 
         val brush = Brush.linearGradient(
-            colors = listOf(surface, highlight, highlight, surface),
+            colors = listOf(surfaceColor, highlightColor, highlightColor, surfaceColor),
             start = Offset(startX, 0f),
             end = Offset(startX + shimmerWidth, height),
         )

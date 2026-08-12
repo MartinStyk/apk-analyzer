@@ -296,6 +296,7 @@ Add these traces after the three primary traces use the same infrastructure succ
 | `storage_stats_load` | `outcome`, `permission`, `trigger` |
 | `usage_stats_load` | `outcome`, `permission` |
 | `device_features_load` | `outcome` |
+| `ai_summary_load` | `outcome`, `analysis_mode`, `cache_hit`, `availability` |
 
 The current enrichment entry points do not carry the installed-list trigger through their public
 repository APIs. Storage reports `trigger=installed_apps` for list-driven requests and
@@ -303,6 +304,15 @@ repository APIs. Storage reports `trigger=installed_apps` for list-driven reques
 so it does not record a constant trigger attribute; its single-package query remains part of
 app-detail work. Both enrichment traces report `permission=granted|denied` and use
 `outcome=degraded` when permission is missing or a storage query yields partial data.
+
+`ai_summary_load` (`core:ai-insights`) wraps one coalesced generation per `AppReference`, not every
+`getDescription` call — concurrent callers for the same reference share one trace. `analysis_mode`
+is `installed` or `apk_file`; only `installed` requests are cache-eligible, so `cache_hit` is only
+meaningful there. `availability` mirrors `AiAvailability` (`available`, `downloadable`,
+`downloading`, `unavailable`) at the moment generation was attempted. `outcome=degraded` covers every
+expected reason `getDescription` returns `null` — AI not available, metadata lookup failure, or no
+valid model output after the retry — since none of those are unexpected errors; `outcome=error` is
+reserved for a genuine unhandled exception (for example, a cache I/O failure).
 
 Do not emit one remote trace or non-fatal per installed app from bulk operations. Per-app failures
 are accumulated for logging; one non-fatal may be recorded for the operation only when the failure

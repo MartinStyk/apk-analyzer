@@ -36,6 +36,8 @@ data class ApkAnalyzerColorPalette(
     val negativeContainer: Color,
     val warning: Color,
     val warningContainer: Color,
+    val aiAccent: Color,
+    val aiAccentContainer: Color,
 
     val shadow: Color,
 )
@@ -64,6 +66,8 @@ internal val LightApkAnalyzerColors = ApkAnalyzerColorPalette(
     negativeContainer = Color(0xFFFFEBEE),
     warning = Color(0xFFFF9500),
     warningContainer = Color(0xFFFFF3E0),
+    aiAccent = Color(0xFF7C4DFF),
+    aiAccentContainer = Color(0xFFEDE7FE),
     shadow = Color(0x1A000000),
 )
 
@@ -91,6 +95,8 @@ internal val DarkApkAnalyzerColors = ApkAnalyzerColorPalette(
     negativeContainer = Color(0xFF3E1414),
     warning = Color(0xFFFF9F0A),
     warningContainer = Color(0xFF3E2A0F),
+    aiAccent = Color(0xFFB39DFF),
+    aiAccentContainer = Color(0xFF2E2251),
     shadow = Color(0x00000000),
 )
 
