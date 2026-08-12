@@ -14,8 +14,13 @@ import sk.styk.martin.apkanalyzer.core.aiinsights.appdescription.cache.AppAiDesc
 import sk.styk.martin.apkanalyzer.core.aiinsights.appdescription.generation.AiDescriptionGenerator
 import sk.styk.martin.apkanalyzer.core.aiinsights.appdescription.generation.DescriptionValidator
 import sk.styk.martin.apkanalyzer.core.aiinsights.appdescription.metadata.AppMetadataProvider
+import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTrace
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
+import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
+import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -28,6 +33,7 @@ internal class AppAiDescriptionRepositoryImpl @Inject constructor(
     private val generator: AiDescriptionGenerator,
     private val validator: DescriptionValidator,
     private val appScope: CoroutineScope,
+    private val performanceTracker: PerformanceTracker,
 ) : AppAiDescriptionRepository {
 
     private val inFlightMutex = Mutex()
@@ -64,8 +70,7 @@ internal class AppAiDescriptionRepositoryImpl @Inject constructor(
     }
 
     private fun startGeneration(reference: AppReference): Deferred<AppAiDescription?> {
-        lateinit var deferred: Deferred<AppAiDescription?>
-        deferred = appScope.async { loadDescription(reference) }
+        val deferred: Deferred<AppAiDescription?> = appScope.async { loadDescription(reference) }
         deferred.invokeOnCompletion {
             appScope.launch {
                 inFlightMutex.withLock {
@@ -76,13 +81,27 @@ internal class AppAiDescriptionRepositoryImpl @Inject constructor(
         return deferred
     }
 
-    private suspend fun loadDescription(reference: AppReference): AppAiDescription? {
+    private suspend fun loadDescription(reference: AppReference): AppAiDescription? = performanceTracker.startCancellableTrace("ai_summary_load") { trace ->
+        trace["analysis_mode"] = reference.toString()
         Logger.d(TAG, "AI description loading started: reference=$reference")
-        val context = fetchContext(reference) ?: return null
-        val isCacheable = reference is AppReference.InstalledPackage
-        val inputHash = generator.inputHash(context)
-        val cached = if (isCacheable) getCachedDescription(context, inputHash, reference) else null
-        return cached ?: generateAndCacheDescription(context, inputHash, reference, isCacheable)
+        runCatchingCancellable {
+            val context = fetchContext(reference) ?: return@runCatchingCancellable null
+            val isCacheable = reference is AppReference.InstalledPackage
+            val inputHash = generator.inputHash(context)
+            val cached = if (isCacheable) getCachedDescription(context, inputHash, reference) else null
+            trace["cache_hit"] = (cached != null).toString()
+            cached ?: generateAndCacheDescription(context, inputHash, reference, isCacheable, trace)
+        }.fold(
+            onSuccess = { description ->
+                trace.setOutcome(if (description != null) TraceOutcome.Success else TraceOutcome.Degraded)
+                description
+            },
+            onFailure = { failure ->
+                trace.setOutcome(TraceOutcome.Error)
+                Logger.e(TAG, failure, "AI description loading failed")
+                null
+            },
+        )
     }
 
     private suspend fun fetchContext(reference: AppReference): AppAiContext? {
@@ -110,8 +129,9 @@ internal class AppAiDescriptionRepositoryImpl @Inject constructor(
         inputHash: String,
         reference: AppReference,
         isCacheable: Boolean,
+        trace: PerformanceTrace,
     ): AppAiDescription? {
-        val description = generateIfAvailable(context, reference) ?: return null
+        val description = generateIfAvailable(context, reference, trace) ?: return null
         if (isCacheable) {
             cache.save(context.packageName, inputHash, description)
         }
@@ -119,7 +139,12 @@ internal class AppAiDescriptionRepositoryImpl @Inject constructor(
         return description
     }
 
-    private suspend fun generateIfAvailable(context: AppAiContext, reference: AppReference): AppAiDescription? {
+    private suspend fun generateIfAvailable(
+        context: AppAiContext,
+        reference: AppReference,
+        trace: PerformanceTrace,
+    ): AppAiDescription? {
+        trace["availability"] = availability.value.name.lowercase()
         if (availability.value != AiAvailability.Available) {
             Logger.d(TAG, "AI description loading finished: AI unavailable, reference=$reference")
             return null

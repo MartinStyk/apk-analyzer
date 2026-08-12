@@ -76,6 +76,14 @@ triggering duplicate generations.
 (`PromptBuilder.build(context)`), not a separately hand-maintained version number — any change to the
 prompt template or output contract invalidates the cache on its own, with nothing to remember to bump.
 
+`loadDescription` is wrapped in the `ai_summary_load` performance trace (`core:common`'s
+`PerformanceTracker`/`PerformanceTrace`, see
+[`docs/technical/repository-load-performance.md`](../../docs/technical/repository-load-performance.md)) —
+one trace per coalesced generation, not per `getDescription` call, so concurrent callers for the same
+`AppReference` share it. `outcome=degraded` covers every expected `null` result (AI unavailable,
+metadata failure, no valid output after retry); `outcome=error` is reserved for a genuine unhandled
+exception such as a cache I/O failure.
+
 ## AI Integration
 
 `appdescription/generation/AiDescriptionGeneratorImpl` stays engine-agnostic — it composes
