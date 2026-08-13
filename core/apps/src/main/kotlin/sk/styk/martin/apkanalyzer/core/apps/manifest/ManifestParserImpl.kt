@@ -13,6 +13,7 @@ import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
 import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
+import sk.styk.martin.apkanalyzer.core.common.performance.analysisMode
 import sk.styk.martin.apkanalyzer.core.common.performance.outcome
 import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
 import javax.inject.Inject
@@ -27,13 +28,13 @@ internal class ManifestParserImpl @Inject constructor(
     private val performanceTracker: PerformanceTracker,
 ) : ManifestParser {
 
-    override suspend fun manifest(reference: AppReference): Result<ParsedManifest> = performanceTracker.startCancellableTrace("manifest_load") { trace ->
-        trace["analysis_mode"] = reference.analysisModeAttribute
+    override suspend fun manifest(reference: AppReference): Result<ParsedManifest> = performanceTracker.startCancellableTrace("manifest_load") {
+        analysisMode = reference.analysisModeAttribute
         val result = when (reference) {
             is AppReference.InstalledPackage -> installedPackageManifest(reference.packageName)
             is AppReference.ApkFile -> apkFileManifest(reference.path)
         }
-        trace.outcome = if (result.isSuccess) TraceOutcome.Success else TraceOutcome.Error
+        outcome = if (result.isSuccess) TraceOutcome.Success else TraceOutcome.Error
         result
     }
 

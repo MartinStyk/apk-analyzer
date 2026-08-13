@@ -18,6 +18,7 @@ import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
 import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
+import sk.styk.martin.apkanalyzer.core.common.performance.appCount
 import sk.styk.martin.apkanalyzer.core.common.performance.outcome
 import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
 import sk.styk.martin.apkanalyzer.core.common.performance.timedSection
@@ -44,9 +45,9 @@ internal class AppIndexRepositoryImpl @Inject constructor(
     override fun index(): Flow<AppIndexStatus> = cachedIndex
 
     private suspend fun buildIndex(apps: List<InstalledApp>, signing: Map<PackageName, AppSigning>) =
-        performanceTracker.startCancellableTrace("app_index_build") { trace ->
-            trace["app_count"] = apps.size
-            trace.timedSection(tag = TAG, operation = "App index build", metric = "index_build_ms") {
+        performanceTracker.startCancellableTrace("app_index_build") {
+            appCount = apps.size
+            timedSection(tag = TAG, operation = "App index build", metric = "index_build_ms") {
                 AppAttributeIndex(
                     targetSdk = apps.byTargetSdk(),
                     minSdk = apps.byMinSdk(),
@@ -60,7 +61,7 @@ internal class AppIndexRepositoryImpl @Inject constructor(
                     sharedUserId = apps.bySharedUserId(),
                     appCategory = apps.byAppCategory(),
                 )
-            }.also { trace.outcome = TraceOutcome.Success }
+            }.also { outcome = TraceOutcome.Success }
         }
 
     private fun List<InstalledApp>.byTargetSdk() = groupBy(InstalledApp::targetSdk, InstalledApp::packageName)

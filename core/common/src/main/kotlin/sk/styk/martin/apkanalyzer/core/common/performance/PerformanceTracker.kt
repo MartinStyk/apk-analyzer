@@ -6,9 +6,9 @@ interface PerformanceTracker {
     fun startTrace(name: String): PerformanceTrace
 }
 
-suspend fun <T> PerformanceTracker.startCancellableTrace(name: String, block: suspend (PerformanceTrace) -> T): T = startTrace(name).use { trace ->
+suspend fun <T> PerformanceTracker.startCancellableTrace(name: String, block: suspend PerformanceTrace.() -> T): T = startTrace(name).use { trace ->
     try {
-        block(trace)
+        trace.block()
     } catch (cancellation: CancellationException) {
         trace.recordCancellation(cancellation)
         throw cancellation

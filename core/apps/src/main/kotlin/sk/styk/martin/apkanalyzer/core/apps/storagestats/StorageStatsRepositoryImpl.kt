@@ -92,11 +92,11 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
     }
 
     private suspend fun fetchTotalSizes(packageNames: List<PackageName>, trigger: String) {
-        performanceTracker.startCancellableTrace("storage_stats_load") { trace ->
-            trace["trigger"] = trigger
+        performanceTracker.startCancellableTrace("storage_stats_load") {
+            this["trigger"] = trigger
             runCatchingCancellable {
                 val hasPermission = checkPermission()
-                trace.permission = if (hasPermission) TracePermission.Granted else TracePermission.Denied
+                permission = if (hasPermission) TracePermission.Granted else TracePermission.Denied
                 isPermissionGranted.value = hasPermission
 
                 if (!hasPermission) {
@@ -108,7 +108,7 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
                     var permissionRaceCount = 0
                     var queryFailureCount = 0
                     var lastQueryFailure: IOException? = null
-                    val sizes = trace.timedSection(
+                    val sizes = timedSection(
                         tag = TAG,
                         operation = "Storage stats query",
                         metric = "storage_stats_query_ms",
@@ -158,9 +158,9 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
                     }
                 }
             }.fold(
-                onSuccess = { trace.outcome = it },
+                onSuccess = { outcome = it },
                 onFailure = { failure ->
-                    trace.outcome = TraceOutcome.Error
+                    outcome = TraceOutcome.Error
                     Logger.e(TAG, failure, "Storage stats loading failed")
                 },
             )

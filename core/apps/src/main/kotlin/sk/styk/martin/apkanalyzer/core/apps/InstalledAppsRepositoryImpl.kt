@@ -28,6 +28,7 @@ import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
 import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
+import sk.styk.martin.apkanalyzer.core.common.performance.appCount
 import sk.styk.martin.apkanalyzer.core.common.performance.outcome
 import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
 import sk.styk.martin.apkanalyzer.core.common.performance.timedSection
@@ -74,26 +75,26 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
     override fun apps(): Flow<List<InstalledApp>> = cachedApps
 
     @SuppressLint("QueryPermissionsNeeded")
-    private suspend fun loadAllApps(): List<InstalledApp> = performanceTracker.startCancellableTrace("installed_apps_load") { trace ->
+    private suspend fun loadAllApps(): List<InstalledApp> = performanceTracker.startCancellableTrace("installed_apps_load") {
         Logger.i(INSTALLED_APPS, "Installed apps loading started")
         runCatchingCancellable {
-            val packages = trace.timedSection(tag = INSTALLED_APPS, operation = "Installed apps package query", metric = "package_query_ms") {
+            val packages = timedSection(tag = INSTALLED_APPS, operation = "Installed apps package query", metric = "package_query_ms") {
                 packageManager.getInstalledPackages(PackageManager.GET_PERMISSIONS)
             }
 
-            val apps = trace.timedSection(tag = INSTALLED_APPS, operation = "Installed apps mapping", metric = "apps_mapping_ms") {
+            val apps = timedSection(tag = INSTALLED_APPS, operation = "Installed apps mapping", metric = "apps_mapping_ms") {
                 packages.mapNotNull { packageInfo -> packageInfo.applicationInfo?.let { packageInfo.toInstalledApp() } }
             }
-            trace["app_count"] = apps.size
+            appCount = apps.size
             apps
         }.fold(
             onSuccess = { apps ->
-                trace.outcome = TraceOutcome.Success
+                outcome = TraceOutcome.Success
                 Logger.i(INSTALLED_APPS, "Installed apps loading finished: ${apps.size} apps loaded")
                 apps
             },
             onFailure = { failure ->
-                trace.outcome = TraceOutcome.Error
+                outcome = TraceOutcome.Error
                 Logger.e(INSTALLED_APPS, failure, "Installed apps loading failed")
                 emptyList()
             },

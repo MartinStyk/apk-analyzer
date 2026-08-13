@@ -41,22 +41,22 @@ internal class AppSigningRepositoryImpl @Inject constructor(
     override fun signing(): Flow<Map<PackageName, AppSigning>> = cachedSigning
 
     @SuppressLint("QueryPermissionsNeeded")
-    private suspend fun loadAllSigning(): Map<PackageName, AppSigning> = performanceTracker.startCancellableTrace("app_signing_index_load") { trace ->
+    private suspend fun loadAllSigning(): Map<PackageName, AppSigning> = performanceTracker.startCancellableTrace("app_signing_index_load") {
         runCatchingCancellable {
-            val packages = trace.timedSection(tag = TAG, operation = "App signing package query", metric = "package_query_ms") {
+            val packages = timedSection(tag = TAG, operation = "App signing package query", metric = "package_query_ms") {
                 packageManager.getInstalledPackages(PackageManager.GET_SIGNING_CERTIFICATES)
             }
-            trace.timedSection(tag = TAG, operation = "App signing extraction", metric = "signing_extraction_ms") {
+            timedSection(tag = TAG, operation = "App signing extraction", metric = "signing_extraction_ms") {
                 packages.associate { PackageName(it.packageName) to certificateExtractor.getAppSigning(it) }
             }
         }.fold(
             onSuccess = { signing ->
-                trace.outcome = TraceOutcome.Success
+                outcome = TraceOutcome.Success
                 Logger.i(TAG, "App signing index loading finished: ${signing.size} apps loaded")
                 signing
             },
             onFailure = { failure ->
-                trace.outcome = TraceOutcome.Error
+                outcome = TraceOutcome.Error
                 Logger.e(TAG, failure, "App signing index loading failed")
                 emptyMap()
             },

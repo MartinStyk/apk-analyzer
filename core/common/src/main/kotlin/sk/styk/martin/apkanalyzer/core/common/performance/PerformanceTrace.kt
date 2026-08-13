@@ -41,6 +41,18 @@ var PerformanceTrace.permission: TracePermission
         this["permission"] = value.attributeValue
     }
 
+var PerformanceTrace.analysisMode: String
+    get() = throw UnsupportedOperationException("PerformanceTrace.analysisMode is write-only")
+    set(value) {
+        this["analysis_mode"] = value
+    }
+
+var PerformanceTrace.appCount: Int
+    get() = throw UnsupportedOperationException("PerformanceTrace.appCount is write-only")
+    set(value) {
+        this["app_count"] = value
+    }
+
 enum class TraceOutcome(internal val attributeValue: String) {
     Success("success"),
     Degraded("degraded"),

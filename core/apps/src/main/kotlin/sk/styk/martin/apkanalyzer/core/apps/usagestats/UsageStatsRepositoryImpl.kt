@@ -64,17 +64,17 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
     }
 
     private suspend fun fetchUsageTimes() {
-        performanceTracker.startCancellableTrace("usage_stats_load") { trace ->
+        performanceTracker.startCancellableTrace("usage_stats_load") {
             runCatchingCancellable {
                 val hasPermission = checkPermission()
-                trace.permission = if (hasPermission) TracePermission.Granted else TracePermission.Denied
+                permission = if (hasPermission) TracePermission.Granted else TracePermission.Denied
                 isPermissionGranted.value = hasPermission
 
                 if (!hasPermission) {
                     Logger.w(TAG, "Usage stats loading degraded: permission missing")
                     TraceOutcome.Degraded
                 } else {
-                    val rawUsages = trace.timedSection(tag = TAG, operation = "Usage stats query", metric = "usage_stats_query_ms") {
+                    val rawUsages = timedSection(tag = TAG, operation = "Usage stats query", metric = "usage_stats_query_ms") {
                         queryRawUsageStats()
                     }
                     val usages = rawUsages
@@ -85,9 +85,9 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
                     TraceOutcome.Success
                 }
             }.fold(
-                onSuccess = { trace.outcome = it },
+                onSuccess = { outcome = it },
                 onFailure = { failure ->
-                    trace.outcome = TraceOutcome.Error
+                    outcome = TraceOutcome.Error
                     Logger.e(TAG, failure, "Usage stats loading failed")
                 },
             )
