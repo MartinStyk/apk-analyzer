@@ -330,6 +330,7 @@ Add these traces after the three primary traces use the same infrastructure succ
 | `usage_stats_load` | `outcome`, `permission` | `usage_stats_query_ms` |
 | `app_index_build` | `outcome` | `app_count`, `index_build_ms` |
 | `device_features_load` | `outcome` | — (not yet instrumented; single memoized `PackageManager` call, low value) |
+| `ai_summary_load` | `outcome`, `analysis_mode`, `cache_hit`, `availability` | — |
 
 `app_signing_index_load` has one reload path (package-change driven), so a `trigger` attribute would
 never vary and was dropped — it wouldn't segment anything. The current enrichment entry points do not
@@ -344,6 +345,15 @@ yields partial data.
 installed-app and signing-index flows — not IO-bound, but expensive enough across the full app list
 plus per-app certificates to be worth one aggregate duration metric, matching this doc's "only time
 genuinely expensive stages" rule.
+
+`ai_summary_load` (`core:ai-insights`) wraps one coalesced generation per `AppReference`, not every
+`getDescription` call — concurrent callers for the same reference share one trace. `analysis_mode`
+is `installed` or `apk_file`; only `installed` requests are cache-eligible, so `cache_hit` is only
+meaningful there. `availability` mirrors `AiAvailability` (`available`, `downloadable`,
+`downloading`, `unavailable`) at the moment generation was attempted. `outcome=degraded` covers every
+expected reason `getDescription` returns `null` — AI not available, metadata lookup failure, or no
+valid model output after the retry — since none of those are unexpected errors; `outcome=error` is
+reserved for a genuine unhandled exception (for example, a cache I/O failure).
 
 Do not emit one remote trace or non-fatal per installed app from bulk operations. Per-app failures
 are accumulated for logging; one non-fatal may be recorded for the operation only when the failure

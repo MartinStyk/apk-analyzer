@@ -15,6 +15,7 @@ import androidx.compose.material.icons.rounded.Apps
 import androidx.compose.material.icons.rounded.ArrowDownward
 import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.ArrowUpward
+import androidx.compose.material.icons.rounded.AutoAwesome
 import androidx.compose.material.icons.rounded.Bluetooth
 import androidx.compose.material.icons.rounded.CalendarToday
 import androidx.compose.material.icons.rounded.Category
@@ -80,6 +81,7 @@ data object ApkAnalyzerIcons {
     val Android = Icons.Rounded.Android
     val ArrowDropDown = Icons.Rounded.ArrowDropDown
     val ActivityRecognition = Icons.AutoMirrored.Rounded.DirectionsRun
+    val AiSparkle = Icons.Rounded.AutoAwesome
     val Bluetooth = Icons.Rounded.Bluetooth
     val Browse = Icons.Rounded.Category
     val BrowseBorder = Icons.Outlined.Category

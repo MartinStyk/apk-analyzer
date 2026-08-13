@@ -69,5 +69,9 @@ gradlePlugin {
             id = "apkanalyzer.compose"
             implementationClass = "sk.styk.martin.apkanalyzer.ComposePlugin"
         }
+        register("apkanalyzer.room") {
+            id = "apkanalyzer.room"
+            implementationClass = "sk.styk.martin.apkanalyzer.RoomPlugin"
+        }
     }
 }

@@ -28,6 +28,7 @@ include(
     ":core:apk-files",
     ":core:apps",
     ":core:app-permissions",
+    ":core:ai-insights",
     ":core:app-index",
     ":core:common",
     ":core:user-preferences",
