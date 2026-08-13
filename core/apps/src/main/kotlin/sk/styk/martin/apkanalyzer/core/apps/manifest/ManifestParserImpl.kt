@@ -3,6 +3,7 @@ package sk.styk.martin.apkanalyzer.core.apps.manifest
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import kotlinx.coroutines.withContext
+import sk.styk.martin.apkanalyzer.core.apps.analysisModeAttribute
 import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
 import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilterKey
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
@@ -10,6 +11,10 @@ import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
+import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
+import sk.styk.martin.apkanalyzer.core.common.performance.outcome
+import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
 import javax.inject.Inject
 
 private const val TAG = "ManifestParser"
@@ -19,20 +24,21 @@ internal class ManifestParserImpl @Inject constructor(
     private val dispatcherProvider: DispatcherProvider,
     private val manifestXmlRenderer: ManifestXmlRenderer,
     private val componentManifestParser: ComponentManifestParser,
+    private val performanceTracker: PerformanceTracker,
 ) : ManifestParser {
 
-    override suspend fun manifest(reference: AppReference): Result<ParsedManifest> = when (reference) {
-        is AppReference.InstalledPackage -> installedPackageManifest(reference.packageName)
-        is AppReference.ApkFile -> apkFileManifest(reference.path)
+    override suspend fun manifest(reference: AppReference): Result<ParsedManifest> = performanceTracker.startCancellableTrace("manifest_load") { trace ->
+        trace["analysis_mode"] = reference.analysisModeAttribute
+        val result = when (reference) {
+            is AppReference.InstalledPackage -> installedPackageManifest(reference.packageName)
+            is AppReference.ApkFile -> apkFileManifest(reference.path)
+        }
+        trace.outcome = if (result.isSuccess) TraceOutcome.Success else TraceOutcome.Error
+        result
     }
 
-    override suspend fun componentIntentFilters(reference: AppReference): Result<Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>> {
-        val context = when (reference) {
-            is AppReference.InstalledPackage -> "mode=installed package=${reference.packageName.value}"
-            is AppReference.ApkFile -> "mode=apk_file apk_path=${reference.path}"
-        }
-        Logger.d(TAG, "Component intent filters loading started: $context")
-        return withContext(dispatcherProvider.io()) {
+    override suspend fun componentIntentFilters(reference: AppReference): Result<Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>> =
+        withContext(dispatcherProvider.io()) {
             runCatchingCancellable {
                 when (reference) {
                     is AppReference.InstalledPackage -> installedComponentIntentFilters(reference.packageName)
@@ -44,12 +50,7 @@ internal class ManifestParserImpl @Inject constructor(
                     )
                     .mapValues { (_, filters) -> filters.distinct() }
             }
-        }.onSuccess {
-            Logger.d(TAG, "Component intent filters loading finished: ${it.size} components loaded, $context")
-        }.onFailure {
-            Logger.w(TAG, it, "Component intent filters loading degraded: $context")
         }
-    }
 
     private suspend fun installedPackageManifest(packageName: PackageName): Result<ParsedManifest> {
         val context = "mode=installed package=${packageName.value}"

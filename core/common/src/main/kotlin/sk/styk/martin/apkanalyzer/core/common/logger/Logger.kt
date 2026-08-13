@@ -39,6 +39,7 @@ object Logger {
             message: String,
             t: Throwable?,
         ) {
+            if (priority < Log.INFO) return
             FirebaseCrashlytics.getInstance().log("${priority.toPriorityChar()}/${tag.orEmpty()}: $message")
             if (priority >= Log.WARN && t != null) {
                 FirebaseCrashlytics.getInstance().recordException(t)
@@ -48,9 +49,7 @@ object Logger {
         private fun Int.toPriorityChar() = when (this) {
             Log.ASSERT, Log.ERROR -> 'E'
             Log.WARN -> 'W'
-            Log.INFO -> 'I'
-            Log.DEBUG -> 'D'
-            else -> 'V'
+            else -> 'I'
         }
     }
 }

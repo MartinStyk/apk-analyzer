@@ -19,7 +19,10 @@ import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
 import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
 import sk.styk.martin.apkanalyzer.core.common.performance.TracePermission
+import sk.styk.martin.apkanalyzer.core.common.performance.outcome
+import sk.styk.martin.apkanalyzer.core.common.performance.permission
 import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
+import sk.styk.martin.apkanalyzer.core.common.performance.timedSection
 import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -64,15 +67,17 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
         performanceTracker.startCancellableTrace("usage_stats_load") { trace ->
             runCatchingCancellable {
                 val hasPermission = checkPermission()
-                trace.setPermission(if (hasPermission) TracePermission.Granted else TracePermission.Denied)
+                trace.permission = if (hasPermission) TracePermission.Granted else TracePermission.Denied
                 isPermissionGranted.value = hasPermission
 
                 if (!hasPermission) {
                     Logger.w(TAG, "Usage stats loading degraded: permission missing")
                     TraceOutcome.Degraded
                 } else {
-                    Logger.d(TAG, "Usage stats loading started")
-                    val usages = queryRawUsageStats()
+                    val rawUsages = trace.timedSection(tag = TAG, operation = "Usage stats query", metric = "usage_stats_query_ms") {
+                        queryRawUsageStats()
+                    }
+                    val usages = rawUsages
                         .groupBy { PackageName(it.packageName) }
                         .mapValues { (_, usages) -> Instant.ofEpochMilli(usages.maxOf { it.lastTimeUsed }) }
                     lastUsedTimes.value = usages
@@ -80,11 +85,10 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
                     TraceOutcome.Success
                 }
             }.fold(
-                onSuccess = trace::setOutcome,
+                onSuccess = { trace.outcome = it },
                 onFailure = { failure ->
-                    trace.setOutcome(TraceOutcome.Error)
+                    trace.outcome = TraceOutcome.Error
                     Logger.e(TAG, failure, "Usage stats loading failed")
-                    throw failure
                 },
             )
         }

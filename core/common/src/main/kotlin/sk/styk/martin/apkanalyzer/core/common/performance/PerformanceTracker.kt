@@ -17,7 +17,7 @@ suspend fun <T> PerformanceTracker.startCancellableTrace(name: String, block: su
 
 private fun PerformanceTrace.recordCancellation(cancellation: CancellationException) {
     val outcomeFailure = runCatching {
-        setOutcome(TraceOutcome.Cancelled)
+        outcome = TraceOutcome.Cancelled
     }.exceptionOrNull()
     if (outcomeFailure != null && outcomeFailure !== cancellation) {
         cancellation.addSuppressed(outcomeFailure)

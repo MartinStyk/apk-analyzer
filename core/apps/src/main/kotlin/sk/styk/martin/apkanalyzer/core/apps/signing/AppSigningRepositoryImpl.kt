@@ -11,10 +11,15 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import sk.styk.martin.apkanalyzer.core.apps.PackageChangesObserver
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
+import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
+import sk.styk.martin.apkanalyzer.core.common.performance.outcome
+import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
+import sk.styk.martin.apkanalyzer.core.common.performance.timedSection
 import javax.inject.Inject
-import kotlin.coroutines.cancellation.CancellationException
 
 private const val TAG = "AppSigningRepositoryImpl"
 
@@ -24,30 +29,37 @@ internal class AppSigningRepositoryImpl @Inject constructor(
     packageChangesObserver: PackageChangesObserver,
     dispatcherProvider: DispatcherProvider,
     appScope: CoroutineScope,
+    private val performanceTracker: PerformanceTracker,
 ) : AppSigningRepository {
 
-    @Suppress("TooGenericExceptionCaught")
     private val cachedSigning = packageChangesObserver.observe()
         .onStart { emit(Unit) }
-        .mapLatest {
-            Logger.d(TAG, "App signing index loading started")
-            try {
-                val result = loadAllSigning()
-                Logger.i(TAG, "App signing index loading finished: ${result.size} apps loaded")
-                result
-            } catch (failure: Throwable) {
-                if (failure !is CancellationException) {
-                    Logger.e(TAG, failure, "App signing index loading failed")
-                }
-                throw failure
-            }
-        }
+        .mapLatest { loadAllSigning() }
         .flowOn(dispatcherProvider.io())
         .shareIn(appScope, SharingStarted.Lazily, replay = 1)
 
     override fun signing(): Flow<Map<PackageName, AppSigning>> = cachedSigning
 
     @SuppressLint("QueryPermissionsNeeded")
-    private fun loadAllSigning(): Map<PackageName, AppSigning> = packageManager.getInstalledPackages(PackageManager.GET_SIGNING_CERTIFICATES)
-        .associate { PackageName(it.packageName) to certificateExtractor.getAppSigning(it) }
+    private suspend fun loadAllSigning(): Map<PackageName, AppSigning> = performanceTracker.startCancellableTrace("app_signing_index_load") { trace ->
+        runCatchingCancellable {
+            val packages = trace.timedSection(tag = TAG, operation = "App signing package query", metric = "package_query_ms") {
+                packageManager.getInstalledPackages(PackageManager.GET_SIGNING_CERTIFICATES)
+            }
+            trace.timedSection(tag = TAG, operation = "App signing extraction", metric = "signing_extraction_ms") {
+                packages.associate { PackageName(it.packageName) to certificateExtractor.getAppSigning(it) }
+            }
+        }.fold(
+            onSuccess = { signing ->
+                trace.outcome = TraceOutcome.Success
+                Logger.i(TAG, "App signing index loading finished: ${signing.size} apps loaded")
+                signing
+            },
+            onFailure = { failure ->
+                trace.outcome = TraceOutcome.Error
+                Logger.e(TAG, failure, "App signing index loading failed")
+                emptyMap()
+            },
+        )
+    }
 }

@@ -51,12 +51,16 @@ import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTrace
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
 import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
+import sk.styk.martin.apkanalyzer.core.common.performance.outcome
 import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
+import sk.styk.martin.apkanalyzer.core.common.performance.timedSection
 import java.io.File
 import java.time.Instant
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Singleton
+
+private const val TAG = "AppDetailRepositoryImpl"
 
 @Suppress("TooManyFunctions")
 @Singleton
@@ -94,72 +98,45 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             .launchIn(appScope + dispatcherProvider.default())
     }
 
-    override suspend fun details(reference: AppReference): Result<AppDetail> = runCatchingCancellable {
-        performanceTracker.startCancellableTrace(APP_DETAIL_LOAD_TRACE) { trace ->
-            trace[ANALYSIS_MODE_ATTRIBUTE] = reference.analysisModeAttribute
-            val result = when (reference) {
-                is AppReference.InstalledPackage -> installedPackageDetails(reference.packageName, trace)
-                is AppReference.ApkFile -> apkFilePackageDetails(File(reference.path), trace)
-            }
-            result.fold(
-                onSuccess = { detail ->
-                    trace.recordResult(detail)
-                    detail
-                },
-                onFailure = { failure ->
-                    trace.recordErrorPreserving(failure)
-                    throw failure
-                },
-            )
+    override suspend fun details(reference: AppReference): Result<AppDetail> = performanceTracker.startCancellableTrace("app_detail_load") { trace ->
+        trace["analysis_mode"] = reference.analysisModeAttribute
+        when (reference) {
+            is AppReference.InstalledPackage -> installedPackageDetails(reference.packageName, trace)
+            is AppReference.ApkFile -> apkFilePackageDetails(File(reference.path), trace)
+        }.onSuccess {
+            trace.recordResult(it)
+        }.onFailure {
+            trace.recordErrorPreserving(it)
         }
     }
 
     private suspend fun installedPackageDetails(packageName: PackageName, trace: PerformanceTrace): Result<AppDetail> {
         val context = "mode=installed package=${packageName.value}"
         val cacheKey = CacheKey.InstalledPackage(packageName)
-        Logger.d(TAG, "App detail loading started: $context")
-        Logger.d(TAG, "App detail cache lookup started: $context")
+        Logger.i(TAG, "App detail loading started: $context")
         val cachedDetail = cache[cacheKey]
-        trace[CACHE_HIT_ATTRIBUTE] = cachedDetail?.let { ATTRIBUTE_TRUE } ?: ATTRIBUTE_FALSE
         cachedDetail?.let {
-            Logger.d(TAG, "App detail cache lookup finished: cache hit, $context")
-            if (!it.isPerformanceDegraded) {
-                Logger.i(TAG, "App detail loading finished: cache hit, $context")
-            } else {
-                Logger.w(TAG, "App detail loading degraded: optional analysis unavailable, cache hit, $context")
-            }
+            trace[CACHE_HIT_ATTRIBUTE] = true.toString()
+            Logger.i(TAG, "App detail loading finished: cache hit, $context")
             return Result.success(it)
         }
-        Logger.d(TAG, "App detail cache lookup finished: cache miss, $context")
         return runCatchingCancellable {
             val reference = AppReference.InstalledPackage(packageName)
-
-            Logger.d(TAG, "App detail package query started: $context")
-            val packageInfo = packageManager.getPackageInfo(packageName.value, analysisFlags)
-            Logger.d(TAG, "App detail package query finished: $context")
-
-            val intentFilters = manifestParser.componentIntentFilters(reference)
-            if (intentFilters.isSuccess) {
-                Logger.d(TAG, "App detail intent filters loading finished: $context")
-            } else {
-                Logger.w(TAG, "App detail intent filters loading degraded: $context")
+            val packageInfo = trace.timedStage("package query", "package_query_ms", context) {
+                packageManager.getPackageInfo(packageName.value, analysisFlags)
             }
-
-            val totalSize = storageStatsRepository.queryTotalSize(packageName)
-            if (totalSize != null) {
-                Logger.d(TAG, "App detail storage stats loading finished: $context")
-            } else {
-                Logger.w(TAG, "App detail storage stats loading degraded: data unavailable, $context")
-            }
-
-            val lastUsedTime = usageStatsRepository.queryLastUsedTime(packageName)
-            if (lastUsedTime != null) {
-                Logger.d(TAG, "App detail usage stats loading finished: $context")
-            } else {
-                Logger.w(TAG, "App detail usage stats loading degraded: data unavailable, $context")
-            }
+            val intentFilters = trace.timedStage("manifest parsing", "manifest_parse_ms", context) {
+                manifestParser.componentIntentFilters(reference)
+            }.warnIfDegraded("intent filters", context)
+            val totalSize = trace.timedStage("storage stats", "storage_stats_ms", context) {
+                storageStatsRepository.queryTotalSize(packageName)
+            }.warnIfDegraded("storage stats", context)
+            val lastUsedTime = trace.timedStage("usage stats", "usage_stats_ms", context) {
+                usageStatsRepository.queryLastUsedTime(packageName)
+            }.warnIfDegraded("usage stats", context)
 
             getPackageDetails(
+                trace = trace,
                 context = context,
                 analysisMode = AppDetail.AnalysisMode.InstalledPackage,
                 packageInfo = packageInfo,
@@ -183,37 +160,25 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     private suspend fun apkFilePackageDetails(accessibleFile: File, trace: PerformanceTrace): Result<AppDetail> {
         val context = "mode=apk_file apk_path=${accessibleFile.absolutePath}"
         val cacheKey = CacheKey.ApkFile(accessibleFile.absolutePath, accessibleFile.lastModified())
-        Logger.d(TAG, "App detail loading started: $context")
-        Logger.d(TAG, "App detail cache lookup started: $context")
+        Logger.i(TAG, "App detail loading started: $context")
         val cachedDetail = cache[cacheKey]
-        trace[CACHE_HIT_ATTRIBUTE] = cachedDetail?.let { ATTRIBUTE_TRUE } ?: ATTRIBUTE_FALSE
         cachedDetail?.let {
-            Logger.d(TAG, "App detail cache lookup finished: cache hit, $context")
-            if (!it.isPerformanceDegraded) {
-                Logger.i(TAG, "App detail loading finished: cache hit, $context")
-            } else {
-                Logger.w(TAG, "App detail loading degraded: optional analysis unavailable, cache hit, $context")
-            }
+            trace[CACHE_HIT_ATTRIBUTE] = true.toString()
+            Logger.i(TAG, "App detail loading finished: cache hit, $context")
             return Result.success(it)
         }
 
-        Logger.d(TAG, "App detail cache lookup finished: cache miss, $context")
         return runCatchingCancellable {
             val reference = AppReference.ApkFile(accessibleFile.absolutePath)
-
-            Logger.d(TAG, "App detail package query started: $context")
-            val packageInfo = packageManager.getPackageArchiveInfoWithCorrectPath(accessibleFile.absolutePath, analysisFlags)
-                ?: error("Cannot parse APK file: ${accessibleFile.absolutePath}")
-            Logger.d(TAG, "App detail package query finished: $context")
-
-            val intentFilters = manifestParser.componentIntentFilters(reference)
-            if (intentFilters.isSuccess) {
-                Logger.d(TAG, "App detail intent filters loading finished: $context")
-            } else {
-                Logger.w(TAG, "App detail intent filters loading degraded: $context")
-            }
+            val packageInfo = trace.timedStage("package query", "package_query_ms", context) {
+                packageManager.getPackageArchiveInfoWithCorrectPath(accessibleFile.absolutePath, analysisFlags)
+            } ?: error("Cannot parse APK file: ${accessibleFile.absolutePath}")
+            val intentFilters = trace.timedStage("manifest parsing", "manifest_parse_ms", context) {
+                manifestParser.componentIntentFilters(reference)
+            }.warnIfDegraded("intent filters", context)
 
             getPackageDetails(
+                trace = trace,
                 context = context,
                 analysisMode = AppDetail.AnalysisMode.ApkFile,
                 packageInfo = packageInfo,
@@ -222,17 +187,14 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             )
         }.onSuccess { detail ->
             cache[cacheKey] = detail
-            if (!detail.isPerformanceDegraded) {
-                Logger.i(TAG, "App detail loading finished: $context")
-            } else {
-                Logger.w(TAG, "App detail loading degraded: optional analysis unavailable, $context")
-            }
+            Logger.i(TAG, "App detail loading finished: $context")
         }.onFailure {
             Logger.e(TAG, it, "App detail loading failed: $context")
         }
     }
 
     private fun getPackageDetails(
+        trace: PerformanceTrace,
         context: String,
         analysisMode: AppDetail.AnalysisMode,
         packageInfo: PackageInfo,
@@ -241,75 +203,89 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         totalSize: AppSize? = null,
         lastUsedTime: Instant? = null,
     ): AppDetail {
-        Logger.d(TAG, "App detail general information loading started: $context")
-        val info = getGeneralData(packageInfo, totalSize, lastUsedTime)
-        Logger.d(TAG, "App detail general information loading finished: $context")
-
-        Logger.d(TAG, "App detail certificates loading started: $context")
-        val signing = certificateExtractor.getAppSigning(packageInfo)
-        Logger.d(
-            TAG,
-            "App detail certificates loading finished: ${signing.currentCertificates.size + signing.pastCertificates.size} certificates loaded, $context",
-        )
-
-        Logger.d(TAG, "App detail signing schemes loading started: $context")
-        val signingSchemeVersions = packageInfo.applicationInfo?.sourceDir?.let(apkSigningBlockAnalyzer::detectSchemeVersions)
-        if (signingSchemeVersions != null) {
-            Logger.d(TAG, "App detail signing schemes loading finished: ${signingSchemeVersions.size} schemes loaded, $context")
-        } else {
-            Logger.w(TAG, "App detail signing schemes loading degraded: data unavailable, $context")
+        val info = trace.timedStage("general information", "general_info_ms", context) {
+            getGeneralData(packageInfo, totalSize, lastUsedTime)
         }
 
+        val signing = trace.timedStage("certificates", "certificates_ms", context) {
+            certificateExtractor.getAppSigning(packageInfo)
+        }
+
+        val signingSchemeVersions = trace.timedStage("signing schemes", "signing_schemes_ms", context) {
+            packageInfo.applicationInfo?.sourceDir?.let(apkSigningBlockAnalyzer::detectSchemeVersions)
+        }.warnIfDegraded("signing schemes", context)
+
         val launcherActivityNames = when (analysisMode) {
-            AppDetail.AnalysisMode.InstalledPackage -> {
-                Logger.d(TAG, "App detail launcher activities loading started: $context")
-                queryLauncherActivityNames(PackageName(packageInfo.packageName)).also {
-                    Logger.d(TAG, "App detail launcher activities loading finished: ${it.size} activities loaded, $context")
-                }
+            AppDetail.AnalysisMode.InstalledPackage -> trace.timedStage("launcher activities", "launcher_activities_ms", context) {
+                queryLauncherActivityNames(PackageName(packageInfo.packageName))
             }
 
             AppDetail.AnalysisMode.ApkFile -> null
         }
 
-        Logger.d(TAG, "App detail components loading started: $context")
-        val activities = getActivities(packageInfo, launcherActivityNames, intentFiltersByComponent)
-        val services = getServices(packageInfo, intentFiltersByComponent)
-        val contentProviders = getContentProviders(packageInfo, intentFiltersByComponent)
-        val receivers = getBroadcastReceivers(packageInfo, intentFiltersByComponent)
-        Logger.d(
-            TAG,
-            "App detail components loading finished: ${activities.size + services.size + contentProviders.size + receivers.size} components loaded, $context",
-        )
+        val components = trace.timedStage("components", "components_ms", context) {
+            ComponentsBundle(
+                activities = getActivities(packageInfo, launcherActivityNames, intentFiltersByComponent),
+                services = getServices(packageInfo, intentFiltersByComponent),
+                contentProviders = getContentProviders(packageInfo, intentFiltersByComponent),
+                receivers = getBroadcastReceivers(packageInfo, intentFiltersByComponent),
+            )
+        }
 
-        Logger.d(TAG, "App detail permissions loading started: $context")
-        val permissions = getPermissions(packageInfo)
-        Logger.d(
-            TAG,
-            "App detail permissions loading finished: ${permissions.used.size + permissions.defined.size} permissions loaded, $context",
-        )
+        val permissions = trace.timedStage("permissions", "permissions_ms", context) {
+            getPermissions(packageInfo)
+        }
 
-        Logger.d(TAG, "App detail features loading started: $context")
-        val features = getFeatures(packageInfo)
-        Logger.d(TAG, "App detail features loading finished: ${features.size} features loaded, $context")
+        val features = trace.timedStage("features", "features_ms", context) {
+            getFeatures(packageInfo)
+        }
 
-        Logger.d(TAG, "App detail packaging loading started: $context")
-        val nativeLibraries = readNativeLibraries(packageInfo.applicationInfo)
-        Logger.d(TAG, "App detail packaging loading finished: ${nativeLibraries.files.size} native libraries loaded, $context")
+        val nativeLibraries = trace.timedStage("packaging", "packaging_ms", context) {
+            readNativeLibraries(packageInfo.applicationInfo)
+        }
 
         return AppDetail(
             analysisMode = analysisMode,
             info = info,
             signing = signing.copy(signingSchemeVersions = signingSchemeVersions),
-            activities = activities,
-            services = services,
-            contentProviders = contentProviders,
-            receivers = receivers,
+            activities = components.activities,
+            services = components.services,
+            contentProviders = components.contentProviders,
+            receivers = components.receivers,
             permissions = permissions,
             features = features,
             nativeLibraries = nativeLibraries,
             areComponentIntentFiltersAvailable = areIntentFiltersAvailable,
         )
     }
+
+    private inline fun <T> PerformanceTrace.timedStage(
+        stage: String,
+        metric: String,
+        context: String,
+        block: () -> T,
+    ): T = timedSection(tag = TAG, operation = "App detail $stage loading", metric = metric, context = context, block = block)
+
+    private fun warnDegraded(stage: String, context: String) {
+        Logger.w(TAG, "App detail $stage loading degraded: data unavailable, $context")
+    }
+
+    private fun <T> T?.warnIfDegraded(stage: String, context: String): T? {
+        if (this == null) warnDegraded(stage, context)
+        return this
+    }
+
+    private fun <T> Result<T>.warnIfDegraded(stage: String, context: String): Result<T> {
+        if (isFailure) warnDegraded(stage, context)
+        return this
+    }
+
+    private data class ComponentsBundle(
+        val activities: List<Activity>,
+        val services: List<Service>,
+        val contentProviders: List<ContentProvider>,
+        val receivers: List<BroadcastReceiver>,
+    )
 
     private fun getGeneralData(
         packageInfo: PackageInfo,
@@ -482,46 +458,28 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         data class InstalledPackage(val packageName: PackageName) : CacheKey
         data class ApkFile(val path: String, val lastModified: Long) : CacheKey
     }
-
-    companion object {
-        private const val TAG = "AppDetailRepositoryImpl"
-
-        private val launcherCategories = listOf(Intent.CATEGORY_LAUNCHER, Intent.CATEGORY_LEANBACK_LAUNCHER)
-    }
 }
 
-private val AppReference.analysisModeAttribute: String
-    get() = when (this) {
-        is AppReference.InstalledPackage -> ANALYSIS_MODE_INSTALLED
-        is AppReference.ApkFile -> ANALYSIS_MODE_APK_FILE
-    }
+private val launcherCategories = listOf(Intent.CATEGORY_LAUNCHER, Intent.CATEGORY_LEANBACK_LAUNCHER)
 
 private val AppDetail.isPerformanceDegraded: Boolean
     get() = !areComponentIntentFiltersAvailable || signing.signingSchemeVersions == null
 
 private fun PerformanceTrace.recordResult(detail: AppDetail) {
-    this[INTENT_FILTERS_ATTRIBUTE] = if (detail.areComponentIntentFiltersAvailable) AVAILABILITY_AVAILABLE else AVAILABILITY_UNAVAILABLE
-    this[SIGNING_SCHEMES_ATTRIBUTE] = if (detail.signing.signingSchemeVersions != null) AVAILABILITY_AVAILABLE else AVAILABILITY_UNAVAILABLE
-    setOutcome(if (detail.isPerformanceDegraded) TraceOutcome.Degraded else TraceOutcome.Success)
+    this["intent_filters"] = if (detail.areComponentIntentFiltersAvailable) AVAILABILITY_AVAILABLE else AVAILABILITY_UNAVAILABLE
+    this["signing_schemes"] = if (detail.signing.signingSchemeVersions != null) AVAILABILITY_AVAILABLE else AVAILABILITY_UNAVAILABLE
+    outcome = if (detail.isPerformanceDegraded) TraceOutcome.Degraded else TraceOutcome.Success
 }
 
 private fun PerformanceTrace.recordErrorPreserving(failure: Throwable) {
     val telemetryFailure = runCatching {
-        setOutcome(TraceOutcome.Error)
+        outcome = TraceOutcome.Error
     }.exceptionOrNull()
     if (telemetryFailure != null && telemetryFailure !== failure) {
         failure.addSuppressed(telemetryFailure)
     }
 }
 
-private const val APP_DETAIL_LOAD_TRACE = "app_detail_load"
-private const val ANALYSIS_MODE_ATTRIBUTE = "analysis_mode"
 private const val CACHE_HIT_ATTRIBUTE = "cache_hit"
-private const val INTENT_FILTERS_ATTRIBUTE = "intent_filters"
-private const val SIGNING_SCHEMES_ATTRIBUTE = "signing_schemes"
-private const val ANALYSIS_MODE_INSTALLED = "installed"
-private const val ANALYSIS_MODE_APK_FILE = "apk_file"
-private const val ATTRIBUTE_TRUE = "true"
-private const val ATTRIBUTE_FALSE = "false"
 private const val AVAILABILITY_AVAILABLE = "available"
 private const val AVAILABILITY_UNAVAILABLE = "unavailable"

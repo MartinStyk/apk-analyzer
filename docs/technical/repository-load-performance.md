@@ -73,11 +73,16 @@ inside per-item loops; report a bounded count when the stage finishes.
 
 | Level | Use | Crashlytics behavior |
 |---|---|---|
-| `DEBUG` | Operation/stage start, cache hit/miss, expected absence, and successful internal stages | Breadcrumb only |
+| `DEBUG` | Operation/stage start, cache hit/miss, expected absence, and successful internal stages | Local logcat only, not forwarded |
 | `INFO` | Successful completion of a public repository load or a process-level reload | Breadcrumb only |
 | `WARN` without `Throwable` | Unusual but expected or fully handled state, such as missing usage permission, an uninstall race, unsupported signing data, or unavailable optional metadata | Breadcrumb only |
 | `WARN` with `Throwable` | Unexpected recoverable failure where the operation returns a useful but degraded result | One non-fatal report with diagnostic context |
 | `ERROR` with `Throwable` | Unexpected failure that makes the parent operation fail | One non-fatal report with diagnostic context |
+
+`FirebaseTree` (`core:common`) drops anything below `INFO` before it reaches
+`FirebaseCrashlytics.log(...)`. Crashlytics's log buffer is small and only sent alongside a crash or
+non-fatal, so per-stage DEBUG detail — now emitted routinely by `timedSection` across every timed
+repository — would otherwise crowd out the breadcrumbs that matter by the time a crash happens.
 
 Do not use `ERROR` without a `Throwable` for a failed operation because it cannot produce the required
 non-fatal report. Do not report coroutine cancellation as a warning, error, or non-fatal.
@@ -204,9 +209,17 @@ interface PerformanceTracker {
 interface PerformanceTrace : AutoCloseable {
     operator fun set(name: String, value: Long)
     operator fun set(name: String, value: String)
-    fun setOutcome(outcome: TraceOutcome)
-    fun setPermission(permission: TracePermission)
 }
+
+inline fun <T> PerformanceTrace.measuredSection(metric: String, block: () -> T): T
+
+var PerformanceTrace.outcome: TraceOutcome
+    get() = throw UnsupportedOperationException(...)
+    set(value) { this["outcome"] = ... }
+
+var PerformanceTrace.permission: TracePermission
+    get() = throw UnsupportedOperationException(...)
+    set(value) { this["permission"] = ... }
 
 enum class TraceOutcome {
     Success,
@@ -233,8 +246,11 @@ Requirements for the adapter and contract:
 - `startCancellableTrace` starts and scopes an independent trace handle. It records the standard
   `outcome=cancelled` attribute and closes the handle when the block returns, throws, or is cancelled.
 - `trace[name] = longValue` records a metric, while `trace[name] = stringValue` records an attribute.
-- Shared values use typed setters such as `trace.setOutcome(TraceOutcome.Success)` and
-  `trace.setPermission(TracePermission.Granted)`; operation-specific attributes stay local.
+- Shared values use typed setters such as `trace.outcome = TraceOutcome.Success` and
+  `trace.permission = TracePermission.Granted`; operation-specific attributes stay local. Both are
+  write-only extension properties; reading either throws.
+- Wrap a timed step with `trace.measuredSection(metric) { ... }` instead of `measureTimedValue`; it
+  records the duration as a metric and returns the block's value.
 - Each emitting repository owns private operation-specific names that satisfy Firebase naming limits.
 - Callers record the parent outcome attribute inside the trace block before it returns or throws.
 - Instrumentation must not change repository results, cache semantics, dispatcher selection, or
@@ -291,30 +307,43 @@ does not speculate beyond these APIs or change their established result behavior
 ### `manifest_load`
 
 This trace measures the complete readable-manifest request from `ManifestParser.manifest`.
+`componentIntentFilters` (the other public method on `ManifestParser`) has exactly one caller —
+`AppDetailRepositoryImpl` — and is already fully covered by that caller's `app_detail_load` stage
+timing, so it does not own a second trace or duplicate logging of its own.
 
 | Attribute | Values |
 |---|---|
 | `outcome` | `success`, `error`, `cancelled` |
 | `analysis_mode` | `installed`, `apk_file` |
-| `split_count_bucket` | `0`, `1_4`, `5_9`, `10_plus` |
+
+`split_count_bucket` was planned here but dropped: bucketing split count only adds segmentation value
+once a production question needs it, and nothing does yet.
 
 ## Supporting Trace Design
 
 Add these traces after the three primary traces use the same infrastructure successfully:
 
-| Trace | Key attributes |
-|---|---|
-| `app_signing_index_load` | `outcome`, `trigger` |
-| `storage_stats_load` | `outcome`, `permission`, `trigger` |
-| `usage_stats_load` | `outcome`, `permission` |
-| `device_features_load` | `outcome` |
+| Trace | Key attributes | Custom metrics |
+|---|---|---|
+| `app_signing_index_load` | `outcome` | `package_query_ms`, `signing_extraction_ms` |
+| `storage_stats_load` | `outcome`, `permission`, `trigger` | `storage_stats_query_ms` |
+| `usage_stats_load` | `outcome`, `permission` | `usage_stats_query_ms` |
+| `app_index_build` | `outcome` | `app_count`, `index_build_ms` |
+| `device_features_load` | `outcome` | — (not yet instrumented; single memoized `PackageManager` call, low value) |
 
-The current enrichment entry points do not carry the installed-list trigger through their public
-repository APIs. Storage reports `trigger=installed_apps` for list-driven requests and
-`trigger=lifecycle_start` for foreground refreshes. Usage has only lifecycle-driven bulk refreshes,
-so it does not record a constant trigger attribute; its single-package query remains part of
-app-detail work. Both enrichment traces report `permission=granted|denied` and use
-`outcome=degraded` when permission is missing or a storage query yields partial data.
+`app_signing_index_load` has one reload path (package-change driven), so a `trigger` attribute would
+never vary and was dropped — it wouldn't segment anything. The current enrichment entry points do not
+carry the installed-list trigger through their public repository APIs. Storage reports
+`trigger=installed_apps` for list-driven requests and `trigger=lifecycle_start` for foreground
+refreshes. Usage has only lifecycle-driven bulk refreshes, so it does not record a constant trigger
+attribute; its single-package query remains part of app-detail work. Both enrichment traces report
+`permission=granted|denied` and use `outcome=degraded` when permission is missing or a storage query
+yields partial data.
+
+`app_index_build` (`core:app-index`) times the CPU-bound attribute-bucketing pass over the combined
+installed-app and signing-index flows — not IO-bound, but expensive enough across the full app list
+plus per-app certificates to be worth one aggregate duration metric, matching this doc's "only time
+genuinely expensive stages" rule.
 
 Do not emit one remote trace or non-fatal per installed app from bulk operations. Per-app failures
 are accumulated for logging; one non-fatal may be recorded for the operation only when the failure
@@ -339,7 +368,8 @@ cause. Add a remote custom metric only after a concrete production question just
 
 ## Rollout
 
-OBS-01 through OBS-04 are implemented. OBS-05 and later stages remain deferred.
+OBS-01 through OBS-04 are implemented. OBS-05 is partially implemented — see below. OBS-06 remains
+deferred.
 
 ### OBS-01: Make logging consistent
 
@@ -372,9 +402,16 @@ OBS-01 through OBS-04 are implemented. OBS-05 and later stages remain deferred.
 
 ### OBS-05: Instrument manifest and supporting loads
 
-- Add `manifest_load` for readable manifests.
-- Add the signing-index and device-feature traces.
-- Complete the public repository/manager load-entry inventory and document every exclusion.
+- Add `manifest_load` for readable manifests. Done.
+- Add the signing-index trace. Done — `app_signing_index_load` also fixed a latent bug where
+  `AppSigningRepositoryImpl` rethrew from a fire-and-forget `shareIn` collector with no
+  `CoroutineExceptionHandler`; it now logs and falls back to an empty index instead.
+- Add `app_index_build` (`core:app-index`) for the device-wide attribute index. Done — not in the
+  original plan, added because the grouping pass is CPU-bound over the full app list and per-app
+  certificates.
+- Add the device-feature trace. Deferred — `DeviceFeaturesRepositoryImpl` is one memoized
+  `PackageManager` call, not a loop; low value relative to the others.
+- Complete the public repository/manager load-entry inventory and document every exclusion. Deferred.
 
 ### OBS-06: Establish baselines and alerts
 
