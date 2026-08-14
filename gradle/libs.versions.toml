@@ -1,7 +1,7 @@
 [versions]
 # Kotlin
 kotlin = "2.4.10"
-ksp = "2.3.10"
+ksp = "2.3.11"
 kotlinx-collections-immutable = "0.5.1"
 
 # Android
@@ -13,7 +13,7 @@ lifecycle = "2.11.0"
 datastore = "1.2.1"
 
 # Compose
-compose-bom = "2026.06.01"
+compose-bom = "2026.08.00"
 compose-foundation = "1.11.4"
 
 # Navigation
@@ -32,6 +32,9 @@ google-services = "4.5.0"
 
 # Persistence
 room = "2.8.4"
+
+# Play Core
+play-review = "2.0.2"
 
 # On-device AI
 mlkit-genai-prompt = "1.0.0-beta4"
@@ -94,6 +97,9 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 
 # On-device AI
 mlkit-genai-prompt = { module = "com.google.mlkit:genai-prompt", version.ref = "mlkit-genai-prompt" }
+
+# Play Core
+play-review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "play-review" }
 
 # Third-party
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }

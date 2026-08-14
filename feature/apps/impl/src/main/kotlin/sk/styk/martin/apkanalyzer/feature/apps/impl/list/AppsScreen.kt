@@ -55,6 +55,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.navigationBarContentPadding
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.uilibrary.lazylist.itemsPositioned
+import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.ShimmerGroup
 import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.card
 import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.collapsingHeader
 import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.collapsingHeaderContainer
@@ -167,31 +168,33 @@ private fun AppsContent(
             lazyListState.scrollToItem(0)
         }
 
-        LazyColumn(
-            state = lazyListState,
-            contentPadding = PaddingValues(
-                start = 16.dp,
-                end = 16.dp,
-                bottom = navigationBarContentPadding + 16.dp,
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .offset { collapsingState.contentOffset },
-        ) {
-            recentsSectionItems(
-                recents = state.recents,
-                sortType = state.sortType,
-                onAppClicked = { onAction(AppsAction.AppClicked(it)) },
-            )
+        ShimmerGroup {
+            LazyColumn(
+                state = lazyListState,
+                contentPadding = PaddingValues(
+                    start = 16.dp,
+                    end = 16.dp,
+                    bottom = navigationBarContentPadding + 16.dp,
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .offset { collapsingState.contentOffset },
+            ) {
+                recentsSectionItems(
+                    recents = state.recents,
+                    sortType = state.sortType,
+                    onAppClicked = { onAction(AppsAction.AppClicked(it)) },
+                )
 
-            appsSectionItems(
-                apps = state.apps,
-                isFiltering = state.activeFilter.isActive,
-                sortType = state.sortType,
-                onAppClicked = { onAction(AppsAction.AppClicked(it)) },
-                onClearFilters = { onAction(AppsAction.ClearAllFilters) },
-                onShowSort = { showSortSheet = true },
-            )
+                appsSectionItems(
+                    apps = state.apps,
+                    isFiltering = state.activeFilter.isActive,
+                    sortType = state.sortType,
+                    onAppClicked = { onAction(AppsAction.AppClicked(it)) },
+                    onClearFilters = { onAction(AppsAction.ClearAllFilters) },
+                    onShowSort = { showSortSheet = true },
+                )
+            }
         }
     }
 
