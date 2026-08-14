@@ -37,17 +37,20 @@ import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.isSideloaded
+import sk.styk.martin.apkanalyzer.core.common.review.ReviewEligibilityTracker
 import sk.styk.martin.apkanalyzer.core.userpreferences.RecentlyViewedAppsRepository
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.ApkFileLifetime
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.AppDetailBadge
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.insight.AppDetailInsight
 import sk.styk.martin.apkanalyzer.feature.appdetail.impl.insight.AppDetailInsightEvaluator
+import java.time.Duration
 import java.time.Instant
 import kotlin.time.Duration.Companion.days
 import kotlin.time.toJavaDuration
 
 private const val TAG = "AppDetailViewModel"
+private val MIN_QUALIFYING_DWELL: Duration = Duration.ofSeconds(8)
 
 @Suppress("TooManyFunctions")
 @HiltViewModel(assistedFactory = AppDetailViewModel.Factory::class)
@@ -62,6 +65,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
     private val recentlyViewedAppsRepository: RecentlyViewedAppsRepository,
     private val clipboardManager: ClipboardManager,
     private val summaryTextFormatter: AppSummaryTextFormatter,
+    private val reviewEligibilityTracker: ReviewEligibilityTracker,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -88,6 +92,9 @@ internal class AppDetailViewModel @AssistedInject constructor(
     private var activeExport: AppDetailExport? = null
     private val appReference = appDetailInput.toAppReference()
 
+    private val sessionStartedAt = Instant.now()
+    private var engaged = false
+
     init {
         loadDetail()
     }
@@ -97,7 +104,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
         when (action) {
             is AppDetailAction.Retry -> loadDetail()
 
-            is AppDetailAction.ViewManifest -> sendEvent(AppDetailEvent.NavigateToManifest)
+            is AppDetailAction.ViewManifest -> sendSectionEvent(AppDetailEvent.NavigateToManifest)
 
             is AppDetailAction.ExportApk -> requestDocument(AppDetailExport.Apk)
 
@@ -115,23 +122,23 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
             is AppDetailAction.OpenAppInfo -> withLoadedState { sendEvent(AppDetailEvent.OpenAppInfo(it.packageName)) }
 
-            is AppDetailAction.NavigateGeneralDetails -> sendEvent(AppDetailEvent.NavigateToGeneralDetails)
+            is AppDetailAction.NavigateGeneralDetails -> sendSectionEvent(AppDetailEvent.NavigateToGeneralDetails)
 
-            is AppDetailAction.NavigatePermissions -> sendEvent(AppDetailEvent.NavigateToPermissions(action.permissionName))
+            is AppDetailAction.NavigatePermissions -> sendSectionEvent(AppDetailEvent.NavigateToPermissions(action.permissionName))
 
-            is AppDetailAction.NavigateComponents -> sendEvent(AppDetailEvent.NavigateToComponents)
+            is AppDetailAction.NavigateComponents -> sendSectionEvent(AppDetailEvent.NavigateToComponents)
 
-            is AppDetailAction.NavigateActivities -> sendEvent(AppDetailEvent.NavigateToActivities)
+            is AppDetailAction.NavigateActivities -> sendSectionEvent(AppDetailEvent.NavigateToActivities)
 
-            is AppDetailAction.NavigateServices -> sendEvent(AppDetailEvent.NavigateToServices)
+            is AppDetailAction.NavigateServices -> sendSectionEvent(AppDetailEvent.NavigateToServices)
 
-            is AppDetailAction.NavigateReceivers -> sendEvent(AppDetailEvent.NavigateToReceivers)
+            is AppDetailAction.NavigateReceivers -> sendSectionEvent(AppDetailEvent.NavigateToReceivers)
 
-            is AppDetailAction.NavigateProviders -> sendEvent(AppDetailEvent.NavigateToProviders)
+            is AppDetailAction.NavigateProviders -> sendSectionEvent(AppDetailEvent.NavigateToProviders)
 
-            is AppDetailAction.NavigateCertificates -> sendEvent(AppDetailEvent.NavigateToCertificates)
+            is AppDetailAction.NavigateCertificates -> sendSectionEvent(AppDetailEvent.NavigateToCertificates)
 
-            is AppDetailAction.NavigateFeatures -> sendEvent(AppDetailEvent.NavigateToFeatures)
+            is AppDetailAction.NavigateFeatures -> sendSectionEvent(AppDetailEvent.NavigateToFeatures)
 
             is AppDetailAction.NavigateInsight -> navigateToInsight(action.insight)
 
@@ -159,6 +166,8 @@ internal class AppDetailViewModel @AssistedInject constructor(
                 Logger.e(TAG, error, "Unable to release temporary APK")
             }
         }
+        val dwelled = Duration.between(sessionStartedAt, Instant.now()) >= MIN_QUALIFYING_DWELL
+        reviewEligibilityTracker.recordAppDetailSessionCompleted(qualified = engaged || dwelled)
     }
 
     private fun requestDocument(export: AppDetailExport) {
@@ -179,6 +188,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
     private fun copySummary() {
         withLoadedState { state ->
+            engaged = true
             val summary = summaryTextFormatter.summary(state)
             val label = summaryTextFormatter.clipLabel(state.appName)
             if (clipboardManager.copy(label, summary) == CopyResult.FeedbackNotShown) {
@@ -189,6 +199,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
     private fun shareSummary() {
         withLoadedState { state ->
+            engaged = true
             sendEvent(AppDetailEvent.ShareSummary(summaryTextFormatter.summary(state)))
         }
     }
@@ -197,13 +208,13 @@ internal class AppDetailViewModel @AssistedInject constructor(
         when (insight) {
             AppDetailInsight.Debuggable,
             is AppDetailInsight.OutdatedTargetSdk,
-            -> sendEvent(AppDetailEvent.NavigateToGeneralDetails)
+            -> sendSectionEvent(AppDetailEvent.NavigateToGeneralDetails)
 
             AppDetailInsight.DebugCertificate,
             AppDetailInsight.CertificateNotYetValid,
-            -> sendEvent(AppDetailEvent.NavigateToCertificates)
+            -> sendSectionEvent(AppDetailEvent.NavigateToCertificates)
 
-            is AppDetailInsight.SensitivePermission -> sendEvent(AppDetailEvent.NavigateToPermissions(insight.permissionName))
+            is AppDetailInsight.SensitivePermission -> sendSectionEvent(AppDetailEvent.NavigateToPermissions(insight.permissionName))
         }
     }
 
@@ -214,7 +225,10 @@ internal class AppDetailViewModel @AssistedInject constructor(
         exportInProgress.value = AppDetailExport.Apk
         viewModelScope.launch {
             val feedback = appExportManager.exportApk(appReference, destination).fold(
-                onSuccess = { AppDetailFeedback.ApkSaved(it.displayName, it.baseApkOnly) },
+                onSuccess = {
+                    engaged = true
+                    AppDetailFeedback.ApkSaved(it.displayName, it.baseApkOnly)
+                },
                 onFailure = { AppDetailFeedback.ApkSaveFailed },
             )
             activeExport = null
@@ -230,7 +244,10 @@ internal class AppDetailViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val result = appExportManager.exportIcon(appReference, destination)
             val feedback = result.fold(
-                onSuccess = { AppDetailFeedback.IconSaved(it.displayName) },
+                onSuccess = {
+                    engaged = true
+                    AppDetailFeedback.IconSaved(it.displayName)
+                },
                 onFailure = { AppDetailFeedback.IconSaveFailed },
             )
             activeExport = null
@@ -241,6 +258,11 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
     private fun sendEvent(event: AppDetailEvent) {
         viewModelScope.launch { eventChannel.send(event) }
+    }
+
+    private fun sendSectionEvent(event: AppDetailEvent) {
+        engaged = true
+        sendEvent(event)
     }
 
     private fun withLoadedState(block: (AppDetailState.Loaded) -> Unit) {

@@ -15,4 +15,5 @@ dependencies {
     implementation(libs.firebase.performance)
     implementation(libs.timber)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.play.review.ktx)
 }

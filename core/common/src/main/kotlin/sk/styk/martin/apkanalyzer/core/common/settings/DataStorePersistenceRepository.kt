@@ -23,6 +23,8 @@ private val KEY_APP_START_NUMBER = intPreferencesKey("app_start_number")
 private val KEY_RECENTLY_VIEWED = stringPreferencesKey("recently_viewed_apps")
 private val KEY_RECENTLY_VIEWED_ENABLED = booleanPreferencesKey("recently_viewed_apps_enabled")
 private val KEY_SEARCH_HISTORY = stringPreferencesKey("search_history")
+private val KEY_APP_DETAIL_QUALIFIED_SESSION_COUNT = intPreferencesKey("app_detail_qualified_session_count")
+private val KEY_REVIEW_FLOW_REQUESTED = booleanPreferencesKey("review_flow_requested")
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
     name = "app_settings",
@@ -85,6 +87,14 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
             val raw = prefs[KEY_SEARCH_HISTORY] ?: ""
             if (raw.isEmpty()) emptyList() else raw.split("|")
         }
+
+        Key.AppDetailQualifiedSessionCount -> {
+            prefs[KEY_APP_DETAIL_QUALIFIED_SESSION_COUNT] ?: 0
+        }
+
+        Key.ReviewFlowRequested -> {
+            prefs[KEY_REVIEW_FLOW_REQUESTED] ?: false
+        }
     } as T
 
     private fun <T : Any> Key<T>.write(prefs: MutablePreferences, value: T) = when (this) {
@@ -117,6 +127,14 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
         Key.SearchHistory -> {
             @Suppress("UNCHECKED_CAST")
             prefs[KEY_SEARCH_HISTORY] = (value as List<String>).joinToString("|")
+        }
+
+        Key.AppDetailQualifiedSessionCount -> {
+            prefs[KEY_APP_DETAIL_QUALIFIED_SESSION_COUNT] = value as Int
+        }
+
+        Key.ReviewFlowRequested -> {
+            prefs[KEY_REVIEW_FLOW_REQUESTED] = value as Boolean
         }
     }
 }

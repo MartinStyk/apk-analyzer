@@ -13,6 +13,7 @@ logic do not belong here.
 * `coroutines/` - injectable dispatchers, flow helpers, and cancellation-safe result capture.
 * `logger/` - the repository logging facade.
 * `performance/` - performance instrumentation contracts and the internal Firebase adapter.
+* `review/` - in-app review eligibility tracking and the internal Play Core adapter.
 * `settings/` - generic typed DataStore persistence and preference keys.
 * `model/` - genuinely cross-module value types such as app references, source classification, and
   file sizes.
@@ -44,3 +45,10 @@ logic do not belong here.
   excluding recognized stores and system-preinstalled apps.
 * Add preference keys to the typed persistence contract rather than creating feature-local
   DataStore instances.
+* Play Core review APIs stay inside `review/`'s internal adapter, same rule as Firebase Performance.
+  `ReviewEligibilityTracker.reviewPromptRequests` is a one-shot event stream (`Flow<Unit>`), not
+  observable state — showing the review dialog is a side effect, and this codebase's rule that
+  one-shot signals go through an event channel rather than state applies here too, even though this
+  tracker sits below the ViewModel layer. It deliberately has no cooldown or lifetime cap beyond
+  "ask once" — Play's own quota governs repeat frequency, and reimplementing that policy locally is
+  unnecessary.
