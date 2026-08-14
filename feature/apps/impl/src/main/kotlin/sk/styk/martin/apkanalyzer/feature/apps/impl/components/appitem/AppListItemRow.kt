@@ -131,7 +131,6 @@ private fun SortValueBadge(
     }
 }
 
-
 internal fun listItemShape(position: ListItemPosition): Shape = when (position) {
     ListItemPosition.Single -> Shapes.CardShape
     ListItemPosition.First -> RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)

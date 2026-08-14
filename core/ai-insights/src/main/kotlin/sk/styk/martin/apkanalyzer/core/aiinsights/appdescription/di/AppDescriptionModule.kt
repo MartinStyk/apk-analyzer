@@ -45,9 +45,8 @@ internal interface AppDescriptionModule {
     companion object {
         @Provides
         @Singleton
-        fun provideAppAiDescriptionDatabase(@ApplicationContext context: Context): AppAiDescriptionDatabase {
-            return Room.databaseBuilder(context, AppAiDescriptionDatabase::class.java, DATABASE_NAME).build()
-        }
+        fun provideAppAiDescriptionDatabase(@ApplicationContext context: Context): AppAiDescriptionDatabase =
+            Room.databaseBuilder(context, AppAiDescriptionDatabase::class.java, DATABASE_NAME).build()
 
         @Provides
         @Singleton
