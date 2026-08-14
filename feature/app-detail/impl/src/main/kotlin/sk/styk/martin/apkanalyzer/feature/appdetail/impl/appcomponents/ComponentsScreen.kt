@@ -41,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 import sk.styk.martin.apkanalyzer.core.common.util.sendForeignBroadcast
@@ -72,7 +73,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionLoadi
 internal fun ComponentsScreen(
     appDetailInput: AppDetailInput,
     initialScope: ComponentScope,
-    initialFilters: Set<ComponentFilter>,
+    initialFilters: PersistentSet<ComponentFilter>,
     onBack: () -> Unit,
     onNavigateToIntentFilters: (componentName: String, componentType: ComponentType) -> Unit,
     modifier: Modifier = Modifier,
@@ -394,7 +395,7 @@ private fun EmptyContent(
     }
 }
 
-@Preview
+@Preview(apiLevel = 36)
 @Composable
 private fun ComponentsLoadingPreview() {
     ApkAnalyzerTheme {
@@ -407,7 +408,7 @@ private fun ComponentsLoadingPreview() {
     }
 }
 
-@Preview
+@Preview(apiLevel = 36)
 @Composable
 private fun ComponentsErrorPreview() {
     ApkAnalyzerTheme {
@@ -420,7 +421,7 @@ private fun ComponentsErrorPreview() {
     }
 }
 
-@Preview
+@Preview(apiLevel = 36)
 @Composable
 private fun ComponentsLoadedPreview() {
     ApkAnalyzerTheme {
@@ -433,7 +434,7 @@ private fun ComponentsLoadedPreview() {
     }
 }
 
-@Preview
+@Preview(apiLevel = 36)
 @Composable
 private fun ComponentsEmptyResultPreview() {
     ApkAnalyzerTheme {

@@ -23,6 +23,7 @@ import sk.styk.martin.apkanalyzer.core.appindex.model.AppIndexStatus
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.feature.browse.impl.BrowseAnalytics
 import sk.styk.martin.apkanalyzer.feature.browse.impl.BrowseAnalyticsEvent
+import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.BrowseBucketSelection
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.BrowseDimensionLabeler
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.BrowseSubAttribute
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.bucketsFor
@@ -76,9 +77,11 @@ internal class BrowseOptionsViewModel @AssistedInject constructor(
                 analytics.track(BrowseAnalyticsEvent.CategoryOpened(dimension))
                 eventChannel.trySend(
                     BrowseOptionsEvent.NavigateToApps(
-                        bucketKey = action.option.key,
-                        bucketLabel = action.option.label,
-                        subAttribute = loaded?.subAttribute,
+                        bucket = BrowseBucketSelection(
+                            key = action.option.key,
+                            label = action.option.label,
+                            subAttribute = loaded?.subAttribute,
+                        ),
                     ),
                 )
             }

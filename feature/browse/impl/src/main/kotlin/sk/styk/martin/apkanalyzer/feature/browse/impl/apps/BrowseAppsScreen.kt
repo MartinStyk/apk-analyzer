@@ -57,20 +57,18 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.browse.impl.R
-import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.BrowseSubAttribute
+import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.BrowseBucketSelection
 import sk.styk.martin.apkanalyzer.feature.browse.impl.model.BrowseDimension
 
 @Composable
 internal fun BrowseAppsScreen(
     dimension: BrowseDimension,
-    bucketKey: String,
-    bucketLabel: String,
-    subAttribute: BrowseSubAttribute?,
+    bucket: BrowseBucketSelection,
     onBack: () -> Unit,
     onOpenApp: (PackageName) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: BrowseAppsViewModel = hiltViewModel { factory: BrowseAppsViewModel.Factory ->
-        factory.create(dimension, bucketKey, subAttribute)
+        factory.create(dimension, bucket)
     },
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -84,7 +82,7 @@ internal fun BrowseAppsScreen(
     }
 
     BrowseAppsContent(
-        bucketLabel = bucketLabel,
+        bucketLabel = bucket.label,
         state = state,
         onAction = viewModel::onAction,
         onBack = onBack,

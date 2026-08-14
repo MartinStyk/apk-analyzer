@@ -23,7 +23,7 @@ import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.apps.permissions.PermissionDefinitionResolver
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
-import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.BrowseSubAttribute
+import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.BrowseBucketSelection
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.bucketsFor
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.isCertificateHash
 import sk.styk.martin.apkanalyzer.feature.browse.impl.model.BrowseDimension
@@ -31,8 +31,7 @@ import sk.styk.martin.apkanalyzer.feature.browse.impl.model.BrowseDimension
 @HiltViewModel(assistedFactory = BrowseAppsViewModel.Factory::class)
 internal class BrowseAppsViewModel @AssistedInject constructor(
     @Assisted private val dimension: BrowseDimension,
-    @Assisted("bucketKey") private val bucketKey: String,
-    @Assisted("subAttribute") private val subAttribute: BrowseSubAttribute?,
+    @Assisted private val bucket: BrowseBucketSelection,
     appIndexRepository: AppIndexRepository,
     installedAppsRepository: InstalledAppsRepository,
     private val permissionDefinitionResolver: PermissionDefinitionResolver,
@@ -41,11 +40,7 @@ internal class BrowseAppsViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(
-            dimension: BrowseDimension,
-            @Assisted("bucketKey") bucketKey: String,
-            @Assisted("subAttribute") subAttribute: BrowseSubAttribute?,
-        ): BrowseAppsViewModel
+        fun create(dimension: BrowseDimension, bucket: BrowseBucketSelection): BrowseAppsViewModel
     }
 
     private val query = MutableStateFlow("")
@@ -72,7 +67,7 @@ internal class BrowseAppsViewModel @AssistedInject constructor(
         AppIndexStatus.Loading -> BrowseAppsState.Loading
 
         is AppIndexStatus.Data -> {
-            val bucketPackages = index.bucketsFor(dimension, subAttribute)[bucketKey].orEmpty().toSet()
+            val bucketPackages = index.bucketsFor(dimension, bucket.subAttribute)[bucket.key].orEmpty().toSet()
             val bucketApps = apps
                 .filter { it.packageName in bucketPackages }
                 .sortedBy { it.applicationName.lowercase() }

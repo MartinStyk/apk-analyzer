@@ -39,7 +39,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import sk.styk.martin.apkanalyzer.core.apps.components.IntentFilterDataRuleType
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.SearchBarActive
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Tag
@@ -224,11 +226,12 @@ private fun IntentFilterRow(
     val copyLabel = stringResource(filter.purposeTitleRes(componentType))
     val purposeBadgeRes = filter.purposeBadgeRes(componentType)
     val dataRules = filter.dataRules + filter.uriRelativeGroups.filter { it.isAllowed }.flatMap { it.dataRules }
-    val actionValues = filter.actions.map { it.toDisplayRequestType() }.filter { it.isNotBlank() }
+    val actionValues = filter.actions.map { it.toDisplayRequestType() }.filter { it.isNotBlank() }.toImmutableList()
     val categoryValues = filter.categories
         .filterNot { it == Intent.CATEGORY_DEFAULT }
         .map { it.toDisplayCategory() }
         .filter { it.isNotBlank() }
+        .toImmutableList()
     val hasPurposeRow = purposeBadgeRes != null || filter.isAutoVerify || filter.uriRelativeGroups.any { !it.isAllowed }
     val hasNoDeclaredContent = !hasPurposeRow && actionValues.isEmpty() && categoryValues.isEmpty() && dataRules.isEmpty()
     Column(
@@ -278,7 +281,7 @@ private fun IntentFilterRow(
         dataRules.groupedByType().forEach { (type, values) ->
             IntentFilterDataField(
                 label = stringResource(type.labelRes),
-                values = values,
+                values = values.toImmutableList(),
             )
         }
     }
@@ -287,7 +290,7 @@ private fun IntentFilterRow(
 @Composable
 private fun IntentFilterChipField(
     label: String,
-    values: List<String>,
+    values: ImmutableList<String>,
     modifier: Modifier = Modifier,
     emphasized: Boolean = false,
 ) {
@@ -314,7 +317,7 @@ private fun IntentFilterChipField(
 @Composable
 private fun IntentFilterDataField(
     label: String,
-    values: List<String>,
+    values: ImmutableList<String>,
     modifier: Modifier = Modifier,
 ) {
     if (values.isNotEmpty()) {
@@ -468,7 +471,7 @@ private fun otherPurposeRes(componentType: ComponentType): Int = when (component
     ComponentType.Provider -> R.string.intent_filters_purpose_provider_other
 }
 
-@Preview
+@Preview(apiLevel = 36)
 @Composable
 private fun IntentFiltersLoadedPreview() {
     ApkAnalyzerTheme {
@@ -485,7 +488,7 @@ private fun IntentFiltersLoadedPreview() {
     }
 }
 
-@Preview
+@Preview(apiLevel = 36)
 @Composable
 private fun IntentFiltersEmptyPreview() {
     ApkAnalyzerTheme {
