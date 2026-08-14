@@ -4,33 +4,90 @@
 [![Release](https://github.com/MartinStyk/AndroidApkAnalyzer/actions/workflows/release.yml/badge.svg)](https://github.com/MartinStyk/AndroidApkAnalyzer/actions/workflows/release.yml)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4.10-blue.svg?logo=kotlin)](gradle/libs.versions.toml)
+[![API](https://img.shields.io/badge/API-28%2B-brightgreen.svg?logo=android)](build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/utils/AndroidSdk.kt)
+[![Google Play](https://img.shields.io/badge/Google%20Play-2M%2B%20downloads-34A853.svg?logo=googleplay&logoColor=white)](https://play.google.com/store/apps/details?id=sk.styk.martin.apkanalyzer)
 
 <img src="app/src/main/res/mipmap-xxhdpi/ic_launcher.png" width="72" align="left" alt="Apk Analyzer icon" />
 
 **Detailed reports of the applications on your device — 📱**
 
-Apk Analyzer is the *most downloaded APK analysis app* on Google Play. It inspects installed apps
-and `.apk` files straight from device storage — no root required. It's open source and completely
-ad-free.
+Apk Analyzer is the *most downloaded APK analysis app* on Google Play, with over 2 million
+downloads. It inspects installed apps and `.apk` files straight from device storage — no root
+required. It's open source, ad-free, and does its analysis on your device.
+
+Shipping since 2017, now rebuilt as a multi-module Jetpack Compose app.
 
 <a href='https://play.google.com/store/apps/details?id=sk.styk.martin.apkanalyzer'><img alt='Get it on Google Play' height="60" src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
 
 <br clear="left"/>
 
+## Table of contents
+
+- [What it does](#what-it-does)
+- [Why it exists](#why-it-exists)
+- [Privacy and permissions](#privacy-and-permissions)
+- [Tech stack](#tech-stack)
+- [Architecture](#architecture)
+- [Getting started](#getting-started)
+- [Repository layout](#repository-layout)
+- [CI and releases](#ci-and-releases)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
+- [Support](#support)
+- [License](#license)
+
 ## What it does
 
-**App reports** — naming and version data, target/minimum Android version, install and update
-dates, signing certificate details, requested permissions with descriptions, activities with
-launch options, services/broadcast receivers/content providers, required and optional hardware
-features, and a full readable export of `AndroidManifest.xml`. Reports are available even for
-`.apk` files you haven't installed yet, and app data (including the icon) can be saved to and
-shared from device storage.
+**Inspect one app — everything Android knows about it, in one report.**
 
-**Permissions** — which permissions are requested across all apps on your device, which apps
-request a given permission, and each permission's protection level.
+| Group | What you get |
+|---|---|
+| Identity | Package and app name, version name and code, app category, install and update dates |
+| Compatibility | Target and minimum Android version, required and optional hardware features |
+| Origin | Full install-source chain — which store or app actually installed it |
+| Signing | Certificate details, issuer and subject, validity, fingerprints, signing-scheme versions |
+| Permissions | Requested and declared permissions with plain-language descriptions and protection levels |
+| Components | Activities, services, receivers and providers with intent filters, exported state, path permissions, and launch options |
+| Packaging | Native libraries and ABIs, split APKs, shared UID group, manifest security flags, storage size |
+| Manifest | The complete `AndroidManifest.xml`, readable |
 
-**Statistics** — Android version and signing-scheme distribution across your installed apps,
-average permission/activity counts, and other collection-wide insights.
+**Browse by attribute.** Turn the question around and start from the attribute instead of the app:
+which apps request a given permission, which are signed by a given certificate, what targets each
+Android version, where each app came from, which share a UID, how apps spread across categories.
+
+**Analyze `.apk` files.** Open an `.apk` from another app or pick one from storage and get the same
+full report for something you haven't installed.
+
+**On-device AI summary.** A short, factual, plain-language read on what an app is and what its
+permissions and components imply — generated locally with ML Kit's GenAI prompt API. The app data
+never leaves the device.
+
+**Export and share.** Export or share the APK itself, save the app icon, copy or share a text
+summary, and launch an app's components directly.
+
+**Requirements:** Android 9 (API 28) or newer. The AI summary additionally needs a device that
+supports on-device generative AI; everything else works everywhere.
+
+## Why it exists
+
+Android tells you very little about the software you already run. Apk Analyzer surfaces the whole
+manifest-level truth about every installed app in a form a human can read — no root, no ads, no
+paywall on the raw data. Raw facts stay free by design; see the
+[roadmap](docs/product/roadmap.md) for where interpretation features are heading.
+
+## Privacy and permissions
+
+App analysis runs entirely on device. The app declares exactly two sensitive permissions, both
+needed for the core feature:
+
+| Permission | Why |
+|---|---|
+| `QUERY_ALL_PACKAGES` | Read the list and details of installed apps — this is what the app is for |
+| `PACKAGE_USAGE_STATS` | Optional. Powers last-used times and storage size breakdowns; granted by you in system settings |
+
+App-analysis data is processed on device. Network use is limited to Firebase telemetry (Analytics,
+Crashlytics, Performance) and ML Kit downloading the on-device AI model. See
+[`PRIVACY_POLICY.MD`](PRIVACY_POLICY.MD).
 
 ## Tech stack
 
@@ -40,38 +97,91 @@ average permission/activity counts, and other collection-wide insights.
 | UI | Jetpack Compose only — no XML layouts |
 | DI | Hilt |
 | Navigation | Navigation 3 (`androidx.navigation3`) |
+| Persistence | Room, DataStore Preferences |
+| On-device AI | ML Kit GenAI Prompt API |
+| Images | Coil 3 |
 | Build | Gradle version catalog + custom convention plugins (`build-logic/`) |
-| Backend services | Firebase (Analytics, Crashlytics, Performance) |
-| Formatting | Spotless (ktlint + compose-rules-ktlint) |
+| Backend services | Firebase (Analytics, Crashlytics, Performance, App Distribution) |
+| Static analysis | Spotless (ktlint + compose-rules-ktlint), Detekt, Android Lint, LeakCanary in debug |
+| Min / target SDK | 28 / 37 |
 
 Exact versions live in [`gradle/libs.versions.toml`](gradle/libs.versions.toml) — that file is the
 single source of truth; nothing pins a version elsewhere.
 
 ## Architecture
 
-A multi-module Gradle project with one strict dependency direction:
+A multi-module Gradle project with one strict dependency direction: `app` → `feature/*/impl` →
+`feature/*/api` + `core/*`, and `core/*` never looks back at a feature.
 
-```
-app                          → wires everything together (Hilt graph, nav host, Activity)
-├── core/*                   → domain & infra: apps, app-permissions, app-index,
-│                               common, navigation, ui-library, user-preferences
-└── feature/<name>/{api,impl}
-    ├── api                  → NavKey only, depends on nothing
-    └── impl                 → screen + ViewModel, depends on its own api + needed core modules
+```mermaid
+graph TD
+    app[":app<br/>Activities, nav host, Hilt graph"]
+    fimpl["feature/&lt;name&gt;/impl<br/>screens + ViewModels"]
+    fapi["feature/&lt;name&gt;/api<br/>NavKeys only"]
+    core["core/*<br/>domain, data, design system"]
+
+    app --> fimpl
+    app --> core
+    fimpl --> fapi
+    fimpl --> core
+    core --> core
 ```
 
-Rules: `feature/*/api` depends on nothing; `feature/*/impl` depends on its own `api` plus whatever
-`core/*` modules it needs; `core/*` modules may depend on other `core/*` modules but never on
-`feature/*`; `app` depends on everything. Every module — including `app` itself — has its own
-`AGENTS.md` documenting its purpose, structure, and key types; start there when working inside a
-specific module instead of re-deriving it from scratch.
+Rules:
+
+* `feature/*/api` depends on nothing — it holds only `@Serializable` NavKeys and a tab label, so any
+  feature can navigate to another without touching its implementation.
+* `feature/*/impl` depends on its own `api` plus whichever `core` modules it needs. Never on another
+  feature's `impl`.
+* `core/*` may depend on other `core` modules, **never** on a `feature`.
+* `app` is wiring only: Activities, nav host, and app-scoped Hilt bindings. No feature logic.
+
+### How the code reads
+
+The same shapes repeat everywhere, so an unfamiliar file is rarely a surprise:
+
+* **One ViewModel shape.** A single `StateFlow<State>` and a single `onAction(Action)` with a `when`
+  dispatch. No other public methods. One-shot signals (navigation, toasts, intents) go out as
+  `Event`s over a `Channel`, never as state.
+* **One data-layer shape.** A public `interface` plus an `internal` `Impl`, bound with Hilt and
+  scoped `@Singleton`. Interface methods never throw — they return `Result<T>`, a nullable, or an
+  empty collection. Dispatchers are injected, never hardcoded.
+* **A design system, not scattered Material.** Feature modules don't import `androidx.compose.material3`
+  at all; they use the wrappers, theme and icons in [`core:ui-library`](core/ui-library/AGENTS.md).
+* **No comments.** Naming and structure carry the intent — deliberately, and enforced in review.
+* **One source of versions.** [`gradle/libs.versions.toml`](gradle/libs.versions.toml) for
+  dependencies, `build-logic` for SDK levels and the JVM toolchain. Nothing is pinned in a module.
+* **Documented decisions.** Every module carries an `AGENTS.md` explaining its boundary and package
+  map, and product decisions — including the ones deliberately retired — live in
+  [`docs/`](docs/product/README.md).
+
+### Modules
+
+| Module | Owns |
+|---|---|
+| [`core:apps`](core/apps/AGENTS.md) | Installed-app and APK analysis: extraction, normalization, caching, domain models |
+| [`core:apk-files`](core/apk-files/AGENTS.md) | Temporary materialization and cleanup of APKs received via content URIs |
+| [`core:app-index`](core/app-index/AGENTS.md) | Device-wide `attribute → apps` indexes behind Browse |
+| [`core:app-permissions`](core/app-permissions/AGENTS.md) | The deduplicated device-wide permission list |
+| [`core:ai-insights`](core/ai-insights/AGENTS.md) | On-device AI features and the ML Kit engine wrapper |
+| [`core:user-preferences`](core/user-preferences/AGENTS.md) | Recently viewed apps and search history |
+| [`core:navigation`](core/navigation/AGENTS.md) | Navigation 3 infrastructure for independent bottom-nav stacks |
+| [`core:ui-library`](core/ui-library/AGENTS.md) | The design system: theme, icons, components, animation metadata |
+| [`core:common`](core/common/AGENTS.md) | Dispatchers, logging, and models shared across domains |
+| [`feature:apps`](feature/apps/AGENTS.md) | The installed-app list: search, filter, sort |
+| [`feature:app-detail`](feature/app-detail/AGENTS.md) | The full report for one app or APK |
+| [`feature:browse`](feature/browse/AGENTS.md) | Browse by attribute |
+| [`feature:settings`](feature/settings/AGENTS.md) | Theme and app settings |
+
+Every module — including [`app`](app/AGENTS.md) — has its own `AGENTS.md` documenting its purpose,
+package map, and key types. Start there when working inside a module instead of re-deriving it.
 
 ## Getting started
 
-**Prerequisites:** Android Studio (latest stable). That's genuinely it — this project's Gradle
-setup auto-provisions a matching JDK on first build, and Android Studio's own SDK Manager covers
-the Android SDK. Run the `/setup-local-tools` skill for the full breakdown (including CLI-only /
-headless setup, and optional tools like the Firebase CLI and GitHub CLI).
+**Prerequisites:** Android Studio (latest stable). That's genuinely it — the Gradle setup
+auto-provisions a matching JDK on first build, and Android Studio's SDK Manager covers the Android
+SDK. The [`setup-local-tools`](.claude/skills/setup-local-tools/SKILL.md) skill has the full
+breakdown, including headless/CLI-only setup and optional tools.
 
 ```bash
 git clone https://github.com/MartinStyk/AndroidApkAnalyzer.git
@@ -79,27 +189,73 @@ cd AndroidApkAnalyzer
 ./gradlew assembleDebug   # first build downloads Gradle, the JDK, and all dependencies
 ```
 
-`app/google-services.json` is already committed (a real Firebase project config, required for the
-`:app` module's Firebase plugins to compile) — nothing to fetch or configure before your first
-build.
+`app/google-services.json` is committed, so the Firebase Gradle plugins compile out of the box with
+nothing to configure. CI replaces it with a freshly fetched config at build time.
 
 **Common tasks:**
 
 ```bash
-./gradlew installDebug       # build + install the debug build on a connected device/emulator
-./gradlew spotlessApply      # auto-fix formatting — run before every commit
-./gradlew spotlessCheck      # formatting check (what CI runs)
-./gradlew lintDebug          # Android lint
-./gradlew validateAgentContext # verify shared Claude/Copilot context
+./gradlew installDebug          # build + install debug on a connected device/emulator
+./gradlew spotlessApply         # auto-fix formatting — run before every commit
+./gradlew :feature:apps:impl:compileDebugKotlin   # fast single-module check while iterating
+./gradlew spotlessCheck detektDebug lintDebug :app:assembleDebug   # what CI gates on
+./gradlew validateAgentContext  # verify the shared Claude/Copilot context files
 ```
+
+Version name and code come from Gradle properties (`-Pversion.name=`, `-Pversion.code=`) and default
+to a local `dev` build.
+
+## Repository layout
+
+```
+app/           Activities, nav host, app-scoped Hilt bindings — wiring only
+core/          Domain, data, and design-system modules
+feature/       One api + impl pair per feature area
+build-logic/   Convention plugins; SDK levels and the JVM toolchain live here
+config/        Detekt and static-analysis configuration
+docs/          Product roadmap, feature design docs, technical decision records
+.claude/       Task skills shared by Claude and Copilot
+gradle/        Version catalog and wrapper
+```
+
+## CI and releases
+
+Every push and PR to `develop` runs `spotlessCheck`, Detekt, Android Lint (results uploaded as
+SARIF), and builds a debug APK that is attached to the run as an artifact. Pushes to `develop` also
+go out to internal testers via Firebase App Distribution.
+
+Tagging `MAJOR.MINOR.PATCH` runs the release workflow: it verifies against the release variant,
+builds and signs an AAB and APK, derives `versionCode` from the tag, publishes a GitHub release with
+the tag annotation as notes, uploads the AAB to the Play Store beta track with its mapping file, and
+distributes the APK to internal testers.
+
+## Documentation
+
+| Doc | What it covers |
+|---|---|
+| [`AGENTS.md`](AGENTS.md) | Engineering conventions — the canonical contributor reference |
+| [`docs/product/roadmap.md`](docs/product/roadmap.md) | Open scope and sequencing, with stable IDs |
+| [`docs/product/shipped.md`](docs/product/shipped.md) | What has shipped or been deliberately retired |
+| [`docs/product/features/`](docs/product/README.md) | One design doc per feature, written before it's built |
+| [`docs/technical/`](docs/technical/README.md) | Cross-cutting engineering decisions and audits |
+| [`.claude/skills/`](.claude/skills) | Step-by-step procedures for recurring tasks |
 
 ## Contributing
 
-Read [`AGENTS.md`](AGENTS.md) first — it documents module boundaries, navigation/DI/MVVM
-conventions, naming rules, where changes belong, and the
-[shared Claude/Copilot context](AGENTS.md#shared-ai-context).
+Contributions are welcome. Start with [`CONTRIBUTING.md`](CONTRIBUTING.md) for the workflow, then
+[`AGENTS.md`](AGENTS.md) for module boundaries and conventions. By participating you agree to the
+[Code of Conduct](CODE_OF_CONDUCT.md).
 
-Run `./gradlew spotlessApply spotlessCheck assembleDebug` before opening a PR.
+Good first contributions: a **translation** (the app currently ships English and Japanese, and a PR
+touching only `strings.xml` files needs no prior discussion), or anything marked open in the
+[roadmap](docs/product/roadmap.md).
+
+## Support
+
+* **Bugs and feature requests** — [open an issue](https://github.com/MartinStyk/AndroidApkAnalyzer/issues)
+* **Security vulnerabilities** — see [`SECURITY.md`](SECURITY.md); please don't file a public issue
+* **Using the app** — the [Play Store listing](https://play.google.com/store/apps/details?id=sk.styk.martin.apkanalyzer)
+  is the place for reviews and general feedback
 
 ## License
 
