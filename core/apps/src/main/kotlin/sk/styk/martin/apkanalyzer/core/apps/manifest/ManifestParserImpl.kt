@@ -3,7 +3,6 @@ package sk.styk.martin.apkanalyzer.core.apps.manifest
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import kotlinx.coroutines.withContext
-import sk.styk.martin.apkanalyzer.core.apps.analysisModeAttribute
 import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
 import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilterKey
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
@@ -14,6 +13,7 @@ import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
 import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
 import sk.styk.martin.apkanalyzer.core.common.performance.analysisMode
+import sk.styk.martin.apkanalyzer.core.common.performance.analysisModeAttribute
 import sk.styk.martin.apkanalyzer.core.common.performance.outcome
 import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
 import javax.inject.Inject

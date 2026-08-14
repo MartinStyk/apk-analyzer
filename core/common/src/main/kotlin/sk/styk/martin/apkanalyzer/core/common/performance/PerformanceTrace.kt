@@ -1,6 +1,7 @@
 package sk.styk.martin.apkanalyzer.core.common.performance
 
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
+import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import kotlin.time.measureTimedValue
 
 interface PerformanceTrace : AutoCloseable {
@@ -51,6 +52,12 @@ var PerformanceTrace.appCount: Int
     get() = throw UnsupportedOperationException("PerformanceTrace.appCount is write-only")
     set(value) {
         this["app_count"] = value
+    }
+
+val AppReference.analysisModeAttribute: String
+    get() = when (this) {
+        is AppReference.InstalledPackage -> "installed"
+        is AppReference.ApkFile -> "apk_file"
     }
 
 enum class TraceOutcome(internal val attributeValue: String) {

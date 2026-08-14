@@ -52,6 +52,7 @@ import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTrace
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
 import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
 import sk.styk.martin.apkanalyzer.core.common.performance.analysisMode
+import sk.styk.martin.apkanalyzer.core.common.performance.analysisModeAttribute
 import sk.styk.martin.apkanalyzer.core.common.performance.outcome
 import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
 import sk.styk.martin.apkanalyzer.core.common.performance.timedSection

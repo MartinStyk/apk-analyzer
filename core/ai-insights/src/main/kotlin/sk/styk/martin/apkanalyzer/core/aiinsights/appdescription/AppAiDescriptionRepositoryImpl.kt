@@ -20,6 +20,8 @@ import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTrace
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
 import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
+import sk.styk.martin.apkanalyzer.core.common.performance.analysisMode
+import sk.styk.martin.apkanalyzer.core.common.performance.analysisModeAttribute
 import sk.styk.martin.apkanalyzer.core.common.performance.outcome
 import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
 import javax.inject.Inject
@@ -83,7 +85,7 @@ internal class AppAiDescriptionRepositoryImpl @Inject constructor(
     }
 
     private suspend fun loadDescription(reference: AppReference): AppAiDescription? = performanceTracker.startCancellableTrace("ai_summary_load") {
-        this["analysis_mode"] = reference.toString()
+        analysisMode = reference.analysisModeAttribute
         Logger.d(TAG, "AI description loading started: reference=$reference")
         runCatchingCancellable {
             val context = fetchContext(reference) ?: return@runCatchingCancellable null
