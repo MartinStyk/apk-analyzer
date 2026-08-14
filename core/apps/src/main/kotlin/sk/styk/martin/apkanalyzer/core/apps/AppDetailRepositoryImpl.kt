@@ -6,7 +6,6 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.FeatureInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.content.pm.PermissionInfo
 import android.content.pm.ServiceInfo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
@@ -32,11 +31,10 @@ import sk.styk.martin.apkanalyzer.core.apps.packaging.computeApkSize
 import sk.styk.martin.apkanalyzer.core.apps.packaging.readInstalledSplits
 import sk.styk.martin.apkanalyzer.core.apps.packaging.readNativeLibraries
 import sk.styk.martin.apkanalyzer.core.apps.permissions.Permission
-import sk.styk.martin.apkanalyzer.core.apps.permissions.PermissionDetails
+import sk.styk.martin.apkanalyzer.core.apps.permissions.PermissionDefinitionResolver
 import sk.styk.martin.apkanalyzer.core.apps.permissions.Permissions
 import sk.styk.martin.apkanalyzer.core.apps.permissions.UsedPermission
-import sk.styk.martin.apkanalyzer.core.apps.permissions.resolveProtectionFlags
-import sk.styk.martin.apkanalyzer.core.apps.permissions.resolveProtectionLevel
+import sk.styk.martin.apkanalyzer.core.apps.permissions.toPermissionDetails
 import sk.styk.martin.apkanalyzer.core.apps.sdkversion.SdkVersionResolver
 import sk.styk.martin.apkanalyzer.core.apps.signing.ApkSigningBlockAnalyzer
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateExtractor
@@ -73,6 +71,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     private val certificateExtractor: CertificateExtractor,
     private val apkSigningBlockAnalyzer: ApkSigningBlockAnalyzer,
     private val manifestParser: ManifestParser,
+    private val permissionDefinitionResolver: PermissionDefinitionResolver,
     private val storageStatsRepository: StorageStatsRepository,
     private val usageStatsRepository: UsageStatsRepository,
     packageChangesObserver: PackageChangesObserver,
@@ -360,19 +359,21 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         }
         .toSet()
 
-    private fun getServices(packageInfo: PackageInfo, intentFiltersByComponent: Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>): List<Service> =
-        packageInfo.services.orEmpty().map {
-            Service(
-                name = it.name,
-                permission = it.permission,
-                isExported = it.exported,
-                isStopWithTask = it.flags and ServiceInfo.FLAG_STOP_WITH_TASK > 0,
-                isSingleUser = it.flags and ServiceInfo.FLAG_SINGLE_USER > 0,
-                isIsolatedProcess = it.flags and ServiceInfo.FLAG_ISOLATED_PROCESS > 0,
-                isExternalService = it.flags and ServiceInfo.FLAG_EXTERNAL_SERVICE > 0,
-                intentFilters = intentFiltersByComponent[ComponentIntentFilterKey(it.name, ComponentKind.Service)].orEmpty(),
-            )
-        }
+    private fun getServices(
+        packageInfo: PackageInfo,
+        intentFiltersByComponent: Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>,
+    ): List<Service> = packageInfo.services.orEmpty().map {
+        Service(
+            name = it.name,
+            permission = it.permission,
+            isExported = it.exported,
+            isStopWithTask = it.flags and ServiceInfo.FLAG_STOP_WITH_TASK > 0,
+            isSingleUser = it.flags and ServiceInfo.FLAG_SINGLE_USER > 0,
+            isIsolatedProcess = it.flags and ServiceInfo.FLAG_ISOLATED_PROCESS > 0,
+            isExternalService = it.flags and ServiceInfo.FLAG_EXTERNAL_SERVICE > 0,
+            intentFilters = intentFiltersByComponent[ComponentIntentFilterKey(it.name, ComponentKind.Service)].orEmpty(),
+        )
+    }
 
     private fun getContentProviders(
         packageInfo: PackageInfo,
@@ -410,35 +411,22 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     private fun getDefinedPermissions(packageInfo: PackageInfo): List<Permission> = packageInfo.permissions.orEmpty().map {
         Permission(
             name = it.name,
-            details = it.toDetails(),
+            details = it.toPermissionDetails(packageManager),
         )
     }
 
     private fun getUsedPermissions(packageInfo: PackageInfo): List<UsedPermission> {
         val grantedFlags = packageInfo.requestedPermissionsFlags
         return packageInfo.requestedPermissions.orEmpty().mapIndexed { index, name ->
-            val permissionInfo = try {
-                packageManager.getPermissionInfo(name, PackageManager.GET_META_DATA)
-            } catch (_: Exception) {
-                null
-            }
             UsedPermission(
                 permissionData = Permission(
                     name = name,
-                    details = permissionInfo?.toDetails(),
+                    details = permissionDefinitionResolver.resolve(name),
                 ),
                 isGranted = (grantedFlags?.getOrNull(index) ?: 0) and PackageInfo.REQUESTED_PERMISSION_GRANTED != 0,
             )
         }
     }
-
-    private fun PermissionInfo.toDetails() = PermissionDetails(
-        groupName = group,
-        protectionLevel = resolveProtectionLevel(protection),
-        protectionFlags = resolveProtectionFlags(protectionFlags),
-        description = loadDescription(packageManager)?.toString(),
-        declaringPackage = PackageName(packageName),
-    )
 
     private fun getFeatures(packageInfo: PackageInfo): List<Feature> = packageInfo.reqFeatures.orEmpty().map { featureInfo ->
         val isRequired = (featureInfo.flags and FeatureInfo.FLAG_REQUIRED) > 0

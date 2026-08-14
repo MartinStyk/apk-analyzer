@@ -62,6 +62,26 @@
     <string name="browse_certificate_hash_sha1">SHA-1</string>
     <string name="browse_certificate_hash_md5">MD5</string>
 
+    <string name="browse_protection_level_dangerous">Dangerous</string>
+    <string name="browse_protection_level_signature">Signature</string>
+    <string name="browse_protection_level_internal">Internal</string>
+    <string name="browse_protection_level_normal">Normal</string>
+    <string name="browse_protection_level_dangerous_explanation">Needs your explicit approval before an app can use it.</string>
+    <string name="browse_protection_level_signature_explanation">Only apps signed with the same key as the app that declared it can hold this.</string>
+    <string name="browse_protection_level_internal_explanation">Reserved for the system and granted by internal rules rather than by you.</string>
+    <string name="browse_protection_level_normal_explanation">Usually granted automatically at install. Low risk on its own.</string>
+    <string name="browse_algorithm_strong">Strong</string>
+    <string name="browse_algorithm_weak">Weak</string>
+    <string name="browse_algorithm_unknown">Unknown strength</string>
+    <string name="browse_algorithm_strong_explanation">%1$s uses SHA-256 or a stronger digest. No practical collision attack is known, though overall security also depends on the signing key type and size.</string>
+    <string name="browse_algorithm_sha1_explanation">%1$s uses SHA-1. SHA-1 is no longer collision resistant, so an attacker can create different data with the same digest. New signing certificates should use SHA-256 or stronger.</string>
+    <string name="browse_algorithm_md5_explanation">%1$s uses MD5. MD5 is not collision resistant and is unsafe for signing certificates. New signing certificates should use SHA-256 or stronger.</string>
+    <string name="browse_algorithm_md2_explanation">%1$s uses MD2. MD2 is obsolete and vulnerable to practical attacks, so it is unsafe for signing certificates. New signing certificates should use SHA-256 or stronger.</string>
+    <string name="browse_algorithm_unknown_explanation">The strength of %1$s cannot be assessed from its algorithm name. Key type and size may also affect its security.</string>
+    <string name="browse_certificate_self_signed">Self-signed</string>
+    <string name="browse_certificate_self_signed_explanation">Self-signed certificates are normal for Android apps. Compare the certificate fingerprint with a trusted source when you need to verify the publisher.</string>
+    <string name="browse_bucket_info_content_description">About %1$s</string>
+
     <plurals name="browse_options_filter_hint">
         <item quantity="one">Filter %1$d option</item>
         <item quantity="other">Filter %1$d options</item>

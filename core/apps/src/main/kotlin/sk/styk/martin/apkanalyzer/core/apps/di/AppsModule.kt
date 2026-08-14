@@ -32,6 +32,8 @@ import sk.styk.martin.apkanalyzer.core.apps.manifest.ManifestParser
 import sk.styk.martin.apkanalyzer.core.apps.manifest.ManifestParserImpl
 import sk.styk.martin.apkanalyzer.core.apps.manifest.ManifestXmlRenderer
 import sk.styk.martin.apkanalyzer.core.apps.manifest.ManifestXmlRendererImpl
+import sk.styk.martin.apkanalyzer.core.apps.permissions.PermissionDefinitionResolver
+import sk.styk.martin.apkanalyzer.core.apps.permissions.PermissionDefinitionResolverImpl
 import sk.styk.martin.apkanalyzer.core.apps.signing.ApkSigningBlockAnalyzer
 import sk.styk.martin.apkanalyzer.core.apps.signing.ApkSigningBlockAnalyzerImpl
 import sk.styk.martin.apkanalyzer.core.apps.signing.ApkSigningBlockParser
@@ -78,6 +80,11 @@ internal interface AppsModule {
     @Binds
     @Singleton
     fun bindApkSigningBlockParser(impl: ApkSigningBlockParserImpl): ApkSigningBlockParser
+
+    // permissions
+    @Binds
+    @Singleton
+    fun bindPermissionDefinitionResolver(impl: PermissionDefinitionResolverImpl): PermissionDefinitionResolver
 
     // manifest
     @Binds
@@ -130,8 +137,10 @@ internal interface AppsModule {
 
         @Provides
         @Singleton
-        fun provideUsageStatsManager(@ApplicationContext context: Context): UsageStatsManager =
-            context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+        fun provideUsageStatsManager(@ApplicationContext context: Context): UsageStatsManager {
+            val service = context.getSystemService(Context.USAGE_STATS_SERVICE)
+            return service as UsageStatsManager
+        }
 
         @Provides
         @Singleton

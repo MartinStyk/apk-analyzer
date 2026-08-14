@@ -25,6 +25,12 @@ class AppFilterRepository @Inject constructor() {
     val activeQuickFilters: Flow<ImmutableSet<QuickFilter>>
         get() = _filter.map { deriveActiveQuickFilters(it) }
 
+    val activeSourceQuickFilters: Flow<ImmutableSet<SourceQuickFilter>>
+        get() = _filter.map { it.activeSourceQuickFilters }
+
+    val activeActivityQuickFilter: Flow<ActivityQuickFilter?>
+        get() = _filter.map { it.activeActivityQuickFilter }
+
     fun update(filter: AppFilterState) {
         _filter.value = filter
     }
@@ -38,14 +44,38 @@ class AppFilterRepository @Inject constructor() {
             when (filter) {
                 QuickFilter.SensitivePermissions -> toggleSensitivePermissions(current)
                 QuickFilter.Large -> toggleLargeTotal(current)
-                QuickFilter.RecentlyUsed -> toggleRecentlyUsed(current)
-                QuickFilter.Unused -> toggleUnused(current)
-                QuickFilter.System -> toggleSource(current, AppSource.SystemPreinstalled)
-                QuickFilter.GooglePlay -> toggleSource(current, AppSource.GooglePlay)
-                QuickFilter.Sideloaded -> toggleSideloadedSources(current)
                 QuickFilter.RecentlyInstalled -> toggleRecentInstall(current)
                 QuickFilter.RecentlyUpdated -> toggleRecentUpdate(current)
             }
+        }
+    }
+
+    fun toggleSourceQuickFilter(filter: SourceQuickFilter) {
+        _filter.update { current ->
+            val sources = filter.appSources()
+            val allSelected = sources.all { it in current.selectedSources }
+            current.copy(
+                selectedSources = if (allSelected) {
+                    (current.selectedSources - sources).toPersistentSet()
+                } else {
+                    (current.selectedSources + sources).toPersistentSet()
+                },
+            )
+        }
+    }
+
+    private fun SourceQuickFilter.appSources(): Set<AppSource> = when (this) {
+        SourceQuickFilter.System -> setOf(AppSource.SystemPreinstalled)
+        SourceQuickFilter.GooglePlay -> setOf(AppSource.GooglePlay)
+        SourceQuickFilter.Sideloaded -> AppSource.entries.filter { it.isSideloaded }.toSet()
+    }
+
+    fun selectActivityQuickFilter(filter: ActivityQuickFilter?) {
+        _filter.update { current ->
+            current.copy(
+                recentlyUsedDays = if (filter == ActivityQuickFilter.RecentlyUsed) AppClassificationThresholds.RECENTLY_USED_DAYS else null,
+                unusedPeriod = if (filter == ActivityQuickFilter.Unused) UnusedAppsPeriod.SIX_MONTHS else null,
+            )
         }
     }
 
@@ -58,18 +88,6 @@ class AppFilterRepository @Inject constructor() {
         permissionMatchAll = false,
     )
 
-    private fun toggleSource(current: AppFilterState, source: AppSource): AppFilterState = current.copy(
-        selectedSources = if (source in current.selectedSources) persistentSetOf() else persistentSetOf(source),
-    )
-
-    private fun toggleSideloadedSources(current: AppFilterState): AppFilterState = current.copy(
-        selectedSources = if (current.isSideloadedFilterActive) {
-            persistentSetOf()
-        } else {
-            AppSource.entries.filter { it.isSideloaded }.toPersistentSet()
-        },
-    )
-
     private fun toggleLargeTotal(current: AppFilterState): AppFilterState = if (current.isLargeTotalFilterActive) {
         current.copy(totalSizeRange = null)
     } else {
@@ -77,16 +95,6 @@ class AppFilterRepository @Inject constructor() {
         val max = current.totalSizeRange?.max ?: Long.MAX_VALUE.bytes
         current.copy(totalSizeRange = AppSizeRange(min = min, max = max))
     }
-
-    private fun toggleRecentlyUsed(current: AppFilterState): AppFilterState = current.copy(
-        recentlyUsedDays = if (current.isRecentlyUsedActive) null else AppClassificationThresholds.RECENTLY_USED_DAYS,
-        unusedPeriod = null,
-    )
-
-    private fun toggleUnused(current: AppFilterState): AppFilterState = current.copy(
-        unusedPeriod = if (current.isUnusedFilterActive) null else UnusedAppsPeriod.SIX_MONTHS,
-        recentlyUsedDays = null,
-    )
 
     private fun toggleRecentInstall(current: AppFilterState): AppFilterState {
         val now = Instant.now()
@@ -114,11 +122,6 @@ class AppFilterRepository @Inject constructor() {
 private fun deriveActiveQuickFilters(state: AppFilterState): ImmutableSet<QuickFilter> = buildList {
     if (state.isSensitivePermissionsFilterActive) add(QuickFilter.SensitivePermissions)
     if (state.isLargeTotalFilterActive) add(QuickFilter.Large)
-    if (state.isRecentlyUsedActive) add(QuickFilter.RecentlyUsed)
-    if (state.isUnusedFilterActive) add(QuickFilter.Unused)
-    if (state.isSystemFilterActive) add(QuickFilter.System)
-    if (state.isGooglePlayFilterActive) add(QuickFilter.GooglePlay)
-    if (state.isSideloadedFilterActive) add(QuickFilter.Sideloaded)
     if (state.isRecentInstallActive) add(QuickFilter.RecentlyInstalled)
     if (state.isRecentUpdateActive) add(QuickFilter.RecentlyUpdated)
 }.toPersistentSet()

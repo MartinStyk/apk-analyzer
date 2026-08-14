@@ -14,6 +14,7 @@ internal sealed interface BrowseAppsState {
         val query: String,
         val totalApps: Int,
         val apps: ImmutableList<BrowseAppItem>,
+        val bucketDetail: BrowseBucketDetail? = null,
     ) : BrowseAppsState
 }
 

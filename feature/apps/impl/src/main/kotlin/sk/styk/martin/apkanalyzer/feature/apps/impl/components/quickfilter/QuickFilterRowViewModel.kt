@@ -30,11 +30,15 @@ class QuickFilterRowViewModel @Inject constructor(
 
     val state = combine(
         appFilterRepository.activeQuickFilters,
+        appFilterRepository.activeSourceQuickFilters,
+        appFilterRepository.activeActivityQuickFilter,
         appFilterRepository.filter,
         permissionRationale,
-    ) { activeFilters, filterState, rationale ->
+    ) { activeFilters, activeSources, activeActivity, filterState, rationale ->
         QuickFilterRowState(
             activeQuickFilters = activeFilters,
+            activeSourceQuickFilters = activeSources,
+            activeActivityQuickFilter = activeActivity,
             isDeepFilterActive = filterState.isActive,
             permissionRationale = rationale,
         )
@@ -44,8 +48,6 @@ class QuickFilterRowViewModel @Inject constructor(
         when (action) {
             is QuickFilterRowAction.QuickFilterToggle -> {
                 val missingPermission = when {
-                    action.filter == QuickFilter.RecentlyUsed && !usageStatsRepository.isPermissionGranted.value -> AppDataPermission.UsageAccess
-                    action.filter == QuickFilter.Unused && !usageStatsRepository.isPermissionGranted.value -> AppDataPermission.UsageAccess
                     action.filter == QuickFilter.Large && !storageStatsRepository.isPermissionGranted.value -> AppDataPermission.StorageAccess
                     else -> null
                 }
@@ -54,6 +56,16 @@ class QuickFilterRowViewModel @Inject constructor(
                     return
                 }
                 appFilterRepository.toggleQuickFilter(action.filter)
+            }
+
+            is QuickFilterRowAction.SourceQuickFilterToggled -> appFilterRepository.toggleSourceQuickFilter(action.filter)
+
+            is QuickFilterRowAction.ActivityQuickFilterSelected -> {
+                if (action.filter != null && !usageStatsRepository.isPermissionGranted.value) {
+                    permissionRationale.value = AppDataPermission.UsageAccess
+                    return
+                }
+                appFilterRepository.selectActivityQuickFilter(action.filter)
             }
 
             is QuickFilterRowAction.FilterClick -> eventChannel.trySend(QuickFilterRowEvent.NavigateToFilter)

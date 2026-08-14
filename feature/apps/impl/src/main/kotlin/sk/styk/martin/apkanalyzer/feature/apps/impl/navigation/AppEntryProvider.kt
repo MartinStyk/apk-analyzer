@@ -16,6 +16,8 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailNavKey
 import sk.styk.martin.apkanalyzer.feature.apps.api.AppsNavKey
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.FilterScreen
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.permission.PermissionFilterScreen
+import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.sdkversion.SdkVersionFilterScreen
+import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.source.SourceFilterScreen
 import sk.styk.martin.apkanalyzer.feature.apps.impl.list.AppsScreen
 import sk.styk.martin.apkanalyzer.feature.apps.impl.search.AppSearchScreen
 import sk.styk.martin.apkanalyzer.feature.settings.api.SettingsNavKey
@@ -76,6 +78,12 @@ fun EntryProviderScope<NavKey>.appEntries(navigator: Navigator) {
             onPermissionFilter = {
                 navigator.navigate(PermissionFilterNavKey)
             },
+            onSourceFilter = {
+                navigator.navigate(SourceFilterNavKey)
+            },
+            onSdkVersionFilter = {
+                navigator.navigate(SdkVersionFilterNavKey)
+            },
         )
     }
 
@@ -83,6 +91,26 @@ fun EntryProviderScope<NavKey>.appEntries(navigator: Navigator) {
         metadata = slideFromEndEntryMetadata(),
     ) {
         PermissionFilterScreen(
+            onBack = {
+                navigator.goBack()
+            },
+        )
+    }
+
+    entry<SourceFilterNavKey>(
+        metadata = slideFromEndEntryMetadata(),
+    ) {
+        SourceFilterScreen(
+            onBack = {
+                navigator.goBack()
+            },
+        )
+    }
+
+    entry<SdkVersionFilterNavKey>(
+        metadata = slideFromEndEntryMetadata(),
+    ) {
+        SdkVersionFilterScreen(
             onBack = {
                 navigator.goBack()
             },

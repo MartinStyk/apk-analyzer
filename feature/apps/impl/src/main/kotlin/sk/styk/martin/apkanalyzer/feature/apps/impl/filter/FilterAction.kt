@@ -22,5 +22,7 @@ sealed interface FilterAction {
     data class UnusedPeriodSelected(val period: UnusedAppsPeriod) : FilterAction
     data object OpenUsagePermissionSettings : FilterAction
     data object OpenPermissionFilter : FilterAction
+    data object OpenSourceFilter : FilterAction
+    data object OpenSdkVersionFilter : FilterAction
     data class PermissionPresetToggled(val preset: PermissionPreset) : FilterAction
 }

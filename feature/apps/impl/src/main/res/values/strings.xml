@@ -35,6 +35,10 @@
     <string name="quick_filter_sideloaded">Sideloaded</string>
     <string name="quick_filter_recently_installed">Recently Installed</string>
     <string name="quick_filter_recently_updated">Recently Updated</string>
+    <string name="quick_filter_source_sheet_title">Source</string>
+    <string name="quick_filter_selection_more" tools:ignore="PluralsCandidate">%1$s +%2$d</string>
+    <string name="quick_filter_activity_sheet_title">Activity</string>
+    <string name="quick_filter_activity_all">Any activity</string>
     <string name="apps_empty_filtered">No apps found</string>
     <string name="apps_clear_filters">Clear filters</string>
     <string name="installed_apps">Installed apps</string>
@@ -99,7 +103,6 @@
     <string name="sort_permission_storage_description">Sorting by Total Size measures each app\'s full footprint — installer, stored data, and cache combined. Grant usage access in Settings to enable this sort option.</string>
     <string name="filter_permissions_section">Permissions</string>
     <string name="filter_permissions_count" tools:ignore="PluralsCandidate">+%d more</string>
-    <string name="filter_permissions_more">More… </string>
     <string name="filter_permissions_title">Filter by Permission</string>
     <string name="filter_permissions_quick_filters">Quick filters</string>
     <string name="filter_permissions_match_label">Match</string>

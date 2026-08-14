@@ -289,10 +289,26 @@ returns a complete or degraded `AppDetail`, an error, or cancellation.
 | `intent_filters` | `available`, `unavailable` |
 | `signing_schemes` | `available`, `unavailable` |
 
+| Custom metric | Meaning |
+|---|---|
+| `package_query_ms` | `PackageManager` package/archive query duration |
+| `manifest_parse_ms` | Component intent-filter manifest parsing duration |
+| `storage_stats_ms` | Optional storage-size query duration |
+| `usage_stats_ms` | Optional usage-stats query duration |
+| `general_info_ms` | General information mapping duration |
+| `certificates_ms` | Certificate extraction and assessment duration |
+| `signing_schemes_ms` | APK signing-scheme detection duration |
+| `launcher_activities_ms` | Launcher-activity query duration (installed packages only) |
+| `components_ms` | Activity, service, provider, and receiver mapping duration |
+| `permissions_ms` | Permission mapping and resolution duration |
+| `features_ms` | Feature mapping duration |
+| `packaging_ms` | APK size, installed-split, and native-library analysis duration |
+
 An optional sub-operation that fails while `AppDetail` remains usable produces `outcome=degraded`.
 Availability attributes allow degraded requests to be filtered away from complete requests.
-The trace intentionally has no custom stage metrics: Firebase already measures the total request, and
-the existing chronological logs identify internal stages without adding permanent remote telemetry.
+Each internal stage records its own `<stage>_ms` metric via `timedStage`, unlike most other traces
+in this rollout, because `app_detail_load` is the app's slowest and most failure-prone request and
+its stage timings are worth the added metric count.
 
 OBS-04 uses the two availability facts persisted in `AppDetail` to classify complete versus degraded
 results: component intent filters and signing schemes. Storage size and last-used time remain nullable
