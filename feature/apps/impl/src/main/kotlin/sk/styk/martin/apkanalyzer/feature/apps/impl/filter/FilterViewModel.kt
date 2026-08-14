@@ -25,12 +25,18 @@ import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppSizeRange
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.PermissionFilterCoordinator
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.PermissionFilterDraft
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.PermissionPreset
+import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.SdkVersionFilterCoordinator
+import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.SdkVersionFilterDraft
+import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.SourceFilterCoordinator
+import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.SourceFilterDraft
 import javax.inject.Inject
 
 @HiltViewModel
 class FilterViewModel @Inject constructor(
     private val appFilterRepository: AppFilterRepository,
     private val permissionFilterCoordinator: PermissionFilterCoordinator,
+    private val sourceFilterCoordinator: SourceFilterCoordinator,
+    private val sdkVersionFilterCoordinator: SdkVersionFilterCoordinator,
     installedAppsRepository: InstalledAppsRepository,
     usageStatsRepository: UsageStatsRepository,
     storageStatsRepository: StorageStatsRepository,
@@ -51,6 +57,16 @@ class FilterViewModel @Inject constructor(
                         permissionMatchAll = draft.matchAll,
                     )
                 }
+            }
+        }
+        viewModelScope.launch {
+            sourceFilterCoordinator.results.collect { draft ->
+                localFilter.update { current -> current.copy(selectedSources = draft.selectedSources.toImmutableSet()) }
+            }
+        }
+        viewModelScope.launch {
+            sdkVersionFilterCoordinator.results.collect { draft ->
+                localFilter.update { current -> current.copy(selectedSdkVersions = draft.selectedSdkVersions.toImmutableSet()) }
             }
         }
     }
@@ -139,7 +155,25 @@ class FilterViewModel @Inject constructor(
 
             FilterAction.OpenUsagePermissionSettings -> eventChannel.trySend(FilterEvent.OpenUsagePermissionSettings)
 
-            FilterAction.OpenPermissionFilter -> openPermissionFilter()
+            FilterAction.OpenPermissionFilter -> {
+                permissionFilterCoordinator.setInput(
+                    PermissionFilterDraft(
+                        selectedPermissions = localFilter.value.selectedPermissions,
+                        matchAll = localFilter.value.permissionMatchAll,
+                    ),
+                )
+                eventChannel.trySend(FilterEvent.NavigateToPermissionFilter)
+            }
+
+            FilterAction.OpenSourceFilter -> {
+                sourceFilterCoordinator.setInput(SourceFilterDraft(selectedSources = localFilter.value.selectedSources))
+                eventChannel.trySend(FilterEvent.NavigateToSourceFilter)
+            }
+
+            FilterAction.OpenSdkVersionFilter -> {
+                sdkVersionFilterCoordinator.setInput(SdkVersionFilterDraft(selectedSdkVersions = localFilter.value.selectedSdkVersions))
+                eventChannel.trySend(FilterEvent.NavigateToSdkVersionFilter)
+            }
 
             is FilterAction.PermissionPresetToggled -> togglePermissionPreset(action)
 
@@ -194,16 +228,6 @@ class FilterViewModel @Inject constructor(
             val bounds = (state.value.totalSizeSectionState as? TotalSizeSectionState.RangeAvailable)?.bounds
             current.copy(totalSizeRange = if (bounds == action.range) null else action.range)
         }
-    }
-
-    private fun openPermissionFilter() {
-        permissionFilterCoordinator.setInput(
-            PermissionFilterDraft(
-                selectedPermissions = localFilter.value.selectedPermissions,
-                matchAll = localFilter.value.permissionMatchAll,
-            ),
-        )
-        eventChannel.trySend(FilterEvent.NavigateToPermissionFilter)
     }
 
     private fun togglePermissionPreset(action: FilterAction.PermissionPresetToggled) {

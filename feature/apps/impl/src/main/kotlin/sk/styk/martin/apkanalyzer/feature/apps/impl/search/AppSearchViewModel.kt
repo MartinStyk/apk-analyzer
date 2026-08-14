@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.core.userpreferences.SearchHistoryRepository
+import sk.styk.martin.apkanalyzer.core.userpreferences.searchhistory.SearchHistoryRepository
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppFilterRepository
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.FilterAppsUseCase
 import sk.styk.martin.apkanalyzer.feature.apps.impl.list.AppListItem
@@ -53,16 +53,26 @@ class AppSearchViewModel @Inject constructor(
         searchApps(query, apps).toImmutableList()
     }.flowOn(dispatcherProvider.default())
 
+    private val searchHistoryFlow = searchHistoryRepository.history().map { entries ->
+        entries.map { entry ->
+            SearchHistoryItem(
+                packageName = entry.packageName,
+                query = entry.query,
+                app = entry.app?.toListItem(),
+            )
+        }.toImmutableList()
+    }.flowOn(dispatcherProvider.default())
+
     val state = combine(
         query,
         searchResultsFlow,
         allApps.map { it.size }.distinctUntilChanged(),
-        searchHistoryRepository.queries(),
+        searchHistoryFlow,
     ) { query, results, totalCount, history ->
         AppSearchState(
             query = query,
             results = results,
-            searchHistory = history.toImmutableList(),
+            searchHistory = history,
             totalAppCount = totalCount,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AppSearchState())
@@ -75,16 +85,23 @@ class AppSearchViewModel @Inject constructor(
                 val currentQuery = query.value
                 viewModelScope.launch {
                     if (currentQuery.length >= MIN_QUERY_LENGTH) {
-                        searchHistoryRepository.addQuery(currentQuery)
+                        searchHistoryRepository.addSearch(action.app.packageName, currentQuery)
                     }
                 }
                 eventChannel.trySend(AppSearchEvent.NavigateToAppDetail(action.app.packageName))
             }
 
-            is AppSearchAction.HistoryQueryClicked -> query.value = action.query
+            is AppSearchAction.HistoryItemClicked -> {
+                val app = action.item.app
+                if (app != null) {
+                    eventChannel.trySend(AppSearchEvent.NavigateToAppDetail(app.packageName))
+                } else {
+                    query.value = action.item.query
+                }
+            }
 
             is AppSearchAction.DeleteHistoryItem -> {
-                viewModelScope.launch { searchHistoryRepository.removeQuery(action.query) }
+                viewModelScope.launch { searchHistoryRepository.removeEntry(action.packageName) }
             }
 
             is AppSearchAction.ClearHistory -> {

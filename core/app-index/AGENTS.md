@@ -18,6 +18,10 @@ category, and current-signing-certificate identity and subject attributes.
 * Multi-signer apps appear under every current signer.
 * Certificate fingerprint dimensions use certificate hashes, not signature algorithms.
 * Organization and country come from the certificate subject, matching app-detail terminology.
+* `certificateByHash` carries one representative `Certificate` per SHA-256/SHA-1/MD5 hash so
+  `feature:browse` can show per-bucket detail (algorithm strength, self-signed) without a second
+  device-wide signing scan. First-seen wins; apps sharing a certificate hash are assumed to share its
+  algorithm and self-signed status too.
 
 The first dimensions reuse data already present on `InstalledApp`. Certificate grouping consumes the
 heavier `AppSigningRepository` output.

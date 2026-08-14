@@ -44,14 +44,9 @@ internal fun AppListItemRow(
     position: ListItemPosition,
     modifier: Modifier = Modifier,
     sortType: SortType = SortType.Name,
+    trailingContent: (@Composable () -> Unit)? = null,
 ) {
-    val shape: Shape =
-        when (position) {
-            ListItemPosition.Single -> Shapes.CardShape
-            ListItemPosition.First -> RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
-            ListItemPosition.Middle -> RectangleShape
-            ListItemPosition.Last -> RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)
-        }
+    val shape: Shape = listItemShape(position)
 
     Row(
         modifier =
@@ -92,6 +87,11 @@ internal fun AppListItemRow(
             Spacer(modifier = Modifier.width(8.dp))
             SortValueBadge(app = app, sortType = sortType)
         }
+
+        if (trailingContent != null) {
+            Spacer(modifier = Modifier.width(8.dp))
+            trailingContent()
+        }
     }
 }
 
@@ -107,7 +107,7 @@ private fun SortValueBadge(
         SortType.InstallDate -> ApkAnalyzerIcons.Calendar to app.installTime.toShortDate(stringResource(R.string.preinstalled))
         SortType.TargetSdk -> ApkAnalyzerIcons.Android to app.targetSdk.toString()
         SortType.LastUpdated -> ApkAnalyzerIcons.Calendar to app.lastUpdateTime.toShortDate(stringResource(R.string.preinstalled))
-        SortType.LastUsed -> ApkAnalyzerIcons.Calendar to (app.lastUsedTime?.toShortDate(stringResource(R.string.never)) ?: "—")
+        SortType.LastUsed -> ApkAnalyzerIcons.Calendar to (app.lastUsedTime?.toShortDate(stringResource(R.string.never)) ?: stringResource(R.string.never))
         SortType.Name -> return
     }
 
@@ -129,6 +129,13 @@ private fun SortValueBadge(
             color = AppTheme.colors.onSecondaryContainer,
         )
     }
+}
+
+internal fun listItemShape(position: ListItemPosition): Shape = when (position) {
+    ListItemPosition.Single -> Shapes.CardShape
+    ListItemPosition.First -> RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+    ListItemPosition.Middle -> RectangleShape
+    ListItemPosition.Last -> RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)
 }
 
 @Composable

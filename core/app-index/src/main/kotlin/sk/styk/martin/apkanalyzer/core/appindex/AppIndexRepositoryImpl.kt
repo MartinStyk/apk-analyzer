@@ -15,6 +15,8 @@ import sk.styk.martin.apkanalyzer.core.apps.signing.AppSigning
 import sk.styk.martin.apkanalyzer.core.apps.signing.AppSigningRepository
 import sk.styk.martin.apkanalyzer.core.apps.signing.Certificate
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
+import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
 import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
@@ -47,21 +49,31 @@ internal class AppIndexRepositoryImpl @Inject constructor(
     private suspend fun buildIndex(apps: List<InstalledApp>, signing: Map<PackageName, AppSigning>) =
         performanceTracker.startCancellableTrace("app_index_build") {
             appCount = apps.size
-            timedSection(tag = TAG, operation = "App index build", metric = "index_build_ms") {
-                AppAttributeIndex(
-                    targetSdk = apps.byTargetSdk(),
-                    minSdk = apps.byMinSdk(),
-                    installSource = apps.byInstallSource(),
-                    permission = apps.byPermission(),
-                    certificateSha256 = apps.byCertificate(signing) { it.certificateHashSha256 },
-                    certificateSha1 = apps.byCertificate(signing) { it.certificateHashSha1 },
-                    certificateMd5 = apps.byCertificate(signing) { it.certificateHashMd5 },
-                    certificateOrganization = apps.byCertificate(signing) { it.subject.organization },
-                    certificateCountry = apps.byCertificate(signing) { it.subject.country },
-                    sharedUserId = apps.bySharedUserId(),
-                    appCategory = apps.byAppCategory(),
-                )
-            }.also { outcome = TraceOutcome.Success }
+            runCatchingCancellable {
+                timedSection(tag = TAG, operation = "App index build", metric = "index_build_ms") {
+                    AppAttributeIndex(
+                        targetSdk = apps.byTargetSdk(),
+                        minSdk = apps.byMinSdk(),
+                        installSource = apps.byInstallSource(),
+                        permission = apps.byPermission(),
+                        certificateSha256 = apps.byCertificate(signing) { it.certificateHashSha256 },
+                        certificateSha1 = apps.byCertificate(signing) { it.certificateHashSha1 },
+                        certificateMd5 = apps.byCertificate(signing) { it.certificateHashMd5 },
+                        certificateOrganization = apps.byCertificate(signing) { it.subject.organization },
+                        certificateCountry = apps.byCertificate(signing) { it.subject.country },
+                        certificateByHash = apps.certificatesByHash(signing),
+                        sharedUserId = apps.bySharedUserId(),
+                        appCategory = apps.byAppCategory(),
+                    )
+                }
+            }.onSuccess {
+                outcome = TraceOutcome.Success
+            }.onFailure {
+                outcome = TraceOutcome.Error
+                Logger.e(TAG, it, "App index build failed")
+            }.getOrElse {
+                AppAttributeIndex()
+            }
         }
 
     private fun List<InstalledApp>.byTargetSdk() = groupBy(InstalledApp::targetSdk, InstalledApp::packageName)
@@ -81,4 +93,15 @@ internal class AppIndexRepositoryImpl @Inject constructor(
     private fun <T> List<InstalledApp>.byCertificate(signing: Map<PackageName, AppSigning>, key: (Certificate) -> T): Map<T, List<PackageName>> =
         flatMap { app -> signing[app.packageName]?.currentCertificates.orEmpty().map { key(it) to app.packageName } }
             .groupBy({ it.first }, { it.second })
+
+    private fun List<InstalledApp>.certificatesByHash(signing: Map<PackageName, AppSigning>): Map<String, Certificate> {
+        val certificates = flatMap { app -> signing[app.packageName]?.currentCertificates.orEmpty() }
+        return buildMap {
+            certificates.forEach { certificate ->
+                putIfAbsent(certificate.certificateHashSha256, certificate)
+                putIfAbsent(certificate.certificateHashSha1, certificate)
+                putIfAbsent(certificate.certificateHashMd5, certificate)
+            }
+        }
+    }
 }

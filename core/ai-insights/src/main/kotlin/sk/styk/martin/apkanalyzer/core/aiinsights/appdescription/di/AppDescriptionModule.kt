@@ -46,9 +46,7 @@ internal interface AppDescriptionModule {
         @Provides
         @Singleton
         fun provideAppAiDescriptionDatabase(@ApplicationContext context: Context): AppAiDescriptionDatabase =
-            Room.databaseBuilder(context, AppAiDescriptionDatabase::class.java, DATABASE_NAME)
-                .fallbackToDestructiveMigration(dropAllTables = true)
-                .build()
+            Room.databaseBuilder(context, AppAiDescriptionDatabase::class.java, DATABASE_NAME).build()
 
         @Provides
         @Singleton

@@ -3,6 +3,7 @@ package sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.collections.immutable.toPersistentSet
 import sk.styk.martin.apkanalyzer.core.apps.AppClassificationThresholds
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
@@ -45,6 +46,20 @@ data class AppFilterState(
     val isUnusedFilterActive: Boolean get() = unusedPeriod != null
     val isRecentlyUsedActive: Boolean get() = recentlyUsedDays != null
     val isSensitivePermissionsFilterActive: Boolean get() = PermissionPreset.Sensitive.permissions.all { it in selectedPermissions }
+
+    val activeSourceQuickFilters: ImmutableSet<SourceQuickFilter>
+        get() = buildSet {
+            if (isSystemFilterActive) add(SourceQuickFilter.System)
+            if (isGooglePlayFilterActive) add(SourceQuickFilter.GooglePlay)
+            if (isSideloadedFilterActive) add(SourceQuickFilter.Sideloaded)
+        }.toPersistentSet()
+
+    val activeActivityQuickFilter: ActivityQuickFilter?
+        get() = when {
+            isRecentlyUsedActive -> ActivityQuickFilter.RecentlyUsed
+            isUnusedFilterActive -> ActivityQuickFilter.Unused
+            else -> null
+        }
 }
 
 @Immutable

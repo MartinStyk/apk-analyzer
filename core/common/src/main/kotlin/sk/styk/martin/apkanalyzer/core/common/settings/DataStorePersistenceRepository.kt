@@ -20,9 +20,7 @@ import javax.inject.Singleton
 private val KEY_COLOR_SCHEME = stringPreferencesKey("dayNightPref")
 private val KEY_ONBOARDING = booleanPreferencesKey("first_app_start")
 private val KEY_APP_START_NUMBER = intPreferencesKey("app_start_number")
-private val KEY_RECENTLY_VIEWED = stringPreferencesKey("recently_viewed_apps")
 private val KEY_RECENTLY_VIEWED_ENABLED = booleanPreferencesKey("recently_viewed_apps_enabled")
-private val KEY_SEARCH_HISTORY = stringPreferencesKey("search_history")
 private val KEY_APP_DETAIL_QUALIFIED_SESSION_COUNT = intPreferencesKey("app_detail_qualified_session_count")
 private val KEY_REVIEW_FLOW_REQUESTED = booleanPreferencesKey("review_flow_requested")
 
@@ -74,18 +72,8 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
             prefs[KEY_APP_START_NUMBER] ?: 0
         }
 
-        Key.RecentlyViewedApps -> {
-            val raw = prefs[KEY_RECENTLY_VIEWED] ?: ""
-            if (raw.isEmpty()) emptyList() else raw.split("|")
-        }
-
         Key.RecentlyViewedAppsEnabled -> {
             prefs[KEY_RECENTLY_VIEWED_ENABLED] ?: true
-        }
-
-        Key.SearchHistory -> {
-            val raw = prefs[KEY_SEARCH_HISTORY] ?: ""
-            if (raw.isEmpty()) emptyList() else raw.split("|")
         }
 
         Key.AppDetailQualifiedSessionCount -> {
@@ -115,18 +103,8 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
             prefs[KEY_APP_START_NUMBER] = value as Int
         }
 
-        Key.RecentlyViewedApps -> {
-            @Suppress("UNCHECKED_CAST")
-            prefs[KEY_RECENTLY_VIEWED] = (value as List<String>).joinToString("|")
-        }
-
         Key.RecentlyViewedAppsEnabled -> {
             prefs[KEY_RECENTLY_VIEWED_ENABLED] = value as Boolean
-        }
-
-        Key.SearchHistory -> {
-            @Suppress("UNCHECKED_CAST")
-            prefs[KEY_SEARCH_HISTORY] = (value as List<String>).joinToString("|")
         }
 
         Key.AppDetailQualifiedSessionCount -> {

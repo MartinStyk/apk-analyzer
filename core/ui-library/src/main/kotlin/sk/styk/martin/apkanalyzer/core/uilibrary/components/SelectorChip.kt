@@ -33,11 +33,14 @@ fun <T> SelectorChip(
     label: @Composable (T) -> String,
     onSelectOption: (T) -> Unit,
     modifier: Modifier = Modifier,
+    isActive: Boolean = false,
+    chipLabel: @Composable (T) -> String = label,
 ) {
     var showSheet by remember { mutableStateOf(false) }
 
     OutlinedChip(
-        label = label(selected),
+        label = chipLabel(selected),
+        selected = isActive,
         onClick = { showSheet = true },
         trailingIcon = ApkAnalyzerIcons.ArrowDropDown,
         modifier = modifier,
@@ -123,6 +126,21 @@ private fun SelectorChipDarkPreview() {
             selected = "Defined by this app",
             label = { it },
             onSelectOption = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun SelectorChipActivePreview() {
+    ApkAnalyzerTheme {
+        SelectorChip(
+            sheetTitle = "Source",
+            options = persistentListOf("All sources", "Google Play"),
+            selected = "Google Play",
+            label = { it },
+            onSelectOption = {},
+            isActive = true,
         )
     }
 }

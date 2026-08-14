@@ -12,12 +12,23 @@ The API module exposes only the top-level navigation key. Implementation code us
 
 * `list/` - the installed-app list and recently viewed section.
 * `search/` - app search and search-history interaction.
-* `filter/` - in-memory filter state, quick filters, and permission selection.
+* `filter/` - in-memory filter state and quick filters. `filter/permission/`, `filter/source/`, and
+  `filter/sdkversion/` each own a nested full-screen multiselect destination opened from a card on
+  the main filter screen.
 * `components/` - feature-owned reusable UI, including APK document selection and app rows.
 * `navigation/` - the top-level and internal Navigation 3 destinations.
 
 Each user-visible destination owns its State/Action/Event/ViewModel set. Do not centralize search,
-filter, and permission-filter state into the list ViewModel.
+filter, and nested-filter-screen state into the list ViewModel.
+
+A section on the main filter screen that opens a nested multiselect destination (permission, source,
+SDK version) edits `FilterViewModel`'s uncommitted `localFilter` draft, never `AppFilterRepository`
+directly — the nested screen and the main screen's inline chips must stay in sync with the same
+draft, and the top-level Apply/unsaved-changes flow stays authoritative. Each nested destination is
+bridged in through its own `Singleton` coordinator (`PermissionFilterCoordinator`,
+`SourceFilterCoordinator`, `SdkVersionFilterCoordinator`) built on the shared `FilterDraftBridge`,
+because the nested screen is a separate Navigation 3 destination with its own `HiltViewModel` and
+cannot share `FilterViewModel`'s in-memory state directly.
 
 ## Navigation Topology
 

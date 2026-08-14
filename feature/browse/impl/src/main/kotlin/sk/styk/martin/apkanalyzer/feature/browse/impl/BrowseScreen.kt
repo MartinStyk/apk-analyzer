@@ -179,9 +179,8 @@ private fun DimensionCard(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState(), enabled = false)
-                    .padding(start = 76.dp),
+                    .horizontalScroll(rememberScrollState())
+                    .padding(start = 76.dp, end = 16.dp),
             ) {
                 summary.topLabels.forEach { label ->
                     Chip(label = label, variant = ChipVariant.Tonal)

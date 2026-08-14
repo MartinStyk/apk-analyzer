@@ -16,13 +16,16 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import sk.styk.martin.apkanalyzer.core.appindex.AppIndexRepository
+import sk.styk.martin.apkanalyzer.core.appindex.model.AppAttributeIndex
 import sk.styk.martin.apkanalyzer.core.appindex.model.AppIndexStatus
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
+import sk.styk.martin.apkanalyzer.core.apps.permissions.PermissionDefinitionResolver
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.BrowseSubAttribute
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.bucketsFor
+import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.isCertificateHash
 import sk.styk.martin.apkanalyzer.feature.browse.impl.model.BrowseDimension
 
 @HiltViewModel(assistedFactory = BrowseAppsViewModel.Factory::class)
@@ -32,6 +35,7 @@ internal class BrowseAppsViewModel @AssistedInject constructor(
     @Assisted("subAttribute") private val subAttribute: BrowseSubAttribute?,
     appIndexRepository: AppIndexRepository,
     installedAppsRepository: InstalledAppsRepository,
+    private val permissionDefinitionResolver: PermissionDefinitionResolver,
     dispatcherProvider: DispatcherProvider,
 ) : ViewModel() {
 
@@ -84,7 +88,26 @@ internal class BrowseAppsViewModel @AssistedInject constructor(
                 query = query,
                 totalApps = bucketApps.size,
                 apps = filtered.toImmutableList(),
+                bucketDetail = index.resolveBucketDetail(),
             )
         }
+    }
+
+    private fun AppAttributeIndex.resolveBucketDetail(): BrowseBucketDetail? = when (dimension) {
+        BrowseDimension.Permission -> permissionDefinitionResolver.resolve(bucketKey)?.let {
+            BrowseBucketDetail.Permission(protectionLevel = it.protectionLevel, description = it.description)
+        }
+
+        BrowseDimension.SigningCertificate -> subAttribute.takeIf { it.isCertificateHash }
+            ?.let { certificateByHash[bucketKey] }
+            ?.let {
+                BrowseBucketDetail.Certificate(
+                    algorithm = it.signAlgorithm,
+                    algorithmAssessment = it.signatureAlgorithmAssessment,
+                    isSelfSigned = it.isSelfSigned,
+                )
+            }
+
+        else -> null
     }
 }

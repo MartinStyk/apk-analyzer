@@ -22,7 +22,7 @@ import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.bucketsFor
 import sk.styk.martin.apkanalyzer.feature.browse.impl.model.BrowseDimension
 import javax.inject.Inject
 
-private const val TOP_LABELS_COUNT = 4
+private const val TOP_LABELS_COUNT = 6
 
 @HiltViewModel
 internal class BrowseViewModel @Inject constructor(

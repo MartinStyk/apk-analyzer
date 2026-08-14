@@ -5,11 +5,13 @@ import android.provider.Settings
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -41,12 +43,12 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
-import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.BottomSheet
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Button
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Chip
+import sk.styk.martin.apkanalyzer.core.uilibrary.components.ChipVariant
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.DateRangePickerDialog
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.LoadingSpinner
@@ -73,6 +75,8 @@ import java.util.Locale
 internal fun FilterScreen(
     onBack: () -> Unit,
     onPermissionFilter: () -> Unit,
+    onSourceFilter: () -> Unit,
+    onSdkVersionFilter: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: FilterViewModel = hiltViewModel(),
 ) {
@@ -89,6 +93,10 @@ internal fun FilterScreen(
                 }
 
                 FilterEvent.NavigateToPermissionFilter -> onPermissionFilter()
+
+                FilterEvent.NavigateToSourceFilter -> onSourceFilter()
+
+                FilterEvent.NavigateToSdkVersionFilter -> onSdkVersionFilter()
             }
         }
     }
@@ -136,12 +144,11 @@ private fun FilterContent(
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Spacer(modifier = Modifier.height(4.dp))
-
             SourceSection(
                 availableSources = state.availableSources,
                 selectedSources = state.filter.selectedSources,
                 onSourceToggle = { source, selected -> onAction(FilterAction.SourceToggled(source, selected)) },
+                onOpenSourceFilter = { onAction(FilterAction.OpenSourceFilter) },
             )
 
             PermissionsSection(
@@ -181,6 +188,7 @@ private fun FilterContent(
                 availableSdkVersions = state.availableSdkVersions,
                 selectedSdkVersions = state.filter.selectedSdkVersions,
                 onSdkVersionToggle = { onAction(FilterAction.SdkVersionToggled(it)) },
+                onOpenSdkVersionFilter = { onAction(FilterAction.OpenSdkVersionFilter) },
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -217,60 +225,98 @@ private fun FilterContent(
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun SourceSection(
     availableSources: ImmutableList<AppSource>,
     selectedSources: ImmutableSet<AppSource>,
     onSourceToggle: (AppSource, Boolean) -> Unit,
+    onOpenSourceFilter: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (availableSources.isEmpty()) return
 
-    FilterSection(
+    FilterNavigableSection(
         title = stringResource(R.string.filter_source_section),
+        onClick = onOpenSourceFilter,
         modifier = modifier,
     ) {
-        FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            availableSources.forEach { source ->
-                val isSelected = source in selectedSources
-                Chip(
-                    label = source.displayName(),
-                    selected = isSelected,
-                    onClick = { onSourceToggle(source, !isSelected) },
-                )
-            }
+        availableSources.forEach { source ->
+            val isSelected = source in selectedSources
+            Chip(
+                label = source.displayName(),
+                selected = isSelected,
+                onClick = { onSourceToggle(source, !isSelected) },
+            )
         }
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun SdkVersionSection(
     availableSdkVersions: ImmutableList<Int>,
     selectedSdkVersions: ImmutableSet<Int>,
     onSdkVersionToggle: (Int) -> Unit,
+    onOpenSdkVersionFilter: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (availableSdkVersions.isEmpty()) return
 
-    FilterSection(
+    FilterNavigableSection(
         title = stringResource(R.string.filter_sdk_section),
+        onClick = onOpenSdkVersionFilter,
         modifier = modifier,
     ) {
-        FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            availableSdkVersions.forEach { sdk ->
-                Chip(
-                    label = sdk.toAndroidVersionLabel(),
-                    selected = sdk in selectedSdkVersions,
-                    onClick = { onSdkVersionToggle(sdk) },
-                )
-            }
+        availableSdkVersions.forEach { sdk ->
+            Chip(
+                label = sdk.toAndroidVersionLabel(),
+                selected = sdk in selectedSdkVersions,
+                onClick = { onSdkVersionToggle(sdk) },
+            )
         }
+    }
+}
+
+@Composable
+private fun FilterNavigableSection(
+    title: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    chips: @Composable RowScope.() -> Unit,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .card()
+            .clickable(onClick = onClick)
+            .padding(vertical = 16.dp),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+        ) {
+            Text(
+                text = title,
+                style = AppTheme.typography.titleMedium,
+                color = AppTheme.colors.onBackground,
+                modifier = Modifier.weight(1f),
+            )
+            Icon(
+                imageVector = ApkAnalyzerIcons.ChevronRight,
+                tint = AppTheme.colors.onSurfaceVariant,
+                modifier = Modifier.size(20.dp),
+            )
+        }
+        Spacer(modifier = Modifier.height(12.dp))
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp),
+            content = chips,
+        )
     }
 }
 
@@ -533,7 +579,6 @@ private fun LockedContent(
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun PermissionsSection(
     activePermissionPresets: ImmutableList<PermissionPreset>,
@@ -542,43 +587,24 @@ private fun PermissionsSection(
     onOpenPermissionFilter: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
-        Text(
-            text = stringResource(R.string.filter_permissions_section),
-            style = AppTheme.typography.titleMedium,
-            color = AppTheme.colors.onBackground,
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .card()
-                .clickable(onClick = onOpenPermissionFilter)
-                .padding(16.dp),
-        ) {
-            PermissionPreset.all.forEach { preset ->
-                val isSelected = preset in activePermissionPresets
-                Logger.e("XXX", "preset $preset")
-                Chip(
-                    label = preset.displayLabel(),
-                    selected = isSelected,
-                    onClick = { onPresetToggle(preset) },
-                )
-            }
-            if (extraPermissionCount > 0) {
-                Chip(
-                    label = stringResource(R.string.filter_permissions_count, extraPermissionCount),
-                    selected = true,
-                    onClick = onOpenPermissionFilter,
-                )
-            } else {
-                Chip(
-                    label = stringResource(R.string.filter_permissions_more),
-                    leadingIcon = ApkAnalyzerIcons.Search,
-                    onClick = onOpenPermissionFilter,
-                )
-            }
+    FilterNavigableSection(
+        title = stringResource(R.string.filter_permissions_section),
+        onClick = onOpenPermissionFilter,
+        modifier = modifier,
+    ) {
+        PermissionPreset.all.forEach { preset ->
+            val isSelected = preset in activePermissionPresets
+            Chip(
+                label = preset.displayLabel(),
+                selected = isSelected,
+                onClick = { onPresetToggle(preset) },
+            )
+        }
+        if (extraPermissionCount > 0) {
+            Chip(
+                label = stringResource(R.string.filter_permissions_count, extraPermissionCount),
+                variant = ChipVariant.Tonal,
+            )
         }
     }
 }

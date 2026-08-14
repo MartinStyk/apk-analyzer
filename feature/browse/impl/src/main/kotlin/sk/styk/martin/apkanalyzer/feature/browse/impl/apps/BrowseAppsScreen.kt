@@ -19,6 +19,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,13 +36,20 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.apps.signing.SignatureAlgorithmAssessment
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.AppIcon
+import sk.styk.martin.apkanalyzer.core.uilibrary.components.BottomSheet
+import sk.styk.martin.apkanalyzer.core.uilibrary.components.Chip
+import sk.styk.martin.apkanalyzer.core.uilibrary.components.ChipVariant
+import sk.styk.martin.apkanalyzer.core.uilibrary.components.IconButton
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.LoadingSpinner
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.SearchBarActive
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Toolbar
+import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.collapsingHeader
 import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.collapsingHeaderContainer
 import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.rememberCollapsingHeaderState
@@ -90,12 +100,27 @@ private fun BrowseAppsContent(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var showDetailSheet by rememberSaveable { mutableStateOf(false) }
+    val bucketDetail = (state as? BrowseAppsState.Loaded)?.bucketDetail
+
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(AppTheme.colors.background),
     ) {
-        Toolbar(title = bucketLabel, onBack = onBack)
+        Toolbar(
+            title = bucketLabel,
+            onBack = onBack,
+            actions = {
+                if (bucketDetail != null) {
+                    IconButton(
+                        imageVector = ApkAnalyzerIcons.Info,
+                        onClick = { showDetailSheet = true },
+                        contentDescription = stringResource(R.string.browse_bucket_info_content_description, bucketLabel),
+                    )
+                }
+            },
+        )
 
         when (state) {
             is BrowseAppsState.Loading -> Box(modifier = Modifier.fillMaxSize()) {
@@ -105,6 +130,144 @@ private fun BrowseAppsContent(
             is BrowseAppsState.Loaded -> BrowseAppsList(state = state, onAction = onAction)
         }
     }
+
+    if (showDetailSheet && bucketDetail != null) {
+        BrowseBucketDetailSheet(
+            bucketLabel = bucketLabel,
+            detail = bucketDetail,
+            onDismiss = { showDetailSheet = false },
+        )
+    }
+}
+
+@Composable
+private fun BrowseBucketDetailSheet(
+    bucketLabel: String,
+    detail: BrowseBucketDetail,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    BottomSheet(onDismiss = onDismiss, modifier = modifier) {
+        Column(modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp)) {
+            Text(
+                text = bucketLabel,
+                style = AppTheme.typography.titleMedium,
+                color = AppTheme.colors.onSurface,
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+
+            when (detail) {
+                is BrowseBucketDetail.Permission -> PermissionDetailContent(detail)
+                is BrowseBucketDetail.Certificate -> CertificateDetailContent(detail)
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+        }
+    }
+}
+
+@Composable
+private fun PermissionDetailContent(detail: BrowseBucketDetail.Permission, modifier: Modifier = Modifier) {
+    Column(modifier = modifier.fillMaxWidth()) {
+        detail.protectionLevel?.let { protectionLevel ->
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                Chip(label = stringResource(protectionLevel.labelRes), variant = protectionLevel.chipVariant())
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = stringResource(protectionLevel.explanationRes),
+                style = AppTheme.typography.bodyMedium,
+                color = AppTheme.colors.onSurfaceVariant,
+            )
+        }
+        detail.description?.let { description ->
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = description,
+                style = AppTheme.typography.bodyMedium,
+                color = AppTheme.colors.onSurfaceVariant,
+            )
+        }
+    }
+}
+
+@Composable
+private fun CertificateDetailContent(detail: BrowseBucketDetail.Certificate, modifier: Modifier = Modifier) {
+    Column(modifier = modifier.fillMaxWidth()) {
+        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            Chip(label = stringResource(detail.algorithmAssessment.labelRes), variant = detail.algorithmAssessment.chipVariant())
+            if (detail.isSelfSigned) {
+                Chip(label = stringResource(R.string.browse_certificate_self_signed), variant = ChipVariant.Default)
+            }
+        }
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            text = stringResource(detail.algorithmAssessment.explanationRes, detail.algorithm),
+            style = AppTheme.typography.bodyMedium,
+            color = AppTheme.colors.onSurfaceVariant,
+        )
+        if (detail.isSelfSigned) {
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = stringResource(R.string.browse_certificate_self_signed_explanation),
+                style = AppTheme.typography.bodyMedium,
+                color = AppTheme.colors.onSurfaceVariant,
+            )
+        }
+    }
+}
+
+private val ProtectionLevel.labelRes: Int
+    get() = when (this) {
+        ProtectionLevel.Dangerous -> R.string.browse_protection_level_dangerous
+        ProtectionLevel.Signature -> R.string.browse_protection_level_signature
+        ProtectionLevel.Internal -> R.string.browse_protection_level_internal
+        ProtectionLevel.Normal -> R.string.browse_protection_level_normal
+    }
+
+private val ProtectionLevel.explanationRes: Int
+    get() = when (this) {
+        ProtectionLevel.Dangerous -> R.string.browse_protection_level_dangerous_explanation
+        ProtectionLevel.Signature -> R.string.browse_protection_level_signature_explanation
+        ProtectionLevel.Internal -> R.string.browse_protection_level_internal_explanation
+        ProtectionLevel.Normal -> R.string.browse_protection_level_normal_explanation
+    }
+
+private fun ProtectionLevel.chipVariant(): ChipVariant = when (this) {
+    ProtectionLevel.Dangerous -> ChipVariant.Warning
+    ProtectionLevel.Signature, ProtectionLevel.Internal, ProtectionLevel.Normal -> ChipVariant.Default
+}
+
+private val SignatureAlgorithmAssessment.labelRes: Int
+    get() = when (this) {
+        SignatureAlgorithmAssessment.ModernDigest -> R.string.browse_algorithm_strong
+
+        SignatureAlgorithmAssessment.WeakSha1Digest,
+        SignatureAlgorithmAssessment.WeakMd5Digest,
+        SignatureAlgorithmAssessment.WeakMd2Digest,
+        -> R.string.browse_algorithm_weak
+
+        SignatureAlgorithmAssessment.Unknown -> R.string.browse_algorithm_unknown
+    }
+
+private val SignatureAlgorithmAssessment.explanationRes: Int
+    get() = when (this) {
+        SignatureAlgorithmAssessment.ModernDigest -> R.string.browse_algorithm_strong_explanation
+        SignatureAlgorithmAssessment.WeakSha1Digest -> R.string.browse_algorithm_sha1_explanation
+        SignatureAlgorithmAssessment.WeakMd5Digest -> R.string.browse_algorithm_md5_explanation
+        SignatureAlgorithmAssessment.WeakMd2Digest -> R.string.browse_algorithm_md2_explanation
+        SignatureAlgorithmAssessment.Unknown -> R.string.browse_algorithm_unknown_explanation
+    }
+
+private fun SignatureAlgorithmAssessment.chipVariant(): ChipVariant = when (this) {
+    SignatureAlgorithmAssessment.ModernDigest -> ChipVariant.Positive
+
+    SignatureAlgorithmAssessment.WeakSha1Digest,
+    SignatureAlgorithmAssessment.WeakMd5Digest,
+    SignatureAlgorithmAssessment.WeakMd2Digest,
+    -> ChipVariant.Warning
+
+    SignatureAlgorithmAssessment.Unknown -> ChipVariant.Default
 }
 
 @Composable
@@ -233,6 +396,37 @@ private fun BrowseAppsEmptyPreview() {
     }
 }
 
+@Preview
+@Composable
+private fun BrowseBucketDetailPermissionPreview() {
+    ApkAnalyzerTheme {
+        BrowseBucketDetailSheet(
+            bucketLabel = "Camera",
+            detail = BrowseBucketDetail.Permission(
+                protectionLevel = ProtectionLevel.Dangerous,
+                description = "Required to be able to access the camera device.",
+            ),
+            onDismiss = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun BrowseBucketDetailCertificatePreview() {
+    ApkAnalyzerTheme {
+        BrowseBucketDetailSheet(
+            bucketLabel = "FC:98:DA:E6:3A:D3:96:26",
+            detail = BrowseBucketDetail.Certificate(
+                algorithm = "SHA1withRSA",
+                algorithmAssessment = SignatureAlgorithmAssessment.WeakSha1Digest,
+                isSelfSigned = true,
+            ),
+            onDismiss = {},
+        )
+    }
+}
+
 private fun sampleLoadedState() = BrowseAppsState.Loaded(
     query = "",
     totalApps = 2,
@@ -240,4 +434,5 @@ private fun sampleLoadedState() = BrowseAppsState.Loaded(
         BrowseAppItem(packageName = PackageName("com.instagram.android"), applicationName = "Instagram"),
         BrowseAppItem(packageName = PackageName("com.spotify.music"), applicationName = "Spotify"),
     ).toImmutableList(),
+    bucketDetail = BrowseBucketDetail.Permission(protectionLevel = ProtectionLevel.Dangerous, description = null),
 )
