@@ -28,11 +28,13 @@ import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
 import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
+import sk.styk.martin.apkanalyzer.core.common.performance.appCount
+import sk.styk.martin.apkanalyzer.core.common.performance.outcome
 import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
+import sk.styk.martin.apkanalyzer.core.common.performance.timedSection
 import java.io.File
 import java.time.Instant
 import javax.inject.Inject
-import kotlin.time.measureTimedValue
 
 internal const val INSTALLED_APPS = "InstalledApps"
 
@@ -73,34 +75,28 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
     override fun apps(): Flow<List<InstalledApp>> = cachedApps
 
     @SuppressLint("QueryPermissionsNeeded")
-    private suspend fun loadAllApps(): List<InstalledApp> = performanceTracker.startCancellableTrace("installed_apps_load") { trace ->
-        Logger.d(INSTALLED_APPS, "Installed apps loading started")
+    private suspend fun loadAllApps(): List<InstalledApp> = performanceTracker.startCancellableTrace("installed_apps_load") {
+        Logger.i(INSTALLED_APPS, "Installed apps loading started")
         runCatchingCancellable {
-            Logger.d(INSTALLED_APPS, "Installed apps package query started")
-            val packageQuery = measureTimedValue {
+            val packages = timedSection(tag = INSTALLED_APPS, operation = "Installed apps package query", metric = "package_query_ms") {
                 packageManager.getInstalledPackages(PackageManager.GET_PERMISSIONS)
             }
-            val packages = packageQuery.value
-            trace["package_query_ms"] = packageQuery.duration.inWholeMilliseconds
-            Logger.d(INSTALLED_APPS, "Installed apps package query finished: ${packages.size} packages found")
 
-            Logger.d(INSTALLED_APPS, "Installed apps mapping started")
-            val apps = packages.mapNotNull { packageInfo ->
-                packageInfo.applicationInfo?.let { packageInfo.toInstalledApp() }
+            val apps = timedSection(tag = INSTALLED_APPS, operation = "Installed apps mapping", metric = "apps_mapping_ms") {
+                packages.mapNotNull { packageInfo -> packageInfo.applicationInfo?.let { packageInfo.toInstalledApp() } }
             }
-            trace["app_count"] = apps.size.toLong()
-            Logger.d(INSTALLED_APPS, "Installed apps mapping finished: ${apps.size} apps mapped")
+            appCount = apps.size
             apps
         }.fold(
             onSuccess = { apps ->
-                trace.setOutcome(TraceOutcome.Success)
+                outcome = TraceOutcome.Success
                 Logger.i(INSTALLED_APPS, "Installed apps loading finished: ${apps.size} apps loaded")
                 apps
             },
             onFailure = { failure ->
-                trace.setOutcome(TraceOutcome.Error)
+                outcome = TraceOutcome.Error
                 Logger.e(INSTALLED_APPS, failure, "Installed apps loading failed")
-                throw failure
+                emptyList()
             },
         )
     }

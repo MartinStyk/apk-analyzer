@@ -28,10 +28,17 @@ logic do not belong here.
   events, formatter helpers, or logging-only wrapper functions.
 * Throwable-bearing WARN and ERROR logs record Crashlytics non-fatals. Attach the throwable once at
   the boundary that owns the degraded result or terminal failure.
+* Crashlytics only receives INFO and above (`Logger.d`/`Logger.v` never reach it). Its `.log()` buffer
+  is a limited-size breadcrumb trail sent only alongside a crash or non-fatal, not a live stream —
+  DEBUG-level per-stage detail belongs in local logcat only, or it crowds out the breadcrumbs that
+  matter by the time a crash actually happens.
 * Firebase Performance imports stay inside the internal adapter in this infrastructure module.
   Domain core modules and feature modules depend only on `PerformanceTracker` and
   `PerformanceTrace`. This module already owns the Firebase-backed logging facade, while the app
   convention plugin remains responsible for packaging and instrumenting the SDK.
+* Time an expensive stage with `PerformanceTrace.measuredSection` (records a metric, no logging) or
+  `PerformanceTrace.timedSection` (same, plus a paired DEBUG started/finished log) instead of calling
+  `measureTimedValue` and setting the trace metric by hand at each call site.
 * `AppReference` is the shared type-safe distinction between an installed package and an APK file.
 * `AppSource.isSideloaded` intentionally groups sideloaded, local-install, and unknown sources while
   excluding recognized stores and system-preinstalled apps.

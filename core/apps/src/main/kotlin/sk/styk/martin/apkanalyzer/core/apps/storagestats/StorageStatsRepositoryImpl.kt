@@ -23,7 +23,10 @@ import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
 import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
 import sk.styk.martin.apkanalyzer.core.common.performance.TracePermission
+import sk.styk.martin.apkanalyzer.core.common.performance.outcome
+import sk.styk.martin.apkanalyzer.core.common.performance.permission
 import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
+import sk.styk.martin.apkanalyzer.core.common.performance.timedSection
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -89,44 +92,50 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
     }
 
     private suspend fun fetchTotalSizes(packageNames: List<PackageName>, trigger: String) {
-        performanceTracker.startCancellableTrace("storage_stats_load") { trace ->
-            trace["trigger"] = trigger
+        performanceTracker.startCancellableTrace("storage_stats_load") {
+            this["trigger"] = trigger
             runCatchingCancellable {
                 val hasPermission = checkPermission()
-                trace.setPermission(if (hasPermission) TracePermission.Granted else TracePermission.Denied)
+                permission = if (hasPermission) TracePermission.Granted else TracePermission.Denied
                 isPermissionGranted.value = hasPermission
 
                 if (!hasPermission) {
                     Logger.w(TAG, "Storage stats loading degraded: permission missing")
                     TraceOutcome.Degraded
                 } else {
-                    Logger.d(TAG, "Storage stats loading started: ${packageNames.size} apps requested")
                     val user = UserHandle.getUserHandleForUid(Process.myUid())
                     var uninstallRaceCount = 0
                     var permissionRaceCount = 0
                     var queryFailureCount = 0
                     var lastQueryFailure: IOException? = null
-                    val sizes = packageNames.mapNotNull { packageName ->
-                        when (val queryResult = queryPackageSize(user, packageName)) {
-                            is SizeQueryResult.Success -> packageName to queryResult.size
+                    val sizes = timedSection(
+                        tag = TAG,
+                        operation = "Storage stats query",
+                        metric = "storage_stats_query_ms",
+                        context = "${packageNames.size} apps requested",
+                    ) {
+                        packageNames.mapNotNull { packageName ->
+                            when (val queryResult = queryPackageSize(user, packageName)) {
+                                is SizeQueryResult.Success -> packageName to queryResult.size
 
-                            SizeQueryResult.UninstallRace -> {
-                                uninstallRaceCount++
-                                null
-                            }
+                                SizeQueryResult.UninstallRace -> {
+                                    uninstallRaceCount++
+                                    null
+                                }
 
-                            SizeQueryResult.PermissionRace -> {
-                                permissionRaceCount++
-                                null
-                            }
+                                SizeQueryResult.PermissionRace -> {
+                                    permissionRaceCount++
+                                    null
+                                }
 
-                            is SizeQueryResult.Failure -> {
-                                queryFailureCount++
-                                lastQueryFailure = queryResult.error
-                                null
+                                is SizeQueryResult.Failure -> {
+                                    queryFailureCount++
+                                    lastQueryFailure = queryResult.error
+                                    null
+                                }
                             }
-                        }
-                    }.toMap()
+                        }.toMap()
+                    }
                     totalSizes.value = sizes
 
                     if (uninstallRaceCount > 0) {
@@ -149,11 +158,10 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
                     }
                 }
             }.fold(
-                onSuccess = trace::setOutcome,
+                onSuccess = { outcome = it },
                 onFailure = { failure ->
-                    trace.setOutcome(TraceOutcome.Error)
+                    outcome = TraceOutcome.Error
                     Logger.e(TAG, failure, "Storage stats loading failed")
-                    throw failure
                 },
             )
         }

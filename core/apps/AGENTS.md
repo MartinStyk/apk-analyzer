@@ -47,12 +47,33 @@ block.
 ## Loading Observability
 
 Use direct, readable messages in the form `<operation> loading <started|finished|degraded|failed>`
-with useful result counts or context. DEBUG marks starts and successful internal stages, INFO marks
-successful public-load completion, WARN marks degraded results, and ERROR marks terminal failures.
+with useful result counts or context. INFO marks successful public-load completion, WARN marks
+degraded results, and ERROR marks terminal failures.
+
+DEBUG marks the start and finish of an internal stage only when that stage is itself expensive — a
+platform/IPC query, a file or manifest read, a loop that calls into the platform once per item. A
+pure in-memory mapping over data already fetched does not earn a DEBUG pair. Use
+`PerformanceTrace.timedSection` (`core:common`) for every such stage instead of logging and setting a
+trace metric by hand: it logs the started/finished pair and records the duration as a `<metric>`
+trace attribute in one call. `AppDetailRepositoryImpl.timedStage` is a thin wrapper around it for that
+file's `"App detail <stage> loading"` wording; repositories with only one or two timed stages
+(`InstalledAppsRepositoryImpl`, `StorageStatsRepositoryImpl`, `UsageStatsRepositoryImpl`) call
+`timedSection` directly. If a stage can also degrade to a fallback, add a WARN for that outcome on
+top of the timing — don't stack a WARN onto every stage, only the ones that actually can degrade.
 
 Attach a throwable only for unexpected recoverable degradation or terminal failure, and only at the
 layer that owns that outcome. Let coroutine cancellation propagate without logging it. Package names
 and APK file paths are valid diagnostic context.
+
+`AppDetailRepositoryImpl` owns one `app_detail_load` trace around the complete public request,
+including cache hits. Every internal stage (package query, manifest parsing, certificates, signing
+schemes, permissions, ...) records its own `<stage>_ms` metric via `timedStage`, alongside the bounded
+analysis mode, cache result, availability, and terminal outcome attributes; package names and APK
+paths remain local log context, not trace attributes.
+
+Use `startCancellableTrace` for trace lifetime and cancellation outcome. Classify cached and uncached
+results from facts persisted in `AppDetail`; nullable storage, usage, certificate, and packaging data
+must not be promoted into guessed telemetry outcomes.
 
 ## Signing Semantics
 
