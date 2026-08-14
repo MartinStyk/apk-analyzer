@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
@@ -48,12 +49,14 @@ private val TOOLBAR_PADDING_START = 4.dp
 private val ICON_SIZE_EXPANDED = 96.dp
 private val ICON_SIZE_COLLAPSED = 32.dp
 private val ICON_CONTAINER_PADDING = 8.dp
+private val ICON_CONTAINER_SIZE = ICON_SIZE_EXPANDED + ICON_CONTAINER_PADDING * 2
 private val ICON_SHADOW_EXPANDED = 4.dp
 private val ICON_CORNER_EXPANDED = 16.dp
 private val ICON_CORNER_COLLAPSED = 8.dp
 private val APP_NAME_HORIZONTAL_MARGIN = 16.dp
 private val ICON_COLLAPSE_SCALE = ICON_SIZE_COLLAPSED.value / ICON_SIZE_EXPANDED.value
-private val FADING_CONTENT_RISE = ICON_SIZE_EXPANDED + ICON_CONTAINER_PADDING * 2 - ICON_SIZE_COLLAPSED
+private val ICON_PIVOT_FRACTION = ICON_CONTAINER_PADDING.value / ICON_CONTAINER_SIZE.value
+private val FADING_CONTENT_RISE = ICON_CONTAINER_SIZE - ICON_SIZE_COLLAPSED
 
 @Composable
 internal fun AppDetailToolbar(
@@ -64,7 +67,7 @@ internal fun AppDetailToolbar(
     modifier: Modifier = Modifier,
 ) {
     val density = LocalDensity.current
-    var packageNameHeightDp by remember { mutableStateOf(20.dp) }
+    var fadingContentHeight by remember { mutableStateOf(60.dp) }
 
     val appNameStyle = AppTheme.typography.titleLarge.copy(
         fontWeight = FontWeight.Bold,
@@ -76,18 +79,16 @@ internal fun AppDetailToolbar(
     val backButtonEndX = TOOLBAR_PADDING_START + BACK_BUTTON_SIZE
     val backButtonCenterY = TOOLBAR_PADDING_VERTICAL + BACK_BUTTON_SIZE / 2
 
-    val iconContainerSize = ICON_SIZE_EXPANDED + ICON_CONTAINER_PADDING * 2
     val expandedIconY = TOOLBAR_PADDING_VERTICAL + BACK_BUTTON_SIZE + 16.dp
-    val collapsedIconY = backButtonCenterY - ICON_SIZE_COLLAPSED / 2
+    val collapsedIconX = backButtonEndX - ICON_CONTAINER_PADDING
+    val collapsedIconY = backButtonCenterY - ICON_SIZE_COLLAPSED / 2 - ICON_CONTAINER_PADDING
 
-    val appNameY = expandedIconY + iconContainerSize + 12.dp
+    val expandedAppNameY = expandedIconY + ICON_CONTAINER_SIZE + 12.dp
     val collapsedAppNameX = backButtonEndX + ICON_SIZE_COLLAPSED + 8.dp
 
-    val packageNameY = appNameY + 38.dp
-    val badgesRowHeight = if (state.badges.isNotEmpty()) 40.dp else 0.dp
-    val badgesY = packageNameY + packageNameHeightDp + 8.dp
+    val fadingContentY = expandedAppNameY + 38.dp
 
-    val expandedTotalHeight = badgesY + badgesRowHeight
+    val expandedTotalHeight = fadingContentY + fadingContentHeight
     val collapsedTotalHeight = TOOLBAR_PADDING_VERTICAL * 2 + BACK_BUTTON_SIZE
 
     LaunchedEffect(expandedTotalHeight) {
@@ -123,26 +124,20 @@ internal fun AppDetailToolbar(
                     val placeable = measurable.measure(constraints.copy(minWidth = 0, minHeight = 0))
                     layout(placeable.width, placeable.height) {
                         val progress = collapsingState.progress
-                        val scaledPadding = ICON_CONTAINER_PADDING.toPx() * lerp(1f, ICON_COLLAPSE_SCALE, progress)
-                        val x = lerp(
-                            (parentWidth - placeable.width) / 2f,
-                            backButtonEndX.toPx() - scaledPadding,
-                            progress,
-                        )
-                        val y = lerp(expandedIconY.toPx(), collapsedIconY.toPx() - scaledPadding, progress)
+                        val x = lerp((parentWidth - placeable.width) / 2f, collapsedIconX.toPx(), progress)
+                        val y = lerp(expandedIconY.toPx(), collapsedIconY.toPx(), progress)
                         placeable.place(x.roundToInt(), y.roundToInt())
                     }
                 }
                 .graphicsLayer {
                     val progress = collapsingState.progress
                     val scale = lerp(1f, ICON_COLLAPSE_SCALE, progress)
+                    val onScreenCorner = lerp(ICON_CORNER_EXPANDED.toPx(), ICON_CORNER_COLLAPSED.toPx(), progress)
                     scaleX = scale
                     scaleY = scale
-                    transformOrigin = TransformOrigin(0f, 0f)
+                    transformOrigin = TransformOrigin(ICON_PIVOT_FRACTION, ICON_PIVOT_FRACTION)
                     shadowElevation = lerp(ICON_SHADOW_EXPANDED.toPx(), 0f, progress)
-                    shape = RoundedCornerShape(
-                        lerp(ICON_CORNER_EXPANDED.toPx(), ICON_CORNER_COLLAPSED.toPx(), progress) / scale,
-                    )
+                    shape = RoundedCornerShape(onScreenCorner / scale)
                     clip = true
                 }
                 .background(AppTheme.colors.background)
@@ -171,11 +166,10 @@ internal fun AppDetailToolbar(
                     )
                     layout(placeable.width, placeable.height) {
                         val progress = collapsingState.progress
-                        val scale = lerp(1f, appNameCollapseScale, progress)
                         val x = lerp((parentWidth - placeable.width) / 2f, collapsedAppNameX.toPx(), progress)
                         val y = lerp(
-                            appNameY.toPx(),
-                            backButtonCenterY.toPx() - placeable.height * scale / 2f,
+                            expandedAppNameY.toPx(),
+                            backButtonCenterY.toPx() - placeable.height / 2f,
                             progress,
                         )
                         placeable.place(x.roundToInt(), y.roundToInt())
@@ -185,48 +179,47 @@ internal fun AppDetailToolbar(
                     val scale = lerp(1f, appNameCollapseScale, collapsingState.progress)
                     scaleX = scale
                     scaleY = scale
-                    transformOrigin = TransformOrigin(0f, 0f)
+                    transformOrigin = TransformOrigin(0f, 0.5f)
                 },
         )
 
-        Text(
-            text = state.packageName.value,
-            style = AppTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
-            color = AppTheme.colors.onSurfaceVariant,
-            textAlign = TextAlign.Center,
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .offset(y = packageNameY)
+                .offset(y = fadingContentY)
                 .graphicsLayer {
                     val progress = collapsingState.progress
-                    alpha = (1f - progress).coerceIn(0f, 1f)
+                    alpha = 1f - progress
                     translationY = lerp(0f, -FADING_CONTENT_RISE.toPx(), progress)
                 }
                 .onSizeChanged { size ->
-                    packageNameHeightDp = with(density) { size.height.toDp() }
+                    fadingContentHeight = with(density) { size.height.toDp() }
                 },
-        )
+        ) {
+            Text(
+                text = state.packageName.value,
+                style = AppTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
+                color = AppTheme.colors.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
+            )
 
-        if (state.badges.isNotEmpty()) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .offset(y = badgesY)
-                    .graphicsLayer {
-                        val progress = collapsingState.progress
-                        alpha = (1f - progress).coerceIn(0f, 1f)
-                        translationY = lerp(0f, -FADING_CONTENT_RISE.toPx(), progress)
+            if (state.badges.isNotEmpty()) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .horizontalScroll(rememberScrollState())
+                        .padding(horizontal = 16.dp),
+                ) {
+                    state.badges.forEach { badge ->
+                        Chip(
+                            label = stringResource(badge.labelRes()),
+                            variant = badge.chipVariant(),
+                            leadingIcon = badge.icon(),
+                        )
                     }
-                    .horizontalScroll(rememberScrollState())
-                    .padding(horizontal = 16.dp),
-            ) {
-                state.badges.forEach { badge ->
-                    Chip(
-                        label = stringResource(badge.labelRes()),
-                        variant = badge.chipVariant(),
-                        leadingIcon = badge.icon(),
-                    )
                 }
             }
         }
