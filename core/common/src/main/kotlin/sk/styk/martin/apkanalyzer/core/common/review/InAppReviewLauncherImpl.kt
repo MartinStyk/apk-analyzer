@@ -5,12 +5,9 @@ import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
 import kotlinx.coroutines.suspendCancellableCoroutine
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
-import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-
-private const val TAG = "InAppReviewLauncher"
 
 internal class InAppReviewLauncherImpl @Inject constructor(
     private val reviewManager: ReviewManager,
