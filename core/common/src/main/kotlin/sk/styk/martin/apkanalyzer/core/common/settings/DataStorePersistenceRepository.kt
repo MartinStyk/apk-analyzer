@@ -46,9 +46,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
 @Singleton
 class DataStorePersistenceRepository
 @Inject
-constructor(
-    @param:ApplicationContext private val context: Context,
-) : PersistenceRepository {
+constructor(@param:ApplicationContext private val context: Context) : PersistenceRepository {
     override fun <T : Any> observe(key: Key<T>): Flow<T> = context.dataStore.data.map { key.read(it) }
 
     override suspend fun <T : Any> get(key: Key<T>): T = context.dataStore.data.first().let { key.read(it) }

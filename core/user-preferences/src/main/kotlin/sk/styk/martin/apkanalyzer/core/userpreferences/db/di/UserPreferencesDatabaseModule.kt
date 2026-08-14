@@ -18,7 +18,6 @@ internal object UserPreferencesDatabaseModule {
     @Provides
     @Singleton
     fun provideUserPreferencesDatabase(@ApplicationContext context: Context): UserPreferencesDatabase {
-        val builder = Room.databaseBuilder(context, UserPreferencesDatabase::class.java, DATABASE_NAME)
-        return builder.build()
+        return Room.databaseBuilder(context, UserPreferencesDatabase::class.java, DATABASE_NAME).build()
     }
 }

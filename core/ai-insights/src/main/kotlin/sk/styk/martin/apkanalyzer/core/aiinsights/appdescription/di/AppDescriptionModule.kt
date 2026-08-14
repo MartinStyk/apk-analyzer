@@ -46,8 +46,7 @@ internal interface AppDescriptionModule {
         @Provides
         @Singleton
         fun provideAppAiDescriptionDatabase(@ApplicationContext context: Context): AppAiDescriptionDatabase {
-            val builder = Room.databaseBuilder(context, AppAiDescriptionDatabase::class.java, DATABASE_NAME)
-            return builder.build()
+            return Room.databaseBuilder(context, AppAiDescriptionDatabase::class.java, DATABASE_NAME).build()
         }
 
         @Provides

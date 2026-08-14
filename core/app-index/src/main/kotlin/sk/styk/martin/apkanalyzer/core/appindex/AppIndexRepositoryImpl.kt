@@ -46,53 +46,35 @@ internal class AppIndexRepositoryImpl @Inject constructor(
 
     override fun index(): Flow<AppIndexStatus> = cachedIndex
 
-    private suspend fun buildIndex(
-        apps: List<InstalledApp>,
-        signing: Map<PackageName, AppSigning>,
-    ) = performanceTracker.startCancellableTrace("app_index_build") {
-        appCount = apps.size
-        runCatchingCancellable {
-            timedSection(tag = TAG, operation = "App index build", metric = "index_build_ms") {
-                AppAttributeIndex(
-                    targetSdk = apps.byTargetSdk(),
-                    minSdk = apps.byMinSdk(),
-                    installSource = apps.byInstallSource(),
-                    permission = apps.byPermission(),
-                    certificateSha256 = apps.byCertificate(signing) { it.certificateHashSha256 },
-                    certificateSha1 = apps.byCertificate(signing) { it.certificateHashSha1 },
-                    certificateMd5 = apps.byCertificate(signing) { it.certificateHashMd5 },
-                    certificateOrganization = apps.byCertificate(signing) { it.subject.organization },
-                    certificateCountry = apps.byCertificate(signing) { it.subject.country },
-                    certificateByHash = apps.certificatesByHash(signing),
-                    sharedUserId = apps.bySharedUserId(),
-                    appCategory = apps.byAppCategory(),
-                )
-            }
-        }.fold(
-            onSuccess = { index ->
+    private suspend fun buildIndex(apps: List<InstalledApp>, signing: Map<PackageName, AppSigning>) =
+        performanceTracker.startCancellableTrace("app_index_build") {
+            appCount = apps.size
+            runCatchingCancellable {
+                timedSection(tag = TAG, operation = "App index build", metric = "index_build_ms") {
+                    AppAttributeIndex(
+                        targetSdk = apps.byTargetSdk(),
+                        minSdk = apps.byMinSdk(),
+                        installSource = apps.byInstallSource(),
+                        permission = apps.byPermission(),
+                        certificateSha256 = apps.byCertificate(signing) { it.certificateHashSha256 },
+                        certificateSha1 = apps.byCertificate(signing) { it.certificateHashSha1 },
+                        certificateMd5 = apps.byCertificate(signing) { it.certificateHashMd5 },
+                        certificateOrganization = apps.byCertificate(signing) { it.subject.organization },
+                        certificateCountry = apps.byCertificate(signing) { it.subject.country },
+                        certificateByHash = apps.certificatesByHash(signing),
+                        sharedUserId = apps.bySharedUserId(),
+                        appCategory = apps.byAppCategory(),
+                    )
+                }
+            }.onSuccess {
                 outcome = TraceOutcome.Success
-                index
-            },
-            onFailure = { failure ->
+            }.onFailure {
                 outcome = TraceOutcome.Error
-                Logger.e(TAG, failure, "App index build failed")
-                AppAttributeIndex(
-                    targetSdk = emptyMap(),
-                    minSdk = emptyMap(),
-                    installSource = emptyMap(),
-                    permission = emptyMap(),
-                    certificateSha256 = emptyMap(),
-                    certificateSha1 = emptyMap(),
-                    certificateMd5 = emptyMap(),
-                    certificateOrganization = emptyMap(),
-                    certificateCountry = emptyMap(),
-                    certificateByHash = emptyMap(),
-                    sharedUserId = emptyMap(),
-                    appCategory = emptyMap(),
-                )
-            },
-        )
-    }
+                Logger.e(TAG, it, "App index build failed")
+            }.getOrElse {
+                AppAttributeIndex()
+            }
+        }
 
     private fun List<InstalledApp>.byTargetSdk() = groupBy(InstalledApp::targetSdk, InstalledApp::packageName)
 
@@ -108,11 +90,9 @@ internal class AppIndexRepositoryImpl @Inject constructor(
 
     private fun List<InstalledApp>.byAppCategory() = groupBy(InstalledApp::category, InstalledApp::packageName)
 
-    private fun <T> List<InstalledApp>.byCertificate(
-        signing: Map<PackageName, AppSigning>,
-        key: (Certificate) -> T,
-    ): Map<T, List<PackageName>> = flatMap { app -> signing[app.packageName]?.currentCertificates.orEmpty().map { key(it) to app.packageName } }
-        .groupBy({ it.first }, { it.second })
+    private fun <T> List<InstalledApp>.byCertificate(signing: Map<PackageName, AppSigning>, key: (Certificate) -> T): Map<T, List<PackageName>> =
+        flatMap { app -> signing[app.packageName]?.currentCertificates.orEmpty().map { key(it) to app.packageName } }
+            .groupBy({ it.first }, { it.second })
 
     private fun List<InstalledApp>.certificatesByHash(signing: Map<PackageName, AppSigning>): Map<String, Certificate> {
         val certificates = flatMap { app -> signing[app.packageName]?.currentCertificates.orEmpty() }
