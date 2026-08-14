@@ -7,11 +7,7 @@ sealed interface Key<T : Any> {
 
     data object AppStartNumber : Key<Int>
 
-    data object RecentlyViewedApps : Key<List<String>>
-
     data object RecentlyViewedAppsEnabled : Key<Boolean>
-
-    data object SearchHistory : Key<List<String>>
 }
 
 enum class ColorAppScheme {

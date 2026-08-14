@@ -20,9 +20,7 @@ import javax.inject.Singleton
 private val KEY_COLOR_SCHEME = stringPreferencesKey("dayNightPref")
 private val KEY_ONBOARDING = booleanPreferencesKey("first_app_start")
 private val KEY_APP_START_NUMBER = intPreferencesKey("app_start_number")
-private val KEY_RECENTLY_VIEWED = stringPreferencesKey("recently_viewed_apps")
 private val KEY_RECENTLY_VIEWED_ENABLED = booleanPreferencesKey("recently_viewed_apps_enabled")
-private val KEY_SEARCH_HISTORY = stringPreferencesKey("search_history")
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
     name = "app_settings",
@@ -46,7 +44,9 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
 @Singleton
 class DataStorePersistenceRepository
 @Inject
-constructor(@param:ApplicationContext private val context: Context) : PersistenceRepository {
+constructor(
+    @param:ApplicationContext private val context: Context,
+) : PersistenceRepository {
     override fun <T : Any> observe(key: Key<T>): Flow<T> = context.dataStore.data.map { key.read(it) }
 
     override suspend fun <T : Any> get(key: Key<T>): T = context.dataStore.data.first().let { key.read(it) }
@@ -72,18 +72,8 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
             prefs[KEY_APP_START_NUMBER] ?: 0
         }
 
-        Key.RecentlyViewedApps -> {
-            val raw = prefs[KEY_RECENTLY_VIEWED] ?: ""
-            if (raw.isEmpty()) emptyList() else raw.split("|")
-        }
-
         Key.RecentlyViewedAppsEnabled -> {
             prefs[KEY_RECENTLY_VIEWED_ENABLED] ?: true
-        }
-
-        Key.SearchHistory -> {
-            val raw = prefs[KEY_SEARCH_HISTORY] ?: ""
-            if (raw.isEmpty()) emptyList() else raw.split("|")
         }
     } as T
 
@@ -105,18 +95,8 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
             prefs[KEY_APP_START_NUMBER] = value as Int
         }
 
-        Key.RecentlyViewedApps -> {
-            @Suppress("UNCHECKED_CAST")
-            prefs[KEY_RECENTLY_VIEWED] = (value as List<String>).joinToString("|")
-        }
-
         Key.RecentlyViewedAppsEnabled -> {
             prefs[KEY_RECENTLY_VIEWED_ENABLED] = value as Boolean
-        }
-
-        Key.SearchHistory -> {
-            @Suppress("UNCHECKED_CAST")
-            prefs[KEY_SEARCH_HISTORY] = (value as List<String>).joinToString("|")
         }
     }
 }

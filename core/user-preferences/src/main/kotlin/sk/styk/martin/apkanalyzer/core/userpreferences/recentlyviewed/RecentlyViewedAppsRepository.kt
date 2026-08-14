@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.userpreferences
+package sk.styk.martin.apkanalyzer.core.userpreferences.recentlyviewed
 
 import kotlinx.coroutines.flow.Flow
 import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp

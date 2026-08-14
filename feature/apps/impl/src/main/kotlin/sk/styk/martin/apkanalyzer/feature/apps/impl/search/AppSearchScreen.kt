@@ -40,12 +40,14 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.components.IconButtonStyle
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.SearchBarActive
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
+import sk.styk.martin.apkanalyzer.core.uilibrary.lazylist.ListItemPosition
 import sk.styk.martin.apkanalyzer.core.uilibrary.lazylist.itemsPositioned
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.apps.impl.R
 import sk.styk.martin.apkanalyzer.feature.apps.impl.components.appitem.AppListItemRow
+import sk.styk.martin.apkanalyzer.feature.apps.impl.components.appitem.listItemShape
 import sk.styk.martin.apkanalyzer.feature.apps.impl.components.quickfilter.QuickFilterRow
 import sk.styk.martin.apkanalyzer.feature.apps.impl.list.AppListItem
 import java.time.Instant
@@ -132,7 +134,7 @@ private fun AppSearchContent(
 
             state.searchHistory.isNotEmpty() -> RecentSearchesContent(
                 history = state.searchHistory,
-                onQueryClick = { onAction(AppSearchAction.HistoryQueryClicked(it)) },
+                onItemClick = { onAction(AppSearchAction.HistoryItemClicked(it)) },
                 onDeleteItem = { onAction(AppSearchAction.DeleteHistoryItem(it)) },
                 onClearAll = { onAction(AppSearchAction.ClearHistory) },
             )
@@ -168,14 +170,14 @@ private fun SearchResults(results: ImmutableList<AppListItem>, onAppClick: (AppL
 
 @Composable
 private fun RecentSearchesContent(
-    history: ImmutableList<String>,
-    onQueryClick: (String) -> Unit,
-    onDeleteItem: (String) -> Unit,
+    history: ImmutableList<SearchHistoryItem>,
+    onItemClick: (SearchHistoryItem) -> Unit,
+    onDeleteItem: (PackageName) -> Unit,
     onClearAll: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        contentPadding = PaddingValues(bottom = 16.dp),
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp),
         modifier = modifier.fillMaxSize(),
     ) {
         item(key = "history_header") {
@@ -183,7 +185,7 @@ private fun RecentSearchesContent(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 4.dp),
+                    .padding(top = 16.dp, bottom = 4.dp),
             ) {
                 Text(
                     text = stringResource(R.string.search_history_title),
@@ -195,18 +197,22 @@ private fun RecentSearchesContent(
                     text = stringResource(R.string.search_history_clear),
                     style = AppTheme.typography.labelLarge,
                     color = AppTheme.colors.onSurfaceVariant,
-                    modifier = Modifier.clickable { onClearAll() },
+                    modifier = Modifier
+                        .clip(Shapes.CardShape)
+                        .clickable { onClearAll() }
+                        .padding(horizontal = 12.dp, vertical = 4.dp),
                 )
             }
         }
-        items(
-            count = history.size,
-            key = { history[it] },
-        ) { index ->
+        itemsPositioned(
+            items = history,
+            key = { _, item -> item.packageName.value },
+        ) { position, item ->
             SearchHistoryRow(
-                query = history[index],
-                onClick = { onQueryClick(history[index]) },
-                onDelete = { onDeleteItem(history[index]) },
+                item = item,
+                position = position,
+                onClick = { onItemClick(item) },
+                onDelete = { onDeleteItem(item.packageName) },
                 modifier = Modifier.animateItem(),
             )
         }
@@ -214,42 +220,61 @@ private fun RecentSearchesContent(
 }
 
 @Composable
-fun SearchHistoryRow(
-    query: String,
+private fun SearchHistoryRow(
+    item: SearchHistoryItem,
+    position: ListItemPosition,
     onClick: () -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(Shapes.CardShape)
-            .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-    ) {
-        Icon(
-            imageVector = ApkAnalyzerIcons.History,
-            contentDescription = null,
-            tint = AppTheme.colors.onSurfaceVariant,
-            modifier = Modifier.size(20.dp),
+    val app = item.app
+    if (app != null) {
+        AppListItemRow(
+            app = app,
+            onClick = onClick,
+            position = position,
+            modifier = modifier,
+            trailingContent = { HistoryDeleteButton(label = app.applicationName, onDelete = onDelete) },
         )
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = query,
-            style = AppTheme.typography.bodyLarge,
-            color = AppTheme.colors.onSurface,
-            maxLines = 1,
-            modifier = Modifier.weight(1f),
-        )
-        IconButton(
-            imageVector = ApkAnalyzerIcons.Clear,
-            onClick = onDelete,
-            modifier = Modifier.size(32.dp),
-            style = IconButtonStyle.StandardMuted,
-            contentDescription = stringResource(R.string.content_description_delete_search, query),
-        )
+    } else {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = modifier
+                .fillMaxWidth()
+                .background(AppTheme.colors.surface, listItemShape(position))
+                .padding(2.dp)
+                .clip(Shapes.CardShape)
+                .clickable(onClick = onClick)
+                .padding(horizontal = 12.dp, vertical = 12.dp),
+        ) {
+            Icon(
+                imageVector = ApkAnalyzerIcons.History,
+                contentDescription = null,
+                tint = AppTheme.colors.onSurfaceVariant,
+                modifier = Modifier.size(20.dp),
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(
+                text = item.query,
+                style = AppTheme.typography.titleMedium,
+                color = AppTheme.colors.onSurface,
+                maxLines = 1,
+                modifier = Modifier.weight(1f),
+            )
+            HistoryDeleteButton(label = item.query, onDelete = onDelete)
+        }
     }
+}
+
+@Composable
+private fun HistoryDeleteButton(label: String, onDelete: () -> Unit) {
+    IconButton(
+        imageVector = ApkAnalyzerIcons.Clear,
+        onClick = onDelete,
+        modifier = Modifier.size(32.dp),
+        style = IconButtonStyle.StandardMuted,
+        contentDescription = stringResource(R.string.content_description_delete_search, label),
+    )
 }
 
 @Composable
@@ -328,6 +353,42 @@ private fun AppSearchContentResultsPreview() {
                         lastUpdateTime = Instant.EPOCH,
                         lastUsedTime = Instant.EPOCH,
                         source = AppSource.GooglePlay,
+                    ),
+                ),
+                totalAppCount = 342,
+            ),
+            onAction = {},
+            onBack = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun AppSearchContentHistoryPreview() {
+    ApkAnalyzerTheme {
+        AppSearchContent(
+            state = AppSearchState(
+                searchHistory = persistentListOf(
+                    SearchHistoryItem(
+                        packageName = PackageName("com.instagram.android"),
+                        query = "insta",
+                        app = AppListItem(
+                            packageName = PackageName("com.instagram.android"),
+                            applicationName = "Instagram",
+                            targetSdk = 34,
+                            apkSize = 64.megabytes,
+                            totalSize = null,
+                            installTime = Instant.EPOCH,
+                            lastUpdateTime = Instant.EPOCH,
+                            lastUsedTime = Instant.EPOCH,
+                            source = AppSource.GooglePlay,
+                        ),
+                    ),
+                    SearchHistoryItem(
+                        packageName = PackageName("com.uninstalled.app"),
+                        query = "old app",
+                        app = null,
                     ),
                 ),
                 totalAppCount = 342,

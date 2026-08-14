@@ -45,10 +45,10 @@ internal interface AppDescriptionModule {
     companion object {
         @Provides
         @Singleton
-        fun provideAppAiDescriptionDatabase(@ApplicationContext context: Context): AppAiDescriptionDatabase =
-            Room.databaseBuilder(context, AppAiDescriptionDatabase::class.java, DATABASE_NAME)
-                .fallbackToDestructiveMigration(dropAllTables = true)
-                .build()
+        fun provideAppAiDescriptionDatabase(@ApplicationContext context: Context): AppAiDescriptionDatabase {
+            val builder = Room.databaseBuilder(context, AppAiDescriptionDatabase::class.java, DATABASE_NAME)
+            return builder.build()
+        }
 
         @Provides
         @Singleton

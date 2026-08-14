@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.userpreferences
+package sk.styk.martin.apkanalyzer.core.userpreferences.recentlyviewed
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -13,6 +13,7 @@ import sk.styk.martin.apkanalyzer.core.common.settings.PersistenceRepository
 import javax.inject.Inject
 
 internal class RecentlyViewedAppsRepositoryImpl @Inject constructor(
+    private val dao: RecentlyViewedAppDao,
     private val persistenceRepository: PersistenceRepository,
     private val installedAppsRepository: InstalledAppsRepository,
 ) : RecentlyViewedAppsRepository {
@@ -21,7 +22,7 @@ internal class RecentlyViewedAppsRepositoryImpl @Inject constructor(
         .flatMapLatest { enabled ->
             if (enabled) {
                 combine(
-                    persistenceRepository.observe(Key.RecentlyViewedApps),
+                    dao.observeRecentPackageNames(MAX_RECENTS),
                     installedAppsRepository.apps().map { apps -> apps.associateBy { it.packageName } },
                 ) { recentPackages, installedApps ->
                     recentPackages.mapNotNull { installedApps[PackageName(it)] }
@@ -32,13 +33,10 @@ internal class RecentlyViewedAppsRepositoryImpl @Inject constructor(
         }
 
     override suspend fun addRecent(packageName: PackageName) {
-        val current = persistenceRepository.get(Key.RecentlyViewedApps)
-        val updated = (listOf(packageName.value) + current.filter { it != packageName.value }).take(MAX_RECENTS)
-        persistenceRepository.save(Key.RecentlyViewedApps, updated)
+        dao.recordView(packageName.value, System.currentTimeMillis())
     }
 
-    override suspend fun hasRecents(): Boolean =
-        persistenceRepository.get(Key.RecentlyViewedAppsEnabled) && persistenceRepository.get(Key.RecentlyViewedApps).isNotEmpty()
+    override suspend fun hasRecents(): Boolean = persistenceRepository.get(Key.RecentlyViewedAppsEnabled) && dao.count() > 0
 
     private companion object {
         const val MAX_RECENTS = 8
