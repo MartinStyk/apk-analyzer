@@ -13,15 +13,15 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal abstract class ReviewModule {
+internal interface ReviewModule {
 
     @Binds
     @Singleton
-    abstract fun bindReviewEligibilityTracker(impl: ReviewEligibilityTrackerImpl): ReviewEligibilityTracker
+    fun bindReviewEligibilityTracker(impl: ReviewEligibilityTrackerImpl): ReviewEligibilityTracker
 
     @Binds
     @Singleton
-    abstract fun bindInAppReviewLauncher(impl: InAppReviewLauncherImpl): InAppReviewLauncher
+    fun bindInAppReviewLauncher(impl: InAppReviewLauncherImpl): InAppReviewLauncher
 
     companion object {
         @Provides
