@@ -26,12 +26,16 @@ import sk.styk.martin.apkanalyzer.core.apps.export.AppExportManager
 import sk.styk.martin.apkanalyzer.core.apps.export.AppExportManagerImpl
 import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceResolver
 import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceResolverImpl
+import sk.styk.martin.apkanalyzer.core.apps.intentfilters.IntentFiltersRepository
+import sk.styk.martin.apkanalyzer.core.apps.intentfilters.IntentFiltersRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apps.manifest.ComponentManifestParser
 import sk.styk.martin.apkanalyzer.core.apps.manifest.ComponentManifestParserImpl
 import sk.styk.martin.apkanalyzer.core.apps.manifest.ManifestParser
 import sk.styk.martin.apkanalyzer.core.apps.manifest.ManifestParserImpl
 import sk.styk.martin.apkanalyzer.core.apps.manifest.ManifestXmlRenderer
 import sk.styk.martin.apkanalyzer.core.apps.manifest.ManifestXmlRendererImpl
+import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibrariesRepository
+import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibrariesRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apps.permissions.PermissionDefinitionResolver
 import sk.styk.martin.apkanalyzer.core.apps.permissions.PermissionDefinitionResolverImpl
 import sk.styk.martin.apkanalyzer.core.apps.signing.ApkSigningBlockAnalyzer
@@ -96,6 +100,11 @@ internal interface AppsModule {
     @Binds
     fun bindManifestXmlRenderer(impl: ManifestXmlRendererImpl): ManifestXmlRenderer
 
+    // intentfilters
+    @Binds
+    @Singleton
+    fun bindIntentFiltersRepository(impl: IntentFiltersRepositoryImpl): IntentFiltersRepository
+
     // installsource
     @Binds
     fun bindInstallSourceResolver(impl: InstallSourceResolverImpl): InstallSourceResolver
@@ -104,6 +113,11 @@ internal interface AppsModule {
     @Binds
     @Singleton
     fun bindDeviceFeaturesRepository(impl: DeviceFeaturesRepositoryImpl): DeviceFeaturesRepository
+
+    // packaging
+    @Binds
+    @Singleton
+    fun bindNativeLibrariesRepository(impl: NativeLibrariesRepositoryImpl): NativeLibrariesRepository
 
     // usagestats
     @Binds

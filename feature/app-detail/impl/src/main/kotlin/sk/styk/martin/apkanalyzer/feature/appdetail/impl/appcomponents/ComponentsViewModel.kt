@@ -8,7 +8,9 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -22,10 +24,14 @@ import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.components.Activity
 import sk.styk.martin.apkanalyzer.core.apps.components.BroadcastReceiver
+import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
+import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilterKey
+import sk.styk.martin.apkanalyzer.core.apps.components.ComponentKind
 import sk.styk.martin.apkanalyzer.core.apps.components.ContentProvider
 import sk.styk.martin.apkanalyzer.core.apps.components.Service
 import sk.styk.martin.apkanalyzer.core.apps.components.hasUnguardedPathPermission
 import sk.styk.martin.apkanalyzer.core.apps.components.isExternallyReachableWithoutPermission
+import sk.styk.martin.apkanalyzer.core.apps.intentfilters.IntentFiltersRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
@@ -40,6 +46,7 @@ internal class ComponentsViewModel @AssistedInject constructor(
     @Assisted initialScope: ComponentScope,
     @Assisted initialFilters: Set<ComponentFilter>,
     private val appDetailRepository: AppDetailRepository,
+    private val intentFiltersRepository: IntentFiltersRepository,
     private val dispatcherProvider: DispatcherProvider,
     private val clipboardManager: ClipboardManager,
 ) : ViewModel() {
@@ -105,11 +112,23 @@ internal class ComponentsViewModel @AssistedInject constructor(
     private fun loadComponents() {
         source.value = ComponentsSource.Loading
         viewModelScope.launch {
+            val reference = appDetailInput.toAppReference()
             source.value = withContext(dispatcherProvider.default()) {
-                appDetailRepository.details(appDetailInput.toAppReference()).fold(
-                    onSuccess = { it.toSource(canLaunch = appDetailInput is AppDetailInput.InstalledPackage) },
-                    onFailure = { ComponentsSource.Error },
-                )
+                coroutineScope {
+                    val detailDeferred = async { appDetailRepository.details(reference) }
+                    val filtersDeferred = async { intentFiltersRepository.componentIntentFilters(reference) }
+                    val filtersResult = filtersDeferred.await()
+                    detailDeferred.await().fold(
+                        onSuccess = { detail ->
+                            detail.toSource(
+                                canLaunch = appDetailInput is AppDetailInput.InstalledPackage,
+                                intentFiltersByComponent = filtersResult.getOrDefault(emptyMap()),
+                                areIntentFiltersAvailable = filtersResult.isSuccess,
+                            )
+                        },
+                        onFailure = { ComponentsSource.Error },
+                    )
+                }
             }
         }
     }
@@ -127,19 +146,23 @@ private data class Narrowing(
     val filters: Set<ComponentFilter> = emptySet(),
 )
 
-private fun AppDetail.toSource(canLaunch: Boolean) = ComponentsSource.Ready(
+private fun AppDetail.toSource(
+    canLaunch: Boolean,
+    intentFiltersByComponent: Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>,
+    areIntentFiltersAvailable: Boolean,
+) = ComponentsSource.Ready(
     componentsByType = mapOf(
         ComponentType.Activity to activities.map {
-            it.toItem(canLaunch, areComponentIntentFiltersAvailable)
+            it.toItem(canLaunch, intentFiltersByComponent[ComponentIntentFilterKey(it.name, ComponentKind.Activity)].orEmpty(), areIntentFiltersAvailable)
         }.sortedForDisplay(),
         ComponentType.Service to services.map {
-            it.toItem(areComponentIntentFiltersAvailable)
+            it.toItem(intentFiltersByComponent[ComponentIntentFilterKey(it.name, ComponentKind.Service)].orEmpty(), areIntentFiltersAvailable)
         }.sortedForDisplay(),
         ComponentType.Receiver to receivers.map {
-            it.toItem(canLaunch, areComponentIntentFiltersAvailable)
+            it.toItem(canLaunch, intentFiltersByComponent[ComponentIntentFilterKey(it.name, ComponentKind.Receiver)].orEmpty(), areIntentFiltersAvailable)
         }.sortedForDisplay(),
         ComponentType.Provider to contentProviders.map {
-            it.toItem(areComponentIntentFiltersAvailable)
+            it.toItem(intentFiltersByComponent[ComponentIntentFilterKey(it.name, ComponentKind.Provider)].orEmpty(), areIntentFiltersAvailable)
         }.sortedForDisplay(),
     ),
 )
@@ -150,7 +173,11 @@ private fun List<ComponentItem>.sortedForDisplay() = sortedWith(
         .thenBy { it.simpleName.lowercase() },
 )
 
-private fun Activity.toItem(canLaunch: Boolean, areIntentFiltersAvailable: Boolean) = ComponentItem(
+private fun Activity.toItem(
+    canLaunch: Boolean,
+    intentFilters: List<ComponentIntentFilter>,
+    areIntentFiltersAvailable: Boolean,
+) = ComponentItem(
     name = name,
     simpleName = name.substringAfterLast('.'),
     packagePath = name.substringBeforeLast('.', ""),
@@ -171,7 +198,7 @@ private fun Activity.toItem(canLaunch: Boolean, areIntentFiltersAvailable: Boole
     ),
 )
 
-private fun Service.toItem(areIntentFiltersAvailable: Boolean) = ComponentItem(
+private fun Service.toItem(intentFilters: List<ComponentIntentFilter>, areIntentFiltersAvailable: Boolean) = ComponentItem(
     name = name,
     simpleName = name.substringAfterLast('.'),
     packagePath = name.substringBeforeLast('.', ""),
@@ -191,7 +218,11 @@ private fun Service.toItem(areIntentFiltersAvailable: Boolean) = ComponentItem(
     details = ComponentDetails.ServiceDetails(permission = permission),
 )
 
-private fun BroadcastReceiver.toItem(canLaunch: Boolean, areIntentFiltersAvailable: Boolean) = ComponentItem(
+private fun BroadcastReceiver.toItem(
+    canLaunch: Boolean,
+    intentFilters: List<ComponentIntentFilter>,
+    areIntentFiltersAvailable: Boolean,
+) = ComponentItem(
     name = name,
     simpleName = name.substringAfterLast('.'),
     packagePath = name.substringBeforeLast('.', ""),
@@ -206,7 +237,7 @@ private fun BroadcastReceiver.toItem(canLaunch: Boolean, areIntentFiltersAvailab
     details = ComponentDetails.ReceiverDetails(permission = permission),
 )
 
-private fun ContentProvider.toItem(areIntentFiltersAvailable: Boolean) = ComponentItem(
+private fun ContentProvider.toItem(intentFilters: List<ComponentIntentFilter>, areIntentFiltersAvailable: Boolean) = ComponentItem(
     name = name,
     simpleName = name.substringAfterLast('.'),
     packagePath = name.substringBeforeLast('.', ""),
