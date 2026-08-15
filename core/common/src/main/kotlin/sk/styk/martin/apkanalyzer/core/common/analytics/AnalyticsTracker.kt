@@ -10,7 +10,7 @@ public data class AnalyticsEvent(
 )
 
 public enum class AnalyticsParameterName(
-    internal val value: String,
+    val value: String,
 ) {
     Action("action"),
     AnalysisMode("analysis_mode"),
