@@ -26,8 +26,8 @@ fun EntryProviderScope<NavKey>.browseEntries(navigator: Navigator) {
         BrowseOptionsScreen(
             dimension = key.dimension,
             onBack = { navigator.goBack() },
-            onOpenOption = { bucket ->
-                navigator.navigate(BrowseAppsNavKey(key.dimension, bucket))
+            onOpenOption = { bucketKey, bucketLabel, subAttribute ->
+                navigator.navigate(BrowseAppsNavKey(key.dimension, bucketKey, bucketLabel, subAttribute))
             },
         )
     }
@@ -37,7 +37,9 @@ fun EntryProviderScope<NavKey>.browseEntries(navigator: Navigator) {
     ) { key ->
         BrowseAppsScreen(
             dimension = key.dimension,
-            bucket = key.bucket,
+            bucketKey = key.bucketKey,
+            bucketLabel = key.bucketLabel,
+            subAttribute = key.subAttribute,
             onBack = { navigator.goBack() },
             onOpenApp = { packageName ->
                 navigator.navigate(AppDetailNavKey(AppDetailInput.InstalledPackage(packageName.value)))

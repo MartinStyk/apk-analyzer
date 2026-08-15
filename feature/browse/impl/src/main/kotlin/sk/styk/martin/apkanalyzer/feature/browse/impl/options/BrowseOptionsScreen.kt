@@ -49,7 +49,6 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.browse.impl.R
-import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.BrowseBucketSelection
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.BrowseSubAttribute
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.cardLabelRes
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.subAttributes
@@ -60,7 +59,7 @@ import sk.styk.martin.apkanalyzer.feature.browse.impl.title
 internal fun BrowseOptionsScreen(
     dimension: BrowseDimension,
     onBack: () -> Unit,
-    onOpenOption: (bucket: BrowseBucketSelection) -> Unit,
+    onOpenOption: (bucketKey: String, bucketLabel: String, subAttribute: BrowseSubAttribute?) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: BrowseOptionsViewModel = hiltViewModel { factory: BrowseOptionsViewModel.Factory -> factory.create(dimension) },
 ) {
@@ -69,7 +68,7 @@ internal fun BrowseOptionsScreen(
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
-                is BrowseOptionsEvent.NavigateToApps -> onOpenOption(event.bucket)
+                is BrowseOptionsEvent.NavigateToApps -> onOpenOption(event.bucketKey, event.bucketLabel, event.subAttribute)
             }
         }
     }

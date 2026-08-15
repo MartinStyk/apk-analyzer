@@ -3,7 +3,6 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.impl.appcomponents
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
 
-@Immutable
 internal sealed interface IntentFiltersState {
     data object Loading : IntentFiltersState
 
