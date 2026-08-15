@@ -227,11 +227,6 @@ internal fun AppDetailToolbar(
 }
 
 private fun AppDetailBadge.chipVariant(): ChipVariant = when (this) {
-    AppDetailBadge.Sideloaded,
-    AppDetailBadge.DangerousPermissions,
-    AppDetailBadge.Unused,
-    -> ChipVariant.Warning
-
     AppDetailBadge.Large -> ChipVariant.Tonal
 
     AppDetailBadge.System,
@@ -243,9 +238,6 @@ private fun AppDetailBadge.chipVariant(): ChipVariant = when (this) {
 }
 
 private fun AppDetailBadge.labelRes(): Int = when (this) {
-    AppDetailBadge.Sideloaded -> R.string.app_detail_badge_sideloaded
-    AppDetailBadge.DangerousPermissions -> R.string.app_detail_badge_dangerous_permissions
-    AppDetailBadge.Unused -> R.string.app_detail_badge_unused
     AppDetailBadge.Large -> R.string.app_detail_badge_large
     AppDetailBadge.System -> R.string.app_detail_badge_system
     AppDetailBadge.GooglePlay -> R.string.app_detail_badge_google_play
@@ -255,9 +247,6 @@ private fun AppDetailBadge.labelRes(): Int = when (this) {
 }
 
 private fun AppDetailBadge.icon(): ImageVector = when (this) {
-    AppDetailBadge.Sideloaded -> ApkAnalyzerIcons.Warning
-    AppDetailBadge.DangerousPermissions -> ApkAnalyzerIcons.DangerousPermissions
-    AppDetailBadge.Unused -> ApkAnalyzerIcons.HourglassEmpty
     AppDetailBadge.Large -> ApkAnalyzerIcons.DataUsage
     AppDetailBadge.System -> ApkAnalyzerIcons.Android
     AppDetailBadge.GooglePlay -> ApkAnalyzerIcons.PlayArrow
