@@ -1,6 +1,7 @@
 package sk.styk.martin.apkanalyzer.core.uilibrary.icons.app
 
 import android.content.pm.PackageManager
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
 import coil3.ImageLoader
 import coil3.asImage
@@ -43,8 +44,11 @@ internal class PackageIconFetcher(private val data: AppReference, private val pa
                             if (applicationInfo.icon == 0) {
                                 packageManager.defaultActivityIcon
                             } else {
-                                packageManager.getResourcesForApplication(applicationInfo)
-                                    .getDrawable(applicationInfo.icon, null)
+                                ResourcesCompat.getDrawable(
+                                    packageManager.getResourcesForApplication(applicationInfo),
+                                    applicationInfo.icon,
+                                    null,
+                                )
                             }
                         } ?: error("Can not read APK icon")
             }
