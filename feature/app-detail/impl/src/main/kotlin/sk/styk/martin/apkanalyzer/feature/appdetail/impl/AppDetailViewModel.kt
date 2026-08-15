@@ -30,8 +30,6 @@ import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.FeatureAvailability
 import sk.styk.martin.apkanalyzer.core.apps.export.AppExportManager
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
-import sk.styk.martin.apkanalyzer.core.common.analytics.AnalyticsEvent
-import sk.styk.martin.apkanalyzer.core.common.analytics.AnalyticsTracker
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
@@ -68,7 +66,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
     private val clipboardManager: ClipboardManager,
     private val summaryTextFormatter: AppSummaryTextFormatter,
     private val reviewEligibilityTracker: ReviewEligibilityTracker,
-    private val analyticsTracker: AnalyticsTracker,
+    private val analytics: AppDetailAnalytics,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -107,7 +105,10 @@ internal class AppDetailViewModel @AssistedInject constructor(
         when (action) {
             is AppDetailAction.Retry -> loadDetail()
 
-            is AppDetailAction.ViewManifest -> sendSectionEvent(AppDetailEvent.NavigateToManifest, SECTION_MANIFEST)
+            is AppDetailAction.ViewManifest -> sendSectionEvent(
+                AppDetailEvent.NavigateToManifest,
+                AppDetailAnalyticsEvent.Section.Manifest,
+            )
 
             is AppDetailAction.ExportApk -> requestDocument(AppDetailExport.Apk)
 
@@ -125,23 +126,50 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
             is AppDetailAction.OpenAppInfo -> withLoadedState { sendEvent(AppDetailEvent.OpenAppInfo(it.packageName)) }
 
-            is AppDetailAction.NavigateGeneralDetails -> sendSectionEvent(AppDetailEvent.NavigateToGeneralDetails, SECTION_GENERAL)
+            is AppDetailAction.NavigateGeneralDetails -> sendSectionEvent(
+                AppDetailEvent.NavigateToGeneralDetails,
+                AppDetailAnalyticsEvent.Section.General,
+            )
 
-            is AppDetailAction.NavigatePermissions -> sendSectionEvent(AppDetailEvent.NavigateToPermissions(action.permissionName), SECTION_PERMISSIONS)
+            is AppDetailAction.NavigatePermissions -> sendSectionEvent(
+                AppDetailEvent.NavigateToPermissions(action.permissionName),
+                AppDetailAnalyticsEvent.Section.Permissions,
+            )
 
-            is AppDetailAction.NavigateComponents -> sendSectionEvent(AppDetailEvent.NavigateToComponents, SECTION_COMPONENTS)
+            is AppDetailAction.NavigateComponents -> sendSectionEvent(
+                AppDetailEvent.NavigateToComponents,
+                AppDetailAnalyticsEvent.Section.Components,
+            )
 
-            is AppDetailAction.NavigateActivities -> sendSectionEvent(AppDetailEvent.NavigateToActivities, SECTION_ACTIVITIES)
+            is AppDetailAction.NavigateActivities -> sendSectionEvent(
+                AppDetailEvent.NavigateToActivities,
+                AppDetailAnalyticsEvent.Section.Activities,
+            )
 
-            is AppDetailAction.NavigateServices -> sendSectionEvent(AppDetailEvent.NavigateToServices, SECTION_SERVICES)
+            is AppDetailAction.NavigateServices -> sendSectionEvent(
+                AppDetailEvent.NavigateToServices,
+                AppDetailAnalyticsEvent.Section.Services,
+            )
 
-            is AppDetailAction.NavigateReceivers -> sendSectionEvent(AppDetailEvent.NavigateToReceivers, SECTION_RECEIVERS)
+            is AppDetailAction.NavigateReceivers -> sendSectionEvent(
+                AppDetailEvent.NavigateToReceivers,
+                AppDetailAnalyticsEvent.Section.Receivers,
+            )
 
-            is AppDetailAction.NavigateProviders -> sendSectionEvent(AppDetailEvent.NavigateToProviders, SECTION_PROVIDERS)
+            is AppDetailAction.NavigateProviders -> sendSectionEvent(
+                AppDetailEvent.NavigateToProviders,
+                AppDetailAnalyticsEvent.Section.Providers,
+            )
 
-            is AppDetailAction.NavigateCertificates -> sendSectionEvent(AppDetailEvent.NavigateToCertificates, SECTION_CERTIFICATES)
+            is AppDetailAction.NavigateCertificates -> sendSectionEvent(
+                AppDetailEvent.NavigateToCertificates,
+                AppDetailAnalyticsEvent.Section.Certificates,
+            )
 
-            is AppDetailAction.NavigateFeatures -> sendSectionEvent(AppDetailEvent.NavigateToFeatures, SECTION_FEATURES)
+            is AppDetailAction.NavigateFeatures -> sendSectionEvent(
+                AppDetailEvent.NavigateToFeatures,
+                AppDetailAnalyticsEvent.Section.Features,
+            )
 
             is AppDetailAction.NavigateInsight -> navigateToInsight(action.insight)
 
@@ -179,7 +207,14 @@ internal class AppDetailViewModel @AssistedInject constructor(
             if (export == AppDetailExport.Apk && appDetailInput !is AppDetailInput.InstalledPackage) return@withLoadedState
             val extension = if (export == AppDetailExport.Apk) "apk" else "png"
             exportInProgress.value = export
-            trackAction(export.analyticsAction)
+            analytics.track(
+                AppDetailAnalyticsEvent.ActionPerformed(
+                    when (export) {
+                        AppDetailExport.Apk -> AppDetailAnalyticsEvent.Action.ExportApk
+                        AppDetailExport.Icon -> AppDetailAnalyticsEvent.Action.ExportIcon
+                    },
+                ),
+            )
             sendEvent(AppDetailEvent.CreateDocument(export, "${state.packageName}.$extension"))
         }
     }
@@ -212,15 +247,21 @@ internal class AppDetailViewModel @AssistedInject constructor(
         when (insight) {
             AppDetailInsight.Debuggable,
             is AppDetailInsight.OutdatedTargetSdk,
-            -> sendSectionEvent(AppDetailEvent.NavigateToGeneralDetails, SECTION_GENERAL)
+            -> sendSectionEvent(
+                AppDetailEvent.NavigateToGeneralDetails,
+                AppDetailAnalyticsEvent.Section.General,
+            )
 
             AppDetailInsight.DebugCertificate,
             AppDetailInsight.CertificateNotYetValid,
-            -> sendSectionEvent(AppDetailEvent.NavigateToCertificates, SECTION_CERTIFICATES)
+            -> sendSectionEvent(
+                AppDetailEvent.NavigateToCertificates,
+                AppDetailAnalyticsEvent.Section.Certificates,
+            )
 
             is AppDetailInsight.SensitivePermission -> sendSectionEvent(
                 AppDetailEvent.NavigateToPermissions(insight.permissionName),
-                SECTION_PERMISSIONS,
+                AppDetailAnalyticsEvent.Section.Permissions,
             )
         }
     }
@@ -267,14 +308,13 @@ internal class AppDetailViewModel @AssistedInject constructor(
         viewModelScope.launch { eventChannel.send(event) }
     }
 
-    private fun sendSectionEvent(event: AppDetailEvent, section: String) {
+    private fun sendSectionEvent(
+        event: AppDetailEvent,
+        section: AppDetailAnalyticsEvent.Section,
+    ) {
         engaged = true
-        analyticsTracker.track(AnalyticsEvent(EVENT_SECTION_OPENED, mapOf(PARAMETER_SECTION to section)))
+        analytics.track(AppDetailAnalyticsEvent.SectionOpened(section))
         sendEvent(event)
-    }
-
-    private fun trackAction(action: String) {
-        analyticsTracker.track(AnalyticsEvent(EVENT_ACTION_PERFORMED, mapOf(PARAMETER_ACTION to action)))
     }
 
     private fun withLoadedState(block: (AppDetailState.Loaded) -> Unit) {
@@ -290,12 +330,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
             }
             source.value = detailResult.fold(
                 onSuccess = { detail ->
-                    analyticsTracker.track(
-                        AnalyticsEvent(
-                            EVENT_APP_DETAIL_OPENED,
-                            mapOf(PARAMETER_ANALYSIS_MODE to appReference.analyticsAnalysisMode),
-                        ),
-                    )
+                    analytics.track(AppDetailAnalyticsEvent.Opened(appReference))
                     AppDetailSource.Ready(
                         detail.toLoadedState(permissionLabelProvider, deviceFeatures)
                             .withComputedBadges(Instant.now()),
@@ -315,35 +350,6 @@ private sealed interface AppDetailSource {
     data object Error : AppDetailSource
     data class Ready(val state: AppDetailState.Loaded) : AppDetailSource
 }
-
-private const val EVENT_APP_DETAIL_OPENED = "app_detail_opened"
-private const val EVENT_SECTION_OPENED = "app_detail_section_opened"
-private const val EVENT_ACTION_PERFORMED = "app_detail_action_performed"
-private const val PARAMETER_ANALYSIS_MODE = "analysis_mode"
-private const val PARAMETER_SECTION = "section"
-private const val PARAMETER_ACTION = "action"
-private const val SECTION_MANIFEST = "manifest"
-private const val SECTION_GENERAL = "general"
-private const val SECTION_PERMISSIONS = "permissions"
-private const val SECTION_COMPONENTS = "components"
-private const val SECTION_ACTIVITIES = "activities"
-private const val SECTION_SERVICES = "services"
-private const val SECTION_RECEIVERS = "receivers"
-private const val SECTION_PROVIDERS = "providers"
-private const val SECTION_CERTIFICATES = "certificates"
-private const val SECTION_FEATURES = "features"
-
-private val AppReference.analyticsAnalysisMode: String
-    get() = when (this) {
-        is AppReference.ApkFile -> "apk_file"
-        is AppReference.InstalledPackage -> "installed_package"
-    }
-
-private val AppDetailExport.analyticsAction: String
-    get() = when (this) {
-        AppDetailExport.Apk -> "export_apk"
-        AppDetailExport.Icon -> "export_icon"
-    }
 
 private const val MAX_BADGES = 3
 private const val MAX_REQUIREMENT_PREVIEWS = 6
