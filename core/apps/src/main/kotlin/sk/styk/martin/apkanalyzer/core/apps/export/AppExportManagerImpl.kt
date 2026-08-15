@@ -9,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.provider.OpenableColumns
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.createBitmap
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.currentCoroutineContext
@@ -92,8 +93,12 @@ internal class AppExportManagerImpl @Inject constructor(
                 drawable = if (applicationInfo.icon == 0) {
                     packageManager.defaultActivityIcon
                 } else {
-                    packageManager.getResourcesForApplication(applicationInfo)
-                        .getDrawable(applicationInfo.icon, null)
+                    ResourcesCompat.getDrawable(
+                        packageManager.getResourcesForApplication(applicationInfo),
+                        applicationInfo.icon,
+                        null,
+                    )
+                        ?: packageManager.defaultActivityIcon
                 },
                 defaultName = "${applicationInfo.packageName}.png",
             )
