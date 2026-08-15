@@ -68,7 +68,7 @@ internal object AppDetailInsightEvaluator {
 private const val DAYS_PER_MONTH = 30
 
 private fun monthsBetween(from: Instant, to: Instant): Int =
-    (Duration.between(from, to).toDays() / DAYS_PER_MONTH).toInt().coerceAtLeast(1)
+    (Duration.between(from, to).toDays() / DAYS_PER_MONTH).coerceIn(1L, Int.MAX_VALUE.toLong()).toInt()
 
 @Suppress("DEPRECATION")
 @SuppressLint("InlinedApi")
