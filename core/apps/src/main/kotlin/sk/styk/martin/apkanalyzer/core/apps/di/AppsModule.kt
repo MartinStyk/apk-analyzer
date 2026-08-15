@@ -38,8 +38,6 @@ import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibrariesRepository
 import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibrariesRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apps.permissions.PermissionDefinitionResolver
 import sk.styk.martin.apkanalyzer.core.apps.permissions.PermissionDefinitionResolverImpl
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibrariesRepository
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibrariesRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apps.signing.ApkSigningBlockAnalyzer
 import sk.styk.martin.apkanalyzer.core.apps.signing.ApkSigningBlockAnalyzerImpl
 import sk.styk.martin.apkanalyzer.core.apps.signing.ApkSigningBlockParser
