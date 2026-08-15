@@ -15,7 +15,7 @@ internal class FirebaseAnalyticsTracker @Inject constructor(
         analytics.logEvent(
             event.name,
             Bundle().apply {
-                event.parameters.forEach { (name, value) -> putString(name, value) }
+                event.parameters.forEach { (name, value) -> putString(name.value, value) }
             },
         )
     }

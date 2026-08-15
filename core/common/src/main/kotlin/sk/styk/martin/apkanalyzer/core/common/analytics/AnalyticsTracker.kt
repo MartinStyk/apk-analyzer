@@ -6,5 +6,14 @@ public interface AnalyticsTracker {
 
 public data class AnalyticsEvent(
     val name: String,
-    val parameters: Map<String, String> = emptyMap(),
+    val parameters: Map<AnalyticsParameterName, String> = emptyMap(),
 )
+
+public enum class AnalyticsParameterName(
+    internal val value: String,
+) {
+    Action("action"),
+    AnalysisMode("analysis_mode"),
+    Dimension("dimension"),
+    Section("section"),
+}

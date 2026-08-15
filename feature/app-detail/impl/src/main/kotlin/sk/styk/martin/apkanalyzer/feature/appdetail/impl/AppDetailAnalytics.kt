@@ -1,6 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl
 
 import sk.styk.martin.apkanalyzer.core.common.analytics.AnalyticsEvent
+import sk.styk.martin.apkanalyzer.core.common.analytics.AnalyticsParameterName
 import sk.styk.martin.apkanalyzer.core.common.analytics.AnalyticsTracker
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import javax.inject.Inject
@@ -13,16 +14,16 @@ internal class AppDetailAnalytics @Inject constructor(
         analyticsTracker.track(
             when (event) {
                 is AppDetailAnalyticsEvent.Opened -> AnalyticsEvent(
-                    EVENT_APP_DETAIL_OPENED,
-                    mapOf(PARAMETER_ANALYSIS_MODE to event.appReference.analyticsAnalysisMode),
+                    "app_detail_opened",
+                    mapOf(AnalyticsParameterName.AnalysisMode to event.appReference.analyticsAnalysisMode),
                 )
                 is AppDetailAnalyticsEvent.SectionOpened -> AnalyticsEvent(
-                    EVENT_SECTION_OPENED,
-                    mapOf(PARAMETER_SECTION to event.section.analyticsValue),
+                    "app_detail_section_opened",
+                    mapOf(AnalyticsParameterName.Section to event.section.analyticsValue),
                 )
                 is AppDetailAnalyticsEvent.ActionPerformed -> AnalyticsEvent(
-                    EVENT_ACTION_PERFORMED,
-                    mapOf(PARAMETER_ACTION to event.action.analyticsValue),
+                    "app_detail_action_performed",
+                    mapOf(AnalyticsParameterName.Action to event.action.analyticsValue),
                 )
             },
         )
@@ -54,13 +55,6 @@ internal sealed interface AppDetailAnalyticsEvent {
         ExportIcon,
     }
 }
-
-private const val EVENT_APP_DETAIL_OPENED = "app_detail_opened"
-private const val EVENT_SECTION_OPENED = "app_detail_section_opened"
-private const val EVENT_ACTION_PERFORMED = "app_detail_action_performed"
-private const val PARAMETER_ANALYSIS_MODE = "analysis_mode"
-private const val PARAMETER_SECTION = "section"
-private const val PARAMETER_ACTION = "action"
 
 private val AppReference.analyticsAnalysisMode: String
     get() = when (this) {
