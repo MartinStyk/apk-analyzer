@@ -107,10 +107,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
         when (action) {
             is AppDetailAction.Retry -> loadDetail()
 
-            is AppDetailAction.ViewManifest -> {
-                trackAction(ACTION_VIEW_MANIFEST)
-                sendSectionEvent(AppDetailEvent.NavigateToManifest, SECTION_MANIFEST)
-            }
+            is AppDetailAction.ViewManifest -> sendSectionEvent(AppDetailEvent.NavigateToManifest, SECTION_MANIFEST)
 
             is AppDetailAction.ExportApk -> requestDocument(AppDetailExport.Apk)
 
@@ -325,7 +322,6 @@ private const val EVENT_ACTION_PERFORMED = "app_detail_action_performed"
 private const val PARAMETER_ANALYSIS_MODE = "analysis_mode"
 private const val PARAMETER_SECTION = "section"
 private const val PARAMETER_ACTION = "action"
-private const val ACTION_VIEW_MANIFEST = "view_manifest"
 private const val SECTION_MANIFEST = "manifest"
 private const val SECTION_GENERAL = "general"
 private const val SECTION_PERMISSIONS = "permissions"
