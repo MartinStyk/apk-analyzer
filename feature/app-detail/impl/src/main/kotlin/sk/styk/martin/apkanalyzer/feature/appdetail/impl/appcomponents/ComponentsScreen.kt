@@ -41,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 import sk.styk.martin.apkanalyzer.core.common.util.sendForeignBroadcast
@@ -72,7 +73,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionLoadi
 internal fun ComponentsScreen(
     appDetailInput: AppDetailInput,
     initialScope: ComponentScope,
-    initialFilters: Set<ComponentFilter>,
+    initialFilters: ImmutableSet<ComponentFilter>,
     onBack: () -> Unit,
     onNavigateToIntentFilters: (componentName: String, componentType: ComponentType) -> Unit,
     modifier: Modifier = Modifier,
