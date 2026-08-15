@@ -20,6 +20,8 @@ import kotlinx.coroutines.flow.update
 import sk.styk.martin.apkanalyzer.core.appindex.AppIndexRepository
 import sk.styk.martin.apkanalyzer.core.appindex.model.AppAttributeIndex
 import sk.styk.martin.apkanalyzer.core.appindex.model.AppIndexStatus
+import sk.styk.martin.apkanalyzer.core.common.analytics.AnalyticsEvent
+import sk.styk.martin.apkanalyzer.core.common.analytics.AnalyticsTracker
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.BrowseDimensionLabeler
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.BrowseSubAttribute
@@ -27,6 +29,10 @@ import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.bucketsFor
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.isCertificateHash
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.subAttributes
 import sk.styk.martin.apkanalyzer.feature.browse.impl.model.BrowseDimension
+import sk.styk.martin.apkanalyzer.feature.browse.impl.model.analyticsValue
+
+private const val EVENT_BROWSE_CATEGORY_OPENED = "browse_category_opened"
+private const val PARAMETER_DIMENSION = "dimension"
 
 @HiltViewModel(assistedFactory = BrowseOptionsViewModel.Factory::class)
 internal class BrowseOptionsViewModel @AssistedInject constructor(
@@ -34,6 +40,7 @@ internal class BrowseOptionsViewModel @AssistedInject constructor(
     appIndexRepository: AppIndexRepository,
     private val labeler: BrowseDimensionLabeler,
     dispatcherProvider: DispatcherProvider,
+    private val analyticsTracker: AnalyticsTracker,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -70,6 +77,12 @@ internal class BrowseOptionsViewModel @AssistedInject constructor(
 
             is BrowseOptionsAction.SelectOption -> {
                 val loaded = state.value as? BrowseOptionsState.Loaded
+                analyticsTracker.track(
+                    AnalyticsEvent(
+                        EVENT_BROWSE_CATEGORY_OPENED,
+                        mapOf(PARAMETER_DIMENSION to dimension.analyticsValue),
+                    ),
+                )
                 eventChannel.trySend(
                     BrowseOptionsEvent.NavigateToApps(
                         bucketKey = action.option.key,

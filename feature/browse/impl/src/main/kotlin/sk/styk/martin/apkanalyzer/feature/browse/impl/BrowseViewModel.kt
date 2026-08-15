@@ -15,14 +15,20 @@ import sk.styk.martin.apkanalyzer.core.appindex.AppIndexRepository
 import sk.styk.martin.apkanalyzer.core.appindex.model.AppIndexStatus
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
+import sk.styk.martin.apkanalyzer.core.common.analytics.AnalyticsEvent
+import sk.styk.martin.apkanalyzer.core.common.analytics.AnalyticsTracker
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.BrowseDimensionLabeler
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.BrowseSubAttribute
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.bucketsFor
 import sk.styk.martin.apkanalyzer.feature.browse.impl.model.BrowseDimension
+import sk.styk.martin.apkanalyzer.feature.browse.impl.model.analyticsValue
 import javax.inject.Inject
 
 private const val TOP_LABELS_COUNT = 6
+private const val EVENT_BROWSE_TAB_OPENED = "browse_tab_opened"
+private const val EVENT_BROWSE_DIMENSION_OPENED = "browse_dimension_opened"
+private const val PARAMETER_DIMENSION = "dimension"
 
 @HiltViewModel
 internal class BrowseViewModel @Inject constructor(
@@ -30,6 +36,7 @@ internal class BrowseViewModel @Inject constructor(
     installedAppsRepository: InstalledAppsRepository,
     private val labeler: BrowseDimensionLabeler,
     dispatcherProvider: DispatcherProvider,
+    private val analyticsTracker: AnalyticsTracker,
 ) : ViewModel() {
 
     val state: StateFlow<BrowseState> = combine(
@@ -42,9 +49,21 @@ internal class BrowseViewModel @Inject constructor(
     private val eventChannel = Channel<BrowseEvent>(Channel.BUFFERED)
     val events = eventChannel.receiveAsFlow()
 
+    init {
+        analyticsTracker.track(AnalyticsEvent(EVENT_BROWSE_TAB_OPENED))
+    }
+
     fun onAction(action: BrowseAction) {
         when (action) {
-            is BrowseAction.SelectDimension -> eventChannel.trySend(BrowseEvent.NavigateToDimension(action.dimension))
+            is BrowseAction.SelectDimension -> {
+                analyticsTracker.track(
+                    AnalyticsEvent(
+                        EVENT_BROWSE_DIMENSION_OPENED,
+                        mapOf(PARAMETER_DIMENSION to action.dimension.analyticsValue),
+                    ),
+                )
+                eventChannel.trySend(BrowseEvent.NavigateToDimension(action.dimension))
+            }
         }
     }
 
