@@ -120,9 +120,15 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
             is AppDetailAction.ShareSummaryUnavailable -> sendEvent(AppDetailEvent.ShowFeedback(AppDetailFeedback.ShareUnavailable))
 
-            is AppDetailAction.OpenPlayStore -> withLoadedState { sendEvent(AppDetailEvent.OpenPlayStore(it.packageName)) }
+            is AppDetailAction.OpenPlayStore -> withLoadedState {
+                analytics.track(AppDetailAnalyticsEvent.ActionPerformed(AppDetailAnalyticsEvent.Action.OpenPlayStore))
+                sendEvent(AppDetailEvent.OpenPlayStore(it.packageName))
+            }
 
-            is AppDetailAction.OpenAppInfo -> withLoadedState { sendEvent(AppDetailEvent.OpenAppInfo(it.packageName)) }
+            is AppDetailAction.OpenAppInfo -> withLoadedState {
+                analytics.track(AppDetailAnalyticsEvent.ActionPerformed(AppDetailAnalyticsEvent.Action.OpenAppInfo))
+                sendEvent(AppDetailEvent.OpenAppInfo(it.packageName))
+            }
 
             is AppDetailAction.NavigateGeneralDetails -> sendSectionEvent(AppDetailEvent.NavigateToGeneralDetails)
 
@@ -192,11 +198,13 @@ internal class AppDetailViewModel @AssistedInject constructor(
     }
 
     private fun viewSummary() = withLoadedState { state ->
+        analytics.track(AppDetailAnalyticsEvent.ActionPerformed(AppDetailAnalyticsEvent.Action.ViewSummary))
         sendEvent(AppDetailEvent.ShowSummaryPreview(summaryTextFormatter.summary(state)))
     }
 
     private fun copySummary() = withLoadedState { state ->
         engaged = true
+        analytics.track(AppDetailAnalyticsEvent.ActionPerformed(AppDetailAnalyticsEvent.Action.CopySummary))
         val summary = summaryTextFormatter.summary(state)
         val label = summaryTextFormatter.clipLabel(state.appName)
         if (clipboardManager.copy(label, summary) == CopyResult.FeedbackNotShown) {
@@ -206,6 +214,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
     private fun shareSummary() = withLoadedState { state ->
         engaged = true
+        analytics.track(AppDetailAnalyticsEvent.ActionPerformed(AppDetailAnalyticsEvent.Action.ShareSummary))
         sendEvent(AppDetailEvent.ShareSummary(summaryTextFormatter.summary(state)))
     }
 
@@ -213,11 +222,11 @@ internal class AppDetailViewModel @AssistedInject constructor(
         when (insight) {
             AppDetailInsight.Debuggable,
             is AppDetailInsight.OutdatedTargetSdk,
-                -> sendSectionEvent(AppDetailEvent.NavigateToGeneralDetails)
+            -> sendSectionEvent(AppDetailEvent.NavigateToGeneralDetails)
 
             AppDetailInsight.DebugCertificate,
             AppDetailInsight.CertificateNotYetValid,
-                -> sendSectionEvent(AppDetailEvent.NavigateToCertificates)
+            -> sendSectionEvent(AppDetailEvent.NavigateToCertificates)
 
             is AppDetailInsight.SensitivePermission ->
                 sendSectionEvent(AppDetailEvent.NavigateToPermissions(insight.permissionName))

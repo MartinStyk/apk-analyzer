@@ -53,6 +53,11 @@ internal sealed interface AppDetailAnalyticsEvent {
     enum class Action {
         ExportApk,
         ExportIcon,
+        ViewSummary,
+        CopySummary,
+        ShareSummary,
+        OpenPlayStore,
+        OpenAppInfo,
     }
 }
 
@@ -80,4 +85,9 @@ private val AppDetailAnalyticsEvent.Action.analyticsValue: String
     get() = when (this) {
         AppDetailAnalyticsEvent.Action.ExportApk -> "export_apk"
         AppDetailAnalyticsEvent.Action.ExportIcon -> "export_icon"
+        AppDetailAnalyticsEvent.Action.ViewSummary -> "view_summary"
+        AppDetailAnalyticsEvent.Action.CopySummary -> "copy_summary"
+        AppDetailAnalyticsEvent.Action.ShareSummary -> "share_summary"
+        AppDetailAnalyticsEvent.Action.OpenPlayStore -> "open_play_store"
+        AppDetailAnalyticsEvent.Action.OpenAppInfo -> "open_app_info"
     }
