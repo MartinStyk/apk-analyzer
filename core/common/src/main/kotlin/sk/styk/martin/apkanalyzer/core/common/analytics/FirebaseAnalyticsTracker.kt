@@ -1,15 +1,10 @@
 package sk.styk.martin.apkanalyzer.core.common.analytics
 
-import android.content.Context
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-internal class FirebaseAnalyticsTracker @Inject constructor(
-    @ApplicationContext context: Context,
-) : AnalyticsTracker {
-    private val analytics = FirebaseAnalytics.getInstance(context)
+internal class FirebaseAnalyticsTracker @Inject constructor(private val analytics: FirebaseAnalytics) : AnalyticsTracker {
 
     override fun track(event: AnalyticsEvent) {
         analytics.logEvent(

@@ -6,18 +6,18 @@ import sk.styk.martin.apkanalyzer.core.common.analytics.AnalyticsTracker
 import sk.styk.martin.apkanalyzer.feature.browse.impl.model.BrowseDimension
 import javax.inject.Inject
 
-internal class BrowseAnalytics @Inject constructor(
-    private val analyticsTracker: AnalyticsTracker,
-) {
+internal class BrowseAnalytics @Inject constructor(private val analyticsTracker: AnalyticsTracker) {
 
     fun track(event: BrowseAnalyticsEvent) {
         analyticsTracker.track(
             when (event) {
                 BrowseAnalyticsEvent.TabOpened -> AnalyticsEvent("browse_tab_opened")
+
                 is BrowseAnalyticsEvent.DimensionOpened -> AnalyticsEvent(
                     "browse_dimension_opened",
                     mapOf(AnalyticsParameterName.Dimension to event.dimension.analyticsValue),
                 )
+
                 is BrowseAnalyticsEvent.CategoryOpened -> AnalyticsEvent(
                     "browse_category_opened",
                     mapOf(AnalyticsParameterName.Dimension to event.dimension.analyticsValue),

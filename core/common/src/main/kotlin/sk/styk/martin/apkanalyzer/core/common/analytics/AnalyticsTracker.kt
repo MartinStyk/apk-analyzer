@@ -4,14 +4,9 @@ public interface AnalyticsTracker {
     fun track(event: AnalyticsEvent)
 }
 
-public data class AnalyticsEvent(
-    val name: String,
-    val parameters: Map<AnalyticsParameterName, String> = emptyMap(),
-)
+public data class AnalyticsEvent(val name: String, val parameters: Map<AnalyticsParameterName, String> = emptyMap())
 
-public enum class AnalyticsParameterName(
-    val value: String,
-) {
+public enum class AnalyticsParameterName(val value: String) {
     Action("action"),
     AnalysisMode("analysis_mode"),
     Dimension("dimension"),

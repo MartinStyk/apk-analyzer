@@ -6,9 +6,7 @@ import sk.styk.martin.apkanalyzer.core.common.analytics.AnalyticsTracker
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import javax.inject.Inject
 
-internal class AppDetailAnalytics @Inject constructor(
-    private val analyticsTracker: AnalyticsTracker,
-) {
+internal class AppDetailAnalytics @Inject constructor(private val analyticsTracker: AnalyticsTracker) {
 
     fun track(event: AppDetailAnalyticsEvent) {
         analyticsTracker.track(
@@ -17,10 +15,12 @@ internal class AppDetailAnalytics @Inject constructor(
                     "app_detail_opened",
                     mapOf(AnalyticsParameterName.AnalysisMode to event.appReference.analyticsAnalysisMode),
                 )
+
                 is AppDetailAnalyticsEvent.SectionOpened -> AnalyticsEvent(
                     "app_detail_section_opened",
                     mapOf(AnalyticsParameterName.Section to event.section.analyticsValue),
                 )
+
                 is AppDetailAnalyticsEvent.ActionPerformed -> AnalyticsEvent(
                     "app_detail_action_performed",
                     mapOf(AnalyticsParameterName.Action to event.action.analyticsValue),
