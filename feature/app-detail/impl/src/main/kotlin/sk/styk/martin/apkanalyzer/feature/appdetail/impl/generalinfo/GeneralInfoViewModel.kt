@@ -13,9 +13,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
+import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraries
+import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibrariesRepository
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
@@ -26,6 +27,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.impl.toAppReference
 internal class GeneralInfoViewModel @AssistedInject constructor(
     @Assisted private val appDetailInput: AppDetailInput,
     private val appDetailRepository: AppDetailRepository,
+    private val nativeLibrariesRepository: NativeLibrariesRepository,
     private val dispatcherProvider: DispatcherProvider,
     private val clipboardManager: ClipboardManager,
 ) : ViewModel() {
@@ -57,18 +59,22 @@ internal class GeneralInfoViewModel @AssistedInject constructor(
 
     private fun loadDetail() {
         state.value = GeneralInfoState.Loading
-        viewModelScope.launch {
-            state.value = withContext(dispatcherProvider.default()) {
-                appDetailRepository.details(appDetailInput.toAppReference())
-            }.fold(
-                onSuccess = { it.toGeneralInfoState() },
-                onFailure = { GeneralInfoState.Error },
-            )
+        viewModelScope.launch(dispatcherProvider.default()) {
+            val reference = appDetailInput.toAppReference()
+            appDetailRepository.details(reference)
+                .onSuccess {
+                    state.value = it.toGeneralInfoState(NativeLibraries.Empty)
+                    val nativeLibraries = nativeLibrariesRepository.nativeLibraries(reference).getOrDefault(NativeLibraries.Empty)
+                    state.value = it.toGeneralInfoState(nativeLibraries)
+                }
+                .onFailure {
+                    state.value = GeneralInfoState.Error
+                }
         }
     }
 }
 
-private fun AppDetail.toGeneralInfoState() = GeneralInfoState.Loaded(
+private fun AppDetail.toGeneralInfoState(libraries: NativeLibraries) = GeneralInfoState.Loaded(
     applicationName = info.applicationName,
     packageName = info.packageName,
     processName = info.processName,
@@ -95,10 +101,10 @@ private fun AppDetail.toGeneralInfoState() = GeneralInfoState.Loaded(
     installLocation = info.installLocation.name,
     apkSize = info.apkSize,
     totalSize = info.totalSize,
-    nativeLibraryAbis = nativeLibraries.abis.toImmutableList(),
-    nativeLibraryNames = nativeLibraries.libraryNames.toImmutableList(),
+    nativeLibraryAbis = libraries.abis.toImmutableList(),
+    nativeLibraryNames = libraries.libraryNames.toImmutableList(),
     deviceSupportedAbis = Build.SUPPORTED_ABIS.toList().toImmutableList(),
-    isNativeLibraryDeviceIncompatible = nativeLibraries.hasNativeCode &&
-        nativeLibraries.abis.none { it in Build.SUPPORTED_ABIS },
+    isNativeLibraryDeviceIncompatible = libraries.hasNativeCode &&
+        libraries.abis.none { it in Build.SUPPORTED_ABIS },
     installedSplitsCount = info.installedSplits.size,
 )

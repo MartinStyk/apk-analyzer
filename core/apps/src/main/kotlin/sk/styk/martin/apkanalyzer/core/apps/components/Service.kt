@@ -8,7 +8,6 @@ data class Service(
     val isSingleUser: Boolean = false,
     val isIsolatedProcess: Boolean = false,
     val isExternalService: Boolean = false,
-    val intentFilters: List<ComponentIntentFilter> = emptyList(),
 )
 
 val Service.isExternallyReachableWithoutPermission: Boolean

@@ -11,7 +11,6 @@ data class Activity(
     val parentName: String? = null,
     val isExported: Boolean = false,
     val isLauncher: Boolean? = null,
-    val intentFilters: List<ComponentIntentFilter> = emptyList(),
 )
 
 val Activity.isExternallyReachableWithoutPermission: Boolean

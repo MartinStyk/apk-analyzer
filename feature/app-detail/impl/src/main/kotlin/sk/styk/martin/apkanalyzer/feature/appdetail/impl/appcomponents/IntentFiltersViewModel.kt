@@ -20,9 +20,9 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
-import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
+import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilterKey
+import sk.styk.martin.apkanalyzer.core.apps.components.ComponentKind
+import sk.styk.martin.apkanalyzer.core.apps.intentfilters.IntentFiltersRepository
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
@@ -35,7 +35,7 @@ internal class IntentFiltersViewModel @AssistedInject constructor(
     @Assisted private val appDetailInput: AppDetailInput,
     @Assisted private val componentName: String,
     @Assisted private val componentType: ComponentType,
-    private val appDetailRepository: AppDetailRepository,
+    private val intentFiltersRepository: IntentFiltersRepository,
     private val dispatcherProvider: DispatcherProvider,
     private val clipboardManager: ClipboardManager,
     @ApplicationContext private val context: Context,
@@ -91,21 +91,14 @@ internal class IntentFiltersViewModel @AssistedInject constructor(
 
     private fun loadFilters() {
         source.value = IntentFiltersSource.Loading
-        viewModelScope.launch {
-            source.value = withContext(dispatcherProvider.default()) {
-                appDetailRepository.details(appDetailInput.toAppReference()).fold(
-                    onSuccess = { detail ->
-                        if (!detail.areComponentIntentFiltersAvailable) {
-                            IntentFiltersSource.Unavailable
-                        } else {
-                            detail.intentFiltersFor(componentName, componentType)
-                                ?.let { IntentFiltersSource.Ready(componentName, componentType, it.toItems()) }
-                                ?: IntentFiltersSource.Error
-                        }
-                    },
-                    onFailure = { IntentFiltersSource.Error },
-                )
-            }
+        viewModelScope.launch(dispatcherProvider.default()) {
+            source.value = intentFiltersRepository.componentIntentFilters(appDetailInput.toAppReference()).fold(
+                onSuccess = { filtersByComponent ->
+                    val key = ComponentIntentFilterKey(componentName, componentType.toComponentKind())
+                    IntentFiltersSource.Ready(componentName, componentType, filtersByComponent[key].orEmpty().toItems())
+                },
+                onFailure = { IntentFiltersSource.Unavailable },
+            )
         }
     }
 }
@@ -164,9 +157,9 @@ private fun ComponentIntentFilterItem.searchableValues(componentType: ComponentT
     if (order != 0) yield(order.toString())
 }
 
-private fun AppDetail.intentFiltersFor(componentName: String, componentType: ComponentType): List<ComponentIntentFilter>? = when (componentType) {
-    ComponentType.Activity -> activities.firstOrNull { it.name == componentName }?.intentFilters
-    ComponentType.Service -> services.firstOrNull { it.name == componentName }?.intentFilters
-    ComponentType.Receiver -> receivers.firstOrNull { it.name == componentName }?.intentFilters
-    ComponentType.Provider -> contentProviders.firstOrNull { it.name == componentName }?.intentFilters
+private fun ComponentType.toComponentKind(): ComponentKind = when (this) {
+    ComponentType.Activity -> ComponentKind.Activity
+    ComponentType.Service -> ComponentKind.Service
+    ComponentType.Receiver -> ComponentKind.Receiver
+    ComponentType.Provider -> ComponentKind.Provider
 }

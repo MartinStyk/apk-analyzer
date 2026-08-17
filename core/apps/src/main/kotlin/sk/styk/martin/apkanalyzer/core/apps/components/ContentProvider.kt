@@ -7,7 +7,6 @@ data class ContentProvider(
     val writePermission: String? = null,
     val isExported: Boolean = false,
     val pathPermissions: List<ProviderPathPermission> = emptyList(),
-    val intentFilters: List<ComponentIntentFilter> = emptyList(),
 )
 
 data class ProviderPathPermission(

@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
+import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibrariesRepository
 import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryFile
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
@@ -31,7 +31,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.impl.toAppReference
 @HiltViewModel(assistedFactory = NativeLibrariesViewModel.Factory::class)
 internal class NativeLibrariesViewModel @AssistedInject constructor(
     @Assisted private val appDetailInput: AppDetailInput,
-    private val appDetailRepository: AppDetailRepository,
+    private val nativeLibrariesRepository: NativeLibrariesRepository,
     private val dispatcherProvider: DispatcherProvider,
     private val clipboardManager: ClipboardManager,
 ) : ViewModel() {
@@ -83,9 +83,9 @@ internal class NativeLibrariesViewModel @AssistedInject constructor(
         source.value = NativeLibrariesSource.Loading
         viewModelScope.launch {
             source.value = withContext(dispatcherProvider.default()) {
-                appDetailRepository.details(appDetailInput.toAppReference()).fold(
-                    onSuccess = { detail ->
-                        val items = detail.nativeLibraries.files.toItems(Build.SUPPORTED_ABIS.toSet())
+                nativeLibrariesRepository.nativeLibraries(appDetailInput.toAppReference()).fold(
+                    onSuccess = { libraries ->
+                        val items = libraries.files.toItems(Build.SUPPORTED_ABIS.toSet())
                         NativeLibrariesSource.Ready(items.toImmutableList())
                     },
                     onFailure = { NativeLibrariesSource.Error },

@@ -5,7 +5,6 @@ import sk.styk.martin.apkanalyzer.core.apps.components.BroadcastReceiver
 import sk.styk.martin.apkanalyzer.core.apps.components.ContentProvider
 import sk.styk.martin.apkanalyzer.core.apps.components.Service
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Feature
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraries
 import sk.styk.martin.apkanalyzer.core.apps.permissions.Permissions
 import sk.styk.martin.apkanalyzer.core.apps.signing.AppSigning
 
@@ -19,8 +18,6 @@ data class AppDetail(
     val receivers: List<BroadcastReceiver>,
     val permissions: Permissions,
     val features: List<Feature>,
-    val nativeLibraries: NativeLibraries,
-    val areComponentIntentFiltersAvailable: Boolean,
 ) {
     enum class AnalysisMode {
         InstalledPackage,

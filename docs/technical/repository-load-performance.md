@@ -173,7 +173,6 @@ apps give them different performance characteristics.
 AppDetailRepositoryImpl.details(reference)
   cache lookup for installed packages and APK files
   PackageManager package/archive query
-  parse base and split manifests for component intent filters
   optional storage-size query
   optional usage query
   general information mapping
@@ -186,16 +185,24 @@ AppDetailRepositoryImpl.details(reference)
   permission mapping and resolution
   feature mapping
   APK size and installed-split analysis
-  native-library ZIP analysis
+  native-library existence check (short-circuiting ZIP scan)
   cache result
 ```
 
 Installed-package details are cached by package name until a package-change event clears the cache.
 APK-file details are cached by absolute path and last-modified time.
 
-Component intent-filter parsing is part of app-detail loading and must be included in
-`app_detail_load`. Rendering the complete readable manifest belongs to the separate Manifest screen
-and uses `manifest_load`.
+Component intent-filter parsing is not part of app-detail loading. Only the Components and Intent
+Filters screens need per-component filter data — the app-detail hub only reads component counts, which
+come straight from `PackageManager` — so it is fetched lazily and separately by
+`IntentFiltersRepository` and traced by `intent_filters_load`. Rendering the complete readable
+manifest belongs to the separate Manifest screen and uses `manifest_load`.
+
+The full per-library native-code breakdown (per-ABI, per-APK file size) is likewise not part of
+app-detail loading. The hub only needs to know whether the APK ships native code at all, and general
+info and the native-libraries screen are the only consumers of the full set — so `app_detail_load`
+only pays for a short-circuiting existence scan, and the full breakdown is fetched lazily and
+separately by `NativeLibrariesRepository`, traced by `native_libraries_load`.
 
 ## Performance Integration
 
@@ -286,7 +293,6 @@ returns a complete or degraded `AppDetail`, an error, or cancellation.
 | `outcome` | `success`, `degraded`, `error`, `cancelled` |
 | `analysis_mode` | `installed`, `apk_file` |
 | `cache_hit` | `true`, `false` |
-| `intent_filters` | `available`, `unavailable` |
 | `signing_schemes` | `available`, `unavailable` |
 
 | Custom metric | Meaning |
@@ -310,22 +316,24 @@ Each internal stage records its own `<stage>_ms` metric via `timedStage`, unlike
 in this rollout, because `app_detail_load` is the app's slowest and most failure-prone request and
 its stage timings are worth the added metric count.
 
-OBS-04 uses the two availability facts persisted in `AppDetail` to classify complete versus degraded
-results: component intent filters and signing schemes. Storage size and last-used time remain nullable
-domain values that currently combine permission denial, query failure or race, and legitimate absence,
-so they cannot safely affect the parent outcome or be reconstructed on a cache hit. Likewise,
-`NativeLibraries.Empty` combines an APK with no native libraries and a handled ZIP-read failure, while
-certificate extraction exposes an empty result for both legitimate absence and handled failure.
-`ApkSigningBlockAnalyzer` returns `null` for both no detectable supported scheme and analyzer failure;
-therefore `signing_schemes=unavailable` is an availability statement, not a failure diagnosis. OBS-04
-does not speculate beyond these APIs or change their established result behavior.
+OBS-04 uses the availability fact persisted in `AppDetail` to classify complete versus degraded
+results: signing schemes. Storage size and last-used time remain nullable domain values that
+currently combine permission denial, query failure or race, and legitimate absence, so they cannot
+safely affect the parent outcome or be reconstructed on a cache hit. Likewise, `NativeLibraries.Empty`
+combines an APK with no native libraries and a handled ZIP-read failure, while certificate extraction
+exposes an empty result for both legitimate absence and handled failure. `ApkSigningBlockAnalyzer`
+returns `null` for both no detectable supported scheme and analyzer failure; therefore
+`signing_schemes=unavailable` is an availability statement, not a failure diagnosis. OBS-04 does not
+speculate beyond these APIs or change their established result behavior. Component intent-filter
+availability is no longer part of this trace or `AppDetail`'s degraded state — it is a property of the
+separate `intent_filters_load` request, scoped to whichever screen actually asked for it.
 
 ### `manifest_load`
 
 This trace measures the complete readable-manifest request from `ManifestParser.manifest`.
 `componentIntentFilters` (the other public method on `ManifestParser`) has exactly one caller —
-`AppDetailRepositoryImpl` — and is already fully covered by that caller's `app_detail_load` stage
-timing, so it does not own a second trace or duplicate logging of its own.
+`IntentFiltersRepositoryImpl` — which owns its own `intent_filters_load` trace and cache, so this
+trace covers only the readable-manifest path.
 
 | Attribute | Values |
 |---|---|
@@ -334,6 +342,39 @@ timing, so it does not own a second trace or duplicate logging of its own.
 
 `split_count_bucket` was planned here but dropped: bucketing split count only adds segmentation value
 once a production question needs it, and nothing does yet.
+
+### `intent_filters_load`
+
+Start at entry to `IntentFiltersRepository.componentIntentFilters`, before cache lookup. Stop when the
+repository returns the cached or freshly parsed component intent-filter map, or an error, or
+cancellation. Cached the same way as `app_detail_load`: installed packages by package name, APK files
+by absolute path and last-modified time, both cleared on a package-change event.
+
+| Attribute | Values |
+|---|---|
+| `outcome` | `success`, `error`, `cancelled` |
+| `analysis_mode` | `installed`, `apk_file` |
+| `cache_hit` | `true`, `false` |
+
+`componentIntentFilters` parsing is all-or-nothing (see Manifest and Component Semantics in
+`core/apps/AGENTS.md`), so this trace has no `degraded` outcome — only `app_detail_load` mixes
+multiple optional sub-operations into one result.
+
+### `native_libraries_load`
+
+Start at entry to `NativeLibrariesRepository.nativeLibraries`, before cache lookup. Stop when the
+repository returns the cached or freshly built per-library breakdown, or an error, or cancellation.
+Cached the same way as `app_detail_load` and `intent_filters_load`: installed packages by package
+name, APK files by absolute path and last-modified time, both cleared on a package-change event.
+
+| Attribute | Values |
+|---|---|
+| `outcome` | `success`, `error`, `cancelled` |
+| `analysis_mode` | `installed`, `apk_file` |
+| `cache_hit` | `true`, `false` |
+
+Like `intent_filters_load`, this is one atomic scan rather than a mix of optional sub-operations, so
+it has no `degraded` outcome.
 
 ## Supporting Trace Design
 

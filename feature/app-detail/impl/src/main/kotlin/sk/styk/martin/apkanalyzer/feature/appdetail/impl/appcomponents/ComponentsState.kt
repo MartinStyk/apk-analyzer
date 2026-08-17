@@ -84,8 +84,7 @@ internal data class ComponentItem(
     val isUnprotected: Boolean,
     val isLaunchable: Boolean,
     val flags: ImmutableList<ComponentFlag>,
-    val intentFilters: ImmutableList<ComponentIntentFilterItem> = persistentListOf(),
-    val areIntentFiltersAvailable: Boolean = true,
+    val intentFilters: ImmutableList<ComponentIntentFilterItem>? = persistentListOf(),
     val details: ComponentDetails,
 ) {
     val stableKey: String

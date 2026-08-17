@@ -19,9 +19,11 @@ models, implementation, and private analysis helpers together.
 * `permissions/` - one app's declared and used permissions and typed protection metadata.
 * `components/` - activities, services, receivers, providers, intent filters, and path permissions.
 * `manifest/` - binary manifest parsing and readable XML rendering.
+* `intentfilters/` - cached, on-demand lookup of parsed component intent filters, built on
+  `manifest/`'s `ManifestParser`.
 * `installsource/` - raw installer chain and source classification.
 * `devicefeatures/` - device capabilities and app/device requirement comparison.
-* `packaging/` - installed splits, native libraries, and APK size.
+* `packaging/` - installed splits, native-library existence and breakdown, and APK size.
 * `usagestats/` and `storagestats/` - permission-gated device statistics.
 * `export/` - APK and icon export.
 * `sdkversion/` - Android version labels.
@@ -40,9 +42,10 @@ cached `AppDetail`; consumers combine app facts with device repositories separat
 `PackageChangesObserver` invalidates installed-package data. APK-file inputs and device state have
 different lifecycles and must not be smuggled into that cache key.
 
-Expensive device-wide signing work is shared lazily. Single-app signing-scheme inspection stays in
-the app-detail path so merely collecting the device-wide signer index does not read every APK signing
-block.
+Expensive device-wide signing work is shared lazily. Single-app signing-scheme inspection is itself
+expensive (it reads the APK's signing block directly) and only the Certificates screen shows it, so
+it is fetched lazily and separately by `SigningSchemeRepository` rather than being collected as part
+of the device-wide signer index or the app-detail path.
 
 ## Loading Observability
 
@@ -66,10 +69,17 @@ layer that owns that outcome. Let coroutine cancellation propagate without loggi
 and APK file paths are valid diagnostic context.
 
 `AppDetailRepositoryImpl` owns one `app_detail_load` trace around the complete public request,
-including cache hits. Every internal stage (package query, manifest parsing, certificates, signing
-schemes, permissions, ...) records its own `<stage>_ms` metric via `timedStage`, alongside the bounded
-analysis mode, cache result, availability, and terminal outcome attributes; package names and APK
-paths remain local log context, not trace attributes.
+including cache hits. Every internal stage (package query, certificates, permissions, packaging,
+...) records its own `<stage>_ms` metric via `timedStage`, alongside the bounded analysis mode,
+cache result, and terminal outcome attributes; package names and APK paths remain local log context,
+not trace attributes. Component intent-filter parsing is not one of these stages: it is fetched
+lazily and separately by `IntentFiltersRepository`, which owns its own `intent_filters_load` trace,
+because only the Components and Intent Filters screens ever need that data — the hub only needs
+component counts. Native library detail and signing-scheme detection follow the same pattern: they
+are fetched lazily and separately by `NativeLibrariesRepository` (`native_libraries_load` trace) and
+`SigningSchemeRepository` (`signing_scheme_load` trace) respectively, because only the
+general-info/native-libraries screens and the Certificates screen need that detail — the hub does
+not need any of it.
 
 Use `startCancellableTrace` for trace lifetime and cancellation outcome. Classify cached and uncached
 results from facts persisted in `AppDetail`; nullable storage, usage, certificate, and packaging data
@@ -103,8 +113,9 @@ Read the complete set once rather than calling `hasSystemFeature` repeatedly.
 Hardware feature names and OpenGL ES versions are different domain variants. Device support can be
 available, unavailable, or unknown; a failed device query must not become "missing."
 
-Native-library data follows the same boundary: the cached app model records what the APK ships.
-Compare it with `Build.SUPPORTED_ABIS` at the consuming layer.
+Native-library data follows a stricter version of the same boundary: it is not part of `AppDetail` at
+all. The full shipped ABI/library set comes from `NativeLibrariesRepository` instead, fetched lazily
+by the screens that need it; compare it with `Build.SUPPORTED_ABIS` at that consuming layer.
 
 ## Manifest and Component Semantics
 
@@ -112,8 +123,10 @@ Compare it with `Build.SUPPORTED_ABIS` at the consuming layer.
 intent the caller already knows, so manifest parsing is required.
 
 Parse the base manifest and every installed split manifest. Normalize relative component class names
-before joining filters to `PackageInfo` components, and include component kind in the key because
-different kinds may share a class name.
+before keying filters by `ComponentIntentFilterKey`, and include component kind in the key because
+different kinds may share a class name. `IntentFiltersRepository` returns this keyed map as-is;
+joining it to a specific component list is a feature-layer concern, since only the Components and
+Intent Filters screens need it.
 
 Preserve actions, categories, data rules, priority, order, and link-verification requests. Multiple
 `<data>` elements accumulate within one filter. Host and port are one authority rule; flattening them
@@ -146,10 +159,15 @@ paths remain subject to the top-level permission.
 ## Packaging Semantics
 
 Compute installed APK size from the same split list exposed to consumers so totals and breakdowns
-cannot diverge.
+cannot diverge. Split-APK size and classification live as private helpers in
+`AppDetailRepositoryImpl`, their only consumer.
 
 Read native libraries from base and split ZIP entries. Keep one file record per library name and ABI;
-derive distinct ABI and library-name summaries rather than storing competing copies.
+derive distinct ABI and library-name summaries rather than storing competing copies. This logic lives
+as private helpers in `NativeLibrariesRepositoryImpl`, their only consumer — none of it is part of
+`AppDetail`. The per-file breakdown (`NativeLibraries`, with size and containing-APK per library) is
+expensive to build and only two screens need it, so it is fetched lazily and separately through
+`NativeLibrariesRepository` rather than computed eagerly on every app-detail load.
 
 Install-source models preserve the installing, initiating, and originating chain. Source
 classification is a pure function over that chain and app flags, not another platform resolver call.

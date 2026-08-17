@@ -13,9 +13,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.plus
 import sk.styk.martin.apkanalyzer.core.apps.components.Activity
 import sk.styk.martin.apkanalyzer.core.apps.components.BroadcastReceiver
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilterKey
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentKind
 import sk.styk.martin.apkanalyzer.core.apps.components.ContentProvider
 import sk.styk.martin.apkanalyzer.core.apps.components.Service
 import sk.styk.martin.apkanalyzer.core.apps.components.resolvePathPermissions
@@ -23,20 +20,17 @@ import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Feature
 import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceResolver
 import sk.styk.martin.apkanalyzer.core.apps.installsource.isSystemInstalledApp
 import sk.styk.martin.apkanalyzer.core.apps.installsource.resolveAppInstallSource
-import sk.styk.martin.apkanalyzer.core.apps.manifest.ManifestParser
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.model.AppInfo
 import sk.styk.martin.apkanalyzer.core.apps.model.InstallLocation
-import sk.styk.martin.apkanalyzer.core.apps.packaging.computeApkSize
-import sk.styk.martin.apkanalyzer.core.apps.packaging.readInstalledSplits
-import sk.styk.martin.apkanalyzer.core.apps.packaging.readNativeLibraries
+import sk.styk.martin.apkanalyzer.core.apps.packaging.InstalledSplitApk
+import sk.styk.martin.apkanalyzer.core.apps.packaging.SplitApkKind
 import sk.styk.martin.apkanalyzer.core.apps.permissions.Permission
 import sk.styk.martin.apkanalyzer.core.apps.permissions.PermissionDefinitionResolver
 import sk.styk.martin.apkanalyzer.core.apps.permissions.Permissions
 import sk.styk.martin.apkanalyzer.core.apps.permissions.UsedPermission
 import sk.styk.martin.apkanalyzer.core.apps.permissions.toPermissionDetails
 import sk.styk.martin.apkanalyzer.core.apps.sdkversion.SdkVersionResolver
-import sk.styk.martin.apkanalyzer.core.apps.signing.ApkSigningBlockAnalyzer
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateExtractor
 import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepository
 import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
@@ -44,8 +38,11 @@ import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
+import sk.styk.martin.apkanalyzer.core.common.model.AppReferenceCacheKey
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
+import sk.styk.martin.apkanalyzer.core.common.model.bytes
+import sk.styk.martin.apkanalyzer.core.common.model.toCacheKey
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTrace
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
 import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
@@ -69,18 +66,16 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     private val sdkVersionResolver: SdkVersionResolver,
     private val installSourceResolver: InstallSourceResolver,
     private val certificateExtractor: CertificateExtractor,
-    private val apkSigningBlockAnalyzer: ApkSigningBlockAnalyzer,
-    private val manifestParser: ManifestParser,
     private val permissionDefinitionResolver: PermissionDefinitionResolver,
     private val storageStatsRepository: StorageStatsRepository,
     private val usageStatsRepository: UsageStatsRepository,
     packageChangesObserver: PackageChangesObserver,
     appScope: CoroutineScope,
-    dispatcherProvider: DispatcherProvider,
+    private val dispatcherProvider: DispatcherProvider,
     private val performanceTracker: PerformanceTracker,
 ) : AppDetailRepository {
 
-    private val cache = ConcurrentHashMap<CacheKey, AppDetail>()
+    private val cache = ConcurrentHashMap<AppReferenceCacheKey, AppDetail>()
 
     private val analysisFlags = PackageManager.GET_SIGNING_CERTIFICATES or
         PackageManager.GET_ACTIVITIES or
@@ -105,7 +100,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             is AppReference.InstalledPackage -> installedPackageDetails(reference.packageName)
             is AppReference.ApkFile -> apkFilePackageDetails(File(reference.path))
         }.onSuccess {
-            recordResult(it)
+            outcome = TraceOutcome.Success
         }.onFailure {
             recordErrorPreserving(it)
         }
@@ -113,7 +108,8 @@ internal class AppDetailRepositoryImpl @Inject constructor(
 
     private suspend fun PerformanceTrace.installedPackageDetails(packageName: PackageName): Result<AppDetail> {
         val context = "mode=installed package=${packageName.value}"
-        val cacheKey = CacheKey.InstalledPackage(packageName)
+        val reference = AppReference.InstalledPackage(packageName)
+        val cacheKey = reference.toCacheKey()
         Logger.i(TAG, "App detail loading started: $context")
         val cachedDetail = cache[cacheKey]
         cachedDetail?.let {
@@ -122,13 +118,9 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             return Result.success(it)
         }
         return runCatchingCancellable {
-            val reference = AppReference.InstalledPackage(packageName)
             val packageInfo = timedStage("package query", "package_query_ms", context) {
                 packageManager.getPackageInfo(packageName.value, analysisFlags)
             }
-            val intentFilters = timedStage("manifest parsing", "manifest_parse_ms", context) {
-                manifestParser.componentIntentFilters(reference)
-            }.warnIfDegraded("intent filters", context)
             val totalSize = timedStage("storage stats", "storage_stats_ms", context) {
                 storageStatsRepository.queryTotalSize(packageName)
             }.warnIfDegraded("storage stats", context)
@@ -140,18 +132,12 @@ internal class AppDetailRepositoryImpl @Inject constructor(
                 context = context,
                 analysisMode = AppDetail.AnalysisMode.InstalledPackage,
                 packageInfo = packageInfo,
-                intentFiltersByComponent = intentFilters.getOrDefault(emptyMap()),
-                areIntentFiltersAvailable = intentFilters.isSuccess,
                 totalSize = totalSize,
                 lastUsedTime = lastUsedTime,
             )
         }.onSuccess { detail ->
             cache[cacheKey] = detail
-            if (!detail.isPerformanceDegraded) {
-                Logger.i(TAG, "App detail loading finished: $context")
-            } else {
-                Logger.w(TAG, "App detail loading degraded: optional analysis unavailable, $context")
-            }
+            Logger.i(TAG, "App detail loading finished: $context")
         }.onFailure {
             Logger.e(TAG, it, "App detail loading failed: $context")
         }
@@ -159,7 +145,8 @@ internal class AppDetailRepositoryImpl @Inject constructor(
 
     private suspend fun PerformanceTrace.apkFilePackageDetails(accessibleFile: File): Result<AppDetail> {
         val context = "mode=apk_file apk_path=${accessibleFile.absolutePath}"
-        val cacheKey = CacheKey.ApkFile(accessibleFile.absolutePath, accessibleFile.lastModified())
+        val reference = AppReference.ApkFile(accessibleFile.absolutePath)
+        val cacheKey = reference.toCacheKey()
         Logger.i(TAG, "App detail loading started: $context")
         val cachedDetail = cache[cacheKey]
         cachedDetail?.let {
@@ -169,20 +156,14 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         }
 
         return runCatchingCancellable {
-            val reference = AppReference.ApkFile(accessibleFile.absolutePath)
             val packageInfo = timedStage("package query", "package_query_ms", context) {
                 packageManager.getPackageArchiveInfoWithCorrectPath(accessibleFile.absolutePath, analysisFlags)
             } ?: error("Cannot parse APK file: ${accessibleFile.absolutePath}")
-            val intentFilters = timedStage("manifest parsing", "manifest_parse_ms", context) {
-                manifestParser.componentIntentFilters(reference)
-            }.warnIfDegraded("intent filters", context)
 
             getPackageDetails(
                 context = context,
                 analysisMode = AppDetail.AnalysisMode.ApkFile,
                 packageInfo = packageInfo,
-                intentFiltersByComponent = intentFilters.getOrDefault(emptyMap()),
-                areIntentFiltersAvailable = intentFilters.isSuccess,
             )
         }.onSuccess { detail ->
             cache[cacheKey] = detail
@@ -196,8 +177,6 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         context: String,
         analysisMode: AppDetail.AnalysisMode,
         packageInfo: PackageInfo,
-        intentFiltersByComponent: Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>,
-        areIntentFiltersAvailable: Boolean,
         totalSize: AppSize? = null,
         lastUsedTime: Instant? = null,
     ): AppDetail {
@@ -209,10 +188,6 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             certificateExtractor.getAppSigning(packageInfo)
         }
 
-        val signingSchemeVersions = timedStage("signing schemes", "signing_schemes_ms", context) {
-            packageInfo.applicationInfo?.sourceDir?.let(apkSigningBlockAnalyzer::detectSchemeVersions)
-        }.warnIfDegraded("signing schemes", context)
-
         val launcherActivityNames = when (analysisMode) {
             AppDetail.AnalysisMode.InstalledPackage -> timedStage("launcher activities", "launcher_activities_ms", context) {
                 queryLauncherActivityNames(PackageName(packageInfo.packageName))
@@ -223,10 +198,10 @@ internal class AppDetailRepositoryImpl @Inject constructor(
 
         val components = timedStage("components", "components_ms", context) {
             ComponentsBundle(
-                activities = getActivities(packageInfo, launcherActivityNames, intentFiltersByComponent),
-                services = getServices(packageInfo, intentFiltersByComponent),
-                contentProviders = getContentProviders(packageInfo, intentFiltersByComponent),
-                receivers = getBroadcastReceivers(packageInfo, intentFiltersByComponent),
+                activities = getActivities(packageInfo, launcherActivityNames),
+                services = getServices(packageInfo),
+                contentProviders = getContentProviders(packageInfo),
+                receivers = getBroadcastReceivers(packageInfo),
             )
         }
 
@@ -238,22 +213,16 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             getFeatures(packageInfo)
         }
 
-        val nativeLibraries = timedStage("packaging", "packaging_ms", context) {
-            readNativeLibraries(packageInfo.applicationInfo)
-        }
-
         return AppDetail(
             analysisMode = analysisMode,
             info = info,
-            signing = signing.copy(signingSchemeVersions = signingSchemeVersions),
+            signing = signing,
             activities = components.activities,
             services = components.services,
             contentProviders = components.contentProviders,
             receivers = components.receivers,
             permissions = permissions,
             features = features,
-            nativeLibraries = nativeLibraries,
-            areComponentIntentFiltersAvailable = areIntentFiltersAvailable,
         )
     }
 
@@ -274,11 +243,6 @@ internal class AppDetailRepositoryImpl @Inject constructor(
 
     private fun <T> T?.warnIfDegraded(stage: String, context: String): T? {
         if (this == null) warnDegraded(stage, context)
-        return this
-    }
-
-    private fun <T> Result<T>.warnIfDegraded(stage: String, context: String): Result<T> {
-        if (isFailure) warnDegraded(stage, context)
         return this
     }
 
@@ -330,11 +294,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         )
     }
 
-    private fun getActivities(
-        packageInfo: PackageInfo,
-        launcherActivityNames: Set<String>?,
-        intentFiltersByComponent: Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>,
-    ): List<Activity> = packageInfo.activities.orEmpty().map {
+    private fun getActivities(packageInfo: PackageInfo, launcherActivityNames: Set<String>?): List<Activity> = packageInfo.activities.orEmpty().map {
         Activity(
             name = it.name,
             packageName = PackageName(it.packageName),
@@ -344,7 +304,6 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             parentName = it.parentActivityName,
             isExported = it.exported,
             isLauncher = launcherActivityNames?.contains(it.name),
-            intentFilters = intentFiltersByComponent[ComponentIntentFilterKey(it.name, ComponentKind.Activity)].orEmpty(),
         )
     }
 
@@ -359,24 +318,19 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         }
         .toSet()
 
-    private fun getServices(packageInfo: PackageInfo, intentFiltersByComponent: Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>): List<Service> =
-        packageInfo.services.orEmpty().map {
-            Service(
-                name = it.name,
-                permission = it.permission,
-                isExported = it.exported,
-                isStopWithTask = it.flags and ServiceInfo.FLAG_STOP_WITH_TASK > 0,
-                isSingleUser = it.flags and ServiceInfo.FLAG_SINGLE_USER > 0,
-                isIsolatedProcess = it.flags and ServiceInfo.FLAG_ISOLATED_PROCESS > 0,
-                isExternalService = it.flags and ServiceInfo.FLAG_EXTERNAL_SERVICE > 0,
-                intentFilters = intentFiltersByComponent[ComponentIntentFilterKey(it.name, ComponentKind.Service)].orEmpty(),
-            )
-        }
+    private fun getServices(packageInfo: PackageInfo): List<Service> = packageInfo.services.orEmpty().map {
+        Service(
+            name = it.name,
+            permission = it.permission,
+            isExported = it.exported,
+            isStopWithTask = it.flags and ServiceInfo.FLAG_STOP_WITH_TASK > 0,
+            isSingleUser = it.flags and ServiceInfo.FLAG_SINGLE_USER > 0,
+            isIsolatedProcess = it.flags and ServiceInfo.FLAG_ISOLATED_PROCESS > 0,
+            isExternalService = it.flags and ServiceInfo.FLAG_EXTERNAL_SERVICE > 0,
+        )
+    }
 
-    private fun getContentProviders(
-        packageInfo: PackageInfo,
-        intentFiltersByComponent: Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>,
-    ): List<ContentProvider> = packageInfo.providers.orEmpty().map {
+    private fun getContentProviders(packageInfo: PackageInfo): List<ContentProvider> = packageInfo.providers.orEmpty().map {
         ContentProvider(
             name = it.name,
             authority = it.authority,
@@ -384,19 +338,14 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             writePermission = it.writePermission,
             isExported = it.exported,
             pathPermissions = resolvePathPermissions(it.pathPermissions),
-            intentFilters = intentFiltersByComponent[ComponentIntentFilterKey(it.name, ComponentKind.Provider)].orEmpty(),
         )
     }
 
-    private fun getBroadcastReceivers(
-        packageInfo: PackageInfo,
-        intentFiltersByComponent: Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>,
-    ): List<BroadcastReceiver> = packageInfo.receivers.orEmpty().map {
+    private fun getBroadcastReceivers(packageInfo: PackageInfo): List<BroadcastReceiver> = packageInfo.receivers.orEmpty().map {
         BroadcastReceiver(
             name = it.name,
             permission = it.permission,
             isExported = it.exported,
-            intentFilters = intentFiltersByComponent[ComponentIntentFilterKey(it.name, ComponentKind.Receiver)].orEmpty(),
         )
     }
 
@@ -442,23 +391,9 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         packageInfo?.applicationInfo?.publicSourceDir = pathToPackage
         return packageInfo
     }
-
-    private sealed interface CacheKey {
-        data class InstalledPackage(val packageName: PackageName) : CacheKey
-        data class ApkFile(val path: String, val lastModified: Long) : CacheKey
-    }
 }
 
 private val launcherCategories = listOf(Intent.CATEGORY_LAUNCHER, Intent.CATEGORY_LEANBACK_LAUNCHER)
-
-private val AppDetail.isPerformanceDegraded: Boolean
-    get() = !areComponentIntentFiltersAvailable || signing.signingSchemeVersions == null
-
-private fun PerformanceTrace.recordResult(detail: AppDetail) {
-    this["intent_filters"] = if (detail.areComponentIntentFiltersAvailable) AVAILABILITY_AVAILABLE else AVAILABILITY_UNAVAILABLE
-    this["signing_schemes"] = if (detail.signing.signingSchemeVersions != null) AVAILABILITY_AVAILABLE else AVAILABILITY_UNAVAILABLE
-    outcome = if (detail.isPerformanceDegraded) TraceOutcome.Degraded else TraceOutcome.Success
-}
 
 private fun PerformanceTrace.recordErrorPreserving(failure: Throwable) {
     val telemetryFailure = runCatching {
@@ -470,5 +405,50 @@ private fun PerformanceTrace.recordErrorPreserving(failure: Throwable) {
 }
 
 private const val CACHE_HIT_ATTRIBUTE = "cache_hit"
-private const val AVAILABILITY_AVAILABLE = "available"
-private const val AVAILABILITY_UNAVAILABLE = "unavailable"
+
+private val SPLIT_ABI_QUALIFIERS = mapOf(
+    "armeabi" to "armeabi",
+    "armeabi_v7a" to "armeabi-v7a",
+    "arm64_v8a" to "arm64-v8a",
+    "x86" to "x86",
+    "x86_64" to "x86_64",
+    "mips" to "mips",
+    "mips64" to "mips64",
+)
+
+private val SPLIT_DENSITY_QUALIFIERS = setOf(
+    "ldpi", "mdpi", "tvdpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi", "nodpi", "anydpi",
+)
+
+private fun computeApkSize(applicationInfo: ApplicationInfo?): AppSize {
+    val baseApkSize = applicationInfo?.sourceDir?.let { File(it).length() } ?: 0L
+    val splitApksSize = readInstalledSplits(applicationInfo).sumOf { it.size.bytes }
+    return (baseApkSize + splitApksSize).bytes
+}
+
+private fun readInstalledSplits(applicationInfo: ApplicationInfo?): List<InstalledSplitApk> = applicationInfo?.splitSourceDirs.orEmpty().map { path ->
+    val file = File(path)
+    val (kind, qualifier) = classifySplitApk(file.name)
+    InstalledSplitApk(
+        fileName = file.name,
+        filePath = path,
+        size = file.length().bytes,
+        kind = kind,
+        qualifier = qualifier,
+    )
+}
+
+private fun classifySplitApk(fileName: String): Pair<SplitApkKind, String> {
+    val baseName = fileName.removeSuffix(".apk")
+    val configQualifier = baseName.removePrefix("split_config.")
+    if (configQualifier != baseName) {
+        val abi = SPLIT_ABI_QUALIFIERS[configQualifier.lowercase()]
+        return when {
+            abi != null -> SplitApkKind.Abi to abi
+            configQualifier.lowercase() in SPLIT_DENSITY_QUALIFIERS -> SplitApkKind.ScreenDensity to configQualifier
+            else -> SplitApkKind.Language to configQualifier
+        }
+    }
+    val moduleName = baseName.removePrefix("split_").substringBefore(".config.")
+    return SplitApkKind.DynamicFeature to moduleName
+}
