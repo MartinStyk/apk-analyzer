@@ -2,7 +2,11 @@ package sk.styk.martin.apkanalyzer.core.apps.packaging
 
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.plus
@@ -12,6 +16,7 @@ import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppReferenceCacheKey
+import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import sk.styk.martin.apkanalyzer.core.common.model.toCacheKey
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTrace
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
@@ -20,12 +25,16 @@ import sk.styk.martin.apkanalyzer.core.common.performance.analysisMode
 import sk.styk.martin.apkanalyzer.core.common.performance.analysisModeAttribute
 import sk.styk.martin.apkanalyzer.core.common.performance.outcome
 import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
+import java.io.File
 import java.util.concurrent.ConcurrentHashMap
+import java.util.zip.ZipFile
 import javax.inject.Inject
 import javax.inject.Singleton
 
 private const val TAG = "NativeLibrariesRepositoryImpl"
 private const val CACHE_HIT_ATTRIBUTE = "cache_hit"
+private const val NATIVE_LIBRARY_ENTRY_PREFIX = "lib/"
+private val nativeLibraryEntryRegex = Regex("""^lib/([^/]+)/([^/]+\.so)$""")
 
 @Singleton
 internal class NativeLibrariesRepositoryImpl @Inject constructor(
@@ -49,21 +58,21 @@ internal class NativeLibrariesRepositoryImpl @Inject constructor(
 
     override suspend fun nativeLibraries(reference: AppReference): Result<NativeLibraries> = performanceTracker.startCancellableTrace("native_libraries_load") {
         analysisMode = reference.analysisModeAttribute
-        loadNativeLibraries(reference)
-    }
-
-    private suspend fun PerformanceTrace.loadNativeLibraries(reference: AppReference): Result<NativeLibraries> {
         val cacheKey = reference.toCacheKey()
         cache[cacheKey]?.let {
             markCacheHit()
             outcome = TraceOutcome.Success
-            return Result.success(it)
+            return@startCancellableTrace Result.success(it)
         }
-        return runCatchingCancellable {
+        runCatchingCancellable {
             val applicationInfo = resolveApplicationInfo(reference)
             readNativeLibraries(applicationInfo, dispatcherProvider.io())
-        }.onSuccess { cache[cacheKey] = it }
-            .also { outcome = if (it.isSuccess) TraceOutcome.Success else TraceOutcome.Error }
+        }.onSuccess {
+            cache[cacheKey] = it
+            outcome = TraceOutcome.Success
+        }.onFailure {
+            outcome = TraceOutcome.Error
+        }
     }
 
     private fun resolveApplicationInfo(reference: AppReference): ApplicationInfo = when (reference) {
@@ -81,4 +90,33 @@ internal class NativeLibrariesRepositoryImpl @Inject constructor(
     private fun PerformanceTrace.markCacheHit() {
         this[CACHE_HIT_ATTRIBUTE] = true.toString()
     }
+}
+
+private suspend fun readNativeLibraries(applicationInfo: ApplicationInfo?, ioDispatcher: CoroutineDispatcher): NativeLibraries {
+    val sourceDirs = listOfNotNull(applicationInfo?.sourceDir) + applicationInfo?.splitSourceDirs.orEmpty()
+    val files = coroutineScope {
+        sourceDirs.map { sourceDir -> async(ioDispatcher) { readNativeLibraryFiles(sourceDir) } }.awaitAll()
+    }.flatten().distinctBy { it.name to it.abi }
+    return if (files.isEmpty()) NativeLibraries.Empty else NativeLibraries(files)
+}
+
+private fun readNativeLibraryFiles(sourceDir: String): List<NativeLibraryFile> = runCatching {
+    val containingApkFileName = File(sourceDir).name
+    ZipFile(sourceDir).use { zip ->
+        zip.entries().asSequence()
+            .filter { it.name.startsWith(NATIVE_LIBRARY_ENTRY_PREFIX) }
+            .mapNotNull { entry -> nativeLibraryEntryRegex.matchEntire(entry.name)?.let { it to entry } }
+            .map { (match, entry) ->
+                NativeLibraryFile(
+                    name = match.groupValues[2],
+                    abi = match.groupValues[1],
+                    size = entry.size.coerceAtLeast(0).bytes,
+                    containingApkFileName = containingApkFileName,
+                )
+            }
+            .toList()
+    }
+}.getOrElse {
+    Logger.w(TAG, it, "Can not read native libraries from $sourceDir")
+    emptyList()
 }

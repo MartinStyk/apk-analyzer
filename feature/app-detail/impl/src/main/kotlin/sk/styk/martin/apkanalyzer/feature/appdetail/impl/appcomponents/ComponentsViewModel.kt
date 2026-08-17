@@ -8,9 +8,7 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
-import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -20,7 +18,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.components.Activity
 import sk.styk.martin.apkanalyzer.core.apps.components.BroadcastReceiver
@@ -111,25 +108,18 @@ internal class ComponentsViewModel @AssistedInject constructor(
 
     private fun loadComponents() {
         source.value = ComponentsSource.Loading
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcherProvider.default()) {
             val reference = appDetailInput.toAppReference()
-            source.value = withContext(dispatcherProvider.default()) {
-                coroutineScope {
-                    val detailDeferred = async { appDetailRepository.details(reference) }
-                    val filtersDeferred = async { intentFiltersRepository.componentIntentFilters(reference) }
-                    val filtersResult = filtersDeferred.await()
-                    detailDeferred.await().fold(
-                        onSuccess = { detail ->
-                            detail.toSource(
-                                canLaunch = appDetailInput is AppDetailInput.InstalledPackage,
-                                intentFiltersByComponent = filtersResult.getOrDefault(emptyMap()),
-                                areIntentFiltersAvailable = filtersResult.isSuccess,
-                            )
-                        },
-                        onFailure = { ComponentsSource.Error },
-                    )
+            val canLaunch = appDetailInput is AppDetailInput.InstalledPackage
+            appDetailRepository.details(reference)
+                .onSuccess { detail ->
+                    source.value = detail.toSource(canLaunch = canLaunch, intentFiltersByComponent = null)
+                    val intentFilters = intentFiltersRepository.componentIntentFilters(reference).getOrNull()
+                    source.value = detail.toSource(canLaunch = canLaunch, intentFiltersByComponent = intentFilters)
                 }
-            }
+                .onFailure {
+                    source.value = ComponentsSource.Error
+                }
         }
     }
 }
@@ -146,26 +136,26 @@ private data class Narrowing(
     val filters: Set<ComponentFilter> = emptySet(),
 )
 
-private fun AppDetail.toSource(
-    canLaunch: Boolean,
-    intentFiltersByComponent: Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>,
-    areIntentFiltersAvailable: Boolean,
-) = ComponentsSource.Ready(
-    componentsByType = mapOf(
-        ComponentType.Activity to activities.map {
-            it.toItem(canLaunch, intentFiltersByComponent[ComponentIntentFilterKey(it.name, ComponentKind.Activity)].orEmpty(), areIntentFiltersAvailable)
-        }.sortedForDisplay(),
-        ComponentType.Service to services.map {
-            it.toItem(intentFiltersByComponent[ComponentIntentFilterKey(it.name, ComponentKind.Service)].orEmpty(), areIntentFiltersAvailable)
-        }.sortedForDisplay(),
-        ComponentType.Receiver to receivers.map {
-            it.toItem(canLaunch, intentFiltersByComponent[ComponentIntentFilterKey(it.name, ComponentKind.Receiver)].orEmpty(), areIntentFiltersAvailable)
-        }.sortedForDisplay(),
-        ComponentType.Provider to contentProviders.map {
-            it.toItem(intentFiltersByComponent[ComponentIntentFilterKey(it.name, ComponentKind.Provider)].orEmpty(), areIntentFiltersAvailable)
-        }.sortedForDisplay(),
-    ),
-)
+private fun AppDetail.toSource(canLaunch: Boolean, intentFiltersByComponent: Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>?) =
+    ComponentsSource.Ready(
+        componentsByType = mapOf(
+            ComponentType.Activity to activities.map {
+                it.toItem(canLaunch, intentFiltersByComponent.filtersFor(ComponentIntentFilterKey(it.name, ComponentKind.Activity)))
+            }.sortedForDisplay(),
+            ComponentType.Service to services.map {
+                it.toItem(intentFiltersByComponent.filtersFor(ComponentIntentFilterKey(it.name, ComponentKind.Service)))
+            }.sortedForDisplay(),
+            ComponentType.Receiver to receivers.map {
+                it.toItem(canLaunch, intentFiltersByComponent.filtersFor(ComponentIntentFilterKey(it.name, ComponentKind.Receiver)))
+            }.sortedForDisplay(),
+            ComponentType.Provider to contentProviders.map {
+                it.toItem(intentFiltersByComponent.filtersFor(ComponentIntentFilterKey(it.name, ComponentKind.Provider)))
+            }.sortedForDisplay(),
+        ),
+    )
+
+private fun Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>?.filtersFor(key: ComponentIntentFilterKey): List<ComponentIntentFilter>? =
+    this?.let { it[key].orEmpty() }
 
 private fun List<ComponentItem>.sortedForDisplay() = sortedWith(
     compareByDescending<ComponentItem> { it.isLauncher }
@@ -173,11 +163,7 @@ private fun List<ComponentItem>.sortedForDisplay() = sortedWith(
         .thenBy { it.simpleName.lowercase() },
 )
 
-private fun Activity.toItem(
-    canLaunch: Boolean,
-    intentFilters: List<ComponentIntentFilter>,
-    areIntentFiltersAvailable: Boolean,
-) = ComponentItem(
+private fun Activity.toItem(canLaunch: Boolean, intentFilters: List<ComponentIntentFilter>?) = ComponentItem(
     name = name,
     simpleName = name.substringAfterLast('.'),
     packagePath = name.substringBeforeLast('.', ""),
@@ -187,8 +173,7 @@ private fun Activity.toItem(
     isUnprotected = isExternallyReachableWithoutPermission,
     isLaunchable = canLaunch && isExported && permission.isNullOrBlank(),
     flags = emptyImmutableFlags,
-    intentFilters = intentFilters.toItems(),
-    areIntentFiltersAvailable = areIntentFiltersAvailable,
+    intentFilters = intentFilters?.toItems(),
     details = ComponentDetails.ActivityDetails(
         label = label,
         targetActivity = targetActivity,
@@ -198,7 +183,7 @@ private fun Activity.toItem(
     ),
 )
 
-private fun Service.toItem(intentFilters: List<ComponentIntentFilter>, areIntentFiltersAvailable: Boolean) = ComponentItem(
+private fun Service.toItem(intentFilters: List<ComponentIntentFilter>?) = ComponentItem(
     name = name,
     simpleName = name.substringAfterLast('.'),
     packagePath = name.substringBeforeLast('.', ""),
@@ -213,16 +198,11 @@ private fun Service.toItem(intentFilters: List<ComponentIntentFilter>, areIntent
         if (isIsolatedProcess) add(ComponentFlag.IsolatedProcess)
         if (isExternalService) add(ComponentFlag.ExternalService)
     }.toImmutableList(),
-    intentFilters = intentFilters.toItems(),
-    areIntentFiltersAvailable = areIntentFiltersAvailable,
+    intentFilters = intentFilters?.toItems(),
     details = ComponentDetails.ServiceDetails(permission = permission),
 )
 
-private fun BroadcastReceiver.toItem(
-    canLaunch: Boolean,
-    intentFilters: List<ComponentIntentFilter>,
-    areIntentFiltersAvailable: Boolean,
-) = ComponentItem(
+private fun BroadcastReceiver.toItem(canLaunch: Boolean, intentFilters: List<ComponentIntentFilter>?) = ComponentItem(
     name = name,
     simpleName = name.substringAfterLast('.'),
     packagePath = name.substringBeforeLast('.', ""),
@@ -232,12 +212,11 @@ private fun BroadcastReceiver.toItem(
     isUnprotected = isExternallyReachableWithoutPermission,
     isLaunchable = canLaunch && isExported && permission.isNullOrBlank(),
     flags = emptyImmutableFlags,
-    intentFilters = intentFilters.toItems(),
-    areIntentFiltersAvailable = areIntentFiltersAvailable,
+    intentFilters = intentFilters?.toItems(),
     details = ComponentDetails.ReceiverDetails(permission = permission),
 )
 
-private fun ContentProvider.toItem(intentFilters: List<ComponentIntentFilter>, areIntentFiltersAvailable: Boolean) = ComponentItem(
+private fun ContentProvider.toItem(intentFilters: List<ComponentIntentFilter>?) = ComponentItem(
     name = name,
     simpleName = name.substringAfterLast('.'),
     packagePath = name.substringBeforeLast('.', ""),
@@ -247,8 +226,7 @@ private fun ContentProvider.toItem(intentFilters: List<ComponentIntentFilter>, a
     isUnprotected = isExternallyReachableWithoutPermission,
     isLaunchable = false,
     flags = emptyImmutableFlags,
-    intentFilters = intentFilters.toItems(),
-    areIntentFiltersAvailable = areIntentFiltersAvailable,
+    intentFilters = intentFilters?.toItems(),
     details = ComponentDetails.ProviderDetails(
         authority = authority,
         readPermission = readPermission,

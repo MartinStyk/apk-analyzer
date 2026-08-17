@@ -499,7 +499,6 @@ private fun OverviewSection(
                 when (state.overviewHighlight) {
                     OverviewHighlight.SplitApks -> R.plurals.app_detail_overview_more_details_with_split_apks
                     OverviewHighlight.NetworkSecurity -> R.plurals.app_detail_overview_more_details_with_network_security
-                    OverviewHighlight.NativeLibraries -> R.plurals.app_detail_overview_more_details_with_native_libraries
                     OverviewHighlight.InstallHistory -> R.plurals.app_detail_overview_more_details_with_history
                     OverviewHighlight.InstallDate -> R.plurals.app_detail_overview_more_details_with_date
                     OverviewHighlight.None -> R.plurals.app_detail_overview_more_details

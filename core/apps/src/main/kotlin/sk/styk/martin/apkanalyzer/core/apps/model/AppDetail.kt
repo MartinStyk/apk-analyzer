@@ -18,7 +18,6 @@ data class AppDetail(
     val receivers: List<BroadcastReceiver>,
     val permissions: Permissions,
     val features: List<Feature>,
-    val hasNativeLibraries: Boolean,
 ) {
     enum class AnalysisMode {
         InstalledPackage,

@@ -27,10 +27,6 @@
         <item quantity="one">+%1$d more detail in General information, including install history</item>
         <item quantity="other">+%1$d more details in General information, including install history</item>
     </plurals>
-    <plurals name="app_detail_overview_more_details_with_native_libraries">
-        <item quantity="one">+%1$d more detail in General information, including native libraries</item>
-        <item quantity="other">+%1$d more details in General information, including native libraries</item>
-    </plurals>
     <plurals name="app_detail_overview_more_details_with_network_security">
         <item quantity="one">+%1$d more detail in General information, including network security settings</item>
         <item quantity="other">+%1$d more details in General information, including network security settings</item>

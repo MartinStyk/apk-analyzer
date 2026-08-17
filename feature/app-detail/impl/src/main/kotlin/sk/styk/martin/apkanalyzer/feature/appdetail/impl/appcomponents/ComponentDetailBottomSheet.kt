@@ -140,7 +140,8 @@ internal fun ComponentDetailBottomSheet(
                 }
             }
 
-            if (item.intentFilters.isNotEmpty()) {
+            val intentFilters = item.intentFilters
+            if (!intentFilters.isNullOrEmpty()) {
                 SheetSection(title = stringResource(R.string.components_detail_section_intent_filters)) {
                     Text(
                         text = stringResource(R.string.components_detail_intent_filters_explanation),
@@ -165,8 +166,8 @@ internal fun ComponentDetailBottomSheet(
                             Text(
                                 text = pluralStringResource(
                                     R.plurals.components_intent_filter_count,
-                                    item.intentFilters.size,
-                                    item.intentFilters.size,
+                                    intentFilters.size,
+                                    intentFilters.size,
                                 ),
                                 style = AppTheme.typography.bodySmall,
                                 color = AppTheme.colors.onSurfaceVariant,
@@ -180,7 +181,7 @@ internal fun ComponentDetailBottomSheet(
                         )
                     }
                 }
-            } else if (!item.areIntentFiltersAvailable) {
+            } else if (intentFilters == null) {
                 SheetSection(title = stringResource(R.string.components_detail_section_intent_filters)) {
                     Text(
                         text = stringResource(R.string.components_detail_intent_filters_unavailable),

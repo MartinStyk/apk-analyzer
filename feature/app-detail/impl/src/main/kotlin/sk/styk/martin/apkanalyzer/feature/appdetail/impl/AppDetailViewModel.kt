@@ -409,7 +409,6 @@ internal class AppDetailViewModel @AssistedInject constructor(
             totalSize = info.totalSize,
             lastUsedTime = info.lastUsedTime,
             installedSplitsCount = info.installedSplits.size,
-            hasNativeLibraries = hasNativeLibraries,
             usesCleartextTraffic = info.usesCleartextTraffic,
             insights = insights,
         )

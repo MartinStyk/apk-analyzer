@@ -64,17 +64,15 @@ internal class GeneralInfoViewModel @AssistedInject constructor(
         state.value = GeneralInfoState.Loading
         viewModelScope.launch {
             val reference = appDetailInput.toAppReference()
-            state.value = withContext(dispatcherProvider.default()) {
-                coroutineScope {
-                    val detailDeferred = async { appDetailRepository.details(reference) }
-                    val librariesDeferred = async { nativeLibrariesRepository.nativeLibraries(reference) }
-                    val libraries = librariesDeferred.await().getOrDefault(NativeLibraries.Empty)
-                    detailDeferred.await().fold(
-                        onSuccess = { it.toGeneralInfoState(libraries) },
-                        onFailure = { GeneralInfoState.Error },
-                    )
+            appDetailRepository.details(reference)
+                .onSuccess {
+                    state.value = it.toGeneralInfoState(NativeLibraries.Empty)
+                    val nativeLibraries = nativeLibrariesRepository.nativeLibraries(reference).getOrDefault(NativeLibraries.Empty)
+                    state.value = it.toGeneralInfoState(nativeLibraries)
                 }
-            }
+                .onFailure {
+                    state.value = GeneralInfoState.Error
+                }
         }
     }
 }

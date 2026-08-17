@@ -74,11 +74,10 @@ bounded analysis mode, cache result, availability, and terminal outcome attribut
 APK paths remain local log context, not trace attributes. Component intent-filter parsing is not one
 of these stages: it is fetched lazily and separately by `IntentFiltersRepository`, which owns its own
 `intent_filters_load` trace, because only the Components and Intent Filters screens ever need that
-data — the hub only needs component counts. The `packaging` stage itself only runs a cheap
-existence check (`hasNativeLibraries`); the full per-library breakdown is fetched lazily and
-separately by `NativeLibrariesRepository`, which owns its own `native_libraries_load` trace, because
-only the general-info and native-libraries screens need per-ABI/per-file detail — the hub only needs
-to know whether any native code ships at all.
+data — the hub only needs component counts. Native library detail follows the same pattern: it is
+fetched lazily and separately by `NativeLibrariesRepository`, which owns its own
+`native_libraries_load` trace, because only the general-info and native-libraries screens need
+per-ABI/per-file detail — the hub does not need it at all.
 
 Use `startCancellableTrace` for trace lifetime and cancellation outcome. Classify cached and uncached
 results from facts persisted in `AppDetail`; nullable storage, usage, certificate, and packaging data
@@ -112,10 +111,9 @@ Read the complete set once rather than calling `hasSystemFeature` repeatedly.
 Hardware feature names and OpenGL ES versions are different domain variants. Device support can be
 available, unavailable, or unknown; a failed device query must not become "missing."
 
-Native-library data follows a lighter version of the same boundary: the cached app model records only
-whether the APK ships native code at all (`AppDetail.hasNativeLibraries`). The full shipped ABI/library
-set comes from `NativeLibrariesRepository` instead, fetched lazily by the screens that need it; compare
-it with `Build.SUPPORTED_ABIS` at that consuming layer, not by promoting the full set into `AppDetail`.
+Native-library data follows a stricter version of the same boundary: it is not part of `AppDetail` at
+all. The full shipped ABI/library set comes from `NativeLibrariesRepository` instead, fetched lazily
+by the screens that need it; compare it with `Build.SUPPORTED_ABIS` at that consuming layer.
 
 ## Manifest and Component Semantics
 
@@ -159,15 +157,15 @@ paths remain subject to the top-level permission.
 ## Packaging Semantics
 
 Compute installed APK size from the same split list exposed to consumers so totals and breakdowns
-cannot diverge.
+cannot diverge. Split-APK size and classification live as private helpers in
+`AppDetailRepositoryImpl`, their only consumer.
 
 Read native libraries from base and split ZIP entries. Keep one file record per library name and ABI;
-derive distinct ABI and library-name summaries rather than storing competing copies.
-
-`AppDetail.hasNativeLibraries` is a cheap, short-circuiting existence check computed eagerly on every
-app-detail load. The full per-file breakdown (`NativeLibraries`, with size and containing-APK per
-library) is expensive to build and only two screens need it, so it is not part of `AppDetail` at all —
-fetch it lazily and separately through `NativeLibrariesRepository`.
+derive distinct ABI and library-name summaries rather than storing competing copies. This logic lives
+as private helpers in `NativeLibrariesRepositoryImpl`, their only consumer — none of it is part of
+`AppDetail`. The per-file breakdown (`NativeLibraries`, with size and containing-APK per library) is
+expensive to build and only two screens need it, so it is fetched lazily and separately through
+`NativeLibrariesRepository` rather than computed eagerly on every app-detail load.
 
 Install-source models preserve the installing, initiating, and originating chain. Source
 classification is a pure function over that chain and app flags, not another platform resolver call.

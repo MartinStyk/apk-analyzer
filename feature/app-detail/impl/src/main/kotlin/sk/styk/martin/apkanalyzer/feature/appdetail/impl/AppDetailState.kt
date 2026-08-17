@@ -22,7 +22,6 @@ internal enum class OverviewHighlight {
     None,
     InstallDate,
     InstallHistory,
-    NativeLibraries,
     NetworkSecurity,
     SplitApks,
 }
@@ -57,7 +56,6 @@ internal sealed interface AppDetailState {
         val lastUpdateTime: Instant?,
         val lastUsedTime: Instant? = null,
         val installedSplitsCount: Int = 0,
-        val hasNativeLibraries: Boolean = false,
         val usesCleartextTraffic: Boolean = false,
         val totalPermissionsCount: Int,
         val dangerousPermissionsCount: Int,
@@ -106,7 +104,6 @@ internal sealed interface AppDetailState {
             get() = when {
                 installedSplitsCount > 0 -> OverviewHighlight.SplitApks
                 usesCleartextTraffic -> OverviewHighlight.NetworkSecurity
-                hasNativeLibraries -> OverviewHighlight.NativeLibraries
                 firstInstallTime != null && lastUsedTime != null -> OverviewHighlight.InstallHistory
                 firstInstallTime != null || lastUsedTime != null -> OverviewHighlight.InstallDate
                 else -> OverviewHighlight.None

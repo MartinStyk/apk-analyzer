@@ -91,16 +91,14 @@ internal class IntentFiltersViewModel @AssistedInject constructor(
 
     private fun loadFilters() {
         source.value = IntentFiltersSource.Loading
-        viewModelScope.launch {
-            source.value = withContext(dispatcherProvider.default()) {
-                intentFiltersRepository.componentIntentFilters(appDetailInput.toAppReference()).fold(
-                    onSuccess = { filtersByComponent ->
-                        val key = ComponentIntentFilterKey(componentName, componentType.toComponentKind())
-                        IntentFiltersSource.Ready(componentName, componentType, filtersByComponent[key].orEmpty().toItems())
-                    },
-                    onFailure = { IntentFiltersSource.Unavailable },
-                )
-            }
+        viewModelScope.launch(dispatcherProvider.default()) {
+            source.value = intentFiltersRepository.componentIntentFilters(appDetailInput.toAppReference()).fold(
+                onSuccess = { filtersByComponent ->
+                    val key = ComponentIntentFilterKey(componentName, componentType.toComponentKind())
+                    IntentFiltersSource.Ready(componentName, componentType, filtersByComponent[key].orEmpty().toItems())
+                },
+                onFailure = { IntentFiltersSource.Unavailable },
+            )
         }
     }
 }

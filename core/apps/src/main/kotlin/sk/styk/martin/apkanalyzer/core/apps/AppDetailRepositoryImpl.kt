@@ -23,9 +23,8 @@ import sk.styk.martin.apkanalyzer.core.apps.installsource.resolveAppInstallSourc
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.model.AppInfo
 import sk.styk.martin.apkanalyzer.core.apps.model.InstallLocation
-import sk.styk.martin.apkanalyzer.core.apps.packaging.computeApkSize
-import sk.styk.martin.apkanalyzer.core.apps.packaging.hasNativeLibraries
-import sk.styk.martin.apkanalyzer.core.apps.packaging.readInstalledSplits
+import sk.styk.martin.apkanalyzer.core.apps.packaging.InstalledSplitApk
+import sk.styk.martin.apkanalyzer.core.apps.packaging.SplitApkKind
 import sk.styk.martin.apkanalyzer.core.apps.permissions.Permission
 import sk.styk.martin.apkanalyzer.core.apps.permissions.PermissionDefinitionResolver
 import sk.styk.martin.apkanalyzer.core.apps.permissions.Permissions
@@ -43,6 +42,7 @@ import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppReferenceCacheKey
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
+import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import sk.styk.martin.apkanalyzer.core.common.model.toCacheKey
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTrace
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
@@ -179,7 +179,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun PerformanceTrace.getPackageDetails(
+    private fun PerformanceTrace.getPackageDetails(
         context: String,
         analysisMode: AppDetail.AnalysisMode,
         packageInfo: PackageInfo,
@@ -223,10 +223,6 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             getFeatures(packageInfo)
         }
 
-        val nativeLibrariesPresent = timedStage("packaging", "packaging_ms", context) {
-            hasNativeLibraries(packageInfo.applicationInfo, dispatcherProvider.io())
-        }
-
         return AppDetail(
             analysisMode = analysisMode,
             info = info,
@@ -237,7 +233,6 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             receivers = components.receivers,
             permissions = permissions,
             features = features,
-            hasNativeLibraries = nativeLibrariesPresent,
         )
     }
 
@@ -258,11 +253,6 @@ internal class AppDetailRepositoryImpl @Inject constructor(
 
     private fun <T> T?.warnIfDegraded(stage: String, context: String): T? {
         if (this == null) warnDegraded(stage, context)
-        return this
-    }
-
-    private fun <T> Result<T>.warnIfDegraded(stage: String, context: String): Result<T> {
-        if (isFailure) warnDegraded(stage, context)
         return this
     }
 
@@ -435,3 +425,50 @@ private fun PerformanceTrace.recordErrorPreserving(failure: Throwable) {
 private const val CACHE_HIT_ATTRIBUTE = "cache_hit"
 private const val AVAILABILITY_AVAILABLE = "available"
 private const val AVAILABILITY_UNAVAILABLE = "unavailable"
+
+private val SPLIT_ABI_QUALIFIERS = mapOf(
+    "armeabi" to "armeabi",
+    "armeabi_v7a" to "armeabi-v7a",
+    "arm64_v8a" to "arm64-v8a",
+    "x86" to "x86",
+    "x86_64" to "x86_64",
+    "mips" to "mips",
+    "mips64" to "mips64",
+)
+
+private val SPLIT_DENSITY_QUALIFIERS = setOf(
+    "ldpi", "mdpi", "tvdpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi", "nodpi", "anydpi",
+)
+
+private fun computeApkSize(applicationInfo: ApplicationInfo?): AppSize {
+    val baseApkSize = applicationInfo?.sourceDir?.let { File(it).length() } ?: 0L
+    val splitApksSize = readInstalledSplits(applicationInfo).sumOf { it.size.bytes }
+    return (baseApkSize + splitApksSize).bytes
+}
+
+private fun readInstalledSplits(applicationInfo: ApplicationInfo?): List<InstalledSplitApk> = applicationInfo?.splitSourceDirs.orEmpty().map { path ->
+    val file = File(path)
+    val (kind, qualifier) = classifySplitApk(file.name)
+    InstalledSplitApk(
+        fileName = file.name,
+        filePath = path,
+        size = file.length().bytes,
+        kind = kind,
+        qualifier = qualifier,
+    )
+}
+
+private fun classifySplitApk(fileName: String): Pair<SplitApkKind, String> {
+    val baseName = fileName.removeSuffix(".apk")
+    val configQualifier = baseName.removePrefix("split_config.")
+    if (configQualifier != baseName) {
+        val abi = SPLIT_ABI_QUALIFIERS[configQualifier.lowercase()]
+        return when {
+            abi != null -> SplitApkKind.Abi to abi
+            configQualifier.lowercase() in SPLIT_DENSITY_QUALIFIERS -> SplitApkKind.ScreenDensity to configQualifier
+            else -> SplitApkKind.Language to configQualifier
+        }
+    }
+    val moduleName = baseName.removePrefix("split_").substringBefore(".config.")
+    return SplitApkKind.DynamicFeature to moduleName
+}
