@@ -46,6 +46,8 @@ import sk.styk.martin.apkanalyzer.core.apps.signing.AppSigningRepository
 import sk.styk.martin.apkanalyzer.core.apps.signing.AppSigningRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateExtractor
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateExtractorImpl
+import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeRepository
+import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepository
 import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
@@ -84,6 +86,10 @@ internal interface AppsModule {
     @Binds
     @Singleton
     fun bindApkSigningBlockParser(impl: ApkSigningBlockParserImpl): ApkSigningBlockParser
+
+    @Binds
+    @Singleton
+    fun bindSigningSchemeRepository(impl: SigningSchemeRepositoryImpl): SigningSchemeRepository
 
     // permissions
     @Binds

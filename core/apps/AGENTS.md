@@ -42,9 +42,10 @@ cached `AppDetail`; consumers combine app facts with device repositories separat
 `PackageChangesObserver` invalidates installed-package data. APK-file inputs and device state have
 different lifecycles and must not be smuggled into that cache key.
 
-Expensive device-wide signing work is shared lazily. Single-app signing-scheme inspection stays in
-the app-detail path so merely collecting the device-wide signer index does not read every APK signing
-block.
+Expensive device-wide signing work is shared lazily. Single-app signing-scheme inspection is itself
+expensive (it reads the APK's signing block directly) and only the Certificates screen shows it, so
+it is fetched lazily and separately by `SigningSchemeRepository` rather than being collected as part
+of the device-wide signer index or the app-detail path.
 
 ## Loading Observability
 
@@ -68,16 +69,17 @@ layer that owns that outcome. Let coroutine cancellation propagate without loggi
 and APK file paths are valid diagnostic context.
 
 `AppDetailRepositoryImpl` owns one `app_detail_load` trace around the complete public request,
-including cache hits. Every internal stage (package query, certificates, signing schemes,
-permissions, packaging, ...) records its own `<stage>_ms` metric via `timedStage`, alongside the
-bounded analysis mode, cache result, availability, and terminal outcome attributes; package names and
-APK paths remain local log context, not trace attributes. Component intent-filter parsing is not one
-of these stages: it is fetched lazily and separately by `IntentFiltersRepository`, which owns its own
-`intent_filters_load` trace, because only the Components and Intent Filters screens ever need that
-data — the hub only needs component counts. Native library detail follows the same pattern: it is
-fetched lazily and separately by `NativeLibrariesRepository`, which owns its own
-`native_libraries_load` trace, because only the general-info and native-libraries screens need
-per-ABI/per-file detail — the hub does not need it at all.
+including cache hits. Every internal stage (package query, certificates, permissions, packaging,
+...) records its own `<stage>_ms` metric via `timedStage`, alongside the bounded analysis mode,
+cache result, and terminal outcome attributes; package names and APK paths remain local log context,
+not trace attributes. Component intent-filter parsing is not one of these stages: it is fetched
+lazily and separately by `IntentFiltersRepository`, which owns its own `intent_filters_load` trace,
+because only the Components and Intent Filters screens ever need that data — the hub only needs
+component counts. Native library detail and signing-scheme detection follow the same pattern: they
+are fetched lazily and separately by `NativeLibrariesRepository` (`native_libraries_load` trace) and
+`SigningSchemeRepository` (`signing_scheme_load` trace) respectively, because only the
+general-info/native-libraries screens and the Certificates screen need that detail — the hub does
+not need any of it.
 
 Use `startCancellableTrace` for trace lifetime and cancellation outcome. Classify cached and uncached
 results from facts persisted in `AppDetail`; nullable storage, usage, certificate, and packaging data

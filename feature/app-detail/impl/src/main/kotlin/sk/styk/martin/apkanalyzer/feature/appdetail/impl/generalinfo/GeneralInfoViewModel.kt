@@ -8,14 +8,11 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraries
@@ -62,7 +59,7 @@ internal class GeneralInfoViewModel @AssistedInject constructor(
 
     private fun loadDetail() {
         state.value = GeneralInfoState.Loading
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcherProvider.default()) {
             val reference = appDetailInput.toAppReference()
             appDetailRepository.details(reference)
                 .onSuccess {

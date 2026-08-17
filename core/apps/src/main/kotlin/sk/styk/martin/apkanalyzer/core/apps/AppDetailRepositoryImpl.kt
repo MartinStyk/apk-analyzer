@@ -31,7 +31,6 @@ import sk.styk.martin.apkanalyzer.core.apps.permissions.Permissions
 import sk.styk.martin.apkanalyzer.core.apps.permissions.UsedPermission
 import sk.styk.martin.apkanalyzer.core.apps.permissions.toPermissionDetails
 import sk.styk.martin.apkanalyzer.core.apps.sdkversion.SdkVersionResolver
-import sk.styk.martin.apkanalyzer.core.apps.signing.ApkSigningBlockAnalyzer
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateExtractor
 import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepository
 import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
@@ -67,7 +66,6 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     private val sdkVersionResolver: SdkVersionResolver,
     private val installSourceResolver: InstallSourceResolver,
     private val certificateExtractor: CertificateExtractor,
-    private val apkSigningBlockAnalyzer: ApkSigningBlockAnalyzer,
     private val permissionDefinitionResolver: PermissionDefinitionResolver,
     private val storageStatsRepository: StorageStatsRepository,
     private val usageStatsRepository: UsageStatsRepository,
@@ -102,7 +100,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             is AppReference.InstalledPackage -> installedPackageDetails(reference.packageName)
             is AppReference.ApkFile -> apkFilePackageDetails(File(reference.path))
         }.onSuccess {
-            recordResult(it)
+            outcome = TraceOutcome.Success
         }.onFailure {
             recordErrorPreserving(it)
         }
@@ -139,11 +137,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             )
         }.onSuccess { detail ->
             cache[cacheKey] = detail
-            if (!detail.isPerformanceDegraded) {
-                Logger.i(TAG, "App detail loading finished: $context")
-            } else {
-                Logger.w(TAG, "App detail loading degraded: optional analysis unavailable, $context")
-            }
+            Logger.i(TAG, "App detail loading finished: $context")
         }.onFailure {
             Logger.e(TAG, it, "App detail loading failed: $context")
         }
@@ -194,10 +188,6 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             certificateExtractor.getAppSigning(packageInfo)
         }
 
-        val signingSchemeVersions = timedStage("signing schemes", "signing_schemes_ms", context) {
-            packageInfo.applicationInfo?.sourceDir?.let(apkSigningBlockAnalyzer::detectSchemeVersions)
-        }.warnIfDegraded("signing schemes", context)
-
         val launcherActivityNames = when (analysisMode) {
             AppDetail.AnalysisMode.InstalledPackage -> timedStage("launcher activities", "launcher_activities_ms", context) {
                 queryLauncherActivityNames(PackageName(packageInfo.packageName))
@@ -226,7 +216,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         return AppDetail(
             analysisMode = analysisMode,
             info = info,
-            signing = signing.copy(signingSchemeVersions = signingSchemeVersions),
+            signing = signing,
             activities = components.activities,
             services = components.services,
             contentProviders = components.contentProviders,
@@ -405,14 +395,6 @@ internal class AppDetailRepositoryImpl @Inject constructor(
 
 private val launcherCategories = listOf(Intent.CATEGORY_LAUNCHER, Intent.CATEGORY_LEANBACK_LAUNCHER)
 
-private val AppDetail.isPerformanceDegraded: Boolean
-    get() = signing.signingSchemeVersions == null
-
-private fun PerformanceTrace.recordResult(detail: AppDetail) {
-    this["signing_schemes"] = if (detail.signing.signingSchemeVersions != null) AVAILABILITY_AVAILABLE else AVAILABILITY_UNAVAILABLE
-    outcome = if (detail.isPerformanceDegraded) TraceOutcome.Degraded else TraceOutcome.Success
-}
-
 private fun PerformanceTrace.recordErrorPreserving(failure: Throwable) {
     val telemetryFailure = runCatching {
         outcome = TraceOutcome.Error
@@ -423,8 +405,6 @@ private fun PerformanceTrace.recordErrorPreserving(failure: Throwable) {
 }
 
 private const val CACHE_HIT_ATTRIBUTE = "cache_hit"
-private const val AVAILABILITY_AVAILABLE = "available"
-private const val AVAILABILITY_UNAVAILABLE = "unavailable"
 
 private val SPLIT_ABI_QUALIFIERS = mapOf(
     "armeabi" to "armeabi",
