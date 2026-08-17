@@ -10,10 +10,13 @@ import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.settings.Key
 import sk.styk.martin.apkanalyzer.core.common.settings.PersistenceRepository
+import java.time.Duration
+import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
 
 private const val QUALIFIED_SESSION_THRESHOLD = 2
+private val MIN_QUALIFYING_DWELL = Duration.ofSeconds(5)
 
 @Singleton
 internal class ReviewEligibilityTrackerImpl @Inject constructor(
@@ -32,7 +35,13 @@ internal class ReviewEligibilityTrackerImpl @Inject constructor(
         .filter { eligible -> eligible }
         .map { }
 
-    override fun recordAppDetailSessionCompleted(qualified: Boolean) {
+    override fun recordAppDetailSessionCompleted(
+        startTime: Instant,
+        endTime: Instant,
+        engaged: Boolean,
+    ) {
+        val dwelled = Duration.between(startTime, endTime) >= MIN_QUALIFYING_DWELL
+        val qualified = engaged || dwelled
         if (!qualified) return
         applicationScope.launch(dispatcherProvider.io()) {
             val current = persistenceRepository.get(Key.AppDetailQualifiedSessionCount)

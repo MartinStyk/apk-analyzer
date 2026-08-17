@@ -9,7 +9,9 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -49,7 +51,6 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.toJavaDuration
 
 private const val TAG = "AppDetailViewModel"
-private val MIN_QUALIFYING_DWELL: Duration = Duration.ofSeconds(8)
 
 @Suppress("TooManyFunctions")
 @HiltViewModel(assistedFactory = AppDetailViewModel.Factory::class)
@@ -65,6 +66,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
     private val clipboardManager: ClipboardManager,
     private val summaryTextFormatter: AppSummaryTextFormatter,
     private val reviewEligibilityTracker: ReviewEligibilityTracker,
+    private val analytics: AppDetailAnalytics,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -117,9 +119,15 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
             is AppDetailAction.ShareSummaryUnavailable -> sendEvent(AppDetailEvent.ShowFeedback(AppDetailFeedback.ShareUnavailable))
 
-            is AppDetailAction.OpenPlayStore -> withLoadedState { sendEvent(AppDetailEvent.OpenPlayStore(it.packageName)) }
+            is AppDetailAction.OpenPlayStore -> withLoadedState {
+                analytics.track(AppDetailAnalyticsEvent.ActionPerformed(AppDetailAnalyticsEvent.Action.OpenPlayStore))
+                sendEvent(AppDetailEvent.OpenPlayStore(it.packageName))
+            }
 
-            is AppDetailAction.OpenAppInfo -> withLoadedState { sendEvent(AppDetailEvent.OpenAppInfo(it.packageName)) }
+            is AppDetailAction.OpenAppInfo -> withLoadedState {
+                analytics.track(AppDetailAnalyticsEvent.ActionPerformed(AppDetailAnalyticsEvent.Action.OpenAppInfo))
+                sendEvent(AppDetailEvent.OpenAppInfo(it.packageName))
+            }
 
             is AppDetailAction.NavigateGeneralDetails -> sendSectionEvent(AppDetailEvent.NavigateToGeneralDetails)
 
@@ -165,42 +173,48 @@ internal class AppDetailViewModel @AssistedInject constructor(
                 Logger.e(TAG, error, "Unable to release temporary APK")
             }
         }
-        val dwelled = Duration.between(sessionStartedAt, Instant.now()) >= MIN_QUALIFYING_DWELL
-        reviewEligibilityTracker.recordAppDetailSessionCompleted(qualified = engaged || dwelled)
+        reviewEligibilityTracker.recordAppDetailSessionCompleted(
+            startTime = sessionStartedAt,
+            endTime = Instant.now(),
+            engaged = engaged,
+        )
     }
 
-    private fun requestDocument(export: AppDetailExport) {
-        withLoadedState { state ->
-            if (exportInProgress.value != null) return@withLoadedState
-            if (export == AppDetailExport.Apk && appDetailInput !is AppDetailInput.InstalledPackage) return@withLoadedState
-            val extension = if (export == AppDetailExport.Apk) "apk" else "png"
-            exportInProgress.value = export
-            sendEvent(AppDetailEvent.CreateDocument(export, "${state.packageName}.$extension"))
+    private fun requestDocument(export: AppDetailExport) = withLoadedState { state ->
+        if (exportInProgress.value != null) return@withLoadedState
+        if (export == AppDetailExport.Apk && appDetailInput !is AppDetailInput.InstalledPackage) return@withLoadedState
+        val extension = if (export == AppDetailExport.Apk) "apk" else "png"
+        exportInProgress.value = export
+        analytics.track(
+            AppDetailAnalyticsEvent.ActionPerformed(
+                when (export) {
+                    AppDetailExport.Apk -> AppDetailAnalyticsEvent.Action.ExportApk
+                    AppDetailExport.Icon -> AppDetailAnalyticsEvent.Action.ExportIcon
+                },
+            ),
+        )
+        sendEvent(AppDetailEvent.CreateDocument(export, "${state.packageName}.$extension"))
+    }
+
+    private fun viewSummary() = withLoadedState { state ->
+        analytics.track(AppDetailAnalyticsEvent.ActionPerformed(AppDetailAnalyticsEvent.Action.ViewSummary))
+        sendEvent(AppDetailEvent.ShowSummaryPreview(summaryTextFormatter.summary(state)))
+    }
+
+    private fun copySummary() = withLoadedState { state ->
+        engaged = true
+        analytics.track(AppDetailAnalyticsEvent.ActionPerformed(AppDetailAnalyticsEvent.Action.CopySummary))
+        val summary = summaryTextFormatter.summary(state)
+        val label = summaryTextFormatter.clipLabel(state.appName)
+        if (clipboardManager.copy(label, summary) == CopyResult.FeedbackNotShown) {
+            sendEvent(AppDetailEvent.ShowFeedback(AppDetailFeedback.SummaryCopied))
         }
     }
 
-    private fun viewSummary() {
-        withLoadedState { state ->
-            sendEvent(AppDetailEvent.ShowSummaryPreview(summaryTextFormatter.summary(state)))
-        }
-    }
-
-    private fun copySummary() {
-        withLoadedState { state ->
-            engaged = true
-            val summary = summaryTextFormatter.summary(state)
-            val label = summaryTextFormatter.clipLabel(state.appName)
-            if (clipboardManager.copy(label, summary) == CopyResult.FeedbackNotShown) {
-                sendEvent(AppDetailEvent.ShowFeedback(AppDetailFeedback.SummaryCopied))
-            }
-        }
-    }
-
-    private fun shareSummary() {
-        withLoadedState { state ->
-            engaged = true
-            sendEvent(AppDetailEvent.ShareSummary(summaryTextFormatter.summary(state)))
-        }
+    private fun shareSummary() = withLoadedState { state ->
+        engaged = true
+        analytics.track(AppDetailAnalyticsEvent.ActionPerformed(AppDetailAnalyticsEvent.Action.ShareSummary))
+        sendEvent(AppDetailEvent.ShareSummary(summaryTextFormatter.summary(state)))
     }
 
     private fun navigateToInsight(insight: AppDetailInsight) {
@@ -215,7 +229,8 @@ internal class AppDetailViewModel @AssistedInject constructor(
             AppDetailInsight.CertificateNotYetValid,
             -> sendSectionEvent(AppDetailEvent.NavigateToCertificates)
 
-            is AppDetailInsight.SensitivePermission -> sendSectionEvent(AppDetailEvent.NavigateToPermissions(insight.permissionName))
+            is AppDetailInsight.SensitivePermission ->
+                sendSectionEvent(AppDetailEvent.NavigateToPermissions(insight.permissionName))
         }
     }
 
@@ -243,8 +258,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
         activeExport = AppDetailExport.Icon
         exportInProgress.value = AppDetailExport.Icon
         viewModelScope.launch {
-            val result = appExportManager.exportIcon(appReference, destination)
-            val feedback = result.fold(
+            val feedback = appExportManager.exportIcon(appReference, destination).fold(
                 onSuccess = {
                     engaged = true
                     AppDetailFeedback.IconSaved(it.displayName)
@@ -263,6 +277,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
     private fun sendSectionEvent(event: AppDetailEvent) {
         engaged = true
+        analytics.track(AppDetailAnalyticsEvent.SectionOpened(event.toSection()))
         sendEvent(event)
     }
 
@@ -272,17 +287,16 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
     private fun loadDetail() {
         source.value = AppDetailSource.Loading
-        viewModelScope.launch {
-            val deviceFeatures = deviceFeaturesRepository.deviceFeatures()
-            val detailResult = withContext(dispatcherProvider.default()) {
-                appDetailRepository.details(appReference)
+        viewModelScope.launch(dispatcherProvider.default()) {
+            val (deviceFeatures, detailResult) = coroutineScope {
+                val featuresDeferred = async { deviceFeaturesRepository.deviceFeatures() }
+                val detailDeferred = async { appDetailRepository.details(appReference) }
+                featuresDeferred.await() to detailDeferred.await()
             }
             source.value = detailResult.fold(
                 onSuccess = { detail ->
-                    AppDetailSource.Ready(
-                        detail.toLoadedState(permissionLabelProvider, deviceFeatures)
-                            .withComputedBadges(Instant.now()),
-                    )
+                    analytics.track(AppDetailAnalyticsEvent.Opened(appReference))
+                    AppDetailSource.Ready(detail.toLoadedState(deviceFeatures).withComputedBadges(Instant.now()))
                 },
                 onFailure = { AppDetailSource.Error },
             )
@@ -290,6 +304,111 @@ internal class AppDetailViewModel @AssistedInject constructor(
                 recentlyViewedAppsRepository.addRecent(appReference.packageName)
             }
         }
+    }
+
+    private fun AppDetailState.Loaded.withComputedBadges(now: Instant): AppDetailState.Loaded = copy(
+        badges = buildList {
+            val effectiveSize = totalSize ?: apkSize
+            if (effectiveSize >= AppClassificationThresholds.LARGE_SIZE) add(AppDetailBadge.Large)
+            if (isSystemApp) add(AppDetailBadge.System)
+            firstInstallTime?.let { installTime ->
+                if (installTime.isAfter(now.minus(AppClassificationThresholds.RECENT_PERIOD))) add(AppDetailBadge.RecentlyInstalled)
+            }
+            lastUpdateTime?.let { updateTime ->
+                if (updateTime.isAfter(now.minus(AppClassificationThresholds.RECENT_PERIOD))) add(AppDetailBadge.RecentlyUpdated)
+            }
+            lastUsedTime?.let { lastUsed ->
+                if (lastUsed.isAfter(now.minus(AppClassificationThresholds.RECENTLY_USED_DAYS.days.toJavaDuration()))) add(AppDetailBadge.RecentlyUsed)
+            }
+            if (source == AppSource.GooglePlay) add(AppDetailBadge.GooglePlay)
+        }.take(MAX_BADGES).toImmutableList(),
+    )
+
+    private fun AppDetail.toLoadedState(deviceFeatures: DeviceFeatures): AppDetailState.Loaded {
+        val dangerousPermissions = permissions.used.filter {
+            it.permissionData.details?.protectionLevel == ProtectionLevel.Dangerous
+        }
+        val relevantDangerousPermissions = when (analysisMode) {
+            AppDetail.AnalysisMode.InstalledPackage -> dangerousPermissions.filter { it.isGranted }
+            AppDetail.AnalysisMode.ApkFile -> dangerousPermissions
+        }
+        val currentCertificate = signing.currentCertificates.firstOrNull()
+        val insights = AppDetailInsightEvaluator.evaluate(
+            appDetail = this,
+            now = Instant.now(),
+            deviceSdk = Build.VERSION.SDK_INT,
+        )
+        return AppDetailState.Loaded(
+            analysisMode = analysisMode,
+            appName = info.applicationName,
+            packageName = info.packageName,
+            processName = info.processName,
+            versionName = info.versionName,
+            versionCode = info.versionCode,
+            uid = info.uid,
+            description = info.description,
+            isSystemApp = info.isSystemApp,
+            source = info.source,
+            apkDirectory = info.apkDirectory,
+            dataDirectory = info.dataDirectory,
+            apkSize = info.apkSize,
+            targetSdkVersion = info.targetSdkVersion,
+            targetSdkLabel = info.targetSdkLabel,
+            minSdkVersion = info.minSdkVersion,
+            minSdkLabel = info.minSdkLabel,
+            installLocation = info.installLocation.name,
+            appInstaller = info.installSourceChain.installingPackage,
+            firstInstallTime = info.firstInstallTime,
+            lastUpdateTime = info.lastUpdateTime,
+            totalPermissionsCount = permissions.used.size,
+            dangerousPermissionsCount = dangerousPermissions.size,
+            grantedDangerousPermissionsCount = dangerousPermissions
+                .takeIf { analysisMode == AppDetail.AnalysisMode.InstalledPackage }
+                ?.count { it.isGranted },
+            dangerousPermissionPreviews = relevantDangerousPermissions
+                .map {
+                    AppDetailState.Loaded.PermissionPreview(
+                        name = it.permissionData.name,
+                        groupName = it.permissionData.details?.groupName,
+                        label = permissionLabelProvider.getLabel(it.permissionData.name),
+                    )
+                }
+                .toImmutableList(),
+            definedPermissionsCount = permissions.defined.size,
+            activitiesCount = activities.size,
+            servicesCount = services.size,
+            contentProvidersCount = contentProviders.size,
+            broadcastReceiversCount = receivers.size,
+            certificatesCount = signing.currentCertificates.size,
+            requirementsCount = features.size,
+            requiredFeaturesCount = features.count { it.isRequired },
+            optionalFeaturesCount = features.count { !it.isRequired },
+            unmetRequirementsCount = features.count { it.isRequired && deviceFeatures.availabilityOf(it) == FeatureAvailability.Missing },
+            requirementPreviews = features
+                .sortedWith(compareBy({ deviceFeatures.availabilityOf(it) != FeatureAvailability.Missing }, { !it.isRequired }))
+                .take(MAX_REQUIREMENT_PREVIEWS)
+                .map {
+                    AppDetailState.Loaded.RequirementPreview(
+                        name = (it as? Feature.Hardware)?.name,
+                        isUnmetRequirement = it.isRequired && deviceFeatures.availabilityOf(it) == FeatureAvailability.Missing,
+                    )
+                }
+                .toImmutableList(),
+            certificate = currentCertificate?.let { cert ->
+                AppDetailState.Loaded.CertificateState(
+                    signAlgorithm = cert.signAlgorithm,
+                    sha256Fingerprint = cert.formattedSha256Fingerprint,
+                    issuer = cert.issuer,
+                    trustLevel = cert.trustLevel,
+                )
+            },
+            totalSize = info.totalSize,
+            lastUsedTime = info.lastUsedTime,
+            installedSplitsCount = info.installedSplits.size,
+            hasNativeLibraries = nativeLibraries.hasNativeCode,
+            usesCleartextTraffic = info.usesCleartextTraffic,
+            insights = insights,
+        )
     }
 }
 
@@ -302,107 +421,16 @@ private sealed interface AppDetailSource {
 private const val MAX_BADGES = 3
 private const val MAX_REQUIREMENT_PREVIEWS = 6
 
-private fun AppDetailState.Loaded.withComputedBadges(now: Instant): AppDetailState.Loaded = copy(
-    badges = buildList {
-        val effectiveSize = totalSize ?: apkSize
-        if (effectiveSize >= AppClassificationThresholds.LARGE_SIZE) add(AppDetailBadge.Large)
-        if (isSystemApp) add(AppDetailBadge.System)
-        firstInstallTime?.let { installTime ->
-            if (installTime.isAfter(now.minus(AppClassificationThresholds.RECENT_PERIOD))) add(AppDetailBadge.RecentlyInstalled)
-        }
-        lastUpdateTime?.let { updateTime ->
-            if (updateTime.isAfter(now.minus(AppClassificationThresholds.RECENT_PERIOD))) add(AppDetailBadge.RecentlyUpdated)
-        }
-        lastUsedTime?.let { lastUsed ->
-            if (lastUsed.isAfter(now.minus(AppClassificationThresholds.RECENTLY_USED_DAYS.days.toJavaDuration()))) add(AppDetailBadge.RecentlyUsed)
-        }
-        if (source == AppSource.GooglePlay) add(AppDetailBadge.GooglePlay)
-    }.take(MAX_BADGES).toImmutableList(),
-)
-
-private fun AppDetail.toLoadedState(permissionLabelProvider: PermissionLabelProvider, deviceFeatures: DeviceFeatures): AppDetailState.Loaded {
-    val dangerousPermissions = permissions.used.filter {
-        it.permissionData.details?.protectionLevel == ProtectionLevel.Dangerous
-    }
-    val relevantDangerousPermissions = when (analysisMode) {
-        AppDetail.AnalysisMode.InstalledPackage -> dangerousPermissions.filter { it.isGranted }
-        AppDetail.AnalysisMode.ApkFile -> dangerousPermissions
-    }
-    val currentCertificate = signing.currentCertificates.firstOrNull()
-    val insights = AppDetailInsightEvaluator.evaluate(
-        appDetail = this,
-        now = Instant.now(),
-        deviceSdk = Build.VERSION.SDK_INT,
-    )
-    return AppDetailState.Loaded(
-        analysisMode = analysisMode,
-        appName = info.applicationName,
-        packageName = info.packageName,
-        processName = info.processName,
-        versionName = info.versionName,
-        versionCode = info.versionCode,
-        uid = info.uid,
-        description = info.description,
-        isSystemApp = info.isSystemApp,
-        source = info.source,
-        apkDirectory = info.apkDirectory,
-        dataDirectory = info.dataDirectory,
-        apkSize = info.apkSize,
-        targetSdkVersion = info.targetSdkVersion,
-        targetSdkLabel = info.targetSdkLabel,
-        minSdkVersion = info.minSdkVersion,
-        minSdkLabel = info.minSdkLabel,
-        installLocation = info.installLocation.name,
-        appInstaller = info.installSourceChain.installingPackage,
-        firstInstallTime = info.firstInstallTime,
-        lastUpdateTime = info.lastUpdateTime,
-        totalPermissionsCount = permissions.used.size,
-        dangerousPermissionsCount = dangerousPermissions.size,
-        grantedDangerousPermissionsCount = dangerousPermissions
-            .takeIf { analysisMode == AppDetail.AnalysisMode.InstalledPackage }
-            ?.count { it.isGranted },
-        dangerousPermissionPreviews = relevantDangerousPermissions
-            .map {
-                AppDetailState.Loaded.PermissionPreview(
-                    name = it.permissionData.name,
-                    groupName = it.permissionData.details?.groupName,
-                    label = permissionLabelProvider.getLabel(it.permissionData.name),
-                )
-            }
-            .toImmutableList(),
-        definedPermissionsCount = permissions.defined.size,
-        activitiesCount = activities.size,
-        servicesCount = services.size,
-        contentProvidersCount = contentProviders.size,
-        broadcastReceiversCount = receivers.size,
-        certificatesCount = signing.currentCertificates.size,
-        requirementsCount = features.size,
-        requiredFeaturesCount = features.count { it.isRequired },
-        optionalFeaturesCount = features.count { !it.isRequired },
-        unmetRequirementsCount = features.count { it.isRequired && deviceFeatures.availabilityOf(it) == FeatureAvailability.Missing },
-        requirementPreviews = features
-            .sortedWith(compareBy({ deviceFeatures.availabilityOf(it) != FeatureAvailability.Missing }, { !it.isRequired }))
-            .take(MAX_REQUIREMENT_PREVIEWS)
-            .map {
-                AppDetailState.Loaded.RequirementPreview(
-                    name = (it as? Feature.Hardware)?.name,
-                    isUnmetRequirement = it.isRequired && deviceFeatures.availabilityOf(it) == FeatureAvailability.Missing,
-                )
-            }
-            .toImmutableList(),
-        certificate = currentCertificate?.let { cert ->
-            AppDetailState.Loaded.CertificateState(
-                signAlgorithm = cert.signAlgorithm,
-                sha256Fingerprint = cert.formattedSha256Fingerprint,
-                issuer = cert.issuer,
-                trustLevel = cert.trustLevel,
-            )
-        },
-        totalSize = info.totalSize,
-        lastUsedTime = info.lastUsedTime,
-        installedSplitsCount = info.installedSplits.size,
-        hasNativeLibraries = nativeLibraries.hasNativeCode,
-        usesCleartextTraffic = info.usesCleartextTraffic,
-        insights = insights,
-    )
+private fun AppDetailEvent.toSection(): AppDetailAnalyticsEvent.Section = when (this) {
+    AppDetailEvent.NavigateToManifest -> AppDetailAnalyticsEvent.Section.Manifest
+    AppDetailEvent.NavigateToGeneralDetails -> AppDetailAnalyticsEvent.Section.General
+    is AppDetailEvent.NavigateToPermissions -> AppDetailAnalyticsEvent.Section.Permissions
+    AppDetailEvent.NavigateToComponents -> AppDetailAnalyticsEvent.Section.Components
+    AppDetailEvent.NavigateToActivities -> AppDetailAnalyticsEvent.Section.Activities
+    AppDetailEvent.NavigateToServices -> AppDetailAnalyticsEvent.Section.Services
+    AppDetailEvent.NavigateToReceivers -> AppDetailAnalyticsEvent.Section.Receivers
+    AppDetailEvent.NavigateToProviders -> AppDetailAnalyticsEvent.Section.Providers
+    AppDetailEvent.NavigateToCertificates -> AppDetailAnalyticsEvent.Section.Certificates
+    AppDetailEvent.NavigateToFeatures -> AppDetailAnalyticsEvent.Section.Features
+    else -> error("Unexpected event type: $this")
 }

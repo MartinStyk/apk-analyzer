@@ -30,6 +30,7 @@ internal class BrowseViewModel @Inject constructor(
     installedAppsRepository: InstalledAppsRepository,
     private val labeler: BrowseDimensionLabeler,
     dispatcherProvider: DispatcherProvider,
+    private val analytics: BrowseAnalytics,
 ) : ViewModel() {
 
     val state: StateFlow<BrowseState> = combine(
@@ -42,9 +43,16 @@ internal class BrowseViewModel @Inject constructor(
     private val eventChannel = Channel<BrowseEvent>(Channel.BUFFERED)
     val events = eventChannel.receiveAsFlow()
 
+    init {
+        analytics.track(BrowseAnalyticsEvent.TabOpened)
+    }
+
     fun onAction(action: BrowseAction) {
         when (action) {
-            is BrowseAction.SelectDimension -> eventChannel.trySend(BrowseEvent.NavigateToDimension(action.dimension))
+            is BrowseAction.SelectDimension -> {
+                analytics.track(BrowseAnalyticsEvent.DimensionOpened(action.dimension))
+                eventChannel.trySend(BrowseEvent.NavigateToDimension(action.dimension))
+            }
         }
     }
 

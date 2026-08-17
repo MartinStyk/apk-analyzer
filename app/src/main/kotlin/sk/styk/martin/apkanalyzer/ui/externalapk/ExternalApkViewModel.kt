@@ -53,28 +53,22 @@ internal class ExternalApkViewModel @AssistedInject constructor(
         savedStateHandle.remove<String>(CACHED_APK_PATH_KEY)
     }
 
-    private fun load() {
-        viewModelScope.launch {
-            val result = temporaryApkManager.copy(
-                uri = sourceUri.toUri(),
-                taskId = taskId,
-            )
-            result.fold(
-                onSuccess = { file ->
-                    cachedFile?.let { previousFile ->
-                        temporaryApkManager.release(previousFile.absolutePath).onFailure { error ->
-                            Logger.e(TAG, error, "Unable to release replaced external APK")
-                        }
-                    }
-                    cachedFile = file
-                    savedStateHandle[CACHED_APK_PATH_KEY] = file.absolutePath
-                    state.value = file.toLoadedState()
-                },
-                onFailure = { error ->
-                    Logger.e(TAG, error, "Unable to copy external APK to cache")
-                    state.value = ExternalApkState.Error
-                },
-            )
+    private fun load() = viewModelScope.launch {
+        temporaryApkManager.copy(
+            uri = sourceUri.toUri(),
+            taskId = taskId,
+        ).onSuccess { file ->
+            cachedFile?.let { previousFile ->
+                temporaryApkManager.release(previousFile.absolutePath).onFailure { error ->
+                    Logger.e(TAG, error, "Unable to release replaced external APK")
+                }
+            }
+            cachedFile = file
+            savedStateHandle[CACHED_APK_PATH_KEY] = file.absolutePath
+            state.value = file.toLoadedState()
+        }.onFailure { error ->
+            Logger.e(TAG, error, "Unable to copy external APK to cache")
+            state.value = ExternalApkState.Error
         }
     }
 
