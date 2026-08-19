@@ -1,5 +1,4 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">APK 分析器</string>
     <string name="external_apk_open_error">无法打开此 APK</string>
 </resources>
