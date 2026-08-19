@@ -29,12 +29,15 @@ sealed interface UnusedAppsSectionState {
 }
 
 @Immutable
+data class SdkVersionEntry(val sdkVersion: Int, val androidVersionName: String?)
+
+@Immutable
 data class FilterState(
     val filter: AppFilterState = AppFilterState(),
     val apkSizeSectionState: ApkSizeSectionState = ApkSizeSectionState.Loading,
     val totalSizeSectionState: TotalSizeSectionState = TotalSizeSectionState.Loading,
     val unusedAppsSectionState: UnusedAppsSectionState = UnusedAppsSectionState.Loading,
-    val availableSdkVersions: ImmutableList<Int> = persistentListOf(),
+    val availableSdkVersions: ImmutableList<SdkVersionEntry> = persistentListOf(),
     val availableSources: ImmutableList<AppSource> = persistentListOf(),
     val activePermissionPresets: ImmutableList<PermissionPreset> = persistentListOf(),
     val extraPermissionCount: Int = 0,

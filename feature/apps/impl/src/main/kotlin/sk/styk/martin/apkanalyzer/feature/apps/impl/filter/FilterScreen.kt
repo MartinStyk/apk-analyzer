@@ -253,7 +253,7 @@ private fun SourceSection(
 
 @Composable
 private fun SdkVersionSection(
-    availableSdkVersions: ImmutableList<Int>,
+    availableSdkVersions: ImmutableList<SdkVersionEntry>,
     selectedSdkVersions: ImmutableSet<Int>,
     onSdkVersionToggle: (Int) -> Unit,
     onOpenSdkVersionFilter: () -> Unit,
@@ -266,11 +266,12 @@ private fun SdkVersionSection(
         onClick = onOpenSdkVersionFilter,
         modifier = modifier,
     ) {
-        availableSdkVersions.forEach { sdk ->
+        availableSdkVersions.forEach { entry ->
             Chip(
-                label = sdk.toAndroidVersionLabel(),
-                selected = sdk in selectedSdkVersions,
-                onClick = { onSdkVersionToggle(sdk) },
+                label = entry.androidVersionName?.let { name -> stringResource(R.string.filter_sdk_version, name, entry.sdkVersion) }
+                    ?: stringResource(R.string.filter_sdk_version_no_label, entry.sdkVersion),
+                selected = entry.sdkVersion in selectedSdkVersions,
+                onClick = { onSdkVersionToggle(entry.sdkVersion) },
             )
         }
     }
@@ -712,30 +713,17 @@ private fun UnusedAppsPeriod.label(): String = when (this) {
     UnusedAppsPeriod.ONE_YEAR -> stringResource(R.string.filter_unused_year)
 }
 
-private fun Int.toAndroidVersionLabel(): String {
-    val name = when (this) {
-        21 -> "Android 5"
-        22 -> "Android 5.1"
-        23 -> "Android 6"
-        24 -> "Android 7"
-        25 -> "Android 7.1"
-        26 -> "Android 8"
-        27 -> "Android 8.1"
-        28 -> "Android 9"
-        29 -> "Android 10"
-        30 -> "Android 11"
-        31 -> "Android 12"
-        32 -> "Android 12L"
-        33 -> "Android 13"
-        34 -> "Android 14"
-        35 -> "Android 15"
-        36 -> "Android 16"
-        else -> "API $this"
-    }
-    return "$name (API $this)"
-}
-
 private fun Instant.toShortDate(): String = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault()).format(Date.from(this))
+
+private val previewAvailableSdkVersions = persistentListOf(
+    SdkVersionEntry(35, "Android 15"),
+    SdkVersionEntry(34, "Android 14"),
+    SdkVersionEntry(33, "Android 13"),
+    SdkVersionEntry(31, "Android 12"),
+    SdkVersionEntry(30, "Android 11"),
+    SdkVersionEntry(29, "Android 10"),
+    SdkVersionEntry(28, "Android 9"),
+)
 
 @Preview
 @Composable
@@ -747,7 +735,7 @@ private fun FilterContentDefaultPreview() {
                 apkSizeSectionState = ApkSizeSectionState.Loading,
                 totalSizeSectionState = TotalSizeSectionState.PermissionMissing,
                 unusedAppsSectionState = UnusedAppsSectionState.PermissionMissing,
-                availableSdkVersions = persistentListOf(35, 34, 33, 31, 30, 29, 28),
+                availableSdkVersions = previewAvailableSdkVersions,
                 availableSources = persistentListOf(AppSource.GooglePlay, AppSource.SystemPreinstalled, AppSource.Sideloaded, AppSource.Unknown),
             ),
             onAction = {},
@@ -773,7 +761,7 @@ private fun FilterContentPreview() {
                 apkSizeSectionState = ApkSizeSectionState.RangeAvailable(AppSizeRange(1.megabytes, 512.megabytes)),
                 totalSizeSectionState = TotalSizeSectionState.RangeAvailable(AppSizeRange(1.megabytes, 2048.megabytes)),
                 unusedAppsSectionState = UnusedAppsSectionState.Available,
-                availableSdkVersions = persistentListOf(35, 34, 33, 31, 30, 29, 28),
+                availableSdkVersions = previewAvailableSdkVersions,
                 availableSources = persistentListOf(AppSource.GooglePlay, AppSource.SystemPreinstalled, AppSource.Sideloaded, AppSource.Unknown),
             ),
             onAction = {},
@@ -791,7 +779,7 @@ private fun FilterContentWithPermissionsPreview() {
                 apkSizeSectionState = ApkSizeSectionState.Loading,
                 totalSizeSectionState = TotalSizeSectionState.PermissionMissing,
                 unusedAppsSectionState = UnusedAppsSectionState.PermissionMissing,
-                availableSdkVersions = persistentListOf(35, 34),
+                availableSdkVersions = persistentListOf(SdkVersionEntry(35, "Android 15"), SdkVersionEntry(34, "Android 14")),
                 availableSources = persistentListOf(AppSource.GooglePlay, AppSource.SystemPreinstalled),
                 activePermissionPresets = persistentListOf(
                     PermissionPreset.Camera,

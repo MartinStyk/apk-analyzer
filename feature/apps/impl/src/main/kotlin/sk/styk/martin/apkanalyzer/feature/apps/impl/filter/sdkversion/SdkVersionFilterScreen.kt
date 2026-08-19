@@ -131,34 +131,12 @@ private fun SdkVersionOptionRow(
         Checkbox(checked = option.isSelected, onCheckedChange = { onToggle() })
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = option.sdkVersion.toAndroidVersionLabel(),
+            text = option.androidVersionName?.let { name -> stringResource(R.string.filter_sdk_version, name, option.sdkVersion) }
+                ?: stringResource(R.string.filter_sdk_version_no_label, option.sdkVersion),
             style = AppTheme.typography.bodyMedium,
             color = AppTheme.colors.onSurface,
         )
     }
-}
-
-private fun Int.toAndroidVersionLabel(): String {
-    val name = when (this) {
-        21 -> "Android 5"
-        22 -> "Android 5.1"
-        23 -> "Android 6"
-        24 -> "Android 7"
-        25 -> "Android 7.1"
-        26 -> "Android 8"
-        27 -> "Android 8.1"
-        28 -> "Android 9"
-        29 -> "Android 10"
-        30 -> "Android 11"
-        31 -> "Android 12"
-        32 -> "Android 12L"
-        33 -> "Android 13"
-        34 -> "Android 14"
-        35 -> "Android 15"
-        36 -> "Android 16"
-        else -> "API $this"
-    }
-    return "$name (API $this)"
 }
 
 @Preview
@@ -168,10 +146,10 @@ private fun SdkVersionFilterContentPreview() {
         SdkVersionFilterContent(
             state = SdkVersionFilterState(
                 options = persistentListOf(
-                    SdkVersionOption(35, isSelected = true),
-                    SdkVersionOption(34, isSelected = true),
-                    SdkVersionOption(33, isSelected = false),
-                    SdkVersionOption(28, isSelected = false),
+                    SdkVersionOption(35, isSelected = true, androidVersionName = "Android 15"),
+                    SdkVersionOption(34, isSelected = true, androidVersionName = "Android 14"),
+                    SdkVersionOption(33, isSelected = false, androidVersionName = "Android 13"),
+                    SdkVersionOption(28, isSelected = false, androidVersionName = "Android 9"),
                 ),
             ),
             onAction = {},

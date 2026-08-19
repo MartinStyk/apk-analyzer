@@ -8,4 +8,8 @@ import kotlinx.collections.immutable.persistentListOf
 data class SdkVersionFilterState(val options: ImmutableList<SdkVersionOption> = persistentListOf())
 
 @Immutable
-data class SdkVersionOption(val sdkVersion: Int, val isSelected: Boolean)
+data class SdkVersionOption(
+    val sdkVersion: Int,
+    val isSelected: Boolean,
+    val androidVersionName: String?,
+)
