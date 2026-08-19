@@ -46,6 +46,7 @@ coil = "3.5.0"
 spotless = "8.10.0"
 compose-rules-ktlint = "0.6.4"
 detekt = "2.0.0-alpha.6"
+triplet-play = "4.1.1"
 
 [libraries]
 # AndroidX Core
@@ -128,6 +129,7 @@ crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase-
 firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "firebase-perf-plugin" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 detekt = { id = "dev.detekt", version.ref = "detekt" }
+triplet-play = { id = "com.github.triplet.play", version.ref = "triplet-play" }
 apkanalyzer-library = { id = "apkanalyzer.library" }
 apkanalyzer-application = { id = "apkanalyzer.application" }
 apkanalyzer-agent-context = { id = "apkanalyzer.agent-context" }

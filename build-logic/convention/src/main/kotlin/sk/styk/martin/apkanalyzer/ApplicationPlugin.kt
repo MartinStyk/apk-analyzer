@@ -11,6 +11,7 @@ import sk.styk.martin.apkanalyzer.utils.TARGET_SDK
 import sk.styk.martin.apkanalyzer.utils.configureKotlin
 import sk.styk.martin.apkanalyzer.utils.implementation
 import sk.styk.martin.apkanalyzer.utils.libs
+import sk.styk.martin.apkanalyzer.utils.stringProperty
 
 class ApplicationPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
@@ -19,6 +20,7 @@ class ApplicationPlugin : Plugin<Project> {
             apply("com.google.gms.google-services")
             apply("com.google.firebase.firebase-perf")
             apply("com.google.firebase.crashlytics")
+            apply("com.github.triplet.play")
             apply("apkanalyzer.detekt")
         }
 
@@ -31,10 +33,16 @@ class ApplicationPlugin : Plugin<Project> {
 
             signingConfigs {
                 getByName("debug") {
-                    storeFile = target.file("debug.keystore")
+                    storeFile = file("debug.keystore")
                     storePassword = "android"
                     keyAlias = "androiddebugkey"
                     keyPassword = "android"
+                }
+                create("release") {
+                    storeFile = stringProperty("signing.storeFile")?.let(::file) ?: file("debug.keystore")
+                    storePassword = stringProperty("signing.storePassword") ?: "android"
+                    keyAlias = stringProperty("signing.keyAlias") ?: "androiddebugkey"
+                    keyPassword = stringProperty("signing.keyPassword") ?: "android"
                 }
             }
 
@@ -42,6 +50,7 @@ class ApplicationPlugin : Plugin<Project> {
                 getByName("release") {
                     isMinifyEnabled = true
                     isShrinkResources = true
+                    signingConfig = signingConfigs.getByName("release")
                 }
                 getByName("debug") {
                     isMinifyEnabled = false

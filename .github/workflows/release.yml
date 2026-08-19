@@ -5,48 +5,59 @@ on:
     tags:
       - '+([0-9]).+([0-9]).+([0-9])'
 
+run-name: Release ${{ github.ref_name }}
+
 permissions:
   contents: read
 
 jobs:
+  check-tag:
+    runs-on: ubuntu-latest
+    outputs:
+      notes: ${{ steps.notes.outputs.body }}
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Read tag annotation as release notes
+        id: notes
+        run: |
+          BODY=$(git for-each-ref --format='%(contents)' "refs/tags/$GITHUB_REF_NAME")
+          if [ -z "$BODY" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME has no annotation message, so it can't provide release notes. Push an annotated tag instead: git tag -a $GITHUB_REF_NAME -m \"release notes\" && git push origin $GITHUB_REF_NAME"
+            exit 1
+          fi
+          {
+            echo "body<<NOTES_EOF"
+            echo "$BODY"
+            echo "NOTES_EOF"
+          } >> "$GITHUB_OUTPUT"
+
   verify:
+    needs: [ check-tag ]
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v7
 
-      - name: Set up JDK 25
-        uses: actions/setup-java@v5
-        with:
-          java-version: '25'
-          distribution: 'temurin'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v6
-        with:
-          build-scan-publish: true
-          build-scan-terms-of-use-url: 'https://gradle.com/terms-of-service'
-          build-scan-terms-of-use-agree: 'yes'
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - name: Set up Gradle build environment
+        uses: ./.github/actions/setup-gradle-build
 
       - name: Fetch Firebase google-services.json
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
-          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
-        run: |
-          rm -f app/google-services.json
-          npx --yes firebase-tools@15.26.0 apps:sdkconfig ANDROID "$FIREBASE_APP_ID" \
-            --project "$FIREBASE_PROJECT_ID" \
-            -o app/google-services.json
+        uses: ./.github/actions/fetch-google-services
+        with:
+          firebase-token: ${{ secrets.FIREBASE_TOKEN }}
+          firebase-app-id: ${{ secrets.FIREBASE_APP_ID }}
+          firebase-project-id: ${{ secrets.FIREBASE_PROJECT_ID }}
 
       - name: Verify release
         run: |
           ./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintRelease --continue
 
   build-release:
+    needs: [ check-tag ]
     runs-on: ubuntu-latest
     outputs:
       apk_name: apk-analyzer-${{ github.ref_name }}.apk
@@ -55,32 +66,15 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Set up JDK 25
-        uses: actions/setup-java@v5
-        with:
-          java-version: '25'
-          distribution: 'temurin'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v6
-        with:
-          build-scan-publish: true
-          build-scan-terms-of-use-url: 'https://gradle.com/terms-of-service'
-          build-scan-terms-of-use-agree: 'yes'
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - name: Set up Gradle build environment
+        uses: ./.github/actions/setup-gradle-build
 
       - name: Fetch Firebase google-services.json
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
-          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
-        run: |
-          rm -f app/google-services.json
-          npx --yes firebase-tools@15.26.0 apps:sdkconfig ANDROID "$FIREBASE_APP_ID" \
-            --project "$FIREBASE_PROJECT_ID" \
-            -o app/google-services.json
+        uses: ./.github/actions/fetch-google-services
+        with:
+          firebase-token: ${{ secrets.FIREBASE_TOKEN }}
+          firebase-app-id: ${{ secrets.FIREBASE_APP_ID }}
+          firebase-project-id: ${{ secrets.FIREBASE_PROJECT_ID }}
 
       - name: Compute versionCode from tag
         id: version
@@ -88,36 +82,49 @@ jobs:
           IFS='.' read -r MAJOR MINOR PATCH <<< "$GITHUB_REF_NAME"
           echo "code=$((MAJOR * 10000 + MINOR * 100 + PATCH))" >> "$GITHUB_OUTPUT"
 
-      - name: Build release AAB and APK
+      - name: Verify signing secrets are present
+        env:
+          SIGN_KEY: ${{ secrets.SIGN_KEY }}
+          SIGN_KEY_ALIAS: ${{ secrets.SIGN_KEY_ALIAS }}
+          SIGN_KEY_STORE_PASSWORD: ${{ secrets.SIGN_KEY_STORE_PASSWORD }}
+          SIGN_KEY_PASSWORD: ${{ secrets.SIGN_KEY_PASSWORD }}
+        run: |
+          for name in SIGN_KEY SIGN_KEY_ALIAS SIGN_KEY_STORE_PASSWORD SIGN_KEY_PASSWORD; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Secret $name is empty. Without it the release signingConfig falls back to the debug key, so refusing to build rather than silently shipping a debug-signed release."
+              exit 1
+            fi
+          done
+
+      - name: Decode signing keystore
+        env:
+          SIGN_KEY: ${{ secrets.SIGN_KEY }}
+        run: echo "$SIGN_KEY" | base64 -d > "$RUNNER_TEMP/release.keystore"
+
+      - name: Write signing properties
+        env:
+          SIGN_KEY_ALIAS: ${{ secrets.SIGN_KEY_ALIAS }}
+          SIGN_KEY_STORE_PASSWORD: ${{ secrets.SIGN_KEY_STORE_PASSWORD }}
+          SIGN_KEY_PASSWORD: ${{ secrets.SIGN_KEY_PASSWORD }}
+        run: |
+          mkdir -p "$HOME/.gradle"
+          {
+            echo "signing.storeFile=$RUNNER_TEMP/release.keystore"
+            echo "signing.storePassword=$SIGN_KEY_STORE_PASSWORD"
+            echo "signing.keyAlias=$SIGN_KEY_ALIAS"
+            echo "signing.keyPassword=$SIGN_KEY_PASSWORD"
+          } >> "$HOME/.gradle/gradle.properties"
+
+      - name: Build and sign release AAB and APK
         run: |
           ./gradlew bundleRelease assembleRelease \
             -Pversion.code=${{ steps.version.outputs.code }} \
             -Pversion.name="$GITHUB_REF_NAME"
 
-      - name: Sign AAB
-        uses: r0adkll/sign-android-release@v1
-        id: sign_aab
-        with:
-          releaseDirectory: app/build/outputs/bundle/release
-          signingKeyBase64: ${{ secrets.SIGN_KEY }}
-          alias: ${{ secrets.SIGN_KEY_ALIAS }}
-          keyStorePassword: ${{ secrets.SIGN_KEY_STORE_PASSWORD }}
-          keyPassword: ${{ secrets.SIGN_KEY_PASSWORD }}
-
-      - name: Sign APK
-        uses: r0adkll/sign-android-release@v1
-        id: sign_apk
-        with:
-          releaseDirectory: app/build/outputs/apk/release
-          signingKeyBase64: ${{ secrets.SIGN_KEY }}
-          alias: ${{ secrets.SIGN_KEY_ALIAS }}
-          keyStorePassword: ${{ secrets.SIGN_KEY_STORE_PASSWORD }}
-          keyPassword: ${{ secrets.SIGN_KEY_PASSWORD }}
-
-      - name: Rename signed artifacts
+      - name: Rename release artifacts
         run: |
-          mv "${{ steps.sign_aab.outputs.signedReleaseFile }}" "app/build/outputs/bundle/release/apk-analyzer-${{ github.ref_name }}.aab"
-          mv "${{ steps.sign_apk.outputs.signedReleaseFile }}" "app/build/outputs/apk/release/apk-analyzer-${{ github.ref_name }}.apk"
+          mv app/build/outputs/bundle/release/*.aab "app/build/outputs/bundle/release/apk-analyzer-${{ github.ref_name }}.aab"
+          mv app/build/outputs/apk/release/*.apk "app/build/outputs/apk/release/apk-analyzer-${{ github.ref_name }}.apk"
 
       - name: Upload AAB artifact
         uses: actions/upload-artifact@v7
@@ -143,37 +150,24 @@ jobs:
           if-no-files-found: error
 
   publish-github-release:
-    needs: [ verify, build-release ]
+    needs: [ check-tag, verify, build-release ]
     runs-on: ubuntu-latest
     permissions:
       contents: write
 
     steps:
-      - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-
       - name: Download APK artifact
         uses: actions/download-artifact@v8
         with:
           name: apk-analyzer-apk
           path: artifacts
 
-      - name: Read tag annotation as release notes
-        id: notes
-        run: |
-          {
-            echo "body<<NOTES_EOF"
-            git for-each-ref --format='%(contents)' "refs/tags/$GITHUB_REF_NAME"
-            echo "NOTES_EOF"
-          } >> "$GITHUB_OUTPUT"
-
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
           name: ${{ github.ref_name }}
           tag_name: ${{ github.ref_name }}
-          body: ${{ steps.notes.outputs.body }}
+          body: ${{ needs.check-tag.outputs.notes }}
           files: artifacts/${{ needs['build-release'].outputs.apk_name }}
 
   publish-play-store:
@@ -181,27 +175,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up Gradle build environment
+        uses: ./.github/actions/setup-gradle-build
+
       - name: Download AAB artifact
         uses: actions/download-artifact@v8
         with:
           name: apk-analyzer-aab
           path: artifacts
 
-      - name: Download mapping file artifact
-        uses: actions/download-artifact@v8
-        with:
-          name: apk-analyzer-mapping
-          path: artifacts
-
-      - name: Deploy to Play Store
-        uses: r0adkll/upload-google-play@v1.0.19
-        with:
-          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
-          packageName: sk.styk.martin.apkanalyzer
-          releaseFiles: artifacts/${{ needs['build-release'].outputs.aab_name }}
-          mappingFile: artifacts/mapping.txt
-          track: beta
-          status: completed
+      - name: Publish to Play Store beta track
+        env:
+          ANDROID_PUBLISHER_CREDENTIALS: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+        run: ./gradlew :app:publishBundle --artifact-dir artifacts --track beta
 
   distribute-app-distribution:
     needs: [ verify, build-release ]
