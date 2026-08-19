@@ -68,6 +68,8 @@ jobs:
 
       - name: Set up Gradle build environment
         uses: ./.github/actions/setup-gradle-build
+        with:
+          build-scan-publish: 'false'
 
       - name: Fetch Firebase google-services.json
         uses: ./.github/actions/fetch-google-services
@@ -101,19 +103,25 @@ jobs:
           SIGN_KEY: ${{ secrets.SIGN_KEY }}
         run: echo "$SIGN_KEY" | base64 -d > "$RUNNER_TEMP/release.keystore"
 
-      - name: Build and sign release AAB and APK
+      - name: Write signing properties
         env:
           SIGN_KEY_ALIAS: ${{ secrets.SIGN_KEY_ALIAS }}
           SIGN_KEY_STORE_PASSWORD: ${{ secrets.SIGN_KEY_STORE_PASSWORD }}
           SIGN_KEY_PASSWORD: ${{ secrets.SIGN_KEY_PASSWORD }}
         run: |
+          mkdir -p "$HOME/.gradle"
+          {
+            echo "signing.storeFile=$RUNNER_TEMP/release.keystore"
+            echo "signing.storePassword=$SIGN_KEY_STORE_PASSWORD"
+            echo "signing.keyAlias=$SIGN_KEY_ALIAS"
+            echo "signing.keyPassword=$SIGN_KEY_PASSWORD"
+          } >> "$HOME/.gradle/gradle.properties"
+
+      - name: Build and sign release AAB and APK
+        run: |
           ./gradlew bundleRelease assembleRelease \
             -Pversion.code=${{ steps.version.outputs.code }} \
-            -Pversion.name="$GITHUB_REF_NAME" \
-            -Psigning.storeFile="$RUNNER_TEMP/release.keystore" \
-            -Psigning.storePassword="$SIGN_KEY_STORE_PASSWORD" \
-            -Psigning.keyAlias="$SIGN_KEY_ALIAS" \
-            -Psigning.keyPassword="$SIGN_KEY_PASSWORD"
+            -Pversion.name="$GITHUB_REF_NAME"
 
       - name: Rename release artifacts
         run: |
