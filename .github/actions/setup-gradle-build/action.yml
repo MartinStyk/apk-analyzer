@@ -1,12 +1,6 @@
 name: Set up Gradle build environment
 description: Installs JDK 25, sets up Gradle, and makes gradlew executable. Run actions/checkout before this.
 
-inputs:
-  build-scan-publish:
-    description: Whether to publish a Gradle Build Scan. Disable for jobs whose Gradle invocation touches secrets, since Build Scans capture the raw command line with no redaction.
-    required: false
-    default: 'true'
-
 runs:
   using: composite
   steps:
@@ -19,7 +13,7 @@ runs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v6
       with:
-        build-scan-publish: ${{ inputs.build-scan-publish }}
+        build-scan-publish: true
         build-scan-terms-of-use-url: 'https://gradle.com/terms-of-service'
         build-scan-terms-of-use-agree: 'yes'
 

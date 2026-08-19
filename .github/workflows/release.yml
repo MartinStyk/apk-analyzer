@@ -68,8 +68,6 @@ jobs:
 
       - name: Set up Gradle build environment
         uses: ./.github/actions/setup-gradle-build
-        with:
-          build-scan-publish: 'false'
 
       - name: Fetch Firebase google-services.json
         uses: ./.github/actions/fetch-google-services
