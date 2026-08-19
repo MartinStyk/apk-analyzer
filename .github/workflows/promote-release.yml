@@ -32,6 +32,7 @@ jobs:
         with:
           credentials_json: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
           token_format: access_token
+          access_token_scopes: 'https://www.googleapis.com/auth/androidpublisher'
 
       - name: Determine promotion source track
         id: source
@@ -63,9 +64,15 @@ jobs:
             exit 1
           fi
 
+          if [ "$FROM_TRACK" = "production" ]; then
+            TRACK_ARGS=(--update production)
+          else
+            TRACK_ARGS=(--from-track "$FROM_TRACK" --promote-track production)
+          fi
+
           if [ "$ROLLOUT_PERCENTAGE" -eq 100 ]; then
-            ./gradlew :app:promoteArtifact --from-track "$FROM_TRACK" --promote-track production --release-status completed
+            ./gradlew :app:promoteArtifact "${TRACK_ARGS[@]}" --release-status completed
           else
             USER_FRACTION=$(awk "BEGIN { printf \"%.2f\", $ROLLOUT_PERCENTAGE / 100 }")
-            ./gradlew :app:promoteArtifact --from-track "$FROM_TRACK" --promote-track production --release-status inProgress --user-fraction "$USER_FRACTION"
+            ./gradlew :app:promoteArtifact "${TRACK_ARGS[@]}" --release-status inProgress --user-fraction "$USER_FRACTION"
           fi
