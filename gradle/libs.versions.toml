@@ -43,7 +43,7 @@ mlkit-genai-prompt = "1.0.0-beta4"
 timber = "5.0.1"
 leakcanary = "2.14"
 coil = "3.5.0"
-spotless = "8.9.0"
+spotless = "8.10.0"
 compose-rules-ktlint = "0.6.4"
 detekt = "2.0.0-alpha.6"
 
