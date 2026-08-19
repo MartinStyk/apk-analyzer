@@ -379,11 +379,19 @@ private fun AppDetailInsight.label(): String = when (this) {
 
     AppDetailInsight.CertificateNotYetValid -> stringResource(R.string.app_detail_insight_certificate_not_yet_valid)
 
+    AppDetailInsight.Sideloaded -> stringResource(R.string.app_detail_insight_sideloaded)
+
     is AppDetailInsight.OutdatedTargetSdk -> pluralStringResource(
         R.plurals.app_detail_insight_outdated_target,
         apiLevelGap,
         targetSdk,
         apiLevelGap,
+    )
+
+    is AppDetailInsight.Unused -> pluralStringResource(
+        R.plurals.app_detail_insight_unused,
+        monthsSinceLastUsed,
+        monthsSinceLastUsed,
     )
 
     is AppDetailInsight.SensitivePermission -> when (access) {
@@ -1195,6 +1203,8 @@ private fun AppDetailLoadedPreview() {
         ),
         insights = persistentListOf(
             AppDetailInsight.Debuggable,
+            AppDetailInsight.Sideloaded,
+            AppDetailInsight.Unused(monthsSinceLastUsed = 8),
             AppDetailInsight.SensitivePermission(
                 access = SensitiveAccess.BackgroundLocation,
                 permissionName = "android.permission.ACCESS_BACKGROUND_LOCATION",

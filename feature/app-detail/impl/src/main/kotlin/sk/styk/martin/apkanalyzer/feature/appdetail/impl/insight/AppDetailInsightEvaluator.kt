@@ -8,6 +8,8 @@ import sk.styk.martin.apkanalyzer.core.apps.AppClassificationThresholds
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
+import sk.styk.martin.apkanalyzer.core.common.model.isSideloaded
+import java.time.Duration
 import java.time.Instant
 
 internal object AppDetailInsightEvaluator {
@@ -28,6 +30,9 @@ internal object AppDetailInsightEvaluator {
             if (currentCertificates.any { now.isBefore(it.validFrom) }) {
                 add(AppDetailInsight.CertificateNotYetValid)
             }
+            if (analysisMode == AppDetail.AnalysisMode.InstalledPackage && info.source.isSideloaded) {
+                add(AppDetailInsight.Sideloaded)
+            }
             val targetSdk = info.targetSdkVersion
             if (!info.isSystemApp && targetSdk != null && deviceSdk - targetSdk >= AppClassificationThresholds.OUTDATED_TARGET_SDK_RELEASE_GAP) {
                 add(
@@ -38,6 +43,11 @@ internal object AppDetailInsightEvaluator {
                 )
             }
             if (analysisMode == AppDetail.AnalysisMode.InstalledPackage) {
+                info.lastUsedTime?.let { lastUsed ->
+                    if (lastUsed.isBefore(now.minus(AppClassificationThresholds.UNUSED_PERIOD))) {
+                        add(AppDetailInsight.Unused(monthsSinceLastUsed = monthsBetween(lastUsed, now)))
+                    }
+                }
                 val grantedDangerousPermissionNames = permissions.used
                     .filter {
                         it.isGranted &&
@@ -53,6 +63,13 @@ internal object AppDetailInsightEvaluator {
             }
         }.toImmutableList()
     }
+}
+
+private const val DAYS_PER_MONTH = 30
+
+private fun monthsBetween(from: Instant, to: Instant): Int {
+    val months = Duration.between(from, to).toDays() / DAYS_PER_MONTH
+    return months.coerceIn(1L, Int.MAX_VALUE.toLong()).toInt()
 }
 
 @Suppress("DEPRECATION")

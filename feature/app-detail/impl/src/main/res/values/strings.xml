@@ -58,6 +58,11 @@
         <item quantity="one">Targets API %1$d, one API level behind this device</item>
         <item quantity="other">Targets API %1$d, %2$d API levels behind this device</item>
     </plurals>
+    <string name="app_detail_insight_sideloaded">Installed from outside an app store</string>
+    <plurals name="app_detail_insight_unused">
+        <item quantity="one">Not opened in the last month</item>
+        <item quantity="other">Not opened in the last %1$d months</item>
+    </plurals>
     <string name="app_detail_insight_background_location">Can access location while running in the background</string>
     <string name="app_detail_insight_messages">Can read, receive, or send text messages</string>
     <string name="app_detail_insight_call_history">Can access or change call history</string>
@@ -148,9 +153,6 @@
     <string name="app_detail_certificate_unknown_signer">Unknown signer</string>
     <string name="app_detail_certificate_sha256_fingerprint">SHA-256 Fingerprint</string>
     <string name="app_detail_certificate_debug">Debug certificate</string>
-    <string name="app_detail_badge_sideloaded">Sideloaded</string>
-    <string name="app_detail_badge_dangerous_permissions">Sensitive access</string>
-    <string name="app_detail_badge_unused">Unused</string>
     <string name="app_detail_badge_large">Large App</string>
     <string name="app_detail_badge_system">System</string>
     <string name="app_detail_badge_google_play">Google Play</string>

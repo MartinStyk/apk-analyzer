@@ -38,7 +38,6 @@ import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
-import sk.styk.martin.apkanalyzer.core.common.model.isSideloaded
 import sk.styk.martin.apkanalyzer.core.common.review.ReviewEligibilityTracker
 import sk.styk.martin.apkanalyzer.core.userpreferences.recentlyviewed.RecentlyViewedAppsRepository
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.ApkFileLifetime
@@ -221,7 +220,9 @@ internal class AppDetailViewModel @AssistedInject constructor(
     private fun navigateToInsight(insight: AppDetailInsight) {
         when (insight) {
             AppDetailInsight.Debuggable,
+            AppDetailInsight.Sideloaded,
             is AppDetailInsight.OutdatedTargetSdk,
+            is AppDetailInsight.Unused,
             -> sendSectionEvent(AppDetailEvent.NavigateToGeneralDetails)
 
             AppDetailInsight.DebugCertificate,
@@ -307,11 +308,6 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
     private fun AppDetailState.Loaded.withComputedBadges(now: Instant): AppDetailState.Loaded = copy(
         badges = buildList {
-            if (source.isSideloaded) add(AppDetailBadge.Sideloaded)
-            if (insights.any { it is AppDetailInsight.SensitivePermission }) add(AppDetailBadge.DangerousPermissions)
-            lastUsedTime?.let { lastUsed ->
-                if (lastUsed.isBefore(now.minus(AppClassificationThresholds.UNUSED_PERIOD))) add(AppDetailBadge.Unused)
-            }
             val effectiveSize = totalSize ?: apkSize
             if (effectiveSize >= AppClassificationThresholds.LARGE_SIZE) add(AppDetailBadge.Large)
             if (isSystemApp) add(AppDetailBadge.System)

@@ -1,9 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl.components
 
 sealed interface AppDetailBadge {
-    data object Sideloaded : AppDetailBadge
-    data object DangerousPermissions : AppDetailBadge
-    data object Unused : AppDetailBadge
     data object Large : AppDetailBadge
     data object System : AppDetailBadge
     data object GooglePlay : AppDetailBadge
