@@ -43,3 +43,11 @@ entry points in the app.
 
 Version name and code have local Gradle-property defaults. CI and release workflows override them;
 do not introduce a second version source.
+
+`com.github.triplet.play` (Gradle Play Publisher) is applied directly here with no extension
+configuration — every real invocation (`publishBundle`, `promoteArtifact`) passes its track/status/
+artifact-dir explicitly via CLI flags from the release workflows, so build-script defaults would
+never be read. It reads its service account credentials from the `ANDROID_PUBLISHER_CREDENTIALS`
+environment variable (its own convention, not a Gradle property). Its tasks don't need
+`google-services.json` to exist, even though this module also applies `com.google.gms.google-services`
+— that plugin's file check is lazy, not a configuration-time requirement.

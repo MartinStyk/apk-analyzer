@@ -31,6 +31,11 @@ build scripts.
   second parser or reporting pipeline.
 * `validateAgentContext` enforces module-scoped `AGENTS.md` coverage, adjacent `CLAUDE.md` adapters,
   skill metadata, unique adapters, and valid local Markdown links.
+* The release `signingConfig` in `ApplicationPlugin` falls back to the debug keystore/credentials
+  when the `signing.storeFile`/`signing.storePassword`/`signing.keyAlias`/`signing.keyPassword`
+  Gradle properties aren't set, so a local `assembleRelease`/`bundleRelease` is always a signed,
+  installable build rather than failing or producing an unsigned one. CI supplies the real `-P`
+  properties, decoding the keystore from the `SIGN_KEY` secret first.
 
 ## Adding a Convention Plugin
 
