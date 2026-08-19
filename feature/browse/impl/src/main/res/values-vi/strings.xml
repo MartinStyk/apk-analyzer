@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="browse_title">Duyệt</string>
+    <string name="browse_subtitle_loading">Đang quét các ứng dụng đã cài đặt…</string>
+    <plurals name="browse_subtitle">
+        <item quantity="other">Khám phá %1$d ứng dụng đã cài đặt trên thiết bị này</item>
+    </plurals>
+    <string name="browse_dimension_permission_title">Quyền</string>
+    <string name="browse_dimension_permission_subtitle">Xem ứng dụng nào sử dụng quyền cho trước</string>
+    <string name="browse_dimension_certificate_title">Chứng chỉ ký</string>
+    <string name="browse_dimension_certificate_subtitle">Nhóm ứng dụng theo danh tính người ký, tên nhà phát hành hoặc quốc gia</string>
+    <string name="browse_dimension_target_sdk_title">Phiên bản Android mục tiêu</string>
+    <string name="browse_dimension_target_sdk_subtitle">Xem phiên bản Android mà mỗi ứng dụng được xây dựng cho</string>
+    <string name="browse_dimension_min_sdk_title">Phiên bản Android tối thiểu</string>
+    <string name="browse_dimension_min_sdk_subtitle">Xem phiên bản Android cũ nhất mà mỗi ứng dụng vẫn hỗ trợ</string>
+    <string name="browse_dimension_install_source_title">Nguồn cài đặt</string>
+    <string name="browse_dimension_install_source_subtitle">Xem nơi mỗi ứng dụng đến từ</string>
+    <string name="browse_dimension_shared_user_id_title">Danh tính chia sẻ</string>
+    <string name="browse_dimension_shared_user_id_subtitle">Tìm các ứng dụng chạy dưới cùng một danh tính thiết bị và có thể truy cập dữ liệu của nhau</string>
+    <string name="browse_dimension_app_category_title">Danh mục ứng dụng</string>
+    <string name="browse_dimension_app_category_subtitle">Xem loại ứng dụng mà mỗi ứng dụng tự khai báo</string>
+    <plurals name="browse_dimension_option_count">
+        <item quantity="other">%1$d tùy chọn</item>
+    </plurals>
+    <string name="browse_sdk_unknown">Cấp API %1$s</string>
+    <string name="browse_api_level">API %1$s</string>
+    <string name="browse_source_google_play">Google Play</string>
+    <string name="browse_source_samsung_galaxy_store">Cửa hàng Samsung Galaxy</string>
+    <string name="browse_source_amazon_appstore">Cửa hàng ứng dụng Amazon</string>
+    <string name="browse_source_huawei_app_gallery">Huawei AppGallery</string>
+    <string name="browse_source_xiaomi_get_apps">Xiaomi GetApps</string>
+    <string name="browse_source_fdroid">F-Droid</string>
+    <string name="browse_source_aurora_store">Cửa hàng Aurora</string>
+    <string name="browse_source_sideloaded">Cài đặt từ tệp</string>
+    <string name="browse_source_local_install">Cài đặt qua máy tính</string>
+    <string name="browse_source_system">Hệ thống</string>
+    <string name="browse_source_unknown">Không xác định</string>
+    <string name="browse_signer_unknown">Người ký không xác định</string>
+    <string name="browse_country_unknown">Quốc gia không xác định</string>
+    <string name="browse_category_undefined">Chưa phân loại</string>
+    <string name="browse_category_game">Trò chơi</string>
+    <string name="browse_category_audio">Âm thanh</string>
+    <string name="browse_category_video">Video</string>
+    <string name="browse_category_image">Hình ảnh</string>
+    <string name="browse_category_social">Xã hội</string>
+    <string name="browse_category_news">Tin tức &amp; tạp chí</string>
+    <string name="browse_category_maps">Bản đồ &amp; điều hướng</string>
+    <string name="browse_category_productivity">Năng suất</string>
+    <string name="browse_category_accessibility">Truy cập</string>
+    <string name="browse_sub_attribute_sheet_title">Nhóm theo</string>
+    <string name="browse_certificate_attribute_sha256">Danh tính (SHA-256)</string>
+    <string name="browse_certificate_attribute_sha1">Danh tính (SHA-1)</string>
+    <string name="browse_certificate_attribute_md5">Danh tính (MD5)</string>
+    <string name="browse_certificate_attribute_organization">Tên nhà phát hành</string>
+    <string name="browse_certificate_attribute_country">Quốc gia</string>
+    <string name="browse_certificate_hash_sha256">SHA-256</string>
+    <string name="browse_certificate_hash_sha1">SHA-1</string>
+    <string name="browse_certificate_hash_md5">MD5</string>
+    <string name="browse_protection_level_dangerous">Nguy hiểm</string>
+    <string name="browse_protection_level_signature">Chữ ký</string>
+    <string name="browse_protection_level_internal">Nội bộ</string>
+    <string name="browse_protection_level_normal">Bình thường</string>
+    <string name="browse_protection_level_dangerous_explanation">Cần sự chấp thuận rõ ràng của bạn trước khi một ứng dụng có thể sử dụng nó.</string>
+    <string name="browse_protection_level_signature_explanation">Chỉ các ứng dụng được ký bằng cùng một khóa như ứng dụng đã khai báo mới có thể giữ điều này.</string>
+    <string name="browse_protection_level_internal_explanation">Dành riêng cho hệ thống và được cấp theo các quy tắc nội bộ chứ không phải bởi bạn.</string>
+    <string name="browse_protection_level_normal_explanation">Thường được cấp tự động khi cài đặt. Rủi ro thấp khi tự nó.</string>
+    <string name="browse_algorithm_strong">Mạnh</string>
+    <string name="browse_algorithm_weak">Yếu</string>
+    <string name="browse_algorithm_unknown">Sức mạnh không xác định</string>
+    <string name="browse_algorithm_strong_explanation">%1$s sử dụng SHA-256 hoặc một hàm băm mạnh hơn. Không có cuộc tấn công va chạm thực tiễn nào được biết đến, mặc dù độ bảo mật tổng thể cũng phụ thuộc vào loại và kích thước khóa ký.</string>
+    <string name="browse_algorithm_sha1_explanation">%1$s sử dụng SHA-1. SHA-1 không còn kháng va chạm, vì vậy một kẻ tấn công có thể tạo ra dữ liệu khác nhau với cùng một hàm băm. Các chứng chỉ ký mới nên sử dụng SHA-256 hoặc mạnh hơn.</string>
+    <string name="browse_algorithm_md5_explanation">%1$s sử dụng MD5. MD5 không kháng va chạm và không an toàn cho các chứng chỉ ký. Các chứng chỉ ký mới nên sử dụng SHA-256 hoặc mạnh hơn.</string>
+    <string name="browse_algorithm_md2_explanation">%1$s sử dụng MD2. MD2 đã lỗi thời và dễ bị tấn công thực tiễn, vì vậy nó không an toàn cho các chứng chỉ ký. Các chứng chỉ ký mới nên sử dụng SHA-256 hoặc mạnh hơn.</string>
+    <string name="browse_algorithm_unknown_explanation">Sức mạnh của %1$s không thể được đánh giá từ tên thuật toán của nó. Loại và kích thước khóa cũng có thể ảnh hưởng đến độ bảo mật của nó.</string>
+    <string name="browse_certificate_self_signed">Tự ký</string>
+    <string name="browse_certificate_self_signed_explanation">Chứng chỉ tự ký là bình thường cho các ứng dụng Android. So sánh dấu vân tay chứng chỉ với một nguồn đáng tin cậy khi bạn cần xác minh nhà phát hành.</string>
+    <string name="browse_bucket_info_content_description">Về %1$s</string>
+    <plurals name="browse_options_filter_hint">
+        <item quantity="other">Lọc các tùy chọn %1$d</item>
+    </plurals>
+    <string name="browse_options_empty_query">Không có tùy chọn nào khớp với “%1$s”</string>
+    <plurals name="browse_apps_count">
+        <item quantity="other">Ứng dụng %1$d</item>
+    </plurals>
+    <plurals name="browse_apps_filter_hint">
+        <item quantity="other">Lọc các ứng dụng %1$d</item>
+    </plurals>
+    <string name="browse_apps_empty_query">Không có ứng dụng nào khớp với “%1$s”</string>
+</resources>

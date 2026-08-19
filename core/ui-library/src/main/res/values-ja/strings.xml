@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="content_description_back">戻る</string>
+    <string name="content_description_selected">選択済み</string>
+</resources>

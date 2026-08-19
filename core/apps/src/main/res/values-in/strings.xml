@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string-array name="android_versions">
+        <item>Android 1</item>
+        <item>Android 1.1</item>
+        <item>Android 1.5</item>
+        <item>Android 1.6</item>
+        <item>Android 2.0</item>
+        <item>Android 2.0.1</item>
+        <item>Android 2.1</item>
+        <item>Android 2.2</item>
+        <item>Android 2.3</item>
+        <item>Android 2.3.3</item>
+        <item>Android 3.0</item>
+        <item>Android 3.1</item>
+        <item>Android 3.2</item>
+        <item>Android 4.0</item>
+        <item>Android 4.0.3</item>
+        <item>Android 4.1</item>
+        <item>Android 4.2</item>
+        <item>Android 4.3</item>
+        <item>Android 4.4</item>
+        <item>Android 4.4W</item>
+        <item>Android 5.0</item>
+        <item>Android 5.1.1</item>
+        <item>Android 6.0</item>
+        <item>Android 7.0</item>
+        <item>Android 7.1.2</item>
+        <item>Android 8.0</item>
+        <item>Android 8.1</item>
+        <item>Android 9</item>
+        <item>Android 10</item>
+        <item>Android 11</item>
+        <item>Android 12</item>
+        <item>Android 12L</item>
+        <item>Android 13</item>
+        <item>Android 14</item>
+        <item>Android 15</item>
+        <item>Android 16</item>
+        <item>Android 17</item>
+    </string-array>
+</resources>

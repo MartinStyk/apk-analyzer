@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Apk Analyzer</string>
+    <string name="external_apk_open_error">Nepodarilo sa otvoriť tento APK</string>
+</resources>

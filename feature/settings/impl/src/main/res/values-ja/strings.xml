@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="settings_title">設定</string>
+    <string name="settings_appearance">外観</string>
+    <string name="settings_color_scheme">カラースキーム</string>
+    <string name="settings_color_scheme_day">昼</string>
+    <string name="settings_color_scheme_night">夜</string>
+    <string name="settings_color_scheme_follow_system">システムに従う</string>
+    <string name="settings_apps_section">アプリ</string>
+    <string name="settings_recently_viewed_toggle">最近表示したアプリ</string>
+</resources>

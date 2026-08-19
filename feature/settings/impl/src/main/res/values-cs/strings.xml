@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="settings_title">Nastavení</string>
+    <string name="settings_appearance">Vzhled</string>
+    <string name="settings_color_scheme">Barevné schéma</string>
+    <string name="settings_color_scheme_day">Den</string>
+    <string name="settings_color_scheme_night">Noc</string>
+    <string name="settings_color_scheme_follow_system">Následovat systém</string>
+    <string name="settings_apps_section">Aplikace</string>
+    <string name="settings_recently_viewed_toggle">Nedávno zobrazené aplikace</string>
+</resources>

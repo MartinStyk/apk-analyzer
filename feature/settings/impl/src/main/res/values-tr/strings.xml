@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="settings_title">Ayarlar</string>
+    <string name="settings_appearance">Görünüm</string>
+    <string name="settings_color_scheme">Renk şeması</string>
+    <string name="settings_color_scheme_day">Gün</string>
+    <string name="settings_color_scheme_night">Gece</string>
+    <string name="settings_color_scheme_follow_system">Sistemi takip et</string>
+    <string name="settings_apps_section">Uygulamalar</string>
+    <string name="settings_recently_viewed_toggle">Son görüntülenen uygulamalar</string>
+</resources>

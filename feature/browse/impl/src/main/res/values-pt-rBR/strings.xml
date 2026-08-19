@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="browse_title">Navegar</string>
+    <string name="browse_subtitle_loading">Escaneando aplicativos instalados…</string>
+    <plurals name="browse_subtitle">
+        <item quantity="one">Explore o aplicativo %1$d instalado neste dispositivo</item>
+        <item quantity="other">Explore os aplicativos %1$d instalados neste dispositivo</item>
+    </plurals>
+    <string name="browse_dimension_permission_title">Permissões</string>
+    <string name="browse_dimension_permission_subtitle">Veja quais aplicativos usam uma determinada permissão</string>
+    <string name="browse_dimension_certificate_title">Certificado de assinatura</string>
+    <string name="browse_dimension_certificate_subtitle">Agrupar aplicativos por identidade do signatário, nome do editor ou país</string>
+    <string name="browse_dimension_target_sdk_title">Versão do Android alvo</string>
+    <string name="browse_dimension_target_sdk_subtitle">Veja para qual versão do Android cada aplicativo foi construído</string>
+    <string name="browse_dimension_min_sdk_title">Versão mínima do Android</string>
+    <string name="browse_dimension_min_sdk_subtitle">Veja a versão mais antiga do Android que cada aplicativo ainda suporta</string>
+    <string name="browse_dimension_install_source_title">Fonte de instalação</string>
+    <string name="browse_dimension_install_source_subtitle">Veja de onde cada aplicativo veio</string>
+    <string name="browse_dimension_shared_user_id_title">Identidade compartilhada</string>
+    <string name="browse_dimension_shared_user_id_subtitle">Encontre aplicativos que funcionam sob a mesma identidade de dispositivo e podem acessar os dados uns dos outros</string>
+    <string name="browse_dimension_app_category_title">Categoria do aplicativo</string>
+    <string name="browse_dimension_app_category_subtitle">Veja que tipo de aplicativo cada um declara ser</string>
+    <plurals name="browse_dimension_option_count">
+        <item quantity="one">%1$d opção</item>
+        <item quantity="other">%1$d opções</item>
+    </plurals>
+    <string name="browse_sdk_unknown">Nível da API %1$s</string>
+    <string name="browse_api_level">API %1$s</string>
+    <string name="browse_source_google_play">Google Play</string>
+    <string name="browse_source_samsung_galaxy_store">Samsung Galaxy Store</string>
+    <string name="browse_source_amazon_appstore">Amazon Appstore</string>
+    <string name="browse_source_huawei_app_gallery">Huawei AppGallery</string>
+    <string name="browse_source_xiaomi_get_apps">Xiaomi GetApps</string>
+    <string name="browse_source_fdroid">F-Droid</string>
+    <string name="browse_source_aurora_store">Aurora Store</string>
+    <string name="browse_source_sideloaded">Instalado a partir de um arquivo</string>
+    <string name="browse_source_local_install">Instalado via computador</string>
+    <string name="browse_source_system">Sistema</string>
+    <string name="browse_source_unknown">Desconhecido</string>
+    <string name="browse_signer_unknown">Signatário desconhecido</string>
+    <string name="browse_country_unknown">País desconhecido</string>
+    <string name="browse_category_undefined">Sem categoria</string>
+    <string name="browse_category_game">Jogos</string>
+    <string name="browse_category_audio">Áudio</string>
+    <string name="browse_category_video">Vídeo</string>
+    <string name="browse_category_image">Imagem</string>
+    <string name="browse_category_social">Social</string>
+    <string name="browse_category_news">Notícias e revistas</string>
+    <string name="browse_category_maps">Mapas e navegação</string>
+    <string name="browse_category_productivity">Produtividade</string>
+    <string name="browse_category_accessibility">Acessibilidade</string>
+    <string name="browse_sub_attribute_sheet_title">Agrupar por</string>
+    <string name="browse_certificate_attribute_sha256">Identidade (SHA-256)</string>
+    <string name="browse_certificate_attribute_sha1">Identidade (SHA-1)</string>
+    <string name="browse_certificate_attribute_md5">Identidade (MD5)</string>
+    <string name="browse_certificate_attribute_organization">Nome do editor</string>
+    <string name="browse_certificate_attribute_country">País</string>
+    <string name="browse_certificate_hash_sha256">SHA-256</string>
+    <string name="browse_certificate_hash_sha1">SHA-1</string>
+    <string name="browse_certificate_hash_md5">MD5</string>
+    <string name="browse_protection_level_dangerous">Perigoso</string>
+    <string name="browse_protection_level_signature">Assinatura</string>
+    <string name="browse_protection_level_internal">Interno</string>
+    <string name="browse_protection_level_normal">Normal</string>
+    <string name="browse_protection_level_dangerous_explanation">Precisa da sua aprovação explícita antes que um aplicativo possa usá-lo.</string>
+    <string name="browse_protection_level_signature_explanation">Apenas aplicativos assinados com a mesma chave que o aplicativo que o declarou podem manter isso.</string>
+    <string name="browse_protection_level_internal_explanation">Reservado para o sistema e concedido por regras internas em vez de por você.</string>
+    <string name="browse_protection_level_normal_explanation">Geralmente concedido automaticamente na instalação. Baixo risco por si só.</string>
+    <string name="browse_algorithm_strong">Forte</string>
+    <string name="browse_algorithm_weak">Fraco</string>
+    <string name="browse_algorithm_unknown">Força desconhecida</string>
+    <string name="browse_algorithm_strong_explanation">%1$s usa SHA-256 ou um digest mais forte. Nenhum ataque de colisão prático é conhecido, embora a segurança geral também dependa do tipo e tamanho da chave de assinatura.</string>
+    <string name="browse_algorithm_sha1_explanation">%1$s usa SHA-1. SHA-1 não é mais resistente a colisões, então um atacante pode criar dados diferentes com o mesmo digest. Novos certificados de assinatura devem usar SHA-256 ou mais forte.</string>
+    <string name="browse_algorithm_md5_explanation">%1$s usa MD5. MD5 não é resistente a colisões e é inseguro para certificados de assinatura. Novos certificados de assinatura devem usar SHA-256 ou mais forte.</string>
+    <string name="browse_algorithm_md2_explanation">%1$s usa MD2. MD2 é obsoleto e vulnerável a ataques práticos, então é inseguro para certificados de assinatura. Novos certificados de assinatura devem usar SHA-256 ou mais forte.</string>
+    <string name="browse_algorithm_unknown_explanation">A força de %1$s não pode ser avaliada a partir do nome do seu algoritmo. O tipo e tamanho da chave também podem afetar sua segurança.</string>
+    <string name="browse_certificate_self_signed">Autoassinado</string>
+    <string name="browse_certificate_self_signed_explanation">Certificados autoassinados são normais para aplicativos Android. Compare a impressão digital do certificado com uma fonte confiável quando precisar verificar o editor.</string>
+    <string name="browse_bucket_info_content_description">Sobre %1$s</string>
+    <plurals name="browse_options_filter_hint">
+        <item quantity="one">Filtrar opção %1$d</item>
+        <item quantity="other">Filtrar opções %1$d</item>
+    </plurals>
+    <string name="browse_options_empty_query">Nenhuma opção corresponde a “%1$s”</string>
+    <plurals name="browse_apps_count">
+        <item quantity="one">%1$d aplicativo</item>
+        <item quantity="other">%1$d aplicativos</item>
+    </plurals>
+    <plurals name="browse_apps_filter_hint">
+        <item quantity="one">Filtrar aplicativo %1$d</item>
+        <item quantity="other">Filtrar aplicativos %1$d</item>
+    </plurals>
+    <string name="browse_apps_empty_query">Nenhum aplicativo corresponde a “%1$s”</string>
+</resources>

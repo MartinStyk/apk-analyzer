@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">एपीके एनालाइज़र</string>
+    <string name="external_apk_open_error">इस APK को खोलने में असमर्थ</string>
+</resources>

@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="settings_title">Cài đặt</string>
+    <string name="settings_appearance">Giao diện</string>
+    <string name="settings_color_scheme">Bảng màu</string>
+    <string name="settings_color_scheme_day">Ban ngày</string>
+    <string name="settings_color_scheme_night">Ban đêm</string>
+    <string name="settings_color_scheme_follow_system">Theo hệ thống</string>
+    <string name="settings_apps_section">Ứng dụng</string>
+    <string name="settings_recently_viewed_toggle">Ứng dụng đã xem gần đây</string>
+</resources>
