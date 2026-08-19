@@ -36,6 +36,14 @@ build scripts.
   Gradle properties aren't set, so a local `assembleRelease`/`bundleRelease` is always a signed,
   installable build rather than failing or producing an unsigned one. CI supplies the real `-P`
   properties, decoding the keystore from the `SIGN_KEY` secret first.
+* `ApplicationPlugin` applies `com.github.triplet.play` (Gradle Play Publisher) by string ID with no
+  extension configuration — every real invocation (`publishBundle`, `promoteArtifact`) passes its
+  track/status/artifact-dir explicitly via CLI flags from the release workflows, so build-script
+  defaults would never be read. It reads its service account credentials from the
+  `ANDROID_PUBLISHER_CREDENTIALS` environment variable (its own convention, not a Gradle property).
+  Its tasks don't need `app/google-services.json` to exist, even though this module also applies
+  `com.google.gms.google-services` — that plugin's file check is lazy, not a configuration-time
+  requirement.
 
 ## Adding a Convention Plugin
 

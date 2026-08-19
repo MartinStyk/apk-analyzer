@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.apkanalyzer.hilt)
     alias(libs.plugins.apkanalyzer.compose)
     alias(libs.plugins.apkanalyzer.spotless)
-    alias(libs.plugins.triplet.play)
     alias(libs.plugins.parcelize)
 }
 

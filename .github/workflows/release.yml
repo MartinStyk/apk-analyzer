@@ -42,9 +42,11 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: ./.github/actions/setup-gradle-build
+      - name: Set up Gradle build environment
+        uses: ./.github/actions/setup-gradle-build
 
-      - uses: ./.github/actions/fetch-google-services
+      - name: Fetch Firebase google-services.json
+        uses: ./.github/actions/fetch-google-services
         with:
           firebase-token: ${{ secrets.FIREBASE_TOKEN }}
           firebase-app-id: ${{ secrets.FIREBASE_APP_ID }}
@@ -64,9 +66,11 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: ./.github/actions/setup-gradle-build
+      - name: Set up Gradle build environment
+        uses: ./.github/actions/setup-gradle-build
 
-      - uses: ./.github/actions/fetch-google-services
+      - name: Fetch Firebase google-services.json
+        uses: ./.github/actions/fetch-google-services
         with:
           firebase-token: ${{ secrets.FIREBASE_TOKEN }}
           firebase-app-id: ${{ secrets.FIREBASE_APP_ID }}
@@ -167,7 +171,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: ./.github/actions/setup-gradle-build
+      - name: Set up Gradle build environment
+        uses: ./.github/actions/setup-gradle-build
 
       - name: Download AAB artifact
         uses: actions/download-artifact@v8

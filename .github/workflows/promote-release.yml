@@ -23,7 +23,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: ./.github/actions/setup-gradle-build
+      - name: Set up Gradle build environment
+        uses: ./.github/actions/setup-gradle-build
 
       - name: Authenticate to Google Cloud
         id: auth
