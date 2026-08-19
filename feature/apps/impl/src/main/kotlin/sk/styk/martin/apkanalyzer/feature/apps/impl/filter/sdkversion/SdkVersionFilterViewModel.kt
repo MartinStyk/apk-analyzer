@@ -22,7 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SdkVersionFilterViewModel @Inject constructor(
     private val sdkVersionFilterCoordinator: SdkVersionFilterCoordinator,
-    private val sdkVersionResolver: SdkVersionResolver,
+    sdkVersionResolver: SdkVersionResolver,
     installedAppsRepository: InstalledAppsRepository,
 ) : ViewModel() {
 

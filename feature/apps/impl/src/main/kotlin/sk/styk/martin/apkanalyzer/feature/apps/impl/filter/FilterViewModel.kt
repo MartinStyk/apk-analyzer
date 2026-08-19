@@ -38,7 +38,7 @@ class FilterViewModel @Inject constructor(
     private val permissionFilterCoordinator: PermissionFilterCoordinator,
     private val sourceFilterCoordinator: SourceFilterCoordinator,
     private val sdkVersionFilterCoordinator: SdkVersionFilterCoordinator,
-    private val sdkVersionResolver: SdkVersionResolver,
+    sdkVersionResolver: SdkVersionResolver,
     installedAppsRepository: InstalledAppsRepository,
     usageStatsRepository: UsageStatsRepository,
     storageStatsRepository: StorageStatsRepository,
