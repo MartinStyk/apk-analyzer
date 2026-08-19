@@ -119,7 +119,7 @@ locale folder for a module that has no `values/strings.xml`.
    Any line in the diff is a missing or extra key in the target locale.
 7. **Validate the XML is well-formed** (PowerShell, no extra tooling needed):
    ```powershell
-   [xml](Get-Content "core/apps/src/main/res/values-es/strings.xml" -Raw) | Out-Null
+   [xml] (Get-Content "core/apps/src/main/res/values-es/strings.xml" -Raw) | Out-Null
    ```
    Throws on malformed XML (unescaped `&`, unclosed tags, etc.).
 
