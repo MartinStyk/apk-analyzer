@@ -37,6 +37,25 @@ sentence structure.
 If asked to add a language outside this table, confirm the language and its folder qualifier with the
 user before creating files — don't guess a BCP-47 tag.
 
+## Control Language: Slovak (`values-sk`)
+
+English (`values/strings.xml`) is still the canonical source for keys, placeholders, and structure —
+but English UI copy is often terse enough to be ambiguous about the actually-intended nuance. Slovak
+(`values-sk`) is this app's **control translation**: the app owner personally reviews and corrects it,
+so a confirmed Slovak string encodes the verified intended meaning, tone, and terminology choice more
+precisely than the English source alone.
+
+When translating a string into any language other than Slovak, read both the English source and the
+Slovak translation before writing the target-language text — use English for literal meaning and
+structure, and Slovak to resolve tone, nuance, or ambiguity English leaves open. Where the two would
+suggest different readings, follow the interpretation Slovak embodies, since it reflects reviewed
+intent rather than a first-pass translation. If a Slovak entry doesn't exist yet for a key, fall back
+to English alone and say so rather than guessing what a not-yet-written control would say.
+
+Don't translate *from* Slovak's grammar — its declension and word order don't transfer to unrelated
+languages. Slovak is a meaning/tone reference; English remains the structural source (placeholder
+count and order, key names, sentence type).
+
 ## Android Platform Vocabulary
 
 `Activity`, `Service`, `Receiver` (Broadcast Receiver), `Provider` (Content Provider), `Intent
@@ -73,6 +92,23 @@ same key set.
 Translate module by module. Don't merge keys from different modules into one file, and don't create a
 locale folder for a module that has no `values/strings.xml`.
 
+## Order of Work: String-by-String vs Language-by-Language
+
+For a small batch of **new or changed strings**, translate string-by-string across all languages, not
+language-by-language across all strings. Reading the usage context (workflow step 3 below) is the
+expensive, error-prone part — do it once per string, then produce every language's translation while
+that context and its resolved meaning are still fresh. Translating language-by-language for a handful
+of new keys means re-deriving the same context up to 18 times and risks resolving an ambiguous string
+differently on different passes. Translate Slovak first (or immediately after confirming the English
+meaning) among the batch, since it's the control language — having it settled gives you, and the user
+on review, a second concrete reference before propagating to the remaining languages.
+
+The exception is a **large-scale audit of many already-existing strings** (a full-module or full-app
+correctness review, not a handful of new keys) — group that by language instead. A single sustained
+pass through one language builds up internal terminology and register consistency across the whole
+file that a string-by-string pass would fragment, and it parallelizes cleanly across languages when
+multiple reviewers (human or agent) are available.
+
 ## Workflow
 
 1. **Scope the change.** `git diff develop -- '**/values/strings.xml'` (or the equivalent for the
@@ -93,6 +129,9 @@ locale folder for a module that has no `values/strings.xml`.
      Service, Provider, Permission, Manifest, APK, ...), see "Android Platform Vocabulary" below.
    - The meaning and order of any `%1$s` / `%2$d` placeholders — read the call site to see what each
      argument actually is.
+   - If you're translating into a language other than Slovak, also read the corresponding
+     `values-sk/strings.xml` entry when one exists — see "Control Language: Slovak" above. It often
+     resolves ambiguity the English text alone leaves open.
 4. **Translate.** Keep it natural in the target language, not a clause-for-clause mirror of the
    English sentence. Preserve:
    - Placeholder indices tied to their original argument meaning. You may reorder where `%1$s` and
