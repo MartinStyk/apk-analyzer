@@ -19,14 +19,14 @@
     <plurals name="search_apps_placeholder">
         <item quantity="one">Hľadať %1$d aplikáciu…</item>
         <item quantity="few">Hľadať %1$d aplikácie…</item>
-        <item quantity="many">Hľadať %1$d aplikácie…</item>
-        <item quantity="other">Hľadať %1$d aplikácie…</item>
+        <item quantity="many">Hľadať %1$d aplikácií…</item>
+        <item quantity="other">Hľadať %1$d aplikácií…</item>
     </plurals>
     <plurals name="search_apps_matches">
         <item quantity="one">%d zhoda nájdená</item>
         <item quantity="few">%d zhody nájdené</item>
-        <item quantity="many">%d zhody nájdené</item>
-        <item quantity="other">%d zhody nájdené</item>
+        <item quantity="many">%d zhôd nájdených</item>
+        <item quantity="other">%d zhôd nájdených</item>
     </plurals>
     <string name="filter">Filter</string>
     <string name="preinstalled">Predinštalované</string>
@@ -36,7 +36,7 @@
     <string name="quick_filter_unused">Nepoužívané</string>
     <string name="quick_filter_system">Systém</string>
     <string name="quick_filter_google_play">Google Play</string>
-    <string name="quick_filter_sideloaded">Sideloaded</string>
+    <string name="quick_filter_sideloaded">Nainštalované ručne</string>
     <string name="quick_filter_recently_installed">Nedávno nainštalované</string>
     <string name="quick_filter_recently_updated">Nedávno aktualizované</string>
     <string name="quick_filter_source_sheet_title">Zdroj</string>
@@ -49,16 +49,16 @@
     <string name="installed_apps_count">Nainštalované aplikácie (%1$d)</string>
     <string name="recently_viewed">Nedávno zobrazené</string>
     <plurals name="search_apps_empty">
-        <item quantity="one">Hľadať nainštalovanú aplikáciu %1$d</item>
-        <item quantity="few">Hľadať nainštalované aplikácie %1$d</item>
-        <item quantity="many">Hľadať nainštalované aplikácie %1$d</item>
-        <item quantity="other">Hľadať nainštalované aplikácie %1$d</item>
+        <item quantity="one">Hľadať %1$d nainštalovanú aplikáciu</item>
+        <item quantity="few">Hľadať %1$d nainštalované aplikácie</item>
+        <item quantity="many">Hľadať %1$d nainštalovaných aplikácií</item>
+        <item quantity="other">Hľadať %1$d nainštalovaných aplikácií</item>
     </plurals>
     <string name="search_apps_no_results">Žiadne výsledky pre \"%1$s\"</string>
     <string name="search_history_title">Nedávne vyhľadávania</string>
     <string name="search_history_clear">Vymazať</string>
     <string name="filter_source_section">Zdroj inštalácie</string>
-    <string name="filter_sdk_section">Cieľ SDK</string>
+    <string name="filter_sdk_section">Cieľové SDK</string>
     <string name="filter_apk_size_section">APK Veľkosť súboru</string>
     <string name="filter_apk_size_description">Veľkosť inštalačného balíka (.apk) iba — nezahŕňa používateľské údaje a cache.</string>
     <string name="filter_total_size_section">Celková veľkosť aplikácie</string>
@@ -92,14 +92,14 @@
     <plurals name="filter_unused_days_count">
         <item quantity="one">%d deň</item>
         <item quantity="few">%d dni</item>
-        <item quantity="many">%d dni</item>
-        <item quantity="other">%d dni</item>
+        <item quantity="many">%d dní</item>
+        <item quantity="other">%d dní</item>
     </plurals>
     <plurals name="filter_unused_months_count">
         <item quantity="one">%d mesiac</item>
         <item quantity="few">%d mesiace</item>
-        <item quantity="many">%d mesiace</item>
-        <item quantity="other">%d mesiace</item>
+        <item quantity="many">%d mesiacov</item>
+        <item quantity="other">%d mesiacov</item>
     </plurals>
     <string name="filter_unused_year">1 rok</string>
     <string name="quick_filter_permission_usage_title">Potrebný prístup k používaniu</string>
@@ -111,9 +111,9 @@
     <string name="sort_permission_usage_description">Triedenie podľa posledného použitia potrebuje vedieť, kedy ste naposledy otvorili každú aplikáciu. Povoľte prístup k používaniu v Nastaveniach, aby ste aktivovali túto možnosť triedenia.</string>
     <string name="sort_permission_storage_title">Povoliť prístup k používaniu</string>
     <string name="sort_permission_storage_description">Triedenie podľa celkovej veľkosti meria celkovú stopu každej aplikácie — inštalátor, uložené dáta a vyrovnávaciu pamäť spolu. Povoľte prístup k používaniu v Nastaveniach, aby ste aktivovali túto možnosť triedenia.</string>
-    <string name="filter_permissions_section">Permissions</string>
+    <string name="filter_permissions_section">Povolenia</string>
     <string name="filter_permissions_count" ns0:ignore="PluralsCandidate">+%d viac</string>
-    <string name="filter_permissions_title">Filtrovať podľa Permission</string>
+    <string name="filter_permissions_title">Filtrovať podľa povolenia</string>
     <string name="filter_permissions_quick_filters">Rýchle filtre</string>
     <string name="filter_permissions_match_label">Zodpovedať</string>
     <string name="filter_permissions_chip_match_any">Zodpovedať: Akákoľvek</string>
@@ -122,8 +122,8 @@
     <plurals name="filter_permissions_chip_presets_count">
         <item quantity="one">%d predvoľba</item>
         <item quantity="few">%d predvoľby</item>
-        <item quantity="many">%d predvoľby</item>
-        <item quantity="other">%d predvoľby</item>
+        <item quantity="many">%d predvolieb</item>
+        <item quantity="other">%d predvolieb</item>
     </plurals>
     <string name="filter_permissions_chip_show_all">Zobraziť: Všetky</string>
     <string name="filter_permissions_chip_show_selected">Zobraziť: Vybrané</string>
@@ -152,6 +152,6 @@
     <string name="filter_permissions_empty_selected_title">Žiadne povolenia neboli vybrané</string>
     <string name="filter_permissions_empty_selected_subtitle">Vráťte sa na úplný zoznam a vyberte povolenia na filtrovanie.</string>
     <string name="filter_permissions_empty_title">Žiadne povolenia neboli nájdené</string>
-    <string name="filter_permissions_empty_subtitle">Tento zariadenie nemá žiadne povolenia na zobrazenie.</string>
+    <string name="filter_permissions_empty_subtitle">Toto zariadenie nemá žiadne povolenia na zobrazenie.</string>
     <string name="quick_filter_sensitive_permissions">Citlivé povolenia</string>
 </resources>

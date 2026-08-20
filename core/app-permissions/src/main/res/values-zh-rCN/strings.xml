@@ -36,14 +36,14 @@
     <string name="permission_label_bluetooth_connect">蓝牙连接</string>
     <string name="permission_label_bluetooth_advertise">蓝牙广告</string>
     <string name="permission_label_bluetooth">蓝牙</string>
-    <string name="permission_label_uwb">UWB测距</string>
+    <string name="permission_label_uwb">UWB 测距</string>
     <string name="permission_label_notifications">发布通知</string>
     <string name="permission_label_internet">互联网</string>
     <string name="permission_label_nfc">NFC</string>
     <string name="permission_label_vibrate">震动</string>
     <string name="permission_label_flashlight">手电筒</string>
-    <string name="permission_label_wifi_change">更改Wi-Fi</string>
-    <string name="permission_label_wifi_state">Wi-Fi状态</string>
+    <string name="permission_label_wifi_change">更改 Wi-Fi</string>
+    <string name="permission_label_wifi_state">Wi-Fi 状态</string>
     <string name="permission_label_network_state">网络状态</string>
     <string name="permission_label_wake_lock">保持设备唤醒</string>
     <string name="permission_label_boot">开机时运行</string>
@@ -55,7 +55,7 @@
     <string name="permission_label_foreground_service_media_projection">屏幕共享服务</string>
     <string name="permission_label_foreground_service_phone_call">后台通话处理</string>
     <string name="permission_label_foreground_service_connected_device">后台设备连接</string>
-    <string name="permission_label_ad_id">广告ID</string>
+    <string name="permission_label_ad_id">广告 ID</string>
     <string name="permission_label_ad_attribution">广告归因</string>
     <string name="permission_label_ad_custom_audience">广告受众</string>
     <string name="permission_label_ad_topics">广告主题</string>
@@ -73,7 +73,7 @@
     <string name="permission_label_sync_settings_read">读取同步设置</string>
     <string name="permission_label_sync_settings_write">更改同步设置</string>
     <string name="permission_label_google_services_config">Google 服务配置</string>
-    <string name="permission_label_install_packages">安装包</string>
+    <string name="permission_label_install_packages">安装软件包</string>
     <string name="permission_label_overlay">在其他应用上绘制</string>
     <string name="permission_label_manage_storage">管理所有文件</string>
     <string name="permission_label_schedule_alarm">精确闹钟</string>

@@ -36,7 +36,7 @@
     <string name="permission_label_bluetooth_connect">Подключение по Bluetooth</string>
     <string name="permission_label_bluetooth_advertise">Реклама Bluetooth</string>
     <string name="permission_label_bluetooth">Bluetooth</string>
-    <string name="permission_label_uwb">UWB Измерение расстояния</string>
+    <string name="permission_label_uwb">Измерение расстояния UWB</string>
     <string name="permission_label_notifications">Отправить уведомления</string>
     <string name="permission_label_internet">Интернет</string>
     <string name="permission_label_nfc">NFC</string>

@@ -8,33 +8,33 @@
     <string name="content_description_delete_search">Elimina ricerca: %1$s</string>
     <string name="filter_date_clear">Cancella intervallo di date</string>
     <string name="sort_name">Nome</string>
-    <string name="sort_size">APK Dimensione del file</string>
+    <string name="sort_size">Dimensione del file APK</string>
     <string name="sort_total_size">Dimensione totale dell\'app</string>
     <string name="sort_install_date">Data di installazione</string>
-    <string name="sort_target_sdk">Target Android SDK</string>
+    <string name="sort_target_sdk">SDK Android target</string>
     <string name="sort_last_updated">Ultimo aggiornamento</string>
     <string name="sort_last_used">Ultimo utilizzato</string>
     <string name="sort_bottom_sheet_title">Ordina per</string>
     <string name="search_apps_hint">Cerca app</string>
     <plurals name="search_apps_placeholder">
-        <item quantity="one">Cerca app %1$d…</item>
-        <item quantity="other">Cerca app %1$d…</item>
+        <item quantity="one">Cerca %1$d app…</item>
+        <item quantity="other">Cerca %1$d app…</item>
     </plurals>
     <plurals name="search_apps_matches">
         <item quantity="one">%d corrispondenza trovata</item>
         <item quantity="other">%d corrispondenze trovate</item>
     </plurals>
     <string name="filter">Filtra</string>
-    <string name="preinstalled">Preinstallato</string>
+    <string name="preinstalled">Preinstallata</string>
     <string name="never">Mai</string>
     <string name="quick_filter_large_total">Grande</string>
-    <string name="quick_filter_recently_used">Usato di recente</string>
-    <string name="quick_filter_unused">Non utilizzato</string>
+    <string name="quick_filter_recently_used">Usata di recente</string>
+    <string name="quick_filter_unused">Non utilizzata</string>
     <string name="quick_filter_system">Sistema</string>
     <string name="quick_filter_google_play">Google Play</string>
-    <string name="quick_filter_sideloaded">Sideloaded</string>
-    <string name="quick_filter_recently_installed">Recentemente installato</string>
-    <string name="quick_filter_recently_updated">Aggiornato di recente</string>
+    <string name="quick_filter_sideloaded">Installata da file</string>
+    <string name="quick_filter_recently_installed">Recentemente installata</string>
+    <string name="quick_filter_recently_updated">Aggiornata di recente</string>
     <string name="quick_filter_source_sheet_title">Fonte</string>
     <string name="quick_filter_selection_more" ns0:ignore="PluralsCandidate">%1$s +%2$d</string>
     <string name="quick_filter_activity_sheet_title">Attività</string>
@@ -43,17 +43,17 @@
     <string name="apps_clear_filters">Cancella filtri</string>
     <string name="installed_apps">App installate</string>
     <string name="installed_apps_count">App installate (%1$d)</string>
-    <string name="recently_viewed">Visualizzato di recente</string>
+    <string name="recently_viewed">Visualizzate di recente</string>
     <plurals name="search_apps_empty">
-        <item quantity="one">Cerca app installata %1$d</item>
-        <item quantity="other">Cerca app installate %1$d</item>
+        <item quantity="one">Cerca %1$d app installata</item>
+        <item quantity="other">Cerca %1$d app installate</item>
     </plurals>
     <string name="search_apps_no_results">Nessun risultato per \"%1$s\"</string>
     <string name="search_history_title">Ricerche recenti</string>
     <string name="search_history_clear">Cancella</string>
     <string name="filter_source_section">Fonte di installazione</string>
-    <string name="filter_sdk_section">Obiettivo SDK</string>
-    <string name="filter_apk_size_section">APK Dimensione del file</string>
+    <string name="filter_sdk_section">SDK target</string>
+    <string name="filter_apk_size_section">Dimensione del file APK</string>
     <string name="filter_apk_size_description">Dimensione del pacchetto di installazione (.apk) solo — esclude i dati utente e la cache.</string>
     <string name="filter_total_size_section">Dimensione totale dell\'app</string>
     <string name="filter_total_size_description">Dimensione combinata dell\'installatore, dei dati dell\'app memorizzati e dei file nella cache.</string>
@@ -101,9 +101,9 @@
     <string name="sort_permission_usage_description">L\'ordinamento per Ultimo Utilizzo deve sapere quando hai aperto l\'ultima volta ciascuna app. Concedi l\'accesso all\'uso nelle Impostazioni per abilitare questa opzione di ordinamento.</string>
     <string name="sort_permission_storage_title">Consenti accesso all\'uso</string>
     <string name="sort_permission_storage_description">L\'ordinamento per Dimensione Totale misura l\'impronta totale di ciascuna app — installatore, dati memorizzati e cache combinati. Concedi l\'accesso all\'uso nelle Impostazioni per abilitare questa opzione di ordinamento.</string>
-    <string name="filter_permissions_section">Permissions</string>
-    <string name="filter_permissions_count" ns0:ignore="PluralsCandidate">+%d di più</string>
-    <string name="filter_permissions_title">Filtra per Permission</string>
+    <string name="filter_permissions_section">Autorizzazioni</string>
+    <string name="filter_permissions_count" ns0:ignore="PluralsCandidate">+%d altre</string>
+    <string name="filter_permissions_title">Filtra per autorizzazione</string>
     <string name="filter_permissions_quick_filters">Filtri rapidi</string>
     <string name="filter_permissions_match_label">Corrispondenza</string>
     <string name="filter_permissions_chip_match_any">Corrispondenza: Qualsiasi</string>
@@ -115,19 +115,19 @@
     </plurals>
     <string name="filter_permissions_chip_show_all">Mostra: Tutti</string>
     <string name="filter_permissions_chip_show_selected">Mostra: Selezionato</string>
-    <string name="filter_permissions_presets_description">Tocca un preset per selezionare un gruppo di permessi correlati in una sola volta.</string>
-    <string name="filter_permissions_match_description">Decidi come vengono applicati i permessi selezionati quando si filtrano le app.</string>
-    <string name="filter_permissions_match_any">Qualsiasi permesso</string>
-    <string name="filter_permissions_match_any_subtitle">Mostra le app che hanno almeno uno dei permessi selezionati.</string>
-    <string name="filter_permissions_match_all">Tutti i permessi</string>
-    <string name="filter_permissions_match_all_subtitle">Mostra solo le app che hanno ogni permesso selezionato.</string>
-    <string name="filter_permissions_show_description">Scegli quali permessi appaiono nell\'elenco qui sotto.</string>
-    <string name="filter_permissions_show_all">Tutti i permessi</string>
-    <string name="filter_permissions_show_all_subtitle">Esplora ogni permesso dichiarato su questo dispositivo.</string>
+    <string name="filter_permissions_presets_description">Tocca un preset per selezionare un gruppo di autorizzazioni correlate in una sola volta.</string>
+    <string name="filter_permissions_match_description">Decidi come vengono applicate le autorizzazioni selezionate quando si filtrano le app.</string>
+    <string name="filter_permissions_match_any">Qualsiasi autorizzazione</string>
+    <string name="filter_permissions_match_any_subtitle">Mostra le app che hanno almeno una delle autorizzazioni selezionate.</string>
+    <string name="filter_permissions_match_all">Tutte le autorizzazioni</string>
+    <string name="filter_permissions_match_all_subtitle">Mostra solo le app che hanno ogni autorizzazione selezionata.</string>
+    <string name="filter_permissions_show_description">Scegli quali autorizzazioni appaiono nell\'elenco qui sotto.</string>
+    <string name="filter_permissions_show_all">Tutte le autorizzazioni</string>
+    <string name="filter_permissions_show_all_subtitle">Esplora ogni autorizzazione dichiarata su questo dispositivo.</string>
     <string name="filter_permissions_show_selected">Solo selezionati</string>
-    <string name="filter_permissions_show_selected_subtitle">Vedi solo i permessi che hai già scelto.</string>
-    <string name="filter_permissions_sheet_show">Mostra permessi</string>
-    <string name="filter_permissions_search_hint">Cerca permessi</string>
+    <string name="filter_permissions_show_selected_subtitle">Vedi solo le autorizzazioni che hai già scelto.</string>
+    <string name="filter_permissions_sheet_show">Mostra autorizzazioni</string>
+    <string name="filter_permissions_search_hint">Cerca autorizzazioni</string>
     <string name="filter_permissions_preset_sensitive">Sensibile</string>
     <string name="filter_permissions_preset_camera">Fotocamera</string>
     <string name="filter_permissions_preset_microphone">Microfono</string>
@@ -136,7 +136,7 @@
     <string name="filter_permissions_preset_sms">SMS</string>
     <string name="filter_permissions_preset_storage">Archiviazione</string>
     <string name="filter_permissions_empty_search_title">Nessun risultato per \"%1$s\"</string>
-    <string name="filter_permissions_empty_search_subtitle">Prova un nome di permesso o un identificatore diverso.</string>
+    <string name="filter_permissions_empty_search_subtitle">Prova un nome di autorizzazione o un identificatore diverso.</string>
     <string name="filter_permissions_empty_selected_title">Nessuna autorizzazione selezionata</string>
     <string name="filter_permissions_empty_selected_subtitle">Torna all\'elenco completo e scegli le autorizzazioni da filtrare.</string>
     <string name="filter_permissions_empty_title">Nessuna autorizzazione trovata</string>

@@ -3,12 +3,12 @@
     <string name="browse_title">Przeglądaj</string>
     <string name="browse_subtitle_loading">Skanowanie zainstalowanych aplikacji…</string>
     <plurals name="browse_subtitle">
-        <item quantity="one">Zbadaj aplikację %1$d zainstalowaną na tym urządzeniu</item>
-        <item quantity="few">Zbadaj aplikacje %1$d zainstalowane na tym urządzeniu</item>
-        <item quantity="many">Zbadaj aplikacje %1$d zainstalowane na tym urządzeniu</item>
-        <item quantity="other">Zbadaj aplikacje %1$d zainstalowane na tym urządzeniu</item>
+        <item quantity="one">Zbadaj %1$d aplikację zainstalowaną na tym urządzeniu</item>
+        <item quantity="few">Zbadaj %1$d aplikacje zainstalowane na tym urządzeniu</item>
+        <item quantity="many">Zbadaj %1$d zainstalowanych aplikacji na tym urządzeniu</item>
+        <item quantity="other">Zbadaj %1$d zainstalowanych aplikacji na tym urządzeniu</item>
     </plurals>
-    <string name="browse_dimension_permission_title">Permissions</string>
+    <string name="browse_dimension_permission_title">Uprawnienia</string>
     <string name="browse_dimension_permission_subtitle">Zobacz, które aplikacje używają danego uprawnienia</string>
     <string name="browse_dimension_certificate_title">Certyfikat podpisu</string>
     <string name="browse_dimension_certificate_subtitle">Grupuj aplikacje według tożsamości podpisu, nazwy wydawcy lub kraju</string>
@@ -25,8 +25,8 @@
     <plurals name="browse_dimension_option_count">
         <item quantity="one">%1$d opcja</item>
         <item quantity="few">%1$d opcje</item>
-        <item quantity="many">%1$d opcje</item>
-        <item quantity="other">%1$d opcje</item>
+        <item quantity="many">%1$d opcji</item>
+        <item quantity="other">%1$d opcji</item>
     </plurals>
     <string name="browse_sdk_unknown">API poziom %1$s</string>
     <string name="browse_api_level">API %1$s</string>
@@ -84,21 +84,21 @@
     <plurals name="browse_options_filter_hint">
         <item quantity="one">Filtr %1$d opcja</item>
         <item quantity="few">Filtr %1$d opcje</item>
-        <item quantity="many">Filtr %1$d opcje</item>
-        <item quantity="other">Filtr %1$d opcje</item>
+        <item quantity="many">Filtr %1$d opcji</item>
+        <item quantity="other">Filtr %1$d opcji</item>
     </plurals>
     <string name="browse_options_empty_query">Brak opcji pasujących do “%1$s”</string>
     <plurals name="browse_apps_count">
         <item quantity="one">%1$d aplikacja</item>
         <item quantity="few">%1$d aplikacje</item>
-        <item quantity="many">%1$d aplikacje</item>
-        <item quantity="other">%1$d aplikacje</item>
+        <item quantity="many">%1$d aplikacji</item>
+        <item quantity="other">%1$d aplikacji</item>
     </plurals>
     <plurals name="browse_apps_filter_hint">
         <item quantity="one">Filtr %1$d aplikacja</item>
         <item quantity="few">Filtr %1$d aplikacje</item>
-        <item quantity="many">Filtr %1$d aplikacje</item>
-        <item quantity="other">Filtr %1$d aplikacje</item>
+        <item quantity="many">Filtr %1$d aplikacji</item>
+        <item quantity="other">Filtr %1$d aplikacji</item>
     </plurals>
     <string name="browse_apps_empty_query">Brak aplikacji pasujących do “%1$s”</string>
 </resources>

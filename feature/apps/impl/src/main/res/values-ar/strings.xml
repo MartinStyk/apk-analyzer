@@ -8,10 +8,10 @@
     <string name="content_description_delete_search">حذف البحث: %1$s</string>
     <string name="filter_date_clear">مسح نطاق التاريخ</string>
     <string name="sort_name">الاسم</string>
-    <string name="sort_size">APK حجم الملف</string>
+    <string name="sort_size">حجم ملف APK</string>
     <string name="sort_total_size">إجمالي حجم التطبيق</string>
     <string name="sort_install_date">تاريخ التثبيت</string>
-    <string name="sort_target_sdk">الهدف Android SDK</string>
+    <string name="sort_target_sdk">Android SDK المستهدف</string>
     <string name="sort_last_updated">آخر تحديث</string>
     <string name="sort_last_used">آخر استخدام</string>
     <string name="sort_bottom_sheet_title">ترتيب حسب</string>
@@ -19,18 +19,18 @@
     <plurals name="search_apps_placeholder">
         <item quantity="zero">بحث عن تطبيقات %1$d…</item>
         <item quantity="one">بحث عن تطبيق %1$d…</item>
-        <item quantity="two">بحث عن تطبيقات %1$d…</item>
+        <item quantity="two">بحث عن تطبيقين %1$d…</item>
         <item quantity="few">بحث عن تطبيقات %1$d…</item>
-        <item quantity="many">بحث عن تطبيقات %1$d…</item>
-        <item quantity="other">بحث عن تطبيقات %1$d…</item>
+        <item quantity="many">بحث عن تطبيق %1$d…</item>
+        <item quantity="other">بحث عن تطبيق %1$d…</item>
     </plurals>
     <plurals name="search_apps_matches">
         <item quantity="zero">تم العثور على %d تطابقات</item>
         <item quantity="one">تم العثور على %d تطابق</item>
-        <item quantity="two">تم العثور على %d تطابقات</item>
+        <item quantity="two">تم العثور على %d تطابقين</item>
         <item quantity="few">تم العثور على %d تطابقات</item>
-        <item quantity="many">تم العثور على %d تطابقات</item>
-        <item quantity="other">تم العثور على %d تطابقات</item>
+        <item quantity="many">تم العثور على %d تطابق</item>
+        <item quantity="other">تم العثور على %d تطابق</item>
     </plurals>
     <string name="filter">تصفية</string>
     <string name="preinstalled">مثبت مسبقًا</string>
@@ -39,13 +39,13 @@
     <string name="quick_filter_recently_used">مستخدم مؤخرًا</string>
     <string name="quick_filter_unused">غير مستخدم</string>
     <string name="quick_filter_system">نظام</string>
-    <string name="quick_filter_google_play">جوجل بلاي</string>
+    <string name="quick_filter_google_play">Google Play</string>
     <string name="quick_filter_sideloaded">تم تحميله جانبيًا</string>
     <string name="quick_filter_recently_installed">تم التثبيت مؤخرًا</string>
     <string name="quick_filter_recently_updated">تم التحديث مؤخرًا</string>
     <string name="quick_filter_source_sheet_title">المصدر</string>
     <string name="quick_filter_selection_more" ns0:ignore="PluralsCandidate">%1$s +%2$d</string>
-    <string name="quick_filter_activity_sheet_title">Activity</string>
+    <string name="quick_filter_activity_sheet_title">النشاط</string>
     <string name="quick_filter_activity_all">أي نشاط</string>
     <string name="apps_empty_filtered">لم يتم العثور على تطبيقات</string>
     <string name="apps_clear_filters">مسح الفلاتر</string>
@@ -53,19 +53,19 @@
     <string name="installed_apps_count">التطبيقات المثبتة (%1$d)</string>
     <string name="recently_viewed">تمت مشاهدته مؤخرًا</string>
     <plurals name="search_apps_empty">
-        <item quantity="zero">ابحث عن التطبيقات المثبتة %1$d</item>
-        <item quantity="one">ابحث عن التطبيق المثبت %1$d</item>
-        <item quantity="two">ابحث عن التطبيقات المثبتة %1$d</item>
-        <item quantity="few">ابحث عن التطبيقات المثبتة %1$d</item>
-        <item quantity="many">ابحث عن التطبيقات المثبتة %1$d</item>
-        <item quantity="other">ابحث عن التطبيقات المثبتة %1$d</item>
+        <item quantity="zero">ابحث في %1$d تطبيق مثبت</item>
+        <item quantity="one">ابحث في %1$d تطبيق مثبت</item>
+        <item quantity="two">ابحث في %1$d تطبيقين مثبتين</item>
+        <item quantity="few">ابحث في %1$d تطبيقات مثبتة</item>
+        <item quantity="many">ابحث في %1$d تطبيق مثبت</item>
+        <item quantity="other">ابحث في %1$d تطبيق مثبت</item>
     </plurals>
     <string name="search_apps_no_results">لا توجد نتائج لـ \"%1$s\"</string>
     <string name="search_history_title">عمليات البحث الأخيرة</string>
     <string name="search_history_clear">مسح</string>
     <string name="filter_source_section">مصدر التثبيت</string>
-    <string name="filter_sdk_section">الهدف SDK</string>
-    <string name="filter_apk_size_section">APK حجم الملف</string>
+    <string name="filter_sdk_section">SDK المستهدف</string>
+    <string name="filter_apk_size_section">حجم ملف APK</string>
     <string name="filter_apk_size_description">حجم حزمة المثبت (.apk) فقط - يستثني بيانات المستخدم والذاكرة المؤقتة.</string>
     <string name="filter_total_size_section">إجمالي حجم التطبيق</string>
     <string name="filter_total_size_description">الحجم الإجمالي للمثبت وبيانات التطبيق المخزنة والملفات المؤقتة.</string>
@@ -81,11 +81,11 @@
     <string name="filter_date_any">أي</string>
     <string name="filter_date_range">%1$s–%2$s</string>
     <string name="filter_size_range">%1$s–%2$s</string>
-    <string name="filter_source_google_play">جوجل بلاي</string>
+    <string name="filter_source_google_play">Google Play</string>
     <string name="filter_source_samsung_galaxy_store">متجر جالاكسي</string>
     <string name="filter_source_amazon_appstore">متجر أمازون للتطبيقات</string>
-    <string name="filter_source_huawei_app_gallery">معرض التطبيقات</string>
-    <string name="filter_source_xiaomi_get_apps">احصل على التطبيقات</string>
+    <string name="filter_source_huawei_app_gallery">AppGallery</string>
+    <string name="filter_source_xiaomi_get_apps">GetApps</string>
     <string name="filter_source_fdroid">F-Droid</string>
     <string name="filter_source_aurora_store">متجر أورورا</string>
     <string name="filter_source_sideloaded">تم التثبيت من ملف</string>
@@ -98,18 +98,18 @@
     <plurals name="filter_unused_days_count">
         <item quantity="zero">%d أيام</item>
         <item quantity="one">%d يوم</item>
-        <item quantity="two">%d أيام</item>
+        <item quantity="two">%d يومين</item>
         <item quantity="few">%d أيام</item>
-        <item quantity="many">%d أيام</item>
-        <item quantity="other">%d أيام</item>
+        <item quantity="many">%d يوم</item>
+        <item quantity="other">%d يوم</item>
     </plurals>
     <plurals name="filter_unused_months_count">
         <item quantity="zero">%d أشهر</item>
         <item quantity="one">%d شهر</item>
-        <item quantity="two">%d أشهر</item>
+        <item quantity="two">%d شهرين</item>
         <item quantity="few">%d أشهر</item>
-        <item quantity="many">%d أشهر</item>
-        <item quantity="other">%d أشهر</item>
+        <item quantity="many">%d شهر</item>
+        <item quantity="other">%d شهر</item>
     </plurals>
     <string name="filter_unused_year">سنة واحدة</string>
     <string name="quick_filter_permission_usage_title">الوصول إلى الاستخدام مطلوب</string>
@@ -121,9 +121,9 @@
     <string name="sort_permission_usage_description">الفرز حسب آخر استخدام يحتاج إلى معرفة متى فتحت كل تطبيق آخر مرة. امنح الوصول إلى الاستخدام في الإعدادات لتمكين خيار الفرز هذا.</string>
     <string name="sort_permission_storage_title">السماح بالوصول إلى الاستخدام</string>
     <string name="sort_permission_storage_description">الفرز حسب الحجم الكلي يقيس البصمة الكاملة لكل تطبيق - المثبت، البيانات المخزنة، والذاكرة المؤقتة مجتمعة. امنح الوصول إلى الاستخدام في الإعدادات لتمكين خيار الفرز هذا.</string>
-    <string name="filter_permissions_section">Permissions</string>
+    <string name="filter_permissions_section">الأذونات</string>
     <string name="filter_permissions_count" ns0:ignore="PluralsCandidate">+%d المزيد</string>
-    <string name="filter_permissions_title">تصفية حسب Permission</string>
+    <string name="filter_permissions_title">تصفية حسب الإذن</string>
     <string name="filter_permissions_quick_filters">فلاتر سريعة</string>
     <string name="filter_permissions_match_label">مطابقة</string>
     <string name="filter_permissions_chip_match_any">مطابقة: أي</string>
@@ -132,10 +132,10 @@
     <plurals name="filter_permissions_chip_presets_count">
         <item quantity="zero">%d إعدادات مسبقة</item>
         <item quantity="one">%d إعداد مسبق</item>
-        <item quantity="two">%d إعدادات مسبقة</item>
+        <item quantity="two">%d إعدادين مسبقين</item>
         <item quantity="few">%d إعدادات مسبقة</item>
-        <item quantity="many">%d إعدادات مسبقة</item>
-        <item quantity="other">%d إعدادات مسبقة</item>
+        <item quantity="many">%d إعداد مسبق</item>
+        <item quantity="other">%d إعداد مسبق</item>
     </plurals>
     <string name="filter_permissions_chip_show_all">عرض: الكل</string>
     <string name="filter_permissions_chip_show_selected">عرض: المحدد</string>

@@ -5,8 +5,8 @@
     <plurals name="browse_subtitle">
         <item quantity="one">Изучите приложение %1$d, установленное на этом устройстве</item>
         <item quantity="few">Изучите приложения %1$d, установленные на этом устройстве</item>
-        <item quantity="many">Изучите приложения %1$d, установленные на этом устройстве</item>
-        <item quantity="other">Изучите приложения %1$d, установленные на этом устройстве</item>
+        <item quantity="many">Изучите приложений %1$d, установленных на этом устройстве</item>
+        <item quantity="other">Изучите приложений %1$d, установленных на этом устройстве</item>
     </plurals>
     <string name="browse_dimension_permission_title">Разрешения</string>
     <string name="browse_dimension_permission_subtitle">Посмотрите, какие приложения используют данное разрешение</string>
@@ -25,8 +25,8 @@
     <plurals name="browse_dimension_option_count">
         <item quantity="one">%1$d опция</item>
         <item quantity="few">%1$d опции</item>
-        <item quantity="many">%1$d опции</item>
-        <item quantity="other">%1$d опции</item>
+        <item quantity="many">%1$d опций</item>
+        <item quantity="other">%1$d опций</item>
     </plurals>
     <string name="browse_sdk_unknown">Уровень API %1$s</string>
     <string name="browse_api_level">API %1$s</string>
@@ -67,7 +67,7 @@
     <string name="browse_protection_level_internal">Внутренний</string>
     <string name="browse_protection_level_normal">Обычный</string>
     <string name="browse_protection_level_dangerous_explanation">Требуется ваше явное одобрение, прежде чем приложение сможет его использовать.</string>
-    <string name="browse_protection_level_signature_explanation">Только приложения, подписанные тем же ключом, что и приложение, которое его объявило, могут это держать.</string>
+    <string name="browse_protection_level_signature_explanation">Только приложения, подписанные тем же ключом, что и приложение, которое его объявило, могут получить это разрешение.</string>
     <string name="browse_protection_level_internal_explanation">Резервируется для системы и предоставляется внутренними правилами, а не вами.</string>
     <string name="browse_protection_level_normal_explanation">Обычно предоставляется автоматически при установке. Низкий риск сам по себе.</string>
     <string name="browse_algorithm_strong">Сильный</string>
@@ -82,23 +82,23 @@
     <string name="browse_certificate_self_signed_explanation">Самоподписанные сертификаты являются нормой для приложений Android. Сравните отпечаток сертификата с доверенным источником, когда вам нужно проверить издателя.</string>
     <string name="browse_bucket_info_content_description">О %1$s</string>
     <plurals name="browse_options_filter_hint">
-        <item quantity="one">Фильтр опции %1$d</item>
-        <item quantity="few">Фильтр опций %1$d</item>
-        <item quantity="many">Фильтр опций %1$d</item>
-        <item quantity="other">Фильтр опций %1$d</item>
+        <item quantity="one">Отфильтровать %1$d опцию</item>
+        <item quantity="few">Отфильтровать %1$d опции</item>
+        <item quantity="many">Отфильтровать %1$d опций</item>
+        <item quantity="other">Отфильтровать %1$d опций</item>
     </plurals>
     <string name="browse_options_empty_query">Нет опций, соответствующих “%1$s”</string>
     <plurals name="browse_apps_count">
         <item quantity="one">%1$d приложение</item>
         <item quantity="few">%1$d приложения</item>
-        <item quantity="many">%1$d приложения</item>
-        <item quantity="other">%1$d приложения</item>
+        <item quantity="many">%1$d приложений</item>
+        <item quantity="other">%1$d приложений</item>
     </plurals>
     <plurals name="browse_apps_filter_hint">
-        <item quantity="one">Фильтр приложения %1$d</item>
-        <item quantity="few">Фильтр приложений %1$d</item>
-        <item quantity="many">Фильтр приложений %1$d</item>
-        <item quantity="other">Фильтр приложений %1$d</item>
+        <item quantity="one">Отфильтровать %1$d приложение</item>
+        <item quantity="few">Отфильтровать %1$d приложения</item>
+        <item quantity="many">Отфильтровать %1$d приложений</item>
+        <item quantity="other">Отфильтровать %1$d приложений</item>
     </plurals>
     <string name="browse_apps_empty_query">Нет приложений, соответствующих “%1$s”</string>
 </resources>

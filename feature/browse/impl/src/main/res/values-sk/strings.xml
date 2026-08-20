@@ -3,12 +3,12 @@
     <string name="browse_title">Prehľadávať</string>
     <string name="browse_subtitle_loading">Skenovanie nainštalovaných aplikácií…</string>
     <plurals name="browse_subtitle">
-        <item quantity="one">Preskúmať aplikáciu %1$d nainštalovanú na tomto zariadení</item>
-        <item quantity="few">Preskúmať aplikácie %1$d nainštalované na tomto zariadení</item>
-        <item quantity="many">Preskúmať aplikácie %1$d nainštalované na tomto zariadení</item>
-        <item quantity="other">Preskúmať aplikácie %1$d nainštalované na tomto zariadení</item>
+        <item quantity="one">Preskúmať %1$d aplikáciu nainštalovanú na tomto zariadení</item>
+        <item quantity="few">Preskúmať %1$d aplikácie nainštalované na tomto zariadení</item>
+        <item quantity="many">Preskúmať %1$d nainštalovaných aplikácií na tomto zariadení</item>
+        <item quantity="other">Preskúmať %1$d nainštalovaných aplikácií na tomto zariadení</item>
     </plurals>
-    <string name="browse_dimension_permission_title">Permissions</string>
+    <string name="browse_dimension_permission_title">Povolenia</string>
     <string name="browse_dimension_permission_subtitle">Zobraziť, ktoré aplikácie používajú dané povolenie</string>
     <string name="browse_dimension_certificate_title">Podpisový certifikát</string>
     <string name="browse_dimension_certificate_subtitle">Zoskupiť aplikácie podľa identity podpisu, názvu vydavateľa alebo krajiny</string>
@@ -25,8 +25,8 @@
     <plurals name="browse_dimension_option_count">
         <item quantity="one">%1$d možnosť</item>
         <item quantity="few">%1$d možnosti</item>
-        <item quantity="many">%1$d možnosti</item>
-        <item quantity="other">%1$d možnosti</item>
+        <item quantity="many">%1$d možností</item>
+        <item quantity="other">%1$d možností</item>
     </plurals>
     <string name="browse_sdk_unknown">API úroveň %1$s</string>
     <string name="browse_api_level">API %1$s</string>
@@ -82,23 +82,23 @@
     <string name="browse_certificate_self_signed_explanation">Samo-podpísané certifikáty sú bežné pre Android aplikácie. Porovnajte odtlačok certifikátu s dôveryhodným zdrojom, keď potrebujete overiť vydavateľa.</string>
     <string name="browse_bucket_info_content_description">O %1$s</string>
     <plurals name="browse_options_filter_hint">
-        <item quantity="one">Filtrovať možnosť %1$d</item>
-        <item quantity="few">Filtrovať možnosti %1$d</item>
-        <item quantity="many">Filtrovať možnosti %1$d</item>
-        <item quantity="other">Filtrovať možnosti %1$d</item>
+        <item quantity="one">Filtrovať %1$d možnosť</item>
+        <item quantity="few">Filtrovať %1$d možnosti</item>
+        <item quantity="many">Filtrovať %1$d možností</item>
+        <item quantity="other">Filtrovať %1$d možností</item>
     </plurals>
     <string name="browse_options_empty_query">Žiadne možnosti nezodpovedajú “%1$s”</string>
     <plurals name="browse_apps_count">
         <item quantity="one">%1$d aplikácia</item>
         <item quantity="few">%1$d aplikácie</item>
-        <item quantity="many">%1$d aplikácie</item>
-        <item quantity="other">%1$d aplikácie</item>
+        <item quantity="many">%1$d aplikácií</item>
+        <item quantity="other">%1$d aplikácií</item>
     </plurals>
     <plurals name="browse_apps_filter_hint">
-        <item quantity="one">Filtrovať aplikáciu %1$d</item>
-        <item quantity="few">Filtrovať aplikácie %1$d</item>
-        <item quantity="many">Filtrovať aplikácie %1$d</item>
-        <item quantity="other">Filtrovať aplikácie %1$d</item>
+        <item quantity="one">Filtrovať %1$d aplikáciu</item>
+        <item quantity="few">Filtrovať %1$d aplikácie</item>
+        <item quantity="many">Filtrovať %1$d aplikácií</item>
+        <item quantity="other">Filtrovať %1$d aplikácií</item>
     </plurals>
     <string name="browse_apps_empty_query">Žiadne aplikácie nezodpovedajú “%1$s”</string>
 </resources>

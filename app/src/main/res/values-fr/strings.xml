@@ -1,4 +1,4 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="external_apk_open_error">Impossible d\'ouvrir ce APK</string>
+    <string name="external_apk_open_error">Impossible d\'ouvrir cet APK</string>
 </resources>

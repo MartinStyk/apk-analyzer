@@ -5,13 +5,13 @@
     <string name="app_detail_ai_summary_title">Riepilogo AI</string>
     <string name="app_detail_ai_summary_download_action">Scarica AI sul dispositivo</string>
     <string name="app_detail_ai_summary_downloading">Scaricamento AI sul dispositivo…</string>
-    <string name="app_detail_system_app">Applicazione di Sistema</string>
+    <string name="app_detail_system_app">Applicazione di sistema</string>
     <string name="app_detail_overview_section">Panoramica</string>
-    <string name="app_detail_actions_section">Azioni Veloci</string>
+    <string name="app_detail_actions_section">Azioni veloci</string>
     <string name="app_detail_version">Versione</string>
-    <string name="app_detail_apk_size">APK Dimensione</string>
-    <string name="app_detail_total_size">Dimensione Totale</string>
-    <string name="app_detail_target_sdk">Obiettivo SDK</string>
+    <string name="app_detail_apk_size">Dimensione APK</string>
+    <string name="app_detail_total_size">Dimensione totale</string>
+    <string name="app_detail_target_sdk">SDK target</string>
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_updated">Aggiornato</string>
@@ -32,8 +32,8 @@
         <item quantity="other">+%1$d ulteriori dettagli in Informazioni generali, incluse le impostazioni di sicurezza della rete</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_split_apks">
-        <item quantity="one">+%1$d ulteriore dettaglio in Informazioni generali, inclusa la suddivisione APKs</item>
-        <item quantity="other">+%1$d ulteriori dettagli in Informazioni generali, inclusa la suddivisione APKs</item>
+        <item quantity="one">+%1$d ulteriore dettaglio in Informazioni generali, inclusi gli APK suddivisi</item>
+        <item quantity="other">+%1$d ulteriori dettagli in Informazioni generali, inclusi gli APK suddivisi</item>
     </plurals>
     <string name="app_detail_yes">Sì</string>
     <string name="app_detail_no">No</string>
@@ -55,10 +55,10 @@
     <string name="app_detail_insight_debug_certificate">Firmato con la chiave di debug condivisa di Android</string>
     <string name="app_detail_insight_certificate_not_yet_valid">Il certificato di firma non è ancora valido</string>
     <plurals name="app_detail_insight_outdated_target">
-        <item quantity="one">Target API %1$d, un livello API dietro questo dispositivo</item>
-        <item quantity="other">Target API %1$d, %2$d API livelli dietro questo dispositivo</item>
+        <item quantity="one">API target %1$d, un livello API dietro questo dispositivo</item>
+        <item quantity="other">API target %1$d, %2$d livelli API dietro questo dispositivo</item>
     </plurals>
-    <string name="app_detail_insight_sideloaded">Installato da fuori un app store</string>
+    <string name="app_detail_insight_sideloaded">Installato al di fuori di uno store di app</string>
     <plurals name="app_detail_insight_unused">
         <item quantity="one">Non aperto nell\'ultimo mese</item>
         <item quantity="other">Non aperto negli ultimi %1$d mesi</item>
@@ -69,11 +69,11 @@
     <string name="app_detail_insight_contacts">Può accedere o modificare i contatti</string>
     <string name="app_detail_insight_calendar">Può accedere o modificare gli eventi del calendario</string>
     <string name="app_detail_apk_saved">Salvato %1$s</string>
-    <string name="app_detail_split_apk_saved_title">Base APK salvata</string>
-    <string name="app_detail_split_apk_saved_description">%1$s è stato salvato. Questa app utilizza APKs diviso, quindi il file non contiene l\'app installata completa. Puoi ispezionarlo, ma installarlo da solo potrebbe fallire.</string>
+    <string name="app_detail_split_apk_saved_title">Base APK salvato</string>
+    <string name="app_detail_split_apk_saved_description">%1$s è stato salvato. Questa app utilizza APK suddivisi, quindi il file non contiene l\'app installata completa. Puoi ispezionarlo, ma installarlo da solo potrebbe fallire.</string>
     <string name="app_detail_split_apk_saved_close">Chiudi</string>
     <string name="app_detail_icon_saved">Salvato %1$s</string>
-    <string name="app_detail_apk_save_failed">Il APK non può essere salvato</string>
+    <string name="app_detail_apk_save_failed">L\'APK non può essere salvato</string>
     <string name="app_detail_icon_save_failed">L\'icona non può essere salvata</string>
     <string name="app_detail_document_picker_unavailable">Nessuna app può scegliere una posizione di salvataggio</string>
     <string name="app_detail_summary_copied">Riepilogo copiato negli appunti</string>
@@ -86,21 +86,21 @@
     <string name="app_detail_summary_permissions">%1$s · %2$s</string>
     <string name="app_detail_summary_permissions_granted">%1$s · %2$s · %3$s</string>
     <plurals name="app_detail_summary_permissions_requested">
-        <item quantity="one">%1$d ha richiesto il permesso</item>
-        <item quantity="other">%1$d ha richiesto i permessi</item>
+        <item quantity="one">%1$d permesso richiesto</item>
+        <item quantity="other">%1$d permessi richiesti</item>
     </plurals>
     <plurals name="app_detail_summary_permissions_dangerous">
         <item quantity="one">%1$d permesso pericoloso</item>
         <item quantity="other">%1$d permessi pericolosi</item>
     </plurals>
     <plurals name="app_detail_summary_permissions_granted_count">
-        <item quantity="one">%1$d ha concesso il permesso</item>
-        <item quantity="other">%1$d ha concesso i permessi</item>
+        <item quantity="one">%1$d permesso concesso</item>
+        <item quantity="other">%1$d permessi concessi</item>
     </plurals>
-    <string name="app_detail_permissions_section">Permissions</string>
-    <string name="app_detail_total_permissions">Totale Permissions</string>
-    <string name="app_detail_dangerous_permissions">Permissions pericoloso</string>
-    <string name="app_detail_view_permissions">Visualizza Permissions</string>
+    <string name="app_detail_permissions_section">Autorizzazioni</string>
+    <string name="app_detail_total_permissions">Autorizzazioni totali</string>
+    <string name="app_detail_dangerous_permissions">Autorizzazioni pericolose</string>
+    <string name="app_detail_view_permissions">Visualizza autorizzazioni</string>
     <string name="app_detail_permissions_none">Nessun permesso richiesto</string>
     <string name="app_detail_permissions_no_dangerous">Nessuna autorizzazione sensibile richiesta</string>
     <string name="app_detail_permissions_none_granted">Nessuna autorizzazione sensibile concessa</string>
@@ -156,9 +156,9 @@
     <string name="app_detail_badge_large">App grande</string>
     <string name="app_detail_badge_system">Sistema</string>
     <string name="app_detail_badge_google_play">Google Play</string>
-    <string name="app_detail_badge_recently_installed">Nuovo</string>
-    <string name="app_detail_badge_recently_updated">Aggiornato</string>
-    <string name="app_detail_badge_recently_used">Usato di recente</string>
+    <string name="app_detail_badge_recently_installed">Nuova</string>
+    <string name="app_detail_badge_recently_updated">Aggiornata</string>
+    <string name="app_detail_badge_recently_used">Usata di recente</string>
     <string name="manifest_title">Manifest di Android</string>
     <string name="manifest_error">Impossibile leggere il manifest</string>
     <string name="manifest_search">Cerca manifest</string>
@@ -174,8 +174,8 @@
         <item quantity="other">%1$d righe corrispondenti · %2$d totale</item>
     </plurals>
     <plurals name="manifest_base_split_note">
-        <item quantity="one">Mostra il manifest di base APK. Questa app ha %1$d split aggiuntivo installato con il proprio manifest.</item>
-        <item quantity="other">Mostra il manifest di base APK. Questa app ha %1$d split aggiuntivi installati con i propri manifest.</item>
+        <item quantity="one">Mostra il manifest dell\'APK di base. Questa app ha %1$d split aggiuntivo installato con il proprio manifest.</item>
+        <item quantity="other">Mostra il manifest dell\'APK di base. Questa app ha %1$d split aggiuntivi installati con i propri manifest.</item>
     </plurals>
     <string name="certificates_title">Certificato di firma</string>
     <string name="certificates_error">Impossibile caricare il certificato di firma</string>
@@ -249,13 +249,13 @@
     <string name="general_info_copied">Copiato negli appunti</string>
     <string name="general_info_section_identification">Identificazione</string>
     <string name="general_info_section_versioning">Versionamento</string>
-    <string name="general_info_section_api_targets">API Obiettivi</string>
+    <string name="general_info_section_api_targets">API target</string>
     <string name="general_info_section_security">Impostazioni di sicurezza</string>
     <string name="general_info_section_installation">Installazione e origine</string>
     <string name="general_info_section_storage">Memoria e percorsi</string>
     <string name="general_info_section_native_libraries">Librerie native</string>
     <string name="general_info_application_name">Nome dell\'applicazione</string>
-    <string name="general_info_package_name">Package Nome</string>
+    <string name="general_info_package_name">Nome pacchetto</string>
     <string name="general_info_process_name">Nome del processo</string>
     <string name="general_info_uid">UID</string>
     <string name="general_info_shared_user_id">Identità condivisa</string>
@@ -285,22 +285,22 @@
     <string name="general_info_install_source_local_install">Installato da un computer connesso</string>
     <string name="general_info_install_source_system">Sistema</string>
     <string name="general_info_install_source_unknown">Sconosciuto</string>
-    <string name="general_info_installer_package">Installer Package</string>
+    <string name="general_info_installer_package">Pacchetto installer</string>
     <string name="general_info_install_initiator">Iniziatore di installazione</string>
-    <string name="general_info_install_originator">APK Origine Package</string>
+    <string name="general_info_install_originator">Pacchetto di origine APK</string>
     <string name="general_info_first_installed">Primo installato</string>
     <string name="general_info_last_updated">Ultimo aggiornamento</string>
     <string name="general_info_last_used">Ultimo utilizzato</string>
-    <string name="general_info_apk_directory">APK Directory</string>
+    <string name="general_info_apk_directory">Directory APK</string>
     <string name="general_info_data_directory">Directory dati</string>
     <string name="general_info_install_location">Posizione di installazione</string>
-    <string name="general_info_apk_size">APK Dimensione</string>
-    <string name="general_info_split_apks">Split APKs</string>
+    <string name="general_info_apk_size">Dimensione APK</string>
+    <string name="general_info_split_apks">APK suddivisi</string>
     <plurals name="general_info_split_apks_value">
-        <item quantity="one">Installato come %1$d split APK</item>
-        <item quantity="other">Installato come %1$d split APKs</item>
+        <item quantity="one">Installato come %1$d APK suddiviso</item>
+        <item quantity="other">Installato come %1$d APK suddivisi</item>
     </plurals>
-    <string name="general_info_total_size">Dimensione Totale</string>
+    <string name="general_info_total_size">Dimensione totale</string>
     <string name="general_info_native_library_abis">Architetture CPU</string>
     <string name="general_info_native_library_abis_none">Nessun codice nativo</string>
     <string name="general_info_native_library_files">File della libreria nativa</string>
@@ -310,7 +310,7 @@
         <item quantity="other">%1$d file</item>
     </plurals>
     <string name="general_info_rationale_application_name">L\'etichetta visibile all\'utente dell\'app, come mostrato sulla schermata principale e nel cassetto delle app.</string>
-    <string name="general_info_rationale_package_name">L\'identificatore unico per questa app sul dispositivo. Nessuna due app può condividere lo stesso nome del pacchetto.</string>
+    <string name="general_info_rationale_package_name">L\'identificatore unico per questa app sul dispositivo. Due app non possono condividere lo stesso nome del pacchetto.</string>
     <string name="general_info_rationale_process_name">Il nome del processo del sistema operativo in cui l\'app viene eseguita. Per impostazione predefinita, corrisponde al nome del pacchetto.</string>
     <string name="general_info_rationale_uid">L\'identificatore unico assegnato a questa app dal sistema Android. Determina l\'accesso dell\'app alle risorse di sistema e ai permessi dei file.</string>
     <string name="general_info_rationale_shared_user_id">Questa app dichiara che viene eseguita sotto un\'identità condivisa con altre app firmate dalla stessa chiave. Le app che condividono questa identità possono accedere ai dati e ai permessi l\'una dell\'altra come se fossero un\'unica app.</string>
@@ -346,16 +346,16 @@
     <string name="general_info_rationale_apk_directory">Il percorso del file system in cui è memorizzato il file APK sul dispositivo.</string>
     <string name="general_info_rationale_data_directory">Il percorso del file system in cui l\'app memorizza i propri dati privati, database e preferenze condivise.</string>
     <string name="general_info_rationale_install_location">La posizione di archiviazione preferita dichiarata dallo sviluppatore: archiviazione interna, archiviazione esterna o automatica.</string>
-    <string name="general_info_rationale_apk_size">La dimensione combinata dei file APK installati su disco, escludendo i dati dell\'app, le cache e i file generati durante l\'esecuzione. La maggior parte delle app installate da Google Play è suddivisa in un APK di base più APKs aggiuntivi per la lingua e la densità dello schermo del tuo dispositivo; questo totale copre tutti.</string>
+    <string name="general_info_rationale_apk_size">La dimensione combinata dei file APK installati su disco, escludendo i dati dell\'app, le cache e i file generati durante l\'esecuzione. La maggior parte delle app installate da Google Play è suddivisa in un APK di base più APK aggiuntivi per la lingua e la densità dello schermo del tuo dispositivo; questo totale copre tutti.</string>
     <string name="general_info_rationale_total_size">La dimensione combinata di APK, dati dell\'app e file cache. Richiede il permesso di accesso all\'uso.</string>
     <string name="general_info_rationale_native_library_abis">I tipi di processore per cui questa app include codice nativo compilato, letto dai propri file di APK piuttosto che da ciò che questo dispositivo riporta.</string>
     <string name="general_info_native_library_device_support">Questo dispositivo supporta: %1$s.</string>
     <string name="general_info_native_library_incompatible">Nessuno di quei tipi di processore corrisponde a ciò che questo dispositivo supporta, quindi il codice nativo di quest\'app probabilmente non verrà eseguito qui.</string>
-    <string name="permissions_title">Permissions</string>
+    <string name="permissions_title">Autorizzazioni</string>
     <string name="permissions_error">Impossibile leggere i permessi di questa app.</string>
     <plurals name="permissions_filter_hint">
-        <item quantity="one">Filtra il permesso %1$d</item>
-        <item quantity="other">Filtra i permessi %1$d</item>
+        <item quantity="one">Filtra %1$d permesso</item>
+        <item quantity="other">Filtra %1$d permessi</item>
     </plurals>
     <string name="permissions_scope_sheet_title">Mostra</string>
     <string name="permissions_scope_requested">Richiesto</string>
@@ -397,24 +397,24 @@
     <string name="components_type_receivers">Receivers</string>
     <string name="components_type_providers">Providers</string>
     <plurals name="components_filter_hint_all">
-        <item quantity="one">Filtra il componente %1$d</item>
-        <item quantity="other">Filtra i componenti %1$d</item>
+        <item quantity="one">Filtra %1$d componente</item>
+        <item quantity="other">Filtra %1$d componenti</item>
     </plurals>
     <plurals name="components_filter_hint_activities">
-        <item quantity="one">Filtra l\'attività %1$d</item>
-        <item quantity="other">Filtra le attività %1$d</item>
+        <item quantity="one">Filtra %1$d attività</item>
+        <item quantity="other">Filtra %1$d attività</item>
     </plurals>
     <plurals name="components_filter_hint_services">
-        <item quantity="one">Filtra il servizio %1$d</item>
-        <item quantity="other">Filtra i servizi %1$d</item>
+        <item quantity="one">Filtra %1$d servizio</item>
+        <item quantity="other">Filtra %1$d servizi</item>
     </plurals>
     <plurals name="components_filter_hint_receivers">
-        <item quantity="one">Filtra il ricevitore %1$d</item>
-        <item quantity="other">Filtra i ricevitori %1$d</item>
+        <item quantity="one">Filtra %1$d ricevitore</item>
+        <item quantity="other">Filtra %1$d ricevitori</item>
     </plurals>
     <plurals name="components_filter_hint_providers">
-        <item quantity="one">Filtra il fornitore %1$d</item>
-        <item quantity="other">Filtra i fornitori %1$d</item>
+        <item quantity="one">Filtra %1$d fornitore</item>
+        <item quantity="other">Filtra %1$d fornitori</item>
     </plurals>
     <string name="components_filter_exported">Esportato</string>
     <string name="components_filter_unprotected">Non protetto</string>
@@ -467,11 +467,11 @@
     <string name="components_detail_intent_auto_verify_requested">Richiesto</string>
     <string name="components_detail_intent_auto_verify_explanation">L\'app chiede ad Android di verificare che la sua identità di firma sia autorizzata ad aprire questi link web.</string>
     <string name="components_detail_intent_activity_priority">Priorità di corrispondenza</string>
-    <string name="components_detail_intent_activity_priority_explanation">Un numero più alto può rendere questa activity preferita rispetto ad altre activity di corrispondenza, soggetta alle regole di instradamento di Android.</string>
+    <string name="components_detail_intent_activity_priority_explanation">Un numero più alto può rendere questa attività preferita rispetto ad altre attività corrispondenti, soggetta alle regole di instradamento di Android.</string>
     <string name="components_detail_intent_receiver_priority">Priorità di broadcast</string>
-    <string name="components_detail_intent_receiver_priority_explanation">Per i broadcast ordinati, un numero più alto può far eseguire questo receiver prima, soggetto ai limiti di Android.</string>
+    <string name="components_detail_intent_receiver_priority_explanation">Per i broadcast ordinati, un numero più alto può far eseguire questo ricevitore prima, soggetto ai limiti di Android.</string>
     <string name="components_detail_intent_declared_priority">Priorità dichiarata</string>
-    <string name="components_detail_intent_declared_priority_explanation">Il manifest dichiara questo valore, ma Android non lo utilizza per scegliere tra i servizi o i providers corrispondenti.</string>
+    <string name="components_detail_intent_declared_priority_explanation">Il manifest dichiara questo valore, ma Android non lo utilizza per scegliere tra i servizi o i fornitori corrispondenti.</string>
     <string name="components_detail_intent_order">Ordine di consegna</string>
     <string name="components_detail_intent_order_explanation">Un numero più alto è considerato per primo quando questa app ha più filtri di corrispondenza.</string>
     <string name="components_intent_data_scheme">Schema dell\'indirizzo</string>
@@ -504,8 +504,8 @@
     <string name="intent_filters_component_heading">Modelli di richiesta dichiarati da %1$s</string>
     <string name="intent_filters_explanation">Ogni elemento è un modello di richiesta dichiarato per questo componente. Se un\'altra app può utilizzarlo dipende anche dalla raggiungibilità del componente e dalle autorizzazioni richieste.</string>
     <plurals name="intent_filters_search_hint">
-        <item quantity="one">Cerca regola di richiesta %1$d</item>
-        <item quantity="other">Cerca regole di richiesta %1$d</item>
+        <item quantity="one">Cerca %1$d regola di richiesta</item>
+        <item quantity="other">Cerca %1$d regole di richiesta</item>
     </plurals>
     <string name="intent_filters_filter_fallback">Intent filter</string>
     <string name="intent_filters_purpose_launcher">Voce di avvio app</string>
@@ -557,7 +557,7 @@
     <string name="permissions_detail_full_name">Nome completo</string>
     <string name="permissions_detail_grant_state">Stato di concessione</string>
     <string name="permissions_detail_protection_level">Livello di protezione</string>
-    <string name="permissions_detail_group">Permission gruppo</string>
+    <string name="permissions_detail_group">Gruppo di autorizzazioni</string>
     <string name="permissions_detail_declared_by">Dichiarato da</string>
     <string name="permissions_defined_by">Definito da %1$s.</string>
     <string name="permissions_detail_section_status">Stato</string>
@@ -718,18 +718,18 @@
     <string name="requirement_backup">Backup di sistema</string>
     <string name="requirement_sip_voip">Chiamata Internet</string>
     <string name="requirement_connection_service">Integrazione dell\'app di chiamata</string>
-    <string name="splitapks_title">Split APKs</string>
+    <string name="splitapks_title">APK suddivisi</string>
     <plurals name="splitapks_heading">
-        <item quantity="one">%1$d suddiviso APK installato</item>
-        <item quantity="other">%1$d suddiviso APKs installato</item>
+        <item quantity="one">%1$d APK suddiviso installato</item>
+        <item quantity="other">%1$d APK suddivisi installati</item>
     </plurals>
-    <string name="splitapks_explanation">Questa app è stata installata come base APK più questi ulteriori APKs suddivisi, un formato di consegna utilizzato da Google Play per inviare solo il codice e le risorse di cui il tuo dispositivo ha bisogno.</string>
+    <string name="splitapks_explanation">Questa app è stata installata come base APK più questi ulteriori APK suddivisi, un formato di consegna utilizzato da Google Play per inviare solo il codice e le risorse di cui il tuo dispositivo ha bisogno.</string>
     <plurals name="splitapks_search_hint">
         <item quantity="one">Cerca %1$d suddiviso</item>
         <item quantity="other">Cerca %1$d suddivisi</item>
     </plurals>
-    <string name="splitapks_error">Impossibile caricare il APKs suddiviso</string>
-    <string name="splitapks_empty">Questa app non ha APKs suddiviso installato.</string>
+    <string name="splitapks_error">Impossibile caricare gli APK suddivisi</string>
+    <string name="splitapks_empty">Questa app non ha APK suddivisi installati.</string>
     <string name="splitapks_empty_query">Nessun APK suddiviso corrisponde a \"%1$s\".</string>
     <string name="splitapks_clear_search">Cancella ricerca</string>
     <string name="splitapks_kind_feature">Modulo funzionalità</string>
@@ -764,8 +764,8 @@
     </plurals>
     <string name="nativelibraries_explanation">Ogni file di codice nativo distinto che questa app fornisce, una riga per nome file anche quando la stessa libreria è costruita per più architetture di processore.</string>
     <plurals name="nativelibraries_search_hint">
-        <item quantity="one">Cerca la libreria %1$d</item>
-        <item quantity="other">Cerca le librerie %1$d</item>
+        <item quantity="one">Cerca %1$d libreria</item>
+        <item quantity="other">Cerca %1$d librerie</item>
     </plurals>
     <string name="nativelibraries_error">Impossibile caricare le librerie native</string>
     <string name="nativelibraries_empty">Questa app non ha librerie native incluse.</string>

@@ -15,7 +15,7 @@
     <string name="browse_dimension_min_sdk_subtitle">각 앱이 여전히 지원하는 가장 오래된 Android 버전 확인</string>
     <string name="browse_dimension_install_source_title">설치 출처</string>
     <string name="browse_dimension_install_source_subtitle">각 앱이 어디에서 왔는지 확인</string>
-    <string name="browse_dimension_shared_user_id_title">공유된 아이덴티티</string>
+    <string name="browse_dimension_shared_user_id_title">공유 ID</string>
     <string name="browse_dimension_shared_user_id_subtitle">같은 장치 ID로 실행되고 서로의 데이터에 접근할 수 있는 앱 찾기</string>
     <string name="browse_dimension_app_category_title">앱 카테고리</string>
     <string name="browse_dimension_app_category_subtitle">각 앱이 자신을 어떤 종류로 선언하는지 확인</string>
@@ -51,7 +51,7 @@
     <string name="browse_certificate_attribute_sha256">아이덴티티 (SHA-256)</string>
     <string name="browse_certificate_attribute_sha1">아이덴티티 (SHA-1)</string>
     <string name="browse_certificate_attribute_md5">아이덴티티 (MD5)</string>
-    <string name="browse_certificate_attribute_organization">퍼블리셔 이름</string>
+    <string name="browse_certificate_attribute_organization">게시자 이름</string>
     <string name="browse_certificate_attribute_country">국가</string>
     <string name="browse_certificate_hash_sha256">SHA-256</string>
     <string name="browse_certificate_hash_sha1">SHA-1</string>

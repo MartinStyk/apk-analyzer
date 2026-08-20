@@ -56,7 +56,7 @@
     <string name="app_detail_insight_certificate_not_yet_valid">O certificado de assinatura ainda não é válido</string>
     <plurals name="app_detail_insight_outdated_target">
         <item quantity="one">Alvo da API %1$d, um nível de API atrás deste dispositivo</item>
-        <item quantity="other">Alvos da API %1$d, %2$d níveis de API atrás deste dispositivo</item>
+        <item quantity="other">Alvo da API %1$d, %2$d níveis de API atrás deste dispositivo</item>
     </plurals>
     <string name="app_detail_insight_sideloaded">Instalado de fora de uma loja de aplicativos</string>
     <plurals name="app_detail_insight_unused">
@@ -129,7 +129,7 @@
     <string name="app_detail_activities">Atividades</string>
     <string name="app_detail_services">Serviços</string>
     <string name="app_detail_broadcast_receivers">Receptores</string>
-    <string name="app_detail_content_providers">Fornecedores</string>
+    <string name="app_detail_content_providers">Provedores</string>
     <string name="app_detail_certificates_section">Certificados</string>
     <string name="app_detail_certificates_count">Certificados</string>
     <string name="app_detail_view_details">Ver Detalhes</string>
@@ -310,7 +310,7 @@
         <item quantity="other">%1$d arquivos</item>
     </plurals>
     <string name="general_info_rationale_application_name">O rótulo visível para o usuário do aplicativo, conforme mostrado na tela inicial e na gaveta de aplicativos.</string>
-    <string name="general_info_rationale_package_name">O identificador exclusivo para este aplicativo no dispositivo. Nenhum dois aplicativos podem compartilhar o mesmo nome de pacote.</string>
+    <string name="general_info_rationale_package_name">O identificador exclusivo para este aplicativo no dispositivo. Dois aplicativos não podem compartilhar o mesmo nome de pacote.</string>
     <string name="general_info_rationale_process_name">O nome do processo do sistema operacional em que o aplicativo é executado. Por padrão, corresponde ao nome do pacote.</string>
     <string name="general_info_rationale_uid">O identificador exclusivo atribuído a este aplicativo pelo sistema Android. Ele determina o acesso do aplicativo a recursos do sistema e permissões de arquivo.</string>
     <string name="general_info_rationale_shared_user_id">Este aplicativo declara que é executado sob uma identidade compartilhada com outros aplicativos assinados pela mesma chave. Aplicativos que compartilham essa identidade podem acessar os dados e permissões uns dos outros como se fossem um único aplicativo.</string>
@@ -354,8 +354,8 @@
     <string name="permissions_title">Permissões</string>
     <string name="permissions_error">Não foi possível ler as permissões deste aplicativo.</string>
     <plurals name="permissions_filter_hint">
-        <item quantity="one">Filtrar permissão %1$d</item>
-        <item quantity="other">Filtrar permissões %1$d</item>
+        <item quantity="one">Filtrar %1$d permissão</item>
+        <item quantity="other">Filtrar %1$d permissões</item>
     </plurals>
     <string name="permissions_scope_sheet_title">Mostrar</string>
     <string name="permissions_scope_requested">Solicitado</string>
@@ -391,30 +391,30 @@
     <string name="components_scope_activities">Atividades</string>
     <string name="components_scope_services">Serviços</string>
     <string name="components_scope_receivers">Receptores</string>
-    <string name="components_scope_providers">Fornecedores</string>
+    <string name="components_scope_providers">Provedores</string>
     <string name="components_type_activities">Atividades</string>
     <string name="components_type_services">Serviços</string>
     <string name="components_type_receivers">Receptores</string>
-    <string name="components_type_providers">Fornecedores</string>
+    <string name="components_type_providers">Provedores</string>
     <plurals name="components_filter_hint_all">
-        <item quantity="one">Filtrar componente %1$d</item>
-        <item quantity="other">Filtrar componentes %1$d</item>
+        <item quantity="one">Filtrar %1$d componente</item>
+        <item quantity="other">Filtrar %1$d componentes</item>
     </plurals>
     <plurals name="components_filter_hint_activities">
-        <item quantity="one">Filtrar atividade %1$d</item>
-        <item quantity="other">Filtrar atividades %1$d</item>
+        <item quantity="one">Filtrar %1$d atividade</item>
+        <item quantity="other">Filtrar %1$d atividades</item>
     </plurals>
     <plurals name="components_filter_hint_services">
-        <item quantity="one">Filtrar serviço %1$d</item>
-        <item quantity="other">Filtrar serviços %1$d</item>
+        <item quantity="one">Filtrar %1$d serviço</item>
+        <item quantity="other">Filtrar %1$d serviços</item>
     </plurals>
     <plurals name="components_filter_hint_receivers">
-        <item quantity="one">Filtrar receptor %1$d</item>
-        <item quantity="other">Filtrar receptores %1$d</item>
+        <item quantity="one">Filtrar %1$d receptor</item>
+        <item quantity="other">Filtrar %1$d receptores</item>
     </plurals>
     <plurals name="components_filter_hint_providers">
-        <item quantity="one">Filtrar provedor %1$d</item>
-        <item quantity="other">Filtrar provedores %1$d</item>
+        <item quantity="one">Filtrar %1$d provedor</item>
+        <item quantity="other">Filtrar %1$d provedores</item>
     </plurals>
     <string name="components_filter_exported">Exportado</string>
     <string name="components_filter_unprotected">Não protegido</string>
@@ -446,11 +446,11 @@
     <string name="components_detail_section_details">Detalhes</string>
     <string name="components_detail_section_intent_filters">Solicitações que este componente aceita</string>
     <string name="components_detail_intent_filters_explanation">O Android e outros aplicativos usam essas declarações para decidir quais solicitações, links e conteúdos podem alcançar este componente.</string>
-    <string name="components_detail_intent_filters_unavailable">Filtros de intenção não puderam ser lidos para este aplicativo.</string>
-    <string name="components_detail_intent_filters_open">Ver filtros de intenção</string>
+    <string name="components_detail_intent_filters_unavailable">Filtros de intent não puderam ser lidos para este aplicativo.</string>
+    <string name="components_detail_intent_filters_open">Ver filtros de intent</string>
     <plurals name="components_intent_filter_count">
-        <item quantity="one">%1$d filtro de intenção</item>
-        <item quantity="other">%1$d filtros de intenção</item>
+        <item quantity="one">%1$d filtro de intent</item>
+        <item quantity="other">%1$d filtros de intent</item>
     </plurals>
     <string name="components_detail_intent_actions">Ações</string>
     <string name="components_detail_intent_actions_explanation">O que outro aplicativo ou o Android pede para este componente fazer.</string>
@@ -499,15 +499,15 @@
     <string name="components_intent_data_fragment_advanced_pattern">Padrão avançado do fragmento</string>
     <string name="components_intent_data_mime_type">Tipo de conteúdo</string>
     <string name="components_intent_data_mime_group">Grupo de tipo de conteúdo</string>
-    <string name="intent_filters_title">Filtros de intenção</string>
-    <string name="intent_filters_error">Falha ao carregar filtros de intenção</string>
+    <string name="intent_filters_title">Filtros de intent</string>
+    <string name="intent_filters_error">Falha ao carregar filtros de intent</string>
     <string name="intent_filters_component_heading">Padrões de solicitação declarados por %1$s</string>
     <string name="intent_filters_explanation">Cada item é um padrão de solicitação declarado para este componente. Se outro aplicativo pode usá-lo também depende da acessibilidade do componente e das permissões necessárias.</string>
     <plurals name="intent_filters_search_hint">
-        <item quantity="one">Pesquisar regra de solicitação %1$d</item>
-        <item quantity="other">Pesquisar regras de solicitação %1$d</item>
+        <item quantity="one">Pesquisar %1$d regra de solicitação</item>
+        <item quantity="other">Pesquisar %1$d regras de solicitação</item>
     </plurals>
-    <string name="intent_filters_filter_fallback">Filtro de intenção</string>
+    <string name="intent_filters_filter_fallback">Filtro de intent</string>
     <string name="intent_filters_purpose_launcher">Entrada do lançador de aplicativo</string>
     <string name="intent_filters_purpose_tv_launcher">Entrada do lançador de TV</string>
     <string name="intent_filters_purpose_main">Solicitação de entrada principal</string>
@@ -528,8 +528,8 @@
     <string name="intent_filters_purpose_provider_other">Solicitação de provedor personalizado</string>
     <string name="intent_filters_tag_verified">Verificação solicitada</string>
     <string name="intent_filters_tag_blocked_rules">Regras de bloqueio de link</string>
-    <string name="intent_filters_empty">Este componente não declara filtros de intenção.</string>
-    <string name="intent_filters_empty_query">Nenhum filtro de intenção corresponde a \"%1$s\".</string>
+    <string name="intent_filters_empty">Este componente não declara filtros de intent.</string>
+    <string name="intent_filters_empty_query">Nenhum filtro de intent corresponde a \"%1$s\".</string>
     <string name="intent_filters_clear_search">Limpar pesquisa</string>
     <string name="components_detail_exported">Exportado</string>
     <string name="components_exported_yes">Sim</string>
@@ -637,7 +637,7 @@
     <string name="requirements_detail_version">Versão</string>
     <string name="requirements_detail_version_comparison">%1$s necessário · %2$s neste dispositivo</string>
     <string name="requirements_availability_available">Disponível</string>
-    <string name="requirements_availability_available_explanation">Este dispositivo fornece, então o aplicativo pode usá-lo.</string>
+    <string name="requirements_availability_available_explanation">Este dispositivo o fornece, então o aplicativo pode usá-lo.</string>
     <string name="requirements_availability_missing">Não disponível</string>
     <string name="requirements_availability_missing_required_explanation">O aplicativo declara que é necessário, mas este dispositivo não o fornece. Partes do aplicativo podem não funcionar, e uma nova instalação normalmente seria bloqueada.</string>
     <string name="requirements_availability_missing_optional_explanation">O aplicativo funciona sem isso. O que depende disso permanece desligado.</string>
@@ -748,13 +748,13 @@
     <string name="splitapks_abi_x86">Intel x86 (32-bit)</string>
     <string name="splitapks_abi_mips64">MIPS (64-bit)</string>
     <string name="splitapks_abi_mips">MIPS (32-bit)</string>
-    <string name="splitapks_density_ldpi">Telões de baixa densidade</string>
-    <string name="splitapks_density_mdpi">Telões de densidade média</string>
-    <string name="splitapks_density_tvdpi">Telões de densidade para TV</string>
-    <string name="splitapks_density_hdpi">Telões de alta densidade</string>
-    <string name="splitapks_density_xhdpi">Telões de densidade extra-alta</string>
-    <string name="splitapks_density_xxhdpi">Telões de densidade extra-extra-alta</string>
-    <string name="splitapks_density_xxxhdpi">Telões de densidade extra-extra-extra-alta</string>
+    <string name="splitapks_density_ldpi">Telas de baixa densidade</string>
+    <string name="splitapks_density_mdpi">Telas de densidade média</string>
+    <string name="splitapks_density_tvdpi">Telas de densidade para TV</string>
+    <string name="splitapks_density_hdpi">Telas de alta densidade</string>
+    <string name="splitapks_density_xhdpi">Telas de densidade extra-alta</string>
+    <string name="splitapks_density_xxhdpi">Telas de densidade extra-extra-alta</string>
+    <string name="splitapks_density_xxxhdpi">Telas de densidade extra-extra-extra-alta</string>
     <string name="splitapks_density_nodpi">Recursos independentes de densidade</string>
     <string name="splitapks_density_anydpi">Qualquer densidade (recursos vetoriais)</string>
     <string name="nativelibraries_title">Arquivos de biblioteca nativa</string>
@@ -764,8 +764,8 @@
     </plurals>
     <string name="nativelibraries_explanation">Cada arquivo de código nativo distinto que este aplicativo envia, uma linha por nome de arquivo, mesmo quando a mesma biblioteca é construída para várias arquiteturas de processador.</string>
     <plurals name="nativelibraries_search_hint">
-        <item quantity="one">Pesquisar biblioteca %1$d</item>
-        <item quantity="other">Pesquisar bibliotecas %1$d</item>
+        <item quantity="one">Pesquisar %1$d biblioteca</item>
+        <item quantity="other">Pesquisar %1$d bibliotecas</item>
     </plurals>
     <string name="nativelibraries_error">Falha ao carregar bibliotecas nativas</string>
     <string name="nativelibraries_empty">Este aplicativo não possui bibliotecas nativas incluídas.</string>

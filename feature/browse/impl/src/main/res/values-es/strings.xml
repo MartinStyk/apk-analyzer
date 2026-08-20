@@ -3,8 +3,8 @@
     <string name="browse_title">Navegar</string>
     <string name="browse_subtitle_loading">Escaneando aplicaciones instaladas…</string>
     <plurals name="browse_subtitle">
-        <item quantity="one">Explorar la aplicación %1$d instalada en este dispositivo</item>
-        <item quantity="other">Explorar las aplicaciones %1$d instaladas en este dispositivo</item>
+        <item quantity="one">Explorar %1$d aplicación instalada en este dispositivo</item>
+        <item quantity="other">Explorar %1$d aplicaciones instaladas en este dispositivo</item>
     </plurals>
     <string name="browse_dimension_permission_title">Permisos</string>
     <string name="browse_dimension_permission_subtitle">Ver qué aplicaciones utilizan un permiso dado</string>

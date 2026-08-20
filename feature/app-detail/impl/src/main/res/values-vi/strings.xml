@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="content_description_back">Quay lại</string>
-    <string name="app_detail_title">Chi tiết Ứng dụng</string>
+    <string name="app_detail_title">Chi tiết ứng dụng</string>
     <string name="app_detail_ai_summary_title">Tóm tắt AI</string>
     <string name="app_detail_ai_summary_download_action">Tải xuống AI trên thiết bị</string>
     <string name="app_detail_ai_summary_downloading">Đang tải xuống AI trên thiết bị…</string>
-    <string name="app_detail_system_app">Ứng dụng Hệ thống</string>
+    <string name="app_detail_system_app">Ứng dụng hệ thống</string>
     <string name="app_detail_overview_section">Tổng quan</string>
-    <string name="app_detail_actions_section">Hành động Nhanh</string>
+    <string name="app_detail_actions_section">Hành động nhanh</string>
     <string name="app_detail_version">Phiên bản</string>
     <string name="app_detail_apk_size">Kích thước APK</string>
     <string name="app_detail_total_size">Tổng kích thước</string>
@@ -37,7 +37,7 @@
     <string name="app_detail_retry">Thử lại</string>
     <string name="app_detail_action_manifest">Manifest</string>
     <string name="app_detail_action_export_apk">Xuất APK</string>
-    <string name="app_detail_action_save_icon">Biểu tượng Lưu</string>
+    <string name="app_detail_action_save_icon">Lưu biểu tượng</string>
     <string name="app_detail_action_summary">Tóm tắt</string>
     <string name="app_detail_action_copy_summary">Sao chép</string>
     <string name="app_detail_action_share_summary">Chia sẻ</string>
@@ -75,7 +75,7 @@
     <string name="app_detail_summary_line">%1$s: %2$s</string>
     <string name="app_detail_summary_header">%1$s (%2$s)</string>
     <string name="app_detail_summary_version">%1$s (%2$d)</string>
-    <string name="app_detail_summary_signing_label">Đang ký</string>
+    <string name="app_detail_summary_signing_label">Chữ ký</string>
     <string name="app_detail_summary_permissions">%1$s · %2$s</string>
     <string name="app_detail_summary_permissions_granted">%1$s · %2$s · %3$s</string>
     <plurals name="app_detail_summary_permissions_requested">
@@ -573,7 +573,7 @@
     <string name="permission_description_internet">Mở kết nối mạng và gửi hoặc nhận dữ liệu qua internet.</string>
     <string name="permission_description_network_state">Xem liệu thiết bị có trực tuyến hay không và loại kết nối mà nó sử dụng.</string>
     <string name="permission_description_wifi_state">Xem các mạng Wi-Fi mà thiết bị biết và đang kết nối.</string>
-    <string name="permission_description_nfc">Trao đổi dữ liệu với các thẻ NFC và __TERMn__ được giữ gần thiết bị.</string>
+    <string name="permission_description_nfc">Trao đổi dữ liệu với thẻ NFC và đầu đọc được áp gần thiết bị.</string>
     <string name="permission_description_vibrate">Khiến thiết bị rung.</string>
     <string name="permission_description_wake_lock">Giữ cho thiết bị tỉnh táo để công việc tiếp tục khi màn hình tắt.</string>
     <string name="permission_description_boot_completed">Bắt đầu chạy ngay khi thiết bị hoàn tất khởi động.</string>
@@ -661,7 +661,7 @@
     <string name="requirement_infrared">Bộ phát hồng ngoại</string>
     <string name="requirement_ram_low">Thiết bị bộ nhớ thấp</string>
     <string name="requirement_ram_normal">Thiết bị bộ nhớ tiêu chuẩn</string>
-    <string name="requirement_type_watch">Xem</string>
+    <string name="requirement_type_watch">Đồng hồ</string>
     <string name="requirement_type_television">TV</string>
     <string name="requirement_type_automotive">Màn hình ô tô</string>
     <string name="requirement_type_pc">Máy tính để bàn</string>

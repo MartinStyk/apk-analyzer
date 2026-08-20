@@ -11,14 +11,14 @@
     <string name="sort_size">Tamaño del archivo APK</string>
     <string name="sort_total_size">Tamaño total de la aplicación</string>
     <string name="sort_install_date">Fecha de instalación</string>
-    <string name="sort_target_sdk">SDK de Android objetivo</string>
-    <string name="sort_last_updated">Última Actualización</string>
-    <string name="sort_last_used">Último Uso</string>
+    <string name="sort_target_sdk">SDK objetivo de Android</string>
+    <string name="sort_last_updated">Última actualización</string>
+    <string name="sort_last_used">Último uso</string>
     <string name="sort_bottom_sheet_title">Ordenar por</string>
     <string name="search_apps_hint">Buscar aplicaciones</string>
     <plurals name="search_apps_placeholder">
-        <item quantity="one">Buscar la aplicación %1$d…</item>
-        <item quantity="other">Buscar aplicaciones %1$d…</item>
+        <item quantity="one">Buscar en %1$d aplicación…</item>
+        <item quantity="other">Buscar en %1$d aplicaciones…</item>
     </plurals>
     <plurals name="search_apps_matches">
         <item quantity="one">Se encontró %d coincidencia</item>
@@ -28,7 +28,7 @@
     <string name="preinstalled">Preinstalado</string>
     <string name="never">Nunca</string>
     <string name="quick_filter_large_total">Grande</string>
-    <string name="quick_filter_recently_used">Usado Recientemente</string>
+    <string name="quick_filter_recently_used">Usado recientemente</string>
     <string name="quick_filter_unused">No utilizado</string>
     <string name="quick_filter_system">Sistema</string>
     <string name="quick_filter_google_play">Google Play</string>
@@ -45,8 +45,8 @@
     <string name="installed_apps_count">Aplicaciones instaladas (%1$d)</string>
     <string name="recently_viewed">Visto recientemente</string>
     <plurals name="search_apps_empty">
-        <item quantity="one">Buscar aplicación instalada %1$d</item>
-        <item quantity="other">Buscar aplicaciones instaladas %1$d</item>
+        <item quantity="one">Buscar en %1$d aplicación instalada</item>
+        <item quantity="other">Buscar en %1$d aplicaciones instaladas</item>
     </plurals>
     <string name="search_apps_no_results">No hay resultados para \"%1$s\"</string>
     <string name="search_history_title">Búsquedas recientes</string>
@@ -103,7 +103,7 @@
     <string name="sort_permission_storage_description">Ordenar por Tamaño Total mide la huella total de cada aplicación: instalador, datos almacenados y caché combinados. Concede acceso a uso en Configuración para habilitar esta opción de ordenación.</string>
     <string name="filter_permissions_section">Permisos</string>
     <string name="filter_permissions_count" ns0:ignore="PluralsCandidate">+%d más</string>
-    <string name="filter_permissions_title">Filtrar por Permiso</string>
+    <string name="filter_permissions_title">Filtrar por permiso</string>
     <string name="filter_permissions_quick_filters">Filtros rápidos</string>
     <string name="filter_permissions_match_label">Coincidir</string>
     <string name="filter_permissions_chip_match_any">Coincidir: Cualquiera</string>

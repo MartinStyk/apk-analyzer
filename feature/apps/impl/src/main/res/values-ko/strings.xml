@@ -60,7 +60,7 @@
     <string name="filter_apply">적용</string>
     <string name="filter_reset">재설정</string>
     <string name="filter_unsaved_title">저장되지 않은 필터</string>
-    <string name="filter_unsaved_subtitle">아직 적용되지 않은 변경 사항이 있습니다. 앱 목록을 업데이트하려면 저장하거나, 그대로 두려면 취소하세요.</string>
+    <string name="filter_unsaved_subtitle">아직 적용되지 않은 변경 사항이 있습니다. 앱 목록을 업데이트하려면 저장하거나, 그대로 두려면 버리세요.</string>
     <string name="filter_unsaved_save">필터 저장</string>
     <string name="filter_unsaved_discard">변경 사항 버리기</string>
     <string name="filter_date_any">모두</string>
@@ -114,7 +114,7 @@
     <string name="filter_permissions_match_any">모든 권한</string>
     <string name="filter_permissions_match_any_subtitle">선택한 권한 중 하나 이상이 있는 앱을 표시합니다.</string>
     <string name="filter_permissions_match_all">모든 권한</string>
-    <string name="filter_permissions_match_all_subtitle">모든 선택된 권한이 있는 앱만 표시합니다.</string>
+    <string name="filter_permissions_match_all_subtitle">선택한 권한을 모두 가진 앱만 표시합니다.</string>
     <string name="filter_permissions_show_description">아래 목록에 표시할 권한을 선택하세요.</string>
     <string name="filter_permissions_show_all">모든 권한</string>
     <string name="filter_permissions_show_all_subtitle">이 장치에 선언된 모든 권한을 탐색합니다.</string>

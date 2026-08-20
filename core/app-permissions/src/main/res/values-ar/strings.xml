@@ -34,7 +34,7 @@
     <string name="permission_label_activity_recognition">النشاط البدني</string>
     <string name="permission_label_bluetooth_scan">البحث عن الأجهزة القريبة</string>
     <string name="permission_label_bluetooth_connect">الاتصال عبر البلوتوث</string>
-    <string name="permission_label_bluetooth_advertise">إعلانات بلوتوث</string>
+    <string name="permission_label_bluetooth_advertise">الظهور للأجهزة القريبة</string>
     <string name="permission_label_bluetooth">بلوتوث</string>
     <string name="permission_label_uwb">تحديد المسافة UWB</string>
     <string name="permission_label_notifications">إرسال الإشعارات</string>
@@ -45,14 +45,14 @@
     <string name="permission_label_wifi_change">تغيير الواي فاي</string>
     <string name="permission_label_wifi_state">حالة الواي فاي</string>
     <string name="permission_label_network_state">حالة الشبكة</string>
-    <string name="permission_label_wake_lock">ابقاء الجهاز مستيقظًا</string>
+    <string name="permission_label_wake_lock">إبقاء الجهاز مستيقظًا</string>
     <string name="permission_label_boot">تشغيل عند بدء التشغيل</string>
-    <string name="permission_label_foreground_service">في المقدمة Service</string>
+    <string name="permission_label_foreground_service">Service في المقدمة</string>
     <string name="permission_label_foreground_service_camera">استخدام الكاميرا في الخلفية</string>
     <string name="permission_label_foreground_service_microphone">استخدام الميكروفون في الخلفية</string>
     <string name="permission_label_foreground_service_data_sync">مزامنة البيانات في الخلفية</string>
     <string name="permission_label_foreground_service_media_playback">تشغيل الوسائط في الخلفية</string>
-    <string name="permission_label_foreground_service_media_projection">مشاركة الشاشة Service</string>
+    <string name="permission_label_foreground_service_media_projection">Service مشاركة الشاشة</string>
     <string name="permission_label_foreground_service_phone_call">إدارة المكالمات في الخلفية</string>
     <string name="permission_label_foreground_service_connected_device">الاتصال بالجهاز في الخلفية</string>
     <string name="permission_label_ad_id">معرف الإعلان</string>
@@ -72,7 +72,7 @@
     <string name="permission_label_ignore_battery_optimizations">تجاهل تحسينات البطارية</string>
     <string name="permission_label_sync_settings_read">قراءة إعدادات المزامنة</string>
     <string name="permission_label_sync_settings_write">تغيير إعدادات المزامنة</string>
-    <string name="permission_label_google_services_config">تكوين Services من Google</string>
+    <string name="permission_label_google_services_config">تكوين خدمات Google</string>
     <string name="permission_label_install_packages">تثبيت Packages</string>
     <string name="permission_label_overlay">الرسم فوق التطبيقات الأخرى</string>
     <string name="permission_label_manage_storage">إدارة جميع الملفات</string>

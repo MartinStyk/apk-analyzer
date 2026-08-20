@@ -9,9 +9,9 @@
     <string name="app_detail_overview_section">Übersicht</string>
     <string name="app_detail_actions_section">Schnellaktionen</string>
     <string name="app_detail_version">Version</string>
-    <string name="app_detail_apk_size">APK Größe</string>
+    <string name="app_detail_apk_size">APK-Größe</string>
     <string name="app_detail_total_size">Gesamtgröße</string>
-    <string name="app_detail_target_sdk">Ziel SDK</string>
+    <string name="app_detail_target_sdk">Ziel-SDK</string>
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_updated">Aktualisiert</string>
@@ -32,8 +32,8 @@
         <item quantity="other">+%1$d weitere Details in allgemeinen Informationen, einschließlich Netzwerksicherheitseinstellungen</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_split_apks">
-        <item quantity="one">+%1$d weitere Details in allgemeinen Informationen, einschließlich geteiltem APKs</item>
-        <item quantity="other">+%1$d weitere Details in allgemeinen Informationen, einschließlich geteiltem APKs</item>
+        <item quantity="one">+%1$d weitere Details in allgemeinen Informationen, einschließlich geteilter APKs</item>
+        <item quantity="other">+%1$d weitere Details in allgemeinen Informationen, einschließlich geteilter APKs</item>
     </plurals>
     <string name="app_detail_yes">Ja</string>
     <string name="app_detail_no">Nein</string>
@@ -97,10 +97,10 @@
         <item quantity="one">%1$d hat die Berechtigung gewährt</item>
         <item quantity="other">%1$d hat die Berechtigungen gewährt</item>
     </plurals>
-    <string name="app_detail_permissions_section">Permissions</string>
-    <string name="app_detail_total_permissions">Insgesamt Permissions</string>
-    <string name="app_detail_dangerous_permissions">Gefährliche Permissions</string>
-    <string name="app_detail_view_permissions">Permissions anzeigen</string>
+    <string name="app_detail_permissions_section">Berechtigungen</string>
+    <string name="app_detail_total_permissions">Berechtigungen insgesamt</string>
+    <string name="app_detail_dangerous_permissions">Gefährliche Berechtigungen</string>
+    <string name="app_detail_view_permissions">Berechtigungen anzeigen</string>
     <string name="app_detail_permissions_none">Keine Berechtigungen angefordert</string>
     <string name="app_detail_permissions_no_dangerous">Keine sensiblen Berechtigungen angefordert</string>
     <string name="app_detail_permissions_none_granted">Keine sensiblen Berechtigungen gewährt</string>
@@ -182,7 +182,7 @@
     <string name="certificates_empty">Kein Signaturzertifikat gefunden</string>
     <string name="certificates_copied">In die Zwischenablage kopiert</string>
     <string name="certificates_card_position">%1$s (%2$d von %3$d)</string>
-    <string name="certificates_signer_position">Signer %1$d von %2$d</string>
+    <string name="certificates_signer_position">Unterzeichner %1$d von %2$d</string>
     <string name="certificates_current_certificate">Aktuelles Signierungszertifikat</string>
     <string name="certificates_current_certificates">Aktuelle Signierungszertifikate</string>
     <string name="certificates_history">Signierungshistorie</string>
@@ -194,7 +194,7 @@
     <string name="certificates_previous_signing_key">Vorheriger Signaturschlüssel</string>
     <string name="certificates_debug_title">Debug-Zertifikat</string>
     <string name="certificates_debug_description">Diese App verwendet den gemeinsam genutzten Debug-Schlüssel von Android anstelle eines privaten Veröffentlichungs-Schlüssels. Das ist normal für Tests, aber nicht für eine veröffentlichte App.</string>
-    <string name="certificates_signer">Signer</string>
+    <string name="certificates_signer">Unterzeichner</string>
     <string name="certificates_details">Zertifikatsdetails</string>
     <string name="certificates_organization">Organisation</string>
     <string name="certificates_name">Name</string>
@@ -249,13 +249,13 @@
     <string name="general_info_copied">In die Zwischenablage kopiert</string>
     <string name="general_info_section_identification">Identifikation</string>
     <string name="general_info_section_versioning">Versionierung</string>
-    <string name="general_info_section_api_targets">API Ziele</string>
+    <string name="general_info_section_api_targets">API-Ziele</string>
     <string name="general_info_section_security">Sicherheitseinstellungen</string>
     <string name="general_info_section_installation">Installation &amp; Quelle</string>
     <string name="general_info_section_storage">Speicher &amp; Pfade</string>
     <string name="general_info_section_native_libraries">Native Bibliotheken</string>
     <string name="general_info_application_name">Anwendungsname</string>
-    <string name="general_info_package_name">Package Name</string>
+    <string name="general_info_package_name">Package-Name</string>
     <string name="general_info_process_name">Prozessname</string>
     <string name="general_info_uid">UID</string>
     <string name="general_info_shared_user_id">Geteilte Identität</string>
@@ -285,16 +285,16 @@
     <string name="general_info_install_source_local_install">Von einem verbundenen Computer installiert</string>
     <string name="general_info_install_source_system">System</string>
     <string name="general_info_install_source_unknown">Unbekannt</string>
-    <string name="general_info_installer_package">Installer Package</string>
+    <string name="general_info_installer_package">Installer-Package</string>
     <string name="general_info_install_initiator">Installationsinitiator</string>
-    <string name="general_info_install_originator">APK Ursprung Package</string>
+    <string name="general_info_install_originator">Ursprungs-Package der APK</string>
     <string name="general_info_first_installed">Erstinstalliert</string>
     <string name="general_info_last_updated">Zuletzt aktualisiert</string>
     <string name="general_info_last_used">Zuletzt verwendet</string>
-    <string name="general_info_apk_directory">APK Verzeichnis</string>
+    <string name="general_info_apk_directory">APK-Verzeichnis</string>
     <string name="general_info_data_directory">Datenverzeichnis</string>
     <string name="general_info_install_location">Installationsort</string>
-    <string name="general_info_apk_size">APK Größe</string>
+    <string name="general_info_apk_size">APK-Größe</string>
     <string name="general_info_split_apks">Geteilte APKs</string>
     <plurals name="general_info_split_apks_value">
         <item quantity="one">Installiert als %1$d geteilte APK</item>
@@ -351,7 +351,7 @@
     <string name="general_info_rationale_native_library_abis">Die Prozessorarten, für die diese App kompilierte native Code enthält, werden aus den eigenen Dateien der APK gelesen, anstatt was dieses Gerät meldet.</string>
     <string name="general_info_native_library_device_support">Dieses Gerät unterstützt: %1$s.</string>
     <string name="general_info_native_library_incompatible">Keine dieser Prozessorarten stimmt mit dem überein, was dieses Gerät unterstützt, sodass der native Code dieser App hier wahrscheinlich nicht ausgeführt werden kann.</string>
-    <string name="permissions_title">Permissions</string>
+    <string name="permissions_title">Berechtigungen</string>
     <string name="permissions_error">Die Berechtigungen dieser App konnten nicht gelesen werden.</string>
     <plurals name="permissions_filter_hint">
         <item quantity="one">Filter %1$d-Berechtigung</item>
@@ -557,13 +557,13 @@
     <string name="permissions_detail_full_name">Vollständiger Name</string>
     <string name="permissions_detail_grant_state">Zustand gewähren</string>
     <string name="permissions_detail_protection_level">Schutzstufe</string>
-    <string name="permissions_detail_group">Permission Gruppe</string>
+    <string name="permissions_detail_group">Berechtigungsgruppe</string>
     <string name="permissions_detail_declared_by">Deklariert von</string>
     <string name="permissions_defined_by">Definiert von %1$s.</string>
     <string name="permissions_detail_section_status">Status</string>
     <string name="permissions_detail_extra_rules">Zusätzliche Regeln</string>
-    <string name="permissions_grant_dangerous_granted">Du hast dies erlaubt. Du kannst es in den Einstellungen zurücknehmen.</string>
-    <string name="permissions_grant_dangerous_not_granted">Du hast dies noch nicht erlaubt.</string>
+    <string name="permissions_grant_dangerous_granted">Sie haben dies erlaubt. Sie können es in den Einstellungen zurücknehmen.</string>
+    <string name="permissions_grant_dangerous_not_granted">Sie haben dies noch nicht erlaubt.</string>
     <string name="permissions_grant_signature_self">Diese App definiert diese Berechtigung selbst.</string>
     <string name="permissions_grant_signature_granted">Diese App ist mit dem gleichen Schlüssel signiert wie die App, die sie definiert.</string>
     <string name="permissions_grant_signature_granted_privileged">Diese App ist mit dem gleichen Schlüssel signiert wie die App, die sie definiert, oder läuft als privilegierte System-App.</string>
@@ -616,8 +616,8 @@
     <string name="permission_description_biometric">Fragen Sie Sie, Ihre Identität mit einem Fingerabdruck oder Gesichtserkennung zu bestätigen.</string>
     <string name="permission_description_query_all_packages">Siehe die vollständige Liste der auf diesem Gerät installierten Apps.</string>
     <string name="requirements_title">Geräteanforderungen</string>
-    <string name="requirements_error">Die Geräteeinstellungen dieser App konnten nicht gelesen werden.</string>
-    <string name="requirements_empty">Diese App gibt keine Geräteeinstellungen an.</string>
+    <string name="requirements_error">Die Geräteanforderungen dieser App konnten nicht gelesen werden.</string>
+    <string name="requirements_empty">Diese App gibt keine Geräteanforderungen an.</string>
     <string name="requirements_section_header">%1$s · %2$d</string>
     <string name="requirements_section_required">Erforderlich</string>
     <string name="requirements_section_required_explanation">Die App wird ohne diese nicht installiert.</string>

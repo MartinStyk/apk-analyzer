@@ -3,7 +3,7 @@
     <string name="browse_title">浏览</string>
     <string name="browse_subtitle_loading">正在扫描已安装的应用…</string>
     <plurals name="browse_subtitle">
-        <item quantity="other">查看在此设备上安装的 %1$d 应用</item>
+        <item quantity="other">查看在此设备上安装的 %1$d 个应用</item>
     </plurals>
     <string name="browse_dimension_permission_title">权限</string>
     <string name="browse_dimension_permission_subtitle">查看哪些应用使用了特定权限</string>
@@ -20,7 +20,7 @@
     <string name="browse_dimension_app_category_title">应用类别</string>
     <string name="browse_dimension_app_category_subtitle">查看每个应用声明自己是什么类型</string>
     <plurals name="browse_dimension_option_count">
-        <item quantity="other">%1$d 选项</item>
+        <item quantity="other">%1$d 个选项</item>
     </plurals>
     <string name="browse_sdk_unknown">API 级别 %1$s</string>
     <string name="browse_api_level">API %1$s</string>
@@ -76,14 +76,14 @@
     <string name="browse_certificate_self_signed_explanation">自签名证书在 Android 应用中是正常的。当您需要验证发布者时，请将证书指纹与可信来源进行比较。</string>
     <string name="browse_bucket_info_content_description">关于 %1$s</string>
     <plurals name="browse_options_filter_hint">
-        <item quantity="other">筛选 %1$d 选项</item>
+        <item quantity="other">筛选 %1$d 个选项</item>
     </plurals>
     <string name="browse_options_empty_query">没有选项匹配 “%1$s”</string>
     <plurals name="browse_apps_count">
-        <item quantity="other">%1$d 应用</item>
+        <item quantity="other">%1$d 个应用</item>
     </plurals>
     <plurals name="browse_apps_filter_hint">
-        <item quantity="other">筛选 %1$d 应用</item>
+        <item quantity="other">筛选 %1$d 个应用</item>
     </plurals>
     <string name="browse_apps_empty_query">没有应用匹配 “%1$s”</string>
 </resources>

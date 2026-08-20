@@ -16,7 +16,7 @@
     <string name="permission_label_mms_receive">MMS 받기</string>
     <string name="permission_label_wap_push">WAP 푸시 받기</string>
     <string name="permission_label_call_log_read">통화 기록 읽기</string>
-    <string name="permission_label_call_log_write">통화 기록 작성</string>
+    <string name="permission_label_call_log_write">통화 기록 쓰기</string>
     <string name="permission_label_call_phone">전화 걸기</string>
     <string name="permission_label_phone_state">전화 상태</string>
     <string name="permission_label_phone_numbers">전화번호</string>
@@ -34,7 +34,7 @@
     <string name="permission_label_activity_recognition">신체 활동</string>
     <string name="permission_label_bluetooth_scan">근처 장치 검색</string>
     <string name="permission_label_bluetooth_connect">블루투스 연결</string>
-    <string name="permission_label_bluetooth_advertise">블루투스 광고</string>
+    <string name="permission_label_bluetooth_advertise">근처 기기에 표시</string>
     <string name="permission_label_bluetooth">블루투스</string>
     <string name="permission_label_uwb">UWB 거리 측정</string>
     <string name="permission_label_notifications">알림 게시</string>
@@ -47,7 +47,7 @@
     <string name="permission_label_network_state">네트워크 상태</string>
     <string name="permission_label_wake_lock">기기 깨우기 유지</string>
     <string name="permission_label_boot">시작 시 실행</string>
-    <string name="permission_label_foreground_service">전경 서비스</string>
+    <string name="permission_label_foreground_service">포그라운드 서비스</string>
     <string name="permission_label_foreground_service_camera">백그라운드 카메라 사용</string>
     <string name="permission_label_foreground_service_microphone">백그라운드 마이크 사용</string>
     <string name="permission_label_foreground_service_data_sync">백그라운드 데이터 동기화</string>

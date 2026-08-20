@@ -6,7 +6,7 @@
         <item quantity="one">इस डिवाइस पर स्थापित %1$d ऐप का अन्वेषण करें</item>
         <item quantity="other">इस डिवाइस पर स्थापित %1$d ऐप्स का अन्वेषण करें</item>
     </plurals>
-    <string name="browse_dimension_permission_title">Permissions</string>
+    <string name="browse_dimension_permission_title">अनुमतियाँ</string>
     <string name="browse_dimension_permission_subtitle">देखें कि कौन से ऐप्स एक निर्दिष्ट अनुमति का उपयोग करते हैं</string>
     <string name="browse_dimension_certificate_title">साइनिंग प्रमाणपत्र</string>
     <string name="browse_dimension_certificate_subtitle">ऐप्स को साइनर पहचान, प्रकाशक नाम, या देश के अनुसार समूहित करें</string>
@@ -63,7 +63,7 @@
     <string name="browse_protection_level_internal">आंतरिक</string>
     <string name="browse_protection_level_normal">सामान्य</string>
     <string name="browse_protection_level_dangerous_explanation">एक ऐप इसका उपयोग करने से पहले आपकी स्पष्ट स्वीकृति की आवश्यकता है।</string>
-    <string name="browse_protection_level_signature_explanation">केवल वही ऐप्स जो उसी कुंजी से हस्ताक्षरित हैं जैसे कि ऐप जिसने इसे घोषित किया है, इसे रख सकते हैं।</string>
+    <string name="browse_protection_level_signature_explanation">केवल वही ऐप्स जो उसी कुंजी से हस्ताक्षरित हैं जैसे कि ऐप जिसने इसे घोषित किया है, इसे प्राप्त कर सकते हैं।</string>
     <string name="browse_protection_level_internal_explanation">सिस्टम के लिए आरक्षित और आंतरिक नियमों द्वारा दी गई, न कि आपके द्वारा।</string>
     <string name="browse_protection_level_normal_explanation">आमतौर पर इंस्टॉल पर स्वचालित रूप से दिया जाता है। अपने आप में कम जोखिम।</string>
     <string name="browse_algorithm_strong">मजबूत</string>

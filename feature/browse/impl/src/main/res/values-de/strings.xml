@@ -6,7 +6,7 @@
         <item quantity="one">%1$d App, die auf diesem Gerät installiert ist, erkunden</item>
         <item quantity="other">%1$d Apps, die auf diesem Gerät installiert sind, erkunden</item>
     </plurals>
-    <string name="browse_dimension_permission_title">Permissions</string>
+    <string name="browse_dimension_permission_title">Berechtigungen</string>
     <string name="browse_dimension_permission_subtitle">Sehen Sie, welche Apps eine bestimmte Berechtigung verwenden</string>
     <string name="browse_dimension_certificate_title">Signaturzertifikat</string>
     <string name="browse_dimension_certificate_subtitle">Apps nach Signaturidentität, Herausgebername oder Land gruppieren</string>
@@ -24,7 +24,7 @@
         <item quantity="one">%1$d Option</item>
         <item quantity="other">%1$d Optionen</item>
     </plurals>
-    <string name="browse_sdk_unknown">API Level %1$s</string>
+    <string name="browse_sdk_unknown">API-Level %1$s</string>
     <string name="browse_api_level">API %1$s</string>
     <string name="browse_source_google_play">Google Play</string>
     <string name="browse_source_samsung_galaxy_store">Samsung Galaxy Store</string>
@@ -78,17 +78,17 @@
     <string name="browse_certificate_self_signed_explanation">Selbstsignierte Zertifikate sind normal für Android-Apps. Vergleichen Sie den Fingerabdruck des Zertifikats mit einer vertrauenswürdigen Quelle, wenn Sie den Herausgeber überprüfen müssen.</string>
     <string name="browse_bucket_info_content_description">Über %1$s</string>
     <plurals name="browse_options_filter_hint">
-        <item quantity="one">Filter %1$d-Option</item>
-        <item quantity="other">Filter %1$d-Optionen</item>
+        <item quantity="one">Filter %1$d Option</item>
+        <item quantity="other">Filter %1$d Optionen</item>
     </plurals>
     <string name="browse_options_empty_query">Keine Optionen entsprechen „%1$s“</string>
     <plurals name="browse_apps_count">
-        <item quantity="one">%1$d-App</item>
-        <item quantity="other">%1$d-Apps</item>
+        <item quantity="one">%1$d App</item>
+        <item quantity="other">%1$d Apps</item>
     </plurals>
     <plurals name="browse_apps_filter_hint">
-        <item quantity="one">Filter %1$d-App</item>
-        <item quantity="other">Filter %1$d-Apps</item>
+        <item quantity="one">Filter %1$d App</item>
+        <item quantity="other">Filter %1$d Apps</item>
     </plurals>
     <string name="browse_apps_empty_query">Keine Apps entsprechen „%1$s“</string>
 </resources>

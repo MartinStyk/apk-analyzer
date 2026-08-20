@@ -24,7 +24,7 @@
     </plurals>
     <string name="filter">フィルター</string>
     <string name="preinstalled">プリインストール</string>
-    <string name="never">決して</string>
+    <string name="never">未使用</string>
     <string name="quick_filter_large_total">大</string>
     <string name="quick_filter_recently_used">最近使用した</string>
     <string name="quick_filter_unused">未使用</string>

@@ -8,7 +8,7 @@
     <string name="content_description_delete_search">Usuń wyszukiwanie: %1$s</string>
     <string name="filter_date_clear">Wyczyść zakres dat</string>
     <string name="sort_name">Nazwa</string>
-    <string name="sort_size">APK Rozmiar pliku</string>
+    <string name="sort_size">Rozmiar pliku APK</string>
     <string name="sort_total_size">Całkowity rozmiar aplikacji</string>
     <string name="sort_install_date">Data instalacji</string>
     <string name="sort_target_sdk">Docelowy Android SDK</string>
@@ -17,14 +17,14 @@
     <string name="sort_bottom_sheet_title">Sortuj według</string>
     <string name="search_apps_hint">Szukaj aplikacji</string>
     <plurals name="search_apps_placeholder">
-        <item quantity="one">Szukaj aplikacji %1$d…</item>
-        <item quantity="few">Szukaj aplikacji %1$d…</item>
-        <item quantity="many">Szukaj aplikacji %1$d…</item>
-        <item quantity="other">Szukaj aplikacji %1$d…</item>
+        <item quantity="one">Szukaj w %1$d aplikacji…</item>
+        <item quantity="few">Szukaj w %1$d aplikacjach…</item>
+        <item quantity="many">Szukaj w %1$d aplikacjach…</item>
+        <item quantity="other">Szukaj w %1$d aplikacjach…</item>
     </plurals>
     <plurals name="search_apps_matches">
         <item quantity="one">Znaleziono %d dopasowanie</item>
-        <item quantity="few">Znaleziono %d dopasowań</item>
+        <item quantity="few">Znaleziono %d dopasowania</item>
         <item quantity="many">Znaleziono %d dopasowań</item>
         <item quantity="other">Znaleziono %d dopasowań</item>
     </plurals>
@@ -41,25 +41,25 @@
     <string name="quick_filter_recently_updated">Ostatnio zaktualizowane</string>
     <string name="quick_filter_source_sheet_title">Źródło</string>
     <string name="quick_filter_selection_more" ns0:ignore="PluralsCandidate">%1$s +%2$d</string>
-    <string name="quick_filter_activity_sheet_title">Activity</string>
-    <string name="quick_filter_activity_all">Dowolna activity</string>
+    <string name="quick_filter_activity_sheet_title">Aktywność</string>
+    <string name="quick_filter_activity_all">Dowolna aktywność</string>
     <string name="apps_empty_filtered">Nie znaleziono aplikacji</string>
     <string name="apps_clear_filters">Wyczyść filtry</string>
     <string name="installed_apps">Zainstalowane aplikacje</string>
     <string name="installed_apps_count">Zainstalowane aplikacje (%1$d)</string>
     <string name="recently_viewed">Ostatnio przeglądane</string>
     <plurals name="search_apps_empty">
-        <item quantity="one">Szukaj zainstalowanej aplikacji %1$d</item>
-        <item quantity="few">Szukaj zainstalowanych aplikacji %1$d</item>
-        <item quantity="many">Szukaj zainstalowanych aplikacji %1$d</item>
-        <item quantity="other">Szukaj zainstalowanych aplikacji %1$d</item>
+        <item quantity="one">Szukaj %1$d zainstalowanej aplikacji</item>
+        <item quantity="few">Szukaj %1$d zainstalowanych aplikacji</item>
+        <item quantity="many">Szukaj %1$d zainstalowanych aplikacji</item>
+        <item quantity="other">Szukaj %1$d zainstalowanych aplikacji</item>
     </plurals>
     <string name="search_apps_no_results">Brak wyników dla \"%1$s\"</string>
     <string name="search_history_title">Ostatnie wyszukiwania</string>
     <string name="search_history_clear">Wyczyść</string>
     <string name="filter_source_section">Źródło instalacji</string>
     <string name="filter_sdk_section">Docelowy SDK</string>
-    <string name="filter_apk_size_section">APK Rozmiar pliku</string>
+    <string name="filter_apk_size_section">Rozmiar pliku APK</string>
     <string name="filter_apk_size_description">Rozmiar pakietu instalacyjnego (.apk) tylko — nie obejmuje danych użytkownika i pamięci podręcznej.</string>
     <string name="filter_total_size_section">Całkowity rozmiar aplikacji</string>
     <string name="filter_total_size_description">Łączny rozmiar instalatora, przechowywanych danych aplikacji i plików w pamięci podręcznej.</string>
@@ -98,8 +98,8 @@
     <plurals name="filter_unused_months_count">
         <item quantity="one">%d miesiąc</item>
         <item quantity="few">%d miesiące</item>
-        <item quantity="many">%d miesiące</item>
-        <item quantity="other">%d miesiące</item>
+        <item quantity="many">%d miesięcy</item>
+        <item quantity="other">%d miesięcy</item>
     </plurals>
     <string name="filter_unused_year">1 rok</string>
     <string name="quick_filter_permission_usage_title">Wymagany dostęp do użycia</string>
@@ -111,9 +111,9 @@
     <string name="sort_permission_usage_description">Sortowanie według Ostatnio Używane wymaga wiedzy, kiedy ostatnio otworzyłeś każdą aplikację. Przyznaj dostęp do użycia w Ustawieniach, aby włączyć tę opcję sortowania.</string>
     <string name="sort_permission_storage_title">Zezwól na dostęp do użycia</string>
     <string name="sort_permission_storage_description">Sortowanie według Całkowitego Rozmiaru mierzy całkowity ślad każdej aplikacji — instalator, dane przechowywane i pamięć podręczna razem. Przyznaj dostęp do użycia w Ustawieniach, aby włączyć tę opcję sortowania.</string>
-    <string name="filter_permissions_section">Permissions</string>
+    <string name="filter_permissions_section">Uprawnienia</string>
     <string name="filter_permissions_count" ns0:ignore="PluralsCandidate">+%d więcej</string>
-    <string name="filter_permissions_title">Filtruj według Permission</string>
+    <string name="filter_permissions_title">Filtruj według uprawnień</string>
     <string name="filter_permissions_quick_filters">Szybkie filtry</string>
     <string name="filter_permissions_match_label">Dopasowanie</string>
     <string name="filter_permissions_chip_match_any">Dopasowanie: Jakiekolwiek</string>
@@ -122,8 +122,8 @@
     <plurals name="filter_permissions_chip_presets_count">
         <item quantity="one">%d ustawienie wstępne</item>
         <item quantity="few">%d ustawienia wstępne</item>
-        <item quantity="many">%d ustawienia wstępne</item>
-        <item quantity="other">%d ustawienia wstępne</item>
+        <item quantity="many">%d ustawień wstępnych</item>
+        <item quantity="other">%d ustawień wstępnych</item>
     </plurals>
     <string name="filter_permissions_chip_show_all">Pokaż: Wszystkie</string>
     <string name="filter_permissions_chip_show_selected">Pokaż: Wybrane</string>

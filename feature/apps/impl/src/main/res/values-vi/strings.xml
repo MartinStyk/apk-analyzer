@@ -17,7 +17,7 @@
     <string name="sort_bottom_sheet_title">Sắp xếp theo</string>
     <string name="search_apps_hint">Tìm kiếm ứng dụng</string>
     <plurals name="search_apps_placeholder">
-        <item quantity="other">Tìm kiếm ứng dụng %1$d…</item>
+        <item quantity="other">Tìm kiếm %1$d ứng dụng…</item>
     </plurals>
     <plurals name="search_apps_matches">
         <item quantity="other">Tìm thấy %d kết quả</item>
@@ -30,9 +30,9 @@
     <string name="quick_filter_unused">Chưa sử dụng</string>
     <string name="quick_filter_system">Hệ thống</string>
     <string name="quick_filter_google_play">Google Play</string>
-    <string name="quick_filter_sideloaded">Tải bên</string>
-    <string name="quick_filter_recently_installed">Gần đây đã cài đặt</string>
-    <string name="quick_filter_recently_updated">Gần đây đã cập nhật</string>
+    <string name="quick_filter_sideloaded">Cài đặt thủ công</string>
+    <string name="quick_filter_recently_installed">Đã cài đặt gần đây</string>
+    <string name="quick_filter_recently_updated">Đã cập nhật gần đây</string>
     <string name="quick_filter_source_sheet_title">Nguồn</string>
     <string name="quick_filter_selection_more" ns0:ignore="PluralsCandidate">%1$s +%2$d</string>
     <string name="quick_filter_activity_sheet_title">Hoạt động</string>
@@ -43,7 +43,7 @@
     <string name="installed_apps_count">Ứng dụng đã cài đặt (%1$d)</string>
     <string name="recently_viewed">Đã xem gần đây</string>
     <plurals name="search_apps_empty">
-        <item quantity="other">Tìm kiếm ứng dụng đã cài đặt %1$d</item>
+        <item quantity="other">Tìm kiếm %1$d ứng dụng đã cài đặt</item>
     </plurals>
     <string name="search_apps_no_results">Không có kết quả cho \"%1$s\"</string>
     <string name="search_history_title">Tìm kiếm gần đây</string>
@@ -93,9 +93,9 @@
     <string name="quick_filter_permission_storage_description">Bộ lọc này đo kích thước đầy đủ của mỗi ứng dụng — trình cài đặt, dữ liệu lưu trữ và bộ nhớ cache kết hợp. Cấp quyền truy cập sử dụng trong Cài đặt để xem mỗi ứng dụng thực sự chiếm bao nhiêu không gian.</string>
     <string name="quick_filter_permission_open_settings">Mở cài đặt</string>
     <string name="sort_permission_usage_title">Cho phép truy cập sử dụng</string>
-    <string name="sort_permission_usage_description">Sắp xếp theo Lần Sử Dụng cần biết khi bạn mở mỗi ứng dụng lần cuối. Cấp quyền truy cập sử dụng trong Cài đặt để kích hoạt tùy chọn sắp xếp này.</string>
+    <string name="sort_permission_usage_description">Sắp xếp theo Sử dụng lần cuối cần biết khi bạn mở mỗi ứng dụng lần cuối. Cấp quyền truy cập sử dụng trong Cài đặt để kích hoạt tùy chọn sắp xếp này.</string>
     <string name="sort_permission_storage_title">Cho phép truy cập sử dụng</string>
-    <string name="sort_permission_storage_description">Sắp xếp theo Kích Thước Tổng Cộng đo lường toàn bộ kích thước của mỗi ứng dụng — trình cài đặt, dữ liệu đã lưu và bộ nhớ cache kết hợp. Cấp quyền truy cập sử dụng trong Cài đặt để kích hoạt tùy chọn sắp xếp này.</string>
+    <string name="sort_permission_storage_description">Sắp xếp theo Tổng kích thước ứng dụng đo lường toàn bộ kích thước của mỗi ứng dụng — trình cài đặt, dữ liệu đã lưu và bộ nhớ cache kết hợp. Cấp quyền truy cập sử dụng trong Cài đặt để kích hoạt tùy chọn sắp xếp này.</string>
     <string name="filter_permissions_section">Quyền</string>
     <string name="filter_permissions_count" ns0:ignore="PluralsCandidate">+%d thêm</string>
     <string name="filter_permissions_title">Lọc theo Quyền</string>

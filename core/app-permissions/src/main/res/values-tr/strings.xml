@@ -16,7 +16,7 @@
     <string name="permission_label_mms_receive">MMS Al</string>
     <string name="permission_label_wap_push">WAP Push Al</string>
     <string name="permission_label_call_log_read">Arama Kaydını Oku</string>
-    <string name="permission_label_call_log_write">Arama Günlüğü Yaz</string>
+    <string name="permission_label_call_log_write">Arama Kaydını Yaz</string>
     <string name="permission_label_call_phone">Telefon Aramaları Yap</string>
     <string name="permission_label_phone_state">Telefon Durumu</string>
     <string name="permission_label_phone_numbers">Telefon Numaraları</string>
@@ -70,12 +70,12 @@
     <string name="permission_label_manage_own_calls">Kendi Çağrılarını Yönet</string>
     <string name="permission_label_detect_screen_capture">Ekran Kaydını Tespit Et</string>
     <string name="permission_label_ignore_battery_optimizations">Pil Optimizasyonlarını Yoksay</string>
-    <string name="permission_label_sync_settings_read">Senkran Ayarlarını Oku</string>
-    <string name="permission_label_sync_settings_write">Senkran Ayarlarını Değiştir</string>
+    <string name="permission_label_sync_settings_read">Senkronizasyon Ayarlarını Oku</string>
+    <string name="permission_label_sync_settings_write">Senkronizasyon Ayarlarını Değiştir</string>
     <string name="permission_label_google_services_config">Google Hizmetleri Yapılandırması</string>
     <string name="permission_label_install_packages">Paketleri Yükle</string>
     <string name="permission_label_overlay">Diğer Uygulamaların Üzerinde Çiz</string>
     <string name="permission_label_manage_storage">Tüm Dosyaları Yönet</string>
-    <string name="permission_label_schedule_alarm">Kesin Alarm</string>
+    <string name="permission_label_schedule_alarm">Kesin Alarmlar</string>
     <string name="permission_label_query_all_packages">Yüklenmiş Paketleri Sorgula</string>
 </resources>

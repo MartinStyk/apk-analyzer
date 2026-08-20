@@ -3,12 +3,12 @@
     <string name="browse_title">Procházet</string>
     <string name="browse_subtitle_loading">Skenování nainstalovaných aplikací…</string>
     <plurals name="browse_subtitle">
-        <item quantity="one">Prozkoumat aplikaci %1$d nainstalovanou na tomto zařízení</item>
-        <item quantity="few">Prozkoumat aplikace %1$d nainstalované na tomto zařízení</item>
-        <item quantity="many">Prozkoumat aplikace %1$d nainstalované na tomto zařízení</item>
-        <item quantity="other">Prozkoumat aplikace %1$d nainstalované na tomto zařízení</item>
+        <item quantity="one">Prozkoumat %1$d aplikaci nainstalovanou na tomto zařízení</item>
+        <item quantity="few">Prozkoumat %1$d aplikace nainstalované na tomto zařízení</item>
+        <item quantity="many">Prozkoumat %1$d nainstalovaných aplikací na tomto zařízení</item>
+        <item quantity="other">Prozkoumat %1$d nainstalovaných aplikací na tomto zařízení</item>
     </plurals>
-    <string name="browse_dimension_permission_title">Permissions</string>
+    <string name="browse_dimension_permission_title">Oprávnění</string>
     <string name="browse_dimension_permission_subtitle">Zobrazit, které aplikace používají dané oprávnění</string>
     <string name="browse_dimension_certificate_title">Certifikát pro podepisování</string>
     <string name="browse_dimension_certificate_subtitle">Skupina aplikací podle identity podepisujícího, názvu vydavatele nebo země</string>
@@ -25,8 +25,8 @@
     <plurals name="browse_dimension_option_count">
         <item quantity="one">%1$d možnost</item>
         <item quantity="few">%1$d možnosti</item>
-        <item quantity="many">%1$d možnosti</item>
-        <item quantity="other">%1$d možnosti</item>
+        <item quantity="many">%1$d možností</item>
+        <item quantity="other">%1$d možností</item>
     </plurals>
     <string name="browse_sdk_unknown">API úroveň %1$s</string>
     <string name="browse_api_level">API %1$s</string>
@@ -84,19 +84,19 @@
     <plurals name="browse_options_filter_hint">
         <item quantity="one">Filtr %1$d možnost</item>
         <item quantity="few">Filtr %1$d možnosti</item>
-        <item quantity="many">Filtr %1$d možnosti</item>
-        <item quantity="other">Filtr %1$d možnosti</item>
+        <item quantity="many">Filtr %1$d možností</item>
+        <item quantity="other">Filtr %1$d možností</item>
     </plurals>
     <string name="browse_options_empty_query">Žádné možnosti neodpovídají “%1$s”</string>
     <plurals name="browse_apps_count">
         <item quantity="one">%1$d aplikace</item>
         <item quantity="few">%1$d aplikace</item>
-        <item quantity="many">%1$d aplikace</item>
-        <item quantity="other">%1$d aplikace</item>
+        <item quantity="many">%1$d aplikací</item>
+        <item quantity="other">%1$d aplikací</item>
     </plurals>
     <plurals name="browse_apps_filter_hint">
         <item quantity="one">Filtr %1$d aplikace</item>
-        <item quantity="few">Filtr %1$d aplikací</item>
+        <item quantity="few">Filtr %1$d aplikace</item>
         <item quantity="many">Filtr %1$d aplikací</item>
         <item quantity="other">Filtr %1$d aplikací</item>
     </plurals>

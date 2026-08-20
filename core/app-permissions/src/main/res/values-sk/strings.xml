@@ -37,7 +37,7 @@
     <string name="permission_label_bluetooth_advertise">Bluetooth Reklama</string>
     <string name="permission_label_bluetooth">Bluetooth</string>
     <string name="permission_label_uwb">UWB Meranie vzdialenosti</string>
-    <string name="permission_label_notifications">Odoslať Notifikácie</string>
+    <string name="permission_label_notifications">Odoslať oznámenia</string>
     <string name="permission_label_internet">Internet</string>
     <string name="permission_label_nfc">NFC</string>
     <string name="permission_label_vibrate">Vibrovať</string>
@@ -47,12 +47,12 @@
     <string name="permission_label_network_state">Stav siete</string>
     <string name="permission_label_wake_lock">Udržať zariadenie bdené</string>
     <string name="permission_label_boot">Spustiť pri štarte</string>
-    <string name="permission_label_foreground_service">Predný Service</string>
+    <string name="permission_label_foreground_service">Service na popredí</string>
     <string name="permission_label_foreground_service_camera">Použitie kamery na pozadí</string>
     <string name="permission_label_foreground_service_microphone">Použitie mikrofónu na pozadí</string>
     <string name="permission_label_foreground_service_data_sync">Synchronizácia dát na pozadí</string>
     <string name="permission_label_foreground_service_media_playback">Prehrávanie médií na pozadí</string>
-    <string name="permission_label_foreground_service_media_projection">Zdieľanie obrazovky Service</string>
+    <string name="permission_label_foreground_service_media_projection">Service zdieľania obrazovky</string>
     <string name="permission_label_foreground_service_phone_call">Správa hovorov na pozadí</string>
     <string name="permission_label_foreground_service_connected_device">Pripojenie zariadenia na pozadí</string>
     <string name="permission_label_ad_id">ID reklamy</string>
@@ -77,5 +77,5 @@
     <string name="permission_label_overlay">Kresliť nad inými aplikáciami</string>
     <string name="permission_label_manage_storage">Spravovať všetky súbory</string>
     <string name="permission_label_schedule_alarm">Presné alarmy</string>
-    <string name="permission_label_query_all_packages">Dotaz na nainštalovaný Packages</string>
+    <string name="permission_label_query_all_packages">Zisťovať nainštalované Packages</string>
 </resources>

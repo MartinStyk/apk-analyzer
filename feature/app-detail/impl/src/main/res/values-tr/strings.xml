@@ -56,9 +56,9 @@
     <string name="app_detail_insight_certificate_not_yet_valid">İmzalama sertifikası henüz geçerli değil</string>
     <plurals name="app_detail_insight_outdated_target">
         <item quantity="one">Hedef API %1$d, bu cihazdan bir API seviyesi geride</item>
-        <item quantity="other">Bu cihazdan %1$d, %2$d API seviyeleri hedefleniyor</item>
+        <item quantity="other">Hedef API %1$d, bu cihazdan %2$d API seviyesi geride</item>
     </plurals>
-    <string name="app_detail_insight_sideloaded">Bir uygulama mağazasından dışarıdan yüklendi</string>
+    <string name="app_detail_insight_sideloaded">Bir uygulama mağazası dışından yüklendi</string>
     <plurals name="app_detail_insight_unused">
         <item quantity="one">Son bir ayda açılmadı</item>
         <item quantity="other">Son %1$d ayda açılmadı</item>
@@ -86,16 +86,16 @@
     <string name="app_detail_summary_permissions">%1$s · %2$s</string>
     <string name="app_detail_summary_permissions_granted">%1$s · %2$s · %3$s</string>
     <plurals name="app_detail_summary_permissions_requested">
-        <item quantity="one">%1$d izin istedi</item>
-        <item quantity="other">%1$d izinler istedi</item>
+        <item quantity="one">%1$d istenen izin</item>
+        <item quantity="other">%1$d istenen izin</item>
     </plurals>
     <plurals name="app_detail_summary_permissions_dangerous">
         <item quantity="one">%1$d tehlikeli izin</item>
-        <item quantity="other">%1$d tehlikeli izinler</item>
+        <item quantity="other">%1$d tehlikeli izin</item>
     </plurals>
     <plurals name="app_detail_summary_permissions_granted_count">
-        <item quantity="one">%1$d izin verildi</item>
-        <item quantity="other">%1$d izinler verildi</item>
+        <item quantity="one">%1$d verilen izin</item>
+        <item quantity="other">%1$d verilen izin</item>
     </plurals>
     <string name="app_detail_permissions_section">İzinler</string>
     <string name="app_detail_total_permissions">Toplam İzinler</string>
@@ -105,8 +105,8 @@
     <string name="app_detail_permissions_no_dangerous">Hassas izin talep edilmedi</string>
     <string name="app_detail_permissions_none_granted">Hassas izin verilmedi</string>
     <plurals name="app_detail_permissions_granted_summary">
-        <item quantity="one">%1$d %2$d hassas izin verildi</item>
-        <item quantity="other">%1$d %2$d hassas izin verildi</item>
+        <item quantity="one">%1$d/%2$d hassas izin verildi</item>
+        <item quantity="other">%1$d/%2$d hassas izin verildi</item>
     </plurals>
     <plurals name="app_detail_permissions_dangerous_summary">
         <item quantity="one">%1$d hassas izin talep edildi</item>
@@ -122,7 +122,7 @@
     </plurals>
     <plurals name="app_detail_permissions_sensitive_count">
         <item quantity="one">%d hassas izin</item>
-        <item quantity="other">%d hassas izinler</item>
+        <item quantity="other">%d hassas izin</item>
     </plurals>
     <string name="app_detail_count_pair">%1$s · %2$s</string>
     <string name="app_detail_components_section">Bileşenler</string>
@@ -136,17 +136,17 @@
     <string name="app_detail_features_section">Cihaz gereksinimleri</string>
     <plurals name="app_detail_features_required_count">
         <item quantity="one">%d gerekli özellik</item>
-        <item quantity="other">%d gerekli özellikler</item>
+        <item quantity="other">%d gerekli özellik</item>
     </plurals>
     <plurals name="app_detail_features_optional_count">
         <item quantity="one">%d isteğe bağlı özellik</item>
-        <item quantity="other">%d isteğe bağlı özellikler</item>
+        <item quantity="other">%d isteğe bağlı özellik</item>
     </plurals>
     <string name="app_detail_features_all_met">Bu cihaz, uygulamanın gerektirdiği her şeyi karşılıyor</string>
     <string name="app_detail_features_none">Bu uygulama hiçbir cihaz gereksinimi bildirmiyor</string>
     <plurals name="app_detail_features_unmet">
         <item quantity="one">%1$d gereksinimi bu cihaz karşılayamaz</item>
-        <item quantity="other">%1$d gereksinimleri bu cihaz karşılayamaz</item>
+        <item quantity="other">%1$d gereksinimi bu cihaz karşılayamaz</item>
     </plurals>
     <string name="app_detail_certificate_signature_section">Sertifika İmzası</string>
     <string name="app_detail_certificate_signed_by">%1$s tarafından imzalandı</string>
@@ -166,16 +166,16 @@
     <string name="manifest_collapse">Manifesti daralt</string>
     <string name="manifest_no_matches">Hiçbir manifest satırı “%1$s” içermiyor.</string>
     <plurals name="manifest_line_count">
-        <item quantity="one">%1$d satırı</item>
-        <item quantity="other">%1$d satırı</item>
+        <item quantity="one">%1$d satır</item>
+        <item quantity="other">%1$d satır</item>
     </plurals>
     <plurals name="manifest_match_count">
         <item quantity="one">%1$d eşleşen satır · %2$d toplam</item>
-        <item quantity="other">%1$d eşleşen satırlar · %2$d toplam</item>
+        <item quantity="other">%1$d eşleşen satır · %2$d toplam</item>
     </plurals>
     <plurals name="manifest_base_split_note">
-        <item quantity="one">Temel APK manifestini gösterir. Bu uygulamanın %1$d ek olarak yüklenmiş kendi manifesti olan bölümleri vardır.</item>
-        <item quantity="other">Temel APK manifestini gösterir. Bu uygulamanın %1$d ek olarak yüklenmiş kendi manifestleri olan bölümleri vardır.</item>
+        <item quantity="one">Temel APK manifestini gösterir. Bu uygulamanın kendi manifestine sahip %1$d ek olarak yüklenmiş bölümü vardır.</item>
+        <item quantity="other">Temel APK manifestini gösterir. Bu uygulamanın kendi manifestlerine sahip %1$d ek olarak yüklenmiş bölümü vardır.</item>
     </plurals>
     <string name="certificates_title">İmza sertifikası</string>
     <string name="certificates_error">İmza sertifikası yüklenemedi</string>
@@ -188,7 +188,7 @@
     <string name="certificates_history">İmzalama geçmişi</string>
     <plurals name="certificates_history_description">
         <item quantity="one">Android, mevcut anahtardan önce kullanılan bir imzalama anahtarını doğruladı.</item>
-        <item quantity="other">Android, mevcut anahtardan önce kullanılan %d imzalama anahtarlarını doğruladı. En son kullanılan önceki anahtar ilk sırada görünür.</item>
+        <item quantity="other">Android, mevcut anahtardan önce kullanılan %d imzalama anahtarını doğruladı. En son kullanılan önceki anahtar ilk sırada görünür.</item>
     </plurals>
     <string name="certificates_original_signing_key">Orijinal imzalama anahtarı</string>
     <string name="certificates_previous_signing_key">Önceki imzalama anahtarı</string>
@@ -217,7 +217,7 @@
     <string name="certificates_multiple_signers">Birden fazla imzalayan</string>
     <string name="certificates_single_signer_explanation">Bu uygulama şu anda bir sertifika ile imzalanmıştır. Geliştirici imzalama anahtarını tekrar değiştirirse, Android bu değişikliği bu uygulamanın güvenilir imzalama geçmişine karşı doğrular.</string>
     <string name="certificates_multiple_signers_explanation">Bu uygulama şu anda birden fazla sertifika ile imzalanmıştır. Android, güncellemelerin aynı imzalayan setini kullanmasını gerektirir.</string>
-    <string name="certificates_scheme">Şeması</string>
+    <string name="certificates_scheme">Şema</string>
     <string name="certificates_scheme_v1">v1</string>
     <string name="certificates_scheme_v2">v2</string>
     <string name="certificates_scheme_v3">v3</string>
@@ -298,7 +298,7 @@
     <string name="general_info_split_apks">Bölünmüş APK\'lar</string>
     <plurals name="general_info_split_apks_value">
         <item quantity="one">%1$d bölünmüş APK olarak yüklendi</item>
-        <item quantity="other">%1$d bölünmüş APK\'lar olarak yüklendi</item>
+        <item quantity="other">%1$d bölünmüş APK olarak yüklendi</item>
     </plurals>
     <string name="general_info_total_size">Toplam Boyut</string>
     <string name="general_info_native_library_abis">CPU mimarileri</string>
@@ -306,15 +306,15 @@
     <string name="general_info_native_library_files">Yerel kütüphane dosyaları</string>
     <string name="general_info_native_library_files_none">Hiçbiri paketlenmemiş</string>
     <plurals name="general_info_native_library_file_count">
-        <item quantity="one">%1$d dosyası</item>
-        <item quantity="other">%1$d dosyaları</item>
+        <item quantity="one">%1$d dosya</item>
+        <item quantity="other">%1$d dosya</item>
     </plurals>
     <string name="general_info_rationale_application_name">Uygulamanın ana ekranda ve uygulama çekmecesinde gösterilen kullanıcıya görünür etiketi.</string>
     <string name="general_info_rationale_package_name">Cihazda bu uygulama için benzersiz tanımlayıcı. İki uygulama aynı paket adını paylaşamaz.</string>
     <string name="general_info_rationale_process_name">Uygulamanın çalıştığı işletim sistemi sürecinin adı. Varsayılan olarak, paket adıyla eşleşir.</string>
     <string name="general_info_rationale_uid">Android sistemi tarafından bu uygulamaya atanan benzersiz tanımlayıcı. Uygulamanın sistem kaynaklarına ve dosya izinlerine erişimini belirler.</string>
     <string name="general_info_rationale_shared_user_id">Bu uygulama, aynı anahtar ile imzalanmış diğer uygulamalarla paylaşılan bir kimlik altında çalıştığını beyan eder. Bu kimliği paylaşan uygulamalar, sanki tek bir uygulama gibi birbirlerinin verilerine ve izinlerine erişebilir.</string>
-    <string name="general_info_rationale_description">Manifestoda uygulama geliştiricisi tarafından sağlanan isteğe bağlı özet.</string>
+    <string name="general_info_rationale_description">Manifestte uygulama geliştiricisi tarafından sağlanan isteğe bağlı özet.</string>
     <string name="general_info_rationale_version_name">Kullanıcılara gösterilen insan tarafından okunabilir sürüm dizesi, örneğin "2.5.1" veya "Beta 3".</string>
     <string name="general_info_rationale_version_code">Her sürümle artan dahili bir tamsayı. Sistem, bir sürümün diğerinden daha yeni olup olmadığını belirlemek için bunu kullanır.</string>
     <string name="general_info_rationale_min_sdk">Bu uygulamanın desteklediği en düşük Android API seviyesi. Daha eski bir sürüm çalıştıran cihazlar bunu yükleyemez.</string>
@@ -354,8 +354,8 @@
     <string name="permissions_title">İzinler</string>
     <string name="permissions_error">Bu uygulamanın izinlerini okuyamadı.</string>
     <plurals name="permissions_filter_hint">
-        <item quantity="one">%1$d iznini filtrele</item>
-        <item quantity="other">%1$d izinlerini filtrele</item>
+        <item quantity="one">%1$d izni filtrele</item>
+        <item quantity="other">%1$d izni filtrele</item>
     </plurals>
     <string name="permissions_scope_sheet_title">Göster</string>
     <string name="permissions_scope_requested">Talep Edilen</string>
@@ -380,7 +380,7 @@
     <string name="permissions_flag_appop">Bu, izinle ayrı olan Ayarlar\'da kendi anahtarına da sahiptir.</string>
     <string name="permissions_flag_instant">Anlık uygulamalar - kurulum olmadan çalışan uygulamalar - bunu da tutabilir.</string>
     <string name="permissions_flag_development">Geliştirme için elle de verilebilir.</string>
-    <string name="permissions_empty_query">No permission matches \"%1$s\".</string>
+    <string name="permissions_empty_query">Hiçbir izin \"%1$s\" ile eşleşmiyor.</string>
     <string name="permissions_empty_filters">Seçilen filtrelerle eşleşen izin yok.</string>
     <string name="permissions_empty_scope">Bu uygulama hiçbir izin talep etmiyor.</string>
     <string name="permissions_clear_narrowing">Filtreleri temizle</string>
@@ -397,24 +397,24 @@
     <string name="components_type_receivers">Alıcılar</string>
     <string name="components_type_providers">Sağlayıcılar</string>
     <plurals name="components_filter_hint_all">
-        <item quantity="one">%1$d bileşenini filtrele</item>
-        <item quantity="other">%1$d bileşenlerini filtrele</item>
+        <item quantity="one">%1$d bileşeni filtrele</item>
+        <item quantity="other">%1$d bileşeni filtrele</item>
     </plurals>
     <plurals name="components_filter_hint_activities">
-        <item quantity="one">%1$d etkinliğini filtrele</item>
-        <item quantity="other">%1$d etkinliklerini filtrele</item>
+        <item quantity="one">%1$d etkinliği filtrele</item>
+        <item quantity="other">%1$d etkinliği filtrele</item>
     </plurals>
     <plurals name="components_filter_hint_services">
-        <item quantity="one">%1$d hizmetini filtrele</item>
-        <item quantity="other">%1$d hizmetlerini filtrele</item>
+        <item quantity="one">%1$d hizmeti filtrele</item>
+        <item quantity="other">%1$d hizmeti filtrele</item>
     </plurals>
     <plurals name="components_filter_hint_receivers">
-        <item quantity="one">%1$d alıcısını filtrele</item>
-        <item quantity="other">%1$d alıcılarını filtrele</item>
+        <item quantity="one">%1$d alıcıyı filtrele</item>
+        <item quantity="other">%1$d alıcıyı filtrele</item>
     </plurals>
     <plurals name="components_filter_hint_providers">
-        <item quantity="one">%1$d sağlayıcısını filtrele</item>
-        <item quantity="other">%1$d sağlayıcılarını filtrele</item>
+        <item quantity="one">%1$d sağlayıcıyı filtrele</item>
+        <item quantity="other">%1$d sağlayıcıyı filtrele</item>
     </plurals>
     <string name="components_filter_exported">Dışa aktarıldı</string>
     <string name="components_filter_unprotected">Korumasız</string>
@@ -446,11 +446,11 @@
     <string name="components_detail_section_details">Ayrıntılar</string>
     <string name="components_detail_section_intent_filters">Bu bileşenin kabul ettiği istekler</string>
     <string name="components_detail_intent_filters_explanation">Android ve diğer uygulamalar, bu bileşene hangi isteklerin, bağlantıların ve içeriğin ulaşabileceğini belirlemek için bu bildirimleri kullanır.</string>
-    <string name="components_detail_intent_filters_unavailable">Bu uygulama için niyet filtreleri okunamadı.</string>
-    <string name="components_detail_intent_filters_open">Niyet filtrelerini görüntüle</string>
+    <string name="components_detail_intent_filters_unavailable">Bu uygulama için Intent filtreleri okunamadı.</string>
+    <string name="components_detail_intent_filters_open">Intent filtrelerini görüntüle</string>
     <plurals name="components_intent_filter_count">
-        <item quantity="one">%1$d niyet filtresi</item>
-        <item quantity="other">%1$d niyet filtreleri</item>
+        <item quantity="one">%1$d Intent filtresi</item>
+        <item quantity="other">%1$d Intent filtresi</item>
     </plurals>
     <string name="components_detail_intent_actions">Eylemler</string>
     <string name="components_detail_intent_actions_explanation">Başka bir uygulamanın veya Android\'in bu bileşenden ne yapmasını istediği.</string>
@@ -499,15 +499,15 @@
     <string name="components_intent_data_fragment_advanced_pattern">Gelişmiş parça deseni</string>
     <string name="components_intent_data_mime_type">İçerik türü</string>
     <string name="components_intent_data_mime_group">İçerik türü grubu</string>
-    <string name="intent_filters_title">Niyet filtreleri</string>
-    <string name="intent_filters_error">Niyet filtreleri yüklenemedi</string>
+    <string name="intent_filters_title">Intent filtreleri</string>
+    <string name="intent_filters_error">Intent filtreleri yüklenemedi</string>
     <string name="intent_filters_component_heading">%1$s tarafından bildirilen istek desenleri</string>
     <string name="intent_filters_explanation">Her bir öğe, bu bileşen için bildirilen bir istek desenidir. Başka bir uygulamanın bunu kullanabilmesi, bileşenin erişilebilirliği ve gerekli izinlere de bağlıdır.</string>
     <plurals name="intent_filters_search_hint">
-        <item quantity="one">%1$d istek kuralını ara</item>
-        <item quantity="other">%1$d istek kurallarını ara</item>
+        <item quantity="one">%1$d istek kuralı ara</item>
+        <item quantity="other">%1$d istek kuralı ara</item>
     </plurals>
-    <string name="intent_filters_filter_fallback">Niyet filtresi</string>
+    <string name="intent_filters_filter_fallback">Intent filtresi</string>
     <string name="intent_filters_purpose_launcher">Uygulama başlatıcı girişi</string>
     <string name="intent_filters_purpose_tv_launcher">TV başlatıcı girişi</string>
     <string name="intent_filters_purpose_main">Ana giriş isteği</string>
@@ -528,8 +528,8 @@
     <string name="intent_filters_purpose_provider_other">Özel sağlayıcı isteği</string>
     <string name="intent_filters_tag_verified">Doğrulama istendi</string>
     <string name="intent_filters_tag_blocked_rules">Bağlantı kurallarını engeller</string>
-    <string name="intent_filters_empty">Bu bileşen herhangi bir niyet filtresi bildirmiyor.</string>
-    <string name="intent_filters_empty_query">Hiçbir niyet filtresi \"%1$s\" ile eşleşmiyor.</string>
+    <string name="intent_filters_empty">Bu bileşen herhangi bir Intent filtresi bildirmiyor.</string>
+    <string name="intent_filters_empty_query">Hiçbir Intent filtresi \"%1$s\" ile eşleşmiyor.</string>
     <string name="intent_filters_clear_search">Aramayı temizle</string>
     <string name="components_detail_exported">Dışa aktarıldı</string>
     <string name="components_exported_yes">Evet</string>
@@ -725,8 +725,8 @@
     </plurals>
     <string name="splitapks_explanation">Bu uygulama, cihazınızın ihtiyaç duyduğu kod ve kaynakları yalnızca göndermek için Google Play\'in kullandığı bir teslimat formatı olan temel APK ile birlikte bu ek bölünmüş APK\'lar olarak yüklendi.</string>
     <plurals name="splitapks_search_hint">
-        <item quantity="one">%1$d bölünmüş arama</item>
-        <item quantity="other">%1$d bölünmüşleri ara</item>
+        <item quantity="one">%1$d bölünmüşü ara</item>
+        <item quantity="other">%1$d bölünmüşü ara</item>
     </plurals>
     <string name="splitapks_error">Bölünmüş APK\'lar yüklenemedi</string>
     <string name="splitapks_empty">Bu uygulamada hiç bölünmüş APK yok.</string>
@@ -760,12 +760,12 @@
     <string name="nativelibraries_title">Yerel kütüphane dosyaları</string>
     <plurals name="nativelibraries_heading">
         <item quantity="one">%1$d yerel kütüphane paketlendi</item>
-        <item quantity="other">%1$d yerel kütüphaneler paketlendi</item>
+        <item quantity="other">%1$d yerel kütüphane paketlendi</item>
     </plurals>
     <string name="nativelibraries_explanation">Bu uygulamanın gönderdiği her ayrı yerel kod dosyası, aynı kütüphane birden fazla işlemci mimarisi için oluşturulsa bile dosya adı başına bir satır.</string>
     <plurals name="nativelibraries_search_hint">
-        <item quantity="one">%1$d kütüphanesini ara</item>
-        <item quantity="other">%1$d kütüphanelerini ara</item>
+        <item quantity="one">%1$d kütüphaneyi ara</item>
+        <item quantity="other">%1$d kütüphaneyi ara</item>
     </plurals>
     <string name="nativelibraries_error">Yerel kütüphaneler yüklenemedi</string>
     <string name="nativelibraries_empty">Bu uygulamanın paketlenmiş yerel kütüphaneleri yok.</string>

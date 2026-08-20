@@ -8,10 +8,10 @@
     <string name="content_description_delete_search">Suche löschen: %1$s</string>
     <string name="filter_date_clear">Datumsbereich löschen</string>
     <string name="sort_name">Name</string>
-    <string name="sort_size">APK Dateigröße</string>
+    <string name="sort_size">APK-Dateigröße</string>
     <string name="sort_total_size">Gesamtgröße der App</string>
     <string name="sort_install_date">Installationsdatum</string>
-    <string name="sort_target_sdk">Ziel Android SDK</string>
+    <string name="sort_target_sdk">Ziel-Android-SDK</string>
     <string name="sort_last_updated">Zuletzt aktualisiert</string>
     <string name="sort_last_used">Zuletzt verwendet</string>
     <string name="sort_bottom_sheet_title">Sortieren nach</string>
@@ -37,8 +37,8 @@
     <string name="quick_filter_recently_updated">Kürzlich aktualisiert</string>
     <string name="quick_filter_source_sheet_title">Quelle</string>
     <string name="quick_filter_selection_more" ns0:ignore="PluralsCandidate">%1$s +%2$d</string>
-    <string name="quick_filter_activity_sheet_title">Activity</string>
-    <string name="quick_filter_activity_all">Jede Activity</string>
+    <string name="quick_filter_activity_sheet_title">Aktivität</string>
+    <string name="quick_filter_activity_all">Beliebige Aktivität</string>
     <string name="apps_empty_filtered">Keine Apps gefunden</string>
     <string name="apps_clear_filters">Filter zurücksetzen</string>
     <string name="installed_apps">Installierte Apps</string>
@@ -52,8 +52,8 @@
     <string name="search_history_title">Kürzliche Suchen</string>
     <string name="search_history_clear">Löschen</string>
     <string name="filter_source_section">Installationsquelle</string>
-    <string name="filter_sdk_section">Ziel SDK</string>
-    <string name="filter_apk_size_section">APK Dateigröße</string>
+    <string name="filter_sdk_section">Ziel-SDK</string>
+    <string name="filter_apk_size_section">APK-Dateigröße</string>
     <string name="filter_apk_size_description">Größe des Installationspakets (.apk) nur – schließt Benutzerdaten und Cache aus.</string>
     <string name="filter_total_size_section">Gesamtgröße der App</string>
     <string name="filter_total_size_description">Kombinierte Größe des Installationspakets, gespeicherte App-Daten und zwischengespeicherte Dateien.</string>
@@ -101,9 +101,9 @@
     <string name="sort_permission_usage_description">Das Sortieren nach zuletzt verwendet benötigt zu wissen, wann Sie jede App zuletzt geöffnet haben. Gewähren Sie den Nutzungszugriff in den Einstellungen, um diese Sortieroption zu aktivieren.</string>
     <string name="sort_permission_storage_title">Nutzungszugriff erlauben</string>
     <string name="sort_permission_storage_description">Das Sortieren nach Gesamter Größe misst den gesamten Fußabdruck jeder App – Installer, gespeicherte Daten und Cache kombiniert. Gewähren Sie den Nutzungszugriff in den Einstellungen, um diese Sortieroption zu aktivieren.</string>
-    <string name="filter_permissions_section">Permissions</string>
+    <string name="filter_permissions_section">Berechtigungen</string>
     <string name="filter_permissions_count" ns0:ignore="PluralsCandidate">+%d mehr</string>
-    <string name="filter_permissions_title">Filtern nach Permission</string>
+    <string name="filter_permissions_title">Filtern nach Berechtigung</string>
     <string name="filter_permissions_quick_filters">Schnellfilter</string>
     <string name="filter_permissions_match_label">Übereinstimmung</string>
     <string name="filter_permissions_chip_match_any">Übereinstimmung: Beliebig</string>
@@ -125,7 +125,7 @@
     <string name="filter_permissions_show_all">Alle Berechtigungen</string>
     <string name="filter_permissions_show_all_subtitle">Durchsuche jede auf diesem Gerät deklarierte Berechtigung.</string>
     <string name="filter_permissions_show_selected">Nur ausgewählt</string>
-    <string name="filter_permissions_show_selected_subtitle">Siehe nur die Berechtigungen, die du bereits ausgewählt hast.</string>
+    <string name="filter_permissions_show_selected_subtitle">Sehen Sie nur die Berechtigungen, die Sie bereits ausgewählt haben.</string>
     <string name="filter_permissions_sheet_show">Berechtigungen anzeigen</string>
     <string name="filter_permissions_search_hint">Berechtigungen suchen</string>
     <string name="filter_permissions_preset_sensitive">Sensibel</string>

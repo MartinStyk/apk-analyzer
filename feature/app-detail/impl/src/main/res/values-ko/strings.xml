@@ -79,13 +79,13 @@
     <string name="app_detail_summary_permissions">%1$s · %2$s</string>
     <string name="app_detail_summary_permissions_granted">%1$s · %2$s · %3$s</string>
     <plurals name="app_detail_summary_permissions_requested">
-        <item quantity="other">%1$d이(가) 요청한 권한</item>
+        <item quantity="other">요청된 권한 %1$d개</item>
     </plurals>
     <plurals name="app_detail_summary_permissions_dangerous">
         <item quantity="other">%1$d 위험한 권한</item>
     </plurals>
     <plurals name="app_detail_summary_permissions_granted_count">
-        <item quantity="other">%1$d이(가) 부여한 권한</item>
+        <item quantity="other">부여된 권한 %1$d개</item>
     </plurals>
     <string name="app_detail_permissions_section">권한</string>
     <string name="app_detail_total_permissions">총 권한</string>
@@ -482,9 +482,9 @@
     <string name="intent_filters_purpose_view">링크 또는 콘텐츠 요청</string>
     <string name="intent_filters_purpose_share">공유 콘텐츠 요청</string>
     <string name="intent_filters_purpose_send_to">주소가 지정된 메시지 요청</string>
-    <string name="intent_filters_purpose_edit">내용 요청 편집</string>
-    <string name="intent_filters_purpose_choose_content">내용 요청 선택</string>
-    <string name="intent_filters_purpose_search">요청 검색</string>
+    <string name="intent_filters_purpose_edit">콘텐츠 편집 요청</string>
+    <string name="intent_filters_purpose_choose_content">콘텐츠 선택 요청</string>
+    <string name="intent_filters_purpose_search">검색 요청</string>
     <string name="intent_filters_purpose_call">전화 통화 요청</string>
     <string name="intent_filters_purpose_device_start">장치 시작 방송</string>
     <string name="intent_filters_purpose_app_change">설치된 앱 변경 방송</string>

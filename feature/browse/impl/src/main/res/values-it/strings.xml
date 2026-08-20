@@ -3,10 +3,10 @@
     <string name="browse_title">Esplora</string>
     <string name="browse_subtitle_loading">Scansione delle app installate…</string>
     <plurals name="browse_subtitle">
-        <item quantity="one">Esplora l\'app %1$d installata su questo dispositivo</item>
-        <item quantity="other">Esplora le app %1$d installate su questo dispositivo</item>
+        <item quantity="one">Esplora %1$d app installata su questo dispositivo</item>
+        <item quantity="other">Esplora le %1$d app installate su questo dispositivo</item>
     </plurals>
-    <string name="browse_dimension_permission_title">Permissions</string>
+    <string name="browse_dimension_permission_title">Autorizzazioni</string>
     <string name="browse_dimension_permission_subtitle">Vedi quali app utilizzano una determinata autorizzazione</string>
     <string name="browse_dimension_certificate_title">Certificato di firma</string>
     <string name="browse_dimension_certificate_subtitle">Raggruppa le app per identità del firmatario, nome dell\'editore o paese</string>
@@ -24,7 +24,7 @@
         <item quantity="one">%1$d opzione</item>
         <item quantity="other">%1$d opzioni</item>
     </plurals>
-    <string name="browse_sdk_unknown">API livello %1$s</string>
+    <string name="browse_sdk_unknown">Livello API %1$s</string>
     <string name="browse_api_level">API %1$s</string>
     <string name="browse_source_google_play">Google Play</string>
     <string name="browse_source_samsung_galaxy_store">Samsung Galaxy Store</string>
@@ -44,7 +44,7 @@
     <string name="browse_category_audio">Audio</string>
     <string name="browse_category_video">Video</string>
     <string name="browse_category_image">Immagine</string>
-    <string name="browse_category_social">Sociale</string>
+    <string name="browse_category_social">Social</string>
     <string name="browse_category_news">Notizie e riviste</string>
     <string name="browse_category_maps">Mappe e navigazione</string>
     <string name="browse_category_productivity">Produttività</string>
@@ -78,17 +78,17 @@
     <string name="browse_certificate_self_signed_explanation">I certificati autofirmati sono normali per le app Android. Confronta l\'impronta del certificato con una fonte fidata quando hai bisogno di verificare l\'editore.</string>
     <string name="browse_bucket_info_content_description">Informazioni su %1$s</string>
     <plurals name="browse_options_filter_hint">
-        <item quantity="one">Filtra opzione %1$d</item>
-        <item quantity="other">Filtra opzioni %1$d</item>
+        <item quantity="one">Filtra %1$d opzione</item>
+        <item quantity="other">Filtra %1$d opzioni</item>
     </plurals>
     <string name="browse_options_empty_query">Nessuna opzione corrisponde a “%1$s”</string>
     <plurals name="browse_apps_count">
-        <item quantity="one">App %1$d</item>
-        <item quantity="other">App %1$d</item>
+        <item quantity="one">%1$d app</item>
+        <item quantity="other">%1$d app</item>
     </plurals>
     <plurals name="browse_apps_filter_hint">
-        <item quantity="one">Filtra app %1$d</item>
-        <item quantity="other">Filtra app %1$d</item>
+        <item quantity="one">Filtra %1$d app</item>
+        <item quantity="other">Filtra %1$d app</item>
     </plurals>
     <string name="browse_apps_empty_query">Nessuna app corrisponde a “%1$s”</string>
 </resources>

@@ -12,13 +12,13 @@
     <string name="sort_total_size">Tamanho total do aplicativo</string>
     <string name="sort_install_date">Data de instalação</string>
     <string name="sort_target_sdk">SDK Android de destino</string>
-    <string name="sort_last_updated">Última Atualização</string>
-    <string name="sort_last_used">Último Uso</string>
+    <string name="sort_last_updated">Última atualização</string>
+    <string name="sort_last_used">Último uso</string>
     <string name="sort_bottom_sheet_title">Classificar por</string>
     <string name="search_apps_hint">Pesquisar aplicativos</string>
     <plurals name="search_apps_placeholder">
-        <item quantity="one">Pesquisar aplicativo %1$d…</item>
-        <item quantity="other">Pesquisar aplicativos %1$d…</item>
+        <item quantity="one">Pesquisar %1$d aplicativo…</item>
+        <item quantity="other">Pesquisar %1$d aplicativos…</item>
     </plurals>
     <plurals name="search_apps_matches">
         <item quantity="one">%d correspondência encontrada</item>
@@ -28,13 +28,13 @@
     <string name="preinstalled">Pré-instalado</string>
     <string name="never">Nunca</string>
     <string name="quick_filter_large_total">Grande</string>
-    <string name="quick_filter_recently_used">Usado Recentemente</string>
+    <string name="quick_filter_recently_used">Usado recentemente</string>
     <string name="quick_filter_unused">Não utilizado</string>
     <string name="quick_filter_system">Sistema</string>
     <string name="quick_filter_google_play">Google Play</string>
     <string name="quick_filter_sideloaded">Instalado manualmente</string>
     <string name="quick_filter_recently_installed">Recentemente instalado</string>
-    <string name="quick_filter_recently_updated">Atualizado Recentemente</string>
+    <string name="quick_filter_recently_updated">Atualizado recentemente</string>
     <string name="quick_filter_source_sheet_title">Fonte</string>
     <string name="quick_filter_selection_more" ns0:ignore="PluralsCandidate">%1$s +%2$d</string>
     <string name="quick_filter_activity_sheet_title">Atividade</string>
@@ -43,16 +43,16 @@
     <string name="apps_clear_filters">Limpar filtros</string>
     <string name="installed_apps">Aplicativos instalados</string>
     <string name="installed_apps_count">Aplicativos instalados (%1$d)</string>
-    <string name="recently_viewed">Visualizados Recentemente</string>
+    <string name="recently_viewed">Visualizados recentemente</string>
     <plurals name="search_apps_empty">
-        <item quantity="one">Pesquisar aplicativo instalado %1$d</item>
-        <item quantity="other">Pesquisar aplicativos instalados %1$d</item>
+        <item quantity="one">Pesquisar %1$d aplicativo instalado</item>
+        <item quantity="other">Pesquisar %1$d aplicativos instalados</item>
     </plurals>
     <string name="search_apps_no_results">Nenhum resultado para \"%1$s\"</string>
     <string name="search_history_title">Pesquisas recentes</string>
     <string name="search_history_clear">Limpar</string>
     <string name="filter_source_section">Fonte de instalação</string>
-    <string name="filter_sdk_section">SDK Alvo</string>
+    <string name="filter_sdk_section">SDK de destino</string>
     <string name="filter_apk_size_section">Tamanho do arquivo APK</string>
     <string name="filter_apk_size_description">Tamanho do pacote do instalador (.apk) apenas — exclui dados do usuário e cache.</string>
     <string name="filter_total_size_section">Tamanho total do aplicativo</string>

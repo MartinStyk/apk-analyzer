@@ -47,12 +47,12 @@
     <string name="permission_label_network_state">Stav sítě</string>
     <string name="permission_label_wake_lock">Udržet zařízení aktivní</string>
     <string name="permission_label_boot">Spustit při startu</string>
-    <string name="permission_label_foreground_service">Na pozadí Service</string>
+    <string name="permission_label_foreground_service">Service v popředí</string>
     <string name="permission_label_foreground_service_camera">Použití kamery na pozadí</string>
     <string name="permission_label_foreground_service_microphone">Použití mikrofonu na pozadí</string>
     <string name="permission_label_foreground_service_data_sync">Synchronizace dat na pozadí</string>
     <string name="permission_label_foreground_service_media_playback">Přehrávání médií na pozadí</string>
-    <string name="permission_label_foreground_service_media_projection">Sdílení obrazovky Service</string>
+    <string name="permission_label_foreground_service_media_projection">Service sdílení obrazovky</string>
     <string name="permission_label_foreground_service_phone_call">Zpracování hovorů na pozadí</string>
     <string name="permission_label_foreground_service_connected_device">Připojení zařízení na pozadí</string>
     <string name="permission_label_ad_id">ID reklamy</string>
@@ -77,5 +77,5 @@
     <string name="permission_label_overlay">Kreslit přes jiné aplikace</string>
     <string name="permission_label_manage_storage">Spravovat všechny soubory</string>
     <string name="permission_label_schedule_alarm">Přesné alarmy</string>
-    <string name="permission_label_query_all_packages">Dotaz na nainstalované Packages</string>
+    <string name="permission_label_query_all_packages">Zjistit nainstalované Packages</string>
 </resources>

@@ -79,13 +79,13 @@
     <string name="app_detail_summary_permissions">%1$s · %2$s</string>
     <string name="app_detail_summary_permissions_granted">%1$s · %2$s · %3$s</string>
     <plurals name="app_detail_summary_permissions_requested">
-        <item quantity="other">%1$d が要求した権限</item>
+        <item quantity="other">要求された権限 %1$d件</item>
     </plurals>
     <plurals name="app_detail_summary_permissions_dangerous">
         <item quantity="other">%1$d 危険な権限</item>
     </plurals>
     <plurals name="app_detail_summary_permissions_granted_count">
-        <item quantity="other">%1$d が付与した権限</item>
+        <item quantity="other">付与された権限 %1$d件</item>
     </plurals>
     <string name="app_detail_permissions_section">権限</string>
     <string name="app_detail_total_permissions">合計権限</string>
@@ -482,9 +482,9 @@
     <string name="intent_filters_purpose_view">リンクまたはコンテンツリクエスト</string>
     <string name="intent_filters_purpose_share">共有コンテンツリクエスト</string>
     <string name="intent_filters_purpose_send_to">宛先メッセージリクエスト</string>
-    <string name="intent_filters_purpose_edit">コンテンツリクエストを編集</string>
-    <string name="intent_filters_purpose_choose_content">コンテンツリクエストを選択</string>
-    <string name="intent_filters_purpose_search">リクエストを検索</string>
+    <string name="intent_filters_purpose_edit">コンテンツ編集リクエスト</string>
+    <string name="intent_filters_purpose_choose_content">コンテンツ選択リクエスト</string>
+    <string name="intent_filters_purpose_search">検索リクエスト</string>
     <string name="intent_filters_purpose_call">電話呼び出しリクエスト</string>
     <string name="intent_filters_purpose_device_start">デバイス起動ブロードキャスト</string>
     <string name="intent_filters_purpose_app_change">インストールされたアプリの変更ブロードキャスト</string>

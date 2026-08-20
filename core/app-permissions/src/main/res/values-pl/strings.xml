@@ -36,8 +36,8 @@
     <string name="permission_label_bluetooth_connect">Połączenie Bluetooth</string>
     <string name="permission_label_bluetooth_advertise">Reklama Bluetooth</string>
     <string name="permission_label_bluetooth">Bluetooth</string>
-    <string name="permission_label_uwb">UWB Zasięg</string>
-    <string name="permission_label_notifications">Powiadomienia Post</string>
+    <string name="permission_label_uwb">Pomiar odległości UWB</string>
+    <string name="permission_label_notifications">Publikowanie powiadomień</string>
     <string name="permission_label_internet">Internet</string>
     <string name="permission_label_nfc">NFC</string>
     <string name="permission_label_vibrate">Wibracja</string>
@@ -47,12 +47,12 @@
     <string name="permission_label_network_state">Stan Sieci</string>
     <string name="permission_label_wake_lock">Utrzymaj Urządzenie Włączone</string>
     <string name="permission_label_boot">Uruchom przy Starcie</string>
-    <string name="permission_label_foreground_service">Na pierwszym planie Service</string>
+    <string name="permission_label_foreground_service">Service na pierwszym planie</string>
     <string name="permission_label_foreground_service_camera">Użycie Kamery w Tle</string>
     <string name="permission_label_foreground_service_microphone">Użycie Mikrofonu w Tle</string>
     <string name="permission_label_foreground_service_data_sync">Synchronizacja Danych w Tle</string>
     <string name="permission_label_foreground_service_media_playback">Odtwarzanie Mediów w Tle</string>
-    <string name="permission_label_foreground_service_media_projection">Udostępnianie ekranu Service</string>
+    <string name="permission_label_foreground_service_media_projection">Service udostępniania ekranu</string>
     <string name="permission_label_foreground_service_phone_call">Zarządzanie połączeniami w tle</string>
     <string name="permission_label_foreground_service_connected_device">Połączenie urządzenia w tle</string>
     <string name="permission_label_ad_id">ID reklamy</string>

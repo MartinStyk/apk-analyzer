@@ -32,8 +32,8 @@
         <item quantity="other">+%1$d सामान्य जानकारी में अधिक विवरण, जिसमें नेटवर्क सुरक्षा सेटिंग्स शामिल हैं</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_split_apks">
-        <item quantity="one">+%1$d सामान्य जानकारी में अधिक विवरण, जिसमें विभाजित APKs शामिल है</item>
-        <item quantity="other">+%1$d सामान्य जानकारी में अधिक विवरण, जिसमें विभाजित APKs शामिल है</item>
+        <item quantity="one">+%1$d सामान्य जानकारी में अधिक विवरण, जिसमें विभाजित APK शामिल है</item>
+        <item quantity="other">+%1$d सामान्य जानकारी में अधिक विवरण, जिसमें विभाजित APK शामिल है</item>
     </plurals>
     <string name="app_detail_yes">हाँ</string>
     <string name="app_detail_no">नहीं</string>
@@ -70,7 +70,7 @@
     <string name="app_detail_insight_calendar">कैलेंडर घटनाओं तक पहुंच या परिवर्तन कर सकता है</string>
     <string name="app_detail_apk_saved">%1$s सहेजा गया</string>
     <string name="app_detail_split_apk_saved_title">बेस APK सहेजा गया</string>
-    <string name="app_detail_split_apk_saved_description">%1$s सहेजा गया। यह ऐप विभाजित APKs का उपयोग करता है, इसलिए फ़ाइल में संपूर्ण स्थापित ऐप नहीं है। आप इसे निरीक्षण कर सकते हैं, लेकिन इसे अकेले स्थापित करना विफल हो सकता है।</string>
+    <string name="app_detail_split_apk_saved_description">%1$s सहेजा गया। यह ऐप विभाजित APK का उपयोग करता है, इसलिए फ़ाइल में संपूर्ण स्थापित ऐप नहीं है। आप इसे निरीक्षण कर सकते हैं, लेकिन इसे अकेले स्थापित करना विफल हो सकता है।</string>
     <string name="app_detail_split_apk_saved_close">बंद करें</string>
     <string name="app_detail_icon_saved">%1$s सहेजा गया</string>
     <string name="app_detail_apk_save_failed">APK को सहेजा नहीं जा सका</string>
@@ -86,16 +86,16 @@
     <string name="app_detail_summary_permissions">%1$s · %2$s</string>
     <string name="app_detail_summary_permissions_granted">%1$s · %2$s · %3$s</string>
     <plurals name="app_detail_summary_permissions_requested">
-        <item quantity="one">%1$d ने अनुमति मांगी</item>
-        <item quantity="other">%1$d ने अनुमतियाँ मांगी</item>
+        <item quantity="one">%1$d अनुरोधित अनुमति</item>
+        <item quantity="other">%1$d अनुरोधित अनुमतियाँ</item>
     </plurals>
     <plurals name="app_detail_summary_permissions_dangerous">
         <item quantity="one">%1$d खतरनाक अनुमति</item>
         <item quantity="other">%1$d खतरनाक अनुमतियाँ</item>
     </plurals>
     <plurals name="app_detail_summary_permissions_granted_count">
-        <item quantity="one">%1$d ने अनुमति दी</item>
-        <item quantity="other">%1$d ने अनुमतियाँ दी</item>
+        <item quantity="one">%1$d दी गई अनुमति</item>
+        <item quantity="other">%1$d दी गई अनुमतियाँ</item>
     </plurals>
     <string name="app_detail_permissions_section">Permissions</string>
     <string name="app_detail_total_permissions">कुल Permissions</string>
@@ -167,11 +167,11 @@
     <string name="manifest_no_matches">कोई manifest लाइन “%1$s” नहीं है।</string>
     <plurals name="manifest_line_count">
         <item quantity="one">%1$d लाइन</item>
-        <item quantity="other">%1$d लाइनों</item>
+        <item quantity="other">%1$d लाइनें</item>
     </plurals>
     <plurals name="manifest_match_count">
         <item quantity="one">%1$d मिलती-जुलती लाइन · %2$d कुल</item>
-        <item quantity="other">%1$d मिलती-जुलती लाइनों · %2$d कुल</item>
+        <item quantity="other">%1$d मिलती-जुलती लाइनें · %2$d कुल</item>
     </plurals>
     <plurals name="manifest_base_split_note">
         <item quantity="one">बेस APK manifest दिखाता है। इस ऐप में %1$d अतिरिक्त स्थापित विभाजन हैं जिनका अपना manifest है।</item>
@@ -295,10 +295,10 @@
     <string name="general_info_data_directory">डेटा निर्देशिका</string>
     <string name="general_info_install_location">स्थापना स्थान</string>
     <string name="general_info_apk_size">APK आकार</string>
-    <string name="general_info_split_apks">स्प्लिट APKs</string>
+    <string name="general_info_split_apks">विभाजित APK</string>
     <plurals name="general_info_split_apks_value">
-        <item quantity="one">%1$d स्प्लिट APK के रूप में स्थापित</item>
-        <item quantity="other">%1$d स्प्लिट APKs के रूप में स्थापित</item>
+        <item quantity="one">%1$d विभाजित APK के रूप में स्थापित</item>
+        <item quantity="other">%1$d विभाजित APK के रूप में स्थापित</item>
     </plurals>
     <string name="general_info_total_size">कुल आकार</string>
     <string name="general_info_native_library_abis">CPU आर्किटेक्चर</string>
@@ -323,8 +323,8 @@
     <string name="general_info_rationale_debug_access_disabled">विकास उपकरण इस ऐप से Android के सामान्य ऐप-डिबगिंग पहुँच का उपयोग करके संलग्न नहीं हो सकते।</string>
     <string name="general_info_rationale_backup_allowed">Android इस ऐप के डेटा को बैकअप में शामिल कर सकता है या इसे दूसरे डिवाइस पर स्थानांतरित कर सकता है। सटीक डेटा ऐप के बैकअप नियमों और Android संस्करण पर निर्भर करता है।</string>
     <string name="general_info_rationale_backup_blocked">यह ऐप Android क्लाउड बैकअप को अक्षम करता है। डिवाइस-से-डिवाइस ट्रांसफर अभी भी Android संस्करण और डिवाइस निर्माता के अनुसार भिन्न हो सकता है।</string>
-    <string name="general_info_rationale_cleartext_allowed">ऐप की सामान्य __MANIFEST__ सेटिंग बिना एन्क्रिप्शन के नेटवर्क कनेक्शनों की अनुमति देती है। कस्टम नेटवर्क सुरक्षा नियम इस सेटिंग को ओवरराइड कर सकते हैं। यह साबित नहीं करता कि ऐप बिना एन्क्रिप्टेड डेटा भेजता है।</string>
-    <string name="general_info_rationale_cleartext_blocked">ऐप की सामान्य __MANIFEST__ सेटिंग बिना एन्क्रिप्शन के नेटवर्क कनेक्शनों को अक्षम करती है। कस्टम नेटवर्क सुरक्षा नियम और कुछ नेटवर्किंग पुस्तकालय अलग तरीके से व्यवहार कर सकते हैं।</string>
+    <string name="general_info_rationale_cleartext_allowed">ऐप की सामान्य मैनिफेस्ट सेटिंग बिना एन्क्रिप्शन के नेटवर्क कनेक्शनों की अनुमति देती है। कस्टम नेटवर्क सुरक्षा नियम इस सेटिंग को ओवरराइड कर सकते हैं। यह साबित नहीं करता कि ऐप बिना एन्क्रिप्टेड डेटा भेजता है।</string>
+    <string name="general_info_rationale_cleartext_blocked">ऐप की सामान्य मैनिफेस्ट सेटिंग बिना एन्क्रिप्शन के नेटवर्क कनेक्शनों को अक्षम करती है। कस्टम नेटवर्क सुरक्षा नियम और कुछ नेटवर्किंग पुस्तकालय अलग तरीके से व्यवहार कर सकते हैं।</string>
     <string name="general_info_rationale_app_type">क्या ऐप एक पूर्व-स्थापित सिस्टम ऐप है या एक उपयोगकर्ता-स्थापित ऐप। सिस्टम ऐप्स के पास उच्चाधिकार होते हैं और इन्हें पूरी तरह से अनइंस्टॉल नहीं किया जा सकता।</string>
     <string name="general_info_rationale_install_source_google_play">यह ऐप Google Play के माध्यम से डाउनलोड और इंस्टॉल किया गया था, जो ऐप्स को प्रकाशित करने से पहले स्क्रीन करता है।</string>
     <string name="general_info_rationale_install_source_samsung_galaxy_store">यह ऐप Samsung के Galaxy Store के माध्यम से डाउनलोड और इंस्टॉल किया गया था, जो निर्माता का अपना ऐप स्टोर है।</string>
@@ -343,7 +343,7 @@
     <string name="general_info_rationale_first_installed">इस ऐप की पहली बार इंस्टॉलेशन की तारीख और समय।</string>
     <string name="general_info_rationale_last_updated">इस ऐप के सबसे हाल के अपडेट की तारीख और समय।</string>
     <string name="general_info_rationale_last_used">लगभग तारीख और समय जब इस ऐप को अंतिम बार उपयोगकर्ता द्वारा खोला गया था।</string>
-    <string name="general_info_rationale_apk_directory">APK फ़ाइल जहां डिवाइस पर संग्रहीत है, का फ़ाइल सिस्टम पथ।</string>
+    <string name="general_info_rationale_apk_directory">फ़ाइल सिस्टम पथ जहां डिवाइस पर APK फ़ाइल संग्रहीत है।</string>
     <string name="general_info_rationale_data_directory">फ़ाइल सिस्टम पथ जहां ऐप अपने निजी डेटा, डेटाबेस और साझा प्राथमिकताएँ संग्रहीत करता है।</string>
     <string name="general_info_rationale_install_location">डेवलपर द्वारा घोषित पसंदीदा संग्रहण स्थान - आंतरिक संग्रहण, बाहरी संग्रहण, या स्वचालित।</string>
     <string name="general_info_rationale_apk_size">डिस्क पर स्थापित APK फ़ाइलों का संयुक्त आकार, ऐप डेटा, कैश और रनटाइम-जनित फ़ाइलों को छोड़कर। Google Play से स्थापित अधिकांश ऐप्स एक बेस APK में विभाजित होते हैं और आपके डिवाइस की भाषा और स्क्रीन घनत्व के लिए अतिरिक्त APKs; यह कुल सभी को कवर करता है।</string>
@@ -718,19 +718,19 @@
     <string name="requirement_backup">सिस्टम बैकअप</string>
     <string name="requirement_sip_voip">इंटरनेट कॉलिंग</string>
     <string name="requirement_connection_service">कॉलिंग ऐप एकीकरण</string>
-    <string name="splitapks_title">स्प्लिट APKs</string>
+    <string name="splitapks_title">विभाजित APK</string>
     <plurals name="splitapks_heading">
         <item quantity="one">%1$d विभाजित APK स्थापित</item>
-        <item quantity="other">%1$d विभाजित APKs स्थापित</item>
+        <item quantity="other">%1$d विभाजित APK स्थापित</item>
     </plurals>
-    <string name="splitapks_explanation">यह ऐप एक बेस APK के रूप में स्थापित किया गया था और इन अतिरिक्त विभाजित APKs के साथ, एक वितरण प्रारूप जो Google Play केवल उस कोड और संसाधनों को भेजने के लिए उपयोग करता है जिसकी आपके डिवाइस को आवश्यकता है।</string>
+    <string name="splitapks_explanation">यह ऐप एक बेस APK के रूप में स्थापित किया गया था और इन अतिरिक्त विभाजित APK के साथ, एक वितरण प्रारूप जो Google Play केवल उस कोड और संसाधनों को भेजने के लिए उपयोग करता है जिसकी आपके डिवाइस को आवश्यकता है।</string>
     <plurals name="splitapks_search_hint">
-        <item quantity="one">खोजें %1$d विभाजन</item>
-        <item quantity="other">खोजें %1$d विभाजनों</item>
+        <item quantity="one">%1$d विभाजन खोजें</item>
+        <item quantity="other">%1$d विभाजन खोजें</item>
     </plurals>
-    <string name="splitapks_error">विभाजन APKs लोड करने में विफल</string>
-    <string name="splitapks_empty">इस ऐप में कोई विभाजन APKs स्थापित नहीं है।</string>
-    <string name="splitapks_empty_query">कोई विभाजन APK \"%1$s\" से मेल नहीं खाता।</string>
+    <string name="splitapks_error">विभाजित APK लोड करने में विफल</string>
+    <string name="splitapks_empty">इस ऐप में कोई विभाजित APK स्थापित नहीं है।</string>
+    <string name="splitapks_empty_query">कोई विभाजित APK \"%1$s\" से मेल नहीं खाता।</string>
     <string name="splitapks_clear_search">खोज साफ़ करें</string>
     <string name="splitapks_kind_feature">फीचर मॉड्यूल</string>
     <string name="splitapks_kind_abi">CPU आर्किटेक्चर</string>

@@ -3,8 +3,8 @@
     <string name="browse_title">Gözat</string>
     <string name="browse_subtitle_loading">Yüklenmiş uygulamalar taranıyor…</string>
     <plurals name="browse_subtitle">
-        <item quantity="one">Bu cihazda yüklü %1$d uygulamasını keşfedin</item>
-        <item quantity="other">Bu cihazda yüklü %1$d uygulamalarını keşfedin</item>
+        <item quantity="one">Bu cihazda yüklü %1$d uygulamayı keşfedin</item>
+        <item quantity="other">Bu cihazda yüklü %1$d uygulamayı keşfedin</item>
     </plurals>
     <string name="browse_dimension_permission_title">İzinler</string>
     <string name="browse_dimension_permission_subtitle">Hangi uygulamaların belirli bir izni kullandığını görün</string>
@@ -21,8 +21,8 @@
     <string name="browse_dimension_app_category_title">Uygulama kategorisi</string>
     <string name="browse_dimension_app_category_subtitle">Her birinin kendisini ne tür bir uygulama olarak tanımladığını görün</string>
     <plurals name="browse_dimension_option_count">
-        <item quantity="one">%1$d seçeneği</item>
-        <item quantity="other">%1$d seçenekleri</item>
+        <item quantity="one">%1$d seçenek</item>
+        <item quantity="other">%1$d seçenek</item>
     </plurals>
     <string name="browse_sdk_unknown">API seviyesi %1$s</string>
     <string name="browse_api_level">API %1$s</string>
@@ -45,8 +45,8 @@
     <string name="browse_category_video">Video</string>
     <string name="browse_category_image">Görüntü</string>
     <string name="browse_category_social">Sosyal</string>
-    <string name="browse_category_news">Haberler &amp; dergiler</string>
-    <string name="browse_category_maps">Haritalar &amp; navigasyon</string>
+    <string name="browse_category_news">Haberler ve dergiler</string>
+    <string name="browse_category_maps">Haritalar ve navigasyon</string>
     <string name="browse_category_productivity">Verimlilik</string>
     <string name="browse_category_accessibility">Erişilebilirlik</string>
     <string name="browse_sub_attribute_sheet_title">Grupla</string>
@@ -78,17 +78,17 @@
     <string name="browse_certificate_self_signed_explanation">Kendinden imzalı sertifikalar Android uygulamaları için normaldir. Yayıncıyı doğrulamak gerektiğinde sertifika parmak izini güvenilir bir kaynakla karşılaştırın.</string>
     <string name="browse_bucket_info_content_description">%1$s hakkında</string>
     <plurals name="browse_options_filter_hint">
-        <item quantity="one">%1$d seçeneğini filtrele</item>
-        <item quantity="other">%1$d seçeneklerini filtrele</item>
+        <item quantity="one">%1$d seçeneği filtrele</item>
+        <item quantity="other">%1$d seçeneği filtrele</item>
     </plurals>
     <string name="browse_options_empty_query">“%1$s” ile eşleşen seçenek yok</string>
     <plurals name="browse_apps_count">
-        <item quantity="one">%1$d uygulaması</item>
-        <item quantity="other">%1$d uygulamaları</item>
+        <item quantity="one">%1$d uygulama</item>
+        <item quantity="other">%1$d uygulama</item>
     </plurals>
     <plurals name="browse_apps_filter_hint">
-        <item quantity="one">%1$d uygulamasını filtrele</item>
-        <item quantity="other">%1$d uygulamalarını filtrele</item>
+        <item quantity="one">%1$d uygulamayı filtrele</item>
+        <item quantity="other">%1$d uygulamayı filtrele</item>
     </plurals>
     <string name="browse_apps_empty_query">“%1$s” ile eşleşen uygulama yok</string>
 </resources>

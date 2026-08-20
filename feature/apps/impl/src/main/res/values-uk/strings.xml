@@ -8,7 +8,7 @@
     <string name="content_description_delete_search">Видалити пошук: %1$s</string>
     <string name="filter_date_clear">Очистити діапазон дат</string>
     <string name="sort_name">Ім\'я</string>
-    <string name="sort_size">APK Розмір файлу</string>
+    <string name="sort_size">Розмір файлу APK</string>
     <string name="sort_total_size">Загальний розмір програми</string>
     <string name="sort_install_date">Дата встановлення</string>
     <string name="sort_target_sdk">Цільовий Android SDK</string>
@@ -19,26 +19,26 @@
     <plurals name="search_apps_placeholder">
         <item quantity="one">Шукати %1$d програму…</item>
         <item quantity="few">Шукати %1$d програми…</item>
-        <item quantity="many">Шукати %1$d програми…</item>
-        <item quantity="other">Шукати %1$d програми…</item>
+        <item quantity="many">Шукати %1$d програм…</item>
+        <item quantity="other">Шукати %1$d програм…</item>
     </plurals>
     <plurals name="search_apps_matches">
         <item quantity="one">%d збіг знайдено</item>
         <item quantity="few">%d збіги знайдено</item>
-        <item quantity="many">%d збіги знайдено</item>
-        <item quantity="other">%d збіги знайдено</item>
+        <item quantity="many">%d збігів знайдено</item>
+        <item quantity="other">%d збігів знайдено</item>
     </plurals>
     <string name="filter">Фільтр</string>
     <string name="preinstalled">Попередньо встановлені</string>
     <string name="never">Ніколи</string>
-    <string name="quick_filter_large_total">Великий</string>
-    <string name="quick_filter_recently_used">Недавно використані</string>
+    <string name="quick_filter_large_total">Великі</string>
+    <string name="quick_filter_recently_used">Нещодавно використані</string>
     <string name="quick_filter_unused">Невикористовувані</string>
     <string name="quick_filter_system">Система</string>
     <string name="quick_filter_google_play">Google Play</string>
-    <string name="quick_filter_sideloaded">Сторонні</string>
+    <string name="quick_filter_sideloaded">Встановлені вручну</string>
     <string name="quick_filter_recently_installed">Нещодавно встановлені</string>
-    <string name="quick_filter_recently_updated">Останні оновлення</string>
+    <string name="quick_filter_recently_updated">Нещодавно оновлені</string>
     <string name="quick_filter_source_sheet_title">Джерело</string>
     <string name="quick_filter_selection_more" ns0:ignore="PluralsCandidate">%1$s +%2$d</string>
     <string name="quick_filter_activity_sheet_title">Activity</string>
@@ -47,19 +47,19 @@
     <string name="apps_clear_filters">Очистити фільтри</string>
     <string name="installed_apps">Встановлені додатки</string>
     <string name="installed_apps_count">Встановлені додатки (%1$d)</string>
-    <string name="recently_viewed">Останні перегляди</string>
+    <string name="recently_viewed">Нещодавно переглянуті</string>
     <plurals name="search_apps_empty">
         <item quantity="one">Шукати %1$d встановлений додаток</item>
         <item quantity="few">Шукати %1$d встановлені додатки</item>
-        <item quantity="many">Шукати %1$d встановлені додатки</item>
-        <item quantity="other">Шукати %1$d встановлені додатки</item>
+        <item quantity="many">Шукати %1$d встановлених додатків</item>
+        <item quantity="other">Шукати %1$d встановлених додатків</item>
     </plurals>
     <string name="search_apps_no_results">Немає результатів для \"%1$s\"</string>
     <string name="search_history_title">Останні пошуки</string>
     <string name="search_history_clear">Очистити</string>
     <string name="filter_source_section">Джерело встановлення</string>
     <string name="filter_sdk_section">Цільовий SDK</string>
-    <string name="filter_apk_size_section">APK Розмір файлу</string>
+    <string name="filter_apk_size_section">Розмір файлу APK</string>
     <string name="filter_apk_size_description">Розмір пакета інсталятора (.apk) тільки — не включає дані користувача та кеш.</string>
     <string name="filter_total_size_section">Загальний розмір програми</string>
     <string name="filter_total_size_description">Сумарний розмір інсталятора, збережених даних додатка та кешованих файлів.</string>
@@ -87,19 +87,19 @@
     <string name="filter_source_system">Система</string>
     <string name="filter_source_unknown">Невідомо</string>
     <string name="filter_unused_section">Невикористовувані додатки</string>
-    <string name="filter_unused_locked_description">Знайдіть додатки, які припали пилюкою. Наддайте доступ до використання, щоб побачити, які додатки ви не відкривали останнім часом.</string>
+    <string name="filter_unused_locked_description">Знайдіть додатки, які припали пилюкою. Надайте доступ до використання, щоб побачити, які додатки ви не відкривали останнім часом.</string>
     <string name="filter_unused_grant_access">Надати доступ</string>
     <plurals name="filter_unused_days_count">
         <item quantity="one">%d день</item>
         <item quantity="few">%d дні</item>
-        <item quantity="many">%d дні</item>
-        <item quantity="other">%d дні</item>
+        <item quantity="many">%d днів</item>
+        <item quantity="other">%d днів</item>
     </plurals>
     <plurals name="filter_unused_months_count">
         <item quantity="one">%d місяць</item>
         <item quantity="few">%d місяці</item>
-        <item quantity="many">%d місяці</item>
-        <item quantity="other">%d місяці</item>
+        <item quantity="many">%d місяців</item>
+        <item quantity="other">%d місяців</item>
     </plurals>
     <string name="filter_unused_year">1 рік</string>
     <string name="quick_filter_permission_usage_title">Потрібен доступ до використання</string>
@@ -111,9 +111,9 @@
     <string name="sort_permission_usage_description">Сортування за останнім використанням потребує знати, коли ви востаннє відкривали кожну програму. Надайте доступ до використання в Налаштуваннях, щоб активувати цю опцію сортування.</string>
     <string name="sort_permission_storage_title">Дозволити доступ до використання</string>
     <string name="sort_permission_storage_description">Сортування за загальним розміром вимірює повний слід кожної програми — установник, збережені дані та кеш разом. Надайте доступ до використання в Налаштуваннях, щоб активувати цю опцію сортування.</string>
-    <string name="filter_permissions_section">Permissions</string>
+    <string name="filter_permissions_section">Дозволи</string>
     <string name="filter_permissions_count" ns0:ignore="PluralsCandidate">+%d більше</string>
-    <string name="filter_permissions_title">Фільтрувати за Permission</string>
+    <string name="filter_permissions_title">Фільтрувати за дозволом</string>
     <string name="filter_permissions_quick_filters">Швидкі фільтри</string>
     <string name="filter_permissions_match_label">Відповідність</string>
     <string name="filter_permissions_chip_match_any">Відповідність: Будь-яка</string>
@@ -122,8 +122,8 @@
     <plurals name="filter_permissions_chip_presets_count">
         <item quantity="one">%d попереднє налаштування</item>
         <item quantity="few">%d попередні налаштування</item>
-        <item quantity="many">%d попередні налаштування</item>
-        <item quantity="other">%d попередні налаштування</item>
+        <item quantity="many">%d попередніх налаштувань</item>
+        <item quantity="other">%d попередніх налаштувань</item>
     </plurals>
     <string name="filter_permissions_chip_show_all">Показати: Усі</string>
     <string name="filter_permissions_chip_show_selected">Показати: Вибрано</string>

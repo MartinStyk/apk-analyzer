@@ -5,7 +5,7 @@
     <string name="content_description_analyze_apk">分析 APK 文件</string>
     <string name="apps_apk_open_error">无法打开此 APK</string>
     <string name="content_description_sort">排序</string>
-    <string name="content_description_delete_search">删除搜索: %1$s</string>
+    <string name="content_description_delete_search">删除搜索：%1$s</string>
     <string name="filter_date_clear">清除日期范围</string>
     <string name="sort_name">名称</string>
     <string name="sort_size">APK 文件大小</string>
@@ -17,10 +17,10 @@
     <string name="sort_bottom_sheet_title">排序方式</string>
     <string name="search_apps_hint">搜索应用</string>
     <plurals name="search_apps_placeholder">
-        <item quantity="other">搜索 %1$d 应用…</item>
+        <item quantity="other">搜索 %1$d 个应用…</item>
     </plurals>
     <plurals name="search_apps_matches">
-        <item quantity="other">%d 个匹配项找到</item>
+        <item quantity="other">找到 %d 个匹配项</item>
     </plurals>
     <string name="filter">过滤</string>
     <string name="preinstalled">预装</string>
@@ -43,15 +43,15 @@
     <string name="installed_apps_count">已安装的应用 (%1$d)</string>
     <string name="recently_viewed">最近查看的</string>
     <plurals name="search_apps_empty">
-        <item quantity="other">搜索 %1$d 已安装的应用</item>
+        <item quantity="other">搜索 %1$d 个已安装的应用</item>
     </plurals>
     <string name="search_apps_no_results">没有找到 \"%1$s\" 的结果</string>
     <string name="search_history_title">最近搜索</string>
     <string name="search_history_clear">清除</string>
     <string name="filter_source_section">安装来源</string>
-    <string name="filter_sdk_section">目标SDK</string>
+    <string name="filter_sdk_section">目标 SDK</string>
     <string name="filter_apk_size_section">APK 文件大小</string>
-    <string name="filter_apk_size_description">安装包的大小 (.apk) 仅 — 不包括用户数据和缓存。</string>
+    <string name="filter_apk_size_description">仅安装包 (.apk) 的大小 — 不包括用户数据和缓存。</string>
     <string name="filter_total_size_section">应用总大小</string>
     <string name="filter_total_size_description">安装程序、存储的应用数据和缓存文件的总大小。</string>
     <string name="filter_total_size_locked_description">按应用的总占用空间进行过滤。授予存储访问权限以测量每个应用的完整大小 — 包括其数据和缓存，而不仅仅是安装程序。</string>
@@ -67,10 +67,10 @@
     <string name="filter_date_range">%1$s\u2013%2$s</string>
     <string name="filter_size_range">%1$s\u2013%2$s</string>
     <string name="filter_source_google_play">Google Play</string>
-    <string name="filter_source_samsung_galaxy_store">银河商店</string>
+    <string name="filter_source_samsung_galaxy_store">Galaxy Store</string>
     <string name="filter_source_amazon_appstore">亚马逊应用商店</string>
-    <string name="filter_source_huawei_app_gallery">应用商店</string>
-    <string name="filter_source_xiaomi_get_apps">获取应用</string>
+    <string name="filter_source_huawei_app_gallery">华为应用市场</string>
+    <string name="filter_source_xiaomi_get_apps">小米应用商店</string>
     <string name="filter_source_fdroid">F-Droid</string>
     <string name="filter_source_aurora_store">Aurora 商店</string>
     <string name="filter_source_sideloaded">从文件安装</string>
@@ -105,7 +105,7 @@
     <string name="filter_permissions_chip_match_all">匹配：所有</string>
     <string name="filter_permissions_chip_presets">预设</string>
     <plurals name="filter_permissions_chip_presets_count">
-        <item quantity="other">%d 预设</item>
+        <item quantity="other">%d 个预设</item>
     </plurals>
     <string name="filter_permissions_chip_show_all">显示：所有</string>
     <string name="filter_permissions_chip_show_selected">显示：已选择</string>

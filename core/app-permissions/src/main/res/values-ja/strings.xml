@@ -16,7 +16,7 @@
     <string name="permission_label_mms_receive">MMSを受信</string>
     <string name="permission_label_wap_push">WAPプッシュを受信</string>
     <string name="permission_label_call_log_read">通話履歴を読む</string>
-    <string name="permission_label_call_log_write">通話ログを書く</string>
+    <string name="permission_label_call_log_write">通話履歴を書く</string>
     <string name="permission_label_call_phone">電話をかける</string>
     <string name="permission_label_phone_state">電話の状態</string>
     <string name="permission_label_phone_numbers">電話番号</string>
@@ -34,7 +34,7 @@
     <string name="permission_label_activity_recognition">身体活動</string>
     <string name="permission_label_bluetooth_scan">近くのデバイスをスキャン</string>
     <string name="permission_label_bluetooth_connect">Bluetooth接続</string>
-    <string name="permission_label_bluetooth_advertise">Bluetooth 広告</string>
+    <string name="permission_label_bluetooth_advertise">近くのデバイスに公開</string>
     <string name="permission_label_bluetooth">Bluetooth</string>
     <string name="permission_label_uwb">UWB 測距</string>
     <string name="permission_label_notifications">通知を投稿</string>

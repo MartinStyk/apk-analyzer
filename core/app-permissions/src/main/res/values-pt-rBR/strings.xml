@@ -36,7 +36,7 @@
     <string name="permission_label_bluetooth_connect">Conectar Bluetooth</string>
     <string name="permission_label_bluetooth_advertise">Anunciar Bluetooth</string>
     <string name="permission_label_bluetooth">Bluetooth</string>
-    <string name="permission_label_uwb">Medindo UWB</string>
+    <string name="permission_label_uwb">Alcance por UWB</string>
     <string name="permission_label_notifications">Publicar Notificações</string>
     <string name="permission_label_internet">Internet</string>
     <string name="permission_label_nfc">NFC</string>

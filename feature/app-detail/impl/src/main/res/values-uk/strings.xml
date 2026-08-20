@@ -9,41 +9,41 @@
     <string name="app_detail_overview_section">Огляд</string>
     <string name="app_detail_actions_section">Швидкі дії</string>
     <string name="app_detail_version">Версія</string>
-    <string name="app_detail_apk_size">APK Розмір</string>
-    <string name="app_detail_total_size">Загальний Розмір</string>
+    <string name="app_detail_apk_size">Розмір APK</string>
+    <string name="app_detail_total_size">Загальний розмір</string>
     <string name="app_detail_target_sdk">Цільовий SDK</string>
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_updated">Оновлено</string>
     <plurals name="app_detail_overview_more_details">
-        <item quantity="one">+%1$d більше деталей у Загальній інформації</item>
+        <item quantity="one">+%1$d більше деталі у Загальній інформації</item>
         <item quantity="few">+%1$d більше деталей у Загальній інформації</item>
         <item quantity="many">+%1$d більше деталей у Загальній інформації</item>
         <item quantity="other">+%1$d більше деталей у Загальній інформації</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_date">
-        <item quantity="one">+%1$d більше деталей у Загальній інформації, включаючи дату встановлення</item>
+        <item quantity="one">+%1$d більше деталі у Загальній інформації, включаючи дату встановлення</item>
         <item quantity="few">+%1$d більше деталей у Загальній інформації, включаючи дату встановлення</item>
         <item quantity="many">+%1$d більше деталей у Загальній інформації, включаючи дату встановлення</item>
         <item quantity="other">+%1$d більше деталей у Загальній інформації, включаючи дату встановлення</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_history">
-        <item quantity="one">+%1$d більше деталей у Загальній інформації, включаючи історію встановлення</item>
+        <item quantity="one">+%1$d більше деталі у Загальній інформації, включаючи історію встановлення</item>
         <item quantity="few">+%1$d більше деталей у Загальній інформації, включаючи історію встановлення</item>
         <item quantity="many">+%1$d більше деталей у Загальній інформації, включаючи історію встановлення</item>
         <item quantity="other">+%1$d більше деталей у Загальній інформації, включаючи історію встановлення</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_network_security">
-        <item quantity="one">+%1$d більше деталей у Загальній інформації, включаючи налаштування безпеки мережі</item>
+        <item quantity="one">+%1$d більше деталі у Загальній інформації, включаючи налаштування безпеки мережі</item>
         <item quantity="few">+%1$d більше деталей у Загальній інформації, включаючи налаштування безпеки мережі</item>
         <item quantity="many">+%1$d більше деталей у Загальній інформації, включаючи налаштування безпеки мережі</item>
         <item quantity="other">+%1$d більше деталей у Загальній інформації, включаючи налаштування безпеки мережі</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_split_apks">
-        <item quantity="one">+%1$d більше деталей у Загальній інформації, включаючи розділений APKs</item>
-        <item quantity="few">+%1$d більше деталей у Загальній інформації, включаючи розділений APKs</item>
-        <item quantity="many">+%1$d більше деталей у Загальній інформації, включаючи розділений APKs</item>
-        <item quantity="other">+%1$d більше деталей у Загальній інформації, включаючи розділений APKs</item>
+        <item quantity="one">+%1$d більше деталі у Загальній інформації, включаючи розділені APK</item>
+        <item quantity="few">+%1$d більше деталей у Загальній інформації, включаючи розділені APK</item>
+        <item quantity="many">+%1$d більше деталей у Загальній інформації, включаючи розділені APK</item>
+        <item quantity="other">+%1$d більше деталей у Загальній інформації, включаючи розділені APK</item>
     </plurals>
     <string name="app_detail_yes">Так</string>
     <string name="app_detail_no">Ні</string>
@@ -53,10 +53,10 @@
     <string name="app_detail_action_manifest">Manifest</string>
     <string name="app_detail_action_export_apk">Експортувати APK</string>
     <string name="app_detail_action_save_icon">Зберегти значок</string>
-    <string name="app_detail_action_summary">Резюме</string>
+    <string name="app_detail_action_summary">Зведення</string>
     <string name="app_detail_action_copy_summary">Копіювати</string>
     <string name="app_detail_action_share_summary">Поділитися</string>
-    <string name="app_detail_summary_sheet_title">Резюме програми</string>
+    <string name="app_detail_summary_sheet_title">Зведення програми</string>
     <string name="app_detail_action_play_store">Play Store</string>
     <string name="app_detail_action_app_info">Інформація про програму</string>
     <string name="app_detail_action_saving">Збереження…</string>
@@ -65,15 +65,15 @@
     <string name="app_detail_insight_debug_certificate">Підписано спільним ключем налагодження Android</string>
     <string name="app_detail_insight_certificate_not_yet_valid">Сертифікат підпису ще не дійсний</string>
     <plurals name="app_detail_insight_outdated_target">
-        <item quantity="one">Цілі API %1$d, один рівень API позаду цього пристрою</item>
-        <item quantity="few">Цілі API %1$d, %2$d API рівнів позаду цього пристрою</item>
-        <item quantity="many">Цілі API %1$d, %2$d API рівнів позаду цього пристрою</item>
-        <item quantity="other">Цілі API %1$d, %2$d API рівнів позаду цього пристрою</item>
+        <item quantity="one">Цільовий API %1$d, на один рівень API позаду цього пристрою</item>
+        <item quantity="few">Цільовий API %1$d, на %2$d рівня API позаду цього пристрою</item>
+        <item quantity="many">Цільовий API %1$d, на %2$d рівнів API позаду цього пристрою</item>
+        <item quantity="other">Цільовий API %1$d, на %2$d рівнів API позаду цього пристрою</item>
     </plurals>
     <string name="app_detail_insight_sideloaded">Встановлено ззовні магазину додатків</string>
     <plurals name="app_detail_insight_unused">
         <item quantity="one">Не відкривалося в останній місяць</item>
-        <item quantity="few">Не відкривалося в останні %1$d місяців</item>
+        <item quantity="few">Не відкривалося в останні %1$d місяці</item>
         <item quantity="many">Не відкривалося в останні %1$d місяців</item>
         <item quantity="other">Не відкривалося в останні %1$d місяців</item>
     </plurals>
@@ -83,15 +83,15 @@
     <string name="app_detail_insight_contacts">Може отримувати доступ або змінювати контакти</string>
     <string name="app_detail_insight_calendar">Може отримувати доступ або змінювати події календаря</string>
     <string name="app_detail_apk_saved">Збережено %1$s</string>
-    <string name="app_detail_split_apk_saved_title">Базу APK збережено</string>
-    <string name="app_detail_split_apk_saved_description">%1$s було збережено. Цей додаток використовує розділений APKs, тому файл не містить повністю встановлений додаток. Ви можете його перевірити, але установка його самостійно може не вдатися.</string>
+    <string name="app_detail_split_apk_saved_title">Базовий APK збережено</string>
+    <string name="app_detail_split_apk_saved_description">%1$s було збережено. Цей додаток використовує розділені APK, тому файл не містить повністю встановлений додаток. Ви можете його перевірити, але установка його самостійно може не вдатися.</string>
     <string name="app_detail_split_apk_saved_close">Закрити</string>
     <string name="app_detail_icon_saved">Збережено %1$s</string>
     <string name="app_detail_apk_save_failed">APK не вдалося зберегти</string>
     <string name="app_detail_icon_save_failed">Іконку не вдалося зберегти</string>
     <string name="app_detail_document_picker_unavailable">Жоден додаток не може вибрати місце збереження</string>
-    <string name="app_detail_summary_copied">Резюме скопійовано в буфер обміну</string>
-    <string name="app_detail_summary_clip_label">%1$s резюме</string>
+    <string name="app_detail_summary_copied">Зведення скопійовано в буфер обміну</string>
+    <string name="app_detail_summary_clip_label">Зведення %1$s</string>
     <string name="app_detail_share_unavailable">Жоден додаток не може обробити спільний доступ</string>
     <string name="app_detail_summary_line">%1$s: %2$s</string>
     <string name="app_detail_summary_header">%1$s (%2$s)</string>
@@ -100,22 +100,22 @@
     <string name="app_detail_summary_permissions">%1$s · %2$s</string>
     <string name="app_detail_summary_permissions_granted">%1$s · %2$s · %3$s</string>
     <plurals name="app_detail_summary_permissions_requested">
-        <item quantity="one">%1$d запитав дозвіл</item>
-        <item quantity="few">%1$d запитав дозволи</item>
-        <item quantity="many">%1$d запитав дозволи</item>
-        <item quantity="other">%1$d запитав дозволи</item>
+        <item quantity="one">%1$d запитаний дозвіл</item>
+        <item quantity="few">%1$d запитані дозволи</item>
+        <item quantity="many">%1$d запитаних дозволів</item>
+        <item quantity="other">%1$d запитаних дозволів</item>
     </plurals>
     <plurals name="app_detail_summary_permissions_dangerous">
         <item quantity="one">%1$d небезпечний дозвіл</item>
         <item quantity="few">%1$d небезпечні дозволи</item>
-        <item quantity="many">%1$d небезпечні дозволи</item>
-        <item quantity="other">%1$d небезпечні дозволи</item>
+        <item quantity="many">%1$d небезпечних дозволів</item>
+        <item quantity="other">%1$d небезпечних дозволів</item>
     </plurals>
     <plurals name="app_detail_summary_permissions_granted_count">
-        <item quantity="one">%1$d надано дозвіл</item>
-        <item quantity="few">%1$d надано дозволи</item>
-        <item quantity="many">%1$d надано дозволи</item>
-        <item quantity="other">%1$d надано дозволи</item>
+        <item quantity="one">%1$d наданий дозвіл</item>
+        <item quantity="few">%1$d надані дозволи</item>
+        <item quantity="many">%1$d наданих дозволів</item>
+        <item quantity="other">%1$d наданих дозволів</item>
     </plurals>
     <string name="app_detail_permissions_section">Permissions</string>
     <string name="app_detail_total_permissions">Всього Permissions</string>
@@ -132,25 +132,25 @@
     </plurals>
     <plurals name="app_detail_permissions_dangerous_summary">
         <item quantity="one">%1$d чутливий дозвіл запитано</item>
-        <item quantity="few">%1$d чутливих дозволів запитано</item>
+        <item quantity="few">%1$d чутливі дозволи запитано</item>
         <item quantity="many">%1$d чутливих дозволів запитано</item>
         <item quantity="other">%1$d чутливих дозволів запитано</item>
     </plurals>
     <plurals name="app_detail_permissions_total">
         <item quantity="one">%1$d дозвіл запитано всього</item>
-        <item quantity="few">%1$d дозволів запитано всього</item>
+        <item quantity="few">%1$d дозволи запитано всього</item>
         <item quantity="many">%1$d дозволів запитано всього</item>
         <item quantity="other">%1$d дозволів запитано всього</item>
     </plurals>
     <plurals name="app_detail_permissions_requested_count">
         <item quantity="one">%d дозвіл запитано</item>
-        <item quantity="few">%d дозволів запитано</item>
+        <item quantity="few">%d дозволи запитано</item>
         <item quantity="many">%d дозволів запитано</item>
         <item quantity="other">%d дозволів запитано</item>
     </plurals>
     <plurals name="app_detail_permissions_sensitive_count">
         <item quantity="one">%d чутливий дозвіл</item>
-        <item quantity="few">%d чутливих дозволів</item>
+        <item quantity="few">%d чутливі дозволи</item>
         <item quantity="many">%d чутливих дозволів</item>
         <item quantity="other">%d чутливих дозволів</item>
     </plurals>
@@ -167,22 +167,22 @@
     <plurals name="app_detail_features_required_count">
         <item quantity="one">%d обов\'язкова функція</item>
         <item quantity="few">%d обов\'язкові функції</item>
-        <item quantity="many">%d обов\'язкові функції</item>
-        <item quantity="other">%d обов\'язкові функції</item>
+        <item quantity="many">%d обов\'язкових функцій</item>
+        <item quantity="other">%d обов\'язкових функцій</item>
     </plurals>
     <plurals name="app_detail_features_optional_count">
         <item quantity="one">%d необов\'язкова функція</item>
         <item quantity="few">%d необов\'язкові функції</item>
-        <item quantity="many">%d необов\'язкові функції</item>
-        <item quantity="other">%d необов\'язкові функції</item>
+        <item quantity="many">%d необов\'язкових функцій</item>
+        <item quantity="other">%d необов\'язкових функцій</item>
     </plurals>
     <string name="app_detail_features_all_met">Цей пристрій відповідає всім вимогам програми</string>
     <string name="app_detail_features_none">Ця програма не оголошує вимог до пристрою</string>
     <plurals name="app_detail_features_unmet">
         <item quantity="one">%1$d вимога, яку цей пристрій не може виконати</item>
         <item quantity="few">%1$d вимоги, які цей пристрій не може виконати</item>
-        <item quantity="many">%1$d вимоги, які цей пристрій не може виконати</item>
-        <item quantity="other">%1$d вимоги, які цей пристрій не може виконати</item>
+        <item quantity="many">%1$d вимог, які цей пристрій не може виконати</item>
+        <item quantity="other">%1$d вимог, які цей пристрій не може виконати</item>
     </plurals>
     <string name="app_detail_certificate_signature_section">Підпис сертифіката</string>
     <string name="app_detail_certificate_signed_by">Підписано %1$s</string>
@@ -203,19 +203,19 @@
     <string name="manifest_no_matches">Жоден рядок маніфесту не містить “%1$s”.</string>
     <plurals name="manifest_line_count">
         <item quantity="one">%1$d рядок</item>
-        <item quantity="few">%1$d рядків</item>
+        <item quantity="few">%1$d рядки</item>
         <item quantity="many">%1$d рядків</item>
         <item quantity="other">%1$d рядків</item>
     </plurals>
     <plurals name="manifest_match_count">
         <item quantity="one">%1$d відповідний рядок · %2$d всього</item>
-        <item quantity="few">%1$d відповідних рядків · %2$d всього</item>
+        <item quantity="few">%1$d відповідні рядки · %2$d всього</item>
         <item quantity="many">%1$d відповідних рядків · %2$d всього</item>
         <item quantity="other">%1$d відповідних рядків · %2$d всього</item>
     </plurals>
     <plurals name="manifest_base_split_note">
         <item quantity="one">Показує базовий APK маніфест. Ця програма має %1$d додатково встановлений спліт з власним маніфестом.</item>
-        <item quantity="few">Показує базовий APK маніфест. Ця програма має %1$d додатково встановлених сплітів з їхніми власними маніфестами.</item>
+        <item quantity="few">Показує базовий APK маніфест. Ця програма має %1$d додатково встановлені спліти з їхніми власними маніфестами.</item>
         <item quantity="many">Показує базовий APK маніфест. Ця програма має %1$d додатково встановлених сплітів з їхніми власними маніфестами.</item>
         <item quantity="other">Показує базовий APK маніфест. Ця програма має %1$d додатково встановлених сплітів з їхніми власними маніфестами.</item>
     </plurals>
@@ -230,7 +230,7 @@
     <string name="certificates_history">Історія підпису</string>
     <plurals name="certificates_history_description">
         <item quantity="one">Android підтвердив один ключ підпису, що використовувався раніше, ніж поточний ключ.</item>
-        <item quantity="few">Android підтвердив %d ключів підпису, що використовувалися раніше, ніж поточний ключ. Найбільш нещодавно використаний попередній ключ з\'являється першим.</item>
+        <item quantity="few">Android підтвердив %d ключі підпису, що використовувалися раніше, ніж поточний ключ. Найбільш нещодавно використаний попередній ключ з\'являється першим.</item>
         <item quantity="many">Android підтвердив %d ключів підпису, що використовувалися раніше, ніж поточний ключ. Найбільш нещодавно використаний попередній ключ з\'являється першим.</item>
         <item quantity="other">Android підтвердив %d ключів підпису, що використовувалися раніше, ніж поточний ключ. Найбільш нещодавно використаний попередній ключ з\'являється першим.</item>
     </plurals>
@@ -293,13 +293,13 @@
     <string name="general_info_copied">Скопійовано в буфер обміну</string>
     <string name="general_info_section_identification">Ідентифікація</string>
     <string name="general_info_section_versioning">Версії</string>
-    <string name="general_info_section_api_targets">API Цілі</string>
+    <string name="general_info_section_api_targets">Цілі API</string>
     <string name="general_info_section_security">Налаштування безпеки</string>
     <string name="general_info_section_installation">Встановлення та джерело</string>
     <string name="general_info_section_storage">Сховище та шляхи</string>
     <string name="general_info_section_native_libraries">Рідні бібліотеки</string>
     <string name="general_info_application_name">Назва програми</string>
-    <string name="general_info_package_name">Package Назва</string>
+    <string name="general_info_package_name">Назва пакета</string>
     <string name="general_info_process_name">Назва процесу</string>
     <string name="general_info_uid">UID</string>
     <string name="general_info_shared_user_id">Спільна ідентичність</string>
@@ -329,40 +329,40 @@
     <string name="general_info_install_source_local_install">Встановлено з підключеного комп\'ютера</string>
     <string name="general_info_install_source_system">Система</string>
     <string name="general_info_install_source_unknown">Невідомо</string>
-    <string name="general_info_installer_package">Встановлювач Package</string>
+    <string name="general_info_installer_package">Пакет інсталятора</string>
     <string name="general_info_install_initiator">Ініціатор встановлення</string>
-    <string name="general_info_install_originator">APK Походження Package</string>
+    <string name="general_info_install_originator">Пакет джерела APK</string>
     <string name="general_info_first_installed">Вперше встановлено</string>
     <string name="general_info_last_updated">Останнє оновлення</string>
     <string name="general_info_last_used">Останнє використання</string>
-    <string name="general_info_apk_directory">APK Директорія</string>
+    <string name="general_info_apk_directory">Директорія APK</string>
     <string name="general_info_data_directory">Директорія даних</string>
     <string name="general_info_install_location">Місце встановлення</string>
-    <string name="general_info_apk_size">APK Розмір</string>
-    <string name="general_info_split_apks">Розділ APKs</string>
+    <string name="general_info_apk_size">Розмір APK</string>
+    <string name="general_info_split_apks">Розділені APK</string>
     <plurals name="general_info_split_apks_value">
-        <item quantity="one">Встановлено як %1$d розділ APK</item>
-        <item quantity="few">Встановлено як %1$d розділ APKs</item>
-        <item quantity="many">Встановлено як %1$d розділ APKs</item>
-        <item quantity="other">Встановлено як %1$d розділ APKs</item>
+        <item quantity="one">Встановлено як %1$d розділений APK</item>
+        <item quantity="few">Встановлено як %1$d розділені APK</item>
+        <item quantity="many">Встановлено як %1$d розділених APK</item>
+        <item quantity="other">Встановлено як %1$d розділених APK</item>
     </plurals>
-    <string name="general_info_total_size">Загальний Розмір</string>
-    <string name="general_info_native_library_abis">Архітектури CPU</string>
+    <string name="general_info_total_size">Загальний розмір</string>
+    <string name="general_info_native_library_abis">Архітектури ЦП</string>
     <string name="general_info_native_library_abis_none">Немає рідного коду</string>
     <string name="general_info_native_library_files">Файли рідної бібліотеки</string>
     <string name="general_info_native_library_files_none">Не включено</string>
     <plurals name="general_info_native_library_file_count">
         <item quantity="one">%1$d файл</item>
         <item quantity="few">%1$d файли</item>
-        <item quantity="many">%1$d файли</item>
-        <item quantity="other">%1$d файли</item>
+        <item quantity="many">%1$d файлів</item>
+        <item quantity="other">%1$d файлів</item>
     </plurals>
     <string name="general_info_rationale_application_name">Видима користувачеві мітка програми, як показано на головному екрані та в меню програм.</string>
     <string name="general_info_rationale_package_name">Унікальний ідентифікатор для цієї програми на пристрої. Жодні дві програми не можуть мати однакову назву пакета.</string>
     <string name="general_info_rationale_process_name">Назва процесу операційної системи, в якому працює програма. За замовчуванням вона збігається з назвою пакета.</string>
     <string name="general_info_rationale_uid">Унікальний ідентифікатор, призначений цій програмі системою Android. Він визначає доступ програми до системних ресурсів і дозволів на файли.</string>
     <string name="general_info_rationale_shared_user_id">Ця програма заявляє, що вона працює під спільною ідентичністю з іншими програмами, підписаними тим самим ключем. Програми, що ділять цю ідентичність, можуть отримувати доступ до даних і дозволів одна одної, як якщо б це була одна програма.</string>
-    <string name="general_info_rationale_description">Додаткове резюме, надане розробником програми в маніфесті.</string>
+    <string name="general_info_rationale_description">Необов\'язковий опис, наданий розробником програми в маніфесті.</string>
     <string name="general_info_rationale_version_name">Людсько-зрозуміла версія рядка, що відображається користувачам, наприклад, "2.5.1" або "Бета 3".</string>
     <string name="general_info_rationale_version_code">Внутрішнє ціле число, яке збільшується з кожним випуском. Система використовує його, щоб визначити, чи є одна версія новішою за іншу.</string>
     <string name="general_info_rationale_min_sdk">Найнижчий рівень Android API, який підтримує ця програма. Пристрої, що працюють на старішій версії, не можуть її встановити.</string>
@@ -449,32 +449,32 @@
     <plurals name="components_filter_hint_all">
         <item quantity="one">Фільтрувати компонент %1$d</item>
         <item quantity="few">Фільтрувати компоненти %1$d</item>
-        <item quantity="many">Фільтрувати компоненти %1$d</item>
-        <item quantity="other">Фільтрувати компоненти %1$d</item>
+        <item quantity="many">Фільтрувати компонентів %1$d</item>
+        <item quantity="other">Фільтрувати компонентів %1$d</item>
     </plurals>
     <plurals name="components_filter_hint_activities">
         <item quantity="one">Фільтрувати активність %1$d</item>
         <item quantity="few">Фільтрувати активності %1$d</item>
-        <item quantity="many">Фільтрувати активності %1$d</item>
-        <item quantity="other">Фільтрувати активності %1$d</item>
+        <item quantity="many">Фільтрувати активностей %1$d</item>
+        <item quantity="other">Фільтрувати активностей %1$d</item>
     </plurals>
     <plurals name="components_filter_hint_services">
         <item quantity="one">Фільтрувати сервіс %1$d</item>
         <item quantity="few">Фільтрувати сервіси %1$d</item>
-        <item quantity="many">Фільтрувати сервіси %1$d</item>
-        <item quantity="other">Фільтрувати сервіси %1$d</item>
+        <item quantity="many">Фільтрувати сервісів %1$d</item>
+        <item quantity="other">Фільтрувати сервісів %1$d</item>
     </plurals>
     <plurals name="components_filter_hint_receivers">
         <item quantity="one">Фільтрувати приймач %1$d</item>
         <item quantity="few">Фільтрувати приймачі %1$d</item>
-        <item quantity="many">Фільтрувати приймачі %1$d</item>
-        <item quantity="other">Фільтрувати приймачі %1$d</item>
+        <item quantity="many">Фільтрувати приймачів %1$d</item>
+        <item quantity="other">Фільтрувати приймачів %1$d</item>
     </plurals>
     <plurals name="components_filter_hint_providers">
         <item quantity="one">Фільтрувати провайдер %1$d</item>
         <item quantity="few">Фільтрувати провайдери %1$d</item>
-        <item quantity="many">Фільтрувати провайдери %1$d</item>
-        <item quantity="other">Фільтрувати провайдери %1$d</item>
+        <item quantity="many">Фільтрувати провайдерів %1$d</item>
+        <item quantity="other">Фільтрувати провайдерів %1$d</item>
     </plurals>
     <string name="components_filter_exported">Експортований</string>
     <string name="components_filter_unprotected">Не захищений</string>
@@ -568,8 +568,8 @@
     <plurals name="intent_filters_search_hint">
         <item quantity="one">Шукати правило запиту %1$d</item>
         <item quantity="few">Шукати правила запиту %1$d</item>
-        <item quantity="many">Шукати правила запиту %1$d</item>
-        <item quantity="other">Шукати правила запиту %1$d</item>
+        <item quantity="many">Шукати правил запиту %1$d</item>
+        <item quantity="other">Шукати правил запиту %1$d</item>
     </plurals>
     <string name="intent_filters_filter_fallback">Intent filter</string>
     <string name="intent_filters_purpose_launcher">Запис для запуску додатка</string>
@@ -684,14 +684,14 @@
     <string name="requirements_empty">Цей додаток не оголошує вимог до пристрою.</string>
     <string name="requirements_section_header">%1$s · %2$d</string>
     <string name="requirements_section_required">Обов\'язково</string>
-    <string name="requirements_section_required_explanation">Додаток не буде встановлено без цих.</string>
+    <string name="requirements_section_required_explanation">Додаток не буде встановлено без цих вимог.</string>
     <string name="requirements_section_optional">Необов\'язково</string>
     <string name="requirements_section_optional_explanation">Використовується, коли доступно.</string>
     <plurals name="requirements_missing_summary">
         <item quantity="one">%1$d вимога, яку цей пристрій не може виконати</item>
         <item quantity="few">%1$d вимоги, які цей пристрій не може виконати</item>
-        <item quantity="many">%1$d вимоги, які цей пристрій не може виконати</item>
-        <item quantity="other">%1$d вимоги, які цей пристрій не може виконати</item>
+        <item quantity="many">%1$d вимог, які цей пристрій не може виконати</item>
+        <item quantity="other">%1$d вимог, які цей пристрій не може виконати</item>
     </plurals>
     <string name="requirements_missing">Не на цьому пристрої</string>
     <string name="requirements_missing_version">Потрібно %1$s · цей пристрій має %2$s</string>
@@ -708,7 +708,7 @@
     <string name="requirements_availability_missing_required_explanation">Додаток вказує на це як на обов\'язкове, але цей пристрій не надає його. Частини додатка можуть не працювати, і нова установка зазвичай буде заблокована.</string>
     <string name="requirements_availability_missing_optional_explanation">Додаток працює без цього. Все, що залежить від цього, залишається вимкненим.</string>
     <string name="requirements_availability_unknown">Невідомо</string>
-    <string name="requirements_availability_unknown_explanation">Список функцій цього пристрою не вдалося прочитати, тому ми не можемо сказати ні так, ні ні.</string>
+    <string name="requirements_availability_unknown_explanation">Список функцій цього пристрою не вдалося прочитати, тому ми не можемо сказати напевно.</string>
     <string name="requirement_camera">Камера</string>
     <string name="requirement_camera_any">Камера, фронтальна або задня</string>
     <string name="requirement_camera_front">Фронтальна камера</string>
@@ -784,23 +784,23 @@
     <string name="requirement_backup">Системне резервне копіювання</string>
     <string name="requirement_sip_voip">Інтернет-дзвінки</string>
     <string name="requirement_connection_service">Інтеграція програми дзвінків</string>
-    <string name="splitapks_title">Розділ APKs</string>
+    <string name="splitapks_title">Розділені APK</string>
     <plurals name="splitapks_heading">
-        <item quantity="one">%1$d розділ APK встановлено</item>
-        <item quantity="few">%1$d розділ APKs встановлено</item>
-        <item quantity="many">%1$d розділ APKs встановлено</item>
-        <item quantity="other">%1$d розділ APKs встановлено</item>
+        <item quantity="one">%1$d розділений APK встановлено</item>
+        <item quantity="few">%1$d розділені APK встановлено</item>
+        <item quantity="many">%1$d розділених APK встановлено</item>
+        <item quantity="other">%1$d розділених APK встановлено</item>
     </plurals>
-    <string name="splitapks_explanation">Ця програма була встановлена як базовий APK плюс ці додаткові розділи APKs, формат доставки, який використовує Google Play, щоб надіслати лише код і ресурси, які потрібні вашому пристрою.</string>
+    <string name="splitapks_explanation">Ця програма була встановлена як базовий APK плюс ці додаткові розділені APK, формат доставки, який використовує Google Play, щоб надіслати лише код і ресурси, які потрібні вашому пристрою.</string>
     <plurals name="splitapks_search_hint">
         <item quantity="one">Пошук %1$d розділу</item>
         <item quantity="few">Пошук %1$d розділів</item>
         <item quantity="many">Пошук %1$d розділів</item>
         <item quantity="other">Пошук %1$d розділів</item>
     </plurals>
-    <string name="splitapks_error">Не вдалося завантажити розділ APKs</string>
-    <string name="splitapks_empty">Ця програма не має встановленого розділу APKs.</string>
-    <string name="splitapks_empty_query">Немає розділу APK, що відповідає \"%1$s\".</string>
+    <string name="splitapks_error">Не вдалося завантажити розділені APK</string>
+    <string name="splitapks_empty">Ця програма не має встановлених розділених APK.</string>
+    <string name="splitapks_empty_query">Немає розділеного APK, що відповідає \"%1$s\".</string>
     <string name="splitapks_clear_search">Очистити пошук</string>
     <string name="splitapks_kind_feature">Модуль функцій</string>
     <string name="splitapks_kind_abi">Архітектура ЦП</string>
@@ -831,15 +831,15 @@
     <plurals name="nativelibraries_heading">
         <item quantity="one">%1$d нативна бібліотека в комплекті</item>
         <item quantity="few">%1$d нативні бібліотеки в комплекті</item>
-        <item quantity="many">%1$d нативні бібліотеки в комплекті</item>
-        <item quantity="other">%1$d нативні бібліотеки в комплекті</item>
+        <item quantity="many">%1$d нативних бібліотек в комплекті</item>
+        <item quantity="other">%1$d нативних бібліотек в комплекті</item>
     </plurals>
     <string name="nativelibraries_explanation">Кожен окремий файл рідного коду, який постачається з цим додатком, один рядок на ім\'я файлу, навіть коли одна й та ж бібліотека створена для кількох архітектур процесорів.</string>
     <plurals name="nativelibraries_search_hint">
         <item quantity="one">Шукати бібліотеку %1$d</item>
         <item quantity="few">Шукати бібліотеки %1$d</item>
-        <item quantity="many">Шукати бібліотеки %1$d</item>
-        <item quantity="other">Шукати бібліотеки %1$d</item>
+        <item quantity="many">Шукати бібліотек %1$d</item>
+        <item quantity="other">Шукати бібліотек %1$d</item>
     </plurals>
     <string name="nativelibraries_error">Не вдалося завантажити рідні бібліотеки</string>
     <string name="nativelibraries_empty">Цей додаток не має вбудованих рідних бібліотек.</string>

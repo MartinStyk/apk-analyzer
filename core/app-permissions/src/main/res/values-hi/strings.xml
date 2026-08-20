@@ -73,7 +73,7 @@
     <string name="permission_label_sync_settings_read">सिंक सेटिंग्स पढ़ें</string>
     <string name="permission_label_sync_settings_write">सिंक सेटिंग्स बदलें</string>
     <string name="permission_label_google_services_config">गूगल Services कॉन्फ़िग</string>
-    <string name="permission_label_install_packages">स्थापित करें Packages</string>
+    <string name="permission_label_install_packages">Packages इंस्टॉल करें</string>
     <string name="permission_label_overlay">अन्य ऐप्स पर ड्रॉ करें</string>
     <string name="permission_label_manage_storage">सभी फ़ाइलें प्रबंधित करें</string>
     <string name="permission_label_schedule_alarm">सटीक अलार्म</string>
