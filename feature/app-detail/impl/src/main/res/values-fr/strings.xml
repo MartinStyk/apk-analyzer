@@ -60,7 +60,7 @@
     </plurals>
     <string name="app_detail_insight_sideloaded">Installé depuis l\'extérieur d\'un magasin d\'applications</string>
     <plurals name="app_detail_insight_unused">
-        <item quantity="one">Pas ouvert au cours du dernier mois</item>
+        <item quantity="one">Pas ouvert au cours des %1$d derniers mois</item>
         <item quantity="other">Pas ouvert au cours des %1$d derniers mois</item>
     </plurals>
     <string name="app_detail_insight_background_location">Peut accéder à la localisation tout en s\'exécutant en arrière-plan</string>

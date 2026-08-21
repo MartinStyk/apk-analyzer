@@ -53,6 +53,7 @@
     <string name="search_history_clear">Clear</string>
     <string name="filter_source_section">Install Source</string>
     <string name="filter_sdk_section">Target SDK</string>
+    <string name="filter_sdk_version" translatable="false">%1$s (API %2$d)</string>
     <string name="filter_apk_size_section">APK File Size</string>
     <string name="filter_apk_size_description">Size of the installer package (.apk) only — excludes user data and cache.</string>
     <string name="filter_total_size_section">Total App Size</string>
