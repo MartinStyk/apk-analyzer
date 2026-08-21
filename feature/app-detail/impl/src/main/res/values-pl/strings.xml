@@ -9,41 +9,41 @@
     <string name="app_detail_overview_section">Przegląd</string>
     <string name="app_detail_actions_section">Szybkie akcje</string>
     <string name="app_detail_version">Wersja</string>
-    <string name="app_detail_apk_size">APK Rozmiar</string>
+    <string name="app_detail_apk_size">Rozmiar APK</string>
     <string name="app_detail_total_size">Całkowity rozmiar</string>
-    <string name="app_detail_target_sdk">Docelowy SDK</string>
+    <string name="app_detail_target_sdk">Target SDK</string>
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_updated">Zaktualizowane</string>
     <plurals name="app_detail_overview_more_details">
-        <item quantity="one">+%1$d więcej szczegółów w Informacjach ogólnych</item>
-        <item quantity="few">+%1$d więcej szczegółów w Informacjach ogólnych</item>
-        <item quantity="many">+%1$d więcej szczegółów w Informacjach ogólnych</item>
-        <item quantity="other">+%1$d więcej szczegółów w Informacjach ogólnych</item>
+        <item quantity="one">+%1$d szczegół w Informacjach ogólnych</item>
+        <item quantity="few">+%1$d szczegóły w Informacjach ogólnych</item>
+        <item quantity="many">+%1$d szczegółów w Informacjach ogólnych</item>
+        <item quantity="other">+%1$d szczegółów w Informacjach ogólnych</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_date">
-        <item quantity="one">+%1$d więcej szczegółów w Informacjach ogólnych, w tym data instalacji</item>
-        <item quantity="few">+%1$d więcej szczegółów w Informacjach ogólnych, w tym data instalacji</item>
-        <item quantity="many">+%1$d więcej szczegółów w Informacjach ogólnych, w tym data instalacji</item>
-        <item quantity="other">+%1$d więcej szczegółów w Informacjach ogólnych, w tym data instalacji</item>
+        <item quantity="one">+%1$d szczegół w Informacjach ogólnych, w tym data instalacji</item>
+        <item quantity="few">+%1$d szczegóły w Informacjach ogólnych, w tym data instalacji</item>
+        <item quantity="many">+%1$d szczegółów w Informacjach ogólnych, w tym data instalacji</item>
+        <item quantity="other">+%1$d szczegółów w Informacjach ogólnych, w tym data instalacji</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_history">
-        <item quantity="one">+%1$d więcej szczegółów w Informacjach ogólnych, w tym historia instalacji</item>
-        <item quantity="few">+%1$d więcej szczegółów w Informacjach ogólnych, w tym historia instalacji</item>
-        <item quantity="many">+%1$d więcej szczegółów w Informacjach ogólnych, w tym historia instalacji</item>
-        <item quantity="other">+%1$d więcej szczegółów w Informacjach ogólnych, w tym historia instalacji</item>
+        <item quantity="one">+%1$d szczegół w Informacjach ogólnych, w tym historia instalacji</item>
+        <item quantity="few">+%1$d szczegóły w Informacjach ogólnych, w tym historia instalacji</item>
+        <item quantity="many">+%1$d szczegółów w Informacjach ogólnych, w tym historia instalacji</item>
+        <item quantity="other">+%1$d szczegółów w Informacjach ogólnych, w tym historia instalacji</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_network_security">
-        <item quantity="one">+%1$d więcej szczegółów w Informacjach ogólnych, w tym ustawienia zabezpieczeń sieci</item>
-        <item quantity="few">+%1$d więcej szczegółów w Informacjach ogólnych, w tym ustawienia zabezpieczeń sieci</item>
-        <item quantity="many">+%1$d więcej szczegółów w Informacjach ogólnych, w tym ustawienia zabezpieczeń sieci</item>
-        <item quantity="other">+%1$d więcej szczegółów w Informacjach ogólnych, w tym ustawienia zabezpieczeń sieci</item>
+        <item quantity="one">+%1$d szczegół w Informacjach ogólnych, w tym ustawienia zabezpieczeń sieci</item>
+        <item quantity="few">+%1$d szczegóły w Informacjach ogólnych, w tym ustawienia zabezpieczeń sieci</item>
+        <item quantity="many">+%1$d szczegółów w Informacjach ogólnych, w tym ustawienia zabezpieczeń sieci</item>
+        <item quantity="other">+%1$d szczegółów w Informacjach ogólnych, w tym ustawienia zabezpieczeń sieci</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_split_apks">
-        <item quantity="one">+%1$d więcej szczegółów w Informacjach ogólnych, w tym podział APKs</item>
-        <item quantity="few">+%1$d więcej szczegółów w Informacjach ogólnych, w tym podział APKs</item>
-        <item quantity="many">+%1$d więcej szczegółów w Informacjach ogólnych, w tym podział APKs</item>
-        <item quantity="other">+%1$d więcej szczegółów w Informacjach ogólnych, w tym podział APKs</item>
+        <item quantity="one">+%1$d szczegół w Informacjach ogólnych, w tym podzielone pliki APK</item>
+        <item quantity="few">+%1$d szczegóły w Informacjach ogólnych, w tym podzielone pliki APK</item>
+        <item quantity="many">+%1$d szczegółów w Informacjach ogólnych, w tym podzielone pliki APK</item>
+        <item quantity="other">+%1$d szczegółów w Informacjach ogólnych, w tym podzielone pliki APK</item>
     </plurals>
     <string name="app_detail_yes">Tak</string>
     <string name="app_detail_no">Nie</string>
@@ -66,9 +66,9 @@
     <string name="app_detail_insight_certificate_not_yet_valid">Certyfikat podpisu nie jest jeszcze ważny</string>
     <plurals name="app_detail_insight_outdated_target">
         <item quantity="one">Celuje w API %1$d, jeden poziom API za tym urządzeniem</item>
-        <item quantity="few">Cele API %1$d, %2$d API poziomy za tym urządzeniem</item>
-        <item quantity="many">Cele API %1$d, %2$d API poziomy za tym urządzeniem</item>
-        <item quantity="other">Cele API %1$d, %2$d API poziomy za tym urządzeniem</item>
+        <item quantity="few">Celuje w API %1$d, %2$d poziomy API za tym urządzeniem</item>
+        <item quantity="many">Celuje w API %1$d, %2$d poziomów API za tym urządzeniem</item>
+        <item quantity="other">Celuje w API %1$d, %2$d poziomów API za tym urządzeniem</item>
     </plurals>
     <string name="app_detail_insight_sideloaded">Zainstalowane z zewnątrz sklepu z aplikacjami</string>
     <plurals name="app_detail_insight_unused">
@@ -100,22 +100,22 @@
     <string name="app_detail_summary_permissions">%1$s · %2$s</string>
     <string name="app_detail_summary_permissions_granted">%1$s · %2$s · %3$s</string>
     <plurals name="app_detail_summary_permissions_requested">
-        <item quantity="one">%1$d poprosił o uprawnienie</item>
-        <item quantity="few">%1$d poprosił o uprawnienia</item>
-        <item quantity="many">%1$d poprosił o uprawnienia</item>
-        <item quantity="other">%1$d poprosił o uprawnienia</item>
+        <item quantity="one">%1$d żądane uprawnienie</item>
+        <item quantity="few">%1$d żądane uprawnienia</item>
+        <item quantity="many">%1$d żądanych uprawnień</item>
+        <item quantity="other">%1$d żądanych uprawnień</item>
     </plurals>
     <plurals name="app_detail_summary_permissions_dangerous">
         <item quantity="one">%1$d niebezpieczne uprawnienie</item>
         <item quantity="few">%1$d niebezpieczne uprawnienia</item>
-        <item quantity="many">%1$d niebezpieczne uprawnienia</item>
-        <item quantity="other">%1$d niebezpieczne uprawnienia</item>
+        <item quantity="many">%1$d niebezpiecznych uprawnień</item>
+        <item quantity="other">%1$d niebezpiecznych uprawnień</item>
     </plurals>
     <plurals name="app_detail_summary_permissions_granted_count">
-        <item quantity="one">%1$d przyznano uprawnienie</item>
-        <item quantity="few">%1$d przyznano uprawnienia</item>
-        <item quantity="many">%1$d przyznano uprawnienia</item>
-        <item quantity="other">%1$d przyznano uprawnienia</item>
+        <item quantity="one">%1$d przyznane uprawnienie</item>
+        <item quantity="few">%1$d przyznane uprawnienia</item>
+        <item quantity="many">%1$d przyznanych uprawnień</item>
+        <item quantity="other">%1$d przyznanych uprawnień</item>
     </plurals>
     <string name="app_detail_permissions_section">Permissions</string>
     <string name="app_detail_total_permissions">Łącznie Permissions</string>
@@ -132,27 +132,27 @@
     </plurals>
     <plurals name="app_detail_permissions_dangerous_summary">
         <item quantity="one">%1$d wrażliwe uprawnienie żądane</item>
-        <item quantity="few">%1$d wrażliwych uprawnień żądano</item>
-        <item quantity="many">%1$d wrażliwych uprawnień żądano</item>
-        <item quantity="other">%1$d wrażliwych uprawnień żądano</item>
+        <item quantity="few">%1$d wrażliwe uprawnienia żądane</item>
+        <item quantity="many">%1$d wrażliwych uprawnień żądanych</item>
+        <item quantity="other">%1$d wrażliwych uprawnień żądanych</item>
     </plurals>
     <plurals name="app_detail_permissions_total">
         <item quantity="one">%1$d uprawnienie żądane łącznie</item>
-        <item quantity="few">%1$d uprawnień żądano łącznie</item>
-        <item quantity="many">%1$d uprawnień żądano łącznie</item>
-        <item quantity="other">%1$d uprawnień żądano łącznie</item>
+        <item quantity="few">%1$d uprawnienia żądane łącznie</item>
+        <item quantity="many">%1$d uprawnień żądanych łącznie</item>
+        <item quantity="other">%1$d uprawnień żądanych łącznie</item>
     </plurals>
     <plurals name="app_detail_permissions_requested_count">
         <item quantity="one">%d uprawnienie żądane</item>
-        <item quantity="few">%d uprawnień żądano</item>
-        <item quantity="many">%d uprawnień żądano</item>
-        <item quantity="other">%d uprawnień żądano</item>
+        <item quantity="few">%d uprawnienia żądane</item>
+        <item quantity="many">%d uprawnień żądanych</item>
+        <item quantity="other">%d uprawnień żądanych</item>
     </plurals>
     <plurals name="app_detail_permissions_sensitive_count">
         <item quantity="one">%d wrażliwe uprawnienie</item>
         <item quantity="few">%d wrażliwe uprawnienia</item>
-        <item quantity="many">%d wrażliwe uprawnienia</item>
-        <item quantity="other">%d wrażliwe uprawnienia</item>
+        <item quantity="many">%d wrażliwych uprawnień</item>
+        <item quantity="other">%d wrażliwych uprawnień</item>
     </plurals>
     <string name="app_detail_count_pair">%1$s · %2$s</string>
     <string name="app_detail_components_section">Komponenty</string>
@@ -167,24 +167,24 @@
     <plurals name="app_detail_features_required_count">
         <item quantity="one">%d wymagana funkcja</item>
         <item quantity="few">%d wymagane funkcje</item>
-        <item quantity="many">%d wymagane funkcje</item>
-        <item quantity="other">%d wymagane funkcje</item>
+        <item quantity="many">%d wymaganych funkcji</item>
+        <item quantity="other">%d wymaganych funkcji</item>
     </plurals>
     <plurals name="app_detail_features_optional_count">
         <item quantity="one">%d opcjonalna funkcja</item>
         <item quantity="few">%d opcjonalne funkcje</item>
-        <item quantity="many">%d opcjonalne funkcje</item>
-        <item quantity="other">%d opcjonalne funkcje</item>
+        <item quantity="many">%d opcjonalnych funkcji</item>
+        <item quantity="other">%d opcjonalnych funkcji</item>
     </plurals>
     <string name="app_detail_features_all_met">To urządzenie spełnia wszystkie wymagania aplikacji</string>
     <string name="app_detail_features_none">Ta aplikacja nie deklaruje żadnych wymagań dotyczących urządzenia</string>
     <plurals name="app_detail_features_unmet">
-        <item quantity="one">%1$d wymaganie, którego to urządzenie nie może spełnić</item>
-        <item quantity="few">%1$d wymagania, których to urządzenie nie może spełnić</item>
-        <item quantity="many">%1$d wymagania, których to urządzenie nie może spełnić</item>
-        <item quantity="other">%1$d wymagania, których to urządzenie nie może spełnić</item>
+        <item quantity="one">%1$d wymaganie, którego to urządzenie nie spełnia</item>
+        <item quantity="few">%1$d wymagania, których to urządzenie nie spełnia</item>
+        <item quantity="many">%1$d wymagań, których to urządzenie nie spełnia</item>
+        <item quantity="other">%1$d wymagań, których to urządzenie nie spełnia</item>
     </plurals>
-    <string name="app_detail_certificate_signature_section">Podpis certyfikatu</string>
+    <string name="app_detail_certificate_signature_section">Certyfikat</string>
     <string name="app_detail_certificate_signed_by">Podpisane przez %1$s</string>
     <string name="app_detail_certificate_unknown_signer">Nieznany podpisujący</string>
     <string name="app_detail_certificate_sha256_fingerprint">Odcisk palca SHA-256</string>
@@ -197,27 +197,27 @@
     <string name="app_detail_badge_recently_used">Ostatnio używane</string>
     <string name="manifest_title">Manifest Androida</string>
     <string name="manifest_error">Nie można odczytać manifestu</string>
-    <string name="manifest_search">Szukaj manifestu</string>
+    <string name="manifest_search">Szukaj w manifeście</string>
     <string name="manifest_expand">Rozwiń manifest</string>
     <string name="manifest_collapse">Zwiń manifest</string>
     <string name="manifest_no_matches">Żaden wiersz manifestu nie zawiera “%1$s”.</string>
     <plurals name="manifest_line_count">
         <item quantity="one">%1$d wiersz</item>
         <item quantity="few">%1$d wiersze</item>
-        <item quantity="many">%1$d wiersze</item>
-        <item quantity="other">%1$d wiersze</item>
+        <item quantity="many">%1$d wierszy</item>
+        <item quantity="other">%1$d wierszy</item>
     </plurals>
     <plurals name="manifest_match_count">
         <item quantity="one">%1$d pasujący wiersz · %2$d łącznie</item>
         <item quantity="few">%1$d pasujące wiersze · %2$d łącznie</item>
-        <item quantity="many">%1$d pasujące wiersze · %2$d łącznie</item>
-        <item quantity="other">%1$d pasujące wiersze · %2$d łącznie</item>
+        <item quantity="many">%1$d pasujących wierszy · %2$d łącznie</item>
+        <item quantity="other">%1$d pasujących wierszy · %2$d łącznie</item>
     </plurals>
     <plurals name="manifest_base_split_note">
-        <item quantity="one">Pokazuje podstawowy APK manifest. Ta aplikacja ma %1$d dodatkowy zainstalowany podział z własnym manifestem.</item>
-        <item quantity="few">Pokazuje podstawowy APK manifest. Ta aplikacja ma %1$d dodatkowe zainstalowane podziały z ich własnymi manifestami.</item>
-        <item quantity="many">Pokazuje podstawowy APK manifest. Ta aplikacja ma %1$d dodatkowe zainstalowane podziały z ich własnymi manifestami.</item>
-        <item quantity="other">Pokazuje podstawowy APK manifest. Ta aplikacja ma %1$d dodatkowe zainstalowane podziały z ich własnymi manifestami.</item>
+        <item quantity="one">Pokazuje manifest podstawowego APK. Ta aplikacja ma %1$d dodatkowy zainstalowany podział z własnym manifestem.</item>
+        <item quantity="few">Pokazuje manifest podstawowego APK. Ta aplikacja ma %1$d dodatkowe zainstalowane podziały z ich własnymi manifestami.</item>
+        <item quantity="many">Pokazuje manifest podstawowego APK. Ta aplikacja ma %1$d dodatkowych zainstalowanych podziałów z ich własnymi manifestami.</item>
+        <item quantity="other">Pokazuje manifest podstawowego APK. Ta aplikacja ma %1$d dodatkowych zainstalowanych podziałów z ich własnymi manifestami.</item>
     </plurals>
     <string name="certificates_title">Certyfikat podpisu</string>
     <string name="certificates_error">Nie udało się załadować certyfikatu podpisu</string>
@@ -231,8 +231,8 @@
     <plurals name="certificates_history_description">
         <item quantity="one">Android zweryfikował jeden klucz podpisujący używany przed aktualnym kluczem.</item>
         <item quantity="few">Android zweryfikował %d klucze podpisujące używane przed aktualnym kluczem. Najnowszy używany poprzedni klucz pojawia się jako pierwszy.</item>
-        <item quantity="many">Android zweryfikował %d klucze podpisujące używane przed aktualnym kluczem. Najnowszy używany poprzedni klucz pojawia się jako pierwszy.</item>
-        <item quantity="other">Android zweryfikował %d klucze podpisujące używane przed aktualnym kluczem. Najnowszy używany poprzedni klucz pojawia się jako pierwszy.</item>
+        <item quantity="many">Android zweryfikował %d kluczy podpisujących używanych przed aktualnym kluczem. Najnowszy używany poprzedni klucz pojawia się jako pierwszy.</item>
+        <item quantity="other">Android zweryfikował %d kluczy podpisujących używanych przed aktualnym kluczem. Najnowszy używany poprzedni klucz pojawia się jako pierwszy.</item>
     </plurals>
     <string name="certificates_original_signing_key">Oryginalny klucz podpisujący</string>
     <string name="certificates_previous_signing_key">Poprzedni klucz podpisujący</string>
@@ -245,9 +245,9 @@
     <string name="certificates_country">Kraj</string>
     <string name="certificates_issuer">Wydany przez</string>
     <string name="certificates_unknown_signer">Nieznany podpisujący</string>
-    <string name="certificates_self_signed">Podpisany samodzielnie</string>
+    <string name="certificates_self_signed">Self-signed</string>
     <string name="certificates_self_signed_value">Podpisujący wydał ten certyfikat</string>
-    <string name="certificates_self_signed_explanation">Certyfikaty samopodpisane są normalne dla aplikacji Android. Porównaj odcisk certyfikatu z zaufanym źródłem, gdy musisz zweryfikować wydawcę.</string>
+    <string name="certificates_self_signed_explanation">Certyfikaty self-signed są normalne dla aplikacji Android. Porównaj odcisk certyfikatu z zaufanym źródłem, gdy musisz zweryfikować wydawcę.</string>
     <string name="certificates_validity">Ważność</string>
     <string name="certificates_date_range">%1$s do %2$s</string>
     <string name="certificates_valid">Ważny</string>
@@ -299,7 +299,7 @@
     <string name="general_info_section_storage">Pamięć i ścieżki</string>
     <string name="general_info_section_native_libraries">Biblioteki natywne</string>
     <string name="general_info_application_name">Nazwa aplikacji</string>
-    <string name="general_info_package_name">Package Nazwa</string>
+    <string name="general_info_package_name">Nazwa pakietu</string>
     <string name="general_info_process_name">Nazwa procesu</string>
     <string name="general_info_uid">UID</string>
     <string name="general_info_shared_user_id">Wspólna tożsamość</string>
@@ -307,10 +307,10 @@
     <string name="general_info_version_name">Nazwa wersji</string>
     <string name="general_info_version_code">Kod wersji</string>
     <string name="general_info_min_sdk">Min SDK</string>
-    <string name="general_info_target_sdk">Docelowy SDK</string>
+    <string name="general_info_target_sdk">Target SDK</string>
     <string name="general_info_debug_access">Dostęp debugowania</string>
     <string name="general_info_app_data_backup">Kopia zapasowa danych aplikacji</string>
-    <string name="general_info_unencrypted_traffic">Domyślny ruch niezaszyfrowany</string>
+    <string name="general_info_unencrypted_traffic">Ruch niezaszyfrowany</string>
     <string name="general_info_enabled">Włączone</string>
     <string name="general_info_disabled">Wyłączone</string>
     <string name="general_info_allowed">Dozwolone</string>
@@ -326,36 +326,36 @@
     <string name="general_info_install_source_fdroid">F-Droid</string>
     <string name="general_info_install_source_aurora_store">Aurora Store</string>
     <string name="general_info_install_source_sideloaded">Zainstalowano z pliku</string>
-    <string name="general_info_install_source_local_install">Zainstalowano z podłączonego komputera</string>
+    <string name="general_info_install_source_local_install">Zainstalowano z komputera</string>
     <string name="general_info_install_source_system">System</string>
     <string name="general_info_install_source_unknown">Nieznany</string>
-    <string name="general_info_installer_package">Instalator Package</string>
+    <string name="general_info_installer_package">Instalator</string>
     <string name="general_info_install_initiator">Inicjator instalacji</string>
-    <string name="general_info_install_originator">APK Pochodzenie Package</string>
+    <string name="general_info_install_originator">Pakiet pochodzenia APK</string>
     <string name="general_info_first_installed">Pierwsza instalacja</string>
     <string name="general_info_last_updated">Ostatnia aktualizacja</string>
     <string name="general_info_last_used">Ostatnie użycie</string>
-    <string name="general_info_apk_directory">APK Katalog</string>
+    <string name="general_info_apk_directory">Katalog APK</string>
     <string name="general_info_data_directory">Katalog danych</string>
     <string name="general_info_install_location">Lokalizacja instalacji</string>
-    <string name="general_info_apk_size">APK Rozmiar</string>
-    <string name="general_info_split_apks">Podziel APKs</string>
+    <string name="general_info_apk_size">Rozmiar APK</string>
+    <string name="general_info_split_apks">Podzielone pliki APK</string>
     <plurals name="general_info_split_apks_value">
-        <item quantity="one">Zainstalowano jako %1$d podzielony APK</item>
-        <item quantity="few">Zainstalowano jako %1$d podzielony APKs</item>
-        <item quantity="many">Zainstalowano jako %1$d podzielony APKs</item>
-        <item quantity="other">Zainstalowano jako %1$d podzielony APKs</item>
+        <item quantity="one">Zainstalowano jako %1$d plik APK</item>
+        <item quantity="few">Zainstalowano jako %1$d split pliki APK</item>
+        <item quantity="many">Zainstalowano jako %1$d split plików APK</item>
+        <item quantity="other">Zainstalowano jako %1$d split plików APK</item>
     </plurals>
     <string name="general_info_total_size">Całkowity rozmiar</string>
     <string name="general_info_native_library_abis">Architektury CPU</string>
     <string name="general_info_native_library_abis_none">Brak kodu natywnego</string>
-    <string name="general_info_native_library_files">Pliki biblioteki natywnej</string>
+    <string name="general_info_native_library_files">Biblioteki natywne</string>
     <string name="general_info_native_library_files_none">Brak dołączonych</string>
     <plurals name="general_info_native_library_file_count">
         <item quantity="one">%1$d plik</item>
         <item quantity="few">%1$d pliki</item>
-        <item quantity="many">%1$d pliki</item>
-        <item quantity="other">%1$d pliki</item>
+        <item quantity="many">%1$d plików</item>
+        <item quantity="other">%1$d plików</item>
     </plurals>
     <string name="general_info_rationale_application_name">Widoczna dla użytkownika etykieta aplikacji, wyświetlana na ekranie głównym i w szufladzie aplikacji.</string>
     <string name="general_info_rationale_package_name">Unikalny identyfikator tej aplikacji na urządzeniu. Żadne dwie aplikacje nie mogą dzielić tej samej nazwy pakietu.</string>
@@ -402,10 +402,10 @@
     <string name="permissions_title">Permissions</string>
     <string name="permissions_error">Nie można odczytać uprawnień tej aplikacji.</string>
     <plurals name="permissions_filter_hint">
-        <item quantity="one">Filtr %1$d uprawnienie</item>
-        <item quantity="few">Filtr %1$d uprawnień</item>
-        <item quantity="many">Filtr %1$d uprawnień</item>
-        <item quantity="other">Filtr %1$d uprawnień</item>
+        <item quantity="one">Filtruj %1$d uprawnienie</item>
+        <item quantity="few">Filtruj %1$d uprawnienia</item>
+        <item quantity="many">Filtruj %1$d uprawnień</item>
+        <item quantity="other">Filtruj %1$d uprawnień</item>
     </plurals>
     <string name="permissions_scope_sheet_title">Pokaż</string>
     <string name="permissions_scope_requested">Żądane</string>
@@ -416,13 +416,13 @@
     <string name="permissions_section_header">%1$s · %2$d</string>
     <string name="permissions_granted">Przyznane</string>
     <string name="permissions_not_granted">Nieprzyznane</string>
-    <string name="permissions_level_dangerous">Niebezpieczne</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
     <string name="permissions_level_dangerous_explanation">Wymaga Twojej wyraźnej zgody, zanim aplikacja będzie mogła to wykorzystać.</string>
-    <string name="permissions_level_signature">Podpis</string>
+    <string name="permissions_level_signature">Signature</string>
     <string name="permissions_level_signature_explanation">Tylko aplikacje podpisane tym samym kluczem mogą to posiadać.</string>
-    <string name="permissions_level_internal">Wewnętrzny</string>
+    <string name="permissions_level_internal">Internal</string>
     <string name="permissions_level_internal_explanation">Zarezerwowane dla systemu i przyznawane na podstawie wewnętrznych zasad, a nie przez Ciebie.</string>
-    <string name="permissions_level_normal">Normalny</string>
+    <string name="permissions_level_normal">Normal</string>
     <string name="permissions_level_normal_explanation">Zwykle przyznawane automatycznie podczas instalacji. Niskie ryzyko samodzielnie.</string>
     <string name="permissions_level_unavailable">Szczegóły niedostępne</string>
     <string name="permissions_level_unavailable_explanation">Żadna aplikacja na tym urządzeniu nie deklaruje tych, więc nie możemy pokazać, co chronią.</string>
@@ -447,34 +447,34 @@
     <string name="components_type_receivers">Receivers</string>
     <string name="components_type_providers">Providers</string>
     <plurals name="components_filter_hint_all">
-        <item quantity="one">Filtruj komponent %1$d</item>
-        <item quantity="few">Filtruj komponenty %1$d</item>
-        <item quantity="many">Filtruj komponenty %1$d</item>
-        <item quantity="other">Filtruj komponenty %1$d</item>
+        <item quantity="one">Filtruj %1$d komponent</item>
+        <item quantity="few">Filtruj %1$d komponenty</item>
+        <item quantity="many">Filtruj %1$d komponentów</item>
+        <item quantity="other">Filtruj %1$d komponentów</item>
     </plurals>
     <plurals name="components_filter_hint_activities">
-        <item quantity="one">Filtruj aktywność %1$d</item>
-        <item quantity="few">Filtruj aktywności %1$d</item>
-        <item quantity="many">Filtruj aktywności %1$d</item>
-        <item quantity="other">Filtruj aktywności %1$d</item>
+        <item quantity="one">Filtruj %1$d aktywność</item>
+        <item quantity="few">Filtruj %1$d aktywności</item>
+        <item quantity="many">Filtruj %1$d aktywności</item>
+        <item quantity="other">Filtruj %1$d aktywności</item>
     </plurals>
     <plurals name="components_filter_hint_services">
-        <item quantity="one">Filtruj usługę %1$d</item>
-        <item quantity="few">Filtruj usługi %1$d</item>
-        <item quantity="many">Filtruj usługi %1$d</item>
-        <item quantity="other">Filtruj usługi %1$d</item>
+        <item quantity="one">Filtruj %1$d usługę</item>
+        <item quantity="few">Filtruj %1$d usługi</item>
+        <item quantity="many">Filtruj %1$d usług</item>
+        <item quantity="other">Filtruj %1$d usług</item>
     </plurals>
     <plurals name="components_filter_hint_receivers">
-        <item quantity="one">Filtruj odbiornik %1$d</item>
-        <item quantity="few">Filtruj odbiorniki %1$d</item>
-        <item quantity="many">Filtruj odbiorniki %1$d</item>
-        <item quantity="other">Filtruj odbiorniki %1$d</item>
+        <item quantity="one">Filtruj %1$d odbiornik</item>
+        <item quantity="few">Filtruj %1$d odbiorniki</item>
+        <item quantity="many">Filtruj %1$d odbiorników</item>
+        <item quantity="other">Filtruj %1$d odbiorników</item>
     </plurals>
     <plurals name="components_filter_hint_providers">
-        <item quantity="one">Filtruj dostawcę %1$d</item>
-        <item quantity="few">Filtruj dostawców %1$d</item>
-        <item quantity="many">Filtruj dostawców %1$d</item>
-        <item quantity="other">Filtruj dostawców %1$d</item>
+        <item quantity="one">Filtruj %1$d dostawcę</item>
+        <item quantity="few">Filtruj %1$d dostawców</item>
+        <item quantity="many">Filtruj %1$d dostawców</item>
+        <item quantity="other">Filtruj %1$d dostawców</item>
     </plurals>
     <string name="components_filter_exported">Eksportowany</string>
     <string name="components_filter_unprotected">Niechroniony</string>
@@ -511,8 +511,8 @@
     <plurals name="components_intent_filter_count">
         <item quantity="one">%1$d filtr intencji</item>
         <item quantity="few">%1$d filtry intencji</item>
-        <item quantity="many">%1$d filtry intencji</item>
-        <item quantity="other">%1$d filtry intencji</item>
+        <item quantity="many">%1$d filtrów intencji</item>
+        <item quantity="other">%1$d filtrów intencji</item>
     </plurals>
     <string name="components_detail_intent_actions">Akcje</string>
     <string name="components_detail_intent_actions_explanation">Co inna aplikacja lub Android prosi ten komponent o zrobienie.</string>
@@ -566,10 +566,10 @@
     <string name="intent_filters_component_heading">Wzorce żądań zadeklarowane przez %1$s</string>
     <string name="intent_filters_explanation">Każdy element to wzorzec żądania zadeklarowany dla tego komponentu. To, czy inna aplikacja może go użyć, zależy również od dostępności komponentu i wymaganych uprawnień.</string>
     <plurals name="intent_filters_search_hint">
-        <item quantity="one">Wyszukaj regułę żądania %1$d</item>
-        <item quantity="few">Wyszukaj reguły żądania %1$d</item>
-        <item quantity="many">Wyszukaj reguły żądania %1$d</item>
-        <item quantity="other">Wyszukaj reguły żądania %1$d</item>
+        <item quantity="one">Wyszukaj %1$d regułę żądania</item>
+        <item quantity="few">Wyszukaj %1$d reguły żądania</item>
+        <item quantity="many">Wyszukaj %1$d reguł żądania</item>
+        <item quantity="other">Wyszukaj %1$d reguł żądania</item>
     </plurals>
     <string name="intent_filters_filter_fallback">Intent filter</string>
     <string name="intent_filters_purpose_launcher">Wejście uruchamiacza aplikacji</string>
@@ -637,11 +637,11 @@
     <string name="permissions_grant_normal_granted">Przyznane automatycznie podczas instalacji aplikacji.</string>
     <string name="permissions_grant_normal_not_granted">Nie przyznane podczas instalacji — najczęściej aplikacja prosi o to tylko w starszych wersjach Androida.</string>
     <string name="permissions_grant_unavailable">Żadna aplikacja na tym urządzeniu nie deklaruje tej zgody, więc nic nie może jej przyznać.</string>
-    <string name="permission_description_camera">Robić zdjęcia i nagrywać wideo za pomocą kamer urządzenia.</string>
-    <string name="permission_description_record_audio">Nagrywać dźwięk przez mikrofon, w tym podczas odtwarzania dźwięku przez inne aplikacje.</string>
-    <string name="permission_description_location_fine">Odczytać dokładną pozycję urządzenia z GPS i pobliskich sieci.</string>
-    <string name="permission_description_location_coarse">Odczytać przybliżoną pozycję urządzenia, dokładną do mniej więcej bloku miejskiego.</string>
-    <string name="permission_description_location_background">Odczytać pozycję urządzenia nawet gdy aplikacja nie jest otwarta.</string>
+    <string name="permission_description_camera">Rób zdjęcia i nagrywaj wideo za pomocą kamer urządzenia.</string>
+    <string name="permission_description_record_audio">Nagrywaj dźwięk przez mikrofon, w tym podczas odtwarzania dźwięku przez inne aplikacje.</string>
+    <string name="permission_description_location_fine">Odczytuj dokładną pozycję urządzenia z GPS i pobliskich sieci.</string>
+    <string name="permission_description_location_coarse">Odczytuj przybliżoną pozycję urządzenia, dokładną do mniej więcej bloku miejskiego.</string>
+    <string name="permission_description_location_background">Odczytuj pozycję urządzenia nawet gdy aplikacja nie jest otwarta.</string>
     <string name="permission_description_contacts_read">Przeczytaj imiona, numery i adresy zapisane w twoich kontaktach.</string>
     <string name="permission_description_contacts_write">Dodaj, zmień lub usuń wpisy w swoich kontaktach.</string>
     <string name="permission_description_accounts">Zobacz listę kont zalogowanych na tym urządzeniu.</string>
@@ -690,8 +690,8 @@
     <plurals name="requirements_missing_summary">
         <item quantity="one">%1$d wymaganie, którego to urządzenie nie może spełnić</item>
         <item quantity="few">%1$d wymagania, których to urządzenie nie może spełnić</item>
-        <item quantity="many">%1$d wymagania, których to urządzenie nie może spełnić</item>
-        <item quantity="other">%1$d wymagania, których to urządzenie nie może spełnić</item>
+        <item quantity="many">%1$d wymagań, których to urządzenie nie może spełnić</item>
+        <item quantity="other">%1$d wymagań, których to urządzenie nie może spełnić</item>
     </plurals>
     <string name="requirements_missing">Nie na tym urządzeniu</string>
     <string name="requirements_missing_version">Wymaga %1$s · to urządzenie ma %2$s</string>
@@ -784,12 +784,12 @@
     <string name="requirement_backup">Kopia zapasowa systemu</string>
     <string name="requirement_sip_voip">Połączenia internetowe</string>
     <string name="requirement_connection_service">Integracja aplikacji do dzwonienia</string>
-    <string name="splitapks_title">Podziel APKs</string>
+    <string name="splitapks_title">Podzielone pliki APK</string>
     <plurals name="splitapks_heading">
         <item quantity="one">%1$d podzielony APK zainstalowany</item>
-        <item quantity="few">%1$d podzielony APKs zainstalowany</item>
-        <item quantity="many">%1$d podzielony APKs zainstalowany</item>
-        <item quantity="other">%1$d podzielony APKs zainstalowany</item>
+        <item quantity="few">%1$d podzielone pliki APK zainstalowane</item>
+        <item quantity="many">%1$d podzielonych plików APK zainstalowanych</item>
+        <item quantity="other">%1$d podzielonych plików APK zainstalowanych</item>
     </plurals>
     <string name="splitapks_explanation">Ta aplikacja została zainstalowana jako podstawowy APK plus te dodatkowe podzielone APKs, format dostarczania, który Google Play używa do wysyłania tylko kodu i zasobów, których potrzebuje Twoje urządzenie.</string>
     <plurals name="splitapks_search_hint">
@@ -831,15 +831,15 @@
     <plurals name="nativelibraries_heading">
         <item quantity="one">%1$d biblioteka natywna dołączona</item>
         <item quantity="few">%1$d biblioteki natywne dołączone</item>
-        <item quantity="many">%1$d biblioteki natywne dołączone</item>
-        <item quantity="other">%1$d biblioteki natywne dołączone</item>
+        <item quantity="many">%1$d bibliotek natywnych dołączonych</item>
+        <item quantity="other">%1$d bibliotek natywnych dołączonych</item>
     </plurals>
     <string name="nativelibraries_explanation">Każdy odrębny plik kodu natywnego, który ta aplikacja dostarcza, jeden wiersz na nazwę pliku, nawet gdy ta sama biblioteka jest budowana dla wielu architektur procesora.</string>
     <plurals name="nativelibraries_search_hint">
-        <item quantity="one">Szukaj biblioteki %1$d</item>
-        <item quantity="few">Szukaj bibliotek %1$d</item>
-        <item quantity="many">Szukaj bibliotek %1$d</item>
-        <item quantity="other">Szukaj bibliotek %1$d</item>
+        <item quantity="one">Szukaj %1$d biblioteki</item>
+        <item quantity="few">Szukaj %1$d bibliotek</item>
+        <item quantity="many">Szukaj %1$d bibliotek</item>
+        <item quantity="other">Szukaj %1$d bibliotek</item>
     </plurals>
     <string name="nativelibraries_error">Nie udało się załadować bibliotek natywnych</string>
     <string name="nativelibraries_empty">Ta aplikacja nie ma wbudowanych bibliotek natywnych.</string>

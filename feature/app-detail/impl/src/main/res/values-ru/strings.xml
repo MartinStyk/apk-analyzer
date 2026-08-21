@@ -11,36 +11,36 @@
     <string name="app_detail_version">Версия</string>
     <string name="app_detail_apk_size">Размер APK</string>
     <string name="app_detail_total_size">Общий размер</string>
-    <string name="app_detail_target_sdk">Целевая SDK</string>
+    <string name="app_detail_target_sdk">Target SDK</string>
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_updated">Обновлено</string>
     <plurals name="app_detail_overview_more_details">
-        <item quantity="one">+%1$d больше информации в Общей информации</item>
+        <item quantity="one">+%1$d больше детали в Общей информации</item>
         <item quantity="few">+%1$d больше деталей в Общей информации</item>
         <item quantity="many">+%1$d больше деталей в Общей информации</item>
         <item quantity="other">+%1$d больше деталей в Общей информации</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_date">
-        <item quantity="one">+%1$d больше информации в Общей информации, включая дату установки</item>
+        <item quantity="one">+%1$d больше детали в Общей информации, включая дату установки</item>
         <item quantity="few">+%1$d больше деталей в Общей информации, включая дату установки</item>
         <item quantity="many">+%1$d больше деталей в Общей информации, включая дату установки</item>
         <item quantity="other">+%1$d больше деталей в Общей информации, включая дату установки</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_history">
-        <item quantity="one">+%1$d больше информации в Общей информации, включая историю установки</item>
+        <item quantity="one">+%1$d больше детали в Общей информации, включая историю установки</item>
         <item quantity="few">+%1$d больше деталей в Общей информации, включая историю установки</item>
         <item quantity="many">+%1$d больше деталей в Общей информации, включая историю установки</item>
         <item quantity="other">+%1$d больше деталей в Общей информации, включая историю установки</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_network_security">
-        <item quantity="one">+%1$d больше информации в Общей информации, включая настройки сетевой безопасности</item>
+        <item quantity="one">+%1$d больше детали в Общей информации, включая настройки сетевой безопасности</item>
         <item quantity="few">+%1$d больше деталей в Общей информации, включая настройки сетевой безопасности</item>
         <item quantity="many">+%1$d больше деталей в Общей информации, включая настройки сетевой безопасности</item>
         <item quantity="other">+%1$d больше деталей в Общей информации, включая настройки сетевой безопасности</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_split_apks">
-        <item quantity="one">+%1$d больше информации в Общей информации, включая разделенные APK</item>
+        <item quantity="one">+%1$d больше детали в Общей информации, включая разделенные APK</item>
         <item quantity="few">+%1$d больше деталей в Общей информации, включая разделенные APK</item>
         <item quantity="many">+%1$d больше деталей в Общей информации, включая разделенные APK</item>
         <item quantity="other">+%1$d больше деталей в Общей информации, включая разделенные APK</item>
@@ -53,7 +53,7 @@
     <string name="app_detail_action_manifest">Манифест</string>
     <string name="app_detail_action_export_apk">Экспорт APK</string>
     <string name="app_detail_action_save_icon">Сохранить значок</string>
-    <string name="app_detail_action_summary">Резюме</string>
+    <string name="app_detail_action_summary">Сводка</string>
     <string name="app_detail_action_copy_summary">Копировать</string>
     <string name="app_detail_action_share_summary">Поделиться</string>
     <string name="app_detail_summary_sheet_title">Сводка приложения</string>
@@ -66,14 +66,14 @@
     <string name="app_detail_insight_certificate_not_yet_valid">Сертификат подписи еще недействителен</string>
     <plurals name="app_detail_insight_outdated_target">
         <item quantity="one">Целевой API %1$d, на один уровень API ниже этого устройства</item>
-        <item quantity="few">Целевые API %1$d, %2$d уровней API ниже этого устройства</item>
-        <item quantity="many">Целевые API %1$d, %2$d уровней API ниже этого устройства</item>
-        <item quantity="other">Целевые API %1$d, %2$d уровней API ниже этого устройства</item>
+        <item quantity="few">Целевые API %1$d, на %2$d уровня API ниже этого устройства</item>
+        <item quantity="many">Целевые API %1$d, на %2$d уровней API ниже этого устройства</item>
+        <item quantity="other">Целевые API %1$d, на %2$d уровней API ниже этого устройства</item>
     </plurals>
     <string name="app_detail_insight_sideloaded">Установлено из внешнего магазина приложений</string>
     <plurals name="app_detail_insight_unused">
         <item quantity="one">Не открывалось в последний месяц</item>
-        <item quantity="few">Не открывалось в последние %1$d месяцев</item>
+        <item quantity="few">Не открывалось в последние %1$d месяца</item>
         <item quantity="many">Не открывалось в последние %1$d месяцев</item>
         <item quantity="other">Не открывалось в последние %1$d месяцев</item>
     </plurals>
@@ -90,8 +90,8 @@
     <string name="app_detail_apk_save_failed">APK не удалось сохранить</string>
     <string name="app_detail_icon_save_failed">Иконку не удалось сохранить</string>
     <string name="app_detail_document_picker_unavailable">Ни одно приложение не может выбрать место для сохранения</string>
-    <string name="app_detail_summary_copied">Резюме скопировано в буфер обмена</string>
-    <string name="app_detail_summary_clip_label">%1$s резюме</string>
+    <string name="app_detail_summary_copied">Сводка скопирована в буфер обмена</string>
+    <string name="app_detail_summary_clip_label">Сводка %1$s</string>
     <string name="app_detail_share_unavailable">Нет приложения, которое может обрабатывать обмен</string>
     <string name="app_detail_summary_line">%1$s: %2$s</string>
     <string name="app_detail_summary_header">%1$s (%2$s)</string>
@@ -100,22 +100,22 @@
     <string name="app_detail_summary_permissions">%1$s · %2$s</string>
     <string name="app_detail_summary_permissions_granted">%1$s · %2$s · %3$s</string>
     <plurals name="app_detail_summary_permissions_requested">
-        <item quantity="one">%1$d запросил разрешение</item>
-        <item quantity="few">%1$d запросил разрешения</item>
-        <item quantity="many">%1$d запросил разрешения</item>
-        <item quantity="other">%1$d запросил разрешения</item>
+        <item quantity="one">%1$d запрошенное разрешение</item>
+        <item quantity="few">%1$d запрошенных разрешения</item>
+        <item quantity="many">%1$d запрошенных разрешений</item>
+        <item quantity="other">%1$d запрошенных разрешений</item>
     </plurals>
     <plurals name="app_detail_summary_permissions_dangerous">
         <item quantity="one">%1$d опасное разрешение</item>
-        <item quantity="few">%1$d опасные разрешения</item>
-        <item quantity="many">%1$d опасные разрешения</item>
-        <item quantity="other">%1$d опасные разрешения</item>
+        <item quantity="few">%1$d опасных разрешения</item>
+        <item quantity="many">%1$d опасных разрешений</item>
+        <item quantity="other">%1$d опасных разрешений</item>
     </plurals>
     <plurals name="app_detail_summary_permissions_granted_count">
-        <item quantity="one">%1$d предоставлено разрешение</item>
-        <item quantity="few">%1$d предоставлены разрешения</item>
-        <item quantity="many">%1$d предоставлены разрешения</item>
-        <item quantity="other">%1$d предоставлены разрешения</item>
+        <item quantity="one">%1$d предоставленное разрешение</item>
+        <item quantity="few">%1$d предоставленных разрешения</item>
+        <item quantity="many">%1$d предоставленных разрешений</item>
+        <item quantity="other">%1$d предоставленных разрешений</item>
     </plurals>
     <string name="app_detail_permissions_section">Разрешения</string>
     <string name="app_detail_total_permissions">Всего разрешений</string>
@@ -132,25 +132,25 @@
     </plurals>
     <plurals name="app_detail_permissions_dangerous_summary">
         <item quantity="one">%1$d чувствительное разрешение запрошено</item>
-        <item quantity="few">%1$d чувствительных разрешений запрошено</item>
+        <item quantity="few">%1$d чувствительных разрешения запрошено</item>
         <item quantity="many">%1$d чувствительных разрешений запрошено</item>
         <item quantity="other">%1$d чувствительных разрешений запрошено</item>
     </plurals>
     <plurals name="app_detail_permissions_total">
         <item quantity="one">%1$d разрешение запрошено всего</item>
-        <item quantity="few">%1$d разрешений запрошено всего</item>
+        <item quantity="few">%1$d разрешения запрошено всего</item>
         <item quantity="many">%1$d разрешений запрошено всего</item>
         <item quantity="other">%1$d разрешений запрошено всего</item>
     </plurals>
     <plurals name="app_detail_permissions_requested_count">
         <item quantity="one">%d разрешение запрошено</item>
-        <item quantity="few">%d разрешений запрошено</item>
+        <item quantity="few">%d разрешения запрошено</item>
         <item quantity="many">%d разрешений запрошено</item>
         <item quantity="other">%d разрешений запрошено</item>
     </plurals>
     <plurals name="app_detail_permissions_sensitive_count">
         <item quantity="one">%d чувствительное разрешение</item>
-        <item quantity="few">%d чувствительных разрешений</item>
+        <item quantity="few">%d чувствительных разрешения</item>
         <item quantity="many">%d чувствительных разрешений</item>
         <item quantity="other">%d чувствительных разрешений</item>
     </plurals>
@@ -166,23 +166,23 @@
     <string name="app_detail_features_section">Требования к устройству</string>
     <plurals name="app_detail_features_required_count">
         <item quantity="one">%d обязательная функция</item>
-        <item quantity="few">%d обязательные функции</item>
-        <item quantity="many">%d обязательные функции</item>
-        <item quantity="other">%d обязательные функции</item>
+        <item quantity="few">%d обязательных функции</item>
+        <item quantity="many">%d обязательных функций</item>
+        <item quantity="other">%d обязательных функций</item>
     </plurals>
     <plurals name="app_detail_features_optional_count">
         <item quantity="one">%d необязательная функция</item>
-        <item quantity="few">%d необязательные функции</item>
-        <item quantity="many">%d необязательные функции</item>
-        <item quantity="other">%d необязательные функции</item>
+        <item quantity="few">%d необязательных функции</item>
+        <item quantity="many">%d необязательных функций</item>
+        <item quantity="other">%d необязательных функций</item>
     </plurals>
     <string name="app_detail_features_all_met">Это устройство соответствует всем требованиям приложения</string>
     <string name="app_detail_features_none">Это приложение не объявляет никаких требований к устройству</string>
     <plurals name="app_detail_features_unmet">
         <item quantity="one">%1$d требование, которое это устройство не может выполнить</item>
         <item quantity="few">%1$d требования, которые это устройство не может выполнить</item>
-        <item quantity="many">%1$d требования, которые это устройство не может выполнить</item>
-        <item quantity="other">%1$d требования, которые это устройство не может выполнить</item>
+        <item quantity="many">%1$d требований, которые это устройство не может выполнить</item>
+        <item quantity="other">%1$d требований, которые это устройство не может выполнить</item>
     </plurals>
     <string name="app_detail_certificate_signature_section">Подпись сертификата</string>
     <string name="app_detail_certificate_signed_by">Подписано %1$s</string>
@@ -192,9 +192,9 @@
     <string name="app_detail_badge_large">Большое приложение</string>
     <string name="app_detail_badge_system">Система</string>
     <string name="app_detail_badge_google_play">Google Play</string>
-    <string name="app_detail_badge_recently_installed">Новый</string>
+    <string name="app_detail_badge_recently_installed">Новое</string>
     <string name="app_detail_badge_recently_updated">Обновлено</string>
-    <string name="app_detail_badge_recently_used">Недавно использованные</string>
+    <string name="app_detail_badge_recently_used">Недавно использованное</string>
     <string name="manifest_title">Android манифест</string>
     <string name="manifest_error">Не удалось прочитать манифест</string>
     <string name="manifest_search">Поиск манифеста</string>
@@ -204,18 +204,18 @@
     <plurals name="manifest_line_count">
         <item quantity="one">%1$d строка</item>
         <item quantity="few">%1$d строки</item>
-        <item quantity="many">%1$d строки</item>
-        <item quantity="other">%1$d строки</item>
+        <item quantity="many">%1$d строк</item>
+        <item quantity="other">%1$d строк</item>
     </plurals>
     <plurals name="manifest_match_count">
         <item quantity="one">%1$d совпадающая строка · %2$d всего</item>
-        <item quantity="few">%1$d совпадающих строк · %2$d всего</item>
+        <item quantity="few">%1$d совпадающих строки · %2$d всего</item>
         <item quantity="many">%1$d совпадающих строк · %2$d всего</item>
         <item quantity="other">%1$d совпадающих строк · %2$d всего</item>
     </plurals>
     <plurals name="manifest_base_split_note">
-        <item quantity="one">Показывает базовый манифест APK. Это приложение имеет %1$d дополнительных установленных сплитов с собственным манифестом.</item>
-        <item quantity="few">Показывает базовый манифест APK. Это приложение имеет %1$d дополнительных установленных сплитов с их собственными манифестами.</item>
+        <item quantity="one">Показывает базовый манифест APK. Это приложение имеет %1$d дополнительный установленный сплит с собственным манифестом.</item>
+        <item quantity="few">Показывает базовый манифест APK. Это приложение имеет %1$d дополнительных установленных сплита с их собственными манифестами.</item>
         <item quantity="many">Показывает базовый манифест APK. Это приложение имеет %1$d дополнительных установленных сплитов с их собственными манифестами.</item>
         <item quantity="other">Показывает базовый манифест APK. Это приложение имеет %1$d дополнительных установленных сплитов с их собственными манифестами.</item>
     </plurals>
@@ -230,7 +230,7 @@
     <string name="certificates_history">История подписей</string>
     <plurals name="certificates_history_description">
         <item quantity="one">Android проверил один ключ подписи, использованный до текущего ключа.</item>
-        <item quantity="few">Android проверил %d ключей подписи, использованных до текущего ключа. Последний использованный предыдущий ключ отображается первым.</item>
+        <item quantity="few">Android проверил %d ключа подписи, использованных до текущего ключа. Последний использованный предыдущий ключ отображается первым.</item>
         <item quantity="many">Android проверил %d ключей подписи, использованных до текущего ключа. Последний использованный предыдущий ключ отображается первым.</item>
         <item quantity="other">Android проверил %d ключей подписи, использованных до текущего ключа. Последний использованный предыдущий ключ отображается первым.</item>
     </plurals>
@@ -307,7 +307,7 @@
     <string name="general_info_version_name">Имя версии</string>
     <string name="general_info_version_code">Код версии</string>
     <string name="general_info_min_sdk">Минимальная SDK</string>
-    <string name="general_info_target_sdk">Целевая SDK</string>
+    <string name="general_info_target_sdk">Target SDK</string>
     <string name="general_info_debug_access">Доступ к отладке</string>
     <string name="general_info_app_data_backup">Резервное копирование данных приложения</string>
     <string name="general_info_unencrypted_traffic">Не зашифрованный трафик по умолчанию</string>
@@ -342,9 +342,9 @@
     <string name="general_info_split_apks">Разделенные APK</string>
     <plurals name="general_info_split_apks_value">
         <item quantity="one">Установлено как %1$d разделенный APK</item>
-        <item quantity="few">Установлено как %1$d разделенные APK</item>
-        <item quantity="many">Установлено как %1$d разделенные APK</item>
-        <item quantity="other">Установлено как %1$d разделенные APK</item>
+        <item quantity="few">Установлено как %1$d разделенных APK</item>
+        <item quantity="many">Установлено как %1$d разделенных APK</item>
+        <item quantity="other">Установлено как %1$d разделенных APK</item>
     </plurals>
     <string name="general_info_total_size">Общий размер</string>
     <string name="general_info_native_library_abis">Архитектуры ЦП</string>
@@ -353,9 +353,9 @@
     <string name="general_info_native_library_files_none">Нет в комплекте</string>
     <plurals name="general_info_native_library_file_count">
         <item quantity="one">%1$d файл</item>
-        <item quantity="few">%1$d файлы</item>
-        <item quantity="many">%1$d файлы</item>
-        <item quantity="other">%1$d файлы</item>
+        <item quantity="few">%1$d файла</item>
+        <item quantity="many">%1$d файлов</item>
+        <item quantity="other">%1$d файлов</item>
     </plurals>
     <string name="general_info_rationale_application_name">Ярлык приложения, видимый пользователю, как показано на главном экране и в меню приложений.</string>
     <string name="general_info_rationale_package_name">Уникальный идентификатор для этого приложения на устройстве. Ни одно из приложений не может иметь одно и то же имя пакета.</string>
@@ -416,13 +416,13 @@
     <string name="permissions_section_header">%1$s · %2$d</string>
     <string name="permissions_granted">Предоставлено</string>
     <string name="permissions_not_granted">Не предоставлено</string>
-    <string name="permissions_level_dangerous">Опасно</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
     <string name="permissions_level_dangerous_explanation">Требует вашего явного одобрения перед использованием приложением.</string>
-    <string name="permissions_level_signature">Подпись</string>
+    <string name="permissions_level_signature">Signature</string>
     <string name="permissions_level_signature_explanation">Только приложения, подписанные тем же ключом, могут это иметь.</string>
-    <string name="permissions_level_internal">Внутренний</string>
+    <string name="permissions_level_internal">Internal</string>
     <string name="permissions_level_internal_explanation">Резервируется для системы и предоставляется внутренними правилами, а не вами.</string>
-    <string name="permissions_level_normal">Обычный</string>
+    <string name="permissions_level_normal">Normal</string>
     <string name="permissions_level_normal_explanation">Обычно предоставляется автоматически при установке. Низкий риск сам по себе.</string>
     <string name="permissions_level_unavailable">Детали недоступны</string>
     <string name="permissions_level_unavailable_explanation">На этом устройстве ни одно приложение не заявляет об этом, поэтому мы не можем показать, что они защищают.</string>
@@ -690,8 +690,8 @@
     <plurals name="requirements_missing_summary">
         <item quantity="one">%1$d требование, которое это устройство не может выполнить</item>
         <item quantity="few">%1$d требования, которые это устройство не может выполнить</item>
-        <item quantity="many">%1$d требования, которые это устройство не может выполнить</item>
-        <item quantity="other">%1$d требования, которые это устройство не может выполнить</item>
+        <item quantity="many">%1$d требований, которые это устройство не может выполнить</item>
+        <item quantity="other">%1$d требований, которые это устройство не может выполнить</item>
     </plurals>
     <string name="requirements_missing">Нет на этом устройстве</string>
     <string name="requirements_missing_version">Требуется %1$s · это устройство имеет %2$s</string>
@@ -830,9 +830,9 @@
     <string name="nativelibraries_title">Файлы нативной библиотеки</string>
     <plurals name="nativelibraries_heading">
         <item quantity="one">%1$d нативная библиотека в комплекте</item>
-        <item quantity="few">%1$d нативные библиотеки в комплекте</item>
-        <item quantity="many">%1$d нативные библиотеки в комплекте</item>
-        <item quantity="other">%1$d нативные библиотеки в комплекте</item>
+        <item quantity="few">%1$d нативных библиотеки в комплекте</item>
+        <item quantity="many">%1$d нативных библиотек в комплекте</item>
+        <item quantity="other">%1$d нативных библиотек в комплекте</item>
     </plurals>
     <string name="nativelibraries_explanation">Каждый отдельный файл нативного кода, который поставляется с этим приложением, одна строка на имя файла, даже если одна и та же библиотека собрана для нескольких архитектур процессоров.</string>
     <plurals name="nativelibraries_search_hint">

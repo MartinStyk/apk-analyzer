@@ -1,34 +1,34 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="browse_title">Prehľadávať</string>
+    <string name="browse_title">Prehľadávať aplikácie</string>
     <string name="browse_subtitle_loading">Skenovanie nainštalovaných aplikácií…</string>
     <plurals name="browse_subtitle">
-        <item quantity="one">Preskúmať aplikáciu %1$d nainštalovanú na tomto zariadení</item>
-        <item quantity="few">Preskúmať aplikácie %1$d nainštalované na tomto zariadení</item>
-        <item quantity="many">Preskúmať aplikácie %1$d nainštalované na tomto zariadení</item>
-        <item quantity="other">Preskúmať aplikácie %1$d nainštalované na tomto zariadení</item>
+        <item quantity="one">Zobraziť %1$d aplikáciu nainštalovanú na tomto zariadení</item>
+        <item quantity="few">Zobraziť %1$d aplikácie nainštalované na tomto zariadení</item>
+        <item quantity="many">Zobraziť %1$d nainštalovaných aplikácií na tomto zariadení</item>
+        <item quantity="other">Zobraziť %1$d nainštalovaných aplikácií na tomto zariadení</item>
     </plurals>
-    <string name="browse_dimension_permission_title">Permissions</string>
+    <string name="browse_dimension_permission_title">Povolenia</string>
     <string name="browse_dimension_permission_subtitle">Zobraziť, ktoré aplikácie používajú dané povolenie</string>
     <string name="browse_dimension_certificate_title">Podpisový certifikát</string>
     <string name="browse_dimension_certificate_subtitle">Zoskupiť aplikácie podľa identity podpisu, názvu vydavateľa alebo krajiny</string>
-    <string name="browse_dimension_target_sdk_title">Cieľová verzia Androidu</string>
+    <string name="browse_dimension_target_sdk_title">Cieľové SDK</string>
     <string name="browse_dimension_target_sdk_subtitle">Zobraziť, pre ktorú verziu Androidu bola každá aplikácia vytvorená</string>
-    <string name="browse_dimension_min_sdk_title">Minimálna verzia Androidu</string>
+    <string name="browse_dimension_min_sdk_title">Minimálne SDK</string>
     <string name="browse_dimension_min_sdk_subtitle">Zobraziť najstaršiu verziu Androidu, ktorú každá aplikácia stále podporuje</string>
     <string name="browse_dimension_install_source_title">Zdroj inštalácie</string>
     <string name="browse_dimension_install_source_subtitle">Zobraziť, odkiaľ každá aplikácia pochádza</string>
     <string name="browse_dimension_shared_user_id_title">Zdieľaná identita</string>
-    <string name="browse_dimension_shared_user_id_subtitle">Nájsť aplikácie, ktoré bežia pod rovnakou identitou zariadenia a môžu si navzájom pristupovať k údajom</string>
+    <string name="browse_dimension_shared_user_id_subtitle">Nájsť aplikácie, ktoré zdieľajú rovnakú identitu používateľa a môžu navzájom pristupovať k svojim údajom</string>
     <string name="browse_dimension_app_category_title">Kategória aplikácie</string>
-    <string name="browse_dimension_app_category_subtitle">Pozrite sa, aký typ aplikácie sa každá z nich vyhlasuje</string>
+    <string name="browse_dimension_app_category_subtitle">Zobraziť kategóriu, do ktorej sú aplikácie zaradené</string>
     <plurals name="browse_dimension_option_count">
         <item quantity="one">%1$d možnosť</item>
         <item quantity="few">%1$d možnosti</item>
-        <item quantity="many">%1$d možnosti</item>
-        <item quantity="other">%1$d možnosti</item>
+        <item quantity="many">%1$d možností</item>
+        <item quantity="other">%1$d možností</item>
     </plurals>
-    <string name="browse_sdk_unknown">API úroveň %1$s</string>
+    <string name="browse_sdk_unknown">API level %1$s</string>
     <string name="browse_api_level">API %1$s</string>
     <string name="browse_source_google_play">Google Play</string>
     <string name="browse_source_samsung_galaxy_store">Samsung Galaxy Store</string>
@@ -37,7 +37,7 @@
     <string name="browse_source_xiaomi_get_apps">Xiaomi GetApps</string>
     <string name="browse_source_fdroid">F-Droid</string>
     <string name="browse_source_aurora_store">Aurora Store</string>
-    <string name="browse_source_sideloaded">Nainštalované z súboru</string>
+    <string name="browse_source_sideloaded">Nainštalované zo súboru</string>
     <string name="browse_source_local_install">Nainštalované cez počítač</string>
     <string name="browse_source_system">Systém</string>
     <string name="browse_source_unknown">Neznáme</string>
@@ -62,13 +62,13 @@
     <string name="browse_certificate_hash_sha256">SHA-256</string>
     <string name="browse_certificate_hash_sha1">SHA-1</string>
     <string name="browse_certificate_hash_md5">MD5</string>
-    <string name="browse_protection_level_dangerous">Nebezpečné</string>
-    <string name="browse_protection_level_signature">Podpis</string>
-    <string name="browse_protection_level_internal">Interné</string>
-    <string name="browse_protection_level_normal">Normálne</string>
-    <string name="browse_protection_level_dangerous_explanation">Vyžaduje si vaše výslovné schválenie predtým, ako ho aplikácia môže použiť.</string>
-    <string name="browse_protection_level_signature_explanation">Iba aplikácie podpísané rovnakým kľúčom ako aplikácia, ktorá to vyhlásila, môžu toto držať.</string>
-    <string name="browse_protection_level_internal_explanation">Vyhradené pre systém a udelené internými pravidlami, nie vami.</string>
+    <string name="browse_protection_level_dangerous">Dangerous</string>
+    <string name="browse_protection_level_signature">Signature</string>
+    <string name="browse_protection_level_internal">Internal</string>
+    <string name="browse_protection_level_normal">Normal</string>
+    <string name="browse_protection_level_dangerous_explanation">Vyžaduje si výslovné schválenie používateľom predtým, ako ho aplikácia môže použiť.</string>
+    <string name="browse_protection_level_signature_explanation">Povolenie môžu získať iba aplikácie podpísané rovnakým kľúčom ako aplikácia, ktorá ho deklarovala.</string>
+    <string name="browse_protection_level_internal_explanation">Vyhradené pre systém a udeľované internými pravidlami, nie používateľom.</string>
     <string name="browse_protection_level_normal_explanation">Zvyčajne sa automaticky udeľuje pri inštalácii. Nízke riziko samostatne.</string>
     <string name="browse_algorithm_strong">Silný</string>
     <string name="browse_algorithm_weak">Slabý</string>
@@ -78,27 +78,27 @@
     <string name="browse_algorithm_md5_explanation">%1$s používa MD5. MD5 nie je odolný voči kolíziám a je nebezpečný pre podpisové certifikáty. Nové podpisové certifikáty by mali používať SHA-256 alebo silnejšie.</string>
     <string name="browse_algorithm_md2_explanation">%1$s používa MD2. MD2 je zastaraný a zraniteľný voči praktickým útokom, takže je nebezpečný pre podpisové certifikáty. Nové podpisové certifikáty by mali používať SHA-256 alebo silnejšie.</string>
     <string name="browse_algorithm_unknown_explanation">Silu %1$s nemožno posúdiť z jeho názvu algoritmu. Typ a veľkosť kľúča môžu tiež ovplyvniť jeho bezpečnosť.</string>
-    <string name="browse_certificate_self_signed">Samo-podpísané</string>
-    <string name="browse_certificate_self_signed_explanation">Samo-podpísané certifikáty sú bežné pre Android aplikácie. Porovnajte odtlačok certifikátu s dôveryhodným zdrojom, keď potrebujete overiť vydavateľa.</string>
+    <string name="browse_certificate_self_signed">Self-signed</string>
+    <string name="browse_certificate_self_signed_explanation">Self-signed certifikáty sú bežné pre Android aplikácie. Porovnajte odtlačok certifikátu s dôveryhodným zdrojom, keď potrebujete overiť vydavateľa.</string>
     <string name="browse_bucket_info_content_description">O %1$s</string>
     <plurals name="browse_options_filter_hint">
-        <item quantity="one">Filtrovať možnosť %1$d</item>
-        <item quantity="few">Filtrovať možnosti %1$d</item>
-        <item quantity="many">Filtrovať možnosti %1$d</item>
-        <item quantity="other">Filtrovať možnosti %1$d</item>
+        <item quantity="one">Filtrovať %1$d možnosť</item>
+        <item quantity="few">Filtrovať %1$d možnosti</item>
+        <item quantity="many">Filtrovať %1$d možností</item>
+        <item quantity="other">Filtrovať %1$d možností</item>
     </plurals>
-    <string name="browse_options_empty_query">Žiadne možnosti nezodpovedajú “%1$s”</string>
+    <string name="browse_options_empty_query">Žiadne možnosti nezodpovedajú „%1$s“</string>
     <plurals name="browse_apps_count">
         <item quantity="one">%1$d aplikácia</item>
         <item quantity="few">%1$d aplikácie</item>
-        <item quantity="many">%1$d aplikácie</item>
-        <item quantity="other">%1$d aplikácie</item>
+        <item quantity="many">%1$d aplikácií</item>
+        <item quantity="other">%1$d aplikácií</item>
     </plurals>
     <plurals name="browse_apps_filter_hint">
-        <item quantity="one">Filtrovať aplikáciu %1$d</item>
-        <item quantity="few">Filtrovať aplikácie %1$d</item>
-        <item quantity="many">Filtrovať aplikácie %1$d</item>
-        <item quantity="other">Filtrovať aplikácie %1$d</item>
+        <item quantity="one">Filtrovať %1$d aplikáciu</item>
+        <item quantity="few">Filtrovať %1$d aplikácie</item>
+        <item quantity="many">Filtrovať %1$d aplikácií</item>
+        <item quantity="other">Filtrovať %1$d aplikácií</item>
     </plurals>
     <string name="browse_apps_empty_query">Žiadne aplikácie nezodpovedajú “%1$s”</string>
 </resources>

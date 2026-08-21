@@ -11,14 +11,14 @@
     <string name="sort_size">APK Dosya Boyutu</string>
     <string name="sort_total_size">Toplam Uygulama Boyutu</string>
     <string name="sort_install_date">Kurulum Tarihi</string>
-    <string name="sort_target_sdk">Hedef Android SDK</string>
+    <string name="sort_target_sdk">Target Android SDK</string>
     <string name="sort_last_updated">Son Güncelleme</string>
     <string name="sort_last_used">Son Kullanım</string>
     <string name="sort_bottom_sheet_title">Sırala</string>
     <string name="search_apps_hint">Uygulamaları ara</string>
     <plurals name="search_apps_placeholder">
-        <item quantity="one">%1$d uygulamasını ara…</item>
-        <item quantity="other">%1$d uygulamaları ara…</item>
+        <item quantity="one">%1$d uygulamayı ara…</item>
+        <item quantity="other">%1$d uygulamayı ara…</item>
     </plurals>
     <plurals name="search_apps_matches">
         <item quantity="one">%d eşleşme bulundu</item>
@@ -45,8 +45,8 @@
     <string name="installed_apps_count">Yüklenmiş uygulamalar (%1$d)</string>
     <string name="recently_viewed">Son görüntülenenler</string>
     <plurals name="search_apps_empty">
-        <item quantity="one">%1$d yüklü uygulama ara</item>
-        <item quantity="other">%1$d yüklü uygulamalar ara</item>
+        <item quantity="one">%1$d yüklü uygulamayı ara</item>
+        <item quantity="other">%1$d yüklü uygulamayı ara</item>
     </plurals>
     <string name="search_apps_no_results">\"%1$s\" için sonuç yok</string>
     <string name="search_history_title">Son aramalar</string>
@@ -54,10 +54,10 @@
     <string name="filter_source_section">Kurulum Kaynağı</string>
     <string name="filter_sdk_section">Hedef SDK</string>
     <string name="filter_apk_size_section">APK Dosya Boyutu</string>
-    <string name="filter_apk_size_description">Yükleyici paketinin boyutu (.apk) yalnızca — kullanıcı verileri ve önbelleği hariçtir.</string>
+    <string name="filter_apk_size_description">Yükleyici paketinin boyutu (.apk) — kullanıcı verileri ve önbelleği hariçtir.</string>
     <string name="filter_total_size_section">Toplam Uygulama Boyutu</string>
     <string name="filter_total_size_description">Yükleyici, saklanan uygulama verileri ve önbellek dosyalarının birleşik boyutu.</string>
-    <string name="filter_total_size_locked_description">Toplam uygulama ayak izi ile filtrele. Her uygulamanın tam boyutunu ölçmek için depolama erişimi ver — yükleyiciyi değil, verilerini ve önbelleğini de dahil et.</string>
+    <string name="filter_total_size_locked_description">Toplam uygulama ayak izi ile filtrele. Her uygulamanın tam boyutunu ölçmek için depolama erişimi verin — bu, yalnızca yükleyiciyi değil, verilerini ve önbelleğini de kapsar.</string>
     <string name="filter_total_size_grant_access">Depolama erişimi ver</string>
     <string name="filter_install_time_section">Kurulum Tarihi</string>
     <string name="filter_apply">Uygula</string>
@@ -81,37 +81,37 @@
     <string name="filter_source_system">Sistem</string>
     <string name="filter_source_unknown">Bilinmiyor</string>
     <string name="filter_unused_section">Kullanılmayan Uygulamalar</string>
-    <string name="filter_unused_locked_description">Tozlanan uygulamaları bulun. Son zamanlarda açmadığınız uygulamaları görmek için kullanım erişimi verin.</string>
+    <string name="filter_unused_locked_description">Tozlanan uygulamaları bulun. Son zamanlarda açmadığınız uygulamaları görmek için kullanım verilerine erişim verin.</string>
     <string name="filter_unused_grant_access">Erişim ver</string>
     <plurals name="filter_unused_days_count">
         <item quantity="one">%d gün</item>
-        <item quantity="other">%d günler</item>
+        <item quantity="other">%d gün</item>
     </plurals>
     <plurals name="filter_unused_months_count">
         <item quantity="one">%d ay</item>
-        <item quantity="other">%d aylar</item>
+        <item quantity="other">%d ay</item>
     </plurals>
     <string name="filter_unused_year">1 yıl</string>
-    <string name="quick_filter_permission_usage_title">Kullanım erişimi gerekli</string>
-    <string name="quick_filter_permission_usage_description">Uygulamaların ne kadar yakın zamanda kullanıldığını filtrelemek için, Ayarlar\'da kullanım erişimine izin verin. Bu, uygulamanın hangi uygulamaların aktif olduğunu ve hangilerinin boşta kaldığını görmesini sağlar.</string>
-    <string name="quick_filter_permission_storage_title">Kullanım erişimi gerekli</string>
-    <string name="quick_filter_permission_storage_description">Bu filtre, her uygulamanın toplam boyutunu - yükleyici, saklanan veriler ve önbellek bir arada - ölçer. Her uygulamanın gerçekten ne kadar alan kapladığını görmek için Ayarlar\'da kullanım erişimine izin verin.</string>
+    <string name="quick_filter_permission_usage_title">Kullanım verilerine erişim gerekli</string>
+    <string name="quick_filter_permission_usage_description">Uygulamaların ne kadar yakın zamanda kullanıldığını filtrelemek için, Ayarlar\'da kullanım verilerine erişime izin verin. Bu, uygulamanın hangi uygulamaların aktif olduğunu ve hangilerinin boşta kaldığını görmesini sağlar.</string>
+    <string name="quick_filter_permission_storage_title">Kullanım verilerine erişim gerekli</string>
+    <string name="quick_filter_permission_storage_description">Bu filtre, her uygulamanın toplam boyutunu — yükleyici, saklanan veriler ve önbellek bir arada — ölçer. Her uygulamanın gerçekten ne kadar alan kapladığını görmek için Ayarlar\'da kullanım verilerine erişime izin verin.</string>
     <string name="quick_filter_permission_open_settings">Ayarları aç</string>
-    <string name="sort_permission_usage_title">Kullanım erişimine izin ver</string>
-    <string name="sort_permission_usage_description">Son Kullanım\'a göre sıralama, her uygulamayı en son ne zaman açtığınızı bilmesi gerekir. Bu sıralama seçeneğini etkinleştirmek için Ayarlar\'da kullanım erişimine izin verin.</string>
-    <string name="sort_permission_storage_title">Kullanım erişimine izin ver</string>
-    <string name="sort_permission_storage_description">Toplam Boyut\'a göre sıralama, her uygulamanın toplam ayak izini - yükleyici, saklanan veriler ve önbellek bir arada - ölçer. Bu sıralama seçeneğini etkinleştirmek için Ayarlar\'da kullanım erişimine izin verin.</string>
+    <string name="sort_permission_usage_title">Kullanım verilerine erişime izin ver</string>
+    <string name="sort_permission_usage_description">Son Kullanım\'a göre sıralama, her uygulamayı en son ne zaman açtığınızı bilmesi gerekir. Bu sıralama seçeneğini etkinleştirmek için Ayarlar\'da kullanım verilerine erişime izin verin.</string>
+    <string name="sort_permission_storage_title">Kullanım verilerine erişime izin ver</string>
+    <string name="sort_permission_storage_description">Toplam Boyut\'a göre sıralama, her uygulamanın toplam ayak izini — yükleyici, saklanan veriler ve önbellek bir arada — ölçer. Bu sıralama seçeneğini etkinleştirmek için Ayarlar\'da kullanım verilerine erişime izin verin.</string>
     <string name="filter_permissions_section">İzinler</string>
     <string name="filter_permissions_count" ns0:ignore="PluralsCandidate">+%d daha fazla</string>
     <string name="filter_permissions_title">İzinlere göre filtrele</string>
     <string name="filter_permissions_quick_filters">Hızlı filtreler</string>
-    <string name="filter_permissions_match_label">Eşleş</string>
-    <string name="filter_permissions_chip_match_any">Eşleş: Herhangi</string>
-    <string name="filter_permissions_chip_match_all">Eşleş: Hepsi</string>
+    <string name="filter_permissions_match_label">Eşleşme</string>
+    <string name="filter_permissions_chip_match_any">Eşleşme: Herhangi</string>
+    <string name="filter_permissions_chip_match_all">Eşleşme: Hepsi</string>
     <string name="filter_permissions_chip_presets">Ön ayarlar</string>
     <plurals name="filter_permissions_chip_presets_count">
         <item quantity="one">%d ön ayar</item>
-        <item quantity="other">%d ön ayarları</item>
+        <item quantity="other">%d ön ayar</item>
     </plurals>
     <string name="filter_permissions_chip_show_all">Göster: Hepsi</string>
     <string name="filter_permissions_chip_show_selected">Göster: Seçilen</string>

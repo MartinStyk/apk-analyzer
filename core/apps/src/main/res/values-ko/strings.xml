@@ -2,34 +2,34 @@
 <resources>
     <string-array name="android_versions">
         <item>Android 1</item>
-        <item>Android 1.1</item>
-        <item>Android 1.5</item>
-        <item>Android 1.6</item>
-        <item>Android 2.0</item>
-        <item>Android 2.0.1</item>
-        <item>Android 2.1</item>
-        <item>Android 2.2</item>
-        <item>Android 2.3</item>
-        <item>Android 2.3.3</item>
-        <item>Android 3.0</item>
-        <item>Android 3.1</item>
-        <item>Android 3.2</item>
-        <item>Android 4.0</item>
-        <item>Android 4.0.3</item>
-        <item>Android 4.1</item>
-        <item>Android 4.2</item>
-        <item>Android 4.3</item>
-        <item>Android 4.4</item>
-        <item>Android 4.4W</item>
-        <item>Android 5.0</item>
-        <item>Android 5.1.1</item>
-        <item>Android 6.0</item>
-        <item>Android 7.0</item>
-        <item>Android 7.1.2</item>
-        <item>Android 8.0</item>
-        <item>Android 8.1</item>
-        <item>Android 9</item>
-        <item>Android 10</item>
+        <item>Android 1.1 Petit Four</item>
+        <item>Android 1.5 컵케이크</item>
+        <item>Android 1.6 도넛</item>
+        <item>Android 2.0 에클레어</item>
+        <item>Android 2.0.1 에클레어</item>
+        <item>Android 2.1 에클레어</item>
+        <item>Android 2.2 프로요</item>
+        <item>Android 2.3 진저브레드</item>
+        <item>Android 2.3.3 진저브레드</item>
+        <item>Android 3.0 허니콤</item>
+        <item>Android 3.1 허니콤</item>
+        <item>Android 3.2 허니콤</item>
+        <item>Android 4.0 아이스크림 샌드위치</item>
+        <item>Android 4.0.3 아이스크림 샌드위치</item>
+        <item>Android 4.1 젤리빈</item>
+        <item>Android 4.2 젤리빈</item>
+        <item>Android 4.3 젤리빈</item>
+        <item>Android 4.4 킷캣</item>
+        <item>Android 4.4W 킷캣</item>
+        <item>Android 5.0 롤리팝</item>
+        <item>Android 5.1.1 롤리팝</item>
+        <item>Android 6.0 마시멜로</item>
+        <item>Android 7.0 누가</item>
+        <item>Android 7.1.2 누가</item>
+        <item>Android 8.0 오레오</item>
+        <item>Android 8.1 오레오</item>
+        <item>Android 9 파이</item>
+        <item>Android 10 Q</item>
         <item>Android 11</item>
         <item>Android 12</item>
         <item>Android 12L</item>

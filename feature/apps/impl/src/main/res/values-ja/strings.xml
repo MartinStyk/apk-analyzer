@@ -11,7 +11,7 @@
     <string name="sort_size">APKファイルサイズ</string>
     <string name="sort_total_size">アプリの合計サイズ</string>
     <string name="sort_install_date">インストール日</string>
-    <string name="sort_target_sdk">ターゲットAndroid SDK</string>
+    <string name="sort_target_sdk">Target Android SDK</string>
     <string name="sort_last_updated">最終更新</string>
     <string name="sort_last_used">最終使用</string>
     <string name="sort_bottom_sheet_title">並べ替え</string>
@@ -24,7 +24,7 @@
     </plurals>
     <string name="filter">フィルター</string>
     <string name="preinstalled">プリインストール</string>
-    <string name="never">決して</string>
+    <string name="never">未使用</string>
     <string name="quick_filter_large_total">大</string>
     <string name="quick_filter_recently_used">最近使用した</string>
     <string name="quick_filter_unused">未使用</string>
@@ -36,7 +36,7 @@
     <string name="quick_filter_source_sheet_title">ソース</string>
     <string name="quick_filter_selection_more" ns0:ignore="PluralsCandidate">%1$s +%2$d</string>
     <string name="quick_filter_activity_sheet_title">アクティビティ</string>
-    <string name="quick_filter_activity_all">任意のアクティビティ</string>
+    <string name="quick_filter_activity_all">すべてのアクティビティ</string>
     <string name="apps_empty_filtered">アプリが見つかりません</string>
     <string name="apps_clear_filters">フィルターをクリア</string>
     <string name="installed_apps">インストール済みアプリ</string>
@@ -45,13 +45,13 @@
     <plurals name="search_apps_empty">
         <item quantity="other">%1$d インストール済みアプリを検索</item>
     </plurals>
-    <string name="search_apps_no_results">"%1$s" の結果はありません</string>
+    <string name="search_apps_no_results">「%1$s」の結果はありません</string>
     <string name="search_history_title">最近の検索</string>
     <string name="search_history_clear">クリア</string>
     <string name="filter_source_section">インストール元</string>
     <string name="filter_sdk_section">ターゲットSDK</string>
     <string name="filter_apk_size_section">APKファイルサイズ</string>
-    <string name="filter_apk_size_description">インストーラーパッケージ (.apk) のサイズのみ — ユーザーデータとキャッシュは除外されます。</string>
+    <string name="filter_apk_size_description">インストーラーパッケージ (.apk) のサイズ — ユーザーデータとキャッシュは除外されます。</string>
     <string name="filter_total_size_section">アプリの合計サイズ</string>
     <string name="filter_total_size_description">インストーラー、保存されたアプリデータ、およびキャッシュファイルの合計サイズ。</string>
     <string name="filter_total_size_locked_description">アプリのフットプリントの合計でフィルタリングします。各アプリの完全なサイズを測定するためにストレージアクセスを許可してください — インストーラーだけでなく、そのデータとキャッシュも含まれます。</string>
@@ -78,7 +78,7 @@
     <string name="filter_source_system">システム</string>
     <string name="filter_source_unknown">不明</string>
     <string name="filter_unused_section">未使用のアプリ</string>
-    <string name="filter_unused_locked_description">ほこりをかぶっているアプリを見つけます。最近開いていないアプリを確認するには、使用アクセスを許可してください。</string>
+    <string name="filter_unused_locked_description">ほこりをかぶっているアプリを見つけます。最近開いていないアプリを確認するには、使用状況データへのアクセスを許可してください。</string>
     <string name="filter_unused_grant_access">アクセスを許可</string>
     <plurals name="filter_unused_days_count">
         <item quantity="other">%d 日</item>
@@ -87,15 +87,15 @@
         <item quantity="other">%d ヶ月</item>
     </plurals>
     <string name="filter_unused_year">1 年</string>
-    <string name="quick_filter_permission_usage_title">使用アクセスが必要</string>
-    <string name="quick_filter_permission_usage_description">アプリが最近どのくらい使用されたかでフィルタリングするには、設定で使用アクセスを許可してください。これにより、アクティブなアプリとアイドル状態のアプリを確認できます。</string>
-    <string name="quick_filter_permission_storage_title">使用アクセスが必要</string>
-    <string name="quick_filter_permission_storage_description">このフィルターは、各アプリのフルサイズ（インストーラー、保存データ、キャッシュを含む）を測定します。各アプリが実際にどれだけのスペースを占めているかを確認するには、設定で使用アクセスを許可してください。</string>
+    <string name="quick_filter_permission_usage_title">使用状況データへのアクセスが必要</string>
+    <string name="quick_filter_permission_usage_description">アプリが最近どのくらい使用されたかでフィルタリングするには、設定で使用状況データへのアクセスを許可してください。これにより、アクティブなアプリとアイドル状態のアプリを確認できます。</string>
+    <string name="quick_filter_permission_storage_title">使用状況データへのアクセスが必要</string>
+    <string name="quick_filter_permission_storage_description">このフィルターは、各アプリのフルサイズ（インストーラー、保存データ、キャッシュを含む）を測定します。各アプリが実際にどれだけのスペースを占めているかを確認するには、設定で使用状況データへのアクセスを許可してください。</string>
     <string name="quick_filter_permission_open_settings">設定を開く</string>
-    <string name="sort_permission_usage_title">使用アクセスを許可</string>
-    <string name="sort_permission_usage_description">最終使用によるソートは、各アプリを最後に開いた時期を知る必要があります。このソートオプションを有効にするには、設定で使用アクセスを許可してください。</string>
-    <string name="sort_permission_storage_title">使用アクセスを許可</string>
-    <string name="sort_permission_storage_description">総サイズによるソートは、各アプリの完全なフットプリント — インストーラー、保存データ、キャッシュを合わせたものを測定します。このソートオプションを有効にするには、設定で使用アクセスを許可してください。</string>
+    <string name="sort_permission_usage_title">使用状況データへのアクセスを許可</string>
+    <string name="sort_permission_usage_description">最終使用によるソートは、各アプリを最後に開いた時期を知る必要があります。このソートオプションを有効にするには、設定で使用状況データへのアクセスを許可してください。</string>
+    <string name="sort_permission_storage_title">使用状況データへのアクセスを許可</string>
+    <string name="sort_permission_storage_description">総サイズによるソートは、各アプリの完全なフットプリント — インストーラー、保存データ、キャッシュを合わせたものを測定します。このソートオプションを有効にするには、設定で使用状況データへのアクセスを許可してください。</string>
     <string name="filter_permissions_section">権限</string>
     <string name="filter_permissions_count" ns0:ignore="PluralsCandidate">+%d もっと</string>
     <string name="filter_permissions_title">権限でフィルタ</string>
@@ -129,7 +129,7 @@
     <string name="filter_permissions_preset_contacts">連絡先</string>
     <string name="filter_permissions_preset_sms">SMS</string>
     <string name="filter_permissions_preset_storage">ストレージ</string>
-    <string name="filter_permissions_empty_search_title">"%1$s" の結果はありません</string>
+    <string name="filter_permissions_empty_search_title">「%1$s」の結果はありません</string>
     <string name="filter_permissions_empty_search_subtitle">別の権限名または識別子を試してください。</string>
     <string name="filter_permissions_empty_selected_title">選択された権限はありません</string>
     <string name="filter_permissions_empty_selected_subtitle">完全なリストに戻り、フィルタリングする権限を選択してください。</string>

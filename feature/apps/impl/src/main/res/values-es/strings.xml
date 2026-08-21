@@ -11,14 +11,14 @@
     <string name="sort_size">Tamaño del archivo APK</string>
     <string name="sort_total_size">Tamaño total de la aplicación</string>
     <string name="sort_install_date">Fecha de instalación</string>
-    <string name="sort_target_sdk">SDK de Android objetivo</string>
-    <string name="sort_last_updated">Última Actualización</string>
-    <string name="sort_last_used">Último Uso</string>
+    <string name="sort_target_sdk">Target Android SDK</string>
+    <string name="sort_last_updated">Última actualización</string>
+    <string name="sort_last_used">Último uso</string>
     <string name="sort_bottom_sheet_title">Ordenar por</string>
     <string name="search_apps_hint">Buscar aplicaciones</string>
     <plurals name="search_apps_placeholder">
-        <item quantity="one">Buscar la aplicación %1$d…</item>
-        <item quantity="other">Buscar aplicaciones %1$d…</item>
+        <item quantity="one">Buscar en %1$d aplicación…</item>
+        <item quantity="other">Buscar en %1$d aplicaciones…</item>
     </plurals>
     <plurals name="search_apps_matches">
         <item quantity="one">Se encontró %d coincidencia</item>
@@ -28,7 +28,7 @@
     <string name="preinstalled">Preinstalado</string>
     <string name="never">Nunca</string>
     <string name="quick_filter_large_total">Grande</string>
-    <string name="quick_filter_recently_used">Usado Recientemente</string>
+    <string name="quick_filter_recently_used">Usado recientemente</string>
     <string name="quick_filter_unused">No utilizado</string>
     <string name="quick_filter_system">Sistema</string>
     <string name="quick_filter_google_play">Google Play</string>
@@ -45,14 +45,14 @@
     <string name="installed_apps_count">Aplicaciones instaladas (%1$d)</string>
     <string name="recently_viewed">Visto recientemente</string>
     <plurals name="search_apps_empty">
-        <item quantity="one">Buscar aplicación instalada %1$d</item>
-        <item quantity="other">Buscar aplicaciones instaladas %1$d</item>
+        <item quantity="one">Buscar en %1$d aplicación instalada</item>
+        <item quantity="other">Buscar en %1$d aplicaciones instaladas</item>
     </plurals>
     <string name="search_apps_no_results">No hay resultados para \"%1$s\"</string>
     <string name="search_history_title">Búsquedas recientes</string>
     <string name="search_history_clear">Borrar</string>
     <string name="filter_source_section">Fuente de instalación</string>
-    <string name="filter_sdk_section">SDK objetivo</string>
+    <string name="filter_sdk_section">Target SDK</string>
     <string name="filter_apk_size_section">Tamaño del archivo APK</string>
     <string name="filter_apk_size_description">Tamaño del paquete del instalador (.apk) solamente — excluye datos de usuario y caché.</string>
     <string name="filter_total_size_section">Tamaño total de la aplicación</string>
@@ -81,7 +81,7 @@
     <string name="filter_source_system">Sistema</string>
     <string name="filter_source_unknown">Desconocido</string>
     <string name="filter_unused_section">Aplicaciones no utilizadas</string>
-    <string name="filter_unused_locked_description">Encuentra aplicaciones que están acumulando polvo. Concede acceso de uso para ver qué aplicaciones no has abierto recientemente.</string>
+    <string name="filter_unused_locked_description">Encuentra aplicaciones que están acumulando polvo. Concede acceso a datos de uso para ver qué aplicaciones no has abierto recientemente.</string>
     <string name="filter_unused_grant_access">Conceder acceso</string>
     <plurals name="filter_unused_days_count">
         <item quantity="one">%d día</item>
@@ -92,22 +92,22 @@
         <item quantity="other">%d meses</item>
     </plurals>
     <string name="filter_unused_year">1 año</string>
-    <string name="quick_filter_permission_usage_title">Se necesita acceso a uso</string>
-    <string name="quick_filter_permission_usage_description">Para filtrar por cuán recientemente se usaron las aplicaciones, permite el acceso a uso en Configuración. Esto permite que la aplicación vea qué aplicaciones están activas y cuáles han estado inactivas.</string>
-    <string name="quick_filter_permission_storage_title">Se necesita acceso a uso</string>
-    <string name="quick_filter_permission_storage_description">Este filtro mide el tamaño total de cada aplicación: instalador, datos almacenados y caché combinados. Concede acceso a uso en Configuración para ver cuánto espacio ocupa realmente cada aplicación.</string>
+    <string name="quick_filter_permission_usage_title">Se necesita acceso a datos de uso</string>
+    <string name="quick_filter_permission_usage_description">Para filtrar por cuán recientemente se usaron las aplicaciones, permite el acceso a datos de uso en Configuración. Esto permite que la aplicación vea qué aplicaciones están activas y cuáles han estado inactivas.</string>
+    <string name="quick_filter_permission_storage_title">Se necesita acceso a datos de uso</string>
+    <string name="quick_filter_permission_storage_description">Este filtro mide el tamaño total de cada aplicación: instalador, datos almacenados y caché combinados. Concede acceso a datos de uso en Configuración para ver cuánto espacio ocupa realmente cada aplicación.</string>
     <string name="quick_filter_permission_open_settings">Abrir configuración</string>
-    <string name="sort_permission_usage_title">Permitir acceso a uso</string>
-    <string name="sort_permission_usage_description">Ordenar por Último Usado necesita saber cuándo abriste cada aplicación por última vez. Concede acceso a uso en Configuración para habilitar esta opción de ordenación.</string>
-    <string name="sort_permission_storage_title">Permitir acceso a uso</string>
-    <string name="sort_permission_storage_description">Ordenar por Tamaño Total mide la huella total de cada aplicación: instalador, datos almacenados y caché combinados. Concede acceso a uso en Configuración para habilitar esta opción de ordenación.</string>
+    <string name="sort_permission_usage_title">Permitir acceso a datos de uso</string>
+    <string name="sort_permission_usage_description">Ordenar por Último Usado necesita saber cuándo abriste cada aplicación por última vez. Concede acceso a datos de uso en Configuración para habilitar esta opción de ordenación.</string>
+    <string name="sort_permission_storage_title">Permitir acceso a datos de uso</string>
+    <string name="sort_permission_storage_description">Ordenar por Tamaño Total mide la huella total de cada aplicación: instalador, datos almacenados y caché combinados. Concede acceso a datos de uso en Configuración para habilitar esta opción de ordenación.</string>
     <string name="filter_permissions_section">Permisos</string>
     <string name="filter_permissions_count" ns0:ignore="PluralsCandidate">+%d más</string>
-    <string name="filter_permissions_title">Filtrar por Permiso</string>
+    <string name="filter_permissions_title">Filtrar por permiso</string>
     <string name="filter_permissions_quick_filters">Filtros rápidos</string>
-    <string name="filter_permissions_match_label">Coincidir</string>
-    <string name="filter_permissions_chip_match_any">Coincidir: Cualquiera</string>
-    <string name="filter_permissions_chip_match_all">Coincidir: Todos</string>
+    <string name="filter_permissions_match_label">Coincidencia</string>
+    <string name="filter_permissions_chip_match_any">Coincidencia: Al menos una</string>
+    <string name="filter_permissions_chip_match_all">Coincidencia: Todas</string>
     <string name="filter_permissions_chip_presets">Preajustes</string>
     <plurals name="filter_permissions_chip_presets_count">
         <item quantity="one">%d preajuste</item>

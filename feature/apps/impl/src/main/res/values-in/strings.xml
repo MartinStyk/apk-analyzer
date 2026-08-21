@@ -8,16 +8,16 @@
     <string name="content_description_delete_search">Hapus pencarian: %1$s</string>
     <string name="filter_date_clear">Hapus rentang tanggal</string>
     <string name="sort_name">Nama</string>
-    <string name="sort_size">Ukuran File APK</string>
-    <string name="sort_total_size">Total Ukuran Aplikasi</string>
-    <string name="sort_install_date">Tanggal Instal</string>
-    <string name="sort_target_sdk">Target SDK Android</string>
-    <string name="sort_last_updated">Terakhir Diperbarui</string>
-    <string name="sort_last_used">Terakhir Digunakan</string>
+    <string name="sort_size">Ukuran file APK</string>
+    <string name="sort_total_size">Total ukuran aplikasi</string>
+    <string name="sort_install_date">Tanggal instal</string>
+    <string name="sort_target_sdk">Target Android SDK</string>
+    <string name="sort_last_updated">Terakhir diperbarui</string>
+    <string name="sort_last_used">Terakhir digunakan</string>
     <string name="sort_bottom_sheet_title">Urutkan berdasarkan</string>
     <string name="search_apps_hint">Cari aplikasi</string>
     <plurals name="search_apps_placeholder">
-        <item quantity="other">Cari aplikasi %1$d…</item>
+        <item quantity="other">Cari %1$d aplikasi…</item>
     </plurals>
     <plurals name="search_apps_matches">
         <item quantity="other">%d kecocokan ditemukan</item>
@@ -26,13 +26,13 @@
     <string name="preinstalled">Terpasang sebelumnya</string>
     <string name="never">Tidak pernah</string>
     <string name="quick_filter_large_total">Besar</string>
-    <string name="quick_filter_recently_used">Baru Saja Digunakan</string>
+    <string name="quick_filter_recently_used">Baru saja digunakan</string>
     <string name="quick_filter_unused">Tidak terpakai</string>
     <string name="quick_filter_system">Sistem</string>
     <string name="quick_filter_google_play">Google Play</string>
-    <string name="quick_filter_sideloaded">Sideloaded</string>
-    <string name="quick_filter_recently_installed">Baru-baru ini Diinstal</string>
-    <string name="quick_filter_recently_updated">Baru-baru ini Diperbarui</string>
+    <string name="quick_filter_sideloaded">Instal manual</string>
+    <string name="quick_filter_recently_installed">Baru-baru ini diinstal</string>
+    <string name="quick_filter_recently_updated">Baru-baru ini diperbarui</string>
     <string name="quick_filter_source_sheet_title">Sumber</string>
     <string name="quick_filter_selection_more" ns0:ignore="PluralsCandidate">%1$s +%2$d</string>
     <string name="quick_filter_activity_sheet_title">Aktivitas</string>
@@ -43,20 +43,20 @@
     <string name="installed_apps_count">Aplikasi yang terpasang (%1$d)</string>
     <string name="recently_viewed">Baru saja dilihat</string>
     <plurals name="search_apps_empty">
-        <item quantity="other">Cari aplikasi yang terpasang %1$d</item>
+        <item quantity="other">Cari %1$d aplikasi yang terpasang</item>
     </plurals>
     <string name="search_apps_no_results">Tidak ada hasil untuk \"%1$s\"</string>
     <string name="search_history_title">Pencarian terbaru</string>
     <string name="search_history_clear">Bersihkan</string>
-    <string name="filter_source_section">Sumber Instalasi</string>
-    <string name="filter_sdk_section">SDK Target</string>
-    <string name="filter_apk_size_section">Ukuran File APK</string>
+    <string name="filter_source_section">Sumber instalasi</string>
+    <string name="filter_sdk_section">SDK target</string>
+    <string name="filter_apk_size_section">Ukuran file APK</string>
     <string name="filter_apk_size_description">Ukuran paket installer (.apk) saja — tidak termasuk data pengguna dan cache.</string>
-    <string name="filter_total_size_section">Total Ukuran Aplikasi</string>
+    <string name="filter_total_size_section">Total ukuran aplikasi</string>
     <string name="filter_total_size_description">Ukuran gabungan dari installer, data aplikasi yang disimpan, dan file yang dicache.</string>
     <string name="filter_total_size_locked_description">Saring berdasarkan jejak total aplikasi. Berikan akses penyimpanan untuk mengukur ukuran penuh setiap aplikasi — termasuk data dan cache-nya, bukan hanya installer.</string>
     <string name="filter_total_size_grant_access">Berikan akses penyimpanan</string>
-    <string name="filter_install_time_section">Tanggal Instal</string>
+    <string name="filter_install_time_section">Tanggal instal</string>
     <string name="filter_apply">Terapkan</string>
     <string name="filter_reset">Atur ulang</string>
     <string name="filter_unsaved_title">Filter yang belum disimpan</string>
@@ -76,7 +76,7 @@
     <string name="filter_source_sideloaded">Diinstal dari file</string>
     <string name="filter_source_local_install">Diinstal melalui komputer</string>
     <string name="filter_source_system">Sistem</string>
-    <string name="filter_source_unknown">Tidak Diketahui</string>
+    <string name="filter_source_unknown">Tidak diketahui</string>
     <string name="filter_unused_section">Aplikasi yang tidak terpakai</string>
     <string name="filter_unused_locked_description">Temukan aplikasi yang tidak terpakai. Berikan akses penggunaan untuk melihat aplikasi mana yang belum Anda buka baru-baru ini.</string>
     <string name="filter_unused_grant_access">Berikan akses</string>
@@ -98,7 +98,7 @@
     <string name="sort_permission_storage_description">Pengurutan berdasarkan Ukuran Total mengukur jejak penuh setiap aplikasi — penginstal, data yang disimpan, dan cache digabungkan. Berikan akses penggunaan di Pengaturan untuk mengaktifkan opsi urut ini.</string>
     <string name="filter_permissions_section">Izin</string>
     <string name="filter_permissions_count" ns0:ignore="PluralsCandidate">+%d lebih</string>
-    <string name="filter_permissions_title">Saring berdasarkan Izin</string>
+    <string name="filter_permissions_title">Saring berdasarkan izin</string>
     <string name="filter_permissions_quick_filters">Filter cepat</string>
     <string name="filter_permissions_match_label">Cocok</string>
     <string name="filter_permissions_chip_match_any">Cocok: Apa saja</string>

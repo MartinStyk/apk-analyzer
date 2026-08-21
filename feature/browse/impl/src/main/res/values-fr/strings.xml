@@ -3,8 +3,8 @@
     <string name="browse_title">Parcourir</string>
     <string name="browse_subtitle_loading">Analyse des applications installées…</string>
     <plurals name="browse_subtitle">
-        <item quantity="one">Explorer l\'application %1$d installée sur cet appareil</item>
-        <item quantity="other">Explorer les applications %1$d installées sur cet appareil</item>
+        <item quantity="one">Explorer %1$d application installée sur cet appareil</item>
+        <item quantity="other">Explorer %1$d applications installées sur cet appareil</item>
     </plurals>
     <string name="browse_dimension_permission_title">Permissions</string>
     <string name="browse_dimension_permission_subtitle">Voir quelles applications utilisent une permission donnée</string>
@@ -24,7 +24,7 @@
         <item quantity="one">%1$d option</item>
         <item quantity="other">%1$d options</item>
     </plurals>
-    <string name="browse_sdk_unknown">API niveau %1$s</string>
+    <string name="browse_sdk_unknown">Niveau d\'API %1$s</string>
     <string name="browse_api_level">API %1$s</string>
     <string name="browse_source_google_play">Google Play</string>
     <string name="browse_source_samsung_galaxy_store">Samsung Galaxy Store</string>
@@ -58,9 +58,9 @@
     <string name="browse_certificate_hash_sha256">SHA-256</string>
     <string name="browse_certificate_hash_sha1">SHA-1</string>
     <string name="browse_certificate_hash_md5">MD5</string>
-    <string name="browse_protection_level_dangerous">Dangereux</string>
+    <string name="browse_protection_level_dangerous">Dangerous</string>
     <string name="browse_protection_level_signature">Signature</string>
-    <string name="browse_protection_level_internal">Interne</string>
+    <string name="browse_protection_level_internal">Internal</string>
     <string name="browse_protection_level_normal">Normal</string>
     <string name="browse_protection_level_dangerous_explanation">Nécessite votre approbation explicite avant qu\'une application puisse l\'utiliser.</string>
     <string name="browse_protection_level_signature_explanation">Seules les applications signées avec la même clé que l\'application qui l\'a déclarée peuvent détenir cela.</string>
@@ -83,8 +83,8 @@
     </plurals>
     <string name="browse_options_empty_query">Aucune option ne correspond à “%1$s”</string>
     <plurals name="browse_apps_count">
-        <item quantity="one">Application %1$d</item>
-        <item quantity="other">Applications %1$d</item>
+        <item quantity="one">%1$d application</item>
+        <item quantity="other">%1$d applications</item>
     </plurals>
     <plurals name="browse_apps_filter_hint">
         <item quantity="one">Filtrer l\'application %1$d</item>

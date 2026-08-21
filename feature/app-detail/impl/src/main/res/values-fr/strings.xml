@@ -9,9 +9,9 @@
     <string name="app_detail_overview_section">Aperçu</string>
     <string name="app_detail_actions_section">Actions rapides</string>
     <string name="app_detail_version">Version</string>
-    <string name="app_detail_apk_size">APK Taille</string>
+    <string name="app_detail_apk_size">Taille de l\'APK</string>
     <string name="app_detail_total_size">Taille totale</string>
-    <string name="app_detail_target_sdk">Cible SDK</string>
+    <string name="app_detail_target_sdk">Target SDK</string>
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_updated">Mis à jour</string>
@@ -32,8 +32,8 @@
         <item quantity="other">+%1$d plus de détails dans les informations générales, y compris les paramètres de sécurité réseau</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_split_apks">
-        <item quantity="one">+%1$d plus de détails dans les informations générales, y compris le APKs divisé</item>
-        <item quantity="other">+%1$d plus de détails dans les informations générales, y compris le APKs divisé</item>
+        <item quantity="one">+%1$d plus de détails dans les informations générales, y compris les APK fractionnés</item>
+        <item quantity="other">+%1$d plus de détails dans les informations générales, y compris les APK fractionnés</item>
     </plurals>
     <string name="app_detail_yes">Oui</string>
     <string name="app_detail_no">Non</string>
@@ -70,7 +70,7 @@
     <string name="app_detail_insight_calendar">Peut accéder ou modifier les événements du calendrier</string>
     <string name="app_detail_apk_saved">%1$s enregistré</string>
     <string name="app_detail_split_apk_saved_title">Base APK enregistrée</string>
-    <string name="app_detail_split_apk_saved_description">%1$s a été enregistré. Cette application utilise APKs fractionné, donc le fichier ne contient pas l\'application installée complète. Vous pouvez l\'inspecter, mais l\'installer seul peut échouer.</string>
+    <string name="app_detail_split_apk_saved_description">%1$s a été enregistré. Cette application utilise des APK fractionnés, donc le fichier ne contient pas l\'application installée complète. Vous pouvez l\'inspecter, mais l\'installer seul peut échouer.</string>
     <string name="app_detail_split_apk_saved_close">Fermer</string>
     <string name="app_detail_icon_saved">%1$s enregistré</string>
     <string name="app_detail_apk_save_failed">Le APK n\'a pas pu être enregistré</string>
@@ -98,9 +98,9 @@
         <item quantity="other">%1$d a accordé des permissions</item>
     </plurals>
     <string name="app_detail_permissions_section">Permissions</string>
-    <string name="app_detail_total_permissions">Total Permissions</string>
-    <string name="app_detail_dangerous_permissions">Dangerous Permissions</string>
-    <string name="app_detail_view_permissions">Voir Permissions</string>
+    <string name="app_detail_total_permissions">Permissions totales</string>
+    <string name="app_detail_dangerous_permissions">Permissions dangereuses</string>
+    <string name="app_detail_view_permissions">Voir les permissions</string>
     <string name="app_detail_permissions_none">Aucune permission demandée</string>
     <string name="app_detail_permissions_no_dangerous">Aucune permission sensible demandée</string>
     <string name="app_detail_permissions_none_granted">Aucune permission sensible accordée</string>
@@ -182,7 +182,7 @@
     <string name="certificates_empty">Aucun certificat de signature trouvé</string>
     <string name="certificates_copied">Copié dans le presse-papiers</string>
     <string name="certificates_card_position">%1$s (%2$d de %3$d)</string>
-    <string name="certificates_signer_position">Signer %1$d de %2$d</string>
+    <string name="certificates_signer_position">Signataire %1$d de %2$d</string>
     <string name="certificates_current_certificate">Certificat de signature actuel</string>
     <string name="certificates_current_certificates">Certificats de signature actuels</string>
     <string name="certificates_history">Historique des signatures</string>
@@ -249,13 +249,13 @@
     <string name="general_info_copied">Copié dans le presse-papiers</string>
     <string name="general_info_section_identification">Identification</string>
     <string name="general_info_section_versioning">Versionnage</string>
-    <string name="general_info_section_api_targets">API Cibles</string>
+    <string name="general_info_section_api_targets">Cibles API</string>
     <string name="general_info_section_security">Paramètres de sécurité</string>
     <string name="general_info_section_installation">Installation &amp; Source</string>
     <string name="general_info_section_storage">Stockage &amp; Chemins</string>
     <string name="general_info_section_native_libraries">Bibliothèques natives</string>
     <string name="general_info_application_name">Nom de l\'application</string>
-    <string name="general_info_package_name">Package Nom</string>
+    <string name="general_info_package_name">Nom du package</string>
     <string name="general_info_process_name">Nom du processus</string>
     <string name="general_info_uid">UID</string>
     <string name="general_info_shared_user_id">Identité partagée</string>
@@ -263,7 +263,7 @@
     <string name="general_info_version_name">Nom de la version</string>
     <string name="general_info_version_code">Code de version</string>
     <string name="general_info_min_sdk">Min SDK</string>
-    <string name="general_info_target_sdk">Cible SDK</string>
+    <string name="general_info_target_sdk">Target SDK</string>
     <string name="general_info_debug_access">Accès de débogage</string>
     <string name="general_info_app_data_backup">Sauvegarde des données de l\'application</string>
     <string name="general_info_unencrypted_traffic">Trafic non chiffré par défaut</string>
@@ -285,20 +285,20 @@
     <string name="general_info_install_source_local_install">Installé à partir d\'un ordinateur connecté</string>
     <string name="general_info_install_source_system">Système</string>
     <string name="general_info_install_source_unknown">Inconnu</string>
-    <string name="general_info_installer_package">Installer Package</string>
+    <string name="general_info_installer_package">Package d\'installation</string>
     <string name="general_info_install_initiator">Initiateur d\'installation</string>
-    <string name="general_info_install_originator">APK Origine Package</string>
+    <string name="general_info_install_originator">Package d\'origine de l\'APK</string>
     <string name="general_info_first_installed">Première installation</string>
     <string name="general_info_last_updated">Dernière mise à jour</string>
     <string name="general_info_last_used">Dernière utilisation</string>
-    <string name="general_info_apk_directory">APK Répertoire</string>
+    <string name="general_info_apk_directory">Répertoire de l\'APK</string>
     <string name="general_info_data_directory">Répertoire de données</string>
     <string name="general_info_install_location">Emplacement d\'installation</string>
-    <string name="general_info_apk_size">APK Taille</string>
-    <string name="general_info_split_apks">Fractionner APKs</string>
+    <string name="general_info_apk_size">Taille de l\'APK</string>
+    <string name="general_info_split_apks">APK fractionnés</string>
     <plurals name="general_info_split_apks_value">
-        <item quantity="one">Installé en tant que %1$d fraction APK</item>
-        <item quantity="other">Installé en tant que %1$d fraction APKs</item>
+        <item quantity="one">Installé sous forme de %1$d APK fractionné</item>
+        <item quantity="other">Installé sous forme de %1$d APK fractionnés</item>
     </plurals>
     <string name="general_info_total_size">Taille totale</string>
     <string name="general_info_native_library_abis">Architectures CPU</string>
@@ -310,7 +310,7 @@
         <item quantity="other">%1$d fichiers</item>
     </plurals>
     <string name="general_info_rationale_application_name">L\'étiquette visible par l\'utilisateur de l\'application, telle qu\'affichée sur l\'écran d\'accueil et dans le tiroir d\'applications.</string>
-    <string name="general_info_rationale_package_name">L\'identifiant unique pour cette application sur l\'appareil. Aucune deux applications ne peut partager le même nom de package.</string>
+    <string name="general_info_rationale_package_name">L\'identifiant unique pour cette application sur l\'appareil. Deux applications ne peuvent pas partager le même nom de package.</string>
     <string name="general_info_rationale_process_name">Le nom du processus du système d\'exploitation dans lequel l\'application s\'exécute. Par défaut, il correspond au nom du package.</string>
     <string name="general_info_rationale_uid">L\'identifiant unique attribué à cette application par le système Android. Il détermine l\'accès de l\'application aux ressources système et aux permissions de fichiers.</string>
     <string name="general_info_rationale_shared_user_id">Cette application déclare qu\'elle s\'exécute sous une identité partagée avec d\'autres applications signées par la même clé. Les applications partageant cette identité peuvent accéder aux données et permissions des autres comme si elles étaient une seule application.</string>
@@ -366,11 +366,11 @@
     <string name="permissions_section_header">%1$s · %2$d</string>
     <string name="permissions_granted">Accordé</string>
     <string name="permissions_not_granted">Non accordé</string>
-    <string name="permissions_level_dangerous">Dangereux</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
     <string name="permissions_level_dangerous_explanation">Nécessite votre approbation explicite avant que l\'application puisse l\'utiliser.</string>
     <string name="permissions_level_signature">Signature</string>
     <string name="permissions_level_signature_explanation">Seules les applications signées avec la même clé peuvent détenir celles-ci.</string>
-    <string name="permissions_level_internal">Interne</string>
+    <string name="permissions_level_internal">Internal</string>
     <string name="permissions_level_internal_explanation">Réservé au système et accordé par des règles internes plutôt que par vous.</string>
     <string name="permissions_level_normal">Normal</string>
     <string name="permissions_level_normal_explanation">Généralement accordé automatiquement lors de l\'installation. Risque faible en soi.</string>
@@ -557,7 +557,7 @@
     <string name="permissions_detail_full_name">Nom complet</string>
     <string name="permissions_detail_grant_state">État de la concession</string>
     <string name="permissions_detail_protection_level">Niveau de protection</string>
-    <string name="permissions_detail_group">Permission groupe</string>
+    <string name="permissions_detail_group">Groupe de permission</string>
     <string name="permissions_detail_declared_by">Déclaré par</string>
     <string name="permissions_defined_by">Défini par %1$s.</string>
     <string name="permissions_detail_section_status">Statut</string>
@@ -605,7 +605,7 @@
     <string name="permission_description_internet">Ouvrir des connexions réseau et envoyer ou recevoir des données via Internet.</string>
     <string name="permission_description_network_state">Voir si l\'appareil est en ligne et quel type de connexion il utilise.</string>
     <string name="permission_description_wifi_state">Voir les réseaux Wi-Fi que l\'appareil connaît et auxquels il est connecté.</string>
-    <string name="permission_description_nfc">Échanger des données avec des étiquettes et des __TERMn__ NFC tenues contre l\'appareil.</string>
+    <string name="permission_description_nfc">Échanger des données avec des étiquettes et des terminaux NFC tenus contre l\'appareil.</string>
     <string name="permission_description_vibrate">Faire vibrer l\'appareil.</string>
     <string name="permission_description_wake_lock">Maintenir l\'appareil éveillé pour que le travail continue avec l\'écran éteint.</string>
     <string name="permission_description_boot_completed">Commencer à fonctionner dès que l\'appareil a fini de démarrer.</string>
@@ -718,19 +718,19 @@
     <string name="requirement_backup">Sauvegarde système</string>
     <string name="requirement_sip_voip">Appel Internet</string>
     <string name="requirement_connection_service">Intégration de l\'application d\'appel</string>
-    <string name="splitapks_title">Fractionner APKs</string>
+    <string name="splitapks_title">APK fractionnés</string>
     <plurals name="splitapks_heading">
-        <item quantity="one">%1$d fraction APK installé</item>
-        <item quantity="other">%1$d fraction APKs installé</item>
+        <item quantity="one">%1$d APK fractionné installé</item>
+        <item quantity="other">%1$d APK fractionnés installés</item>
     </plurals>
-    <string name="splitapks_explanation">Cette application a été installée en tant que APK de base plus ces fractions APKs supplémentaires, un format de livraison utilisé par Google Play pour envoyer uniquement le code et les ressources dont votre appareil a besoin.</string>
+    <string name="splitapks_explanation">Cette application a été installée en tant qu\'APK de base plus ces APK fractionnés supplémentaires, un format de livraison utilisé par Google Play pour envoyer uniquement le code et les ressources dont votre appareil a besoin.</string>
     <plurals name="splitapks_search_hint">
-        <item quantity="one">Rechercher %1$d fraction</item>
-        <item quantity="other">Rechercher %1$d fractions</item>
+        <item quantity="one">Rechercher %1$d APK fractionné</item>
+        <item quantity="other">Rechercher %1$d APK fractionnés</item>
     </plurals>
-    <string name="splitapks_error">Échec du chargement de la fraction APKs</string>
-    <string name="splitapks_empty">Cette application n\'a pas de fraction APKs installée.</string>
-    <string name="splitapks_empty_query">Aucune fraction APK ne correspond à \"%1$s\".</string>
+    <string name="splitapks_error">Échec du chargement des APK fractionnés</string>
+    <string name="splitapks_empty">Cette application n\'a pas d\'APK fractionnés installés.</string>
+    <string name="splitapks_empty_query">Aucun APK fractionné ne correspond à \"%1$s\".</string>
     <string name="splitapks_clear_search">Effacer la recherche</string>
     <string name="splitapks_kind_feature">Module de fonctionnalité</string>
     <string name="splitapks_kind_abi">Architecture CPU</string>

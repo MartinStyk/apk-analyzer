@@ -9,41 +9,41 @@
     <string name="app_detail_overview_section">Přehled</string>
     <string name="app_detail_actions_section">Rychlé akce</string>
     <string name="app_detail_version">Verze</string>
-    <string name="app_detail_apk_size">APK Velikost</string>
+    <string name="app_detail_apk_size">Velikost APK</string>
     <string name="app_detail_total_size">Celková velikost</string>
-    <string name="app_detail_target_sdk">Cílový SDK</string>
+    <string name="app_detail_target_sdk">Target SDK</string>
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_updated">Aktualizováno</string>
     <plurals name="app_detail_overview_more_details">
-        <item quantity="one">+%1$d více informací v Obecných informacích</item>
-        <item quantity="few">+%1$d více podrobností v Obecných informacích</item>
-        <item quantity="many">+%1$d více podrobností v Obecných informacích</item>
-        <item quantity="other">+%1$d více podrobností v Obecných informacích</item>
+        <item quantity="one">+%1$d podrobnost v Obecných informacích</item>
+        <item quantity="few">+%1$d podrobnosti v Obecných informacích</item>
+        <item quantity="many">+%1$d podrobností v Obecných informacích</item>
+        <item quantity="other">+%1$d podrobností v Obecných informacích</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_date">
-        <item quantity="one">+%1$d více informací v Obecných informacích, včetně data instalace</item>
-        <item quantity="few">+%1$d více podrobností v Obecných informacích, včetně data instalace</item>
-        <item quantity="many">+%1$d více podrobností v Obecných informacích, včetně data instalace</item>
-        <item quantity="other">+%1$d více podrobností v Obecných informacích, včetně data instalace</item>
+        <item quantity="one">+%1$d podrobnost v Obecných informacích, včetně data instalace</item>
+        <item quantity="few">+%1$d podrobnosti v Obecných informacích, včetně data instalace</item>
+        <item quantity="many">+%1$d podrobností v Obecných informacích, včetně data instalace</item>
+        <item quantity="other">+%1$d podrobností v Obecných informacích, včetně data instalace</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_history">
-        <item quantity="one">+%1$d více informací v Obecných informacích, včetně historie instalace</item>
-        <item quantity="few">+%1$d více podrobností v Obecných informacích, včetně historie instalace</item>
-        <item quantity="many">+%1$d více podrobností v Obecných informacích, včetně historie instalace</item>
-        <item quantity="other">+%1$d více podrobností v Obecných informacích, včetně historie instalace</item>
+        <item quantity="one">+%1$d podrobnost v Obecných informacích, včetně historie instalace</item>
+        <item quantity="few">+%1$d podrobnosti v Obecných informacích, včetně historie instalace</item>
+        <item quantity="many">+%1$d podrobností v Obecných informacích, včetně historie instalace</item>
+        <item quantity="other">+%1$d podrobností v Obecných informacích, včetně historie instalace</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_network_security">
-        <item quantity="one">+%1$d více informací v Obecných informacích, včetně nastavení zabezpečení sítě</item>
-        <item quantity="few">+%1$d více podrobností v Obecných informacích, včetně nastavení zabezpečení sítě</item>
-        <item quantity="many">+%1$d více podrobností v Obecných informacích, včetně nastavení zabezpečení sítě</item>
-        <item quantity="other">+%1$d více podrobností v Obecných informacích, včetně nastavení zabezpečení sítě</item>
+        <item quantity="one">+%1$d podrobnost v Obecných informacích, včetně nastavení zabezpečení sítě</item>
+        <item quantity="few">+%1$d podrobnosti v Obecných informacích, včetně nastavení zabezpečení sítě</item>
+        <item quantity="many">+%1$d podrobností v Obecných informacích, včetně nastavení zabezpečení sítě</item>
+        <item quantity="other">+%1$d podrobností v Obecných informacích, včetně nastavení zabezpečení sítě</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_split_apks">
-        <item quantity="one">+%1$d více informací v Obecných informacích, včetně rozděleného APKs</item>
-        <item quantity="few">+%1$d více podrobností v Obecných informacích, včetně rozděleného APKs</item>
-        <item quantity="many">+%1$d více podrobností v Obecných informacích, včetně rozděleného APKs</item>
-        <item quantity="other">+%1$d více podrobností v Obecných informacích, včetně rozděleného APKs</item>
+        <item quantity="one">+%1$d podrobnost v Obecných informacích, včetně rozdělených souborů APK</item>
+        <item quantity="few">+%1$d podrobnosti v Obecných informacích, včetně rozdělených souborů APK</item>
+        <item quantity="many">+%1$d podrobností v Obecných informacích, včetně rozdělených souborů APK</item>
+        <item quantity="other">+%1$d podrobností v Obecných informacích, včetně rozdělených souborů APK</item>
     </plurals>
     <string name="app_detail_yes">Ano</string>
     <string name="app_detail_no">Ne</string>
@@ -65,10 +65,10 @@
     <string name="app_detail_insight_debug_certificate">Podepsáno sdíleným ladicím klíčem Androidu</string>
     <string name="app_detail_insight_certificate_not_yet_valid">Certifikát pro podepisování ještě není platný</string>
     <plurals name="app_detail_insight_outdated_target">
-        <item quantity="one">Cíle API %1$d, jedna úroveň API za tímto zařízením</item>
-        <item quantity="few">Cíle API %1$d, %2$d API úrovně za tímto zařízením</item>
-        <item quantity="many">Cíle API %1$d, %2$d API úrovně za tímto zařízením</item>
-        <item quantity="other">Cíle API %1$d, %2$d API úrovně za tímto zařízením</item>
+        <item quantity="one">Cílí na API %1$d, jednu úroveň API za tímto zařízením</item>
+        <item quantity="few">Cílí na API %1$d, %2$d úrovně API za tímto zařízením</item>
+        <item quantity="many">Cílí na API %1$d, %2$d úrovní API za tímto zařízením</item>
+        <item quantity="other">Cílí na API %1$d, %2$d úrovní API za tímto zařízením</item>
     </plurals>
     <string name="app_detail_insight_sideloaded">Nainstalováno zvenčí obchodu s aplikacemi</string>
     <plurals name="app_detail_insight_unused">
@@ -100,22 +100,22 @@
     <string name="app_detail_summary_permissions">%1$s · %2$s</string>
     <string name="app_detail_summary_permissions_granted">%1$s · %2$s · %3$s</string>
     <plurals name="app_detail_summary_permissions_requested">
-        <item quantity="one">%1$d požádal o povolení</item>
-        <item quantity="few">%1$d požádal o povolení</item>
-        <item quantity="many">%1$d požádal o povolení</item>
-        <item quantity="other">%1$d požádal o povolení</item>
+        <item quantity="one">%1$d požadované povolení</item>
+        <item quantity="few">%1$d požadovaná povolení</item>
+        <item quantity="many">%1$d požadovaných povolení</item>
+        <item quantity="other">%1$d požadovaných povolení</item>
     </plurals>
     <plurals name="app_detail_summary_permissions_dangerous">
         <item quantity="one">%1$d nebezpečné povolení</item>
         <item quantity="few">%1$d nebezpečná povolení</item>
-        <item quantity="many">%1$d nebezpečná povolení</item>
-        <item quantity="other">%1$d nebezpečná povolení</item>
+        <item quantity="many">%1$d nebezpečných povolení</item>
+        <item quantity="other">%1$d nebezpečných povolení</item>
     </plurals>
     <plurals name="app_detail_summary_permissions_granted_count">
-        <item quantity="one">%1$d uděleno povolení</item>
-        <item quantity="few">%1$d udělena povolení</item>
-        <item quantity="many">%1$d udělena povolení</item>
-        <item quantity="other">%1$d udělena povolení</item>
+        <item quantity="one">%1$d udělené povolení</item>
+        <item quantity="few">%1$d udělená povolení</item>
+        <item quantity="many">%1$d udělených povolení</item>
+        <item quantity="other">%1$d udělených povolení</item>
     </plurals>
     <string name="app_detail_permissions_section">Permissions</string>
     <string name="app_detail_total_permissions">Celkem Permissions</string>
@@ -133,26 +133,26 @@
     <plurals name="app_detail_permissions_dangerous_summary">
         <item quantity="one">%1$d citlivé oprávnění bylo požadováno</item>
         <item quantity="few">%1$d citlivá oprávnění byla požadována</item>
-        <item quantity="many">%1$d citlivá oprávnění byla požadována</item>
-        <item quantity="other">%1$d citlivá oprávnění byla požadována</item>
+        <item quantity="many">%1$d citlivých oprávnění bylo požadováno</item>
+        <item quantity="other">%1$d citlivých oprávnění bylo požadováno</item>
     </plurals>
     <plurals name="app_detail_permissions_total">
         <item quantity="one">%1$d oprávnění bylo požadováno celkem</item>
         <item quantity="few">%1$d oprávnění byla požadována celkem</item>
-        <item quantity="many">%1$d oprávnění byla požadována celkem</item>
-        <item quantity="other">%1$d oprávnění byla požadována celkem</item>
+        <item quantity="many">%1$d oprávnění bylo požadováno celkem</item>
+        <item quantity="other">%1$d oprávnění bylo požadováno celkem</item>
     </plurals>
     <plurals name="app_detail_permissions_requested_count">
         <item quantity="one">%d oprávnění bylo požadováno</item>
         <item quantity="few">%d oprávnění byla požadována</item>
-        <item quantity="many">%d oprávnění byla požadována</item>
-        <item quantity="other">%d oprávnění byla požadována</item>
+        <item quantity="many">%d oprávnění bylo požadováno</item>
+        <item quantity="other">%d oprávnění bylo požadováno</item>
     </plurals>
     <plurals name="app_detail_permissions_sensitive_count">
         <item quantity="one">%d citlivé oprávnění</item>
         <item quantity="few">%d citlivá oprávnění</item>
-        <item quantity="many">%d citlivá oprávnění</item>
-        <item quantity="other">%d citlivá oprávnění</item>
+        <item quantity="many">%d citlivých oprávnění</item>
+        <item quantity="other">%d citlivých oprávnění</item>
     </plurals>
     <string name="app_detail_count_pair">%1$s · %2$s</string>
     <string name="app_detail_components_section">Komponenty</string>
@@ -167,22 +167,22 @@
     <plurals name="app_detail_features_required_count">
         <item quantity="one">%d požadovaná funkce</item>
         <item quantity="few">%d požadované funkce</item>
-        <item quantity="many">%d požadované funkce</item>
-        <item quantity="other">%d požadované funkce</item>
+        <item quantity="many">%d požadovaných funkcí</item>
+        <item quantity="other">%d požadovaných funkcí</item>
     </plurals>
     <plurals name="app_detail_features_optional_count">
         <item quantity="one">%d volitelná funkce</item>
         <item quantity="few">%d volitelné funkce</item>
-        <item quantity="many">%d volitelné funkce</item>
-        <item quantity="other">%d volitelné funkce</item>
+        <item quantity="many">%d volitelných funkcí</item>
+        <item quantity="other">%d volitelných funkcí</item>
     </plurals>
     <string name="app_detail_features_all_met">Toto zařízení splňuje vše, co aplikace vyžaduje</string>
     <string name="app_detail_features_none">Tato aplikace neuvádí žádné požadavky na zařízení</string>
     <plurals name="app_detail_features_unmet">
         <item quantity="one">%1$d požadavek, který toto zařízení nemůže splnit</item>
         <item quantity="few">%1$d požadavky, které toto zařízení nemůže splnit</item>
-        <item quantity="many">%1$d požadavky, které toto zařízení nemůže splnit</item>
-        <item quantity="other">%1$d požadavky, které toto zařízení nemůže splnit</item>
+        <item quantity="many">%1$d požadavků, které toto zařízení nemůže splnit</item>
+        <item quantity="other">%1$d požadavků, které toto zařízení nemůže splnit</item>
     </plurals>
     <string name="app_detail_certificate_signature_section">Podpis certifikátu</string>
     <string name="app_detail_certificate_signed_by">Podepsáno %1$s</string>
@@ -204,20 +204,20 @@
     <plurals name="manifest_line_count">
         <item quantity="one">%1$d řádek</item>
         <item quantity="few">%1$d řádky</item>
-        <item quantity="many">%1$d řádky</item>
-        <item quantity="other">%1$d řádky</item>
+        <item quantity="many">%1$d řádků</item>
+        <item quantity="other">%1$d řádků</item>
     </plurals>
     <plurals name="manifest_match_count">
         <item quantity="one">%1$d odpovídající řádek · %2$d celkem</item>
         <item quantity="few">%1$d odpovídající řádky · %2$d celkem</item>
-        <item quantity="many">%1$d odpovídající řádky · %2$d celkem</item>
-        <item quantity="other">%1$d odpovídající řádky · %2$d celkem</item>
+        <item quantity="many">%1$d odpovídajících řádků · %2$d celkem</item>
+        <item quantity="other">%1$d odpovídajících řádků · %2$d celkem</item>
     </plurals>
     <plurals name="manifest_base_split_note">
-        <item quantity="one">Zobrazuje základní APK manifest. Tato aplikace má %1$d další nainstalovaný split s vlastním manifestem.</item>
-        <item quantity="few">Zobrazuje základní APK manifest. Tato aplikace má %1$d další nainstalované splits s jejich vlastními manfesty.</item>
-        <item quantity="many">Zobrazuje základní APK manifest. Tato aplikace má %1$d další nainstalované splits s jejich vlastními manfesty.</item>
-        <item quantity="other">Zobrazuje základní APK manifest. Tato aplikace má %1$d další nainstalované splits s jejich vlastními manfesty.</item>
+        <item quantity="one">Zobrazuje manifest základního APK. Tato aplikace má %1$d další nainstalovaný split s vlastním manifestem.</item>
+        <item quantity="few">Zobrazuje manifest základního APK. Tato aplikace má %1$d další nainstalované splity s vlastními manifesty.</item>
+        <item quantity="many">Zobrazuje manifest základního APK. Tato aplikace má %1$d dalších nainstalovaných splitů s vlastními manifesty.</item>
+        <item quantity="other">Zobrazuje manifest základního APK. Tato aplikace má %1$d dalších nainstalovaných splitů s vlastními manifesty.</item>
     </plurals>
     <string name="certificates_title">Certifikát pro podepisování</string>
     <string name="certificates_error">Nepodařilo se načíst certifikát pro podepisování</string>
@@ -231,8 +231,8 @@
     <plurals name="certificates_history_description">
         <item quantity="one">Android ověřil jeden podepisovací klíč použitý před aktuálním klíčem.</item>
         <item quantity="few">Android ověřil %d podepisovací klíče použité před aktuálním klíčem. Nejnověji použitý předchozí klíč se zobrazuje jako první.</item>
-        <item quantity="many">Android ověřil %d podepisovací klíče použité před aktuálním klíčem. Nejnověji použitý předchozí klíč se zobrazuje jako první.</item>
-        <item quantity="other">Android ověřil %d podepisovací klíče použité před aktuálním klíčem. Nejnověji použitý předchozí klíč se zobrazuje jako první.</item>
+        <item quantity="many">Android ověřil %d podepisovacích klíčů použitých před aktuálním klíčem. Nejnověji použitý předchozí klíč se zobrazuje jako první.</item>
+        <item quantity="other">Android ověřil %d podepisovacích klíčů použitých před aktuálním klíčem. Nejnověji použitý předchozí klíč se zobrazuje jako první.</item>
     </plurals>
     <string name="certificates_original_signing_key">Původní podepisovací klíč</string>
     <string name="certificates_previous_signing_key">Předchozí podepisovací klíč</string>
@@ -299,7 +299,7 @@
     <string name="general_info_section_storage">Úložiště a cesty</string>
     <string name="general_info_section_native_libraries">Nativní knihovny</string>
     <string name="general_info_application_name">Název aplikace</string>
-    <string name="general_info_package_name">Package název</string>
+    <string name="general_info_package_name">Název balíčku</string>
     <string name="general_info_process_name">Název procesu</string>
     <string name="general_info_uid">UID</string>
     <string name="general_info_shared_user_id">Sdílená identita</string>
@@ -307,7 +307,7 @@
     <string name="general_info_version_name">Název verze</string>
     <string name="general_info_version_code">Kód verze</string>
     <string name="general_info_min_sdk">Min SDK</string>
-    <string name="general_info_target_sdk">Cílový SDK</string>
+    <string name="general_info_target_sdk">Target SDK</string>
     <string name="general_info_debug_access">Přístup k ladění</string>
     <string name="general_info_app_data_backup">Záloha dat aplikace</string>
     <string name="general_info_unencrypted_traffic">Nešifrovaný provoz jako výchozí</string>
@@ -329,22 +329,22 @@
     <string name="general_info_install_source_local_install">Nainstalováno z připojeného počítače</string>
     <string name="general_info_install_source_system">Systém</string>
     <string name="general_info_install_source_unknown">Neznámý</string>
-    <string name="general_info_installer_package">Instalátor Package</string>
+    <string name="general_info_installer_package">Balíček instalátora</string>
     <string name="general_info_install_initiator">Iniciátor instalace</string>
-    <string name="general_info_install_originator">APK Původ Package</string>
+    <string name="general_info_install_originator">Balíček původu APK</string>
     <string name="general_info_first_installed">První nainstalováno</string>
     <string name="general_info_last_updated">Naposledy aktualizováno</string>
     <string name="general_info_last_used">Naposledy použito</string>
-    <string name="general_info_apk_directory">APK Adresář</string>
+    <string name="general_info_apk_directory">Adresář APK</string>
     <string name="general_info_data_directory">Adresář dat</string>
     <string name="general_info_install_location">Umístění instalace</string>
-    <string name="general_info_apk_size">APK Velikost</string>
+    <string name="general_info_apk_size">Velikost APK</string>
     <string name="general_info_split_apks">Rozdělené APKs</string>
     <plurals name="general_info_split_apks_value">
-        <item quantity="one">Nainstalováno jako %1$d rozdělené APK</item>
-        <item quantity="few">Nainstalováno jako %1$d rozdělené APKs</item>
-        <item quantity="many">Nainstalováno jako %1$d rozdělené APKs</item>
-        <item quantity="other">Nainstalováno jako %1$d rozdělené APKs</item>
+        <item quantity="one">Nainstalováno jako %1$d rozdělený soubor APK</item>
+        <item quantity="few">Nainstalováno jako %1$d rozdělené soubory APK</item>
+        <item quantity="many">Nainstalováno jako %1$d rozdělených souborů APK</item>
+        <item quantity="other">Nainstalováno jako %1$d rozdělených souborů APK</item>
     </plurals>
     <string name="general_info_total_size">Celková velikost</string>
     <string name="general_info_native_library_abis">CPU architektury</string>
@@ -354,8 +354,8 @@
     <plurals name="general_info_native_library_file_count">
         <item quantity="one">%1$d soubor</item>
         <item quantity="few">%1$d soubory</item>
-        <item quantity="many">%1$d soubory</item>
-        <item quantity="other">%1$d soubory</item>
+        <item quantity="many">%1$d souborů</item>
+        <item quantity="other">%1$d souborů</item>
     </plurals>
     <string name="general_info_rationale_application_name">Viditelný název aplikace pro uživatele, jak je zobrazen na domovské obrazovce a v zásuvce aplikací.</string>
     <string name="general_info_rationale_package_name">Jedinečný identifikátor této aplikace na zařízení. Žádné dvě aplikace nemohou sdílet stejné jméno balíčku.</string>
@@ -402,10 +402,10 @@
     <string name="permissions_title">Permissions</string>
     <string name="permissions_error">Nelze přečíst oprávnění této aplikace.</string>
     <plurals name="permissions_filter_hint">
-        <item quantity="one">Filtr %1$d oprávnění</item>
-        <item quantity="few">Filtr %1$d oprávnění</item>
-        <item quantity="many">Filtr %1$d oprávnění</item>
-        <item quantity="other">Filtr %1$d oprávnění</item>
+        <item quantity="one">Filtrovat %1$d oprávnění</item>
+        <item quantity="few">Filtrovat %1$d oprávnění</item>
+        <item quantity="many">Filtrovat %1$d oprávnění</item>
+        <item quantity="other">Filtrovat %1$d oprávnění</item>
     </plurals>
     <string name="permissions_scope_sheet_title">Zobrazit</string>
     <string name="permissions_scope_requested">Požadováno</string>
@@ -416,13 +416,13 @@
     <string name="permissions_section_header">%1$s · %2$d</string>
     <string name="permissions_granted">Přiděleno</string>
     <string name="permissions_not_granted">Nepřiděleno</string>
-    <string name="permissions_level_dangerous">Nebezpečné</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
     <string name="permissions_level_dangerous_explanation">Vyžaduje váš výslovný souhlas, než jej aplikace může použít.</string>
-    <string name="permissions_level_signature">Podpis</string>
+    <string name="permissions_level_signature">Signature</string>
     <string name="permissions_level_signature_explanation">Pouze aplikace podepsané stejným klíčem mohou mít tyto.</string>
-    <string name="permissions_level_internal">Interní</string>
+    <string name="permissions_level_internal">Internal</string>
     <string name="permissions_level_internal_explanation">Vyhrazeno pro systém a přiděleno interními pravidly spíše než vámi.</string>
-    <string name="permissions_level_normal">Normální</string>
+    <string name="permissions_level_normal">Normal</string>
     <string name="permissions_level_normal_explanation">Obvykle přiděleno automaticky při instalaci. Nízké riziko samostatně.</string>
     <string name="permissions_level_unavailable">Podrobnosti nejsou k dispozici</string>
     <string name="permissions_level_unavailable_explanation">Žádná aplikace na tomto zařízení tyto nevyhlašuje, takže nemůžeme ukázat, co chrání.</string>
@@ -447,34 +447,34 @@
     <string name="components_type_receivers">Receivers</string>
     <string name="components_type_providers">Providers</string>
     <plurals name="components_filter_hint_all">
-        <item quantity="one">Filtrovat komponentu %1$d</item>
-        <item quantity="few">Filtrovat komponenty %1$d</item>
-        <item quantity="many">Filtrovat komponenty %1$d</item>
-        <item quantity="other">Filtrovat komponenty %1$d</item>
+        <item quantity="one">Filtrovat %1$d komponentu</item>
+        <item quantity="few">Filtrovat %1$d komponenty</item>
+        <item quantity="many">Filtrovat %1$d komponent</item>
+        <item quantity="other">Filtrovat %1$d komponent</item>
     </plurals>
     <plurals name="components_filter_hint_activities">
-        <item quantity="one">Filtrovat aktivitu %1$d</item>
-        <item quantity="few">Filtrovat aktivity %1$d</item>
-        <item quantity="many">Filtrovat aktivity %1$d</item>
-        <item quantity="other">Filtrovat aktivity %1$d</item>
+        <item quantity="one">Filtrovat %1$d aktivitu</item>
+        <item quantity="few">Filtrovat %1$d aktivity</item>
+        <item quantity="many">Filtrovat %1$d aktivit</item>
+        <item quantity="other">Filtrovat %1$d aktivit</item>
     </plurals>
     <plurals name="components_filter_hint_services">
-        <item quantity="one">Filtrovat službu %1$d</item>
-        <item quantity="few">Filtrovat služby %1$d</item>
-        <item quantity="many">Filtrovat služby %1$d</item>
-        <item quantity="other">Filtrovat služby %1$d</item>
+        <item quantity="one">Filtrovat %1$d službu</item>
+        <item quantity="few">Filtrovat %1$d služby</item>
+        <item quantity="many">Filtrovat %1$d služeb</item>
+        <item quantity="other">Filtrovat %1$d služeb</item>
     </plurals>
     <plurals name="components_filter_hint_receivers">
-        <item quantity="one">Filtrovat přijímač %1$d</item>
-        <item quantity="few">Filtrovat přijímače %1$d</item>
-        <item quantity="many">Filtrovat přijímače %1$d</item>
-        <item quantity="other">Filtrovat přijímače %1$d</item>
+        <item quantity="one">Filtrovat %1$d přijímač</item>
+        <item quantity="few">Filtrovat %1$d přijímače</item>
+        <item quantity="many">Filtrovat %1$d přijímačů</item>
+        <item quantity="other">Filtrovat %1$d přijímačů</item>
     </plurals>
     <plurals name="components_filter_hint_providers">
-        <item quantity="one">Filtrovat poskytovatele %1$d</item>
-        <item quantity="few">Filtrovat poskytovatele %1$d</item>
-        <item quantity="many">Filtrovat poskytovatele %1$d</item>
-        <item quantity="other">Filtrovat poskytovatele %1$d</item>
+        <item quantity="one">Filtrovat %1$d poskytovatele</item>
+        <item quantity="few">Filtrovat %1$d poskytovatele</item>
+        <item quantity="many">Filtrovat %1$d poskytovatelů</item>
+        <item quantity="other">Filtrovat %1$d poskytovatelů</item>
     </plurals>
     <string name="components_filter_exported">Exportováno</string>
     <string name="components_filter_unprotected">Nechráněno</string>
@@ -511,8 +511,8 @@
     <plurals name="components_intent_filter_count">
         <item quantity="one">%1$d intent filter</item>
         <item quantity="few">%1$d intent filtry</item>
-        <item quantity="many">%1$d intent filtry</item>
-        <item quantity="other">%1$d intent filtry</item>
+        <item quantity="many">%1$d intent filtrů</item>
+        <item quantity="other">%1$d intent filtrů</item>
     </plurals>
     <string name="components_detail_intent_actions">Akce</string>
     <string name="components_detail_intent_actions_explanation">Co jiná aplikace nebo Android žádá tento komponent, aby udělal.</string>
@@ -566,10 +566,10 @@
     <string name="intent_filters_component_heading">Vzory žádostí deklarované %1$s</string>
     <string name="intent_filters_explanation">Každá položka je vzor žádosti deklarovaný pro tuto komponentu. To, zda může jiná aplikace použít, také závisí na dosažitelnosti komponenty a požadovaných oprávněních.</string>
     <plurals name="intent_filters_search_hint">
-        <item quantity="one">Hledat pravidlo žádosti %1$d</item>
-        <item quantity="few">Hledat pravidla žádosti %1$d</item>
-        <item quantity="many">Hledat pravidla žádosti %1$d</item>
-        <item quantity="other">Hledat pravidla žádosti %1$d</item>
+        <item quantity="one">Hledat %1$d pravidlo žádosti</item>
+        <item quantity="few">Hledat %1$d pravidla žádosti</item>
+        <item quantity="many">Hledat %1$d pravidel žádosti</item>
+        <item quantity="other">Hledat %1$d pravidel žádosti</item>
     </plurals>
     <string name="intent_filters_filter_fallback">Intent filter</string>
     <string name="intent_filters_purpose_launcher">Vstup pro spouštěč aplikace</string>
@@ -628,7 +628,7 @@
     <string name="permissions_detail_extra_rules">Další pravidla</string>
     <string name="permissions_grant_dangerous_granted">Toto jste povolili. Můžete to vzít zpět v Nastavení.</string>
     <string name="permissions_grant_dangerous_not_granted">Toto jste ještě nepovolili.</string>
-    <string name="permissions_grant_signature_self">Tato aplikace tuto oprávnění definuje sama.</string>
+    <string name="permissions_grant_signature_self">Tato aplikace toto oprávnění definuje sama.</string>
     <string name="permissions_grant_signature_granted">Tato aplikace je podepsána stejným klíčem jako aplikace, která ji definuje.</string>
     <string name="permissions_grant_signature_granted_privileged">Tato aplikace je podepsána stejným klíčem jako aplikace, která ji definuje, nebo běží jako privilegovaná systémová aplikace.</string>
     <string name="permissions_grant_signature_not_granted">Tato aplikace je podepsána jiným klíčem než aplikace, která ji definuje.</string>
@@ -660,25 +660,25 @@
     <string name="permission_description_storage_manage">Získejte přístup ke každému souboru ve sdíleném úložišti, nejen k těm, které aplikace vytvořila.</string>
     <string name="permission_description_media_images">Přečtěte si fotografie uložené na tomto zařízení.</string>
     <string name="permission_description_media_video">Přečtěte si videa uložená na tomto zařízení.</string>
-    <string name="permission_description_media_audio">Číst hudební a audio soubory uložené na tomto zařízení.</string>
-    <string name="permission_description_body_sensors">Číst data ze senzorů o vašem těle, jako je srdeční frekvence.</string>
-    <string name="permission_description_activity_recognition">Zjistit, zda chodíte, jezdíte na kole nebo řídíte, a počítat vaše kroky.</string>
-    <string name="permission_description_bluetooth_scan">Hledat blízká Bluetooth zařízení.</string>
-    <string name="permission_description_bluetooth_connect">Připojit se k Bluetooth zařízením, která jsou již spárována.</string>
-    <string name="permission_description_notifications">Zobrazit oznámení na vaší obrazovce a uzamčené obrazovce.</string>
-    <string name="permission_description_internet">Otevřít síťová připojení a odesílat nebo přijímat data přes internet.</string>
-    <string name="permission_description_network_state">Zjistit, zda je zařízení online a jaký typ připojení používá.</string>
-    <string name="permission_description_wifi_state">Zobrazit Wi-Fi sítě, které zařízení zná a ke kterým je připojeno.</string>
-    <string name="permission_description_nfc">Vyměňovat data s NFC štítky a terminály přiloženými k zařízení.</string>
-    <string name="permission_description_vibrate">Nechat zařízení vibrovat.</string>
-    <string name="permission_description_wake_lock">Udržet zařízení vzhůru, aby práce pokračovala se vypnutou obrazovkou.</string>
-    <string name="permission_description_boot_completed">Začít běžet, jakmile zařízení dokončí spuštění.</string>
-    <string name="permission_description_foreground_service">Pokračovat v běhu na pozadí s viditelným oznámením.</string>
-    <string name="permission_description_install_packages">Požádat vás o instalaci dalších aplikací z souborů, které poskytuje.</string>
-    <string name="permission_description_overlay">Kreslit přes jiné aplikace, zakrývající cokoliv, co je na obrazovce.</string>
-    <string name="permission_description_exact_alarm">Naplánovat práci na přesný čas, i když je zařízení nečinné.</string>
-    <string name="permission_description_biometric">Požádat vás o potvrzení vaší identity otiskem prstu nebo odemčením obličeje.</string>
-    <string name="permission_description_query_all_packages">Zobrazit úplný seznam aplikací nainstalovaných na tomto zařízení.</string>
+    <string name="permission_description_media_audio">Přečtěte si hudební a audio soubory uložené na tomto zařízení.</string>
+    <string name="permission_description_body_sensors">Přečtěte si údaje ze senzorů o vašem těle, jako je srdeční frekvence.</string>
+    <string name="permission_description_activity_recognition">Zjistěte, zda chodíte, jezdíte na kole nebo řídíte, a počítejte své kroky.</string>
+    <string name="permission_description_bluetooth_scan">Hledejte blízká Bluetooth zařízení.</string>
+    <string name="permission_description_bluetooth_connect">Připojte se k Bluetooth zařízením, která jsou již spárována.</string>
+    <string name="permission_description_notifications">Zobrazujte oznámení na vaší obrazovce a uzamčené obrazovce.</string>
+    <string name="permission_description_internet">Otevírejte síťová připojení a odesílejte nebo přijímejte data přes internet.</string>
+    <string name="permission_description_network_state">Zjistěte, zda je zařízení online a jaký typ připojení používá.</string>
+    <string name="permission_description_wifi_state">Zobrazte Wi-Fi sítě, které zařízení zná a ke kterým je připojeno.</string>
+    <string name="permission_description_nfc">Vyměňujte data s NFC štítky a terminály přiloženými k zařízení.</string>
+    <string name="permission_description_vibrate">Nechte zařízení vibrovat.</string>
+    <string name="permission_description_wake_lock">Udržujte zařízení vzhůru, aby práce pokračovala se vypnutou obrazovkou.</string>
+    <string name="permission_description_boot_completed">Začněte běžet, jakmile zařízení dokončí spuštění.</string>
+    <string name="permission_description_foreground_service">Pokračujte v běhu na pozadí s viditelným oznámením.</string>
+    <string name="permission_description_install_packages">Požádejte vás o instalaci dalších aplikací ze souborů, které poskytuje.</string>
+    <string name="permission_description_overlay">Kreslete přes jiné aplikace a zakrývejte cokoliv, co je na obrazovce.</string>
+    <string name="permission_description_exact_alarm">Naplánujte práci na přesný čas, i když je zařízení nečinné.</string>
+    <string name="permission_description_biometric">Požádejte vás o potvrzení vaší identity otiskem prstu nebo odemčením obličeje.</string>
+    <string name="permission_description_query_all_packages">Zobrazte úplný seznam aplikací nainstalovaných na tomto zařízení.</string>
     <string name="requirements_title">Požadavky na zařízení</string>
     <string name="requirements_error">Nelze přečíst požadavky na zařízení této aplikace.</string>
     <string name="requirements_empty">Tato aplikace neuvádí žádné požadavky na zařízení.</string>
@@ -690,8 +690,8 @@
     <plurals name="requirements_missing_summary">
         <item quantity="one">%1$d požadavek, který toto zařízení nemůže splnit</item>
         <item quantity="few">%1$d požadavky, které toto zařízení nemůže splnit</item>
-        <item quantity="many">%1$d požadavky, které toto zařízení nemůže splnit</item>
-        <item quantity="other">%1$d požadavky, které toto zařízení nemůže splnit</item>
+        <item quantity="many">%1$d požadavků, které toto zařízení nemůže splnit</item>
+        <item quantity="other">%1$d požadavků, které toto zařízení nemůže splnit</item>
     </plurals>
     <string name="requirements_missing">Není na tomto zařízení</string>
     <string name="requirements_missing_version">Potřebuje %1$s · toto zařízení má %2$s</string>
@@ -786,10 +786,10 @@
     <string name="requirement_connection_service">Integrace aplikace pro volání</string>
     <string name="splitapks_title">Rozdělené APKs</string>
     <plurals name="splitapks_heading">
-        <item quantity="one">%1$d rozdělen APK nainstalován</item>
-        <item quantity="few">%1$d rozdělen APKs nainstalován</item>
-        <item quantity="many">%1$d rozdělen APKs nainstalován</item>
-        <item quantity="other">%1$d rozdělen APKs nainstalován</item>
+        <item quantity="one">%1$d rozdělený soubor APK nainstalován</item>
+        <item quantity="few">%1$d rozdělené soubory APK nainstalovány</item>
+        <item quantity="many">%1$d rozdělených souborů APK nainstalováno</item>
+        <item quantity="other">%1$d rozdělených souborů APK nainstalováno</item>
     </plurals>
     <string name="splitapks_explanation">Tato aplikace byla nainstalována jako základní APK plus tyto další rozdělené APKs, formát dodání, který Google Play používá k odeslání pouze kódu a zdrojů, které vaše zařízení potřebuje.</string>
     <plurals name="splitapks_search_hint">
@@ -831,15 +831,15 @@
     <plurals name="nativelibraries_heading">
         <item quantity="one">%1$d nativní knihovna zabalená</item>
         <item quantity="few">%1$d nativní knihovny zabalené</item>
-        <item quantity="many">%1$d nativní knihovny zabalené</item>
-        <item quantity="other">%1$d nativní knihovny zabalené</item>
+        <item quantity="many">%1$d nativních knihoven zabalených</item>
+        <item quantity="other">%1$d nativních knihoven zabalených</item>
     </plurals>
     <string name="nativelibraries_explanation">Každý odlišný soubor nativního kódu, který tato aplikace dodává, jeden řádek na název souboru, i když je stejná knihovna sestavena pro více architektur procesorů.</string>
     <plurals name="nativelibraries_search_hint">
-        <item quantity="one">Hledat knihovnu %1$d</item>
-        <item quantity="few">Hledat knihovny %1$d</item>
-        <item quantity="many">Hledat knihovny %1$d</item>
-        <item quantity="other">Hledat knihovny %1$d</item>
+        <item quantity="one">Hledat %1$d knihovnu</item>
+        <item quantity="few">Hledat %1$d knihovny</item>
+        <item quantity="many">Hledat %1$d knihoven</item>
+        <item quantity="other">Hledat %1$d knihoven</item>
     </plurals>
     <string name="nativelibraries_error">Nepodařilo se načíst nativní knihovny</string>
     <string name="nativelibraries_empty">Tato aplikace nemá zabalené nativní knihovny.</string>

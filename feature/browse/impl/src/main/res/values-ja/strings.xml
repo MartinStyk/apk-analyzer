@@ -56,10 +56,10 @@
     <string name="browse_certificate_hash_sha256">SHA-256</string>
     <string name="browse_certificate_hash_sha1">SHA-1</string>
     <string name="browse_certificate_hash_md5">MD5</string>
-    <string name="browse_protection_level_dangerous">危険</string>
-    <string name="browse_protection_level_signature">署名</string>
-    <string name="browse_protection_level_internal">内部</string>
-    <string name="browse_protection_level_normal">通常</string>
+    <string name="browse_protection_level_dangerous">Dangerous</string>
+    <string name="browse_protection_level_signature">Signature</string>
+    <string name="browse_protection_level_internal">Internal</string>
+    <string name="browse_protection_level_normal">Normal</string>
     <string name="browse_protection_level_dangerous_explanation">アプリが使用する前に明示的な承認が必要です。</string>
     <string name="browse_protection_level_signature_explanation">それを宣言したアプリと同じキーで署名されたアプリのみがこれを保持できます。</string>
     <string name="browse_protection_level_internal_explanation">システムのために予約されており、あなたによってではなく内部のルールによって付与されます。</string>

@@ -46,7 +46,7 @@
     <string name="browse_category_news">Tin tức &amp; tạp chí</string>
     <string name="browse_category_maps">Bản đồ &amp; điều hướng</string>
     <string name="browse_category_productivity">Năng suất</string>
-    <string name="browse_category_accessibility">Truy cập</string>
+    <string name="browse_category_accessibility">Trợ năng</string>
     <string name="browse_sub_attribute_sheet_title">Nhóm theo</string>
     <string name="browse_certificate_attribute_sha256">Danh tính (SHA-256)</string>
     <string name="browse_certificate_attribute_sha1">Danh tính (SHA-1)</string>
@@ -56,14 +56,14 @@
     <string name="browse_certificate_hash_sha256">SHA-256</string>
     <string name="browse_certificate_hash_sha1">SHA-1</string>
     <string name="browse_certificate_hash_md5">MD5</string>
-    <string name="browse_protection_level_dangerous">Nguy hiểm</string>
-    <string name="browse_protection_level_signature">Chữ ký</string>
-    <string name="browse_protection_level_internal">Nội bộ</string>
-    <string name="browse_protection_level_normal">Bình thường</string>
+    <string name="browse_protection_level_dangerous">Dangerous</string>
+    <string name="browse_protection_level_signature">Signature</string>
+    <string name="browse_protection_level_internal">Internal</string>
+    <string name="browse_protection_level_normal">Normal</string>
     <string name="browse_protection_level_dangerous_explanation">Cần sự chấp thuận rõ ràng của bạn trước khi một ứng dụng có thể sử dụng nó.</string>
     <string name="browse_protection_level_signature_explanation">Chỉ các ứng dụng được ký bằng cùng một khóa như ứng dụng đã khai báo mới có thể giữ điều này.</string>
     <string name="browse_protection_level_internal_explanation">Dành riêng cho hệ thống và được cấp theo các quy tắc nội bộ chứ không phải bởi bạn.</string>
-    <string name="browse_protection_level_normal_explanation">Thường được cấp tự động khi cài đặt. Rủi ro thấp khi tự nó.</string>
+    <string name="browse_protection_level_normal_explanation">Thường được cấp tự động khi cài đặt. Bản thân nó có rủi ro thấp.</string>
     <string name="browse_algorithm_strong">Mạnh</string>
     <string name="browse_algorithm_weak">Yếu</string>
     <string name="browse_algorithm_unknown">Sức mạnh không xác định</string>
@@ -76,14 +76,14 @@
     <string name="browse_certificate_self_signed_explanation">Chứng chỉ tự ký là bình thường cho các ứng dụng Android. So sánh dấu vân tay chứng chỉ với một nguồn đáng tin cậy khi bạn cần xác minh nhà phát hành.</string>
     <string name="browse_bucket_info_content_description">Về %1$s</string>
     <plurals name="browse_options_filter_hint">
-        <item quantity="other">Lọc các tùy chọn %1$d</item>
+        <item quantity="other">Lọc %1$d tùy chọn</item>
     </plurals>
     <string name="browse_options_empty_query">Không có tùy chọn nào khớp với “%1$s”</string>
     <plurals name="browse_apps_count">
-        <item quantity="other">Ứng dụng %1$d</item>
+        <item quantity="other">%1$d ứng dụng</item>
     </plurals>
     <plurals name="browse_apps_filter_hint">
-        <item quantity="other">Lọc các ứng dụng %1$d</item>
+        <item quantity="other">Lọc %1$d ứng dụng</item>
     </plurals>
     <string name="browse_apps_empty_query">Không có ứng dụng nào khớp với “%1$s”</string>
 </resources>

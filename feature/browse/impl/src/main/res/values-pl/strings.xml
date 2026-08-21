@@ -1,34 +1,34 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="browse_title">Przeglądaj</string>
+    <string name="browse_title">Przeglądaj aplikacje</string>
     <string name="browse_subtitle_loading">Skanowanie zainstalowanych aplikacji…</string>
     <plurals name="browse_subtitle">
-        <item quantity="one">Zbadaj aplikację %1$d zainstalowaną na tym urządzeniu</item>
-        <item quantity="few">Zbadaj aplikacje %1$d zainstalowane na tym urządzeniu</item>
-        <item quantity="many">Zbadaj aplikacje %1$d zainstalowane na tym urządzeniu</item>
-        <item quantity="other">Zbadaj aplikacje %1$d zainstalowane na tym urządzeniu</item>
+        <item quantity="one">Wyświetl %1$d aplikację zainstalowaną na tym urządzeniu</item>
+        <item quantity="few">Wyświetl %1$d aplikacje zainstalowane na tym urządzeniu</item>
+        <item quantity="many">Wyświetl %1$d zainstalowanych aplikacji na tym urządzeniu</item>
+        <item quantity="other">Wyświetl %1$d zainstalowanych aplikacji na tym urządzeniu</item>
     </plurals>
-    <string name="browse_dimension_permission_title">Permissions</string>
+    <string name="browse_dimension_permission_title">Uprawnienia</string>
     <string name="browse_dimension_permission_subtitle">Zobacz, które aplikacje używają danego uprawnienia</string>
     <string name="browse_dimension_certificate_title">Certyfikat podpisu</string>
     <string name="browse_dimension_certificate_subtitle">Grupuj aplikacje według tożsamości podpisu, nazwy wydawcy lub kraju</string>
-    <string name="browse_dimension_target_sdk_title">Docelowa wersja Androida</string>
+    <string name="browse_dimension_target_sdk_title">Docelowe SDK</string>
     <string name="browse_dimension_target_sdk_subtitle">Zobacz, dla której wersji Androida każda aplikacja została zbudowana</string>
-    <string name="browse_dimension_min_sdk_title">Minimalna wersja Androida</string>
+    <string name="browse_dimension_min_sdk_title">Minimalne SDK</string>
     <string name="browse_dimension_min_sdk_subtitle">Zobacz najstarszą wersję Androida, którą każda aplikacja nadal wspiera</string>
     <string name="browse_dimension_install_source_title">Źródło instalacji</string>
     <string name="browse_dimension_install_source_subtitle">Zobacz, skąd pochodzi każda aplikacja</string>
     <string name="browse_dimension_shared_user_id_title">Wspólna tożsamość</string>
-    <string name="browse_dimension_shared_user_id_subtitle">Znajdź aplikacje, które działają pod tą samą tożsamością urządzenia i mogą uzyskiwać dostęp do danych innych aplikacji</string>
+    <string name="browse_dimension_shared_user_id_subtitle">Znajdź aplikacje, które współdzielą tę samą tożsamość użytkownika i mogą wzajemnie uzyskiwać dostęp do swoich danych</string>
     <string name="browse_dimension_app_category_title">Kategoria aplikacji</string>
-    <string name="browse_dimension_app_category_subtitle">Zobacz, jakiego rodzaju aplikacją każda z nich się deklaruje</string>
+    <string name="browse_dimension_app_category_subtitle">Zobacz kategorię, do której zaliczana jest każda aplikacja</string>
     <plurals name="browse_dimension_option_count">
         <item quantity="one">%1$d opcja</item>
         <item quantity="few">%1$d opcje</item>
-        <item quantity="many">%1$d opcje</item>
-        <item quantity="other">%1$d opcje</item>
+        <item quantity="many">%1$d opcji</item>
+        <item quantity="other">%1$d opcji</item>
     </plurals>
-    <string name="browse_sdk_unknown">API poziom %1$s</string>
+    <string name="browse_sdk_unknown">Poziom API %1$s</string>
     <string name="browse_api_level">API %1$s</string>
     <string name="browse_source_google_play">Google Play</string>
     <string name="browse_source_samsung_galaxy_store">Sklep Samsung Galaxy</string>
@@ -62,12 +62,12 @@
     <string name="browse_certificate_hash_sha256">SHA-256</string>
     <string name="browse_certificate_hash_sha1">SHA-1</string>
     <string name="browse_certificate_hash_md5">MD5</string>
-    <string name="browse_protection_level_dangerous">Niebezpieczne</string>
-    <string name="browse_protection_level_signature">Podpis</string>
-    <string name="browse_protection_level_internal">Wewnętrzny</string>
-    <string name="browse_protection_level_normal">Normalny</string>
+    <string name="browse_protection_level_dangerous">Dangerous</string>
+    <string name="browse_protection_level_signature">Signature</string>
+    <string name="browse_protection_level_internal">Internal</string>
+    <string name="browse_protection_level_normal">Normal</string>
     <string name="browse_protection_level_dangerous_explanation">Wymaga Twojej wyraźnej zgody, zanim aplikacja będzie mogła to wykorzystać.</string>
-    <string name="browse_protection_level_signature_explanation">Tylko aplikacje podpisane tym samym kluczem co aplikacja, która to zadeklarowała, mogą to posiadać.</string>
+    <string name="browse_protection_level_signature_explanation">To uprawnienie mogą uzyskać tylko aplikacje podpisane tym samym kluczem co aplikacja, która je zadeklarowała.</string>
     <string name="browse_protection_level_internal_explanation">Zarezerwowane dla systemu i przyznawane na podstawie wewnętrznych zasad, a nie przez Ciebie.</string>
     <string name="browse_protection_level_normal_explanation">Zwykle przyznawane automatycznie podczas instalacji. Niskie ryzyko samo w sobie.</string>
     <string name="browse_algorithm_strong">Silny</string>
@@ -78,27 +78,27 @@
     <string name="browse_algorithm_md5_explanation">%1$s używa MD5. MD5 nie jest odporny na kolizje i jest niebezpieczny dla certyfikatów podpisu. Nowe certyfikaty podpisu powinny używać SHA-256 lub silniejszego.</string>
     <string name="browse_algorithm_md2_explanation">%1$s używa MD2. MD2 jest przestarzały i podatny na praktyczne ataki, więc jest niebezpieczny dla certyfikatów podpisu. Nowe certyfikaty podpisu powinny używać SHA-256 lub silniejszego.</string>
     <string name="browse_algorithm_unknown_explanation">Siły %1$s nie można ocenić na podstawie nazwy algorytmu. Typ i rozmiar klucza mogą również wpływać na jego bezpieczeństwo.</string>
-    <string name="browse_certificate_self_signed">Podpisany samodzielnie</string>
-    <string name="browse_certificate_self_signed_explanation">Certyfikaty samopodpisane są normalne dla aplikacji Android. Porównaj odcisk certyfikatu z zaufanym źródłem, gdy musisz zweryfikować wydawcę.</string>
+    <string name="browse_certificate_self_signed">Self-signed</string>
+    <string name="browse_certificate_self_signed_explanation">Certyfikaty self-signed są normalne dla aplikacji Android. Porównaj odcisk certyfikatu z zaufanym źródłem, gdy musisz zweryfikować wydawcę.</string>
     <string name="browse_bucket_info_content_description">O %1$s</string>
     <plurals name="browse_options_filter_hint">
         <item quantity="one">Filtr %1$d opcja</item>
         <item quantity="few">Filtr %1$d opcje</item>
-        <item quantity="many">Filtr %1$d opcje</item>
-        <item quantity="other">Filtr %1$d opcje</item>
+        <item quantity="many">Filtr %1$d opcji</item>
+        <item quantity="other">Filtr %1$d opcji</item>
     </plurals>
-    <string name="browse_options_empty_query">Brak opcji pasujących do “%1$s”</string>
+    <string name="browse_options_empty_query">Brak opcji pasujących do „%1$s”</string>
     <plurals name="browse_apps_count">
         <item quantity="one">%1$d aplikacja</item>
         <item quantity="few">%1$d aplikacje</item>
-        <item quantity="many">%1$d aplikacje</item>
-        <item quantity="other">%1$d aplikacje</item>
+        <item quantity="many">%1$d aplikacji</item>
+        <item quantity="other">%1$d aplikacji</item>
     </plurals>
     <plurals name="browse_apps_filter_hint">
         <item quantity="one">Filtr %1$d aplikacja</item>
         <item quantity="few">Filtr %1$d aplikacje</item>
-        <item quantity="many">Filtr %1$d aplikacje</item>
-        <item quantity="other">Filtr %1$d aplikacje</item>
+        <item quantity="many">Filtr %1$d aplikacji</item>
+        <item quantity="other">Filtr %1$d aplikacji</item>
     </plurals>
     <string name="browse_apps_empty_query">Brak aplikacji pasujących do “%1$s”</string>
 </resources>

@@ -3,7 +3,7 @@
     <string name="browse_title">Jelajahi</string>
     <string name="browse_subtitle_loading">Memindai aplikasi yang terpasang…</string>
     <plurals name="browse_subtitle">
-        <item quantity="other">Jelajahi aplikasi %1$d yang terpasang di perangkat ini</item>
+        <item quantity="other">Jelajahi %1$d aplikasi yang terpasang di perangkat ini</item>
     </plurals>
     <string name="browse_dimension_permission_title">Izin</string>
     <string name="browse_dimension_permission_subtitle">Lihat aplikasi mana yang menggunakan izin tertentu</string>
@@ -20,7 +20,7 @@
     <string name="browse_dimension_app_category_title">Kategori aplikasi</string>
     <string name="browse_dimension_app_category_subtitle">Lihat jenis aplikasi apa yang dinyatakan oleh masing-masing</string>
     <plurals name="browse_dimension_option_count">
-        <item quantity="other">Opsi %1$d</item>
+        <item quantity="other">%1$d opsi</item>
     </plurals>
     <string name="browse_sdk_unknown">Tingkat API %1$s</string>
     <string name="browse_api_level">API %1$s</string>
@@ -34,7 +34,7 @@
     <string name="browse_source_sideloaded">Diinstal dari file</string>
     <string name="browse_source_local_install">Diinstal melalui komputer</string>
     <string name="browse_source_system">Sistem</string>
-    <string name="browse_source_unknown">Tidak Diketahui</string>
+    <string name="browse_source_unknown">Tidak diketahui</string>
     <string name="browse_signer_unknown">Penanda tangan tidak dikenal</string>
     <string name="browse_country_unknown">Negara tidak diketahui</string>
     <string name="browse_category_undefined">Tidak terklasifikasi</string>
@@ -56,14 +56,14 @@
     <string name="browse_certificate_hash_sha256">SHA-256</string>
     <string name="browse_certificate_hash_sha1">SHA-1</string>
     <string name="browse_certificate_hash_md5">MD5</string>
-    <string name="browse_protection_level_dangerous">Berbahaya</string>
-    <string name="browse_protection_level_signature">Tanda tangan</string>
+    <string name="browse_protection_level_dangerous">Dangerous</string>
+    <string name="browse_protection_level_signature">Signature</string>
     <string name="browse_protection_level_internal">Internal</string>
     <string name="browse_protection_level_normal">Normal</string>
     <string name="browse_protection_level_dangerous_explanation">Membutuhkan persetujuan eksplisit Anda sebelum aplikasi dapat menggunakannya.</string>
     <string name="browse_protection_level_signature_explanation">Hanya aplikasi yang ditandatangani dengan kunci yang sama dengan aplikasi yang mendeklarasikannya yang dapat memegang ini.</string>
     <string name="browse_protection_level_internal_explanation">Dikhususkan untuk sistem dan diberikan oleh aturan internal daripada oleh Anda.</string>
-    <string name="browse_protection_level_normal_explanation">Biasanya diberikan secara otomatis saat instalasi. Risiko rendah sendiri.</string>
+    <string name="browse_protection_level_normal_explanation">Biasanya diberikan secara otomatis saat instalasi. Risiko rendah dengan sendirinya.</string>
     <string name="browse_algorithm_strong">Kuat</string>
     <string name="browse_algorithm_weak">Lemah</string>
     <string name="browse_algorithm_unknown">Kekuatan tidak diketahui</string>
@@ -76,14 +76,14 @@
     <string name="browse_certificate_self_signed_explanation">Sertifikat yang ditandatangani sendiri adalah hal yang normal untuk aplikasi Android. Bandingkan sidik jari sertifikat dengan sumber tepercaya ketika Anda perlu memverifikasi penerbit.</string>
     <string name="browse_bucket_info_content_description">Tentang %1$s</string>
     <plurals name="browse_options_filter_hint">
-        <item quantity="other">Saring opsi %1$d</item>
+        <item quantity="other">Saring %1$d opsi</item>
     </plurals>
     <string name="browse_options_empty_query">Tidak ada opsi yang cocok dengan “%1$s”</string>
     <plurals name="browse_apps_count">
         <item quantity="other">%1$d aplikasi</item>
     </plurals>
     <plurals name="browse_apps_filter_hint">
-        <item quantity="other">Saring aplikasi %1$d</item>
+        <item quantity="other">Saring %1$d aplikasi</item>
     </plurals>
     <string name="browse_apps_empty_query">Tidak ada aplikasi yang cocok dengan “%1$s”</string>
 </resources>

@@ -3,13 +3,13 @@
     <string name="browse_title">Navegar</string>
     <string name="browse_subtitle_loading">Escaneando aplicativos instalados…</string>
     <plurals name="browse_subtitle">
-        <item quantity="one">Explore o aplicativo %1$d instalado neste dispositivo</item>
-        <item quantity="other">Explore os aplicativos %1$d instalados neste dispositivo</item>
+        <item quantity="one">Explore %1$d aplicativo instalado neste dispositivo</item>
+        <item quantity="other">Explore os %1$d aplicativos instalados neste dispositivo</item>
     </plurals>
     <string name="browse_dimension_permission_title">Permissões</string>
     <string name="browse_dimension_permission_subtitle">Veja quais aplicativos usam uma determinada permissão</string>
     <string name="browse_dimension_certificate_title">Certificado de assinatura</string>
-    <string name="browse_dimension_certificate_subtitle">Agrupar aplicativos por identidade do signatário, nome do editor ou país</string>
+    <string name="browse_dimension_certificate_subtitle">Agrupe aplicativos por identidade do signatário, nome do editor ou país</string>
     <string name="browse_dimension_target_sdk_title">Versão do Android alvo</string>
     <string name="browse_dimension_target_sdk_subtitle">Veja para qual versão do Android cada aplicativo foi construído</string>
     <string name="browse_dimension_min_sdk_title">Versão mínima do Android</string>
@@ -58,9 +58,9 @@
     <string name="browse_certificate_hash_sha256">SHA-256</string>
     <string name="browse_certificate_hash_sha1">SHA-1</string>
     <string name="browse_certificate_hash_md5">MD5</string>
-    <string name="browse_protection_level_dangerous">Perigoso</string>
-    <string name="browse_protection_level_signature">Assinatura</string>
-    <string name="browse_protection_level_internal">Interno</string>
+    <string name="browse_protection_level_dangerous">Dangerous</string>
+    <string name="browse_protection_level_signature">Signature</string>
+    <string name="browse_protection_level_internal">Internal</string>
     <string name="browse_protection_level_normal">Normal</string>
     <string name="browse_protection_level_dangerous_explanation">Precisa da sua aprovação explícita antes que um aplicativo possa usá-lo.</string>
     <string name="browse_protection_level_signature_explanation">Apenas aplicativos assinados com a mesma chave que o aplicativo que o declarou podem manter isso.</string>
@@ -78,8 +78,8 @@
     <string name="browse_certificate_self_signed_explanation">Certificados autoassinados são normais para aplicativos Android. Compare a impressão digital do certificado com uma fonte confiável quando precisar verificar o editor.</string>
     <string name="browse_bucket_info_content_description">Sobre %1$s</string>
     <plurals name="browse_options_filter_hint">
-        <item quantity="one">Filtrar opção %1$d</item>
-        <item quantity="other">Filtrar opções %1$d</item>
+        <item quantity="one">Filtrar %1$d opção</item>
+        <item quantity="other">Filtrar %1$d opções</item>
     </plurals>
     <string name="browse_options_empty_query">Nenhuma opção corresponde a “%1$s”</string>
     <plurals name="browse_apps_count">
@@ -87,8 +87,8 @@
         <item quantity="other">%1$d aplicativos</item>
     </plurals>
     <plurals name="browse_apps_filter_hint">
-        <item quantity="one">Filtrar aplicativo %1$d</item>
-        <item quantity="other">Filtrar aplicativos %1$d</item>
+        <item quantity="one">Filtrar %1$d aplicativo</item>
+        <item quantity="other">Filtrar %1$d aplicativos</item>
     </plurals>
     <string name="browse_apps_empty_query">Nenhum aplicativo corresponde a “%1$s”</string>
 </resources>
