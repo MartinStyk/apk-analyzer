@@ -27,10 +27,10 @@ pushes that only touch Markdown, `.claude/`, `LICENSE`, `.editorconfig`, or `.gi
 failed — and uploads the merged `build/reports/merged.sarif` to code scanning. The upload is skipped
 for pull requests from forks, which have no `security-events: write` token.
 
-**`build-apk`** assembles a debug APK named after where it came from: `pr<number>.<run number>` for a
-pull request, `dev.<run number>` for a push to `develop`, passed through `-Pversion.name`. The file
-is renamed to `apk-analyzer.apk` and uploaded as the `apk-analyzer` artifact with a 14-day retention
-and no recompression, so the download is the APK itself.
+**`build-apk`** assembles a debug APK named after where it came from: `pr<number>.<run number>`
+for a pull request, `dev.<run number>` for a push to `develop`, passed through `-Pversion.name`.
+The file is renamed to `apk-analyzer.apk` and uploaded as the `apk-analyzer` artifact with a 14-day
+retention and no recompression, so the download is the APK itself.
 
 **`distribute`** needs both jobs and runs only on `push`, never on a pull request. It downloads the
 artifact and sends it to the `internal-testers` group on Firebase App Distribution, with release
@@ -48,18 +48,18 @@ lightweight tag can't provide release notes. The annotation body becomes the Git
 `lintDebug`), so shrinker- and release-only lint findings block the release.
 
 **`build-release`** derives `versionCode` from the tag as `MAJOR * 10000 + MINOR * 100 + PATCH`, and
-passes the tag itself as `version.name`. Before building it asserts that all four signing secrets are
-non-empty and fails if any is missing: the release `signingConfig` falls back to the debug key when
-they're absent, and a debug-signed release that uploads successfully is worse than a failed build. It
-then decodes the base64 keystore into the runner temp directory, appends the `signing.*` properties
-to `~/.gradle/gradle.properties`, and runs `bundleRelease assembleRelease`. The AAB, APK, and
-ProGuard `mapping.txt` are uploaded as three separate artifacts, the first two named
+passes the tag itself as `version.name`. Before building it asserts that all four signing secrets
+are non-empty and fails if any is missing: the release `signingConfig` falls back to the debug key
+when they're absent, and a debug-signed release that uploads successfully is worse than a failed
+build. It then decodes the base64 keystore into the runner temp directory, appends the `signing.*`
+properties to `~/.gradle/gradle.properties`, and runs `bundleRelease assembleRelease`. The AAB,
+APK, and ProGuard `mapping.txt` are uploaded as three separate artifacts, the first two named
 `apk-analyzer-<tag>`.
 
 Three publishing jobs then run in parallel:
 
-* **`publish-github-release`** attaches the APK to a GitHub release named after the tag, with the tag
-  annotation as the body.
+* **`publish-github-release`** attaches the APK to a GitHub release named after the tag, with the
+  tag annotation as the body.
 * **`publish-play-store`** runs `:app:publishBundle --track beta`, which uploads the AAB together
   with its mapping file. New releases always land on **beta**, never production.
 * **`distribute-app-distribution`** sends the release APK to the `internal-testers` group with the
@@ -90,8 +90,8 @@ Two composite actions keep the workflows from repeating themselves. Both assume 
 has already run.
 
 * [`setup-gradle-build`](../../.github/actions/setup-gradle-build/action.yml) — installs Temurin JDK
-  25, sets up Gradle with build scans enabled, and makes `gradlew` executable. Used by every job that
-  invokes Gradle except `agent-context.yml`, which inlines the same steps.
+  25, sets up Gradle with build scans enabled, and makes `gradlew` executable. Used by every job
+  that invokes Gradle except `agent-context.yml`, which inlines the same steps.
 * [`fetch-google-services`](../../.github/actions/fetch-google-services/action.yml) — replaces
   `app/google-services.json` with the real configuration pulled through the Firebase CLI, so the
   placeholder committed to the repository never reaches a CI build.
@@ -113,5 +113,5 @@ Names only; values live in repository settings.
 
 * [Verification](verification.md) — what each gate checks locally and in CI
 * [AI workflow](ai-workflow.md) — what `validateAgentContext` enforces
-* [`analyze-ci-failure`](../../.claude/skills/analyze-ci-failure/SKILL.md) — turning a red run into a
-  root cause
+* [`analyze-ci-failure`](../../.claude/skills/analyze-ci-failure/SKILL.md) — turning a red run into
+  a root cause
