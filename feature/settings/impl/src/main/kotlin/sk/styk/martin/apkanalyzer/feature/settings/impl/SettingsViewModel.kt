@@ -30,7 +30,7 @@ class SettingsViewModel @Inject constructor(
         SettingsState(
             colorScheme = colorScheme,
             recentlyViewedAppsEnabled = recentlyViewedEnabled,
-            appLanguageSetting = appLanguageRepository.getAppLanguageSetting(),
+            appLanguageSetting = this.appLanguageRepository.getAppLanguageSetting(),
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), SettingsState())
 
