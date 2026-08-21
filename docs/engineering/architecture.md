@@ -70,9 +70,10 @@ and does not pre-empt it.
 
 ## Shape 1 — one ViewModel shape
 
-Every ViewModel extends `ViewModel()` directly, with no base class, and exposes exactly two things:
+Every ViewModel extends `ViewModel()` directly, with no base class, and exposes exactly three things:
 
 * one `val state: StateFlow<FeatureState>`
+* one `val events: Flow<FeatureEvent>`, when the screen has one-shot signals to send
 * one `fun onAction(action: FeatureAction)` with a `when` dispatch
 
 Nothing else is public. The supporting types are equally fixed:

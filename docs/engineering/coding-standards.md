@@ -89,7 +89,7 @@ the choice visible at the call site and keeps the class substitutable.
 Coroutines and flows are the only concurrency primitives. No `Thread`, no `Executor`, no
 `runBlocking`.
 
-## Prefer explicit backing fields for mutable state
+## Keep mutable state private behind a read-only view
 
 A mutable flow is private; only a read-only view is public.
 
@@ -106,8 +106,8 @@ class AppFilterRepository @Inject constructor() {
 — [`AppFilterRepository`](../../feature/apps/impl/src/main/kotlin/sk/styk/martin/apkanalyzer/feature/apps/impl/filter/domain/AppFilterRepository.kt).
 
 Exposing the `MutableStateFlow` itself would let any collector write to state it doesn't own, and
-every mutation path would have to be found by grep rather than by reading one class. With a backing
-field, the set of legal transitions is exactly the public functions on the owner — `update`,
+every mutation path would have to be found by grep rather than by reading one class. With a private
+mutable flow, the set of legal transitions is exactly the public functions on the owner — `update`,
 `clear`, `toggleQuickFilter` — and each one is a named, testable operation instead of an anonymous
 `.value =` somewhere in a Composable.
 

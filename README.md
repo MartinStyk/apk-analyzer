@@ -172,7 +172,7 @@ and LeakCanary watches for leaks in debug builds. What each one enforces, and th
 catches, are in [`docs/engineering/verification.md`](docs/engineering/verification.md).
 
 Writing code? Conventions — the no-comments policy, returning `Result`/nullable instead of throwing,
-injected dispatchers, private `MutableStateFlow` backing fields, and combining sources into one
+injected dispatchers, keeping `MutableStateFlow` private behind a read-only view, and combining sources into one
 screen state — are in
 [`docs/engineering/coding-standards.md`](docs/engineering/coding-standards.md).
 
