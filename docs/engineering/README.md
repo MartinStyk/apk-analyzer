@@ -17,3 +17,6 @@ from the codebase; where they disagree, `AGENTS.md` wins.
 
 New here? Start with [`CONTRIBUTING.md`](../../CONTRIBUTING.md) for the workflow, then
 [architecture](architecture.md) and [coding standards](coding-standards.md).
+
+Editing these docs? `validateAgentContext` checks Markdown links in `AGENTS.md`, `CLAUDE.md`,
+`SKILL.md` and the root `README.md`, but **not** in `docs/` — verify links here by hand.
