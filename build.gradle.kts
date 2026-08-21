@@ -13,4 +13,5 @@ plugins {
     alias(libs.plugins.firebase.perf) apply false
     alias(libs.plugins.spotless) apply false
     alias(libs.plugins.detekt) apply false
+    alias(libs.plugins.triplet.play) apply false
 }

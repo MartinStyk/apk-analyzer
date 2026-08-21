@@ -1,0 +1,78 @@
+name: Promote release to production
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version being promoted (e.g. 3.5.0), for the run log only'
+        required: true
+      rollout-percentage:
+        description: 'Percentage of production users to receive the update (1-100)'
+        required: false
+        default: '100'
+
+run-name: Promote ${{ inputs.version }} to production (${{ inputs.rollout-percentage }}%)
+
+permissions:
+  contents: read
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up Gradle build environment
+        uses: ./.github/actions/setup-gradle-build
+
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v3
+        with:
+          credentials_json: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: 'https://www.googleapis.com/auth/androidpublisher'
+
+      - name: Determine promotion source track
+        id: source
+        env:
+          ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+        run: |
+          BASE="https://androidpublisher.googleapis.com/androidpublisher/v3/applications/sk.styk.martin.apkanalyzer"
+
+          EDIT_ID=$(curl -sf -X POST -H "Authorization: Bearer $ACCESS_TOKEN" "$BASE/edits" | jq -r '.id')
+          RELEASE_COUNT=$(curl -sf -H "Authorization: Bearer $ACCESS_TOKEN" "$BASE/edits/$EDIT_ID/tracks/production" | jq '.releases | length')
+          curl -sf -X POST -H "Authorization: Bearer $ACCESS_TOKEN" "$BASE/edits/$EDIT_ID:delete" > /dev/null
+
+          if [ "$RELEASE_COUNT" -gt 0 ]; then
+            echo "Production track already has a release; adjusting its rollout percentage."
+            echo "from-track=production" >> "$GITHUB_OUTPUT"
+          else
+            echo "Production track is empty; promoting fresh from beta."
+            echo "from-track=beta" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Promote Play Store release to production
+        env:
+          ANDROID_PUBLISHER_CREDENTIALS: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+          FROM_TRACK: ${{ steps.source.outputs.from-track }}
+          ROLLOUT_PERCENTAGE: ${{ inputs.rollout-percentage }}
+        run: |
+          if ! [[ "$ROLLOUT_PERCENTAGE" =~ ^[0-9]+$ ]] || [ "$ROLLOUT_PERCENTAGE" -lt 1 ] || [ "$ROLLOUT_PERCENTAGE" -gt 100 ]; then
+            echo "::error::rollout-percentage must be a whole number between 1 and 100, got '$ROLLOUT_PERCENTAGE'"
+            exit 1
+          fi
+
+          if [ "$FROM_TRACK" = "production" ]; then
+            TRACK_ARGS=(--update production)
+          else
+            TRACK_ARGS=(--from-track "$FROM_TRACK" --promote-track production)
+          fi
+
+          if [ "$ROLLOUT_PERCENTAGE" -eq 100 ]; then
+            ./gradlew :app:promoteArtifact "${TRACK_ARGS[@]}" --release-status completed
+          else
+            USER_FRACTION=$(awk "BEGIN { printf \"%.2f\", $ROLLOUT_PERCENTAGE / 100 }")
+            ./gradlew :app:promoteArtifact "${TRACK_ARGS[@]}" --release-status inProgress --user-fraction "$USER_FRACTION"
+          fi

@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
+import sk.styk.martin.apkanalyzer.core.apps.sdkversion.SdkVersionResolver
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.SdkVersionFilterCoordinator
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.SdkVersionFilterDraft
 import javax.inject.Inject
@@ -21,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SdkVersionFilterViewModel @Inject constructor(
     private val sdkVersionFilterCoordinator: SdkVersionFilterCoordinator,
+    sdkVersionResolver: SdkVersionResolver,
     installedAppsRepository: InstalledAppsRepository,
 ) : ViewModel() {
 
@@ -33,7 +35,13 @@ class SdkVersionFilterViewModel @Inject constructor(
     val state = combine(installedAppsRepository.apps(), selectedSdkVersions) { apps, selected ->
         val options = apps.map { it.targetSdk }.distinct()
             .sortedDescending()
-            .map { sdkVersion -> SdkVersionOption(sdkVersion = sdkVersion, isSelected = sdkVersion in selected) }
+            .map { sdkVersion ->
+                SdkVersionOption(
+                    sdkVersion = sdkVersion,
+                    isSelected = sdkVersion in selected,
+                    androidVersionName = sdkVersionResolver.resolveVersion(sdkVersion),
+                )
+            }
             .toImmutableList()
         SdkVersionFilterState(options = options)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), SdkVersionFilterState())

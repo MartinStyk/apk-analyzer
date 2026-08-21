@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
+import sk.styk.martin.apkanalyzer.core.apps.sdkversion.SdkVersionResolver
 import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepository
 import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.combine
@@ -37,6 +38,7 @@ class FilterViewModel @Inject constructor(
     private val permissionFilterCoordinator: PermissionFilterCoordinator,
     private val sourceFilterCoordinator: SourceFilterCoordinator,
     private val sdkVersionFilterCoordinator: SdkVersionFilterCoordinator,
+    sdkVersionResolver: SdkVersionResolver,
     installedAppsRepository: InstalledAppsRepository,
     usageStatsRepository: UsageStatsRepository,
     storageStatsRepository: StorageStatsRepository,
@@ -122,7 +124,9 @@ class FilterViewModel @Inject constructor(
                 !usagePerm -> UnusedAppsSectionState.PermissionMissing
                 else -> UnusedAppsSectionState.Available
             },
-            availableSdkVersions = metadata.sdkVersions.toImmutableList(),
+            availableSdkVersions = metadata.sdkVersions
+                .map { sdkVersion -> SdkVersionEntry(sdkVersion, sdkVersionResolver.resolveVersion(sdkVersion)) }
+                .toImmutableList(),
             availableSources = metadata.sources.toImmutableList(),
             activePermissionPresets = activePresets,
             extraPermissionCount = extraPermissionCount,

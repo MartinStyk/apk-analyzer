@@ -1,0 +1,24 @@
+name: Fetch Firebase google-services.json
+description: Downloads app/google-services.json via the Firebase CLI
+
+inputs:
+  firebase-token:
+    required: true
+  firebase-app-id:
+    required: true
+  firebase-project-id:
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        FIREBASE_TOKEN: ${{ inputs.firebase-token }}
+        FIREBASE_APP_ID: ${{ inputs.firebase-app-id }}
+        FIREBASE_PROJECT_ID: ${{ inputs.firebase-project-id }}
+      run: |
+        rm -f app/google-services.json
+        npx --yes firebase-tools@15.26.0 apps:sdkconfig ANDROID "$FIREBASE_APP_ID" \
+          --project "$FIREBASE_PROJECT_ID" \
+          -o app/google-services.json
