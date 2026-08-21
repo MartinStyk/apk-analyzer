@@ -91,28 +91,43 @@ Coroutines and flows are the only concurrency primitives. No `Thread`, no `Execu
 
 ## Keep mutable state private behind a read-only view
 
-A mutable flow is private; only a read-only view is public.
+Declare the property with its read-only type and give it a `MutableStateFlow` backing field, using
+Kotlin's explicit backing field syntax. Outside the class only the `StateFlow` is visible; inside it,
+`.value =` works because the real backing field is the mutable flow.
 
 ```kotlin
 @Singleton
-class AppFilterRepository @Inject constructor() {
-    private val _filter = MutableStateFlow(AppFilterState())
-    val filter: StateFlow<AppFilterState> = _filter.asStateFlow()
+internal class StorageStatsRepositoryImpl @Inject constructor(
+    …
+) : StorageStatsRepository {
 
-    fun toggleQuickFilter(filter: QuickFilter) { … }
+    final override val totalSizes: StateFlow<Map<PackageName, AppSize>>
+        field = MutableStateFlow<Map<PackageName, AppSize>>(emptyMap())
+
+    private suspend fun fetchTotalSizes(packageNames: List<PackageName>, trigger: String) {
+        …
+        totalSizes.value = sizes
+    }
 }
 ```
 
-— [`AppFilterRepository`](../../feature/apps/impl/src/main/kotlin/sk/styk/martin/apkanalyzer/feature/apps/impl/filter/domain/AppFilterRepository.kt).
+— [`StorageStatsRepositoryImpl`](../../core/apps/src/main/kotlin/sk/styk/martin/apkanalyzer/core/apps/storagestats/StorageStatsRepositoryImpl.kt).
 
-Exposing the `MutableStateFlow` itself would let any collector write to state it doesn't own, and
-every mutation path would have to be found by grep rather than by reading one class. With a private
-mutable flow, the set of legal transitions is exactly the public functions on the owner — `update`,
-`clear`, `toggleQuickFilter` — and each one is a named, testable operation instead of an anonymous
-`.value =` somewhere in a Composable.
+This replaces the older `private val _x = MutableStateFlow(); val x: StateFlow<X> = _x.asStateFlow()`
+pair with a single declaration. The effect is the same either way: exposing the `MutableStateFlow`
+itself would let any collector write to state it doesn't own, and every mutation path would have to
+be found by grep rather than by reading one class.
 
-The same rule applies inside ViewModels: private `MutableStateFlow` sources, one public
-`StateFlow<State>`, and events over a private `Channel` exposed as `receiveAsFlow()`.
+The same rule applies inside ViewModels: `state` is declared as `StateFlow<FeatureState>` with a
+`MutableStateFlow` backing field, and events go over a private `Channel` exposed as
+`receiveAsFlow()`.
+
+```kotlin
+val state: StateFlow<ApkFilePickerState>
+    field = MutableStateFlow<ApkFilePickerState>(ApkFilePickerState.Ready)
+```
+
+— [`ApkFilePickerViewModel`](../../feature/apps/impl/src/main/kotlin/sk/styk/martin/apkanalyzer/feature/apps/impl/components/apkfilepicker/ApkFilePickerViewModel.kt).
 
 ## Prefer one combined state over several fine-grained flows
 

@@ -1,4 +1,10 @@
+<div align="center">
+
+<img src="app/src/main/res/mipmap-xxhdpi/ic_launcher.png" width="96" alt="Apk Analyzer icon" />
+
 # ApkAnalyzer
+
+**Detailed reports of every app on your device — no root, no ads, nothing leaves the phone.** 📱
 
 [![Continuous integration](https://github.com/MartinStyk/AndroidApkAnalyzer/actions/workflows/ci.yml/badge.svg)](https://github.com/MartinStyk/AndroidApkAnalyzer/actions/workflows/ci.yml)
 [![Release](https://github.com/MartinStyk/AndroidApkAnalyzer/actions/workflows/release.yml/badge.svg)](https://github.com/MartinStyk/AndroidApkAnalyzer/actions/workflows/release.yml)
@@ -6,26 +12,23 @@
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4.10-blue.svg?logo=kotlin)](gradle/libs.versions.toml)
 [![API](https://img.shields.io/badge/API-28%2B-brightgreen.svg?logo=android)](build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/utils/AndroidSdk.kt)
 [![Google Play](https://img.shields.io/badge/Google%20Play-2M%2B%20downloads-34A853.svg?logo=googleplay&logoColor=white)](https://play.google.com/store/apps/details?id=sk.styk.martin.apkanalyzer)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-<img src="app/src/main/res/mipmap-xxhdpi/ic_launcher.png" width="72" align="left" alt="Apk Analyzer icon" />
-
-**Detailed reports of the applications on your device — 📱**
-
-Apk Analyzer is the *most downloaded APK analysis app* on Google Play, with over 2 million
-downloads. It inspects installed apps and `.apk` files straight from device storage — no root
-required. It's open source, ad-free, and does its analysis on your device.
-
-Shipping since 2017, now rebuilt as a multi-module Jetpack Compose app.
+*The most downloaded APK analysis app on Google Play — shipping since 2017, now rebuilt as a
+multi-module Jetpack Compose app.*
 
 <a href='https://play.google.com/store/apps/details?id=sk.styk.martin.apkanalyzer'><img alt='Get it on Google Play' height="60" src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
 
-<br clear="left"/>
+</div>
+
+---
 
 ## Table of contents
 
 - [What it does](#what-it-does)
 - [Why it exists](#why-it-exists)
 - [Privacy and permissions](#privacy-and-permissions)
+- [Requirements](#requirements)
 - [Tech stack](#tech-stack)
 - [Architecture](#architecture)
 - [Getting started](#getting-started)
@@ -33,40 +36,47 @@ Shipping since 2017, now rebuilt as a multi-module Jetpack Compose app.
 - [CI and releases](#ci-and-releases)
 - [Documentation](#documentation)
 - [Contributing](#contributing)
+- [AI-assisted development](#ai-assisted-development)
 - [Support](#support)
 - [License](#license)
 
 ## What it does
 
+- 🔎 **See what Android hides.** Every permission, certificate, component, and manifest flag,
+  translated out of API-speak.
+- 🔒 **100% on-device.** App data never leaves your phone — the on-device AI summary runs locally
+  too.
+- 🧭 **Browse by attribute, not just by app.** Flip the question around: which apps want this
+  permission, share this signer, target this SDK.
+- 🆓 **Free and open source.** No ads, no paywall on the raw data, GPLv3.
+
 **Inspect one app — everything Android knows about it, in one report.**
 
 | Group | What you get |
 |---|---|
-| Identity | Package and app name, version name and code, app category, install and update dates |
-| Compatibility | Target and minimum Android version, required and optional hardware features |
-| Origin | Full install-source chain — which store or app actually installed it |
-| Signing | Certificate details, issuer and subject, validity, fingerprints, signing-scheme versions |
-| Permissions | Requested and declared permissions with plain-language descriptions and protection levels |
-| Components | Activities, services, receivers and providers with intent filters, exported state, path permissions, and launch options |
-| Packaging | Native libraries and ABIs, split APKs, shared UID group, manifest security flags, storage size |
-| Manifest | The complete `AndroidManifest.xml`, readable |
+| 🪪 Identity | Package and app name, version name and code, app category, install and update dates |
+| 📶 Compatibility | Target and minimum Android version, required and optional hardware features |
+| 🏬 Origin | Full install-source chain — which store or app actually installed it |
+| 🔏 Signing | Certificate details, issuer and subject, validity, fingerprints, signing-scheme versions |
+| 🔐 Permissions | Requested and declared permissions with plain-language descriptions and protection levels |
+| 🧩 Components | Activities, services, receivers and providers with intent filters, exported state, path permissions, and launch options |
+| 📦 Packaging | Native libraries and ABIs, split APKs, shared UID group, manifest security flags, storage size |
+| 📄 Manifest | The complete `AndroidManifest.xml`, readable |
 
-**Browse by attribute.** Turn the question around and start from the attribute instead of the app:
-which apps request a given permission, which are signed by a given certificate, what targets each
-Android version, where each app came from, which share a UID, how apps spread across categories.
+**🧭 Browse by attribute.** Turn the question around and start from the attribute instead of the
+app: which apps request a given permission, which are signed by a given certificate, what targets
+each Android version, where each app came from, which share a UID, how apps spread across
+categories.
 
-**Analyze `.apk` files.** Open an `.apk` from another app or pick one from storage and get the same
-full report for something you haven't installed.
+**📂 Analyze `.apk` files.** Open an `.apk` from another app or pick one from storage and get the
+same full report for something you haven't installed.
 
-**On-device AI summary.** A short, factual, plain-language read on what an app is and what its
+**🤖 On-device AI summary.** A short, factual, plain-language read on what an app is and what its
 permissions and components imply — generated locally with ML Kit's GenAI prompt API. The app data
 never leaves the device.
 
-**Export and share.** Export or share the APK itself, save the app icon, copy or share a text
+**📤 Export and share.** Export or share the APK itself, save the app icon, copy or share a text
 summary, and launch an app's components directly.
-
-**Requirements:** Android 9 (API 28) or newer. The AI summary additionally needs a device that
-supports on-device generative AI; everything else works everywhere.
 
 ## Why it exists
 
@@ -88,6 +98,13 @@ needed for the core feature:
 App-analysis data is processed on device. Network use is limited to Firebase telemetry (Analytics,
 Crashlytics, Performance) and ML Kit downloading the on-device AI model. See
 [`PRIVACY_POLICY.MD`](PRIVACY_POLICY.MD).
+
+## Requirements
+
+Android 9 (API 28) or newer. The AI summary additionally needs a device that supports on-device
+generative AI; everything else works everywhere.
+
+---
 
 ## Tech stack
 
@@ -222,15 +239,24 @@ manual promotion. The four workflows, their triggers, and the secrets they need 
 | [`docs/technical/`](docs/technical/README.md) | Cross-cutting engineering decisions and audits |
 | [`.claude/skills/`](.claude/skills) | Step-by-step procedures for recurring tasks, shared by Claude and Copilot |
 
+---
+
 ## Contributing
 
 Contributions are welcome. Start with [`CONTRIBUTING.md`](CONTRIBUTING.md) for the workflow, then
-[`AGENTS.md`](AGENTS.md) for module boundaries and conventions. By participating you agree to the
-[Code of Conduct](CODE_OF_CONDUCT.md).
+[`docs/engineering/architecture.md`](docs/engineering/architecture.md) and
+[`docs/engineering/coding-standards.md`](docs/engineering/coding-standards.md) for module boundaries
+and conventions. By participating you agree to the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 Good first contributions: a **translation** (the app currently ships English and Japanese, and a PR
 touching only `strings.xml` files needs no prior discussion), or anything marked open in the
 [roadmap](docs/product/roadmap.md).
+
+## AI-assisted development
+
+Both Claude and GitHub Copilot are supported for working on this codebase, reading the same
+`AGENTS.md` context files and shared `.claude/skills/`. Details →
+[`docs/engineering/ai-workflow.md`](docs/engineering/ai-workflow.md).
 
 ## Support
 

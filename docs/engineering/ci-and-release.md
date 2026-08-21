@@ -19,70 +19,62 @@ pushes that only touch Markdown, `.claude/`, `LICENSE`, `.editorconfig`, or `.gi
 
 ## Continuous integration
 
-`verify` and `build-apk` run in parallel; neither waits on the other.
+`verify` and `build-apk` run in parallel; `distribute` needs both and runs only on `push`, never on
+a pull request.
 
-**`verify`** runs `spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug
---continue`, so a failure in one tool doesn't hide findings from the rest. It then runs
-`mergeSarifReports` — with `if: always()`, because the reports are only interesting when something
-failed — and uploads the merged `build/reports/merged.sarif` to code scanning. The upload is skipped
-for pull requests from forks, which have no `security-events: write` token.
+| Job | What it does |
+|---|---|
+| `verify` | Runs `spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug --continue`, merges the SARIF reports, and uploads to code scanning |
+| `build-apk` | Assembles a debug APK, renames it to `apk-analyzer.apk`, and uploads it with 14-day retention and no recompression |
+| `distribute` | Downloads the APK and sends it to the `internal-testers` group on Firebase App Distribution |
 
-**`build-apk`** assembles a debug APK named after where it came from: `pr<number>.<run number>`
-for a pull request, `dev.<run number>` for a push to `develop`, passed through `-Pversion.name`.
-The file is renamed to `apk-analyzer.apk` and uploaded as the `apk-analyzer` artifact with a 14-day
-retention and no recompression, so the download is the APK itself.
+Non-obvious details:
 
-**`distribute`** needs both jobs and runs only on `push`, never on a pull request. It downloads the
-artifact and sends it to the `internal-testers` group on Firebase App Distribution, with release
-notes built from the head commit message plus the commit SHA and a link back to the run.
+* The SARIF merge runs with `if: always()` and is skipped for fork PRs, which have no
+  `security-events: write` token.
+* `build-apk` names the file `pr<number>.<run number>` for a PR or `dev.<run number>` for a push to
+  `develop`, passed through `-Pversion.name`.
+* `distribute`'s release notes are the head commit message plus the commit SHA and a link back to
+  the run.
 
 ## Release
 
 Pushing an annotated `MAJOR.MINOR.PATCH` tag starts the release. The tag is the only input: it
 supplies the version name, the version code, and the release notes.
 
-**`check-tag`** reads the tag annotation and fails with a remediation message if it's empty — a
-lightweight tag can't provide release notes. The annotation body becomes the GitHub release body.
+| Job | What it does |
+|---|---|
+| `check-tag` | Fails with a remediation message if the tag annotation is empty — a lightweight tag can't provide release notes. The annotation body becomes the GitHub release body |
+| `verify` | Repeats the CI gates against the release variant (`lintRelease` rather than `lintDebug`) |
+| `build-release` | Derives `versionCode` from the tag, decodes the signing keystore, runs `bundleRelease assembleRelease`, and uploads the AAB, APK, and ProGuard `mapping.txt` as separate artifacts |
+| `publish-github-release` | Attaches the APK to a GitHub release named after the tag |
+| `publish-play-store` | Runs `:app:publishBundle --track beta` — new releases always land on **beta**, never production |
+| `distribute-app-distribution` | Sends the release APK to `internal-testers`, tagged with the release notes |
 
-**`verify`** repeats the CI gates but against the release variant (`lintRelease` rather than
-`lintDebug`), so shrinker- and release-only lint findings block the release.
+Non-obvious details:
 
-**`build-release`** derives `versionCode` from the tag as `MAJOR * 10000 + MINOR * 100 + PATCH`, and
-passes the tag itself as `version.name`. Before building it asserts that all four signing secrets
-are non-empty and fails if any is missing: the release `signingConfig` falls back to the debug key
-when they're absent, and a debug-signed release that uploads successfully is worse than a failed
-build. It then decodes the base64 keystore into the runner temp directory, appends the `signing.*`
-properties to `~/.gradle/gradle.properties`, and runs `bundleRelease assembleRelease`. The AAB,
-APK, and ProGuard `mapping.txt` are uploaded as three separate artifacts, the first two named
-`apk-analyzer-<tag>`.
-
-Three publishing jobs then run in parallel:
-
-* **`publish-github-release`** attaches the APK to a GitHub release named after the tag, with the
-  tag annotation as the body.
-* **`publish-play-store`** runs `:app:publishBundle --track beta`, which uploads the AAB together
-  with its mapping file. New releases always land on **beta**, never production.
-* **`distribute-app-distribution`** sends the release APK to the `internal-testers` group with the
-  tag as its release notes.
+* `versionCode` is `MAJOR * 10000 + MINOR * 100 + PATCH`; the tag itself becomes `version.name`.
+* `build-release` fails outright if any of the four signing secrets is missing, rather than falling
+  back to the debug key — a debug-signed release that uploads successfully is worse than a failed
+  build.
+* The three publishing jobs run in parallel once `build-release` finishes.
 
 ## Promotion to production
 
 `promote-release.yml` is the only path to the production track, and it is always a deliberate manual
-step. It takes two inputs:
+step.
 
 | Input | Required | Meaning |
 |---|---|---|
-| `version` | Yes | The version being promoted, e.g. `3.5.0`. Used for the run name and the log only — it does not select which release is promoted. |
-| `rollout-percentage` | No, defaults to `100` | Share of production users receiving the update, 1–100. Rejected unless it's a whole number in that range. |
+| `version` | Yes | The version being promoted, e.g. `3.5.0`. Used for the run name and the log only — it does not select which release is promoted |
+| `rollout-percentage` | No, defaults to `100` | Share of production users receiving the update, 1–100 |
 
-The job first asks the Play Developer API whether the production track already has a release. If it
-does, the run **updates** that release's rollout rather than promoting again; if the track is empty,
-it promotes from **beta**. A rollout of 100 finishes the release as `completed`; anything lower sets
-`inProgress` with the matching user fraction, so re-running with a higher percentage is how a staged
-rollout is widened.
-
-Because the promoted release is whatever currently sits on beta, promote soon after the release run
-finishes — or check the beta track first.
+* If production already has a release, the run **updates** its rollout instead of promoting again;
+  otherwise it promotes from **beta**.
+* A rollout of `100` finishes the release as `completed`; anything lower sets `inProgress` at that
+  percentage, so re-running with a higher number widens a staged rollout.
+* The promoted release is whatever currently sits on beta, so promote soon after the release run
+  finishes — or check the beta track first.
 
 ## Shared pieces
 
