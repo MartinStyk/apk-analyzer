@@ -11,7 +11,7 @@
     <string name="app_detail_version">Verze</string>
     <string name="app_detail_apk_size">Velikost APK</string>
     <string name="app_detail_total_size">Celková velikost</string>
-    <string name="app_detail_target_sdk">Cílový SDK</string>
+    <string name="app_detail_target_sdk">Target SDK</string>
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_updated">Aktualizováno</string>
@@ -307,7 +307,7 @@
     <string name="general_info_version_name">Název verze</string>
     <string name="general_info_version_code">Kód verze</string>
     <string name="general_info_min_sdk">Min SDK</string>
-    <string name="general_info_target_sdk">Cílový SDK</string>
+    <string name="general_info_target_sdk">Target SDK</string>
     <string name="general_info_debug_access">Přístup k ladění</string>
     <string name="general_info_app_data_backup">Záloha dat aplikace</string>
     <string name="general_info_unencrypted_traffic">Nešifrovaný provoz jako výchozí</string>
@@ -416,13 +416,13 @@
     <string name="permissions_section_header">%1$s · %2$d</string>
     <string name="permissions_granted">Přiděleno</string>
     <string name="permissions_not_granted">Nepřiděleno</string>
-    <string name="permissions_level_dangerous">Nebezpečné</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
     <string name="permissions_level_dangerous_explanation">Vyžaduje váš výslovný souhlas, než jej aplikace může použít.</string>
-    <string name="permissions_level_signature">Podpis</string>
+    <string name="permissions_level_signature">Signature</string>
     <string name="permissions_level_signature_explanation">Pouze aplikace podepsané stejným klíčem mohou mít tyto.</string>
-    <string name="permissions_level_internal">Interní</string>
+    <string name="permissions_level_internal">Internal</string>
     <string name="permissions_level_internal_explanation">Vyhrazeno pro systém a přiděleno interními pravidly spíše než vámi.</string>
-    <string name="permissions_level_normal">Normální</string>
+    <string name="permissions_level_normal">Normal</string>
     <string name="permissions_level_normal_explanation">Obvykle přiděleno automaticky při instalaci. Nízké riziko samostatně.</string>
     <string name="permissions_level_unavailable">Podrobnosti nejsou k dispozici</string>
     <string name="permissions_level_unavailable_explanation">Žádná aplikace na tomto zařízení tyto nevyhlašuje, takže nemůžeme ukázat, co chrání.</string>

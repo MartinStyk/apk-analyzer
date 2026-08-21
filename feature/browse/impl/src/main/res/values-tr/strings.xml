@@ -58,9 +58,9 @@
     <string name="browse_certificate_hash_sha256">SHA-256</string>
     <string name="browse_certificate_hash_sha1">SHA-1</string>
     <string name="browse_certificate_hash_md5">MD5</string>
-    <string name="browse_protection_level_dangerous">Tehlikeli</string>
-    <string name="browse_protection_level_signature">İmza</string>
-    <string name="browse_protection_level_internal">Dahili</string>
+    <string name="browse_protection_level_dangerous">Dangerous</string>
+    <string name="browse_protection_level_signature">Signature</string>
+    <string name="browse_protection_level_internal">Internal</string>
     <string name="browse_protection_level_normal">Normal</string>
     <string name="browse_protection_level_dangerous_explanation">Bir uygulamanın bunu kullanabilmesi için açık onayınızı gerektirir.</string>
     <string name="browse_protection_level_signature_explanation">Sadece bunu beyan eden uygulama ile aynı anahtar ile imzalanmış uygulamalar bunu tutabilir.</string>

@@ -11,7 +11,7 @@
     <string name="sort_size">Розмір файлу APK</string>
     <string name="sort_total_size">Загальний розмір програми</string>
     <string name="sort_install_date">Дата встановлення</string>
-    <string name="sort_target_sdk">Цільовий Android SDK</string>
+    <string name="sort_target_sdk">Target Android SDK</string>
     <string name="sort_last_updated">Останнє оновлення</string>
     <string name="sort_last_used">Останнє використання</string>
     <string name="sort_bottom_sheet_title">Сортувати за</string>
@@ -42,7 +42,7 @@
     <string name="quick_filter_source_sheet_title">Джерело</string>
     <string name="quick_filter_selection_more" ns0:ignore="PluralsCandidate">%1$s +%2$d</string>
     <string name="quick_filter_activity_sheet_title">Activity</string>
-    <string name="quick_filter_activity_all">Будь-яка activity</string>
+    <string name="quick_filter_activity_all">Уся Activity</string>
     <string name="apps_empty_filtered">Додатків не знайдено</string>
     <string name="apps_clear_filters">Очистити фільтри</string>
     <string name="installed_apps">Встановлені додатки</string>
@@ -60,9 +60,9 @@
     <string name="filter_source_section">Джерело встановлення</string>
     <string name="filter_sdk_section">Цільовий SDK</string>
     <string name="filter_apk_size_section">Розмір файлу APK</string>
-    <string name="filter_apk_size_description">Розмір пакета інсталятора (.apk) тільки — не включає дані користувача та кеш.</string>
+    <string name="filter_apk_size_description">Розмір пакета інсталятора (.apk) — не включає дані користувача та кеш.</string>
     <string name="filter_total_size_section">Загальний розмір програми</string>
-    <string name="filter_total_size_description">Сумарний розмір інсталятора, збережених даних додатка та кешованих файлів.</string>
+    <string name="filter_total_size_description">Сумарний розмір APK, даних додатка та кешу.</string>
     <string name="filter_total_size_locked_description">Фільтрувати за загальним обсягом додатка. Надати доступ до сховища, щоб виміряти повний розмір кожного додатка — включаючи його дані та кеш, а не тільки інсталятор.</string>
     <string name="filter_total_size_grant_access">Надати доступ до сховища</string>
     <string name="filter_install_time_section">Дата встановлення</string>
@@ -87,7 +87,7 @@
     <string name="filter_source_system">Система</string>
     <string name="filter_source_unknown">Невідомо</string>
     <string name="filter_unused_section">Невикористовувані додатки</string>
-    <string name="filter_unused_locked_description">Знайдіть додатки, які припали пилюкою. Надайте доступ до використання, щоб побачити, які додатки ви не відкривали останнім часом.</string>
+    <string name="filter_unused_locked_description">Знайдіть додатки, які припали пилюкою. Надайте доступ до даних про використання, щоб побачити, які додатки ви не відкривали останнім часом.</string>
     <string name="filter_unused_grant_access">Надати доступ</string>
     <plurals name="filter_unused_days_count">
         <item quantity="one">%d день</item>
@@ -102,22 +102,22 @@
         <item quantity="other">%d місяців</item>
     </plurals>
     <string name="filter_unused_year">1 рік</string>
-    <string name="quick_filter_permission_usage_title">Потрібен доступ до використання</string>
-    <string name="quick_filter_permission_usage_description">Щоб фільтрувати за тим, як нещодавно використовувалися програми, надайте доступ до використання в Налаштуваннях. Це дозволяє додатку бачити, які програми активні, а які бездіяльні.</string>
-    <string name="quick_filter_permission_storage_title">Потрібен доступ до використання</string>
-    <string name="quick_filter_permission_storage_description">Цей фільтр вимірює повний розмір кожної програми — установник, збережені дані та кеш разом. Надайте доступ до використання в Налаштуваннях, щоб побачити, скільки місця насправді займає кожна програма.</string>
+    <string name="quick_filter_permission_usage_title">Потрібен доступ до даних про використання</string>
+    <string name="quick_filter_permission_usage_description">Щоб фільтрувати за тим, як нещодавно використовувалися програми, надайте доступ до даних про використання в Налаштуваннях. Це дозволяє додатку бачити, які програми активні, а які бездіяльні.</string>
+    <string name="quick_filter_permission_storage_title">Потрібен доступ до даних про використання</string>
+    <string name="quick_filter_permission_storage_description">Цей фільтр вимірює повний розмір кожної програми — установник, збережені дані та кеш разом. Надайте доступ до даних про використання в Налаштуваннях, щоб побачити, скільки місця насправді займає кожна програма.</string>
     <string name="quick_filter_permission_open_settings">Відкрити налаштування</string>
-    <string name="sort_permission_usage_title">Дозволити доступ до використання</string>
-    <string name="sort_permission_usage_description">Сортування за останнім використанням потребує знати, коли ви востаннє відкривали кожну програму. Надайте доступ до використання в Налаштуваннях, щоб активувати цю опцію сортування.</string>
-    <string name="sort_permission_storage_title">Дозволити доступ до використання</string>
-    <string name="sort_permission_storage_description">Сортування за загальним розміром вимірює повний слід кожної програми — установник, збережені дані та кеш разом. Надайте доступ до використання в Налаштуваннях, щоб активувати цю опцію сортування.</string>
+    <string name="sort_permission_usage_title">Дозволити доступ до даних про використання</string>
+    <string name="sort_permission_usage_description">Сортування за останнім використанням потребує знати, коли ви востаннє відкривали кожну програму. Надайте доступ до даних про використання в Налаштуваннях, щоб активувати цю опцію сортування.</string>
+    <string name="sort_permission_storage_title">Дозволити доступ до даних про використання</string>
+    <string name="sort_permission_storage_description">Сортування за загальним розміром вимірює повний слід кожної програми — установник, збережені дані та кеш разом. Надайте доступ до даних про використання в Налаштуваннях, щоб активувати цю опцію сортування.</string>
     <string name="filter_permissions_section">Дозволи</string>
     <string name="filter_permissions_count" ns0:ignore="PluralsCandidate">+%d більше</string>
     <string name="filter_permissions_title">Фільтрувати за дозволом</string>
     <string name="filter_permissions_quick_filters">Швидкі фільтри</string>
     <string name="filter_permissions_match_label">Відповідність</string>
-    <string name="filter_permissions_chip_match_any">Відповідність: Будь-яка</string>
-    <string name="filter_permissions_chip_match_all">Відповідність: Усі</string>
+    <string name="filter_permissions_chip_match_any">Відповідність: будь-яка</string>
+    <string name="filter_permissions_chip_match_all">Відповідність: усі</string>
     <string name="filter_permissions_chip_presets">Попередні налаштування</string>
     <plurals name="filter_permissions_chip_presets_count">
         <item quantity="one">%d попереднє налаштування</item>
@@ -147,7 +147,7 @@
     <string name="filter_permissions_preset_contacts">Контакти</string>
     <string name="filter_permissions_preset_sms">SMS</string>
     <string name="filter_permissions_preset_storage">Сховище</string>
-    <string name="filter_permissions_empty_search_title">Немає результатів для \"%1$s\"</string>
+    <string name="filter_permissions_empty_search_title">Немає результатів для «%1$s»</string>
     <string name="filter_permissions_empty_search_subtitle">Спробуйте іншу назву або ідентифікатор дозволу.</string>
     <string name="filter_permissions_empty_selected_title">Не вибрано жодних дозволів</string>
     <string name="filter_permissions_empty_selected_subtitle">Поверніться до повного списку та виберіть дозволи для фільтрації.</string>

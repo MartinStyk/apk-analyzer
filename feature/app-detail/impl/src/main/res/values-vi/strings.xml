@@ -11,7 +11,7 @@
     <string name="app_detail_version">Phiên bản</string>
     <string name="app_detail_apk_size">Kích thước APK</string>
     <string name="app_detail_total_size">Tổng kích thước</string>
-    <string name="app_detail_target_sdk">SDK mục tiêu</string>
+    <string name="app_detail_target_sdk">Target SDK</string>
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_updated">Đã cập nhật</string>
@@ -241,7 +241,7 @@
     <string name="general_info_version_name">Tên phiên bản</string>
     <string name="general_info_version_code">Mã phiên bản</string>
     <string name="general_info_min_sdk">SDK tối thiểu</string>
-    <string name="general_info_target_sdk">SDK mục tiêu</string>
+    <string name="general_info_target_sdk">Target SDK</string>
     <string name="general_info_debug_access">Truy cập gỡ lỗi</string>
     <string name="general_info_app_data_backup">Sao lưu dữ liệu ứng dụng</string>
     <string name="general_info_unencrypted_traffic">Lưu lượng không mã hóa mặc định</string>
@@ -341,13 +341,13 @@
     <string name="permissions_section_header">%1$s · %2$d</string>
     <string name="permissions_granted">Đã cấp</string>
     <string name="permissions_not_granted">Chưa được cấp</string>
-    <string name="permissions_level_dangerous">Nguy hiểm</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
     <string name="permissions_level_dangerous_explanation">Cần sự chấp thuận rõ ràng của bạn trước khi ứng dụng có thể sử dụng nó.</string>
-    <string name="permissions_level_signature">Chữ ký</string>
+    <string name="permissions_level_signature">Signature</string>
     <string name="permissions_level_signature_explanation">Chỉ có các ứng dụng được ký bằng cùng một khóa mới có thể giữ những điều này.</string>
-    <string name="permissions_level_internal">Nội bộ</string>
+    <string name="permissions_level_internal">Internal</string>
     <string name="permissions_level_internal_explanation">Dành riêng cho hệ thống và được cấp theo các quy tắc nội bộ chứ không phải bởi bạn.</string>
-    <string name="permissions_level_normal">Bình thường</string>
+    <string name="permissions_level_normal">Normal</string>
     <string name="permissions_level_normal_explanation">Thường được cấp tự động khi cài đặt. Rủi ro thấp khi tự nó.</string>
     <string name="permissions_level_unavailable">Chi tiết không có sẵn</string>
     <string name="permissions_level_unavailable_explanation">Không có ứng dụng nào trên thiết bị này khai báo những điều này, vì vậy chúng tôi không thể hiển thị những gì chúng bảo vệ.</string>

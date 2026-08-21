@@ -11,7 +11,7 @@
     <string name="sort_size">Taille du fichier APK</string>
     <string name="sort_total_size">Taille totale de l\'application</string>
     <string name="sort_install_date">Date d\'installation</string>
-    <string name="sort_target_sdk">SDK Android cible</string>
+    <string name="sort_target_sdk">Target Android SDK</string>
     <string name="sort_last_updated">Dernière mise à jour</string>
     <string name="sort_last_used">Dernière utilisation</string>
     <string name="sort_bottom_sheet_title">Trier par</string>
@@ -52,7 +52,7 @@
     <string name="search_history_title">Recherches récentes</string>
     <string name="search_history_clear">Effacer</string>
     <string name="filter_source_section">Source d\'installation</string>
-    <string name="filter_sdk_section">SDK cible</string>
+    <string name="filter_sdk_section">Target SDK</string>
     <string name="filter_apk_size_section">Taille du fichier APK</string>
     <string name="filter_apk_size_description">Taille du package d\'installation (.apk) uniquement — exclut les données utilisateur et le cache.</string>
     <string name="filter_total_size_section">Taille totale de l\'application</string>
@@ -81,7 +81,7 @@
     <string name="filter_source_system">Système</string>
     <string name="filter_source_unknown">Inconnu</string>
     <string name="filter_unused_section">Applications inutilisées</string>
-    <string name="filter_unused_locked_description">Trouvez des applications qui prennent la poussière. Accordez l\'accès à l\'utilisation pour voir quelles applications vous n\'avez pas ouvertes récemment.</string>
+    <string name="filter_unused_locked_description">Trouvez des applications qui prennent la poussière. Accordez l\'accès aux données d\'utilisation pour voir quelles applications vous n\'avez pas ouvertes récemment.</string>
     <string name="filter_unused_grant_access">Accorder l\'accès</string>
     <plurals name="filter_unused_days_count">
         <item quantity="one">%d jour</item>
@@ -92,22 +92,22 @@
         <item quantity="other">%d mois</item>
     </plurals>
     <string name="filter_unused_year">1 an</string>
-    <string name="quick_filter_permission_usage_title">Accès à l\'utilisation nécessaire</string>
-    <string name="quick_filter_permission_usage_description">Pour filtrer par la récence d\'utilisation des applications, autorisez l\'accès à l\'utilisation dans les Paramètres. Cela permet à l\'application de voir quelles applications sont actives et lesquelles sont inactives.</string>
-    <string name="quick_filter_permission_storage_title">Accès à l\'utilisation nécessaire</string>
-    <string name="quick_filter_permission_storage_description">Ce filtre mesure la taille totale de chaque application — installateur, données stockées et cache combinés. Accordez l\'accès à l\'utilisation dans les Paramètres pour voir combien d\'espace chaque application utilise réellement.</string>
+    <string name="quick_filter_permission_usage_title">Accès aux données d\'utilisation nécessaire</string>
+    <string name="quick_filter_permission_usage_description">Pour filtrer par la récence d\'utilisation des applications, autorisez l\'accès aux données d\'utilisation dans les Paramètres. Cela permet à l\'application de voir quelles applications sont actives et lesquelles sont inactives.</string>
+    <string name="quick_filter_permission_storage_title">Accès aux données d\'utilisation nécessaire</string>
+    <string name="quick_filter_permission_storage_description">Ce filtre mesure la taille totale de chaque application — installateur, données stockées et cache combinés. Accordez l\'accès aux données d\'utilisation dans les Paramètres pour voir combien d\'espace chaque application utilise réellement.</string>
     <string name="quick_filter_permission_open_settings">Ouvrir les paramètres</string>
-    <string name="sort_permission_usage_title">Autoriser l\'accès à l\'utilisation</string>
-    <string name="sort_permission_usage_description">Le tri par Dernière Utilisation doit savoir quand vous avez ouvert chaque application pour la dernière fois. Accordez l\'accès à l\'utilisation dans les Paramètres pour activer cette option de tri.</string>
-    <string name="sort_permission_storage_title">Autoriser l\'accès à l\'utilisation</string>
-    <string name="sort_permission_storage_description">Le tri par Taille Totale mesure l\'empreinte totale de chaque application — installateur, données stockées et cache combinés. Accordez l\'accès à l\'utilisation dans les Paramètres pour activer cette option de tri.</string>
+    <string name="sort_permission_usage_title">Autoriser l\'accès aux données d\'utilisation</string>
+    <string name="sort_permission_usage_description">Le tri par Dernière Utilisation doit savoir quand vous avez ouvert chaque application pour la dernière fois. Accordez l\'accès aux données d\'utilisation dans les Paramètres pour activer cette option de tri.</string>
+    <string name="sort_permission_storage_title">Autoriser l\'accès aux données d\'utilisation</string>
+    <string name="sort_permission_storage_description">Le tri par Taille Totale mesure l\'empreinte totale de chaque application — installateur, données stockées et cache combinés. Accordez l\'accès aux données d\'utilisation dans les Paramètres pour activer cette option de tri.</string>
     <string name="filter_permissions_section">Permissions</string>
     <string name="filter_permissions_count" ns0:ignore="PluralsCandidate">+%d de plus</string>
     <string name="filter_permissions_title">Filtrer par permission</string>
     <string name="filter_permissions_quick_filters">Filtres rapides</string>
-    <string name="filter_permissions_match_label">Correspondre</string>
-    <string name="filter_permissions_chip_match_any">Correspondre : N\'importe lequel</string>
-    <string name="filter_permissions_chip_match_all">Correspondre : Tous</string>
+    <string name="filter_permissions_match_label">Correspondance</string>
+    <string name="filter_permissions_chip_match_any">Correspondance : Au moins une</string>
+    <string name="filter_permissions_chip_match_all">Correspondance : Toutes</string>
     <string name="filter_permissions_chip_presets">Préréglages</string>
     <plurals name="filter_permissions_chip_presets_count">
         <item quantity="one">%d préréglage</item>

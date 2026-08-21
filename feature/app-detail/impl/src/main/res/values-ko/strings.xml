@@ -11,7 +11,7 @@
     <string name="app_detail_version">버전</string>
     <string name="app_detail_apk_size">APK 크기</string>
     <string name="app_detail_total_size">전체 크기</string>
-    <string name="app_detail_target_sdk">대상 SDK</string>
+    <string name="app_detail_target_sdk">Target SDK</string>
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_updated">업데이트됨</string>
@@ -241,7 +241,7 @@
     <string name="general_info_version_name">버전 이름</string>
     <string name="general_info_version_code">버전 코드</string>
     <string name="general_info_min_sdk">최소 SDK</string>
-    <string name="general_info_target_sdk">대상 SDK</string>
+    <string name="general_info_target_sdk">Target SDK</string>
     <string name="general_info_debug_access">디버그 접근</string>
     <string name="general_info_app_data_backup">앱 데이터 백업</string>
     <string name="general_info_unencrypted_traffic">암호화되지 않은 트래픽 기본값</string>
@@ -341,13 +341,13 @@
     <string name="permissions_section_header">%1$s · %2$d</string>
     <string name="permissions_granted">부여됨</string>
     <string name="permissions_not_granted">부여되지 않음</string>
-    <string name="permissions_level_dangerous">위험</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
     <string name="permissions_level_dangerous_explanation">앱이 이를 사용하기 전에 귀하의 명시적인 승인이 필요합니다.</string>
-    <string name="permissions_level_signature">서명</string>
+    <string name="permissions_level_signature">Signature</string>
     <string name="permissions_level_signature_explanation">같은 키로 서명된 앱만이 이를 보유할 수 있습니다.</string>
-    <string name="permissions_level_internal">내부</string>
+    <string name="permissions_level_internal">Internal</string>
     <string name="permissions_level_internal_explanation">시스템을 위해 예약되며, 당신이 아닌 내부 규칙에 의해 부여됩니다.</string>
-    <string name="permissions_level_normal">일반</string>
+    <string name="permissions_level_normal">Normal</string>
     <string name="permissions_level_normal_explanation">보통 설치 시 자동으로 부여됩니다. 단독으로는 위험이 낮습니다.</string>
     <string name="permissions_level_unavailable">세부정보를 사용할 수 없습니다.</string>
     <string name="permissions_level_unavailable_explanation">이 장치의 어떤 앱도 이를 선언하지 않으므로, 우리가 보호하는 내용을 보여줄 수 없습니다.</string>

@@ -11,7 +11,7 @@
     <string name="sort_size">Ukuran file APK</string>
     <string name="sort_total_size">Total ukuran aplikasi</string>
     <string name="sort_install_date">Tanggal instal</string>
-    <string name="sort_target_sdk">Target SDK Android</string>
+    <string name="sort_target_sdk">Target Android SDK</string>
     <string name="sort_last_updated">Terakhir diperbarui</string>
     <string name="sort_last_used">Terakhir digunakan</string>
     <string name="sort_bottom_sheet_title">Urutkan berdasarkan</string>

@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="browse_title">Просмотр</string>
+    <string name="browse_title">Просмотр приложений</string>
     <string name="browse_subtitle_loading">Сканирование установленных приложений…</string>
     <plurals name="browse_subtitle">
-        <item quantity="one">Изучите приложение %1$d, установленное на этом устройстве</item>
-        <item quantity="few">Изучите приложения %1$d, установленные на этом устройстве</item>
-        <item quantity="many">Изучите приложений %1$d, установленных на этом устройстве</item>
-        <item quantity="other">Изучите приложений %1$d, установленных на этом устройстве</item>
+        <item quantity="one">Просмотрите приложение %1$d, установленное на этом устройстве</item>
+        <item quantity="few">Просмотрите приложения %1$d, установленные на этом устройстве</item>
+        <item quantity="many">Просмотрите приложений %1$d, установленных на этом устройстве</item>
+        <item quantity="other">Просмотрите приложений %1$d, установленных на этом устройстве</item>
     </plurals>
     <string name="browse_dimension_permission_title">Разрешения</string>
     <string name="browse_dimension_permission_subtitle">Посмотрите, какие приложения используют данное разрешение</string>
@@ -62,10 +62,10 @@
     <string name="browse_certificate_hash_sha256">SHA-256</string>
     <string name="browse_certificate_hash_sha1">SHA-1</string>
     <string name="browse_certificate_hash_md5">MD5</string>
-    <string name="browse_protection_level_dangerous">Опасно</string>
-    <string name="browse_protection_level_signature">Подпись</string>
-    <string name="browse_protection_level_internal">Внутренний</string>
-    <string name="browse_protection_level_normal">Обычный</string>
+    <string name="browse_protection_level_dangerous">Dangerous</string>
+    <string name="browse_protection_level_signature">Signature</string>
+    <string name="browse_protection_level_internal">Internal</string>
+    <string name="browse_protection_level_normal">Normal</string>
     <string name="browse_protection_level_dangerous_explanation">Требуется ваше явное одобрение, прежде чем приложение сможет его использовать.</string>
     <string name="browse_protection_level_signature_explanation">Только приложения, подписанные тем же ключом, что и приложение, которое его объявило, могут получить это разрешение.</string>
     <string name="browse_protection_level_internal_explanation">Резервируется для системы и предоставляется внутренними правилами, а не вами.</string>

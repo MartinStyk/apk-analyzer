@@ -11,7 +11,7 @@
     <string name="app_detail_version">Sürüm</string>
     <string name="app_detail_apk_size">APK Boyutu</string>
     <string name="app_detail_total_size">Toplam Boyut</string>
-    <string name="app_detail_target_sdk">Hedef SDK</string>
+    <string name="app_detail_target_sdk">Target SDK</string>
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_updated">Güncellendi</string>
@@ -263,7 +263,7 @@
     <string name="general_info_version_name">Sürüm Adı</string>
     <string name="general_info_version_code">Sürüm Kodu</string>
     <string name="general_info_min_sdk">Min SDK</string>
-    <string name="general_info_target_sdk">Hedef SDK</string>
+    <string name="general_info_target_sdk">Target SDK</string>
     <string name="general_info_debug_access">Hata ayıklama erişimi</string>
     <string name="general_info_app_data_backup">Uygulama veri yedeği</string>
     <string name="general_info_unencrypted_traffic">Şifrelenmemiş trafik varsayılan</string>
@@ -366,11 +366,11 @@
     <string name="permissions_section_header">%1$s · %2$d</string>
     <string name="permissions_granted">Verildi</string>
     <string name="permissions_not_granted">Verilmedi</string>
-    <string name="permissions_level_dangerous">Tehlikeli</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
     <string name="permissions_level_dangerous_explanation">Uygulamanın bunu kullanabilmesi için açık onayınızı gerektirir.</string>
-    <string name="permissions_level_signature">İmza</string>
+    <string name="permissions_level_signature">Signature</string>
     <string name="permissions_level_signature_explanation">Aynı anahtar ile imzalanmış uygulamalar bunları tutabilir.</string>
-    <string name="permissions_level_internal">Dahili</string>
+    <string name="permissions_level_internal">Internal</string>
     <string name="permissions_level_internal_explanation">Sistem için ayrılmıştır ve sizin tarafınızdan değil, dahili kurallara göre verilir.</string>
     <string name="permissions_level_normal">Normal</string>
     <string name="permissions_level_normal_explanation">Genellikle kurulumda otomatik olarak verilir. Kendi başlarına düşük risk taşırlar.</string>

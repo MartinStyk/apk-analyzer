@@ -11,7 +11,7 @@
     <string name="app_detail_version">版本</string>
     <string name="app_detail_apk_size">APK 大小</string>
     <string name="app_detail_total_size">总大小</string>
-    <string name="app_detail_target_sdk">目标 SDK</string>
+    <string name="app_detail_target_sdk">Target SDK</string>
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_updated">已更新</string>
@@ -241,7 +241,7 @@
     <string name="general_info_version_name">版本名称</string>
     <string name="general_info_version_code">版本代码</string>
     <string name="general_info_min_sdk">最小 SDK</string>
-    <string name="general_info_target_sdk">目标 SDK</string>
+    <string name="general_info_target_sdk">Target SDK</string>
     <string name="general_info_debug_access">调试访问</string>
     <string name="general_info_app_data_backup">应用数据备份</string>
     <string name="general_info_unencrypted_traffic">未加密流量默认</string>
@@ -341,13 +341,13 @@
     <string name="permissions_section_header">%1$s · %2$d</string>
     <string name="permissions_granted">已授予</string>
     <string name="permissions_not_granted">未授予</string>
-    <string name="permissions_level_dangerous">危险</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
     <string name="permissions_level_dangerous_explanation">在应用可以使用之前，需要您的明确批准。</string>
-    <string name="permissions_level_signature">签名</string>
+    <string name="permissions_level_signature">Signature</string>
     <string name="permissions_level_signature_explanation">只有使用相同密钥签名的应用才能持有这些。</string>
-    <string name="permissions_level_internal">内部</string>
+    <string name="permissions_level_internal">Internal</string>
     <string name="permissions_level_internal_explanation">保留给系统，并根据内部规则授予，而不是由您授予。</string>
-    <string name="permissions_level_normal">正常</string>
+    <string name="permissions_level_normal">Normal</string>
     <string name="permissions_level_normal_explanation">通常在安装时自动授予。单独使用风险较低。</string>
     <string name="permissions_level_unavailable">详细信息不可用</string>
     <string name="permissions_level_unavailable_explanation">此设备上没有应用声明这些，因此我们无法显示它们保护的内容。</string>

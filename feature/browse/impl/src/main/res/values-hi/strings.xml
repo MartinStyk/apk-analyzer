@@ -58,10 +58,10 @@
     <string name="browse_certificate_hash_sha256">SHA-256</string>
     <string name="browse_certificate_hash_sha1">SHA-1</string>
     <string name="browse_certificate_hash_md5">MD5</string>
-    <string name="browse_protection_level_dangerous">खतरनाक</string>
-    <string name="browse_protection_level_signature">हस्ताक्षर</string>
-    <string name="browse_protection_level_internal">आंतरिक</string>
-    <string name="browse_protection_level_normal">सामान्य</string>
+    <string name="browse_protection_level_dangerous">Dangerous</string>
+    <string name="browse_protection_level_signature">Signature</string>
+    <string name="browse_protection_level_internal">Internal</string>
+    <string name="browse_protection_level_normal">Normal</string>
     <string name="browse_protection_level_dangerous_explanation">एक ऐप इसका उपयोग करने से पहले आपकी स्पष्ट स्वीकृति की आवश्यकता है।</string>
     <string name="browse_protection_level_signature_explanation">केवल वही ऐप्स जो उसी कुंजी से हस्ताक्षरित हैं जैसे कि ऐप जिसने इसे घोषित किया है, इसे प्राप्त कर सकते हैं।</string>
     <string name="browse_protection_level_internal_explanation">सिस्टम के लिए आरक्षित और आंतरिक नियमों द्वारा दी गई, न कि आपके द्वारा।</string>

@@ -11,7 +11,7 @@
     <string name="sort_size">APK 파일 크기</string>
     <string name="sort_total_size">총 앱 크기</string>
     <string name="sort_install_date">설치 날짜</string>
-    <string name="sort_target_sdk">대상 Android SDK</string>
+    <string name="sort_target_sdk">Target Android SDK</string>
     <string name="sort_last_updated">마지막 업데이트</string>
     <string name="sort_last_used">마지막 사용</string>
     <string name="sort_bottom_sheet_title">정렬 기준</string>

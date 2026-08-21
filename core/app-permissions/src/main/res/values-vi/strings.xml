@@ -34,7 +34,7 @@
     <string name="permission_label_activity_recognition">Hoạt động thể chất</string>
     <string name="permission_label_bluetooth_scan">Quét thiết bị ở gần</string>
     <string name="permission_label_bluetooth_connect">Kết nối Bluetooth</string>
-    <string name="permission_label_bluetooth_advertise">Quảng cáo Bluetooth</string>
+    <string name="permission_label_bluetooth_advertise">Bluetooth Advertise</string>
     <string name="permission_label_bluetooth">Bluetooth</string>
     <string name="permission_label_uwb">Đo khoảng cách UWB</string>
     <string name="permission_label_notifications">Đăng thông báo</string>
@@ -45,7 +45,7 @@
     <string name="permission_label_wifi_change">Thay đổi Wi-Fi</string>
     <string name="permission_label_wifi_state">Trạng thái Wi-Fi</string>
     <string name="permission_label_network_state">Trạng thái mạng</string>
-    <string name="permission_label_wake_lock">Giữ thiết bị luôn hoạt động</string>
+    <string name="permission_label_wake_lock">Wake lock</string>
     <string name="permission_label_boot">Chạy khi khởi động</string>
     <string name="permission_label_foreground_service">Dịch vụ nền trước</string>
     <string name="permission_label_foreground_service_camera">Sử dụng máy ảnh trong nền</string>
@@ -55,10 +55,10 @@
     <string name="permission_label_foreground_service_media_projection">Dịch vụ chia sẻ màn hình</string>
     <string name="permission_label_foreground_service_phone_call">Xử lý cuộc gọi trong nền</string>
     <string name="permission_label_foreground_service_connected_device">Kết nối thiết bị trong nền</string>
-    <string name="permission_label_ad_id">ID quảng cáo</string>
-    <string name="permission_label_ad_attribution">Gán quảng cáo</string>
-    <string name="permission_label_ad_custom_audience">Đối tượng quảng cáo</string>
-    <string name="permission_label_ad_topics">Chủ đề quảng cáo</string>
+    <string name="permission_label_ad_id">Advertising ID</string>
+    <string name="permission_label_ad_attribution">Ad Attribution</string>
+    <string name="permission_label_ad_custom_audience">Ad Audiences</string>
+    <string name="permission_label_ad_topics">Ad Topics</string>
     <string name="permission_label_full_screen_intent">Thông báo toàn màn hình</string>
     <string name="permission_label_push_messages">Nhận tin nhắn đẩy</string>
     <string name="permission_label_running_apps">Ứng dụng đang chạy</string>

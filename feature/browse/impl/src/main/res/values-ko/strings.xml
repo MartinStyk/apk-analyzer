@@ -56,10 +56,10 @@
     <string name="browse_certificate_hash_sha256">SHA-256</string>
     <string name="browse_certificate_hash_sha1">SHA-1</string>
     <string name="browse_certificate_hash_md5">MD5</string>
-    <string name="browse_protection_level_dangerous">위험</string>
-    <string name="browse_protection_level_signature">서명</string>
-    <string name="browse_protection_level_internal">내부</string>
-    <string name="browse_protection_level_normal">일반</string>
+    <string name="browse_protection_level_dangerous">Dangerous</string>
+    <string name="browse_protection_level_signature">Signature</string>
+    <string name="browse_protection_level_internal">Internal</string>
+    <string name="browse_protection_level_normal">Normal</string>
     <string name="browse_protection_level_dangerous_explanation">앱이 이를 사용하기 전에 귀하의 명시적인 승인이 필요합니다.</string>
     <string name="browse_protection_level_signature_explanation">이를 보유할 수 있는 앱은 이를 선언한 앱과 동일한 키로 서명된 앱만 가능합니다.</string>
     <string name="browse_protection_level_internal_explanation">시스템을 위해 예약되며, 당신이 아닌 내부 규칙에 의해 부여됩니다.</string>

@@ -11,7 +11,7 @@
     <string name="app_detail_version">संस्करण</string>
     <string name="app_detail_apk_size">APK आकार</string>
     <string name="app_detail_total_size">कुल आकार</string>
-    <string name="app_detail_target_sdk">लक्ष्य SDK</string>
+    <string name="app_detail_target_sdk">Target SDK</string>
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_updated">अपडेट किया गया</string>
@@ -263,7 +263,7 @@
     <string name="general_info_version_name">संस्करण नाम</string>
     <string name="general_info_version_code">संस्करण कोड</string>
     <string name="general_info_min_sdk">न्यूनतम SDK</string>
-    <string name="general_info_target_sdk">लक्ष्य SDK</string>
+    <string name="general_info_target_sdk">Target SDK</string>
     <string name="general_info_debug_access">डीबग एक्सेस</string>
     <string name="general_info_app_data_backup">ऐप डेटा बैकअप</string>
     <string name="general_info_unencrypted_traffic">अनएन्क्रिप्टेड ट्रैफ़िक डिफ़ॉल्ट</string>
@@ -366,13 +366,13 @@
     <string name="permissions_section_header">%1$s · %2$d</string>
     <string name="permissions_granted">अनुमति दी गई</string>
     <string name="permissions_not_granted">अनुमति नहीं दी गई</string>
-    <string name="permissions_level_dangerous">खतरनाक</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
     <string name="permissions_level_dangerous_explanation">ऐप के उपयोग से पहले आपकी स्पष्ट स्वीकृति की आवश्यकता है।</string>
-    <string name="permissions_level_signature">हस्ताक्षर</string>
+    <string name="permissions_level_signature">Signature</string>
     <string name="permissions_level_signature_explanation">केवल वही ऐप्स जो समान कुंजी से हस्ताक्षरित हैं, इन्हें रख सकते हैं।</string>
-    <string name="permissions_level_internal">आंतरिक</string>
+    <string name="permissions_level_internal">Internal</string>
     <string name="permissions_level_internal_explanation">सिस्टम के लिए आरक्षित और आंतरिक नियमों द्वारा दी गई, न कि आपके द्वारा।</string>
-    <string name="permissions_level_normal">सामान्य</string>
+    <string name="permissions_level_normal">Normal</string>
     <string name="permissions_level_normal_explanation">आमतौर पर इंस्टॉल पर स्वचालित रूप से दी जाती है। अपने आप में कम जोखिम।</string>
     <string name="permissions_level_unavailable">विवरण उपलब्ध नहीं है</string>
     <string name="permissions_level_unavailable_explanation">इस डिवाइस पर कोई ऐप इनकी घोषणा नहीं करता, इसलिए हम नहीं दिखा सकते कि ये क्या सुरक्षा करते हैं।</string>

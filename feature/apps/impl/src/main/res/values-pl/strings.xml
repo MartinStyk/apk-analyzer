@@ -11,7 +11,7 @@
     <string name="sort_size">Rozmiar pliku APK</string>
     <string name="sort_total_size">Całkowity rozmiar aplikacji</string>
     <string name="sort_install_date">Data instalacji</string>
-    <string name="sort_target_sdk">Docelowy Android SDK</string>
+    <string name="sort_target_sdk">Target Android SDK</string>
     <string name="sort_last_updated">Ostatnia aktualizacja</string>
     <string name="sort_last_used">Ostatnie użycie</string>
     <string name="sort_bottom_sheet_title">Sortuj według</string>
@@ -41,8 +41,8 @@
     <string name="quick_filter_recently_updated">Ostatnio zaktualizowane</string>
     <string name="quick_filter_source_sheet_title">Źródło</string>
     <string name="quick_filter_selection_more" ns0:ignore="PluralsCandidate">%1$s +%2$d</string>
-    <string name="quick_filter_activity_sheet_title">Aktywność</string>
-    <string name="quick_filter_activity_all">Dowolna aktywność</string>
+    <string name="quick_filter_activity_sheet_title">Activity</string>
+    <string name="quick_filter_activity_all">Wszystkie Activity</string>
     <string name="apps_empty_filtered">Nie znaleziono aplikacji</string>
     <string name="apps_clear_filters">Wyczyść filtry</string>
     <string name="installed_apps">Zainstalowane aplikacje</string>
@@ -60,9 +60,9 @@
     <string name="filter_source_section">Źródło instalacji</string>
     <string name="filter_sdk_section">Docelowy SDK</string>
     <string name="filter_apk_size_section">Rozmiar pliku APK</string>
-    <string name="filter_apk_size_description">Rozmiar pakietu instalacyjnego (.apk) tylko — nie obejmuje danych użytkownika i pamięci podręcznej.</string>
+    <string name="filter_apk_size_description">Rozmiar pakietu instalacyjnego (.apk) — nie obejmuje danych użytkownika i pamięci podręcznej.</string>
     <string name="filter_total_size_section">Całkowity rozmiar aplikacji</string>
-    <string name="filter_total_size_description">Łączny rozmiar instalatora, przechowywanych danych aplikacji i plików w pamięci podręcznej.</string>
+    <string name="filter_total_size_description">Łączny rozmiar pliku APK, danych aplikacji i pamięci podręcznej.</string>
     <string name="filter_total_size_locked_description">Filtruj według całkowitego rozmiaru aplikacji. Przyznaj dostęp do pamięci, aby zmierzyć pełny rozmiar każdej aplikacji — w tym jej dane i pamięć podręczną, a nie tylko instalator.</string>
     <string name="filter_total_size_grant_access">Przyznaj dostęp do pamięci</string>
     <string name="filter_install_time_section">Data instalacji</string>
@@ -87,7 +87,7 @@
     <string name="filter_source_system">System</string>
     <string name="filter_source_unknown">Nieznany</string>
     <string name="filter_unused_section">Nieużywane aplikacje</string>
-    <string name="filter_unused_locked_description">Znajdź aplikacje, które zbierają kurz. Przyznaj dostęp do użycia, aby zobaczyć, które aplikacje nie były ostatnio otwierane.</string>
+    <string name="filter_unused_locked_description">Znajdź aplikacje, które zbierają kurz. Przyznaj dostęp do danych o użyciu, aby zobaczyć, które aplikacje nie były ostatnio otwierane.</string>
     <string name="filter_unused_grant_access">Przyznaj dostęp</string>
     <plurals name="filter_unused_days_count">
         <item quantity="one">%d dzień</item>
@@ -102,22 +102,22 @@
         <item quantity="other">%d miesięcy</item>
     </plurals>
     <string name="filter_unused_year">1 rok</string>
-    <string name="quick_filter_permission_usage_title">Wymagany dostęp do użycia</string>
-    <string name="quick_filter_permission_usage_description">Aby filtrować według tego, jak niedawno aplikacje były używane, zezwól na dostęp do użycia w Ustawieniach. To pozwala aplikacji zobaczyć, które aplikacje są aktywne, a które były bezczynne.</string>
-    <string name="quick_filter_permission_storage_title">Wymagany dostęp do użycia</string>
-    <string name="quick_filter_permission_storage_description">Ten filtr mierzy całkowity rozmiar każdej aplikacji — instalator, dane przechowywane i pamięć podręczna razem. Przyznaj dostęp do użycia w Ustawieniach, aby zobaczyć, ile miejsca naprawdę zajmuje każda aplikacja.</string>
+    <string name="quick_filter_permission_usage_title">Wymagany dostęp do danych o użyciu</string>
+    <string name="quick_filter_permission_usage_description">Aby filtrować według tego, jak niedawno aplikacje były używane, zezwól na dostęp do danych o użyciu w Ustawieniach. To pozwala aplikacji zobaczyć, które aplikacje są aktywne, a które były bezczynne.</string>
+    <string name="quick_filter_permission_storage_title">Wymagany dostęp do danych o użyciu</string>
+    <string name="quick_filter_permission_storage_description">Ten filtr mierzy całkowity rozmiar każdej aplikacji — instalator, dane przechowywane i pamięć podręczna razem. Przyznaj dostęp do danych o użyciu w Ustawieniach, aby zobaczyć, ile miejsca naprawdę zajmuje każda aplikacja.</string>
     <string name="quick_filter_permission_open_settings">Otwórz ustawienia</string>
     <string name="sort_permission_usage_title">Zezwól na dostęp do użycia</string>
-    <string name="sort_permission_usage_description">Sortowanie według Ostatnio Używane wymaga wiedzy, kiedy ostatnio otworzyłeś każdą aplikację. Przyznaj dostęp do użycia w Ustawieniach, aby włączyć tę opcję sortowania.</string>
+    <string name="sort_permission_usage_description">Sortowanie według ostatnio używanych wymaga wiedzy, kiedy ostatnio otworzyłeś każdą aplikację. Przyznaj dostęp do danych o użyciu w Ustawieniach, aby włączyć tę opcję sortowania.</string>
     <string name="sort_permission_storage_title">Zezwól na dostęp do użycia</string>
-    <string name="sort_permission_storage_description">Sortowanie według Całkowitego Rozmiaru mierzy całkowity ślad każdej aplikacji — instalator, dane przechowywane i pamięć podręczna razem. Przyznaj dostęp do użycia w Ustawieniach, aby włączyć tę opcję sortowania.</string>
+    <string name="sort_permission_storage_description">Sortowanie według całkowitego rozmiaru mierzy całkowity ślad każdej aplikacji — instalator, dane przechowywane i pamięć podręczna razem. Przyznaj dostęp do danych o użyciu w Ustawieniach, aby włączyć tę opcję sortowania.</string>
     <string name="filter_permissions_section">Uprawnienia</string>
     <string name="filter_permissions_count" ns0:ignore="PluralsCandidate">+%d więcej</string>
     <string name="filter_permissions_title">Filtruj według uprawnień</string>
     <string name="filter_permissions_quick_filters">Szybkie filtry</string>
     <string name="filter_permissions_match_label">Dopasowanie</string>
-    <string name="filter_permissions_chip_match_any">Dopasowanie: Jakiekolwiek</string>
-    <string name="filter_permissions_chip_match_all">Dopasowanie: Wszystkie</string>
+    <string name="filter_permissions_chip_match_any">Dopasowanie: co najmniej jedno</string>
+    <string name="filter_permissions_chip_match_all">Dopasowanie: wszystkie</string>
     <string name="filter_permissions_chip_presets">Ustawienia wstępne</string>
     <plurals name="filter_permissions_chip_presets_count">
         <item quantity="one">%d ustawienie wstępne</item>
@@ -135,7 +135,7 @@
     <string name="filter_permissions_match_all_subtitle">Pokaż tylko aplikacje, które mają każde wybrane uprawnienie.</string>
     <string name="filter_permissions_show_description">Wybierz, które uprawnienia pojawią się na liście poniżej.</string>
     <string name="filter_permissions_show_all">Wszystkie uprawnienia</string>
-    <string name="filter_permissions_show_all_subtitle">Przeglądaj każde uprawnienie zadeklarowane na tym urządzeniu.</string>
+    <string name="filter_permissions_show_all_subtitle">Wyświetl wszystkie uprawnienia zadeklarowane na tym urządzeniu.</string>
     <string name="filter_permissions_show_selected">Tylko wybrane</string>
     <string name="filter_permissions_show_selected_subtitle">Zobacz tylko uprawnienia, które już wybrałeś.</string>
     <string name="filter_permissions_sheet_show">Pokaż uprawnienia</string>
@@ -147,7 +147,7 @@
     <string name="filter_permissions_preset_contacts">Kontakty</string>
     <string name="filter_permissions_preset_sms">SMS</string>
     <string name="filter_permissions_preset_storage">Pamięć</string>
-    <string name="filter_permissions_empty_search_title">Brak wyników dla \"%1$s\"</string>
+    <string name="filter_permissions_empty_search_title">Brak wyników dla „%1$s”</string>
     <string name="filter_permissions_empty_search_subtitle">Spróbuj innej nazwy uprawnienia lub identyfikatora.</string>
     <string name="filter_permissions_empty_selected_title">Nie wybrano żadnych uprawnień</string>
     <string name="filter_permissions_empty_selected_subtitle">Wróć do pełnej listy i wybierz uprawnienia do filtrowania.</string>

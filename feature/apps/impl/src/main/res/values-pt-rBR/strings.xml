@@ -11,7 +11,7 @@
     <string name="sort_size">Tamanho do arquivo APK</string>
     <string name="sort_total_size">Tamanho total do aplicativo</string>
     <string name="sort_install_date">Data de instalação</string>
-    <string name="sort_target_sdk">SDK Android de destino</string>
+    <string name="sort_target_sdk">Target Android SDK</string>
     <string name="sort_last_updated">Última atualização</string>
     <string name="sort_last_used">Último uso</string>
     <string name="sort_bottom_sheet_title">Classificar por</string>
@@ -54,7 +54,7 @@
     <string name="filter_source_section">Fonte de instalação</string>
     <string name="filter_sdk_section">SDK de destino</string>
     <string name="filter_apk_size_section">Tamanho do arquivo APK</string>
-    <string name="filter_apk_size_description">Tamanho do pacote do instalador (.apk) apenas — exclui dados do usuário e cache.</string>
+    <string name="filter_apk_size_description">Tamanho do pacote do instalador (.apk) — exclui dados do usuário e cache.</string>
     <string name="filter_total_size_section">Tamanho total do aplicativo</string>
     <string name="filter_total_size_description">Tamanho combinado do instalador, dados do aplicativo armazenados e arquivos em cache.</string>
     <string name="filter_total_size_locked_description">Filtrar pelo tamanho total do aplicativo. Conceda acesso ao armazenamento para medir o tamanho total de cada aplicativo — incluindo seus dados e cache, não apenas o instalador.</string>
@@ -81,7 +81,7 @@
     <string name="filter_source_system">Sistema</string>
     <string name="filter_source_unknown">Desconhecido</string>
     <string name="filter_unused_section">Aplicativos não utilizados</string>
-    <string name="filter_unused_locked_description">Encontre aplicativos acumulando poeira. Conceda acesso de uso para ver quais aplicativos você não abriu recentemente.</string>
+    <string name="filter_unused_locked_description">Encontre aplicativos acumulando poeira. Conceda acesso a dados de uso para ver quais aplicativos você não abriu recentemente.</string>
     <string name="filter_unused_grant_access">Conceder acesso</string>
     <plurals name="filter_unused_days_count">
         <item quantity="one">%d dia</item>
@@ -92,22 +92,22 @@
         <item quantity="other">%d meses</item>
     </plurals>
     <string name="filter_unused_year">1 ano</string>
-    <string name="quick_filter_permission_usage_title">Acesso ao uso necessário</string>
-    <string name="quick_filter_permission_usage_description">Para filtrar por quão recentemente os aplicativos foram usados, permita o acesso ao uso nas Configurações. Isso permite que o aplicativo veja quais aplicativos estão ativos e quais estão inativos.</string>
-    <string name="quick_filter_permission_storage_title">Acesso ao uso necessário</string>
-    <string name="quick_filter_permission_storage_description">Este filtro mede o tamanho total de cada aplicativo — instalador, dados armazenados e cache combinados. Conceda acesso ao uso nas Configurações para ver quanto espaço cada aplicativo realmente ocupa.</string>
+    <string name="quick_filter_permission_usage_title">Acesso a dados de uso necessário</string>
+    <string name="quick_filter_permission_usage_description">Para filtrar por quão recentemente os aplicativos foram usados, permita o acesso a dados de uso nas Configurações. Isso permite que o aplicativo veja quais aplicativos estão ativos e quais estão inativos.</string>
+    <string name="quick_filter_permission_storage_title">Acesso a dados de uso necessário</string>
+    <string name="quick_filter_permission_storage_description">Este filtro mede o tamanho total de cada aplicativo — instalador, dados armazenados e cache combinados. Conceda acesso a dados de uso nas Configurações para ver quanto espaço cada aplicativo realmente ocupa.</string>
     <string name="quick_filter_permission_open_settings">Abrir configurações</string>
-    <string name="sort_permission_usage_title">Permitir acesso ao uso</string>
-    <string name="sort_permission_usage_description">Classificar por Último Uso precisa saber quando você abriu cada aplicativo pela última vez. Conceda acesso ao uso nas Configurações para habilitar esta opção de classificação.</string>
-    <string name="sort_permission_storage_title">Permitir acesso ao uso</string>
-    <string name="sort_permission_storage_description">Classificar por Tamanho Total mede a pegada total de cada aplicativo — instalador, dados armazenados e cache combinados. Conceda acesso ao uso nas Configurações para habilitar esta opção de classificação.</string>
+    <string name="sort_permission_usage_title">Permitir acesso a dados de uso</string>
+    <string name="sort_permission_usage_description">Classificar por Último Uso precisa saber quando você abriu cada aplicativo pela última vez. Conceda acesso a dados de uso nas Configurações para habilitar esta opção de classificação.</string>
+    <string name="sort_permission_storage_title">Permitir acesso a dados de uso</string>
+    <string name="sort_permission_storage_description">Classificar por Tamanho Total mede a pegada total de cada aplicativo — instalador, dados armazenados e cache combinados. Conceda acesso a dados de uso nas Configurações para habilitar esta opção de classificação.</string>
     <string name="filter_permissions_section">Permissões</string>
     <string name="filter_permissions_count" ns0:ignore="PluralsCandidate">+%d mais</string>
     <string name="filter_permissions_title">Filtrar por Permissão</string>
     <string name="filter_permissions_quick_filters">Filtros rápidos</string>
-    <string name="filter_permissions_match_label">Combinar</string>
-    <string name="filter_permissions_chip_match_any">Combinar: Qualquer</string>
-    <string name="filter_permissions_chip_match_all">Combinar: Todos</string>
+    <string name="filter_permissions_match_label">Correspondência</string>
+    <string name="filter_permissions_chip_match_any">Correspondência: Qualquer</string>
+    <string name="filter_permissions_chip_match_all">Correspondência: Todos</string>
     <string name="filter_permissions_chip_presets">Predefinições</string>
     <plurals name="filter_permissions_chip_presets_count">
         <item quantity="one">%d predefinição</item>

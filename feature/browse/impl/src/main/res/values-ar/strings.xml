@@ -66,10 +66,10 @@
     <string name="browse_certificate_hash_sha256">SHA-256</string>
     <string name="browse_certificate_hash_sha1">SHA-1</string>
     <string name="browse_certificate_hash_md5">MD5</string>
-    <string name="browse_protection_level_dangerous">خطير</string>
-    <string name="browse_protection_level_signature">توقيع</string>
-    <string name="browse_protection_level_internal">داخلي</string>
-    <string name="browse_protection_level_normal">عادي</string>
+    <string name="browse_protection_level_dangerous">Dangerous</string>
+    <string name="browse_protection_level_signature">Signature</string>
+    <string name="browse_protection_level_internal">Internal</string>
+    <string name="browse_protection_level_normal">Normal</string>
     <string name="browse_protection_level_dangerous_explanation">يحتاج إلى موافقتك الصريحة قبل أن يتمكن أي تطبيق من استخدامه.</string>
     <string name="browse_protection_level_signature_explanation">فقط التطبيقات الموقعة بنفس المفتاح الذي أعلنته يمكن أن تحتفظ بهذا.</string>
     <string name="browse_protection_level_internal_explanation">محجوز للنظام وممنوح وفقًا لقواعد داخلية بدلاً من قبلك.</string>

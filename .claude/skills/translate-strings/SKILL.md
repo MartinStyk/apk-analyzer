@@ -84,6 +84,33 @@ from Android Studio, developer.android.com, or the Play Console in their languag
   that locale (or ask) instead of guessing silently — getting this wrong reads as a translation that
   doesn't know the platform, which undermines trust more than an occasional English loanword would.
 
+## Always-English Keys
+
+A handful of specific keys are pinned to the exact English source text in **every** language,
+Slovak included — not translated, not adapted. These are deliberate app-owner calls (not derivable
+from the general platform-vocabulary rule above), so don't second-guess them into translation during
+an audit:
+
+- `permission_label_wake_lock` → `Wake lock`. The English source string itself reads "Keep Device
+  Awake" (plain prose, not this term) — every locale still renders the Android API name `Wake lock`
+  instead of translating that source sentence. This is an intentional exception to "translate the
+  English source," not an oversight.
+- `permission_label_ad_id` → `Advertising ID`, `permission_label_ad_attribution` → `Ad Attribution`,
+  `permission_label_ad_custom_audience` → `Ad Audiences`, `permission_label_ad_topics` → `Ad Topics`
+  (all `core/app-permissions`).
+- `permission_label_bluetooth_advertise` → `Bluetooth Advertise` (`core/app-permissions`).
+- `permissions_level_dangerous` / `_signature` / `_internal` / `_normal` (`feature/app-detail/impl`)
+  and their `browse_protection_level_*` counterparts (`feature/browse/impl`) → `Dangerous` /
+  `Signature` / `Internal` / `Normal`.
+- `app_detail_target_sdk` and `general_info_target_sdk` (`feature/app-detail/impl`) → `Target SDK`.
+  `sort_target_sdk` (`feature/apps/impl`) → `Target Android SDK` (matches that key's own English
+  source, which includes "Android" where the other two don't — copy each key's own default text
+  verbatim rather than harmonizing the three into one phrase).
+
+If a new key looks like it belongs in one of these families (e.g. a future `permission_label_ad_*`
+or another `*_target_sdk` label), ask before deciding whether it joins the always-English set or
+gets a normal translation — don't extend the pattern by inference.
+
 ## Scope: One Module at a Time
 
 Every module with a `values/strings.xml` gets its own `values-<qualifier>/strings.xml` with the exact

@@ -34,7 +34,7 @@
     <string name="permission_label_activity_recognition">Aktivitas fisik</string>
     <string name="permission_label_bluetooth_scan">Pindai perangkat terdekat</string>
     <string name="permission_label_bluetooth_connect">Sambungkan Bluetooth</string>
-    <string name="permission_label_bluetooth_advertise">Iklan Bluetooth</string>
+    <string name="permission_label_bluetooth_advertise">Bluetooth Advertise</string>
     <string name="permission_label_bluetooth">Bluetooth</string>
     <string name="permission_label_uwb">Pengukuran jarak UWB</string>
     <string name="permission_label_notifications">Kirim notifikasi</string>
@@ -45,7 +45,7 @@
     <string name="permission_label_wifi_change">Ubah Wi-Fi</string>
     <string name="permission_label_wifi_state">Status Wi-Fi</string>
     <string name="permission_label_network_state">Status jaringan</string>
-    <string name="permission_label_wake_lock">Jaga perangkat tetap aktif</string>
+    <string name="permission_label_wake_lock">Wake lock</string>
     <string name="permission_label_boot">Jalankan saat startup</string>
     <string name="permission_label_foreground_service">Layanan latar depan</string>
     <string name="permission_label_foreground_service_camera">Penggunaan kamera latar belakang</string>
@@ -55,10 +55,10 @@
     <string name="permission_label_foreground_service_media_projection">Layanan berbagi layar</string>
     <string name="permission_label_foreground_service_phone_call">Penanganan panggilan latar belakang</string>
     <string name="permission_label_foreground_service_connected_device">Koneksi perangkat latar belakang</string>
-    <string name="permission_label_ad_id">ID iklan</string>
-    <string name="permission_label_ad_attribution">Atribusi iklan</string>
-    <string name="permission_label_ad_custom_audience">Audiens iklan</string>
-    <string name="permission_label_ad_topics">Topik iklan</string>
+    <string name="permission_label_ad_id">Advertising ID</string>
+    <string name="permission_label_ad_attribution">Ad Attribution</string>
+    <string name="permission_label_ad_custom_audience">Ad Audiences</string>
+    <string name="permission_label_ad_topics">Ad Topics</string>
     <string name="permission_label_full_screen_intent">Notifikasi layar penuh</string>
     <string name="permission_label_push_messages">Terima pesan push</string>
     <string name="permission_label_running_apps">Aplikasi yang berjalan</string>

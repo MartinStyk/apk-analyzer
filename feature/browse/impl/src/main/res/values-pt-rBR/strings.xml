@@ -58,9 +58,9 @@
     <string name="browse_certificate_hash_sha256">SHA-256</string>
     <string name="browse_certificate_hash_sha1">SHA-1</string>
     <string name="browse_certificate_hash_md5">MD5</string>
-    <string name="browse_protection_level_dangerous">Perigoso</string>
-    <string name="browse_protection_level_signature">Assinatura</string>
-    <string name="browse_protection_level_internal">Interno</string>
+    <string name="browse_protection_level_dangerous">Dangerous</string>
+    <string name="browse_protection_level_signature">Signature</string>
+    <string name="browse_protection_level_internal">Internal</string>
     <string name="browse_protection_level_normal">Normal</string>
     <string name="browse_protection_level_dangerous_explanation">Precisa da sua aprovação explícita antes que um aplicativo possa usá-lo.</string>
     <string name="browse_protection_level_signature_explanation">Apenas aplicativos assinados com a mesma chave que o aplicativo que o declarou podem manter isso.</string>

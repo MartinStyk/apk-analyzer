@@ -11,7 +11,7 @@
     <string name="sort_size">Размер файла APK</string>
     <string name="sort_total_size">Общий размер приложения</string>
     <string name="sort_install_date">Дата установки</string>
-    <string name="sort_target_sdk">Целевая версия Android SDK</string>
+    <string name="sort_target_sdk">Target Android SDK</string>
     <string name="sort_last_updated">Последнее обновление</string>
     <string name="sort_last_used">Последнее использование</string>
     <string name="sort_bottom_sheet_title">Сортировать по</string>
@@ -42,7 +42,7 @@
     <string name="quick_filter_source_sheet_title">Источник</string>
     <string name="quick_filter_selection_more" ns0:ignore="PluralsCandidate">%1$s +%2$d</string>
     <string name="quick_filter_activity_sheet_title">Активность</string>
-    <string name="quick_filter_activity_all">Любая активность</string>
+    <string name="quick_filter_activity_all">Вся активность</string>
     <string name="apps_empty_filtered">Приложения не найдены</string>
     <string name="apps_clear_filters">Очистить фильтры</string>
     <string name="installed_apps">Установленные приложения</string>
@@ -60,9 +60,9 @@
     <string name="filter_source_section">Источник установки</string>
     <string name="filter_sdk_section">Целевая SDK</string>
     <string name="filter_apk_size_section">Размер файла APK</string>
-    <string name="filter_apk_size_description">Только размер установочного пакета (.apk) — исключает пользовательские данные и кэш.</string>
+    <string name="filter_apk_size_description">Размер установочного пакета (.apk) — исключает пользовательские данные и кэш.</string>
     <string name="filter_total_size_section">Общий размер приложения</string>
-    <string name="filter_total_size_description">Общий размер установочного пакета, сохраненных данных приложения и кэшированных файлов.</string>
+    <string name="filter_total_size_description">Общий размер APK, данных приложения и кэша.</string>
     <string name="filter_total_size_locked_description">Фильтр по общему размеру приложения. Предоставьте доступ к хранилищу, чтобы измерить полный размер каждого приложения — включая его данные и кэш, а не только установщик.</string>
     <string name="filter_total_size_grant_access">Предоставить доступ к хранилищу</string>
     <string name="filter_install_time_section">Дата установки</string>
@@ -87,7 +87,7 @@
     <string name="filter_source_system">Система</string>
     <string name="filter_source_unknown">Неизвестно</string>
     <string name="filter_unused_section">Неиспользуемые приложения</string>
-    <string name="filter_unused_locked_description">Найдите приложения, которые пылятся. Предоставьте доступ к использованию, чтобы увидеть, какие приложения вы не открывали недавно.</string>
+    <string name="filter_unused_locked_description">Найдите приложения, которые пылятся. Предоставьте доступ к данным об использовании, чтобы увидеть, какие приложения вы не открывали недавно.</string>
     <string name="filter_unused_grant_access">Предоставить доступ</string>
     <plurals name="filter_unused_days_count">
         <item quantity="one">%d день</item>
@@ -102,22 +102,22 @@
         <item quantity="other">%d месяцев</item>
     </plurals>
     <string name="filter_unused_year">1 год</string>
-    <string name="quick_filter_permission_usage_title">Необходим доступ к использованию</string>
-    <string name="quick_filter_permission_usage_description">Чтобы фильтровать по тому, как недавно использовались приложения, разрешите доступ к использованию в Настройках. Это позволяет приложению видеть, какие приложения активны, а какие бездействуют.</string>
-    <string name="quick_filter_permission_storage_title">Необходим доступ к использованию</string>
-    <string name="quick_filter_permission_storage_description">Этот фильтр измеряет полный размер каждого приложения — установщик, сохраненные данные и кэш вместе. Предоставьте доступ к использованию в Настройках, чтобы увидеть, сколько места на самом деле занимает каждое приложение.</string>
+    <string name="quick_filter_permission_usage_title">Необходим доступ к данным об использовании</string>
+    <string name="quick_filter_permission_usage_description">Чтобы фильтровать по тому, как недавно использовались приложения, разрешите доступ к данным об использовании в Настройках. Это позволяет приложению видеть, какие приложения активны, а какие бездействуют.</string>
+    <string name="quick_filter_permission_storage_title">Необходим доступ к данным об использовании</string>
+    <string name="quick_filter_permission_storage_description">Этот фильтр измеряет полный размер каждого приложения — установщик, сохраненные данные и кэш вместе. Предоставьте доступ к данным об использовании в Настройках, чтобы увидеть, сколько места на самом деле занимает каждое приложение.</string>
     <string name="quick_filter_permission_open_settings">Открыть настройки</string>
-    <string name="sort_permission_usage_title">Разрешить доступ к использованию</string>
-    <string name="sort_permission_usage_description">Сортировка по последнему использованию требует знать, когда вы в последний раз открывали каждое приложение. Предоставьте доступ к использованию в Настройках, чтобы включить этот вариант сортировки.</string>
-    <string name="sort_permission_storage_title">Разрешить доступ к использованию</string>
-    <string name="sort_permission_storage_description">Сортировка по общему размеру измеряет полный объем каждого приложения — установщик, сохраненные данные и кэш вместе. Предоставьте доступ к использованию в Настройках, чтобы включить этот вариант сортировки.</string>
+    <string name="sort_permission_usage_title">Разрешить доступ к данным об использовании</string>
+    <string name="sort_permission_usage_description">Сортировка по последнему использованию требует знать, когда вы в последний раз открывали каждое приложение. Предоставьте доступ к данным об использовании в Настройках, чтобы включить этот вариант сортировки.</string>
+    <string name="sort_permission_storage_title">Разрешить доступ к данным об использовании</string>
+    <string name="sort_permission_storage_description">Сортировка по общему размеру измеряет полный объем каждого приложения — установщик, сохраненные данные и кэш вместе. Предоставьте доступ к данным об использовании в Настройках, чтобы включить этот вариант сортировки.</string>
     <string name="filter_permissions_section">Разрешения</string>
     <string name="filter_permissions_count" ns0:ignore="PluralsCandidate">+%d больше</string>
     <string name="filter_permissions_title">Фильтровать по разрешению</string>
     <string name="filter_permissions_quick_filters">Быстрые фильтры</string>
     <string name="filter_permissions_match_label">Совпадение</string>
-    <string name="filter_permissions_chip_match_any">Совпадение: Любое</string>
-    <string name="filter_permissions_chip_match_all">Совпадение: Все</string>
+    <string name="filter_permissions_chip_match_any">Совпадение: любое</string>
+    <string name="filter_permissions_chip_match_all">Совпадение: все</string>
     <string name="filter_permissions_chip_presets">Предустановки</string>
     <plurals name="filter_permissions_chip_presets_count">
         <item quantity="one">%d предустановка</item>
@@ -147,8 +147,8 @@
     <string name="filter_permissions_preset_contacts">Контакты</string>
     <string name="filter_permissions_preset_sms">SMS</string>
     <string name="filter_permissions_preset_storage">Хранение</string>
-    <string name="filter_permissions_empty_search_title">Нет результатов для \"%1$s\"</string>
-    <string name="filter_permissions_empty_search_subtitle">Попробуйте другое имя или идентификатор разрешения.</string>
+    <string name="filter_permissions_empty_search_title">Нет результатов для «%1$s»</string>
+    <string name="filter_permissions_empty_search_subtitle">Попробуйте другое название или идентификатор разрешения.</string>
     <string name="filter_permissions_empty_selected_title">Нет выбранных разрешений</string>
     <string name="filter_permissions_empty_selected_subtitle">Вернитесь к полному списку и выберите разрешения для фильтрации.</string>
     <string name="filter_permissions_empty_title">Разрешения не найдены</string>

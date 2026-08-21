@@ -11,7 +11,7 @@
     <string name="app_detail_version">バージョン</string>
     <string name="app_detail_apk_size">APKサイズ</string>
     <string name="app_detail_total_size">合計サイズ</string>
-    <string name="app_detail_target_sdk">ターゲットSDK</string>
+    <string name="app_detail_target_sdk">Target SDK</string>
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_updated">更新済み</string>
@@ -241,7 +241,7 @@
     <string name="general_info_version_name">バージョン名</string>
     <string name="general_info_version_code">バージョンコード</string>
     <string name="general_info_min_sdk">最小 SDK</string>
-    <string name="general_info_target_sdk">ターゲットSDK</string>
+    <string name="general_info_target_sdk">Target SDK</string>
     <string name="general_info_debug_access">デバッグアクセス</string>
     <string name="general_info_app_data_backup">アプリデータのバックアップ</string>
     <string name="general_info_unencrypted_traffic">暗号化されていないトラフィックのデフォルト</string>
@@ -341,13 +341,13 @@
     <string name="permissions_section_header">%1$s · %2$d</string>
     <string name="permissions_granted">付与済み</string>
     <string name="permissions_not_granted">未付与</string>
-    <string name="permissions_level_dangerous">危険</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
     <string name="permissions_level_dangerous_explanation">アプリが使用する前に明示的な承認が必要です。</string>
-    <string name="permissions_level_signature">署名</string>
+    <string name="permissions_level_signature">Signature</string>
     <string name="permissions_level_signature_explanation">同じキーで署名されたアプリのみがこれを保持できます。</string>
-    <string name="permissions_level_internal">内部</string>
+    <string name="permissions_level_internal">Internal</string>
     <string name="permissions_level_internal_explanation">システムのために予約されており、あなたによってではなく内部のルールによって付与されます。</string>
-    <string name="permissions_level_normal">通常</string>
+    <string name="permissions_level_normal">Normal</string>
     <string name="permissions_level_normal_explanation">通常、インストール時に自動的に付与されます。単独ではリスクが低いです。</string>
     <string name="permissions_level_unavailable">詳細は利用できません</string>
     <string name="permissions_level_unavailable_explanation">このデバイス上のアプリはこれを宣言していないため、保護しているものを表示できません。</string>

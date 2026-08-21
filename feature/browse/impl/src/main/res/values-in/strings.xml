@@ -56,8 +56,8 @@
     <string name="browse_certificate_hash_sha256">SHA-256</string>
     <string name="browse_certificate_hash_sha1">SHA-1</string>
     <string name="browse_certificate_hash_md5">MD5</string>
-    <string name="browse_protection_level_dangerous">Berbahaya</string>
-    <string name="browse_protection_level_signature">Tanda tangan</string>
+    <string name="browse_protection_level_dangerous">Dangerous</string>
+    <string name="browse_protection_level_signature">Signature</string>
     <string name="browse_protection_level_internal">Internal</string>
     <string name="browse_protection_level_normal">Normal</string>
     <string name="browse_protection_level_dangerous_explanation">Membutuhkan persetujuan eksplisit Anda sebelum aplikasi dapat menggunakannya.</string>

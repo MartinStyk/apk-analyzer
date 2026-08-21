@@ -11,7 +11,7 @@
     <string name="sort_size">APK-Dateigröße</string>
     <string name="sort_total_size">Gesamtgröße der App</string>
     <string name="sort_install_date">Installationsdatum</string>
-    <string name="sort_target_sdk">Ziel-Android-SDK</string>
+    <string name="sort_target_sdk">Target Android SDK</string>
     <string name="sort_last_updated">Zuletzt aktualisiert</string>
     <string name="sort_last_used">Zuletzt verwendet</string>
     <string name="sort_bottom_sheet_title">Sortieren nach</string>
@@ -52,9 +52,9 @@
     <string name="search_history_title">Kürzliche Suchen</string>
     <string name="search_history_clear">Löschen</string>
     <string name="filter_source_section">Installationsquelle</string>
-    <string name="filter_sdk_section">Ziel-SDK</string>
+    <string name="filter_sdk_section">Target SDK</string>
     <string name="filter_apk_size_section">APK-Dateigröße</string>
-    <string name="filter_apk_size_description">Größe des Installationspakets (.apk) nur – schließt Benutzerdaten und Cache aus.</string>
+    <string name="filter_apk_size_description">Nur die Größe des Installationspakets (.apk) – schließt Benutzerdaten und Cache aus.</string>
     <string name="filter_total_size_section">Gesamtgröße der App</string>
     <string name="filter_total_size_description">Kombinierte Größe des Installationspakets, gespeicherte App-Daten und zwischengespeicherte Dateien.</string>
     <string name="filter_total_size_locked_description">Nach gesamtem App-Fußabdruck filtern. Gewähren Sie Speicherzugriff, um die vollständige Größe jeder App zu messen – einschließlich ihrer Daten und des Caches, nicht nur des Installers.</string>
@@ -81,7 +81,7 @@
     <string name="filter_source_system">System</string>
     <string name="filter_source_unknown">Unbekannt</string>
     <string name="filter_unused_section">Nicht verwendete Apps</string>
-    <string name="filter_unused_locked_description">Finden Sie Apps, die Staub sammeln. Gewähren Sie Zugriff auf die Nutzung, um zu sehen, welche Apps Sie in letzter Zeit nicht geöffnet haben.</string>
+    <string name="filter_unused_locked_description">Finden Sie Apps, die Staub sammeln. Gewähren Sie Zugriff auf Nutzungsdaten, um zu sehen, welche Apps Sie in letzter Zeit nicht geöffnet haben.</string>
     <string name="filter_unused_grant_access">Zugriff gewähren</string>
     <plurals name="filter_unused_days_count">
         <item quantity="one">%d Tag</item>
@@ -92,21 +92,21 @@
         <item quantity="other">%d Monate</item>
     </plurals>
     <string name="filter_unused_year">1 Jahr</string>
-    <string name="quick_filter_permission_usage_title">Nutzungszugriff erforderlich</string>
-    <string name="quick_filter_permission_usage_description">Um nach der letzten Nutzung von Apps zu filtern, erlauben Sie den Nutzungszugriff in den Einstellungen. Dadurch kann die App sehen, welche Apps aktiv sind und welche untätig sind.</string>
-    <string name="quick_filter_permission_storage_title">Nutzungszugriff erforderlich</string>
-    <string name="quick_filter_permission_storage_description">Dieser Filter misst die gesamte Größe jeder App – Installer, gespeicherte Daten und Cache kombiniert. Gewähren Sie den Nutzungszugriff in den Einstellungen, um zu sehen, wie viel Speicherplatz jede App tatsächlich benötigt.</string>
+    <string name="quick_filter_permission_usage_title">Zugriff auf Nutzungsdaten erforderlich</string>
+    <string name="quick_filter_permission_usage_description">Um nach der letzten Nutzung von Apps zu filtern, erlauben Sie den Zugriff auf Nutzungsdaten in den Einstellungen. Dadurch kann die App sehen, welche Apps aktiv sind und welche untätig sind.</string>
+    <string name="quick_filter_permission_storage_title">Zugriff auf Nutzungsdaten erforderlich</string>
+    <string name="quick_filter_permission_storage_description">Dieser Filter misst die gesamte Größe jeder App – Installer, gespeicherte Daten und Cache kombiniert. Gewähren Sie den Zugriff auf Nutzungsdaten in den Einstellungen, um zu sehen, wie viel Speicherplatz jede App tatsächlich benötigt.</string>
     <string name="quick_filter_permission_open_settings">Einstellungen öffnen</string>
-    <string name="sort_permission_usage_title">Nutzungszugriff erlauben</string>
-    <string name="sort_permission_usage_description">Das Sortieren nach zuletzt verwendet benötigt zu wissen, wann Sie jede App zuletzt geöffnet haben. Gewähren Sie den Nutzungszugriff in den Einstellungen, um diese Sortieroption zu aktivieren.</string>
-    <string name="sort_permission_storage_title">Nutzungszugriff erlauben</string>
-    <string name="sort_permission_storage_description">Das Sortieren nach Gesamter Größe misst den gesamten Fußabdruck jeder App – Installer, gespeicherte Daten und Cache kombiniert. Gewähren Sie den Nutzungszugriff in den Einstellungen, um diese Sortieroption zu aktivieren.</string>
+    <string name="sort_permission_usage_title">Zugriff auf Nutzungsdaten erlauben</string>
+    <string name="sort_permission_usage_description">Das Sortieren nach zuletzt verwendet benötigt zu wissen, wann Sie jede App zuletzt geöffnet haben. Gewähren Sie den Zugriff auf Nutzungsdaten in den Einstellungen, um diese Sortieroption zu aktivieren.</string>
+    <string name="sort_permission_storage_title">Zugriff auf Nutzungsdaten erlauben</string>
+    <string name="sort_permission_storage_description">Das Sortieren nach Gesamter Größe misst den gesamten Fußabdruck jeder App – Installer, gespeicherte Daten und Cache kombiniert. Gewähren Sie den Zugriff auf Nutzungsdaten in den Einstellungen, um diese Sortieroption zu aktivieren.</string>
     <string name="filter_permissions_section">Berechtigungen</string>
     <string name="filter_permissions_count" ns0:ignore="PluralsCandidate">+%d mehr</string>
     <string name="filter_permissions_title">Filtern nach Berechtigung</string>
     <string name="filter_permissions_quick_filters">Schnellfilter</string>
     <string name="filter_permissions_match_label">Übereinstimmung</string>
-    <string name="filter_permissions_chip_match_any">Übereinstimmung: Beliebig</string>
+    <string name="filter_permissions_chip_match_any">Übereinstimmung: Mindestens eine</string>
     <string name="filter_permissions_chip_match_all">Übereinstimmung: Alle</string>
     <string name="filter_permissions_chip_presets">Voreinstellungen</string>
     <plurals name="filter_permissions_chip_presets_count">

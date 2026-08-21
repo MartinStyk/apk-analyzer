@@ -56,10 +56,10 @@
     <string name="browse_certificate_hash_sha256">SHA-256</string>
     <string name="browse_certificate_hash_sha1">SHA-1</string>
     <string name="browse_certificate_hash_md5">MD5</string>
-    <string name="browse_protection_level_dangerous">危险</string>
-    <string name="browse_protection_level_signature">签名</string>
-    <string name="browse_protection_level_internal">内部</string>
-    <string name="browse_protection_level_normal">正常</string>
+    <string name="browse_protection_level_dangerous">Dangerous</string>
+    <string name="browse_protection_level_signature">Signature</string>
+    <string name="browse_protection_level_internal">Internal</string>
+    <string name="browse_protection_level_normal">Normal</string>
     <string name="browse_protection_level_dangerous_explanation">需要您的明确批准才能让应用使用它。</string>
     <string name="browse_protection_level_signature_explanation">只有与声明它的应用使用相同密钥签名的应用才能持有此项。</string>
     <string name="browse_protection_level_internal_explanation">保留给系统，并根据内部规则授予，而不是由您授予。</string>

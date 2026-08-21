@@ -11,7 +11,7 @@
     <string name="app_detail_version">Version</string>
     <string name="app_detail_apk_size">Taille de l\'APK</string>
     <string name="app_detail_total_size">Taille totale</string>
-    <string name="app_detail_target_sdk">SDK cible</string>
+    <string name="app_detail_target_sdk">Target SDK</string>
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_updated">Mis à jour</string>
@@ -263,7 +263,7 @@
     <string name="general_info_version_name">Nom de la version</string>
     <string name="general_info_version_code">Code de version</string>
     <string name="general_info_min_sdk">Min SDK</string>
-    <string name="general_info_target_sdk">Cible SDK</string>
+    <string name="general_info_target_sdk">Target SDK</string>
     <string name="general_info_debug_access">Accès de débogage</string>
     <string name="general_info_app_data_backup">Sauvegarde des données de l\'application</string>
     <string name="general_info_unencrypted_traffic">Trafic non chiffré par défaut</string>
@@ -366,11 +366,11 @@
     <string name="permissions_section_header">%1$s · %2$d</string>
     <string name="permissions_granted">Accordé</string>
     <string name="permissions_not_granted">Non accordé</string>
-    <string name="permissions_level_dangerous">Dangereux</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
     <string name="permissions_level_dangerous_explanation">Nécessite votre approbation explicite avant que l\'application puisse l\'utiliser.</string>
     <string name="permissions_level_signature">Signature</string>
     <string name="permissions_level_signature_explanation">Seules les applications signées avec la même clé peuvent détenir celles-ci.</string>
-    <string name="permissions_level_internal">Interne</string>
+    <string name="permissions_level_internal">Internal</string>
     <string name="permissions_level_internal_explanation">Réservé au système et accordé par des règles internes plutôt que par vous.</string>
     <string name="permissions_level_normal">Normal</string>
     <string name="permissions_level_normal_explanation">Généralement accordé automatiquement lors de l\'installation. Risque faible en soi.</string>

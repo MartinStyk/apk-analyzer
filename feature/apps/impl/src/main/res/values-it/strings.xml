@@ -11,7 +11,7 @@
     <string name="sort_size">Dimensione del file APK</string>
     <string name="sort_total_size">Dimensione totale dell\'app</string>
     <string name="sort_install_date">Data di installazione</string>
-    <string name="sort_target_sdk">SDK Android target</string>
+    <string name="sort_target_sdk">Target Android SDK</string>
     <string name="sort_last_updated">Ultimo aggiornamento</string>
     <string name="sort_last_used">Ultimo utilizzato</string>
     <string name="sort_bottom_sheet_title">Ordina per</string>
@@ -52,9 +52,9 @@
     <string name="search_history_title">Ricerche recenti</string>
     <string name="search_history_clear">Cancella</string>
     <string name="filter_source_section">Fonte di installazione</string>
-    <string name="filter_sdk_section">SDK target</string>
+    <string name="filter_sdk_section">Target SDK</string>
     <string name="filter_apk_size_section">Dimensione del file APK</string>
-    <string name="filter_apk_size_description">Dimensione del pacchetto di installazione (.apk) solo — esclude i dati utente e la cache.</string>
+    <string name="filter_apk_size_description">Dimensione del pacchetto di installazione (.apk) — esclude i dati utente e la cache.</string>
     <string name="filter_total_size_section">Dimensione totale dell\'app</string>
     <string name="filter_total_size_description">Dimensione combinata dell\'installatore, dei dati dell\'app memorizzati e dei file nella cache.</string>
     <string name="filter_total_size_locked_description">Filtra per impronta totale dell\'app. Concedi accesso alla memoria per misurare la dimensione totale di ciascuna app — inclusi i suoi dati e la cache, non solo l\'installatore.</string>
@@ -81,7 +81,7 @@
     <string name="filter_source_system">Sistema</string>
     <string name="filter_source_unknown">Sconosciuto</string>
     <string name="filter_unused_section">App non utilizzate</string>
-    <string name="filter_unused_locked_description">Trova app che non usi. Concedi accesso all\'uso per vedere quali app non hai aperto di recente.</string>
+    <string name="filter_unused_locked_description">Trova app che non usi. Concedi l\'accesso ai dati di utilizzo per vedere quali app non hai aperto di recente.</string>
     <string name="filter_unused_grant_access">Concedi accesso</string>
     <plurals name="filter_unused_days_count">
         <item quantity="one">%d giorno</item>
@@ -92,15 +92,15 @@
         <item quantity="other">%d mesi</item>
     </plurals>
     <string name="filter_unused_year">1 anno</string>
-    <string name="quick_filter_permission_usage_title">Accesso all\'uso necessario</string>
-    <string name="quick_filter_permission_usage_description">Per filtrare in base a quanto recentemente sono state utilizzate le app, consenti l\'accesso all\'uso nelle Impostazioni. Questo consente all\'app di vedere quali app sono attive e quali sono rimaste inattive.</string>
-    <string name="quick_filter_permission_storage_title">Accesso all\'uso necessario</string>
-    <string name="quick_filter_permission_storage_description">Questo filtro misura la dimensione totale di ciascuna app — installatore, dati memorizzati e cache combinati. Concedi l\'accesso all\'uso nelle Impostazioni per vedere quanto spazio occupa realmente ciascuna app.</string>
+    <string name="quick_filter_permission_usage_title">Accesso ai dati di utilizzo necessario</string>
+    <string name="quick_filter_permission_usage_description">Per filtrare in base a quanto recentemente sono state utilizzate le app, consenti l\'accesso ai dati di utilizzo nelle Impostazioni. Questo consente all\'app di vedere quali app sono attive e quali sono rimaste inattive.</string>
+    <string name="quick_filter_permission_storage_title">Accesso ai dati di utilizzo necessario</string>
+    <string name="quick_filter_permission_storage_description">Questo filtro misura la dimensione totale di ciascuna app — installatore, dati memorizzati e cache combinati. Concedi l\'accesso ai dati di utilizzo nelle Impostazioni per vedere quanto spazio occupa realmente ciascuna app.</string>
     <string name="quick_filter_permission_open_settings">Apri impostazioni</string>
-    <string name="sort_permission_usage_title">Consenti accesso all\'uso</string>
-    <string name="sort_permission_usage_description">L\'ordinamento per Ultimo Utilizzo deve sapere quando hai aperto l\'ultima volta ciascuna app. Concedi l\'accesso all\'uso nelle Impostazioni per abilitare questa opzione di ordinamento.</string>
-    <string name="sort_permission_storage_title">Consenti accesso all\'uso</string>
-    <string name="sort_permission_storage_description">L\'ordinamento per Dimensione Totale misura l\'impronta totale di ciascuna app — installatore, dati memorizzati e cache combinati. Concedi l\'accesso all\'uso nelle Impostazioni per abilitare questa opzione di ordinamento.</string>
+    <string name="sort_permission_usage_title">Consenti l\'accesso ai dati di utilizzo</string>
+    <string name="sort_permission_usage_description">L\'ordinamento per Ultimo Utilizzo deve sapere quando hai aperto l\'ultima volta ciascuna app. Concedi l\'accesso ai dati di utilizzo nelle Impostazioni per abilitare questa opzione di ordinamento.</string>
+    <string name="sort_permission_storage_title">Consenti l\'accesso ai dati di utilizzo</string>
+    <string name="sort_permission_storage_description">L\'ordinamento per Dimensione Totale misura l\'impronta totale di ciascuna app — installatore, dati memorizzati e cache combinati. Concedi l\'accesso ai dati di utilizzo nelle Impostazioni per abilitare questa opzione di ordinamento.</string>
     <string name="filter_permissions_section">Autorizzazioni</string>
     <string name="filter_permissions_count" ns0:ignore="PluralsCandidate">+%d altre</string>
     <string name="filter_permissions_title">Filtra per autorizzazione</string>

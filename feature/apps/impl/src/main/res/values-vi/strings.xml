@@ -11,7 +11,7 @@
     <string name="sort_size">Kích thước tệp APK</string>
     <string name="sort_total_size">Tổng kích thước ứng dụng</string>
     <string name="sort_install_date">Ngày cài đặt</string>
-    <string name="sort_target_sdk">SDK Android mục tiêu</string>
+    <string name="sort_target_sdk">Target Android SDK</string>
     <string name="sort_last_updated">Cập nhật lần cuối</string>
     <string name="sort_last_used">Sử dụng lần cuối</string>
     <string name="sort_bottom_sheet_title">Sắp xếp theo</string>

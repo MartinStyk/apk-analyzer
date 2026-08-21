@@ -11,7 +11,7 @@
     <string name="app_detail_version">Versione</string>
     <string name="app_detail_apk_size">Dimensione APK</string>
     <string name="app_detail_total_size">Dimensione totale</string>
-    <string name="app_detail_target_sdk">SDK target</string>
+    <string name="app_detail_target_sdk">Target SDK</string>
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_updated">Aggiornato</string>
@@ -263,7 +263,7 @@
     <string name="general_info_version_name">Nome versione</string>
     <string name="general_info_version_code">Codice versione</string>
     <string name="general_info_min_sdk">Min SDK</string>
-    <string name="general_info_target_sdk">Obiettivo SDK</string>
+    <string name="general_info_target_sdk">Target SDK</string>
     <string name="general_info_debug_access">Accesso di debug</string>
     <string name="general_info_app_data_backup">Backup dei dati dell\'app</string>
     <string name="general_info_unencrypted_traffic">Traffico non crittografato predefinito</string>
@@ -366,13 +366,13 @@
     <string name="permissions_section_header">%1$s · %2$d</string>
     <string name="permissions_granted">Concesso</string>
     <string name="permissions_not_granted">Non concesso</string>
-    <string name="permissions_level_dangerous">Pericoloso</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
     <string name="permissions_level_dangerous_explanation">Richiede la tua approvazione esplicita prima che l\'app possa utilizzarlo.</string>
-    <string name="permissions_level_signature">Firma</string>
+    <string name="permissions_level_signature">Signature</string>
     <string name="permissions_level_signature_explanation">Solo le app firmate con la stessa chiave possono detenere questi.</string>
-    <string name="permissions_level_internal">Interno</string>
+    <string name="permissions_level_internal">Internal</string>
     <string name="permissions_level_internal_explanation">Riservato al sistema e concesso da regole interne piuttosto che da te.</string>
-    <string name="permissions_level_normal">Normale</string>
+    <string name="permissions_level_normal">Normal</string>
     <string name="permissions_level_normal_explanation">Di solito concesso automaticamente all\'installazione. Basso rischio da solo.</string>
     <string name="permissions_level_unavailable">Dettagli non disponibili</string>
     <string name="permissions_level_unavailable_explanation">Nessuna app su questo dispositivo dichiara questi, quindi non possiamo mostrare cosa proteggono.</string>

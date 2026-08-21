@@ -34,7 +34,7 @@
     <string name="permission_label_activity_recognition">身体活动</string>
     <string name="permission_label_bluetooth_scan">扫描附近设备</string>
     <string name="permission_label_bluetooth_connect">蓝牙连接</string>
-    <string name="permission_label_bluetooth_advertise">蓝牙广告</string>
+    <string name="permission_label_bluetooth_advertise">Bluetooth Advertise</string>
     <string name="permission_label_bluetooth">蓝牙</string>
     <string name="permission_label_uwb">UWB 测距</string>
     <string name="permission_label_notifications">发布通知</string>
@@ -45,7 +45,7 @@
     <string name="permission_label_wifi_change">更改 Wi-Fi</string>
     <string name="permission_label_wifi_state">Wi-Fi 状态</string>
     <string name="permission_label_network_state">网络状态</string>
-    <string name="permission_label_wake_lock">保持设备唤醒</string>
+    <string name="permission_label_wake_lock">Wake lock</string>
     <string name="permission_label_boot">开机时运行</string>
     <string name="permission_label_foreground_service">前台服务</string>
     <string name="permission_label_foreground_service_camera">后台相机使用</string>
@@ -55,10 +55,10 @@
     <string name="permission_label_foreground_service_media_projection">屏幕共享服务</string>
     <string name="permission_label_foreground_service_phone_call">后台通话处理</string>
     <string name="permission_label_foreground_service_connected_device">后台设备连接</string>
-    <string name="permission_label_ad_id">广告 ID</string>
-    <string name="permission_label_ad_attribution">广告归因</string>
-    <string name="permission_label_ad_custom_audience">广告受众</string>
-    <string name="permission_label_ad_topics">广告主题</string>
+    <string name="permission_label_ad_id">Advertising ID</string>
+    <string name="permission_label_ad_attribution">Ad Attribution</string>
+    <string name="permission_label_ad_custom_audience">Ad Audiences</string>
+    <string name="permission_label_ad_topics">Ad Topics</string>
     <string name="permission_label_full_screen_intent">全屏通知</string>
     <string name="permission_label_push_messages">接收推送消息</string>
     <string name="permission_label_running_apps">正在运行的应用</string>

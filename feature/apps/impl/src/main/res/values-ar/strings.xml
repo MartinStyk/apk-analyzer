@@ -11,7 +11,7 @@
     <string name="sort_size">حجم ملف APK</string>
     <string name="sort_total_size">إجمالي حجم التطبيق</string>
     <string name="sort_install_date">تاريخ التثبيت</string>
-    <string name="sort_target_sdk">Android SDK المستهدف</string>
+    <string name="sort_target_sdk">Target Android SDK</string>
     <string name="sort_last_updated">آخر تحديث</string>
     <string name="sort_last_used">آخر استخدام</string>
     <string name="sort_bottom_sheet_title">ترتيب حسب</string>
@@ -46,7 +46,7 @@
     <string name="quick_filter_source_sheet_title">المصدر</string>
     <string name="quick_filter_selection_more" ns0:ignore="PluralsCandidate">%1$s +%2$d</string>
     <string name="quick_filter_activity_sheet_title">النشاط</string>
-    <string name="quick_filter_activity_all">أي نشاط</string>
+    <string name="quick_filter_activity_all">All Activity</string>
     <string name="apps_empty_filtered">لم يتم العثور على تطبيقات</string>
     <string name="apps_clear_filters">مسح الفلاتر</string>
     <string name="installed_apps">التطبيقات المثبتة</string>
@@ -60,13 +60,13 @@
         <item quantity="many">ابحث في %1$d تطبيق مثبت</item>
         <item quantity="other">ابحث في %1$d تطبيق مثبت</item>
     </plurals>
-    <string name="search_apps_no_results">لا توجد نتائج لـ \"%1$s\"</string>
+    <string name="search_apps_no_results">لا توجد نتائج لـ «%1$s»</string>
     <string name="search_history_title">عمليات البحث الأخيرة</string>
     <string name="search_history_clear">مسح</string>
     <string name="filter_source_section">مصدر التثبيت</string>
     <string name="filter_sdk_section">SDK المستهدف</string>
     <string name="filter_apk_size_section">حجم ملف APK</string>
-    <string name="filter_apk_size_description">حجم حزمة المثبت (.apk) فقط - يستثني بيانات المستخدم والذاكرة المؤقتة.</string>
+    <string name="filter_apk_size_description">حجم حزمة المثبت (.apk) - يستثني بيانات المستخدم والذاكرة المؤقتة.</string>
     <string name="filter_total_size_section">إجمالي حجم التطبيق</string>
     <string name="filter_total_size_description">الحجم الإجمالي للمثبت وبيانات التطبيق المخزنة والملفات المؤقتة.</string>
     <string name="filter_total_size_locked_description">تصفية حسب البصمة الإجمالية للتطبيق. منح الوصول إلى التخزين لقياس الحجم الكامل لكل تطبيق - بما في ذلك بياناته وذاكرته المؤقتة، وليس فقط المثبت.</string>
@@ -93,7 +93,7 @@
     <string name="filter_source_system">نظام</string>
     <string name="filter_source_unknown">غير معروف</string>
     <string name="filter_unused_section">تطبيقات غير مستخدمة</string>
-    <string name="filter_unused_locked_description">ابحث عن التطبيقات التي تجمع الغبار. امنح حق الوصول للاستخدام لرؤية التطبيقات التي لم تفتحها مؤخرًا.</string>
+    <string name="filter_unused_locked_description">ابحث عن التطبيقات التي تجمع الغبار. امنح حق الوصول إلى بيانات الاستخدام لرؤية التطبيقات التي لم تفتحها مؤخرًا.</string>
     <string name="filter_unused_grant_access">امنح الوصول</string>
     <plurals name="filter_unused_days_count">
         <item quantity="zero">%d أيام</item>
@@ -112,15 +112,15 @@
         <item quantity="other">%d شهر</item>
     </plurals>
     <string name="filter_unused_year">سنة واحدة</string>
-    <string name="quick_filter_permission_usage_title">الوصول إلى الاستخدام مطلوب</string>
-    <string name="quick_filter_permission_usage_description">لتصفية التطبيقات حسب مدى حداثة استخدامها، يجب السماح بالوصول إلى الاستخدام في الإعدادات. هذا يسمح للتطبيق برؤية التطبيقات النشطة والتي كانت غير نشطة.</string>
-    <string name="quick_filter_permission_storage_title">الوصول إلى الاستخدام مطلوب</string>
-    <string name="quick_filter_permission_storage_description">هذا الفلتر يقيس الحجم الكامل لكل تطبيق - المثبت، البيانات المخزنة، والذاكرة المؤقتة مجتمعة. امنح الوصول إلى الاستخدام في الإعدادات لرؤية مقدار المساحة التي يشغلها كل تطبيق فعليًا.</string>
+    <string name="quick_filter_permission_usage_title">الوصول إلى بيانات الاستخدام مطلوب</string>
+    <string name="quick_filter_permission_usage_description">لتصفية التطبيقات حسب مدى حداثة استخدامها، يجب السماح بالوصول إلى بيانات الاستخدام في الإعدادات. هذا يسمح للتطبيق برؤية التطبيقات النشطة والتي كانت غير نشطة.</string>
+    <string name="quick_filter_permission_storage_title">الوصول إلى بيانات الاستخدام مطلوب</string>
+    <string name="quick_filter_permission_storage_description">هذا الفلتر يقيس الحجم الكامل لكل تطبيق - المثبت، البيانات المخزنة، والذاكرة المؤقتة مجتمعة. امنح الوصول إلى بيانات الاستخدام في الإعدادات لرؤية مقدار المساحة التي يشغلها كل تطبيق فعليًا.</string>
     <string name="quick_filter_permission_open_settings">فتح الإعدادات</string>
-    <string name="sort_permission_usage_title">السماح بالوصول إلى الاستخدام</string>
-    <string name="sort_permission_usage_description">الفرز حسب آخر استخدام يحتاج إلى معرفة متى فتحت كل تطبيق آخر مرة. امنح الوصول إلى الاستخدام في الإعدادات لتمكين خيار الفرز هذا.</string>
-    <string name="sort_permission_storage_title">السماح بالوصول إلى الاستخدام</string>
-    <string name="sort_permission_storage_description">الفرز حسب الحجم الكلي يقيس البصمة الكاملة لكل تطبيق - المثبت، البيانات المخزنة، والذاكرة المؤقتة مجتمعة. امنح الوصول إلى الاستخدام في الإعدادات لتمكين خيار الفرز هذا.</string>
+    <string name="sort_permission_usage_title">السماح بالوصول إلى بيانات الاستخدام</string>
+    <string name="sort_permission_usage_description">الفرز حسب آخر استخدام يحتاج إلى معرفة متى فتحت كل تطبيق آخر مرة. امنح الوصول إلى بيانات الاستخدام في الإعدادات لتمكين خيار الفرز هذا.</string>
+    <string name="sort_permission_storage_title">السماح بالوصول إلى بيانات الاستخدام</string>
+    <string name="sort_permission_storage_description">الفرز حسب الحجم الكلي يقيس البصمة الكاملة لكل تطبيق - المثبت، البيانات المخزنة، والذاكرة المؤقتة مجتمعة. امنح الوصول إلى بيانات الاستخدام في الإعدادات لتمكين خيار الفرز هذا.</string>
     <string name="filter_permissions_section">الأذونات</string>
     <string name="filter_permissions_count" ns0:ignore="PluralsCandidate">+%d المزيد</string>
     <string name="filter_permissions_title">تصفية حسب الإذن</string>
@@ -159,7 +159,7 @@
     <string name="filter_permissions_preset_contacts">جهات الاتصال</string>
     <string name="filter_permissions_preset_sms">رسائل قصيرة</string>
     <string name="filter_permissions_preset_storage">التخزين</string>
-    <string name="filter_permissions_empty_search_title">لا توجد نتائج لـ \"%1$s\"</string>
+    <string name="filter_permissions_empty_search_title">لا توجد نتائج لـ «%1$s»</string>
     <string name="filter_permissions_empty_search_subtitle">جرب اسم إذن أو معرف مختلف.</string>
     <string name="filter_permissions_empty_selected_title">لا توجد أذونات مختارة</string>
     <string name="filter_permissions_empty_selected_subtitle">ارجع إلى القائمة الكاملة واختر الأذونات للتصفية حسبها.</string>

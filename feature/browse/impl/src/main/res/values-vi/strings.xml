@@ -56,10 +56,10 @@
     <string name="browse_certificate_hash_sha256">SHA-256</string>
     <string name="browse_certificate_hash_sha1">SHA-1</string>
     <string name="browse_certificate_hash_md5">MD5</string>
-    <string name="browse_protection_level_dangerous">Nguy hiểm</string>
-    <string name="browse_protection_level_signature">Chữ ký</string>
-    <string name="browse_protection_level_internal">Nội bộ</string>
-    <string name="browse_protection_level_normal">Bình thường</string>
+    <string name="browse_protection_level_dangerous">Dangerous</string>
+    <string name="browse_protection_level_signature">Signature</string>
+    <string name="browse_protection_level_internal">Internal</string>
+    <string name="browse_protection_level_normal">Normal</string>
     <string name="browse_protection_level_dangerous_explanation">Cần sự chấp thuận rõ ràng của bạn trước khi một ứng dụng có thể sử dụng nó.</string>
     <string name="browse_protection_level_signature_explanation">Chỉ các ứng dụng được ký bằng cùng một khóa như ứng dụng đã khai báo mới có thể giữ điều này.</string>
     <string name="browse_protection_level_internal_explanation">Dành riêng cho hệ thống và được cấp theo các quy tắc nội bộ chứ không phải bởi bạn.</string>

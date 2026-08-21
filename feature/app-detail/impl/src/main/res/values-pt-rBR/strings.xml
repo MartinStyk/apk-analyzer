@@ -11,7 +11,7 @@
     <string name="app_detail_version">Versão</string>
     <string name="app_detail_apk_size">Tamanho do APK</string>
     <string name="app_detail_total_size">Tamanho Total</string>
-    <string name="app_detail_target_sdk">SDK Alvo</string>
+    <string name="app_detail_target_sdk">Target SDK</string>
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_updated">Atualizado</string>
@@ -263,7 +263,7 @@
     <string name="general_info_version_name">Nome da versão</string>
     <string name="general_info_version_code">Código da versão</string>
     <string name="general_info_min_sdk">Min SDK</string>
-    <string name="general_info_target_sdk">SDK Alvo</string>
+    <string name="general_info_target_sdk">Target SDK</string>
     <string name="general_info_debug_access">Acesso de depuração</string>
     <string name="general_info_app_data_backup">Backup de dados do app</string>
     <string name="general_info_unencrypted_traffic">Tráfego não criptografado padrão</string>
@@ -366,11 +366,11 @@
     <string name="permissions_section_header">%1$s · %2$d</string>
     <string name="permissions_granted">Concedido</string>
     <string name="permissions_not_granted">Não concedido</string>
-    <string name="permissions_level_dangerous">Perigoso</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
     <string name="permissions_level_dangerous_explanation">Precisa da sua aprovação explícita antes que o aplicativo possa usá-lo.</string>
-    <string name="permissions_level_signature">Assinatura</string>
+    <string name="permissions_level_signature">Signature</string>
     <string name="permissions_level_signature_explanation">Apenas aplicativos assinados com a mesma chave podem ter isso.</string>
-    <string name="permissions_level_internal">Interno</string>
+    <string name="permissions_level_internal">Internal</string>
     <string name="permissions_level_internal_explanation">Reservado para o sistema e concedido por regras internas em vez de por você.</string>
     <string name="permissions_level_normal">Normal</string>
     <string name="permissions_level_normal_explanation">Geralmente concedido automaticamente na instalação. Baixo risco por si só.</string>

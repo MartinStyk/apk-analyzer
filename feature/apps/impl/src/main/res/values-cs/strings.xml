@@ -11,7 +11,7 @@
     <string name="sort_size">Velikost souboru APK</string>
     <string name="sort_total_size">Celková velikost aplikace</string>
     <string name="sort_install_date">Datum instalace</string>
-    <string name="sort_target_sdk">Cílový Android SDK</string>
+    <string name="sort_target_sdk">Target Android SDK</string>
     <string name="sort_last_updated">Naposledy aktualizováno</string>
     <string name="sort_last_used">Naposledy použito</string>
     <string name="sort_bottom_sheet_title">Třídit podle</string>
@@ -41,8 +41,8 @@
     <string name="quick_filter_recently_updated">Nedávno aktualizováno</string>
     <string name="quick_filter_source_sheet_title">Zdroj</string>
     <string name="quick_filter_selection_more" ns0:ignore="PluralsCandidate">%1$s +%2$d</string>
-    <string name="quick_filter_activity_sheet_title">Aktivita</string>
-    <string name="quick_filter_activity_all">Jakákoliv aktivita</string>
+    <string name="quick_filter_activity_sheet_title">Activity</string>
+    <string name="quick_filter_activity_all">Všechna Activity</string>
     <string name="apps_empty_filtered">Žádné aplikace nenalezeny</string>
     <string name="apps_clear_filters">Vymazat filtry</string>
     <string name="installed_apps">Nainstalované aplikace</string>
@@ -60,9 +60,9 @@
     <string name="filter_source_section">Zdroj instalace</string>
     <string name="filter_sdk_section">Cílový SDK</string>
     <string name="filter_apk_size_section">Velikost souboru APK</string>
-    <string name="filter_apk_size_description">Velikost instalačního balíčku (.apk) pouze — nezahrnuje uživatelská data a mezipaměť.</string>
+    <string name="filter_apk_size_description">Velikost instalačního balíčku (.apk) — nezahrnuje uživatelská data a mezipaměť.</string>
     <string name="filter_total_size_section">Celková velikost aplikace</string>
-    <string name="filter_total_size_description">Kombinovaná velikost instalačního balíčku, uložených dat aplikace a mezipaměťových souborů.</string>
+    <string name="filter_total_size_description">Kombinovaná velikost souboru APK, dat aplikace a mezipaměti.</string>
     <string name="filter_total_size_locked_description">Filtr podle celkové velikosti aplikace. Udělte přístup k úložišti pro měření plné velikosti každé aplikace — včetně jejích dat a mezipaměti, nejen instalačního balíčku.</string>
     <string name="filter_total_size_grant_access">Udělit přístup k úložišti</string>
     <string name="filter_install_time_section">Datum instalace</string>
@@ -87,7 +87,7 @@
     <string name="filter_source_system">Systém</string>
     <string name="filter_source_unknown">Neznámý</string>
     <string name="filter_unused_section">Nepoužívané aplikace</string>
-    <string name="filter_unused_locked_description">Najděte aplikace, které jen zabírají místo. Udělte přístup k používání, abyste viděli, které aplikace jste v poslední době neotevřeli.</string>
+    <string name="filter_unused_locked_description">Najděte aplikace, které jen zabírají místo. Udělte přístup k datům o používání, abyste viděli, které aplikace jste v poslední době neotevřeli.</string>
     <string name="filter_unused_grant_access">Udělit přístup</string>
     <plurals name="filter_unused_days_count">
         <item quantity="one">%d den</item>
@@ -102,22 +102,22 @@
         <item quantity="other">%d měsíců</item>
     </plurals>
     <string name="filter_unused_year">1 rok</string>
-    <string name="quick_filter_permission_usage_title">Potřebný přístup k používání</string>
-    <string name="quick_filter_permission_usage_description">Pro filtrování podle toho, jak nedávno byly aplikace používány, povolte přístup k používání v Nastavení. To umožní aplikaci vidět, které aplikace jsou aktivní a které byly nečinné.</string>
-    <string name="quick_filter_permission_storage_title">Potřebný přístup k používání</string>
-    <string name="quick_filter_permission_storage_description">Tento filtr měří celkovou velikost každé aplikace — instalátor, uložená data a mezipaměť dohromady. Udělte přístup k používání v Nastavení, abyste viděli, kolik místa každá aplikace skutečně zabírá.</string>
+    <string name="quick_filter_permission_usage_title">Potřebný přístup k datům o používání</string>
+    <string name="quick_filter_permission_usage_description">Pro filtrování podle toho, jak nedávno byly aplikace používány, povolte přístup k datům o používání v Nastavení. To umožní aplikaci vidět, které aplikace jsou aktivní a které byly nečinné.</string>
+    <string name="quick_filter_permission_storage_title">Potřebný přístup k datům o používání</string>
+    <string name="quick_filter_permission_storage_description">Tento filtr měří celkovou velikost každé aplikace — instalátor, uložená data a mezipaměť dohromady. Udělte přístup k datům o používání v Nastavení, abyste viděli, kolik místa každá aplikace skutečně zabírá.</string>
     <string name="quick_filter_permission_open_settings">Otevřít nastavení</string>
     <string name="sort_permission_usage_title">Povolit přístup k používání</string>
-    <string name="sort_permission_usage_description">Třídění podle posledního použití potřebuje vědět, kdy jste naposledy otevřeli každou aplikaci. Udělte přístup k používání v Nastavení, abyste povolili tuto možnost třídění.</string>
+    <string name="sort_permission_usage_description">Třídění podle posledního použití potřebuje vědět, kdy jste naposledy otevřeli každou aplikaci. Udělte přístup k datům o používání v Nastavení, abyste povolili tuto možnost třídění.</string>
     <string name="sort_permission_storage_title">Povolit přístup k používání</string>
-    <string name="sort_permission_storage_description">Třídění podle celkové velikosti měří celkovou stopu každé aplikace — instalátor, uložená data a mezipaměť dohromady. Udělte přístup k používání v Nastavení, abyste povolili tuto možnost třídění.</string>
+    <string name="sort_permission_storage_description">Třídění podle celkové velikosti měří celkovou stopu každé aplikace — instalátor, uložená data a mezipaměť dohromady. Udělte přístup k datům o používání v Nastavení, abyste povolili tuto možnost třídění.</string>
     <string name="filter_permissions_section">Oprávnění</string>
     <string name="filter_permissions_count" ns0:ignore="PluralsCandidate">+%d více</string>
     <string name="filter_permissions_title">Filtrovat podle oprávnění</string>
     <string name="filter_permissions_quick_filters">Rychlé filtry</string>
     <string name="filter_permissions_match_label">Shoda</string>
-    <string name="filter_permissions_chip_match_any">Shoda: Jakákoli</string>
-    <string name="filter_permissions_chip_match_all">Shoda: Vše</string>
+    <string name="filter_permissions_chip_match_any">Shoda: alespoň jedno</string>
+    <string name="filter_permissions_chip_match_all">Shoda: vše</string>
     <string name="filter_permissions_chip_presets">Předvolby</string>
     <plurals name="filter_permissions_chip_presets_count">
         <item quantity="one">%d předvolba</item>
@@ -135,7 +135,7 @@
     <string name="filter_permissions_match_all_subtitle">Zobrazit pouze aplikace, které mají každé vybrané oprávnění.</string>
     <string name="filter_permissions_show_description">Vyberte, která oprávnění se zobrazí v seznamu níže.</string>
     <string name="filter_permissions_show_all">Všechna oprávnění</string>
-    <string name="filter_permissions_show_all_subtitle">Procházet každé oprávnění deklarované na tomto zařízení.</string>
+    <string name="filter_permissions_show_all_subtitle">Zobrazit všechna oprávnění deklarovaná na tomto zařízení.</string>
     <string name="filter_permissions_show_selected">Pouze vybrané</string>
     <string name="filter_permissions_show_selected_subtitle">Zobrazit pouze oprávnění, která jste již vybrali.</string>
     <string name="filter_permissions_sheet_show">Zobrazit oprávnění</string>
@@ -147,7 +147,7 @@
     <string name="filter_permissions_preset_contacts">Kontakty</string>
     <string name="filter_permissions_preset_sms">SMS</string>
     <string name="filter_permissions_preset_storage">Úložiště</string>
-    <string name="filter_permissions_empty_search_title">Žádné výsledky pro \"%1$s\"</string>
+    <string name="filter_permissions_empty_search_title">Žádné výsledky pro „%1$s“</string>
     <string name="filter_permissions_empty_search_subtitle">Zkuste jiný název nebo identifikátor oprávnění.</string>
     <string name="filter_permissions_empty_selected_title">Žádná oprávnění nebyla vybrána</string>
     <string name="filter_permissions_empty_selected_subtitle">Vraťte se k úplnému seznamu a vyberte oprávnění pro filtrování.</string>

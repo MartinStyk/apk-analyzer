@@ -11,7 +11,7 @@
     <string name="app_detail_version">الإصدار</string>
     <string name="app_detail_apk_size">حجم APK</string>
     <string name="app_detail_total_size">الحجم الكلي</string>
-    <string name="app_detail_target_sdk">SDK المستهدف</string>
+    <string name="app_detail_target_sdk">Target SDK</string>
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_updated">تم التحديث</string>
@@ -351,7 +351,7 @@
     <string name="general_info_version_name">اسم الإصدار</string>
     <string name="general_info_version_code">رمز الإصدار</string>
     <string name="general_info_min_sdk">SDK الأدنى</string>
-    <string name="general_info_target_sdk">SDK المستهدف</string>
+    <string name="general_info_target_sdk">Target SDK</string>
     <string name="general_info_debug_access">وصول التصحيح</string>
     <string name="general_info_app_data_backup">نسخة احتياطية لبيانات التطبيق</string>
     <string name="general_info_unencrypted_traffic">حركة المرور غير المشفرة افتراضيًا</string>
@@ -466,13 +466,13 @@
     <string name="permissions_section_header">%1$s · %2$d</string>
     <string name="permissions_granted">ممنوح</string>
     <string name="permissions_not_granted">غير ممنوح</string>
-    <string name="permissions_level_dangerous">خطير</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
     <string name="permissions_level_dangerous_explanation">يحتاج إلى موافقتك الصريحة قبل أن يتمكن التطبيق من استخدامه.</string>
-    <string name="permissions_level_signature">توقيع</string>
+    <string name="permissions_level_signature">Signature</string>
     <string name="permissions_level_signature_explanation">يمكن فقط للتطبيقات الموقعة بنفس المفتاح أن تحتفظ بهذه.</string>
-    <string name="permissions_level_internal">داخلي</string>
+    <string name="permissions_level_internal">Internal</string>
     <string name="permissions_level_internal_explanation">محجوز للنظام وممنوح وفقًا لقواعد داخلية بدلاً من قبلك.</string>
-    <string name="permissions_level_normal">عادي</string>
+    <string name="permissions_level_normal">Normal</string>
     <string name="permissions_level_normal_explanation">عادة ما يتم منحه تلقائيًا عند التثبيت. خطر منخفض بمفرده.</string>
     <string name="permissions_level_unavailable">التفاصيل غير متاحة</string>
     <string name="permissions_level_unavailable_explanation">لا يوجد تطبيق على هذا الجهاز يعلن عن هذه، لذا لا يمكننا عرض ما تحميه.</string>

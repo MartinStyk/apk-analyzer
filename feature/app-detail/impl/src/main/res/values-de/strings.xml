@@ -11,7 +11,7 @@
     <string name="app_detail_version">Version</string>
     <string name="app_detail_apk_size">APK-Größe</string>
     <string name="app_detail_total_size">Gesamtgröße</string>
-    <string name="app_detail_target_sdk">Ziel-SDK</string>
+    <string name="app_detail_target_sdk">Target SDK</string>
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_updated">Aktualisiert</string>
@@ -263,7 +263,7 @@
     <string name="general_info_version_name">Versionsname</string>
     <string name="general_info_version_code">Versionscode</string>
     <string name="general_info_min_sdk">Min SDK</string>
-    <string name="general_info_target_sdk">Ziel SDK</string>
+    <string name="general_info_target_sdk">Target SDK</string>
     <string name="general_info_debug_access">Debug-Zugriff</string>
     <string name="general_info_app_data_backup">App-Daten-Backup</string>
     <string name="general_info_unencrypted_traffic">Unverschlüsselter Verkehr standardmäßig</string>
@@ -366,11 +366,11 @@
     <string name="permissions_section_header">%1$s · %2$d</string>
     <string name="permissions_granted">Gewährt</string>
     <string name="permissions_not_granted">Nicht gewährt</string>
-    <string name="permissions_level_dangerous">Gefährlich</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
     <string name="permissions_level_dangerous_explanation">Benötigt Ihre ausdrückliche Genehmigung, bevor die App es verwenden kann.</string>
-    <string name="permissions_level_signature">Signatur</string>
+    <string name="permissions_level_signature">Signature</string>
     <string name="permissions_level_signature_explanation">Nur Apps, die mit demselben Schlüssel signiert sind, können diese halten.</string>
-    <string name="permissions_level_internal">Intern</string>
+    <string name="permissions_level_internal">Internal</string>
     <string name="permissions_level_internal_explanation">Für das System reserviert und gemäß internen Regeln gewährt, nicht von Ihnen.</string>
     <string name="permissions_level_normal">Normal</string>
     <string name="permissions_level_normal_explanation">Wird normalerweise automatisch bei der Installation gewährt. Geringes Risiko für sich allein.</string>
