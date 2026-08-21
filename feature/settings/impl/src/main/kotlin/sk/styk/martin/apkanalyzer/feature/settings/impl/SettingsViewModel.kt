@@ -9,12 +9,16 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import sk.styk.martin.apkanalyzer.core.common.applanguage.AppLanguageRepository
 import sk.styk.martin.apkanalyzer.core.common.settings.Key
 import sk.styk.martin.apkanalyzer.core.common.settings.PersistenceRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor(private val persistenceRepository: PersistenceRepository) : ViewModel() {
+class SettingsViewModel @Inject constructor(
+    private val persistenceRepository: PersistenceRepository,
+    private val appLanguageRepository: AppLanguageRepository,
+) : ViewModel() {
 
     private val eventChannel = Channel<SettingsEvent>(Channel.BUFFERED)
     val events = eventChannel.receiveAsFlow()
@@ -26,6 +30,7 @@ class SettingsViewModel @Inject constructor(private val persistenceRepository: P
         SettingsState(
             colorScheme = colorScheme,
             recentlyViewedAppsEnabled = recentlyViewedEnabled,
+            appLanguageSetting = this.appLanguageRepository.getAppLanguageSetting(),
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), SettingsState())
 
@@ -37,6 +42,10 @@ class SettingsViewModel @Inject constructor(private val persistenceRepository: P
 
             is SettingsAction.RecentlyViewedAppsToggled -> {
                 viewModelScope.launch { persistenceRepository.save(Key.RecentlyViewedAppsEnabled, action.enabled) }
+            }
+
+            is SettingsAction.OpenLanguageSettings -> {
+                eventChannel.trySend(SettingsEvent.OpenAppLanguageSettings)
             }
 
             is SettingsAction.NavigateBack -> {

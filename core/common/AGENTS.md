@@ -10,6 +10,8 @@ logic do not belong here.
 
 ## Package Map
 
+* `applanguage/` - reads the per-app language setting (API 33+ `LocaleManager`) behind
+  `AppLanguageRepository`.
 * `coroutines/` - injectable dispatchers, flow helpers, and cancellation-safe result capture.
 * `logger/` - the repository logging facade.
 * `performance/` - performance instrumentation contracts and the internal Firebase adapter.

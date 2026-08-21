@@ -25,6 +25,18 @@ fun Context.openAppSystemPage(packageName: PackageName) {
     }
 }
 
+fun Context.openAppLanguageSettings() {
+    try {
+        startActivity(
+            Intent(Settings.ACTION_APP_LOCALE_SETTINGS).apply {
+                data = "package:$packageName".toUri()
+            },
+        )
+    } catch (e: ActivityNotFoundException) {
+        Logger.e(TAG, e, "Could not open app language settings")
+    }
+}
+
 fun Context.openGooglePlay(packageName: PackageName) {
     try {
         startActivity(Intent(Intent.ACTION_VIEW, "market://details?id=$packageName".toUri()))
