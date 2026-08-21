@@ -11,6 +11,12 @@ By participating you agree to the [Code of Conduct](CODE_OF_CONDUCT.md).
 MVVM/DI/navigation conventions, Compose rules, naming, and where a given change belongs. Then read
 the `AGENTS.md` of every module you touch — each one documents its own package map and rules.
 
+**Want the reasoning, not just the rules?** [`docs/engineering/`](docs/engineering/README.md) expands
+them: [architecture](docs/engineering/architecture.md),
+[coding standards](docs/engineering/coding-standards.md),
+[verification](docs/engineering/verification.md), and the
+[AI-assisted workflow](docs/engineering/ai-workflow.md).
+
 **Check the [roadmap](docs/product/roadmap.md).** Open scope is tracked there with stable IDs, and
 finished or deliberately retired work is in [`shipped.md`](docs/product/shipped.md). If your idea is
 already retired, the reasoning is recorded — worth reading before re-proposing it.
