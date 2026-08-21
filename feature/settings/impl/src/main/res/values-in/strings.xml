@@ -8,4 +8,7 @@
     <string name="settings_color_scheme_follow_system">Ikuti sistem</string>
     <string name="settings_apps_section">Aplikasi</string>
     <string name="settings_recently_viewed_toggle">Aplikasi yang baru saja dilihat</string>
+    <string name="settings_language_section">Bahasa</string>
+    <string name="settings_language_app_language">Bahasa aplikasi</string>
+    <string name="settings_language_system_default">Default sistem</string>
 </resources>

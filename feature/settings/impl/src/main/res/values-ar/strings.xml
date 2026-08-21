@@ -8,4 +8,7 @@
     <string name="settings_color_scheme_follow_system">اتبع النظام</string>
     <string name="settings_apps_section">التطبيقات</string>
     <string name="settings_recently_viewed_toggle">التطبيقات التي تم عرضها مؤخرًا</string>
+    <string name="settings_language_section">اللغة</string>
+    <string name="settings_language_app_language">لغة التطبيق</string>
+    <string name="settings_language_system_default">الإعداد الافتراضي للنظام</string>
 </resources>

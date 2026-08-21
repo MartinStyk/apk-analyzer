@@ -8,4 +8,7 @@
     <string name="settings_color_scheme_follow_system">시스템 따르기</string>
     <string name="settings_apps_section">앱</string>
     <string name="settings_recently_viewed_toggle">최근에 본 앱</string>
+    <string name="settings_language_section">언어</string>
+    <string name="settings_language_app_language">앱 언어</string>
+    <string name="settings_language_system_default">시스템 기본값</string>
 </resources>

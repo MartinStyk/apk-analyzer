@@ -8,4 +8,7 @@
     <string name="settings_color_scheme_follow_system">Sistemi takip et</string>
     <string name="settings_apps_section">Uygulamalar</string>
     <string name="settings_recently_viewed_toggle">Son görüntülenen uygulamalar</string>
+    <string name="settings_language_section">Dil</string>
+    <string name="settings_language_app_language">Uygulama dili</string>
+    <string name="settings_language_system_default">Sistem varsayılanı</string>
 </resources>

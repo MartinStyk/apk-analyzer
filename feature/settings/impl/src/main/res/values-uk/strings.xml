@@ -8,4 +8,7 @@
     <string name="settings_color_scheme_follow_system">Слідувати системі</string>
     <string name="settings_apps_section">Додатки</string>
     <string name="settings_recently_viewed_toggle">Нещодавно переглянуті програми</string>
+    <string name="settings_language_section">Мова</string>
+    <string name="settings_language_app_language">Мова додатка</string>
+    <string name="settings_language_system_default">Системне значення за замовчуванням</string>
 </resources>

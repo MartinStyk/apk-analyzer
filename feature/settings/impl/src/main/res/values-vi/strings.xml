@@ -8,4 +8,7 @@
     <string name="settings_color_scheme_follow_system">Theo hệ thống</string>
     <string name="settings_apps_section">Ứng dụng</string>
     <string name="settings_recently_viewed_toggle">Ứng dụng đã xem gần đây</string>
+    <string name="settings_language_section">Ngôn ngữ</string>
+    <string name="settings_language_app_language">Ngôn ngữ ứng dụng</string>
+    <string name="settings_language_system_default">Mặc định hệ thống</string>
 </resources>
