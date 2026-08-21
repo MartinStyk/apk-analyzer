@@ -72,7 +72,7 @@
     </plurals>
     <string name="app_detail_insight_sideloaded">Установлено из внешнего магазина приложений</string>
     <plurals name="app_detail_insight_unused">
-        <item quantity="one">Не открывалось в последний месяц</item>
+        <item quantity="one">Не открывалось в последний %1$d месяц</item>
         <item quantity="few">Не открывалось в последние %1$d месяца</item>
         <item quantity="many">Не открывалось в последние %1$d месяцев</item>
         <item quantity="other">Не открывалось в последние %1$d месяцев</item>
@@ -229,7 +229,7 @@
     <string name="certificates_current_certificates">Текущие сертификаты подписи</string>
     <string name="certificates_history">История подписей</string>
     <plurals name="certificates_history_description">
-        <item quantity="one">Android проверил один ключ подписи, использованный до текущего ключа.</item>
+        <item quantity="one">Android проверил %d ключ подписи, использованный до текущего ключа.</item>
         <item quantity="few">Android проверил %d ключа подписи, использованных до текущего ключа. Последний использованный предыдущий ключ отображается первым.</item>
         <item quantity="many">Android проверил %d ключей подписи, использованных до текущего ключа. Последний использованный предыдущий ключ отображается первым.</item>
         <item quantity="other">Android проверил %d ключей подписи, использованных до текущего ключа. Последний использованный предыдущий ключ отображается первым.</item>

@@ -60,7 +60,7 @@
     </plurals>
     <string name="app_detail_insight_sideloaded">Instalado de fora de uma loja de aplicativos</string>
     <plurals name="app_detail_insight_unused">
-        <item quantity="one">Não aberto no último mês</item>
+        <item quantity="one">Não aberto há %1$d mês</item>
         <item quantity="other">Não aberto nos últimos %1$d meses</item>
     </plurals>
     <string name="app_detail_insight_background_location">Pode acessar a localização enquanto está em segundo plano</string>
@@ -187,7 +187,7 @@
     <string name="certificates_current_certificates">Certificados de assinatura atuais</string>
     <string name="certificates_history">Histórico de assinatura</string>
     <plurals name="certificates_history_description">
-        <item quantity="one">Chave de assinatura verificada pelo Android usada antes da chave atual.</item>
+        <item quantity="one">Android verificou %d chave de assinatura usada antes da chave atual.</item>
         <item quantity="other">Chaves de assinatura %d verificadas pelo Android usadas antes da chave atual. A chave anterior mais recentemente usada aparece primeiro.</item>
     </plurals>
     <string name="certificates_original_signing_key">Chave de assinatura original</string>

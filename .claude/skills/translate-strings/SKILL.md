@@ -169,10 +169,17 @@ multiple reviewers (human or agent) are available.
    - Every `quantity=` category the target language needs per the table above, even though the English
      source only defines `one`/`other`. Write each category's own grammatically correct sentence —
      don't copy the `other` text into `few`/`many`/`two` untranslated.
-   - If any plural branch uses a numeric placeholder (for example `%1$d`), keep that placeholder in
-     every branch for that key in locales where one branch can match multiple numbers (for example
-     Hindi `one` matches `0` and `1`). Avoid text-only singular shortcuts like "last month" there,
-     or lint raises `ImpliedQuantity`.
+   - Every branch of a plural whose English `other` branch carries a numeric placeholder must carry
+     that placeholder too, in every locale where the branch matches more than one number: `one`
+     matches `0` and `1` in French, Portuguese (Brazil) and Hindi, and matches `1, 21, 31, …` in
+     Russian and Ukrainian. Spelling the count out ("last month", "one signing key") reads wrong for
+     the other numbers the branch covers and lint raises `ImpliedQuantity`. The English `one` branch
+     omitting the placeholder is not permission to omit it — the count is always passed to
+     `pluralStringResource`. Check with:
+     ```bash
+     grep -n '<item quantity=' feature/*/impl/src/main/res/values-{fr,pt-rBR,hi,ru,uk}/strings.xml \
+       | grep -v '%'
+     ```
    - `content_description_*` strings stay terse (they're for screen readers, not visible copy).
 5. **`android_versions` string-array (`core/apps`):** keep the dessert-name codename in English for
    Latin/Cyrillic-script languages, matching the convention on the Play Store and in Android's own

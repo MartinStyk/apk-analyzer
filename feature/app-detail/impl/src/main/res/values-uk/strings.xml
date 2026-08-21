@@ -72,7 +72,7 @@
     </plurals>
     <string name="app_detail_insight_sideloaded">Встановлено ззовні магазину додатків</string>
     <plurals name="app_detail_insight_unused">
-        <item quantity="one">Не відкривалося в останній місяць</item>
+        <item quantity="one">Не відкривалося в останній %1$d місяць</item>
         <item quantity="few">Не відкривалося в останні %1$d місяці</item>
         <item quantity="many">Не відкривалося в останні %1$d місяців</item>
         <item quantity="other">Не відкривалося в останні %1$d місяців</item>
@@ -229,7 +229,7 @@
     <string name="certificates_current_certificates">Поточні сертифікати підпису</string>
     <string name="certificates_history">Історія підпису</string>
     <plurals name="certificates_history_description">
-        <item quantity="one">Android підтвердив один ключ підпису, що використовувався раніше, ніж поточний ключ.</item>
+        <item quantity="one">Android підтвердив %d ключ підпису, що використовувався раніше, ніж поточний ключ.</item>
         <item quantity="few">Android підтвердив %d ключі підпису, що використовувалися раніше, ніж поточний ключ. Найбільш нещодавно використаний попередній ключ з\'являється першим.</item>
         <item quantity="many">Android підтвердив %d ключів підпису, що використовувалися раніше, ніж поточний ключ. Найбільш нещодавно використаний попередній ключ з\'являється першим.</item>
         <item quantity="other">Android підтвердив %d ключів підпису, що використовувалися раніше, ніж поточний ключ. Найбільш нещодавно використаний попередній ключ з\'являється першим.</item>
