@@ -169,6 +169,10 @@ multiple reviewers (human or agent) are available.
    - Every `quantity=` category the target language needs per the table above, even though the English
      source only defines `one`/`other`. Write each category's own grammatically correct sentence —
      don't copy the `other` text into `few`/`many`/`two` untranslated.
+   - If any plural branch uses a numeric placeholder (for example `%1$d`), keep that placeholder in
+     every branch for that key in locales where one branch can match multiple numbers (for example
+     Hindi `one` matches `0` and `1`). Avoid text-only singular shortcuts like "last month" there,
+     or lint raises `ImpliedQuantity`.
    - `content_description_*` strings stay terse (they're for screen readers, not visible copy).
 5. **`android_versions` string-array (`core/apps`):** keep the dessert-name codename in English for
    Latin/Cyrillic-script languages, matching the convention on the Play Store and in Android's own

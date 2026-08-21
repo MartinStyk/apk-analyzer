@@ -60,7 +60,7 @@
     </plurals>
     <string name="app_detail_insight_sideloaded">एक ऐप स्टोर से बाहर स्थापित किया गया</string>
     <plurals name="app_detail_insight_unused">
-        <item quantity="one">पिछले महीने में नहीं खोला गया</item>
+        <item quantity="one">पिछले %1$d महीने में नहीं खोला गया</item>
         <item quantity="other">पिछले %1$d महीनों में नहीं खोला गया</item>
     </plurals>
     <string name="app_detail_insight_background_location">पृष्ठभूमि में चलते समय स्थान तक पहुंच सकता है</string>
@@ -187,8 +187,8 @@
     <string name="certificates_current_certificates">वर्तमान साइनिंग सर्टिफिकेट्स</string>
     <string name="certificates_history">साइनिंग इतिहास</string>
     <plurals name="certificates_history_description">
-        <item quantity="one">Android द्वारा सत्यापित एक साइनिंग कुंजी जो वर्तमान कुंजी से पहले उपयोग की गई थी।</item>
-        <item quantity="other">Android द्वारा सत्यापित %d साइनिंग कुंजी जो वर्तमान कुंजी से पहले उपयोग की गई थीं। सबसे हाल ही में उपयोग की गई पूर्व कुंजी पहले दिखाई देती है।</item>
+        <item quantity="one">Android द्वारा सत्यापित %1$d साइनिंग कुंजी जो वर्तमान कुंजी से पहले उपयोग की गई थी।</item>
+        <item quantity="other">Android द्वारा सत्यापित %1$d साइनिंग कुंजी जो वर्तमान कुंजी से पहले उपयोग की गई थीं। सबसे हाल ही में उपयोग की गई पूर्व कुंजी पहले दिखाई देती है।</item>
     </plurals>
     <string name="certificates_original_signing_key">मूल साइनिंग कुंजी</string>
     <string name="certificates_previous_signing_key">पिछली साइनिंग कुंजी</string>
