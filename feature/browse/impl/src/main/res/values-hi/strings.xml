@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="browse_title">ब्राउज़ करें</string>
+    <string name="browse_subtitle_loading">स्थापित ऐप्स को स्कैन कर रहे हैं…</string>
+    <plurals name="browse_subtitle">
+        <item quantity="one">इस डिवाइस पर स्थापित %1$d ऐप का अन्वेषण करें</item>
+        <item quantity="other">इस डिवाइस पर स्थापित %1$d ऐप्स का अन्वेषण करें</item>
+    </plurals>
+    <string name="browse_dimension_permission_title">अनुमतियाँ</string>
+    <string name="browse_dimension_permission_subtitle">देखें कि कौन से ऐप्स एक निर्दिष्ट अनुमति का उपयोग करते हैं</string>
+    <string name="browse_dimension_certificate_title">साइनिंग प्रमाणपत्र</string>
+    <string name="browse_dimension_certificate_subtitle">ऐप्स को साइनर पहचान, प्रकाशक नाम, या देश के अनुसार समूहित करें</string>
+    <string name="browse_dimension_target_sdk_title">लक्षित Android संस्करण</string>
+    <string name="browse_dimension_target_sdk_subtitle">देखें कि प्रत्येक ऐप किस Android संस्करण के लिए बनाया गया था</string>
+    <string name="browse_dimension_min_sdk_title">न्यूनतम Android संस्करण</string>
+    <string name="browse_dimension_min_sdk_subtitle">देखें कि प्रत्येक ऐप अभी भी किस पुराने Android संस्करण का समर्थन करता है</string>
+    <string name="browse_dimension_install_source_title">स्थापना स्रोत</string>
+    <string name="browse_dimension_install_source_subtitle">देखें कि प्रत्येक ऐप कहाँ से आया</string>
+    <string name="browse_dimension_shared_user_id_title">साझा पहचान</string>
+    <string name="browse_dimension_shared_user_id_subtitle">ऐप्स खोजें जो समान डिवाइस पहचान के तहत चलते हैं और एक-दूसरे के डेटा तक पहुँच सकते हैं</string>
+    <string name="browse_dimension_app_category_title">ऐप श्रेणी</string>
+    <string name="browse_dimension_app_category_subtitle">देखें कि प्रत्येक ऐप अपने आप को किस प्रकार का ऐप घोषित करता है</string>
+    <plurals name="browse_dimension_option_count">
+        <item quantity="one">%1$d विकल्प</item>
+        <item quantity="other">%1$d विकल्प</item>
+    </plurals>
+    <string name="browse_sdk_unknown">API स्तर %1$s</string>
+    <string name="browse_api_level">API %1$s</string>
+    <string name="browse_source_google_play">गूगल प्ले</string>
+    <string name="browse_source_samsung_galaxy_store">सैमसंग गैलेक्सी स्टोर</string>
+    <string name="browse_source_amazon_appstore">अमेज़न ऐपस्टोर</string>
+    <string name="browse_source_huawei_app_gallery">हुआवेई ऐपगैलरी</string>
+    <string name="browse_source_xiaomi_get_apps">शियाओमी गेटऐप्स</string>
+    <string name="browse_source_fdroid">F-Droid</string>
+    <string name="browse_source_aurora_store">Aurora Store</string>
+    <string name="browse_source_sideloaded">एक फ़ाइल से स्थापित</string>
+    <string name="browse_source_local_install">कंप्यूटर के माध्यम से स्थापित</string>
+    <string name="browse_source_system">सिस्टम</string>
+    <string name="browse_source_unknown">अज्ञात</string>
+    <string name="browse_signer_unknown">अज्ञात हस्ताक्षरकर्ता</string>
+    <string name="browse_country_unknown">अज्ञात देश</string>
+    <string name="browse_category_undefined">श्रेणीबद्ध नहीं</string>
+    <string name="browse_category_game">खेल</string>
+    <string name="browse_category_audio">ऑडियो</string>
+    <string name="browse_category_video">वीडियो</string>
+    <string name="browse_category_image">छवि</string>
+    <string name="browse_category_social">सामाजिक</string>
+    <string name="browse_category_news">समाचार और पत्रिकाएँ</string>
+    <string name="browse_category_maps">मानचित्र और नेविगेशन</string>
+    <string name="browse_category_productivity">उत्पादकता</string>
+    <string name="browse_category_accessibility">सुलभता</string>
+    <string name="browse_sub_attribute_sheet_title">समूह द्वारा</string>
+    <string name="browse_certificate_attribute_sha256">पहचान (SHA-256)</string>
+    <string name="browse_certificate_attribute_sha1">पहचान (SHA-1)</string>
+    <string name="browse_certificate_attribute_md5">पहचान (MD5)</string>
+    <string name="browse_certificate_attribute_organization">प्रकाशक का नाम</string>
+    <string name="browse_certificate_attribute_country">देश</string>
+    <string name="browse_certificate_hash_sha256">SHA-256</string>
+    <string name="browse_certificate_hash_sha1">SHA-1</string>
+    <string name="browse_certificate_hash_md5">MD5</string>
+    <string name="browse_protection_level_dangerous">Dangerous</string>
+    <string name="browse_protection_level_signature">Signature</string>
+    <string name="browse_protection_level_internal">Internal</string>
+    <string name="browse_protection_level_normal">Normal</string>
+    <string name="browse_protection_level_dangerous_explanation">एक ऐप इसका उपयोग करने से पहले आपकी स्पष्ट स्वीकृति की आवश्यकता है।</string>
+    <string name="browse_protection_level_signature_explanation">केवल वही ऐप्स जो उसी कुंजी से हस्ताक्षरित हैं जैसे कि ऐप जिसने इसे घोषित किया है, इसे प्राप्त कर सकते हैं।</string>
+    <string name="browse_protection_level_internal_explanation">सिस्टम के लिए आरक्षित और आंतरिक नियमों द्वारा दी गई, न कि आपके द्वारा।</string>
+    <string name="browse_protection_level_normal_explanation">आमतौर पर इंस्टॉल पर स्वचालित रूप से दिया जाता है। अपने आप में कम जोखिम।</string>
+    <string name="browse_algorithm_strong">मजबूत</string>
+    <string name="browse_algorithm_weak">कमजोर</string>
+    <string name="browse_algorithm_unknown">अज्ञात ताकत</string>
+    <string name="browse_algorithm_strong_explanation">%1$s SHA-256 या एक मजबूत डाइजेस्ट का उपयोग करता है। कोई व्यावहारिक टकराव हमले ज्ञात नहीं हैं, हालांकि समग्र सुरक्षा हस्ताक्षर कुंजी के प्रकार और आकार पर भी निर्भर करती है।</string>
+    <string name="browse_algorithm_sha1_explanation">%1$s SHA-1 का उपयोग करता है। SHA-1 अब टकराव प्रतिरोधी नहीं है, इसलिए एक हमलावर समान डाइजेस्ट के साथ विभिन्न डेटा बना सकता है। नए हस्ताक्षर प्रमाणपत्रों को SHA-256 या मजबूत का उपयोग करना चाहिए।</string>
+    <string name="browse_algorithm_md5_explanation">%1$s MD5 का उपयोग करता है। MD5 टकराव प्रतिरोधी नहीं है और हस्ताक्षर प्रमाणपत्रों के लिए असुरक्षित है। नए हस्ताक्षर प्रमाणपत्रों को SHA-256 या मजबूत का उपयोग करना चाहिए।</string>
+    <string name="browse_algorithm_md2_explanation">%1$s MD2 का उपयोग करता है। MD2 अप्रचलित है और व्यावहारिक हमलों के प्रति संवेदनशील है, इसलिए यह हस्ताक्षर प्रमाणपत्रों के लिए असुरक्षित है। नए हस्ताक्षर प्रमाणपत्रों को SHA-256 या मजबूत का उपयोग करना चाहिए।</string>
+    <string name="browse_algorithm_unknown_explanation">%1$s की ताकत उसके एल्गोरिदम नाम से आंकी नहीं जा सकती। कुंजी का प्रकार और आकार भी इसकी सुरक्षा को प्रभावित कर सकता है।</string>
+    <string name="browse_certificate_self_signed">स्व-हस्ताक्षरित</string>
+    <string name="browse_certificate_self_signed_explanation">स्व-हस्ताक्षरित प्रमाणपत्र Android ऐप्स के लिए सामान्य हैं। जब आपको प्रकाशक की पुष्टि करने की आवश्यकता हो, तो प्रमाणपत्र के फिंगरप्रिंट की तुलना एक विश्वसनीय स्रोत से करें।</string>
+    <string name="browse_bucket_info_content_description">%1$s के बारे में</string>
+    <plurals name="browse_options_filter_hint">
+        <item quantity="one">%1$d विकल्प फ़िल्टर करें</item>
+        <item quantity="other">%1$d विकल्पों को फ़िल्टर करें</item>
+    </plurals>
+    <string name="browse_options_empty_query">कोई विकल्प “%1$s” से मेल नहीं खाता</string>
+    <plurals name="browse_apps_count">
+        <item quantity="one">%1$d ऐप</item>
+        <item quantity="other">%1$d ऐप्स</item>
+    </plurals>
+    <plurals name="browse_apps_filter_hint">
+        <item quantity="one">%1$d ऐप फ़िल्टर करें</item>
+        <item quantity="other">%1$d ऐप्स फ़िल्टर करें</item>
+    </plurals>
+    <string name="browse_apps_empty_query">कोई ऐप “%1$s” से मेल नहीं खाता</string>
+</resources>

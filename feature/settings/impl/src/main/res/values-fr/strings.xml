@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="settings_title">Paramètres</string>
+    <string name="settings_appearance">Apparence</string>
+    <string name="settings_color_scheme">Schéma de couleurs</string>
+    <string name="settings_color_scheme_day">Jour</string>
+    <string name="settings_color_scheme_night">Nuit</string>
+    <string name="settings_color_scheme_follow_system">Suivre le système</string>
+    <string name="settings_apps_section">Applications</string>
+    <string name="settings_recently_viewed_toggle">Applications récemment vues</string>
+</resources>

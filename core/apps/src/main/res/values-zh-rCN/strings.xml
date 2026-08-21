@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string-array name="android_versions">
+        <item>Android 1</item>
+        <item>Android 1.1 Petit Four</item>
+        <item>Android 1.5 纸杯蛋糕</item>
+        <item>Android 1.6 甜甜圈</item>
+        <item>Android 2.0 泡芙</item>
+        <item>Android 2.0.1 泡芙</item>
+        <item>Android 2.1 泡芙</item>
+        <item>Android 2.2 冻酸奶</item>
+        <item>Android 2.3 姜饼</item>
+        <item>Android 2.3.3 姜饼</item>
+        <item>Android 3.0 蜂巢</item>
+        <item>Android 3.1 蜂巢</item>
+        <item>Android 3.2 蜂巢</item>
+        <item>Android 4.0 冰淇淋三明治</item>
+        <item>Android 4.0.3 冰淇淋三明治</item>
+        <item>Android 4.1 果冻豆</item>
+        <item>Android 4.2 果冻豆</item>
+        <item>Android 4.3 果冻豆</item>
+        <item>Android 4.4 奇巧</item>
+        <item>Android 4.4W 奇巧</item>
+        <item>Android 5.0 棒棒糖</item>
+        <item>Android 5.1.1 棒棒糖</item>
+        <item>Android 6.0 棉花糖</item>
+        <item>Android 7.0 牛轧糖</item>
+        <item>Android 7.1.2 牛轧糖</item>
+        <item>Android 8.0 奥利奥</item>
+        <item>Android 8.1 奥利奥</item>
+        <item>Android 9 派</item>
+        <item>Android 10 Q</item>
+        <item>Android 11</item>
+        <item>Android 12</item>
+        <item>Android 12L</item>
+        <item>Android 13</item>
+        <item>Android 14</item>
+        <item>Android 15</item>
+        <item>Android 16</item>
+        <item>Android 17</item>
+    </string-array>
+</resources>

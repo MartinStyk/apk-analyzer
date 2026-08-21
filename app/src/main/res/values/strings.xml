@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">Apk Analyzer</string>
+    <string name="app_name" translatable="false">Apk Analyzer</string>
     <string name="external_apk_open_error">Couldn’t open this APK</string>
 </resources>

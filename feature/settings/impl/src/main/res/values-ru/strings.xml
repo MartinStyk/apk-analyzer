@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="settings_title">Настройки</string>
+    <string name="settings_appearance">Внешний вид</string>
+    <string name="settings_color_scheme">Цветовая схема</string>
+    <string name="settings_color_scheme_day">День</string>
+    <string name="settings_color_scheme_night">Ночь</string>
+    <string name="settings_color_scheme_follow_system">Следовать системе</string>
+    <string name="settings_apps_section">Приложения</string>
+    <string name="settings_recently_viewed_toggle">Недавно просмотренные приложения</string>
+</resources>

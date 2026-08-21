@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="browse_title">浏览</string>
+    <string name="browse_subtitle_loading">正在扫描已安装的应用…</string>
+    <plurals name="browse_subtitle">
+        <item quantity="other">查看在此设备上安装的 %1$d 个应用</item>
+    </plurals>
+    <string name="browse_dimension_permission_title">权限</string>
+    <string name="browse_dimension_permission_subtitle">查看哪些应用使用了特定权限</string>
+    <string name="browse_dimension_certificate_title">签名证书</string>
+    <string name="browse_dimension_certificate_subtitle">按签名者身份、发布者名称或国家分组应用</string>
+    <string name="browse_dimension_target_sdk_title">目标 Android 版本</string>
+    <string name="browse_dimension_target_sdk_subtitle">查看每个应用构建的 Android 版本</string>
+    <string name="browse_dimension_min_sdk_title">最低 Android 版本</string>
+    <string name="browse_dimension_min_sdk_subtitle">查看每个应用仍支持的最旧 Android 版本</string>
+    <string name="browse_dimension_install_source_title">安装来源</string>
+    <string name="browse_dimension_install_source_subtitle">查看每个应用的来源</string>
+    <string name="browse_dimension_shared_user_id_title">共享身份</string>
+    <string name="browse_dimension_shared_user_id_subtitle">查找在相同设备身份下运行并可以访问彼此数据的应用</string>
+    <string name="browse_dimension_app_category_title">应用类别</string>
+    <string name="browse_dimension_app_category_subtitle">查看每个应用声明自己是什么类型</string>
+    <plurals name="browse_dimension_option_count">
+        <item quantity="other">%1$d 个选项</item>
+    </plurals>
+    <string name="browse_sdk_unknown">API 级别 %1$s</string>
+    <string name="browse_api_level">API %1$s</string>
+    <string name="browse_source_google_play">Google Play</string>
+    <string name="browse_source_samsung_galaxy_store">三星 Galaxy 商店</string>
+    <string name="browse_source_amazon_appstore">亚马逊应用商店</string>
+    <string name="browse_source_huawei_app_gallery">华为应用市场</string>
+    <string name="browse_source_xiaomi_get_apps">小米应用商店</string>
+    <string name="browse_source_fdroid">F-Droid</string>
+    <string name="browse_source_aurora_store">Aurora 商店</string>
+    <string name="browse_source_sideloaded">从文件安装</string>
+    <string name="browse_source_local_install">通过计算机安装</string>
+    <string name="browse_source_system">系统</string>
+    <string name="browse_source_unknown">未知</string>
+    <string name="browse_signer_unknown">未知签名者</string>
+    <string name="browse_country_unknown">未知国家</string>
+    <string name="browse_category_undefined">未分类</string>
+    <string name="browse_category_game">游戏</string>
+    <string name="browse_category_audio">音频</string>
+    <string name="browse_category_video">视频</string>
+    <string name="browse_category_image">图像</string>
+    <string name="browse_category_social">社交</string>
+    <string name="browse_category_news">新闻与杂志</string>
+    <string name="browse_category_maps">地图与导航</string>
+    <string name="browse_category_productivity">生产力</string>
+    <string name="browse_category_accessibility">无障碍</string>
+    <string name="browse_sub_attribute_sheet_title">按组</string>
+    <string name="browse_certificate_attribute_sha256">身份 (SHA-256)</string>
+    <string name="browse_certificate_attribute_sha1">身份 (SHA-1)</string>
+    <string name="browse_certificate_attribute_md5">身份 (MD5)</string>
+    <string name="browse_certificate_attribute_organization">发布者名称</string>
+    <string name="browse_certificate_attribute_country">国家</string>
+    <string name="browse_certificate_hash_sha256">SHA-256</string>
+    <string name="browse_certificate_hash_sha1">SHA-1</string>
+    <string name="browse_certificate_hash_md5">MD5</string>
+    <string name="browse_protection_level_dangerous">Dangerous</string>
+    <string name="browse_protection_level_signature">Signature</string>
+    <string name="browse_protection_level_internal">Internal</string>
+    <string name="browse_protection_level_normal">Normal</string>
+    <string name="browse_protection_level_dangerous_explanation">需要您的明确批准才能让应用使用它。</string>
+    <string name="browse_protection_level_signature_explanation">只有与声明它的应用使用相同密钥签名的应用才能持有此项。</string>
+    <string name="browse_protection_level_internal_explanation">保留给系统，并根据内部规则授予，而不是由您授予。</string>
+    <string name="browse_protection_level_normal_explanation">通常在安装时自动授予。单独使用风险较低。</string>
+    <string name="browse_algorithm_strong">强</string>
+    <string name="browse_algorithm_weak">弱</string>
+    <string name="browse_algorithm_unknown">未知强度</string>
+    <string name="browse_algorithm_strong_explanation">%1$s 使用 SHA-256 或更强的摘要。已知没有实际的碰撞攻击，但整体安全性也取决于签名密钥的类型和大小。</string>
+    <string name="browse_algorithm_sha1_explanation">%1$s 使用 SHA-1。SHA-1 不再具有抗碰撞性，因此攻击者可以创建具有相同摘要的不同数据。新的签名证书应使用 SHA-256 或更强的算法。</string>
+    <string name="browse_algorithm_md5_explanation">%1$s 使用 MD5。MD5 不具有抗碰撞性，不适合用于签名证书。新的签名证书应使用 SHA-256 或更强的算法。</string>
+    <string name="browse_algorithm_md2_explanation">%1$s 使用 MD2。MD2 已过时且易受实际攻击，因此不适合用于签名证书。新的签名证书应使用 SHA-256 或更强的算法。</string>
+    <string name="browse_algorithm_unknown_explanation">%1$s 的强度无法仅通过其算法名称进行评估。密钥类型和大小也可能影响其安全性。</string>
+    <string name="browse_certificate_self_signed">自签名</string>
+    <string name="browse_certificate_self_signed_explanation">自签名证书在 Android 应用中是正常的。当您需要验证发布者时，请将证书指纹与可信来源进行比较。</string>
+    <string name="browse_bucket_info_content_description">关于 %1$s</string>
+    <plurals name="browse_options_filter_hint">
+        <item quantity="other">筛选 %1$d 个选项</item>
+    </plurals>
+    <string name="browse_options_empty_query">没有选项匹配 “%1$s”</string>
+    <plurals name="browse_apps_count">
+        <item quantity="other">%1$d 个应用</item>
+    </plurals>
+    <plurals name="browse_apps_filter_hint">
+        <item quantity="other">筛选 %1$d 个应用</item>
+    </plurals>
+    <string name="browse_apps_empty_query">没有应用匹配 “%1$s”</string>
+</resources>

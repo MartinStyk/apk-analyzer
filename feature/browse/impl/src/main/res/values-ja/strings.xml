@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="browse_title">閲覧</string>
+    <string name="browse_subtitle_loading">インストールされたアプリをスキャン中…</string>
+    <plurals name="browse_subtitle">
+        <item quantity="other">このデバイスにインストールされている %1$d アプリを探索する</item>
+    </plurals>
+    <string name="browse_dimension_permission_title">権限</string>
+    <string name="browse_dimension_permission_subtitle">特定の権限を使用しているアプリを確認する</string>
+    <string name="browse_dimension_certificate_title">署名証明書</string>
+    <string name="browse_dimension_certificate_subtitle">署名者のアイデンティティ、発行者名、または国でアプリをグループ化する</string>
+    <string name="browse_dimension_target_sdk_title">ターゲットAndroidバージョン</string>
+    <string name="browse_dimension_target_sdk_subtitle">各アプリが構築されたAndroidバージョンを確認する</string>
+    <string name="browse_dimension_min_sdk_title">最小Androidバージョン</string>
+    <string name="browse_dimension_min_sdk_subtitle">各アプリがまだサポートしている最も古いAndroidバージョンを確認する</string>
+    <string name="browse_dimension_install_source_title">インストール元</string>
+    <string name="browse_dimension_install_source_subtitle">各アプリの出所を確認する</string>
+    <string name="browse_dimension_shared_user_id_title">共有アイデンティティ</string>
+    <string name="browse_dimension_shared_user_id_subtitle">同じデバイスアイデンティティの下で実行され、互いのデータにアクセスできるアプリを見つける</string>
+    <string name="browse_dimension_app_category_title">アプリカテゴリ</string>
+    <string name="browse_dimension_app_category_subtitle">各アプリが自らをどのようなアプリとして宣言しているかを確認する</string>
+    <plurals name="browse_dimension_option_count">
+        <item quantity="other">%1$d オプション</item>
+    </plurals>
+    <string name="browse_sdk_unknown">APIレベル %1$s</string>
+    <string name="browse_api_level">API %1$s</string>
+    <string name="browse_source_google_play">Google Play</string>
+    <string name="browse_source_samsung_galaxy_store">Samsung Galaxy Store</string>
+    <string name="browse_source_amazon_appstore">Amazon Appstore</string>
+    <string name="browse_source_huawei_app_gallery">Huawei AppGallery</string>
+    <string name="browse_source_xiaomi_get_apps">Xiaomi GetApps</string>
+    <string name="browse_source_fdroid">F-Droid</string>
+    <string name="browse_source_aurora_store">Aurora Store</string>
+    <string name="browse_source_sideloaded">ファイルからインストール</string>
+    <string name="browse_source_local_install">コンピュータ経由でインストール</string>
+    <string name="browse_source_system">システム</string>
+    <string name="browse_source_unknown">不明</string>
+    <string name="browse_signer_unknown">不明な署名者</string>
+    <string name="browse_country_unknown">不明な国</string>
+    <string name="browse_category_undefined">カテゴリなし</string>
+    <string name="browse_category_game">ゲーム</string>
+    <string name="browse_category_audio">オーディオ</string>
+    <string name="browse_category_video">ビデオ</string>
+    <string name="browse_category_image">画像</string>
+    <string name="browse_category_social">ソーシャル</string>
+    <string name="browse_category_news">ニュースと雑誌</string>
+    <string name="browse_category_maps">地図とナビゲーション</string>
+    <string name="browse_category_productivity">生産性</string>
+    <string name="browse_category_accessibility">アクセシビリティ</string>
+    <string name="browse_sub_attribute_sheet_title">グループ化</string>
+    <string name="browse_certificate_attribute_sha256">アイデンティティ (SHA-256)</string>
+    <string name="browse_certificate_attribute_sha1">アイデンティティ (SHA-1)</string>
+    <string name="browse_certificate_attribute_md5">アイデンティティ (MD5)</string>
+    <string name="browse_certificate_attribute_organization">発行者名</string>
+    <string name="browse_certificate_attribute_country">国</string>
+    <string name="browse_certificate_hash_sha256">SHA-256</string>
+    <string name="browse_certificate_hash_sha1">SHA-1</string>
+    <string name="browse_certificate_hash_md5">MD5</string>
+    <string name="browse_protection_level_dangerous">Dangerous</string>
+    <string name="browse_protection_level_signature">Signature</string>
+    <string name="browse_protection_level_internal">Internal</string>
+    <string name="browse_protection_level_normal">Normal</string>
+    <string name="browse_protection_level_dangerous_explanation">アプリが使用する前に明示的な承認が必要です。</string>
+    <string name="browse_protection_level_signature_explanation">それを宣言したアプリと同じキーで署名されたアプリのみがこれを保持できます。</string>
+    <string name="browse_protection_level_internal_explanation">システムのために予約されており、あなたによってではなく内部のルールによって付与されます。</string>
+    <string name="browse_protection_level_normal_explanation">通常、インストール時に自動的に付与されます。単独ではリスクが低いです。</string>
+    <string name="browse_algorithm_strong">強力</string>
+    <string name="browse_algorithm_weak">弱い</string>
+    <string name="browse_algorithm_unknown">不明な強度</string>
+    <string name="browse_algorithm_strong_explanation">%1$sはSHA-256またはそれ以上のダイジェストを使用します。実用的な衝突攻撃は知られていませんが、全体的なセキュリティは署名鍵の種類とサイズにも依存します。</string>
+    <string name="browse_algorithm_sha1_explanation">%1$sはSHA-1を使用します。SHA-1はもはや衝突耐性がないため、攻撃者は同じダイジェストを持つ異なるデータを作成できます。新しい署名証明書はSHA-256またはそれ以上を使用するべきです。</string>
+    <string name="browse_algorithm_md5_explanation">%1$sはMD5を使用します。MD5は衝突耐性がなく、署名証明書には安全ではありません。新しい署名証明書はSHA-256またはそれ以上を使用するべきです。</string>
+    <string name="browse_algorithm_md2_explanation">%1$sはMD2を使用します。MD2は時代遅れで実用的な攻撃に対して脆弱であるため、署名証明書には安全ではありません。新しい署名証明書はSHA-256またはそれ以上を使用するべきです。</string>
+    <string name="browse_algorithm_unknown_explanation">%1$sの強度はそのアルゴリズム名から評価できません。鍵の種類とサイズもそのセキュリティに影響を与える可能性があります。</string>
+    <string name="browse_certificate_self_signed">自己署名</string>
+    <string name="browse_certificate_self_signed_explanation">自己署名証明書はAndroidアプリでは一般的です。発行者を確認する必要がある場合は、証明書のフィンガープリントを信頼できるソースと比較してください。</string>
+    <string name="browse_bucket_info_content_description">%1$sについて</string>
+    <plurals name="browse_options_filter_hint">
+        <item quantity="other">フィルター %1$d オプション</item>
+    </plurals>
+    <string name="browse_options_empty_query">オプションは “%1$s” に一致しません</string>
+    <plurals name="browse_apps_count">
+        <item quantity="other">%1$d アプリ</item>
+    </plurals>
+    <plurals name="browse_apps_filter_hint">
+        <item quantity="other">フィルター %1$d アプリ</item>
+    </plurals>
+    <string name="browse_apps_empty_query">アプリは “%1$s” に一致しません</string>
+</resources>

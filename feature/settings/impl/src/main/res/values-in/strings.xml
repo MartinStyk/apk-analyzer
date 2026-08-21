@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="settings_title">Pengaturan</string>
+    <string name="settings_appearance">Tampilan</string>
+    <string name="settings_color_scheme">Skema warna</string>
+    <string name="settings_color_scheme_day">Siang</string>
+    <string name="settings_color_scheme_night">Malam</string>
+    <string name="settings_color_scheme_follow_system">Ikuti sistem</string>
+    <string name="settings_apps_section">Aplikasi</string>
+    <string name="settings_recently_viewed_toggle">Aplikasi yang baru saja dilihat</string>
+</resources>

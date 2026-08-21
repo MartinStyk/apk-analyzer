@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="settings_title">설정</string>
+    <string name="settings_appearance">모양</string>
+    <string name="settings_color_scheme">색 구성표</string>
+    <string name="settings_color_scheme_day">낮</string>
+    <string name="settings_color_scheme_night">밤</string>
+    <string name="settings_color_scheme_follow_system">시스템 따르기</string>
+    <string name="settings_apps_section">앱</string>
+    <string name="settings_recently_viewed_toggle">최근에 본 앱</string>
+</resources>

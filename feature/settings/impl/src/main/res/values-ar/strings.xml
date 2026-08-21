@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="settings_title">الإعدادات</string>
+    <string name="settings_appearance">المظهر</string>
+    <string name="settings_color_scheme">نظام الألوان</string>
+    <string name="settings_color_scheme_day">يوم</string>
+    <string name="settings_color_scheme_night">ليل</string>
+    <string name="settings_color_scheme_follow_system">اتبع النظام</string>
+    <string name="settings_apps_section">التطبيقات</string>
+    <string name="settings_recently_viewed_toggle">التطبيقات التي تم عرضها مؤخرًا</string>
+</resources>

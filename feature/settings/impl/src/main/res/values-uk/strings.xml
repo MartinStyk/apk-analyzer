@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="settings_title">Налаштування</string>
+    <string name="settings_appearance">Зовнішній вигляд</string>
+    <string name="settings_color_scheme">Кольорова схема</string>
+    <string name="settings_color_scheme_day">День</string>
+    <string name="settings_color_scheme_night">Ніч</string>
+    <string name="settings_color_scheme_follow_system">Слідувати системі</string>
+    <string name="settings_apps_section">Додатки</string>
+    <string name="settings_recently_viewed_toggle">Нещодавно переглянуті програми</string>
+</resources>

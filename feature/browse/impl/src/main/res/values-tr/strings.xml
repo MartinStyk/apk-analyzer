@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="browse_title">Gözat</string>
+    <string name="browse_subtitle_loading">Yüklenmiş uygulamalar taranıyor…</string>
+    <plurals name="browse_subtitle">
+        <item quantity="one">Bu cihazda yüklü %1$d uygulamayı keşfedin</item>
+        <item quantity="other">Bu cihazda yüklü %1$d uygulamayı keşfedin</item>
+    </plurals>
+    <string name="browse_dimension_permission_title">İzinler</string>
+    <string name="browse_dimension_permission_subtitle">Hangi uygulamaların belirli bir izni kullandığını görün</string>
+    <string name="browse_dimension_certificate_title">İmza sertifikası</string>
+    <string name="browse_dimension_certificate_subtitle">Uygulamaları imza kimliği, yayıncı adı veya ülkeye göre gruplandırın</string>
+    <string name="browse_dimension_target_sdk_title">Hedef Android sürümü</string>
+    <string name="browse_dimension_target_sdk_subtitle">Her uygulamanın hangi Android sürümü için oluşturulduğunu görün</string>
+    <string name="browse_dimension_min_sdk_title">Minimum Android sürümü</string>
+    <string name="browse_dimension_min_sdk_subtitle">Her uygulamanın hala desteklediği en eski Android sürümünü görün</string>
+    <string name="browse_dimension_install_source_title">Kurulum kaynağı</string>
+    <string name="browse_dimension_install_source_subtitle">Her uygulamanın nereden geldiğini görün</string>
+    <string name="browse_dimension_shared_user_id_title">Paylaşılan kimlik</string>
+    <string name="browse_dimension_shared_user_id_subtitle">Aynı cihaz kimliği altında çalışan ve birbirlerinin verilerine erişebilen uygulamaları bulun</string>
+    <string name="browse_dimension_app_category_title">Uygulama kategorisi</string>
+    <string name="browse_dimension_app_category_subtitle">Her birinin kendisini ne tür bir uygulama olarak tanımladığını görün</string>
+    <plurals name="browse_dimension_option_count">
+        <item quantity="one">%1$d seçenek</item>
+        <item quantity="other">%1$d seçenek</item>
+    </plurals>
+    <string name="browse_sdk_unknown">API seviyesi %1$s</string>
+    <string name="browse_api_level">API %1$s</string>
+    <string name="browse_source_google_play">Google Play</string>
+    <string name="browse_source_samsung_galaxy_store">Samsung Galaxy Store</string>
+    <string name="browse_source_amazon_appstore">Amazon Appstore</string>
+    <string name="browse_source_huawei_app_gallery">Huawei AppGallery</string>
+    <string name="browse_source_xiaomi_get_apps">Xiaomi GetApps</string>
+    <string name="browse_source_fdroid">F-Droid</string>
+    <string name="browse_source_aurora_store">Aurora Store</string>
+    <string name="browse_source_sideloaded">Bir dosyadan yüklendi</string>
+    <string name="browse_source_local_install">Bilgisayar üzerinden yüklendi</string>
+    <string name="browse_source_system">Sistem</string>
+    <string name="browse_source_unknown">Bilinmiyor</string>
+    <string name="browse_signer_unknown">Bilinmeyen imzalayan</string>
+    <string name="browse_country_unknown">Bilinmeyen ülke</string>
+    <string name="browse_category_undefined">Kategorize edilmemiş</string>
+    <string name="browse_category_game">Oyunlar</string>
+    <string name="browse_category_audio">Ses</string>
+    <string name="browse_category_video">Video</string>
+    <string name="browse_category_image">Görüntü</string>
+    <string name="browse_category_social">Sosyal</string>
+    <string name="browse_category_news">Haberler ve dergiler</string>
+    <string name="browse_category_maps">Haritalar ve navigasyon</string>
+    <string name="browse_category_productivity">Verimlilik</string>
+    <string name="browse_category_accessibility">Erişilebilirlik</string>
+    <string name="browse_sub_attribute_sheet_title">Grupla</string>
+    <string name="browse_certificate_attribute_sha256">Kimlik (SHA-256)</string>
+    <string name="browse_certificate_attribute_sha1">Kimlik (SHA-1)</string>
+    <string name="browse_certificate_attribute_md5">Kimlik (MD5)</string>
+    <string name="browse_certificate_attribute_organization">Yayıncı adı</string>
+    <string name="browse_certificate_attribute_country">Ülke</string>
+    <string name="browse_certificate_hash_sha256">SHA-256</string>
+    <string name="browse_certificate_hash_sha1">SHA-1</string>
+    <string name="browse_certificate_hash_md5">MD5</string>
+    <string name="browse_protection_level_dangerous">Dangerous</string>
+    <string name="browse_protection_level_signature">Signature</string>
+    <string name="browse_protection_level_internal">Internal</string>
+    <string name="browse_protection_level_normal">Normal</string>
+    <string name="browse_protection_level_dangerous_explanation">Bir uygulamanın bunu kullanabilmesi için açık onayınızı gerektirir.</string>
+    <string name="browse_protection_level_signature_explanation">Sadece bunu beyan eden uygulama ile aynı anahtar ile imzalanmış uygulamalar bunu tutabilir.</string>
+    <string name="browse_protection_level_internal_explanation">Sistem için ayrılmıştır ve sizin tarafınızdan değil, dahili kurallara göre verilir.</string>
+    <string name="browse_protection_level_normal_explanation">Genellikle kurulumda otomatik olarak verilir. Kendi başına düşük risk.</string>
+    <string name="browse_algorithm_strong">Güçlü</string>
+    <string name="browse_algorithm_weak">Zayıf</string>
+    <string name="browse_algorithm_unknown">Bilinmeyen güç</string>
+    <string name="browse_algorithm_strong_explanation">%1$s SHA-256 veya daha güçlü bir özet kullanır. Pratik bir çarpışma saldırısı bilinmemektedir, ancak genel güvenlik imzalama anahtarının türüne ve boyutuna da bağlıdır.</string>
+    <string name="browse_algorithm_sha1_explanation">%1$s SHA-1 kullanır. SHA-1 artık çarpışma direncine sahip değildir, bu nedenle bir saldırgan aynı özetle farklı veriler oluşturabilir. Yeni imzalama sertifikaları SHA-256 veya daha güçlü olmalıdır.</string>
+    <string name="browse_algorithm_md5_explanation">%1$s MD5 kullanır. MD5 çarpışma direncine sahip değildir ve imzalama sertifikaları için güvensizdir. Yeni imzalama sertifikaları SHA-256 veya daha güçlü olmalıdır.</string>
+    <string name="browse_algorithm_md2_explanation">%1$s MD2 kullanır. MD2 modası geçmiş ve pratik saldırılara karşı savunmasızdır, bu nedenle imzalama sertifikaları için güvensizdir. Yeni imzalama sertifikaları SHA-256 veya daha güçlü olmalıdır.</string>
+    <string name="browse_algorithm_unknown_explanation">%1$s\'nın gücü algoritma adından değerlendirilemez. Anahtar türü ve boyutu da güvenliğini etkileyebilir.</string>
+    <string name="browse_certificate_self_signed">Kendi kendine imzalı</string>
+    <string name="browse_certificate_self_signed_explanation">Kendinden imzalı sertifikalar Android uygulamaları için normaldir. Yayıncıyı doğrulamak gerektiğinde sertifika parmak izini güvenilir bir kaynakla karşılaştırın.</string>
+    <string name="browse_bucket_info_content_description">%1$s hakkında</string>
+    <plurals name="browse_options_filter_hint">
+        <item quantity="one">%1$d seçeneği filtrele</item>
+        <item quantity="other">%1$d seçeneği filtrele</item>
+    </plurals>
+    <string name="browse_options_empty_query">“%1$s” ile eşleşen seçenek yok</string>
+    <plurals name="browse_apps_count">
+        <item quantity="one">%1$d uygulama</item>
+        <item quantity="other">%1$d uygulama</item>
+    </plurals>
+    <plurals name="browse_apps_filter_hint">
+        <item quantity="one">%1$d uygulamayı filtrele</item>
+        <item quantity="other">%1$d uygulamayı filtrele</item>
+    </plurals>
+    <string name="browse_apps_empty_query">“%1$s” ile eşleşen uygulama yok</string>
+</resources>

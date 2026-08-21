@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="settings_title">सेटिंग्स</string>
+    <string name="settings_appearance">दृश्य</string>
+    <string name="settings_color_scheme">रंग योजना</string>
+    <string name="settings_color_scheme_day">दिन</string>
+    <string name="settings_color_scheme_night">रात</string>
+    <string name="settings_color_scheme_follow_system">सिस्टम का पालन करें</string>
+    <string name="settings_apps_section">ऐप्स</string>
+    <string name="settings_recently_viewed_toggle">हाल ही में देखी गई ऐप्स</string>
+</resources>
