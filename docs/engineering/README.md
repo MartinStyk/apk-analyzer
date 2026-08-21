@@ -9,6 +9,7 @@ live in [`docs/product/`](../product/README.md); one-off decisions and audits li
 | [Architecture](architecture.md) | You need the module graph, the dependency rules, or the ViewModel/data-layer/design-system shapes |
 | [Coding standards](coding-standards.md) | Before writing code — conventions, state handling, and the reasoning behind them |
 | [Verification](verification.md) | You want to know what Spotless, Detekt, Lint and LeakCanary actually check, and what CI gates on |
+| [CI and release](ci-and-release.md) | You need to know what a workflow does, how a release is cut, or how it reaches production |
 | [AI workflow](ai-workflow.md) | You're working with a coding agent, or writing/updating an `AGENTS.md` or a skill |
 
 The canonical, terse version of all of this is [`AGENTS.md`](../../AGENTS.md) — the file both humans

@@ -191,17 +191,11 @@ gradle/        Version catalog and wrapper
 
 ## CI and releases
 
-Every push and PR to `develop` runs `spotlessCheck`, Detekt, Android Lint (results uploaded as
-SARIF), and builds a debug APK that is attached to the run as an artifact. Pushes to `develop` also
-go out to internal testers via Firebase App Distribution.
-
-Tagging `MAJOR.MINOR.PATCH` runs the release workflow: it verifies against the release variant,
-builds and signs an AAB and APK, derives `versionCode` from the tag, publishes a GitHub release with
-the tag annotation as notes, uploads the AAB to the Play Store beta track with its mapping file, and
-distributes the APK to internal testers.
-
-A separate workflow validates the shared AI context files whenever an `AGENTS.md`, a skill, or the
-module graph changes — see [`docs/engineering/ai-workflow.md`](docs/engineering/ai-workflow.md).
+Every push and PR to `develop` verifies the project and builds a debug APK artifact; pushes also go
+out to internal testers. An annotated `MAJOR.MINOR.PATCH` tag builds and signs an AAB and APK,
+publishes a GitHub release, and uploads to the Play Store beta track — production is a separate,
+manual promotion. The four workflows, their triggers, and the secrets they need are in
+[`docs/engineering/ci-and-release.md`](docs/engineering/ci-and-release.md).
 
 ## Documentation
 
@@ -224,6 +218,7 @@ module graph changes — see [`docs/engineering/ai-workflow.md`](docs/engineerin
 | [`docs/engineering/coding-standards.md`](docs/engineering/coding-standards.md) | Conventions before you write code, with real examples from the codebase |
 | [`docs/engineering/verification.md`](docs/engineering/verification.md) | Spotless, Detekt, Lint, LeakCanary — what each enforces and what gates CI |
 | [`docs/engineering/ai-workflow.md`](docs/engineering/ai-workflow.md) | Per-module `AGENTS.md`, `validateAgentContext`, and the shared skills |
+| [`docs/engineering/ci-and-release.md`](docs/engineering/ci-and-release.md) | The GitHub Actions workflows, the release pipeline, and production promotion |
 | [`docs/technical/`](docs/technical/README.md) | Cross-cutting engineering decisions and audits |
 | [`.claude/skills/`](.claude/skills) | Step-by-step procedures for recurring tasks, shared by Claude and Copilot |
 

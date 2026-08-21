@@ -96,15 +96,10 @@ compile and let CI catch the rest.
 
 ## In CI
 
-[`.github/workflows/ci.yml`](../../.github/workflows/ci.yml) runs on every push and PR to `develop`:
-a `verify` job (`spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug --continue`,
-then the SARIF merge and upload) and a parallel `build-apk` job that produces a debug APK as a
-downloadable artifact, version-named after the PR or run number. On a push to `develop` a third job
-distributes that APK to internal testers via Firebase App Distribution.
-
-[`.github/workflows/agent-context.yml`](../../.github/workflows/agent-context.yml) runs
-`validateAgentContext` whenever a context file, skill, or the module graph changes — see
-[AI workflow](ai-workflow.md).
+Every push and PR to `develop` runs `spotlessCheck detektDebug
+:build-logic:convention:detektMain lintDebug --continue` and uploads the merged SARIF to code
+scanning. The jobs, artifacts, and the rest of the pipeline are in
+[CI and release](ci-and-release.md).
 
 The [`analyze-ci-failure`](../../.claude/skills/analyze-ci-failure/SKILL.md) skill is the procedure
 for turning a red run into a root cause.
