@@ -63,3 +63,4 @@ header `Implemented`. Keep the doc — it's the record of why the design is the 
 | Doc                                | Roadmap IDs                     | Status                            |
 |------------------------------------|---------------------------------|------------------------------------|
 | [App detail](features/app-detail.md) | FR-10 … FR-18, FR-25, plus EX-07, EX-08 | Shipped — Libraries scope (FR-44) and a hub exposure rule (RI-03) still pending |
+| [App history](features/app-history.md) | FR-31, HI-01 … HI-21          | Design in progress — structure and gating agreed, open questions unresolved |

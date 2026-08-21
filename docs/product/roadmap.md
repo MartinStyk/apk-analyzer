@@ -64,7 +64,7 @@ section has shipped except:
 
 | ID    | Item                                | Status | Notes                                                                                                          |
 |-------|-------------------------------------|--------|-----------------------------------------------------------------------------------------------------------------|
-| FR-31 | Silent **app-state** snapshot collection | Todo | Records the whole analysed app state on every open — version, permissions (requested *and* granted), signing certificate, component counts, install source, manifest flags, sizes. Not permissions only. Feeds `HI-*`. Needs a local DB — see `OQ-01` |
+| FR-31 | Silent **app-state** snapshot collection | Todo | Records the complete analysed app state — version, permissions (requested *and* granted), signing certificate, components, native libraries, install source, manifest flags, sizes. Not permissions only, and not the reduced app-detail hub set: the deep data (native libs, signing schemes) is exactly what makes a diff worth reading. Captured per **install instance**, not per version code. Feeds `HI-*`. Needs a local DB — see `OQ-01`; needs a cost measurement — see `OQ-07` |
 
 ### 1.8 Data Gaps — extraction that doesn't exist yet
 
@@ -92,7 +92,7 @@ ID prefix rather than a letter, so an item keeps its ID if it moves.
 | Area                              | Pillar(s) served | Lands in                          |
 |-----------------------------------|------------------|------------------------------------|
 | `EN` — Entitlement & Billing      | all              | `core:billing`, `core:entitlement` |
-| `HI` — Snapshot & History         | 1                | `core:app-history`                 |
+| `HI` — Snapshot & History         | 1                | `core:app-history`, `feature:app-history` |
 | `RI` — Risk & Trust Rules         | 2, 3             | `core:risk`                        |
 | `TR` — Tracker & SDK Detection    | 2, 3             | `core:trackers`                    |
 | `RP` — Per-App Security Report    | 2                | `feature:security-report`          |
@@ -114,24 +114,73 @@ ID prefix rather than a letter, so an item keeps its ID if it moves.
 
 ### `HI` — Snapshot & History *(Pillar 1 — What Changed)*
 
-Snapshots capture **whole app state**, not permissions alone (`FR-31`). That costs almost nothing
-extra at write time and turns a permission log into an app history: *"v4.2 → v4.3, gained Contacts,
-signer changed, grew 40 MB."* A signer change between versions is the single strongest tamper
+**Design doc:** [features/app-history.md](features/app-history.md) — design in progress, covers
+FR-31 and HI-01 … HI-18.
+
+Snapshots capture **complete app state**, not permissions alone (`FR-31`), because the deep fields
+are where the interesting diffs live: *"v4.2 → v4.3, gained Contacts, signer changed, added an
+arm64 native library, grew 40 MB."* A signer change between versions is the single strongest tamper
 signal the app can produce, and it is only visible if snapshots carry the certificate.
+
+**Identity is the install, not the version.** Two local builds can share a `versionCode`, so a
+snapshot is keyed by `packageName + firstInstallTime + lastUpdateTime`. That key is also what makes
+capture cheap: the installed-app list the app already loads on every open carries `lastUpdateTime`,
+so detecting what to re-analyse is a set-difference against the store, and steady state is a
+handful of apps.
+
+**`lastUpdateTime` covers the APK, not the app's state.** A runtime permission grant, a
+disable, or an install-source adoption never moves it — and "this app now has your location" is the
+most user-relevant change there is. So state is observed on two tiers: a new timestamp creates a new
+install instance (`HI-02`), while the cheap volatile fields are re-observed against the existing one
+(`HI-10`).
 
 | ID    | Task                          | Detail                                                                        | Size |
 |-------|-------------------------------|--------------------------------------------------------------------------------|------|
-| HI-01 | Snapshot store                | Local DB, schema, migrations — **new dependency, see `OQ-01`**                 | M    |
-| HI-02 | Snapshot writer               | Capture on app open; consumer of `FR-31`                                      | S    |
-| HI-03 | Diff engine                   | Version, permissions requested/granted, certificate, components, flags, size  | M    |
-| HI-04 | Retention & pruning           | Whole-state snapshots are bigger — dedupe unchanged fields, cap per app       | S    |
-| HI-05 | Baseline & empty state        | First run has no history — must not look broken                               | XS   |
-| HI-06 | Free teaser card              | Single most recent change                                                     | S    |
+| HI-01 | Snapshot store                | Local DB keyed by install instance. Permission sets, component sets, certificates and library lists are **content-addressed** — hashed into shared tables and referenced by ID — so a snapshot row is scalars plus foreign keys, and an update that changes nothing but version and size reuses every set and costs almost nothing. **New dependency, see `OQ-01`** | M |
+| HI-02 | Delta capture on open         | Set-difference of the installed list against the store; full analysis runs only for changed packages. Off the critical path, never blocking first frame. Consumer of `FR-31` | S |
+| HI-03 | Diff engine                   | **Diffs are computed on read, never stored.** Snapshots are the only source of truth: stored diffs would duplicate derivable data, freeze history in whatever format shipped first, and still not answer arbitrary-pair comparison. Covers version, permissions requested/granted, certificate, components, native libraries, install source, flags, APK size. Data and cache size are captured but never diffed — they drift on every open. Intent filters are captured but not diffed in R1: the volume is pure noise in a change log, and `HI-03` being a read-time projection means a later decision to diff them applies retroactively to all existing history | M |
+| HI-04 | Retention & pruning           | Content addressing makes unchanged data nearly free, so pruning caps **whole generations per app** rather than hollowing rows out. A change row exists if and only if both its snapshots exist, so the timeline shortens at the far end instead of developing phantom entries | S |
+| HI-05 | First-run baseline build      | The whole device has no history on day one. Chunked, cancellable, resumable, with a real progress state ("analysing 214 apps · 62 done") rather than a silent freeze. The only expensive capture in the design — see `OQ-07` | M |
+| HI-21 | Pre-history seeding           | `firstInstallTime` and `lastUpdateTime` are history the platform recorded before this feature existed, so the timeline is populated and truthful on day one — "Signal · updated 2 days ago". These rows state *when*, never *what*, are never counted as observed changes, and must be visually distinct from locked stubs: a stub means "we have this, unlock it", a pre-history row means "nobody has this". Rendering them alike would make the paywall lie on the user's first launch | S |
+| HI-20 | Capture integrity             | A partial capture is recorded as partial, retried, and excluded from diffing. Diffing an incomplete snapshot as if it were complete **fabricates** changes ("removed 12 permissions" because a read failed), which for a security-positioned app is a worse defect than any gating bug | S |
+| HI-06 | Free sample card              | The latest change on the device, in full. A card above the list rather than an unlocked row, so a newer change never re-locks something already read | S |
 | HI-07 | Full change log (Pro)         | All apps, chronological, filterable by change type                            | M    |
 | HI-08 | Per-app timeline (Pro)        |                                                                                | S    |
 | HI-09 | New-changes badge             |                                                                                | XS   |
+| HI-10 | Runtime-state observation     | Granted permissions, enabled state and install source change without `lastUpdateTime` moving. Recorded against the existing install instance, not as a new one | S |
+| HI-11 | Background change detection   | Detect changes while the app is closed. Broadcast-driven if the platform still permits it, periodic worker if not — see `OQ-06` | M |
+| HI-12 | Change notifications          | Only the standout set: newly *requested* dangerous permission, certificate change, large APK size jump, install-source change, app became debuggable. Never routine updates — an alert per Play auto-update gets muted in a week. Certificate changes fire for everyone; the rest are Pro | S |
+| HI-13 | Notification settings         | Which alert types fire, per-app mute, off until opted into. The opt-in is placed on the first-run screen (`HI-21`) — the one moment the user is looking at the feature, understands it, and has no history competing for attention | S |
+| HI-14 | What Changed tab              | Third top-level slot, freed by `CE-05`. Digest since last open on top ("4 updates, 2 new apps") with the `HI-18` alerts called out; per-app history list with version counts below | M |
+| HI-15 | App-detail entry point        | This app's timeline, opened from its detail hub                                | XS   |
+| HI-16 | Drive backup (Pro)            | History does not survive a reinstall. User-triggered upload of the store to their own Google Drive — see `OQ-08` | M |
+| HI-17 | Restore & reconcile           | A restored store describes a device that no longer matches. Merge by install instance and mark the gap rather than overwriting or silently dropping | M |
+| HI-18 | Change-significance rules     | The one predicate behind both `HI-12`'s notifications and `HI-14`'s highlighted section, so the two can never disagree on screen. Also owns the free/locked classification, for the same reason. A fixed list in R1 that folds into `RI` when that area lands — it must not grow into a second rules engine | S |
+| HI-19 | Locked stub row + unlock path | The stub component and the surface it leads to. Labels are **projected from the snapshot pair at read time** — which set IDs differ — so a stub can never promise content the store cannot deliver. The gate fails open. Uses `EN-04`'s pattern; the copy quotes counted totals ("214 apps · 1,847 changes"), not claims | S |
 
-**Area total: ~6–8 days**
+**Gating.** Capture runs for everyone, always, on every app — so the purchase is **retroactive**:
+the unlock is not "we start recording now" but *"eight months of history across 214 apps, readable
+immediately."* Almost nothing else in the app can offer that, and the offer strengthens every month
+a free user doesn't take it.
+
+The free sample is **derived, never chosen**. Anything the user selects is a rotating key to the
+whole product, and anything time-boxed expires while the feature is still empty. So every change row
+renders as a **locked stub** — version transition plus the category labels it touched
+(`Permissions · Components · Size`), never the values — with exactly four rule-based exceptions,
+none of which need stored state:
+
+| Free                                    | Why                                                                     |
+|-----------------------------------------|-------------------------------------------------------------------------|
+| Capture, the tab, the digest counts     | The substrate, and counts are not the product                            |
+| `HI-06` card — latest change on the device, in full | The sample, evaluated live. A card above the list, not an unlocked row, so nothing ever re-locks |
+| Every certificate change, every app     | Rare, so it costs almost no revenue; the strongest signal, so it makes free-tier silence trustworthy; and the best conversion trigger there is |
+| First-seen rows, and `HI-10` observations | Nothing to hide in an origin marker, and a permission the *user* granted is their own action — grant state is already free on the Permissions screen |
+
+Everything else is Pro: the content behind every stub, the per-app timeline (`HI-08`), the cross-app
+log (`HI-07`), arbitrary version comparison, notifications other than certificate changes (`HI-12`),
+and Drive backup (`HI-16`, `HI-17`).
+
+**Area total: ~17–20 days**
 
 ### `RI` — Risk & Trust Rules *(Pillar 2)*
 
@@ -224,8 +273,10 @@ interpretation (that's `RP`) but *tedium removed*: nobody opens 300 app reports 
 
 **Area total: ~1.5–2 days**
 
-**Suggested build order:** `EN` → `HI` (cheapest pillar, ships a fast win) → `RI` → `TR` → `RP` →
-`BX` → `CP`. `RI` and `TR` can run in parallel — they meet only at `RP`.
+**Suggested build order:** `EN` → `HI` → `RI` → `TR` → `RP` →
+`BX` → `CP`. `HI` is no longer the cheap pillar it looked like, but it stays first because its value
+depends on how long collection has been running — every week it ships later is a week of history
+nobody has. `RI` and `TR` can run in parallel — they meet only at `RP`.
 
 ---
 
@@ -233,7 +284,7 @@ interpretation (that's `RP`) but *tedium removed*: nobody opens 300 app reports 
 
 | ID    | Item                              | Notes                                                                            |
 |-------|-----------------------------------|-----------------------------------------------------------------------------------|
-| OP-01 | APK diff / compare tool           | Worth building only if wired into `RI` — flag what changed as *risky*, not raw   |
+| OP-01 | APK diff / compare tool           | Two arbitrary APK files, reusing `HI-03`'s diff engine. Worth building only if wired into `RI` — flag what changed as *risky*, not raw |
 | OP-02 | Custom / exportable report templates | Polish on `BX` exports                                                        |
 | OP-03 | Per-app risk score history        | `HI` × `RI` — "this app got riskier" is a stronger hook than either alone         |
 
@@ -255,11 +306,11 @@ interpretation (that's `RP`) but *tedium removed*: nobody opens 300 app reports 
 | ID | Release         | Contents                                                                              | Duration       | Cumulative |
 |----|-----------------|-----------------------------------------------------------------------------------------|----------------|------------|
 | R0 | Free Rework     | Remaining: FR-17, FR-18, CE-06, FR-31, FR-37, FR-44, plus `EN` — rest shipped, see [shipped.md](shipped.md) | ~7–8 weeks     | Week 8     |
-| R1 | Pro Launch      | `HI`, `RI`, `TR`, `RP`, `CP`                                                             | ~5.5–6.5 weeks | Week 15    |
-| R2 | Bulk Tools      | `BX`                                                                                     | ~1.5–2 weeks   | Week 17    |
+| R1 | Pro Launch      | `HI`, `RI`, `TR`, `RP`, `CP`                                                             | ~7.5–8.5 weeks | Week 17    |
+| R2 | Bulk Tools      | `BX`                                                                                     | ~1.5–2 weeks   | Week 19    |
 | R3 | Optional polish | OP-01 … OP-03                                                                            | as-needed      | Ongoing    |
 
-**Committed roadmap (R0–R2): ~15–17 weeks**
+**Committed roadmap (R0–R2): ~17–19 weeks**
 
 ---
 
@@ -272,3 +323,6 @@ interpretation (that's `RP`) but *tedium removed*: nobody opens 300 app reports 
 | OQ-03 | `BX-01` background scanning: coroutine + foreground service, or WorkManager (another dependency)?          |
 | OQ-04 | `CP-02` remote refresh needs a hosting decision, and that decision sets the ongoing cost floor for Pro     |
 | OQ-05 | `EX-06` DEX scanning on-device has a real performance and battery cost on large APKs — needs a spike before `TR` is committed |
+| OQ-06 | `HI-11`: are `PACKAGE_ADDED` / `PACKAGE_REPLACED` still deliverable to a manifest-declared receiver under current background-broadcast restrictions? If not, background detection needs a periodic worker and `WorkManager` — the same dependency question as `OQ-03` |
+| OQ-07 | `HI-05`: what does a full-detail baseline actually cost on a 300-app device? Native libraries, signing schemes and split-manifest parsing are each file reads per app, which is why `core:apps` fetches them lazily today. Needs a measurement before `HI` is committed — same gate as `OQ-05` |
+| OQ-08 | `HI-16`: Google Drive REST plus sign-in (user-triggered, restorable, Pro-gateable, new dependency) or Android Auto Backup (free, no code, but invisible, size-capped and impossible to gate or trigger)? |
