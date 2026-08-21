@@ -1,7 +1,7 @@
 # Architecture
 
-How the modules fit together, which direction dependencies are allowed to point, and the three
-shapes that repeat across the codebase. The canonical short version lives in
+How the modules fit together, which direction dependencies are allowed to point, and the
+conventions that repeat across the codebase. The canonical short version lives in
 [`AGENTS.md`](../../AGENTS.md); this document is the expanded reading of it for a contributor or
 reviewer who wants the reasoning, not just the rule.
 
@@ -30,12 +30,9 @@ graph TD
   implementation — the whole point of the api/impl split.
 * **`feature/*/impl` depends on its own `api` plus whichever `core` modules it needs.** Never on
   another feature's `impl`. If two features need the same behaviour, it moves into a `core` module.
-* **`core/*` may depend on other `core` modules, never on a `feature`.** A core module that needs to
-  know about a screen is a core module with the wrong boundary.
+* **`core/*` may depend on other `core` modules, never on a `feature`.**
 * **`app` is wiring only** — the launcher Activity, the external-APK document Activity, nav hosts,
   and app-scoped Hilt bindings. No feature logic lands here.
-* Dependencies are declared with typesafe accessors (`projects.core.appPermissions`), never
-  `project(":core:app-permissions")`; plugins are applied with `alias(libs.plugins.apkanalyzer.*)`.
 * A module's package matches its directory with hyphens removed: `core/user-preferences` →
   `core.userpreferences`, `feature/app-detail/impl` → `feature.appdetail.impl`.
 
@@ -57,10 +54,6 @@ graph TD
 | [`feature:browse`](../../feature/browse/AGENTS.md) | Browse by attribute |
 | [`feature:settings`](../../feature/settings/AGENTS.md) | Theme and app settings |
 
-Every module — including [`app`](../../app/AGENTS.md) and
-[`build-logic`](../../build-logic/AGENTS.md) — carries its own `AGENTS.md` with its purpose, package
-map, and key types. Read that before working inside a module instead of re-deriving its structure.
-
 A core module packages by domain once it holds more than one repository/manager family:
 [`core:apps`](../../core/apps/AGENTS.md) is the worked example, with `signing/`, `permissions/`,
 `components/`, `manifest/`, `installsource/`, `devicefeatures/`, `packaging/`, `usagestats/`,
@@ -68,7 +61,7 @@ A core module packages by domain once it holds more than one repository/manager 
 models. A module with a single family (`core:app-index`, `core:apk-files`) has not earned that split
 and does not pre-empt it.
 
-## Shape 1 — one ViewModel shape
+## ViewModel conventions
 
 Every ViewModel extends `ViewModel()` directly, with no base class, and exposes exactly three
 things:
@@ -83,10 +76,9 @@ Nothing else is public. The supporting types are equally fixed:
 * **Action** — a `sealed interface` of UI → ViewModel intents.
 * **Event** — a `sealed interface` of one-shot ViewModel → UI signals (navigation, toasts, system
   intents), delivered over `Channel<Event>(Channel.BUFFERED)` exposed as `receiveAsFlow()`. Never
-  state; a toast that survives a rotation is a bug.
+  state.
 
-Back navigation is modelled as both an Action and an Event, so no ViewModel ever touches `Navigator`
-directly. Composables read state with `collectAsStateWithLifecycle()` and consume events in a
+Composables read state with `collectAsStateWithLifecycle()` and consume events in a
 `LaunchedEffect`.
 
 When a ViewModel needs a runtime parameter it uses
@@ -100,11 +92,11 @@ Production references:
 * [`SettingsViewModel`](../../feature/settings/impl/src/main/kotlin/sk/styk/martin/apkanalyzer/feature/settings/impl/SettingsViewModel.kt)
   — the plain flow-backed shape with state, events, and actions.
 
-## Shape 2 — one data-layer shape
+## Data-layer conventions
 
 Repositories and managers are a public `interface` plus an `internal` `Impl` in the same module,
 bound with Hilt `@Binds` and scoped `@Singleton`. Interface and implementation live in separate
-files; models declared alongside the interface stay in the interface file.
+files; models declared alongside the interface may stay in the interface file.
 
 * **Interface methods never throw.** They return `Result<T>`, a nullable `T?`, or an empty
   collection — see
@@ -119,7 +111,7 @@ files; models declared alongside the interface stay in the interface file.
 The details, including the cancellation-safe `runCatchingCancellable` wrapper, are in
 [coding standards](coding-standards.md).
 
-## Shape 3 — a design system, not scattered Material
+## Design system conventions
 
 Feature modules never import `androidx.compose.material3`. They use Compose foundation APIs plus the
 wrappers, theme, icons, and animation metadata in
@@ -128,9 +120,8 @@ wrapped there first — the [`create-compose-component`](../../.claude/skills/cr
 skill covers the procedure. `app` uses material3 directly for `Scaffold` and theme plumbing; that is
 the only exception in the repository.
 
-Colours and type come from `AppTheme.colors` / `AppTheme.typography`, icons from `ApkAnalyzerIcons`.
-`MaterialTheme.colorScheme` is never reached for outside `core:ui-library`, and a hardcoded colour
-is a review comment.
+Colors and type come from `AppTheme.colors` / `AppTheme.typography`, icons from `ApkAnalyzerIcons`.
+`MaterialTheme.colorScheme` is never reached for outside `core:ui-library`.
 
 ## Navigation
 

@@ -1,9 +1,9 @@
 # AI-assisted workflow
 
-This repository is written to be worked on by humans and by coding agents from the same context
-files, and the structure that makes that work is validated by a Gradle task rather than by
-convention alone. If you never use an agent, most of this still matters: the `AGENTS.md` files are
-the module documentation, and `validateAgentContext` gates them in CI.
+This repository is written to be worked on by humans and by coding agents. Both Claude Code and 
+Github Copilot operate from the same context files, and the structure that makes that work is 
+validated by a Gradle task rather than by convention alone. If you never use an agent, 
+most of this still matters: the `AGENTS.md` files are the module documentation.
 
 ## The context files
 
@@ -23,14 +23,6 @@ never copied into a tool-specific file.** One source, many readers.
 A scoped `AGENTS.md` documents durable context that can't be recovered cheaply by reading the code:
 the module's boundary, its package or domain map, patterns it requires, behaviour that would look
 wrong without explanation, and entry points that are exceptions.
-
-It deliberately does *not* contain exhaustive file trees, copied interface definitions, ordinary
-dependency lists, or implementation summaries — repository search recovers those more accurately,
-and they go stale within a release. A specific file is named only when it is a canonical reference,
-an assembly point, or misleadingly named.
-
-The practical test: **adding or renaming an ordinary source file should not require an `AGENTS.md`
-update.** If it does, the file is documenting the wrong layer.
 
 ## When they get written
 
