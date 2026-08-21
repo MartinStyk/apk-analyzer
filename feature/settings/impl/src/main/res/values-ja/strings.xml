@@ -8,4 +8,7 @@
     <string name="settings_color_scheme_follow_system">システムに従う</string>
     <string name="settings_apps_section">アプリ</string>
     <string name="settings_recently_viewed_toggle">最近表示したアプリ</string>
+    <string name="settings_language_section">言語</string>
+    <string name="settings_language_app_language">アプリの言語</string>
+    <string name="settings_language_system_default">システムのデフォルト</string>
 </resources>

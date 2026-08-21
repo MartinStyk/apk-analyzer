@@ -8,4 +8,7 @@
     <string name="settings_color_scheme_follow_system">Suivre le système</string>
     <string name="settings_apps_section">Applications</string>
     <string name="settings_recently_viewed_toggle">Applications récemment vues</string>
+    <string name="settings_language_section">Langue</string>
+    <string name="settings_language_app_language">Langue de l’application</string>
+    <string name="settings_language_system_default">Par défaut du système</string>
 </resources>

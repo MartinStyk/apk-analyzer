@@ -8,4 +8,7 @@
     <string name="settings_color_scheme_follow_system">跟随系统</string>
     <string name="settings_apps_section">应用程序</string>
     <string name="settings_recently_viewed_toggle">最近查看的应用</string>
+    <string name="settings_language_section">语言</string>
+    <string name="settings_language_app_language">应用语言</string>
+    <string name="settings_language_system_default">系统默认值</string>
 </resources>

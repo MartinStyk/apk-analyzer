@@ -8,4 +8,7 @@
     <string name="settings_color_scheme_follow_system">Následovat systém</string>
     <string name="settings_apps_section">Aplikace</string>
     <string name="settings_recently_viewed_toggle">Nedávno zobrazené aplikace</string>
+    <string name="settings_language_section">Jazyk</string>
+    <string name="settings_language_app_language">Jazyk aplikace</string>
+    <string name="settings_language_system_default">Výchozí systémové nastavení</string>
 </resources>

@@ -8,4 +8,7 @@
     <string name="settings_color_scheme_follow_system">सिस्टम का पालन करें</string>
     <string name="settings_apps_section">ऐप्स</string>
     <string name="settings_recently_viewed_toggle">हाल ही में देखी गई ऐप्स</string>
+    <string name="settings_language_section">भाषा</string>
+    <string name="settings_language_app_language">ऐप भाषा</string>
+    <string name="settings_language_system_default">सिस्टम डिफ़ॉल्ट</string>
 </resources>
