@@ -6,7 +6,7 @@ import androidx.compose.material.icons.automirrored.rounded.DirectionsRun
 import androidx.compose.material.icons.automirrored.rounded.InsertDriveFile
 import androidx.compose.material.icons.automirrored.rounded.VolumeUp
 import androidx.compose.material.icons.outlined.Apps
-import androidx.compose.material.icons.outlined.Category
+import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.InsertChart
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.rounded.Android
@@ -18,7 +18,6 @@ import androidx.compose.material.icons.rounded.ArrowUpward
 import androidx.compose.material.icons.rounded.AutoAwesome
 import androidx.compose.material.icons.rounded.Bluetooth
 import androidx.compose.material.icons.rounded.CalendarToday
-import androidx.compose.material.icons.rounded.Category
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.Clear
@@ -83,8 +82,8 @@ data object ApkAnalyzerIcons {
     val ActivityRecognition = Icons.AutoMirrored.Rounded.DirectionsRun
     val AiSparkle = Icons.Rounded.AutoAwesome
     val Bluetooth = Icons.Rounded.Bluetooth
-    val Browse = Icons.Rounded.Category
-    val BrowseBorder = Icons.Outlined.Category
+    val Browse = Icons.Rounded.Explore
+    val BrowseBorder = Icons.Outlined.Explore
     val Calendar = Icons.Rounded.CalendarToday
     val Camera = Icons.Rounded.PhotoCamera
     val Check = Icons.Rounded.Check
