@@ -1,4 +1,10 @@
+<div align="center">
+
+<img src="app/src/main/res/mipmap-xxhdpi/ic_launcher.png" width="96" alt="Apk Analyzer icon" />
+
 # ApkAnalyzer
+
+**Detailed reports of every app on your device — no root, no ads, nothing leaves the phone.** 📱
 
 [![Continuous integration](https://github.com/MartinStyk/AndroidApkAnalyzer/actions/workflows/ci.yml/badge.svg)](https://github.com/MartinStyk/AndroidApkAnalyzer/actions/workflows/ci.yml)
 [![Release](https://github.com/MartinStyk/AndroidApkAnalyzer/actions/workflows/release.yml/badge.svg)](https://github.com/MartinStyk/AndroidApkAnalyzer/actions/workflows/release.yml)
@@ -6,26 +12,23 @@
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4.10-blue.svg?logo=kotlin)](gradle/libs.versions.toml)
 [![API](https://img.shields.io/badge/API-28%2B-brightgreen.svg?logo=android)](build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/utils/AndroidSdk.kt)
 [![Google Play](https://img.shields.io/badge/Google%20Play-2M%2B%20downloads-34A853.svg?logo=googleplay&logoColor=white)](https://play.google.com/store/apps/details?id=sk.styk.martin.apkanalyzer)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-<img src="app/src/main/res/mipmap-xxhdpi/ic_launcher.png" width="72" align="left" alt="Apk Analyzer icon" />
-
-**Detailed reports of the applications on your device — 📱**
-
-Apk Analyzer is the *most downloaded APK analysis app* on Google Play, with over 2 million
-downloads. It inspects installed apps and `.apk` files straight from device storage — no root
-required. It's open source, ad-free, and does its analysis on your device.
-
-Shipping since 2017, now rebuilt as a multi-module Jetpack Compose app.
+*The most downloaded APK analysis app on Google Play — shipping since 2017, now rebuilt as a
+multi-module Jetpack Compose app.*
 
 <a href='https://play.google.com/store/apps/details?id=sk.styk.martin.apkanalyzer'><img alt='Get it on Google Play' height="60" src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
 
-<br clear="left"/>
+</div>
+
+---
 
 ## Table of contents
 
 - [What it does](#what-it-does)
 - [Why it exists](#why-it-exists)
 - [Privacy and permissions](#privacy-and-permissions)
+- [Requirements](#requirements)
 - [Tech stack](#tech-stack)
 - [Architecture](#architecture)
 - [Getting started](#getting-started)
@@ -33,40 +36,47 @@ Shipping since 2017, now rebuilt as a multi-module Jetpack Compose app.
 - [CI and releases](#ci-and-releases)
 - [Documentation](#documentation)
 - [Contributing](#contributing)
+- [AI-assisted development](#ai-assisted-development)
 - [Support](#support)
 - [License](#license)
 
 ## What it does
 
+- 🔎 **See what Android hides.** Every permission, certificate, component, and manifest flag,
+  translated out of API-speak.
+- 🔒 **100% on-device.** App data never leaves your phone — the on-device AI summary runs locally
+  too.
+- 🧭 **Browse by attribute, not just by app.** Flip the question around: which apps want this
+  permission, share this signer, target this SDK.
+- 🆓 **Free and open source.** No ads, no paywall on the raw data, GPLv3.
+
 **Inspect one app — everything Android knows about it, in one report.**
 
 | Group | What you get |
 |---|---|
-| Identity | Package and app name, version name and code, app category, install and update dates |
-| Compatibility | Target and minimum Android version, required and optional hardware features |
-| Origin | Full install-source chain — which store or app actually installed it |
-| Signing | Certificate details, issuer and subject, validity, fingerprints, signing-scheme versions |
-| Permissions | Requested and declared permissions with plain-language descriptions and protection levels |
-| Components | Activities, services, receivers and providers with intent filters, exported state, path permissions, and launch options |
-| Packaging | Native libraries and ABIs, split APKs, shared UID group, manifest security flags, storage size |
-| Manifest | The complete `AndroidManifest.xml`, readable |
+| 🪪 Identity | Package and app name, version name and code, app category, install and update dates |
+| 📶 Compatibility | Target and minimum Android version, required and optional hardware features |
+| 🏬 Origin | Full install-source chain — which store or app actually installed it |
+| 🔏 Signing | Certificate details, issuer and subject, validity, fingerprints, signing-scheme versions |
+| 🔐 Permissions | Requested and declared permissions with plain-language descriptions and protection levels |
+| 🧩 Components | Activities, services, receivers and providers with intent filters, exported state, path permissions, and launch options |
+| 📦 Packaging | Native libraries and ABIs, split APKs, shared UID group, manifest security flags, storage size |
+| 📄 Manifest | The complete `AndroidManifest.xml`, readable |
 
-**Browse by attribute.** Turn the question around and start from the attribute instead of the app:
-which apps request a given permission, which are signed by a given certificate, what targets each
-Android version, where each app came from, which share a UID, how apps spread across categories.
+**🧭 Browse by attribute.** Turn the question around and start from the attribute instead of the
+app: which apps request a given permission, which are signed by a given certificate, what targets
+each Android version, where each app came from, which share a UID, how apps spread across
+categories.
 
-**Analyze `.apk` files.** Open an `.apk` from another app or pick one from storage and get the same
-full report for something you haven't installed.
+**📂 Analyze `.apk` files.** Open an `.apk` from another app or pick one from storage and get the
+same full report for something you haven't installed.
 
-**On-device AI summary.** A short, factual, plain-language read on what an app is and what its
+**🤖 On-device AI summary.** A short, factual, plain-language read on what an app is and what its
 permissions and components imply — generated locally with ML Kit's GenAI prompt API. The app data
 never leaves the device.
 
-**Export and share.** Export or share the APK itself, save the app icon, copy or share a text
+**📤 Export and share.** Export or share the APK itself, save the app icon, copy or share a text
 summary, and launch an app's components directly.
-
-**Requirements:** Android 9 (API 28) or newer. The AI summary additionally needs a device that
-supports on-device generative AI; everything else works everywhere.
 
 ## Why it exists
 
@@ -88,6 +98,13 @@ needed for the core feature:
 App-analysis data is processed on device. Network use is limited to Firebase telemetry (Analytics,
 Crashlytics, Performance) and ML Kit downloading the on-device AI model. See
 [`PRIVACY_POLICY.MD`](PRIVACY_POLICY.MD).
+
+## Requirements
+
+Android 9 (API 28) or newer. The AI summary additionally needs a device that supports on-device
+generative AI; everything else works everywhere.
+
+---
 
 ## Tech stack
 
@@ -127,54 +144,16 @@ graph TD
     core --> core
 ```
 
-Rules:
+`feature/*/api` holds only NavKeys, so features navigate to each other without compiling against
+each other's implementation; `core/*` never depends on a feature; `app` is wiring only. The same
+three shapes repeat everywhere, which is why an unfamiliar file is rarely a surprise: one ViewModel
+shape (a single `StateFlow<State>`, a single `onAction`, one-shot `Event`s over a `Channel`), one
+data-layer shape (public `interface` + `internal Impl`, never throwing, injected dispatchers), and a
+design system rather than Material scattered across features. Every module carries its own
+`AGENTS.md` with its boundary and package map.
 
-* `feature/*/api` depends on nothing — it holds only `@Serializable` NavKeys and a tab label, so any
-  feature can navigate to another without touching its implementation.
-* `feature/*/impl` depends on its own `api` plus whichever `core` modules it needs. Never on another
-  feature's `impl`.
-* `core/*` may depend on other `core` modules, **never** on a `feature`.
-* `app` is wiring only: Activities, nav host, and app-scoped Hilt bindings. No feature logic.
-
-### How the code reads
-
-The same shapes repeat everywhere, so an unfamiliar file is rarely a surprise:
-
-* **One ViewModel shape.** A single `StateFlow<State>` and a single `onAction(Action)` with a `when`
-  dispatch. No other public methods. One-shot signals (navigation, toasts, intents) go out as
-  `Event`s over a `Channel`, never as state.
-* **One data-layer shape.** A public `interface` plus an `internal` `Impl`, bound with Hilt and
-  scoped `@Singleton`. Interface methods never throw — they return `Result<T>`, a nullable, or an
-  empty collection. Dispatchers are injected, never hardcoded.
-* **A design system, not scattered Material.** Feature modules don't import `androidx.compose.material3`
-  at all; they use the wrappers, theme and icons in [`core:ui-library`](core/ui-library/AGENTS.md).
-* **No comments.** Naming and structure carry the intent — deliberately, and enforced in review.
-* **One source of versions.** [`gradle/libs.versions.toml`](gradle/libs.versions.toml) for
-  dependencies, `build-logic` for SDK levels and the JVM toolchain. Nothing is pinned in a module.
-* **Documented decisions.** Every module carries an `AGENTS.md` explaining its boundary and package
-  map, and product decisions — including the ones deliberately retired — live in
-  [`docs/`](docs/product/README.md).
-
-### Modules
-
-| Module | Owns |
-|---|---|
-| [`core:apps`](core/apps/AGENTS.md) | Installed-app and APK analysis: extraction, normalization, caching, domain models |
-| [`core:apk-files`](core/apk-files/AGENTS.md) | Temporary materialization and cleanup of APKs received via content URIs |
-| [`core:app-index`](core/app-index/AGENTS.md) | Device-wide `attribute → apps` indexes behind Browse |
-| [`core:app-permissions`](core/app-permissions/AGENTS.md) | The deduplicated device-wide permission list |
-| [`core:ai-insights`](core/ai-insights/AGENTS.md) | On-device AI features and the ML Kit engine wrapper |
-| [`core:user-preferences`](core/user-preferences/AGENTS.md) | Recently viewed apps and search history |
-| [`core:navigation`](core/navigation/AGENTS.md) | Navigation 3 infrastructure for independent bottom-nav stacks |
-| [`core:ui-library`](core/ui-library/AGENTS.md) | The design system: theme, icons, components, animation metadata |
-| [`core:common`](core/common/AGENTS.md) | Dispatchers, logging, and models shared across domains |
-| [`feature:apps`](feature/apps/AGENTS.md) | The installed-app list: search, filter, sort |
-| [`feature:app-detail`](feature/app-detail/AGENTS.md) | The full report for one app or APK |
-| [`feature:browse`](feature/browse/AGENTS.md) | Browse by attribute |
-| [`feature:settings`](feature/settings/AGENTS.md) | Theme and app settings |
-
-Every module — including [`app`](app/AGENTS.md) — has its own `AGENTS.md` documenting its purpose,
-package map, and key types. Start there when working inside a module instead of re-deriving it.
+**Full details → [`docs/engineering/architecture.md`](docs/engineering/architecture.md)** — dependency
+rules, the module ownership table, navigation, and each shape with production references.
 
 ## Getting started
 
@@ -205,6 +184,15 @@ nothing to configure. CI replaces it with a freshly fetched config at build time
 Version name and code come from Gradle properties (`-Pversion.name=`, `-Pversion.code=`) and default
 to a local `dev` build.
 
+Spotless auto-fixes formatting, Detekt fails on warnings, Android Lint checks Android correctness,
+and LeakCanary watches for leaks in debug builds. What each one enforces, and the two things no gate
+catches, are in [`docs/engineering/verification.md`](docs/engineering/verification.md).
+
+Writing code? Conventions — the no-comments policy, returning `Result`/nullable instead of throwing,
+injected dispatchers, keeping `MutableStateFlow` private behind a read-only view, and combining
+sources into a single screen state — are in
+[`docs/engineering/coding-standards.md`](docs/engineering/coding-standards.md).
+
 ## Repository layout
 
 ```
@@ -213,42 +201,62 @@ core/          Domain, data, and design-system modules
 feature/       One api + impl pair per feature area
 build-logic/   Convention plugins; SDK levels and the JVM toolchain live here
 config/        Detekt and static-analysis configuration
-docs/          Product roadmap, feature design docs, technical decision records
+docs/          Product roadmap and feature design, engineering docs, technical decision records
 .claude/       Task skills shared by Claude and Copilot
 gradle/        Version catalog and wrapper
 ```
 
 ## CI and releases
 
-Every push and PR to `develop` runs `spotlessCheck`, Detekt, Android Lint (results uploaded as
-SARIF), and builds a debug APK that is attached to the run as an artifact. Pushes to `develop` also
-go out to internal testers via Firebase App Distribution.
-
-Tagging `MAJOR.MINOR.PATCH` runs the release workflow: it verifies against the release variant,
-builds and signs an AAB and APK, derives `versionCode` from the tag, publishes a GitHub release with
-the tag annotation as notes, uploads the AAB to the Play Store beta track with its mapping file, and
-distributes the APK to internal testers.
+Every push and PR to `develop` verifies the project and builds a debug APK artifact; pushes also go
+out to internal testers. An annotated `MAJOR.MINOR.PATCH` tag builds and signs an AAB and APK,
+publishes a GitHub release, and uploads to the Play Store beta track — production is a separate,
+manual promotion. The four workflows, their triggers, and the secrets they need are in
+[`docs/engineering/ci-and-release.md`](docs/engineering/ci-and-release.md).
 
 ## Documentation
 
+**For users and anyone evaluating the app**
+
 | Doc | What it covers |
 |---|---|
-| [`AGENTS.md`](AGENTS.md) | Engineering conventions — the canonical contributor reference |
 | [`docs/product/roadmap.md`](docs/product/roadmap.md) | Open scope and sequencing, with stable IDs |
-| [`docs/product/shipped.md`](docs/product/shipped.md) | What has shipped or been deliberately retired |
+| [`docs/product/shipped.md`](docs/product/shipped.md) | What has shipped or been deliberately retired, and why |
 | [`docs/product/features/`](docs/product/README.md) | One design doc per feature, written before it's built |
+| [`PRIVACY_POLICY.MD`](PRIVACY_POLICY.MD) | What leaves the device, and what doesn't |
+
+**For contributors and technical reviewers**
+
+| Doc | What it covers |
+|---|---|
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) | How to propose, build, and submit a change |
+| [`AGENTS.md`](AGENTS.md) | The canonical, terse engineering rules — humans and agents read this first |
+| [`docs/engineering/architecture.md`](docs/engineering/architecture.md) | Module graph, dependency rules, module ownership, the three repeating shapes |
+| [`docs/engineering/coding-standards.md`](docs/engineering/coding-standards.md) | Conventions before you write code, with real examples from the codebase |
+| [`docs/engineering/verification.md`](docs/engineering/verification.md) | Spotless, Detekt, Lint, LeakCanary — what each enforces and what gates CI |
+| [`docs/engineering/ai-workflow.md`](docs/engineering/ai-workflow.md) | Per-module `AGENTS.md`, `validateAgentContext`, and the shared skills |
+| [`docs/engineering/ci-and-release.md`](docs/engineering/ci-and-release.md) | The GitHub Actions workflows, the release pipeline, and production promotion |
 | [`docs/technical/`](docs/technical/README.md) | Cross-cutting engineering decisions and audits |
-| [`.claude/skills/`](.claude/skills) | Step-by-step procedures for recurring tasks |
+| [`.claude/skills/`](.claude/skills) | Step-by-step procedures for recurring tasks, shared by Claude and Copilot |
+
+---
 
 ## Contributing
 
 Contributions are welcome. Start with [`CONTRIBUTING.md`](CONTRIBUTING.md) for the workflow, then
-[`AGENTS.md`](AGENTS.md) for module boundaries and conventions. By participating you agree to the
-[Code of Conduct](CODE_OF_CONDUCT.md).
+[`docs/engineering/architecture.md`](docs/engineering/architecture.md) and
+[`docs/engineering/coding-standards.md`](docs/engineering/coding-standards.md) for module boundaries
+and conventions. By participating you agree to the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 Good first contributions: a **translation** (the app currently ships English and Japanese, and a PR
 touching only `strings.xml` files needs no prior discussion), or anything marked open in the
 [roadmap](docs/product/roadmap.md).
+
+## AI-assisted development
+
+Both Claude and GitHub Copilot are supported for working on this codebase, reading the same
+`AGENTS.md` context files and shared `.claude/skills/`. Details →
+[`docs/engineering/ai-workflow.md`](docs/engineering/ai-workflow.md).
 
 ## Support
 
