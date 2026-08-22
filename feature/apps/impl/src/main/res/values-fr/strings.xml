@@ -18,7 +18,7 @@
     <string name="search_apps_hint">Rechercher des applications</string>
     <plurals name="search_apps_placeholder">
         <item quantity="one">Rechercher parmi %1$d application…</item>
-        <item quantity="many">Rechercher parmi %1$d d\'applications…</item>
+        <item quantity="many">Rechercher parmi %1$d applications…</item>
         <item quantity="other">Rechercher parmi %1$d applications…</item>
     </plurals>
     <plurals name="search_apps_matches">
@@ -47,7 +47,7 @@
     <string name="recently_viewed">Récemment consulté</string>
     <plurals name="search_apps_empty">
         <item quantity="one">Rechercher parmi %1$d application installée</item>
-        <item quantity="many">Rechercher parmi %1$d d\'applications installées</item>
+        <item quantity="many">Rechercher parmi %1$d applications installées</item>
         <item quantity="other">Rechercher parmi %1$d applications installées</item>
     </plurals>
     <string name="search_apps_no_results">Aucun résultat pour \"%1$s\"</string>

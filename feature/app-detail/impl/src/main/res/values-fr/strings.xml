@@ -189,7 +189,7 @@
     <string name="certificates_history">Historique des signatures</string>
     <plurals name="certificates_history_description">
         <item quantity="one">Android a vérifié %d clé de signature utilisée avant la clé actuelle.</item>
-        <item quantity="many">Android a vérifié %d de clés de signature utilisées avant la clé actuelle. La clé précédente la plus récemment utilisée apparaît en premier.</item>
+        <item quantity="many">Android a vérifié %d clés de signature utilisées avant la clé actuelle. La clé précédente la plus récemment utilisée apparaît en premier.</item>
         <item quantity="other">Android a vérifié %d clés de signature utilisées avant la clé actuelle. La clé précédente la plus récemment utilisée apparaît en premier.</item>
     </plurals>
     <string name="certificates_original_signing_key">Clé de signature originale</string>

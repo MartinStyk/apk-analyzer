@@ -767,7 +767,7 @@
     <string name="nativelibraries_explanation">Cada arquivo de código nativo distinto que este aplicativo envia, uma linha por nome de arquivo, mesmo quando a mesma biblioteca é construída para várias arquiteturas de processador.</string>
     <plurals name="nativelibraries_search_hint">
         <item quantity="one">Pesquisar %1$d biblioteca</item>
-        <item quantity="many">Pesquisar %1$d de bibliotecas</item>
+        <item quantity="many">Pesquisar %1$d bibliotecas</item>
         <item quantity="other">Pesquisar %1$d bibliotecas</item>
     </plurals>
     <string name="nativelibraries_error">Falha ao carregar bibliotecas nativas</string>

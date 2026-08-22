@@ -80,7 +80,7 @@
     <string name="browse_bucket_info_content_description">Sobre %1$s</string>
     <plurals name="browse_options_filter_hint">
         <item quantity="one">Filtrar %1$d opção</item>
-        <item quantity="many">Filtrar %1$d de opções</item>
+        <item quantity="many">Filtrar %1$d opções</item>
         <item quantity="other">Filtrar %1$d opções</item>
     </plurals>
     <string name="browse_options_empty_query">Nenhuma opção corresponde a “%1$s”</string>
@@ -90,7 +90,7 @@
     </plurals>
     <plurals name="browse_apps_filter_hint">
         <item quantity="one">Filtrar %1$d aplicativo</item>
-        <item quantity="many">Filtrar %1$d de aplicativos</item>
+        <item quantity="many">Filtrar %1$d aplicativos</item>
         <item quantity="other">Filtrar %1$d aplicativos</item>
     </plurals>
     <string name="browse_apps_empty_query">Nenhum aplicativo corresponde a “%1$s”</string>

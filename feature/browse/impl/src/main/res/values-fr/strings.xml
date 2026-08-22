@@ -4,7 +4,7 @@
     <string name="browse_subtitle_loading">Analyse des applications installées…</string>
     <plurals name="browse_subtitle">
         <item quantity="one">Explorer %1$d application installée sur cet appareil</item>
-        <item quantity="many">Explorer %1$d d\'applications installées sur cet appareil</item>
+        <item quantity="many">Explorer %1$d applications installées sur cet appareil</item>
         <item quantity="other">Explorer %1$d applications installées sur cet appareil</item>
     </plurals>
     <string name="browse_dimension_permission_title">Permissions</string>
@@ -85,7 +85,7 @@
     <string name="browse_options_empty_query">Aucune option ne correspond à “%1$s”</string>
     <plurals name="browse_apps_count">
         <item quantity="one">%1$d application</item>
-        <item quantity="many">%1$d d\'applications</item>
+        <item quantity="many">%1$d applications</item>
         <item quantity="other">%1$d applications</item>
     </plurals>
     <plurals name="browse_apps_filter_hint">
