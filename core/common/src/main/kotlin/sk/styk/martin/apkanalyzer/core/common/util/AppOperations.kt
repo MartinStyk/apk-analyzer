@@ -11,7 +11,6 @@ import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 
 private const val TAG = "AppOperations"
-private const val ACTION_APP_LOCALE_SETTINGS = "android.settings.APP_LOCALE_SETTINGS"
 
 fun Context.openAppSystemPage(packageName: PackageName) {
     try {
@@ -34,7 +33,7 @@ fun Context.openAppLanguageSettings() {
     }
     try {
         startActivity(
-            Intent(ACTION_APP_LOCALE_SETTINGS).apply {
+            Intent(Settings.ACTION_APP_LOCALE_SETTINGS).apply {
                 data = "package:$packageName".toUri()
             },
         )
