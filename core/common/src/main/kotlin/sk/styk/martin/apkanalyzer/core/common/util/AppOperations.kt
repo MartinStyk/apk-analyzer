@@ -4,12 +4,14 @@ import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.provider.Settings
 import androidx.core.net.toUri
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 
 private const val TAG = "AppOperations"
+private const val ACTION_APP_LOCALE_SETTINGS = "android.settings.APP_LOCALE_SETTINGS"
 
 fun Context.openAppSystemPage(packageName: PackageName) {
     try {
@@ -27,8 +29,13 @@ fun Context.openAppSystemPage(packageName: PackageName) {
 
 fun Context.openAppLanguageSettings() {
     try {
+        val action = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ACTION_APP_LOCALE_SETTINGS
+        } else {
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+        }
         startActivity(
-            Intent(Settings.ACTION_APP_LOCALE_SETTINGS).apply {
+            Intent(action).apply {
                 data = "package:$packageName".toUri()
             },
         )
