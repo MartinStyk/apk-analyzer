@@ -103,6 +103,8 @@ Names only; values live in repository settings.
 
 ## Related
 
+* [`release-app`](../../.claude/skills/release-app/SKILL.md) — cutting a version: picking it,
+  drafting and approving the notes, and creating the annotated tag
 * [Verification](verification.md) — what each gate checks locally and in CI
 * [AI workflow](ai-workflow.md) — what `validateAgentContext` enforces
 * [`analyze-ci-failure`](../../.claude/skills/analyze-ci-failure/SKILL.md) — turning a red run into
