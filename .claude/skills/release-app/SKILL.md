@@ -32,7 +32,7 @@ that formula — Play rejects a lower code.
 
 ```bash
 git status --short
-git log --oneline origin/develop -5
+git log --oneline -5 origin/develop
 ```
 
 Release from `develop` at a commit that is pushed, clean, and green in CI. If CI for that commit
