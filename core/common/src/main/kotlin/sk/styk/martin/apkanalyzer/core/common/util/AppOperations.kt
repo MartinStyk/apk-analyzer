@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.provider.Settings
 import androidx.core.net.toUri
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
@@ -26,6 +27,10 @@ fun Context.openAppSystemPage(packageName: PackageName) {
 }
 
 fun Context.openAppLanguageSettings() {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+        Logger.w(TAG, "App language settings are not available on this Android version")
+        return
+    }
     try {
         startActivity(
             Intent(Settings.ACTION_APP_LOCALE_SETTINGS).apply {
@@ -33,7 +38,7 @@ fun Context.openAppLanguageSettings() {
             },
         )
     } catch (e: ActivityNotFoundException) {
-        Logger.e(TAG, e, "Could not open app language settings")
+        Logger.w(TAG, e, "Could not open app language settings")
     }
 }
 
