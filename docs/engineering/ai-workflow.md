@@ -82,6 +82,7 @@ by copying an existing file.
 | [`analyze-ci-failure`](../../.claude/skills/analyze-ci-failure/SKILL.md) | A workflow run failed and you want the actual failing step, not the log |
 | [`setup-local-tools`](../../.claude/skills/setup-local-tools/SKILL.md) | Setting up a new machine, including headless/CLI-only setup |
 | [`git-commit-author`](../../.claude/skills/git-commit-author/SKILL.md) | Any commit — commits are authored by the human contributor only |
+| [`release-app`](../../.claude/skills/release-app/SKILL.md) | Shipping a `MAJOR.MINOR.PATCH` version — approved release notes in an annotated tag |
 | [`sync-design-changes`](../../.claude/skills/sync-design-changes/SKILL.md) | Bringing tweaks from the Claude Design project back into Compose code |
 
 All are shared by Claude and Copilot except `sync-design-changes`, which needs Claude's `DesignSync`
