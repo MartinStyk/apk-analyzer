@@ -765,6 +765,7 @@
     <string name="nativelibraries_explanation">Ogni file di codice nativo distinto che questa app fornisce, una riga per nome file anche quando la stessa libreria è costruita per più architetture di processore.</string>
     <plurals name="nativelibraries_search_hint">
         <item quantity="one">Cerca %1$d libreria</item>
+        <item quantity="many">Cerca %1$d di librerie</item>
         <item quantity="other">Cerca %1$d librerie</item>
     </plurals>
     <string name="nativelibraries_error">Impossibile caricare le librerie native</string>

@@ -61,6 +61,7 @@
     <string name="app_detail_insight_sideloaded">Instalado de fora de uma loja de aplicativos</string>
     <plurals name="app_detail_insight_unused">
         <item quantity="one">Não aberto há %1$d mês</item>
+        <item quantity="many">Não aberto nos últimos %1$d meses</item>
         <item quantity="other">Não aberto nos últimos %1$d meses</item>
     </plurals>
     <string name="app_detail_insight_background_location">Pode acessar a localização enquanto está em segundo plano</string>
@@ -188,6 +189,7 @@
     <string name="certificates_history">Histórico de assinatura</string>
     <plurals name="certificates_history_description">
         <item quantity="one">Android verificou %d chave de assinatura usada antes da chave atual.</item>
+        <item quantity="many">Chaves de assinatura %d verificadas pelo Android usadas antes da chave atual. A chave anterior mais recentemente usada aparece primeiro.</item>
         <item quantity="other">Chaves de assinatura %d verificadas pelo Android usadas antes da chave atual. A chave anterior mais recentemente usada aparece primeiro.</item>
     </plurals>
     <string name="certificates_original_signing_key">Chave de assinatura original</string>
@@ -765,6 +767,7 @@
     <string name="nativelibraries_explanation">Cada arquivo de código nativo distinto que este aplicativo envia, uma linha por nome de arquivo, mesmo quando a mesma biblioteca é construída para várias arquiteturas de processador.</string>
     <plurals name="nativelibraries_search_hint">
         <item quantity="one">Pesquisar %1$d biblioteca</item>
+        <item quantity="many">Pesquisar %1$d de bibliotecas</item>
         <item quantity="other">Pesquisar %1$d bibliotecas</item>
     </plurals>
     <string name="nativelibraries_error">Falha ao carregar bibliotecas nativas</string>

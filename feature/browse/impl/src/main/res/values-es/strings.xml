@@ -4,6 +4,7 @@
     <string name="browse_subtitle_loading">Escaneando aplicaciones instaladas…</string>
     <plurals name="browse_subtitle">
         <item quantity="one">Explorar %1$d aplicación instalada en este dispositivo</item>
+        <item quantity="many">Explorar %1$d de aplicaciones instaladas en este dispositivo</item>
         <item quantity="other">Explorar %1$d aplicaciones instaladas en este dispositivo</item>
     </plurals>
     <string name="browse_dimension_permission_title">Permisos</string>

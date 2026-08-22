@@ -18,6 +18,7 @@
     <string name="search_apps_hint">Cerca app</string>
     <plurals name="search_apps_placeholder">
         <item quantity="one">Cerca %1$d app…</item>
+        <item quantity="many">Cerca %1$d di app…</item>
         <item quantity="other">Cerca %1$d app…</item>
     </plurals>
     <plurals name="search_apps_matches">
@@ -46,6 +47,7 @@
     <string name="recently_viewed">Visualizzate di recente</string>
     <plurals name="search_apps_empty">
         <item quantity="one">Cerca %1$d app installata</item>
+        <item quantity="many">Cerca %1$d di app installate</item>
         <item quantity="other">Cerca %1$d app installate</item>
     </plurals>
     <string name="search_apps_no_results">Nessun risultato per \"%1$s\"</string>

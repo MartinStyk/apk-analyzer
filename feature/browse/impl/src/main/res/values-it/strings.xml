@@ -4,6 +4,7 @@
     <string name="browse_subtitle_loading">Scansione delle app installate…</string>
     <plurals name="browse_subtitle">
         <item quantity="one">Esplora %1$d app installata su questo dispositivo</item>
+        <item quantity="many">Esplora le %1$d app installate su questo dispositivo</item>
         <item quantity="other">Esplora le %1$d app installate su questo dispositivo</item>
     </plurals>
     <string name="browse_dimension_permission_title">Autorizzazioni</string>
@@ -79,15 +80,18 @@
     <string name="browse_bucket_info_content_description">Informazioni su %1$s</string>
     <plurals name="browse_options_filter_hint">
         <item quantity="one">Filtra %1$d opzione</item>
+        <item quantity="many">Filtra %1$d di opzioni</item>
         <item quantity="other">Filtra %1$d opzioni</item>
     </plurals>
     <string name="browse_options_empty_query">Nessuna opzione corrisponde a “%1$s”</string>
     <plurals name="browse_apps_count">
         <item quantity="one">%1$d app</item>
+        <item quantity="many">%1$d di app</item>
         <item quantity="other">%1$d app</item>
     </plurals>
     <plurals name="browse_apps_filter_hint">
         <item quantity="one">Filtra %1$d app</item>
+        <item quantity="many">Filtra %1$d di app</item>
         <item quantity="other">Filtra %1$d app</item>
     </plurals>
     <string name="browse_apps_empty_query">Nessuna app corrisponde a “%1$s”</string>
