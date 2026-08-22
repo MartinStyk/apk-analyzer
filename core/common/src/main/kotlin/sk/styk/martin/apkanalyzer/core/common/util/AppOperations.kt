@@ -28,19 +28,18 @@ fun Context.openAppSystemPage(packageName: PackageName) {
 }
 
 fun Context.openAppLanguageSettings() {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+        Logger.w(TAG, "App language settings are not available on this Android version")
+        return
+    }
     try {
-        val action = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            ACTION_APP_LOCALE_SETTINGS
-        } else {
-            Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-        }
         startActivity(
-            Intent(action).apply {
+            Intent(ACTION_APP_LOCALE_SETTINGS).apply {
                 data = "package:$packageName".toUri()
             },
         )
     } catch (e: ActivityNotFoundException) {
-        Logger.e(TAG, e, "Could not open app language settings")
+        Logger.w(TAG, e, "Could not open app language settings")
     }
 }
 
