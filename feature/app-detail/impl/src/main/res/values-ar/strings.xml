@@ -4,7 +4,7 @@
     <string name="app_detail_title">تفاصيل التطبيق</string>
     <string name="app_detail_ai_summary_title">ملخص الذكاء الاصطناعي</string>
     <string name="app_detail_ai_summary_download_action">تنزيل الذكاء الاصطناعي على الجهاز</string>
-    <string name="app_detail_ai_summary_downloading">جارٍ تنزيل الذكاء الاصطناعي على الجهاز...</string>
+    <string name="app_detail_ai_summary_downloading">جارٍ تنزيل الذكاء الاصطناعي على الجهاز…</string>
     <string name="app_detail_system_app">تطبيق النظام</string>
     <string name="app_detail_overview_section">نظرة عامة</string>
     <string name="app_detail_actions_section">إجراءات سريعة</string>
