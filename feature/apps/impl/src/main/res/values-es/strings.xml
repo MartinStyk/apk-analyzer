@@ -88,10 +88,12 @@
     <plurals name="filter_unused_days_count">
         <item quantity="one">%d día</item>
         <item quantity="other">%d días</item>
+        <item quantity="many">%d días</item>
     </plurals>
     <plurals name="filter_unused_months_count">
         <item quantity="one">%d mes</item>
         <item quantity="other">%d meses</item>
+        <item quantity="many">%d meses</item>
     </plurals>
     <string name="filter_unused_year">1 año</string>
     <string name="quick_filter_permission_usage_title">Se necesita acceso a datos de uso</string>
@@ -114,6 +116,7 @@
     <plurals name="filter_permissions_chip_presets_count">
         <item quantity="one">%d preajuste</item>
         <item quantity="other">%d preajustes</item>
+        <item quantity="many">%d preajustes</item>
     </plurals>
     <string name="filter_permissions_chip_show_all">Mostrar: Todos</string>
     <string name="filter_permissions_chip_show_selected">Mostrar: Seleccionado</string>

@@ -62,6 +62,7 @@
     <plurals name="app_detail_insight_outdated_target">
         <item quantity="one">API target %1$d, un livello API dietro questo dispositivo</item>
         <item quantity="other">API target %1$d, %2$d livelli API dietro questo dispositivo</item>
+        <item quantity="many">API target %1$d, %2$d livelli API dietro questo dispositivo</item>
     </plurals>
     <string name="app_detail_insight_sideloaded">Installato al di fuori di uno store di app</string>
     <plurals name="app_detail_insight_unused">
