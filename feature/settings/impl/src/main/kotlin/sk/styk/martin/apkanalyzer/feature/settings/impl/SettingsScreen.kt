@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -38,6 +39,8 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.card
 import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.sharedBounds
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
+
+private val SettingsRowMinHeight = 48.dp
 
 @Composable
 fun SettingsScreen(
@@ -167,7 +170,8 @@ private fun AppsSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .card()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+                .heightIn(min = SettingsRowMinHeight),
         ) {
             val recentlyViewedLabel = stringResource(R.string.settings_recently_viewed_toggle)
             Text(
@@ -206,7 +210,8 @@ private fun LanguageSection(
                 .fillMaxWidth()
                 .card()
                 .clickable(onClick = onOpenLanguageSettings)
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+                .heightIn(min = SettingsRowMinHeight),
         ) {
             Text(
                 text = appLanguageLabel,
