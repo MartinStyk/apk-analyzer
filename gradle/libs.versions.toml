@@ -25,8 +25,8 @@ hilt-navigation-compose = "1.4.0"
 hilt = "2.60.1"
 
 # Firebase
-firebase-bom = "34.17.0"
-firebase-crashlytics-plugin = "3.0.7"
+firebase-bom = "34.18.0"
+firebase-crashlytics-plugin = "3.0.8"
 firebase-perf-plugin = "2.0.2"
 google-services = "4.5.0"
 

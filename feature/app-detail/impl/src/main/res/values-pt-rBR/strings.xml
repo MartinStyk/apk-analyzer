@@ -17,18 +17,22 @@
     <string name="app_detail_updated">Atualizado</string>
     <plurals name="app_detail_overview_more_details">
         <item quantity="one">+%1$d mais detalhes em Informações gerais</item>
+        <item quantity="many">+%1$d mais detalhes em Informações gerais</item>
         <item quantity="other">+%1$d mais detalhes em Informações gerais</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_date">
         <item quantity="one">+%1$d mais detalhes em Informações gerais, incluindo data de instalação</item>
+        <item quantity="many">+%1$d mais detalhes em Informações gerais, incluindo data de instalação</item>
         <item quantity="other">+%1$d mais detalhes em Informações gerais, incluindo data de instalação</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_history">
         <item quantity="one">+%1$d mais detalhes em Informações gerais, incluindo histórico de instalação</item>
+        <item quantity="many">+%1$d mais detalhes em Informações gerais, incluindo histórico de instalação</item>
         <item quantity="other">+%1$d mais detalhes em Informações gerais, incluindo histórico de instalação</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_network_security">
         <item quantity="one">+%1$d mais detalhes em Informações gerais, incluindo configurações de segurança da rede</item>
+        <item quantity="many">+%1$d mais detalhes em Informações gerais, incluindo configurações de segurança da rede</item>
         <item quantity="other">+%1$d mais detalhes em Informações gerais, incluindo configurações de segurança da rede</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_split_apks">

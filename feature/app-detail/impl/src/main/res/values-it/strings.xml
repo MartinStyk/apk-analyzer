@@ -17,22 +17,27 @@
     <string name="app_detail_updated">Aggiornato</string>
     <plurals name="app_detail_overview_more_details">
         <item quantity="one">+%1$d ulteriore dettaglio in Informazioni generali</item>
+        <item quantity="many">+%1$d ulteriori dettagli in Informazioni generali</item>
         <item quantity="other">+%1$d ulteriori dettagli in Informazioni generali</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_date">
         <item quantity="one">+%1$d ulteriore dettaglio in Informazioni generali, inclusa la data di installazione</item>
+        <item quantity="many">+%1$d ulteriori dettagli in Informazioni generali, inclusa la data di installazione</item>
         <item quantity="other">+%1$d ulteriori dettagli in Informazioni generali, inclusa la data di installazione</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_history">
         <item quantity="one">+%1$d ulteriore dettaglio in Informazioni generali, inclusa la cronologia delle installazioni</item>
+        <item quantity="many">+%1$d ulteriori dettagli in Informazioni generali, inclusa la cronologia delle installazioni</item>
         <item quantity="other">+%1$d ulteriori dettagli in Informazioni generali, inclusa la cronologia delle installazioni</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_network_security">
         <item quantity="one">+%1$d ulteriore dettaglio in Informazioni generali, incluse le impostazioni di sicurezza della rete</item>
+        <item quantity="many">+%1$d ulteriori dettagli in Informazioni generali, incluse le impostazioni di sicurezza della rete</item>
         <item quantity="other">+%1$d ulteriori dettagli in Informazioni generali, incluse le impostazioni di sicurezza della rete</item>
     </plurals>
     <plurals name="app_detail_overview_more_details_with_split_apks">
         <item quantity="one">+%1$d ulteriore dettaglio in Informazioni generali, inclusi gli APK suddivisi</item>
+        <item quantity="many">+%1$d ulteriori dettagli in Informazioni generali, inclusi gli APK suddivisi</item>
         <item quantity="other">+%1$d ulteriori dettagli in Informazioni generali, inclusi gli APK suddivisi</item>
     </plurals>
     <string name="app_detail_yes">Sì</string>
