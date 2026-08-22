@@ -23,6 +23,7 @@
     <plurals name="browse_dimension_option_count">
         <item quantity="one">%1$d opção</item>
         <item quantity="other">%1$d opções</item>
+        <item quantity="many">%1$d opções</item>
     </plurals>
     <string name="browse_sdk_unknown">Nível da API %1$s</string>
     <string name="browse_api_level">API %1$s</string>
@@ -85,6 +86,7 @@
     <plurals name="browse_apps_count">
         <item quantity="one">%1$d aplicativo</item>
         <item quantity="other">%1$d aplicativos</item>
+        <item quantity="many">%1$d aplicativos</item>
     </plurals>
     <plurals name="browse_apps_filter_hint">
         <item quantity="one">Filtrar %1$d aplicativo</item>

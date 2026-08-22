@@ -23,6 +23,7 @@
     <plurals name="search_apps_matches">
         <item quantity="one">%d correspondência encontrada</item>
         <item quantity="other">%d correspondências encontradas</item>
+        <item quantity="many">%d correspondências encontradas</item>
     </plurals>
     <string name="filter">Filtrar</string>
     <string name="preinstalled">Pré-instalado</string>
@@ -86,10 +87,12 @@
     <plurals name="filter_unused_days_count">
         <item quantity="one">%d dia</item>
         <item quantity="other">%d dias</item>
+        <item quantity="many">%d dias</item>
     </plurals>
     <plurals name="filter_unused_months_count">
         <item quantity="one">%d mês</item>
         <item quantity="other">%d meses</item>
+        <item quantity="many">%d meses</item>
     </plurals>
     <string name="filter_unused_year">1 ano</string>
     <string name="quick_filter_permission_usage_title">Acesso a dados de uso necessário</string>
@@ -112,6 +115,7 @@
     <plurals name="filter_permissions_chip_presets_count">
         <item quantity="one">%d predefinição</item>
         <item quantity="other">%d predefinições</item>
+        <item quantity="many">%d predefinições</item>
     </plurals>
     <string name="filter_permissions_chip_show_all">Mostrar: Todos</string>
     <string name="filter_permissions_chip_show_selected">Mostrar: Selecionado</string>

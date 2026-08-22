@@ -23,6 +23,7 @@
     <plurals name="browse_dimension_option_count">
         <item quantity="one">%1$d opción</item>
         <item quantity="other">%1$d opciones</item>
+        <item quantity="many">%1$d opciones</item>
     </plurals>
     <string name="browse_sdk_unknown">Nivel de API %1$s</string>
     <string name="browse_api_level">API %1$s</string>
@@ -80,15 +81,18 @@
     <plurals name="browse_options_filter_hint">
         <item quantity="one">Filtrar opción %1$d</item>
         <item quantity="other">Filtrar opciones %1$d</item>
+        <item quantity="many">Filtrar opciones %1$d</item>
     </plurals>
     <string name="browse_options_empty_query">No hay opciones que coincidan con “%1$s”</string>
     <plurals name="browse_apps_count">
         <item quantity="one">%1$d aplicación</item>
         <item quantity="other">%1$d aplicaciones</item>
+        <item quantity="many">%1$d aplicaciones</item>
     </plurals>
     <plurals name="browse_apps_filter_hint">
         <item quantity="one">Filtrar aplicación %1$d</item>
         <item quantity="other">Filtrar aplicaciones %1$d</item>
+        <item quantity="many">Filtrar aplicaciones %1$d</item>
     </plurals>
     <string name="browse_apps_empty_query">No hay aplicaciones que coincidan con “%1$s”</string>
 </resources>
