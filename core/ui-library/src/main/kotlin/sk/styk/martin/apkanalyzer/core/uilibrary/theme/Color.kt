@@ -40,6 +40,7 @@ data class ApkAnalyzerColorPalette(
     val aiAccentContainer: Color,
 
     val shadow: Color,
+    val pillBorder: Color,
 )
 
 internal val LightApkAnalyzerColors = ApkAnalyzerColorPalette(
@@ -69,6 +70,7 @@ internal val LightApkAnalyzerColors = ApkAnalyzerColorPalette(
     aiAccent = Color(0xFF7C4DFF),
     aiAccentContainer = Color(0xFFEDE7FE),
     shadow = Color(0x1A000000),
+    pillBorder = Color.Transparent,
 )
 
 internal val DarkApkAnalyzerColors = ApkAnalyzerColorPalette(
@@ -98,6 +100,7 @@ internal val DarkApkAnalyzerColors = ApkAnalyzerColorPalette(
     aiAccent = Color(0xFFB39DFF),
     aiAccentContainer = Color(0xFF2E2251),
     shadow = Color(0x00000000),
+    pillBorder = Color(0xFF2C2C2E),
 )
 
 internal fun lightColorScheme(colors: ApkAnalyzerColorPalette) = lightColorScheme(

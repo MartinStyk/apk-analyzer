@@ -13,6 +13,7 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.AnchoredDraggableDefaults
 import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.DraggableAnchors
@@ -75,6 +76,7 @@ private val NavigationPillItemSpacing: Dp = 8.dp
 private val NavigationPillItemHorizontalPadding: Dp = 16.dp
 private val NavigationPillIconSize: Dp = 20.dp
 private val NavigationPillElevation: Dp = 8.dp
+private val NavigationPillBorderWidth: Dp = 1.dp
 
 val navigationBarContentPadding: Dp = NavigationPillHeight + NavigationPillMargin
 
@@ -156,6 +158,7 @@ private fun NavigationPill(
             .height(NavigationPillHeight)
             .shadow(elevation = NavigationPillElevation, shape = CircleShape)
             .background(color = AppTheme.colors.surfaceVariant, shape = CircleShape)
+            .border(width = NavigationPillBorderWidth, color = AppTheme.colors.pillBorder, shape = CircleShape)
             .padding(NavigationPillItemPadding)
             .onSizeChanged { size ->
                 val itemWidth = size.width.toFloat() / items.size
