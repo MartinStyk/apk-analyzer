@@ -27,7 +27,11 @@ device-dependent facts (`core/apps/AGENTS.md`):
 * Permission grant state. Originally scoped as an `HI-10` observation; dropped for R1 — see
   [Changes to the Product Design](#changes-to-the-product-design).
 * Anything already excluded from live `AppDetail`: device-feature availability, usage stats,
-  storage stats, last-used time.
+  storage stats, last-used time. This specifically includes `AppInfo.totalSize` — despite living on
+  `AppInfo` alongside genuine APK facts, it's populated from `StorageStatsRepository.queryTotalSize()`,
+  which sums `appBytes + dataBytes + cacheBytes` (`StorageStatsRepositoryImpl.queryPackageSize`) — the
+  same device/runtime cache-and-data size this section already excludes, just reachable through a
+  field that looks like an APK fact. Only `AppInfo.apkSize` (base + split APK file sizes) is captured.
 * Filesystem paths — `AppInfo.apkDirectory`, `AppInfo.dataDirectory`,
   `InstalledSplitApk.filePath`. Install-instance plumbing, not app content; would read as a
   spurious change across a device migration for zero product value.
@@ -56,6 +60,12 @@ compared as-is.
 a persisted UUID would itself be swept up by app-data backup/restore and defeat the purpose) is
 stored per snapshot so a future timeline renderer can distinguish "this app was updated" from "this
 history continued on a new device," without changing the gate itself.
+
+Not speculative on `HI-16`/`HI-17` (Drive backup, gated on unresolved `OQ-08`) specifically: Android's
+own Auto Backup can already restore this app's private data — including the Room DB itself — to a new
+device today, with zero product work on our part and independent of whether Drive backup ever ships.
+`deviceId` protects against that platform behavior existing now, not against a future feature that
+might not land.
 
 ## Why JSON Content, Not a Normalized Relational Schema
 
@@ -115,9 +125,10 @@ internal data class AppHistorySnapshotEntity(
     val sharedUserId: String?,
     val description: String?,
     val installLocation: String,
-    val installSourceChain: String?,
+    val installingPackage: String?,
+    val initiatingPackage: String?,
+    val originatingPackage: String?,
     val apkSize: Long,
-    val totalSize: Long?,
     val targetSdkVersion: Int?,
     val minSdkVersion: Int?,
     val permissionsHash: String?,
@@ -219,9 +230,14 @@ Every list/nested section, and what's stored in its blob versus derived at read 
 dropped. "Derive" means the value is a pure function of already-stored fields and would go stale if
 cached; recompute it with the same logic the live screens already use.
 
+`Permissions` holds two structurally distinct lists — `defined` (custom permissions this app
+declares for others) and `used` (permissions this app requests) — and conflating them is a known
+foot-gun in this codebase (`core/ai-insights/AGENTS.md` calls out the same distinction explicitly).
+Both are captured; only `used`'s per-entry `isGranted` is dropped.
+
 | Section | Stored as-is | Derived at read time, not stored | Dropped |
 |---|---|---|---|
-| `permissions` | `Permission` list only (`name`, `PermissionDetails`) | — | `UsedPermission.isGranted` (grant state) |
+| `permissions` | Both of `Permissions`' lists: `defined` (custom permissions this app declares for others) in full, and `used.map { it.permissionData }` (permissions this app requests — `name`, `PermissionDetails`) with `isGranted` stripped | — | `UsedPermission.isGranted` (grant state) |
 | `activities` / `services` / `providers` / `receivers` | Every field on `Activity`, `Service`, `ContentProvider` (incl. `ProviderPathPermission`), `BroadcastReceiver` | — | — |
 | `features` | `Feature.Hardware`, `Feature.OpenGlEs` in full | `OpenGlEs.versionName` (already a computed getter, never a stored field) | — |
 | `signing` | `Certificate`: `signAlgorithm`, all six MD5/SHA1/SHA256 hashes, `validFrom`, `validUntil`, `serialNumber`, `issuer`/`subject`, `isSelfSigned` (a genuine verification result, not recomputable without the raw cert) | `AppSigning.hasMultipleSigners` (`= currentCertificates.size > 1`), `Certificate.trustLevel` (recomputed from `certificateHashSha256` against the known debug-cert hash), `signatureAlgorithmAssessment`, `formattedSha256Fingerprint` (already computed getters) | — |
@@ -231,10 +247,17 @@ cached; recompute it with the same logic the live screens already use.
 | `installedSplits` | `InstalledSplitApk`: `fileName`, `size`, `kind`, `qualifier` | — | `filePath` (filesystem path) |
 
 Snapshot-row scalars follow the same rule: `AppInfo.source` (`AppSource`) and `minSdkLabel`/
-`targetSdkLabel` are dropped from the row and recomputed from `installSourceChain`+`isSystemApp`
-and `minSdkVersion`/`targetSdkVersion` respectively, using the same classifiers `AppDetailRepositoryImpl`
-already calls — storing them would cache a pure function's output and go stale if that
-classification logic is ever corrected.
+`targetSdkLabel` are dropped from the row and recomputed from `installingPackage`/`initiatingPackage`
+(reassembled into an `InstallSourceChain`) + `isSystemApp`, and from `minSdkVersion`/`targetSdkVersion`
+respectively, using the same classifiers `AppDetailRepositoryImpl` already calls — storing them would
+cache a pure function's output and go stale if that classification logic is ever corrected.
+
+`AppInfo.installSourceChain` is a real 3-field struct (`installingPackage`, `initiatingPackage`,
+`originatingPackage`, each `PackageName?`), not a single value — flattened into three separate nullable
+columns above rather than one opaque `String?` column, since `resolveAppInstallSource` (the classifier
+`source` is derived from) reads `installingPackage` and `initiatingPackage` independently. Small and
+fixed-shape, so plain columns rather than a JSON blob — it doesn't need the content-addressing this doc
+uses for list-shaped sections.
 
 ## Capture Gate
 
@@ -295,6 +318,16 @@ Two capture paths, sharing the same gate and pipeline above:
 * **Fast path** — `PackageChangesObserver`'s install/update broadcast. Only fires while the process
   is alive (a context-registered receiver can't survive process death), so it's best-effort
   latency, not the correctness guarantee.
+
+  **Prerequisite, not yet true today:** `PackageChangesObserverImpl` currently emits `Flow<Unit>` —
+  `onReceive` reads nothing off the `Intent` before calling `trySend(Unit)`, so there's no package
+  name to key the single-package gate query on. Its only current consumer
+  (`InstalledAppsRepositoryImpl`) only ever needed "something changed, reload everything," so this
+  was never a problem before. Using this as history's fast path requires extending the observer to
+  surface the changed package from the broadcast's `Intent.getData()` (`package:<name>` URI) —
+  and ideally the action (`ACTION_PACKAGE_ADDED`/`REMOVED`/`REPLACED`) — instead of a bare `Unit`.
+  Until that lands, the fast path can only fall back to the same all-packages batched query
+  reconciliation uses, which defeats its purpose as the low-latency path.
 * **Reconciliation** — sweeps every installed app (`InstalledAppsRepository`) through the batched
   gate query above. This is what actually guarantees completeness, since install/update broadcasts
   missed while the app was dead are otherwise lost forever. Runs once per app process start today;
@@ -348,6 +381,15 @@ Every other section's success type is non-nullable (`Result<AppDetail>`, `Result
 `Result<Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>>`), so this ambiguity doesn't
 exist for them — a successful call always has real content to hash, even an empty list.
 
+Worth being precise about: `permissionsHash` through `installedSplitsHash` (eight of the eleven hash
+columns) all derive from the single `AppDetailRepository.details()` call, and a failure there aborts
+the whole row (step 3) rather than producing a partial one — so in any row that exists, those eight
+are always all-present together, never independently null. Only `intentFiltersHash`,
+`nativeLibrariesHash`, and `signingSchemeHash` (each its own separately-fetched repository) can
+genuinely vary independently today. Modeling all eleven symmetrically isn't wrong — it's headroom for
+`AppDetail` itself later being decomposed the way these three already are — but it's headroom, not a
+reflection of today's real failure granularity.
+
 ## Open Questions
 
 Not yet resolved — flagging rather than silently deciding:
@@ -357,6 +399,9 @@ Not yet resolved — flagging rather than silently deciding:
   schema here yet — they don't fit the content-addressed snapshot model (no new version, no full
   re-capture) and need their own lightweight append-only shape.
 * **`uid` inclusion.** Flagged above as borderline; kept for now, worth revisiting.
+* **`PackageChangesObserver` needs extending before the fast path can work as designed** — see the
+  prerequisite note under [Triggers](#triggers). Not a design gap, an implementation one, but capture
+  can't ship the fast path without it.
 
 ## Changes to the Product Design
 
