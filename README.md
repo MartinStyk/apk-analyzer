@@ -23,10 +23,23 @@ multi-module Jetpack Compose app.*
 
 ---
 
+## See it in action
+
+<p align="center">
+  <img src="docs/images/app-details.gif" width="250" alt="Viewing detailed information about an installed app" />
+  <img src="docs/images/filter-apps.gif" width="250" alt="Filtering installed apps by app attributes" />
+  <img src="docs/images/browse-apps.gif" width="250" alt="Browsing the installed apps list" />
+</p>
+<p align="center">
+  <sub><b>App details</b></sub> &nbsp;&nbsp;&nbsp;&nbsp;
+  <sub><b>Filter apps</b></sub> &nbsp;&nbsp;&nbsp;&nbsp;
+  <sub><b>Browse apps</b></sub>
+</p>
+
 ## Table of contents
 
 - [What it does](#what-it-does)
-- [Screenshots](#screenshots)
+- [See it in action](#see-it-in-action)
 - [Why it exists](#why-it-exists)
 - [Privacy and permissions](#privacy-and-permissions)
 - [Requirements](#requirements)
@@ -78,19 +91,6 @@ never leaves the device.
 
 **📤 Export and share.** Export or share the APK itself, save the app icon, copy or share a text
 summary, and launch an app's components directly.
-
-## Screenshots
-
-<p align="center">
-  <img src="docs/images/browse-apps.gif" width="250" alt="Browsing the installed apps list" />
-  <img src="docs/images/filter-apps.gif" width="250" alt="Filtering installed apps by app attributes" />
-  <img src="docs/images/app-details.gif" width="250" alt="Viewing detailed information about an installed app" />
-</p>
-<p align="center">
-  <sub><b>Browse apps</b></sub> &nbsp;&nbsp;&nbsp;&nbsp;
-  <sub><b>Filter apps</b></sub> &nbsp;&nbsp;&nbsp;&nbsp;
-  <sub><b>App details</b></sub>
-</p>
 
 ## Why it exists
 
