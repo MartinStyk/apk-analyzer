@@ -10,10 +10,11 @@ import sk.styk.martin.apkanalyzer.utils.MIN_SDK
 import sk.styk.martin.apkanalyzer.utils.TARGET_SDK
 import sk.styk.martin.apkanalyzer.utils.configureKotlin
 
-private const val BASELINE_PROFILE_MANAGED_DEVICE = "pixel6ApiTarget"
-
 class BaselineProfilePlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
+        val baselineProfileManagedDeviceName = findProperty("baselineProfileManagedDeviceName") as? String
+            ?: "pixel6ApiTarget"
+
         with(pluginManager) {
             apply("com.android.test")
             apply("org.jetbrains.kotlin.android")
@@ -36,7 +37,7 @@ class BaselineProfilePlugin : Plugin<Project> {
             testOptions {
                 managedDevices {
                     devices {
-                        maybeCreate<ManagedVirtualDevice>(BASELINE_PROFILE_MANAGED_DEVICE).apply {
+                        maybeCreate<ManagedVirtualDevice>(baselineProfileManagedDeviceName).apply {
                             device = "Pixel 6"
                             apiLevel = TARGET_SDK
                             systemImageSource = "aosp"

@@ -4,7 +4,7 @@ plugins {
 
 baselineProfile {
     useConnectedDevices = false
-    managedDevices += "pixel6ApiTarget"
+    managedDevices += providers.gradleProperty("baselineProfileManagedDeviceName").get()
 }
 
 android {
