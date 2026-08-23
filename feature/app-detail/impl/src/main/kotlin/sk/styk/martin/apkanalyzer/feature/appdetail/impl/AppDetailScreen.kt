@@ -570,6 +570,7 @@ private fun ActionsSection(
                 icon = ApkAnalyzerIcons.File,
                 label = stringResource(R.string.app_detail_action_manifest),
                 onClick = { onAction(AppDetailAction.ViewManifest) },
+                iconTint = AppTheme.colors.primary,
             )
             if (state.analysisMode == AppDetail.AnalysisMode.InstalledPackage) {
                 ActionItem(
@@ -581,6 +582,7 @@ private fun ActionsSection(
                     },
                     onClick = { onAction(AppDetailAction.ExportApk) },
                     enabled = state.exportInProgress == null,
+                    iconTint = AppTheme.colors.primary,
                 )
             }
             ActionItem(
@@ -592,22 +594,26 @@ private fun ActionsSection(
                 },
                 onClick = { onAction(AppDetailAction.SaveIcon) },
                 enabled = state.exportInProgress == null,
+                iconTint = AppTheme.colors.primary,
             )
             ActionItem(
                 icon = ApkAnalyzerIcons.Share,
                 label = stringResource(R.string.app_detail_action_summary),
                 onClick = { onAction(AppDetailAction.ViewSummary) },
+                iconTint = AppTheme.colors.primary,
             )
             ActionItem(
                 icon = ApkAnalyzerIcons.Apps,
                 label = stringResource(R.string.app_detail_action_play_store),
                 onClick = { onAction(AppDetailAction.OpenPlayStore) },
+                iconTint = AppTheme.colors.primary,
             )
             if (state.analysisMode == AppDetail.AnalysisMode.InstalledPackage) {
                 ActionItem(
                     icon = ApkAnalyzerIcons.Settings,
                     label = stringResource(R.string.app_detail_action_app_info),
                     onClick = { onAction(AppDetailAction.OpenAppInfo) },
+                    iconTint = AppTheme.colors.primary,
                 )
             }
         }
@@ -628,7 +634,7 @@ private fun RequirementPreviewIcon(preview: AppDetailState.Loaded.RequirementPre
     ) {
         Icon(
             imageVector = requirementIcon(preview.name),
-            tint = if (preview.isUnmetRequirement) AppTheme.colors.warning else AppTheme.colors.primary,
+            tint = if (preview.isUnmetRequirement) AppTheme.colors.warning else AppTheme.colors.onSurfaceVariant,
             modifier = Modifier.size(22.dp),
         )
     }
@@ -642,6 +648,7 @@ private fun ActionItem(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     badgeCount: Int? = null,
+    iconTint: Color = AppTheme.colors.onSurface,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -660,7 +667,7 @@ private fun ActionItem(
             ) {
                 Icon(
                     imageVector = icon,
-                    tint = if (enabled) AppTheme.colors.primary else AppTheme.colors.onSurfaceVariant,
+                    tint = if (enabled) iconTint else AppTheme.colors.onSurfaceVariant,
                     modifier = Modifier.size(22.dp),
                 )
             }
