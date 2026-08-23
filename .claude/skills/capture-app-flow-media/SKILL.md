@@ -1,13 +1,14 @@
 ---
 name: capture-app-flow-media
-description: Use to record screenshots or GIFs of ApkAnalyzer running on a device for the README or product docs. Triggered by phrases like "add screenshots", "record a gif of this flow", "capture app screenshots", "update the README screenshots", "make a demo gif".
+description: Use to record or convert ApkAnalyzer app flows into screenshots or GIFs for the README or product docs. Triggered by phrases like "add screenshots", "convert videos to gifs", "record a gif of this flow", "capture app screenshots", "update the README screenshots", "make a demo gif".
 ---
 
 # Capture App Flow Media
 
-Produces README-ready screenshots or GIFs of real app flows on a connected device, driven headlessly
-via `adb` — no human tapping through the phone. Builds on the `run-app` and `navigate-app-adb` skills;
-read those first if the app isn't already installed and running.
+Produces README-ready screenshots or GIFs of real app flows, either from existing MP4 recordings or
+from a connected device driven headlessly via `adb` — no human tapping through the phone. Builds on
+the `run-app` and `navigate-app-adb` skills; read those first if the app isn't already installed and
+running.
 
 ## 1. Script the flow before touching the device
 
@@ -63,11 +64,28 @@ Two-pass palette generation gives much better quality than a naive single-pass c
 file size:
 
 ```bash
-ffmpeg -y -i flow.mp4 -vf "fps=12,scale=360:-1:flags=lanczos,palettegen" palette.png
-ffmpeg -y -i flow.mp4 -i palette.png -filter_complex "fps=12,scale=360:-1:flags=lanczos[x];[x][1:v]paletteuse" out.gif
+ffmpeg -y -i flow.mp4 -vf "fps=24,scale=360:-1:flags=lanczos,palettegen" palette.png
+ffmpeg -y -i flow.mp4 -i palette.png -filter_complex "fps=24,scale=360:-1:flags=lanczos[x];[x][1:v]paletteuse" out.gif
 ```
 
-Target ~360px width, ~12fps. Keep files reasonably small (aim for a few MB), but don't sacrifice
+For existing recordings, use the source MP4 directly and name the output after the flow:
+
+```powershell
+$ffmpeg = (Get-Command ffmpeg).Source
+$palette = "$env:TEMP\browse-apps-palette.png"
+& $ffmpeg -y -i "$env:USERPROFILE\Desktop\browse-apps.mp4" -vf "fps=24,scale=360:-1:flags=lanczos,palettegen" $palette
+& $ffmpeg -y -i "$env:USERPROFILE\Desktop\browse-apps.mp4" -i $palette -filter_complex "fps=24,scale=360:-1:flags=lanczos[x];[x][1:v]paletteuse" "docs/images/browse-apps.gif"
+```
+
+The current README demo recordings map to these assets:
+
+| Source recording | README asset |
+| --- | --- |
+| `Desktop\browse-apps.mp4` | `docs/images/browse-apps.gif` |
+| `Desktop\filter-apps.mp4` | `docs/images/filter-apps.gif` |
+| `Desktop\app-details.mp4` | `docs/images/app-details.gif` |
+
+Target 360px width and 24fps. Keep files reasonably small, but don't sacrifice
 legibility of on-screen text to hit an arbitrary size target — a longer flow covering several screens
 legitimately runs larger than a single-interaction one.
 
