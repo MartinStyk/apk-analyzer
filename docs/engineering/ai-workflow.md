@@ -84,6 +84,7 @@ by copying an existing file.
 | [`git-commit-author`](../../.claude/skills/git-commit-author/SKILL.md) | Any commit — commits are authored by the human contributor only |
 | [`release-app`](../../.claude/skills/release-app/SKILL.md) | Shipping a `MAJOR.MINOR.PATCH` version — approved release notes in an annotated tag |
 | [`sync-design-changes`](../../.claude/skills/sync-design-changes/SKILL.md) | Bringing tweaks from the Claude Design project back into Compose code |
+| [`capture-app-flow-media`](../../.claude/skills/capture-app-flow-media/SKILL.md) | Recording README screenshots/GIFs of a real app flow via adb |
 
 All are shared by Claude and Copilot except `sync-design-changes`, which needs Claude's `DesignSync`
 tool.
