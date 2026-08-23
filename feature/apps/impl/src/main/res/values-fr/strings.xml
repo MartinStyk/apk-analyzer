@@ -23,6 +23,7 @@
     </plurals>
     <plurals name="search_apps_matches">
         <item quantity="one">%d correspondance trouvée</item>
+        <item quantity="many">%d correspondances trouvées</item>
         <item quantity="other">%d correspondances trouvées</item>
     </plurals>
     <string name="filter">Filtrer</string>
