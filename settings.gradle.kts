@@ -25,6 +25,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "ApkAnalyzer"
 include(
     ":app",
+    ":app:baselineprofile",
     ":core:apk-files",
     ":core:apps",
     ":core:app-permissions",

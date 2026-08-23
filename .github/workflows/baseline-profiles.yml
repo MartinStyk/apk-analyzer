@@ -1,0 +1,54 @@
+name: Baseline profiles
+
+on:
+  schedule:
+    - cron: '0 4 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: baseline-profiles-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up Gradle build environment
+        uses: ./.github/actions/setup-gradle-build
+
+      - name: Fetch Firebase google-services.json
+        uses: ./.github/actions/fetch-google-services
+        with:
+          firebase-token: ${{ secrets.FIREBASE_TOKEN }}
+          firebase-app-id: ${{ secrets.FIREBASE_APP_ID }}
+          firebase-project-id: ${{ secrets.FIREBASE_PROJECT_ID }}
+
+      - name: Generate baseline profile
+        run: ./gradlew :app:baselineprofile:generateBaselineProfile
+
+      - name: Upload generated baseline profile
+        uses: actions/upload-artifact@v7
+        with:
+          name: baseline-profile
+          path: app/src/main/baselineProfiles/baseline-prof.txt
+          if-no-files-found: error
+
+      - name: Open pull request with updated baseline profile
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: Update baseline profile
+          title: Update baseline profile
+          body: |
+            Automated baseline profile refresh.
+          branch: automation/update-baseline-profile
+          delete-branch: true
+          base: develop
+          add-paths: app/src/main/baselineProfiles/baseline-prof.txt

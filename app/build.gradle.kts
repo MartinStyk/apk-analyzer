@@ -2,6 +2,7 @@ import com.android.build.api.dsl.ApplicationExtension
 
 plugins {
     alias(libs.plugins.apkanalyzer.application)
+    alias(libs.plugins.androidx.baselineprofile)
     alias(libs.plugins.apkanalyzer.hilt)
     alias(libs.plugins.apkanalyzer.compose)
     alias(libs.plugins.apkanalyzer.spotless)
@@ -32,7 +33,13 @@ android {
     }
 }
 
+baselineProfile {
+    automaticGenerationDuringBuild = false
+}
+
 dependencies {
+    baselineProfile(projects.app.baselineprofile)
+
     implementation(projects.core.apkFiles)
     implementation(projects.core.apps)
     implementation(projects.core.appPermissions)
@@ -52,6 +59,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.process)
+    implementation(libs.androidx.profileinstaller)
     implementation(libs.androidx.compose.material3)
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.coil.compose)
