@@ -52,14 +52,20 @@ of change. Detection therefore has two tiers:
 | Tier                 | Trigger                                              | Cost                       | Produces                                  |
 |----------------------|------------------------------------------------------|----------------------------|-------------------------------------------|
 | **Install instance** | `firstInstallTime` or `lastUpdateTime` moved         | Full analysis of that package | A new snapshot                          |
-| **Observation**      | Granted permissions, enabled state or install source differ, same instance | Cheap field read | A change recorded against the existing instance |
+| **Observation**      | Enabled state or install source differ, same instance | Cheap field read | A change recorded against the existing instance |
 
-An observation never creates a version. "Torch Pro was granted Location" belongs on v4.2's row, not
-on a fictional v4.3.
+An observation never creates a version. "Torch Pro's install source changed" belongs on v4.2's row,
+not on a fictional v4.3.
 
-**Volatile fields are captured but never compared.** Data and cache size change on every open; if
-they participate in change detection, every app changes every time and the feature is noise. APK
-size is diffed, user data is not.
+Permission grant state is deliberately not tracked. It is device/runtime state — who currently has
+which permission — not a fact about the app, the same distinction that already keeps device-feature
+availability out of live `AppDetail`. See
+[the capture schema doc](../../technical/app-history-capture-schema.md#changes-to-the-product-design).
+
+**Data and cache size are not captured at all.** They're device/runtime state — how much this install
+has accumulated on this device, not a fact about the app — the same reason usage stats and last-used
+time are excluded. Only APK/total size is captured, and it's the one size fact that's diffed; user
+data size would also drift on every open and turn change detection into noise even if it were kept.
 
 ### Snapshots are the only thing stored
 
@@ -72,10 +78,12 @@ after that release. Intent filters are the concrete case: R1 doesn't diff them, 
 projection means a decision to start would light up across every user's entire existing history.
 
 Storage is handled by **content addressing** rather than by delta chains. Permission sets, component
-sets, certificates and library lists are hashed into shared tables; a snapshot row is scalars plus
-foreign keys into them. An update that changes nothing but `versionCode` and size reuses every set
-and costs about a hundred bytes. That gives delta-like efficiency without a chain's fragility — no
-keyframes, no reconstruct-by-replay, no corruption blast radius.
+sets, certificates and library lists are hashed into per-package tables; a snapshot row is scalars
+plus foreign keys into them. An update that changes nothing but `versionCode` and size reuses every
+set and costs about a hundred bytes. Scoping the hash tables per package, rather than sharing them
+globally, means deleting one app's entire history is a direct delete, not a garbage-collection sweep
+over what other apps might still reference. That gives delta-like efficiency without a chain's
+fragility — no keyframes, no reconstruct-by-replay, no corruption blast radius.
 
 It also makes the read path naturally tiered, which is exactly what the screens need:
 
@@ -160,7 +168,7 @@ locked stub; four rule-based exceptions open:
 | The tab, digest counts, change counts  | —                                       | A count and a date are not the product. *What it was* is                              |
 | Latest change on the device, in full   | `max(timestamp)`, evaluated live        | The sample (`HI-06`). It is a **card above the list, not an unlocked row** — an unlocked row would silently re-lock when a newer change arrived, and "I could read this yesterday" is worse than never showing it |
 | Every certificate change, every app    | Change type                             | Rare, so it costs almost no revenue. Strongest signal, so it makes the free tier's silence trustworthy. And it is the best conversion trigger the product will ever have: the alert lands, the diff opens free, and six locked changes sit underneath it |
-| First-seen rows, and `HI-10` observations | Change tier                          | An origin marker has no diff to hide, and a permission the *user* granted in Settings is their own action — current grant state is already free on the Permissions screen |
+| First-seen rows, and `HI-10` observations | Change tier                          | An origin marker has no diff to hide, and an enabled-state or install-source flip is a cheap system fact, not the analysis being sold |
 | Pre-history rows (`HI-21`)             | Recorded before tracking started        | There is nothing behind them to sell. Gating them would be charging for data we never captured |
 
 The two-tier capture model does double duty here: an **observation** is the system or the user
@@ -198,8 +206,10 @@ Two rules still need stating, because they cover failures the schema cannot prev
 cannot be fully rendered — a migration that dropped a field, a truncated restore — is never offered
 as unlockable. The worst case is giving away one row; the alternative is charging for one.
 
-**Partial captures are marked partial and never diffed** (`HI-20`). This one outranks everything
-else here: diffing an incomplete snapshot as though it were complete does not merely under-deliver,
+**A partial capture is left uncomparable and never diffed** (`HI-20`). No stored "partial" marker —
+a section that failed to capture simply has no hash to compare against, so the diff engine can't
+treat it as though it emptied out. This one outranks everything else here: diffing an incomplete
+snapshot as though it were complete does not merely under-deliver,
 it *fabricates* changes — *"Instagram removed 12 permissions"* because a split failed to read. A
 security-positioned app inventing a security event is a worse defect than any gating bug.
 
@@ -330,8 +340,8 @@ Reached from the tab or from the app-detail hub (`HI-15`).
 │  14 Feb  ⚠ Signing certificate    │
 │          changed                ›  │
 │                                   │
-│  2 Feb   You granted Location     │
-│          in Settings            ›  │
+│  2 Feb   Install source changed   │
+│          · Sideloaded           ›  │
 │                                   │
 │  8 Jan   First seen · v308.0    ›  │
 └───────────────────────────────────┘
@@ -343,7 +353,8 @@ most people actually want — which is also why it is Pro.
 
 The unlocked rows here are not exceptions carved for this screen; they fall out of the rules in
 [What is free](#what-is-free-and-how-the-sample-is-chosen). A certificate change opens for everyone,
-a grant the user performed themselves is theirs, and a first-seen marker has no diff to withhold.
+an enabled-state or install-source observation is a cheap system fact rather than analysis, and a
+first-seen marker has no diff to withhold.
 
 An uninstall followed by a reinstall is a **break in the chain**, drawn as one — same package, new
 `firstInstallTime`, and the timeline says so rather than pretending it is a continuous line.

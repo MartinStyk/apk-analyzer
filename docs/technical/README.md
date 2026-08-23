@@ -9,3 +9,4 @@ They describe how the repository should evolve without adding product scope.
 |---|---|
 | [Kotlin code quality](kotlin-code-quality.md) | Proposed |
 | [Repository load performance](repository-load-performance.md) | Proposed |
+| [App history capture schema](app-history-capture-schema.md) | Proposed |
