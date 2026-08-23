@@ -50,13 +50,19 @@ jobs:
           }
           trap cleanup EXIT
 
-          EDIT_ID=$(curl -sSf -X POST -H "Authorization: Bearer $ACCESS_TOKEN" "$BASE/edits" | jq -er ".id")
+          EDIT_RESPONSE=$(curl -sSf -X POST -H "Authorization: Bearer $ACCESS_TOKEN" "$BASE/edits")
+          EDIT_ID=$(echo "$EDIT_RESPONSE" | jq -r ".id // empty")
+          if [ -z "$EDIT_ID" ]; then
+            echo "::error::Failed to create Google Play edit."
+            echo "::error::Response: $EDIT_RESPONSE"
+            exit 1
+          fi
           TRACK_STATUS=$(curl -sS -o "$TRACK_BODY_FILE" -w "%{http_code}" -H "Authorization: Bearer $ACCESS_TOKEN" "$BASE/edits/$EDIT_ID/tracks/production")
 
           if [ "$TRACK_STATUS" -eq 404 ]; then
             RELEASE_COUNT=0
           elif [ "$TRACK_STATUS" -eq 200 ]; then
-            RELEASE_COUNT=$(jq '.releases | length' "$TRACK_BODY_FILE")
+            RELEASE_COUNT=$(jq '(.releases // []) | length' "$TRACK_BODY_FILE")
           else
             echo "::error::Failed to read production track. HTTP status: $TRACK_STATUS"
             echo "::error::Response: $(cat "$TRACK_BODY_FILE")"
