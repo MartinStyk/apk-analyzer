@@ -41,9 +41,33 @@ jobs:
         run: |
           BASE="https://androidpublisher.googleapis.com/androidpublisher/v3/applications/sk.styk.martin.apkanalyzer"
 
-          EDIT_ID=$(curl -sf -X POST -H "Authorization: Bearer $ACCESS_TOKEN" "$BASE/edits" | jq -r '.id')
-          RELEASE_COUNT=$(curl -sf -H "Authorization: Bearer $ACCESS_TOKEN" "$BASE/edits/$EDIT_ID/tracks/production" | jq '.releases | length')
-          curl -sf -X POST -H "Authorization: Bearer $ACCESS_TOKEN" "$BASE/edits/$EDIT_ID:delete" > /dev/null
+          TRACK_BODY_FILE=$(mktemp)
+          cleanup() {
+            if [ -n "${EDIT_ID:-}" ]; then
+              curl -sS -X POST -H "Authorization: Bearer $ACCESS_TOKEN" "$BASE/edits/$EDIT_ID:delete" > /dev/null || true
+            fi
+            rm -f "$TRACK_BODY_FILE"
+          }
+          trap cleanup EXIT
+
+          EDIT_RESPONSE=$(curl -sSf -X POST -H "Authorization: Bearer $ACCESS_TOKEN" "$BASE/edits")
+          EDIT_ID=$(echo "$EDIT_RESPONSE" | jq -r ".id // empty")
+          if [ -z "$EDIT_ID" ]; then
+            echo "::error::Failed to create Google Play edit."
+            echo "::error::Response: $EDIT_RESPONSE"
+            exit 1
+          fi
+          TRACK_STATUS=$(curl -sS -o "$TRACK_BODY_FILE" -w "%{http_code}" -H "Authorization: Bearer $ACCESS_TOKEN" "$BASE/edits/$EDIT_ID/tracks/production")
+
+          if [ "$TRACK_STATUS" -eq 404 ]; then
+            RELEASE_COUNT=0
+          elif [ "$TRACK_STATUS" -eq 200 ]; then
+            RELEASE_COUNT=$(jq '(.releases // []) | length' "$TRACK_BODY_FILE")
+          else
+            echo "::error::Failed to read production track. HTTP status: $TRACK_STATUS"
+            echo "::error::Response: $(cat "$TRACK_BODY_FILE")"
+            exit 1
+          fi
 
           if [ "$RELEASE_COUNT" -gt 0 ]; then
             echo "Production track already has a release; adjusting its rollout percentage."
