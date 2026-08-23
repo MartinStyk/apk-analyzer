@@ -41,23 +41,27 @@ jobs:
         run: |
           BASE="https://androidpublisher.googleapis.com/androidpublisher/v3/applications/sk.styk.martin.apkanalyzer"
 
+          TRACK_BODY_FILE=$(mktemp)
+          cleanup() {
+            if [ -n "${EDIT_ID:-}" ]; then
+              curl -sS -X POST -H "Authorization: Bearer $ACCESS_TOKEN" "$BASE/edits/$EDIT_ID:delete" > /dev/null || true
+            fi
+            rm -f "$TRACK_BODY_FILE"
+          }
+          trap cleanup EXIT
+
           EDIT_ID=$(curl -sf -X POST -H "Authorization: Bearer $ACCESS_TOKEN" "$BASE/edits" | jq -r '.id')
-          TRACK_RESPONSE=$(curl -sS -w "\n%{http_code}" -H "Authorization: Bearer $ACCESS_TOKEN" "$BASE/edits/$EDIT_ID/tracks/production")
-          TRACK_BODY=$(echo "$TRACK_RESPONSE" | sed '$d')
-          TRACK_STATUS=$(echo "$TRACK_RESPONSE" | tail -n1)
+          TRACK_STATUS=$(curl -sS -o "$TRACK_BODY_FILE" -w "%{http_code}" -H "Authorization: Bearer $ACCESS_TOKEN" "$BASE/edits/$EDIT_ID/tracks/production")
 
           if [ "$TRACK_STATUS" -eq 404 ]; then
             RELEASE_COUNT=0
           elif [ "$TRACK_STATUS" -eq 200 ]; then
-            RELEASE_COUNT=$(echo "$TRACK_BODY" | jq '.releases | length')
+            RELEASE_COUNT=$(jq '.releases | length' "$TRACK_BODY_FILE")
           else
-            curl -sf -X POST -H "Authorization: Bearer $ACCESS_TOKEN" "$BASE/edits/$EDIT_ID:delete" > /dev/null
             echo "::error::Failed to read production track. HTTP status: $TRACK_STATUS"
-            echo "::error::Response: $TRACK_BODY"
+            echo "::error::Response: $(cat "$TRACK_BODY_FILE")"
             exit 1
           fi
-
-          curl -sf -X POST -H "Authorization: Bearer $ACCESS_TOKEN" "$BASE/edits/$EDIT_ID:delete" > /dev/null
 
           if [ "$RELEASE_COUNT" -gt 0 ]; then
             echo "Production track already has a release; adjusting its rollout percentage."
