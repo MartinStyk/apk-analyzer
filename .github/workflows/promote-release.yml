@@ -42,7 +42,21 @@ jobs:
           BASE="https://androidpublisher.googleapis.com/androidpublisher/v3/applications/sk.styk.martin.apkanalyzer"
 
           EDIT_ID=$(curl -sf -X POST -H "Authorization: Bearer $ACCESS_TOKEN" "$BASE/edits" | jq -r '.id')
-          RELEASE_COUNT=$(curl -sf -H "Authorization: Bearer $ACCESS_TOKEN" "$BASE/edits/$EDIT_ID/tracks/production" | jq '.releases | length')
+          TRACK_RESPONSE=$(curl -sS -w "\n%{http_code}" -H "Authorization: Bearer $ACCESS_TOKEN" "$BASE/edits/$EDIT_ID/tracks/production")
+          TRACK_BODY=$(echo "$TRACK_RESPONSE" | sed '$d')
+          TRACK_STATUS=$(echo "$TRACK_RESPONSE" | tail -n1)
+
+          if [ "$TRACK_STATUS" -eq 404 ]; then
+            RELEASE_COUNT=0
+          elif [ "$TRACK_STATUS" -eq 200 ]; then
+            RELEASE_COUNT=$(echo "$TRACK_BODY" | jq '.releases | length')
+          else
+            curl -sf -X POST -H "Authorization: Bearer $ACCESS_TOKEN" "$BASE/edits/$EDIT_ID:delete" > /dev/null
+            echo "::error::Failed to read production track. HTTP status: $TRACK_STATUS"
+            echo "::error::Response: $TRACK_BODY"
+            exit 1
+          fi
+
           curl -sf -X POST -H "Authorization: Bearer $ACCESS_TOKEN" "$BASE/edits/$EDIT_ID:delete" > /dev/null
 
           if [ "$RELEASE_COUNT" -gt 0 ]; then
