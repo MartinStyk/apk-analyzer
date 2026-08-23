@@ -8,6 +8,7 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -50,12 +51,13 @@ internal class BrowseAppsViewModel @AssistedInject constructor(
 
     private val query = MutableStateFlow("")
 
-    val state: StateFlow<BrowseAppsState> = combine(
+    private val bucket: Flow<BucketApps> = combine(
         appIndexRepository.index(),
         installedAppsRepository.apps(),
-        query,
-    ) { status, apps, query -> status.toAppsState(apps, query) }
+    ) { status, apps -> status.toBucketApps(apps) }
         .flowOn(dispatcherProvider.default())
+
+    val state: StateFlow<BrowseAppsState> = combine(bucket, query) { bucket, query -> bucket.toAppsState(query) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), BrowseAppsState.Loading)
 
     private val eventChannel = Channel<BrowseAppsEvent>(Channel.BUFFERED)
@@ -68,8 +70,8 @@ internal class BrowseAppsViewModel @AssistedInject constructor(
         }
     }
 
-    private fun AppIndexStatus.toAppsState(apps: List<InstalledApp>, query: String): BrowseAppsState = when (this) {
-        AppIndexStatus.Loading -> BrowseAppsState.Loading
+    private fun AppIndexStatus.toBucketApps(apps: List<InstalledApp>): BucketApps = when (this) {
+        AppIndexStatus.Loading -> BucketApps.Loading
 
         is AppIndexStatus.Data -> {
             val bucketPackages = index.bucketsFor(dimension, subAttribute)[bucketKey].orEmpty().toSet()
@@ -78,7 +80,15 @@ internal class BrowseAppsViewModel @AssistedInject constructor(
                 .sortedBy { it.applicationName.lowercase() }
                 .map { BrowseAppItem(packageName = it.packageName, applicationName = it.applicationName) }
 
-            val filtered = bucketApps.filter { app ->
+            BucketApps.Data(apps = bucketApps, bucketDetail = index.resolveBucketDetail())
+        }
+    }
+
+    private fun BucketApps.toAppsState(query: String): BrowseAppsState = when (this) {
+        BucketApps.Loading -> BrowseAppsState.Loading
+
+        is BucketApps.Data -> {
+            val filtered = apps.filter { app ->
                 query.isBlank() ||
                     app.applicationName.contains(query, ignoreCase = true) ||
                     app.packageName.value.contains(query, ignoreCase = true)
@@ -86,9 +96,9 @@ internal class BrowseAppsViewModel @AssistedInject constructor(
 
             BrowseAppsState.Loaded(
                 query = query,
-                totalApps = bucketApps.size,
+                totalApps = apps.size,
                 apps = filtered.toImmutableList(),
-                bucketDetail = index.resolveBucketDetail(),
+                bucketDetail = bucketDetail,
             )
         }
     }
@@ -110,4 +120,10 @@ internal class BrowseAppsViewModel @AssistedInject constructor(
 
         else -> null
     }
+}
+
+private sealed interface BucketApps {
+    data object Loading : BucketApps
+
+    data class Data(val apps: List<BrowseAppItem>, val bucketDetail: BrowseBucketDetail?) : BucketApps
 }

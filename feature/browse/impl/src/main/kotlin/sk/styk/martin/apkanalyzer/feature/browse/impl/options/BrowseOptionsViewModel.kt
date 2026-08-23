@@ -59,7 +59,6 @@ internal class BrowseOptionsViewModel @AssistedInject constructor(
             is OptionsSource.Ready -> source.narrowedBy(narrowing)
         }
     }
-        .flowOn(dispatcherProvider.default())
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), BrowseOptionsState.Loading)
 
     private val eventChannel = Channel<BrowseOptionsEvent>(Channel.BUFFERED)
