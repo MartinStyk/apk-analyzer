@@ -1,6 +1,5 @@
 package sk.styk.martin.apkanalyzer
 
-import com.android.build.api.dsl.ManagedVirtualDevice
 import com.android.build.api.dsl.TestExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -17,7 +16,6 @@ class BaselineProfilePlugin : Plugin<Project> {
 
         with(pluginManager) {
             apply("com.android.test")
-            apply("org.jetbrains.kotlin.android")
             apply("androidx.baselineprofile")
             apply("apkanalyzer.spotless")
             apply("apkanalyzer.detekt")
@@ -36,12 +34,11 @@ class BaselineProfilePlugin : Plugin<Project> {
 
             testOptions {
                 managedDevices {
-                    devices {
-                        maybeCreate<ManagedVirtualDevice>(baselineProfileManagedDeviceName).apply {
-                            device = "Pixel 6"
-                            apiLevel = TARGET_SDK
-                            systemImageSource = "aosp"
-                        }
+                    localDevices.maybeCreate(baselineProfileManagedDeviceName).apply {
+                        device = "Pixel 6"
+                        apiLevel = TARGET_SDK
+                        systemImageSource = "google"
+                        testedAbi = "x86_64"
                     }
                 }
             }

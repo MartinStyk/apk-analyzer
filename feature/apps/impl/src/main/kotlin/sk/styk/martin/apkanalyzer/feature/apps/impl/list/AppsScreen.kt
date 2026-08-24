@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -73,6 +74,8 @@ import sk.styk.martin.apkanalyzer.feature.apps.impl.components.apkfilepicker.Apk
 import sk.styk.martin.apkanalyzer.feature.apps.impl.components.appitem.AppListItemRow
 import sk.styk.martin.apkanalyzer.feature.apps.impl.components.quickfilter.QuickFilterRow
 import java.time.Instant
+
+private const val APP_LIST_ITEM_TAG = "app_list_item_row"
 
 @Composable
 internal fun AppsScreen(
@@ -302,6 +305,7 @@ private fun LazyListScope.appsSectionItems(
                         onClick = { onAppClicked(app.packageName) },
                         position = position,
                         sortType = sortType,
+                        modifier = Modifier.testTag(APP_LIST_ITEM_TAG),
                     )
                 }
             }

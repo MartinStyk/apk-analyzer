@@ -10,11 +10,43 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
+  actions: read
   contents: write
-  pull-requests: write
 
 jobs:
+  check-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.check.outputs.changed }}
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Check for changes since last successful run
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          LAST_SHA=$(gh run list --workflow=baseline-profiles.yml --branch=develop --status=success --limit=1 --json headSha --jq '.[0].headSha')
+
+          if [ -z "$LAST_SHA" ] || ! git cat-file -e "$LAST_SHA" 2>/dev/null; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          elif git diff --quiet "$LAST_SHA" HEAD; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
   generate:
+    needs: check-changes
+    if: needs.check-changes.outputs.changed == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 90
 
@@ -32,23 +64,26 @@ jobs:
           firebase-project-id: ${{ secrets.FIREBASE_PROJECT_ID }}
 
       - name: Generate baseline profile
-        run: ./gradlew :app:baselineprofile:generateBaselineProfile
+        run: ./gradlew :app:generateBaselineProfile
 
       - name: Upload generated baseline profile
         uses: actions/upload-artifact@v7
         with:
           name: baseline-profile
-          path: app/src/main/baselineProfiles/baseline-prof.txt
+          path: |
+            app/src/release/generated/baselineProfiles/baseline-prof.txt
+            app/src/release/generated/baselineProfiles/startup-prof.txt
           if-no-files-found: error
 
-      - name: Open pull request with updated baseline profile
-        uses: peter-evans/create-pull-request@v7
-        with:
-          commit-message: Update baseline profile
-          title: Update baseline profile
-          body: |
-            Automated baseline profile refresh.
-          branch: automation/update-baseline-profile
-          delete-branch: true
-          base: develop
-          add-paths: app/src/main/baselineProfiles/baseline-prof.txt
+      - name: Commit and push baseline profile
+        run: |
+          if git diff --quiet -- app/src/release/generated/baselineProfiles/; then
+            echo "Baseline profile unchanged, nothing to push."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/src/release/generated/baselineProfiles/
+          git commit -m "Update baseline profile"
+          git push origin HEAD:develop
