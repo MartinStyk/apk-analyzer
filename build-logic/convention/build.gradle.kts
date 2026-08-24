@@ -73,5 +73,9 @@ gradlePlugin {
             id = "apkanalyzer.room"
             implementationClass = "sk.styk.martin.apkanalyzer.RoomPlugin"
         }
+        register("apkanalyzer.baselineprofile") {
+            id = "apkanalyzer.baselineprofile"
+            implementationClass = "sk.styk.martin.apkanalyzer.BaselineProfilePlugin"
+        }
     }
 }
