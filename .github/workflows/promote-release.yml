@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version being promoted (e.g. 3.5.0), for the run log only'
+        description: 'Version being promoted (e.g. 3.5.0)'
         required: true
       rollout-percentage:
         description: 'Percentage of production users to receive the update (1-100)'
@@ -38,7 +38,12 @@ jobs:
         id: source
         env:
           ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+          VERSION: ${{ inputs.version }}
         run: |
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+          TARGET_VERSION_CODE=$((MAJOR * 10000 + MINOR * 100 + PATCH))
+          echo "version-code=$TARGET_VERSION_CODE" >> "$GITHUB_OUTPUT"
+
           BASE="https://androidpublisher.googleapis.com/androidpublisher/v3/applications/sk.styk.martin.apkanalyzer"
 
           TRACK_BODY_FILE=$(mktemp)
@@ -57,23 +62,33 @@ jobs:
             echo "::error::Response: $EDIT_RESPONSE"
             exit 1
           fi
+
           TRACK_STATUS=$(curl -sS -o "$TRACK_BODY_FILE" -w "%{http_code}" -H "Authorization: Bearer $ACCESS_TOKEN" "$BASE/edits/$EDIT_ID/tracks/production")
 
           if [ "$TRACK_STATUS" -eq 404 ]; then
-            RELEASE_COUNT=0
+            PROD_VERSION_CODE=""
+            PROD_RELEASE_STATUS=""
           elif [ "$TRACK_STATUS" -eq 200 ]; then
-            RELEASE_COUNT=$(jq '(.releases // []) | length' "$TRACK_BODY_FILE")
+            PROD_RELEASE=$(jq -c '[(.releases // [])[] | select(.status == "inProgress" or .status == "halted")][0] // empty' "$TRACK_BODY_FILE")
+            PROD_VERSION_CODE=$(echo "$PROD_RELEASE" | jq -r '.versionCodes[0] // empty')
+            PROD_RELEASE_STATUS=$(echo "$PROD_RELEASE" | jq -r '.status // empty')
           else
             echo "::error::Failed to read production track. HTTP status: $TRACK_STATUS"
             echo "::error::Response: $(cat "$TRACK_BODY_FILE")"
             exit 1
           fi
 
-          if [ "$RELEASE_COUNT" -gt 0 ]; then
-            echo "Production track already has a release; adjusting its rollout percentage."
+          if [ -n "$PROD_VERSION_CODE" ] && [ "$PROD_VERSION_CODE" = "$TARGET_VERSION_CODE" ]; then
+            if [ "$PROD_RELEASE_STATUS" = "halted" ]; then
+              echo "::error::Production release (version code $PROD_VERSION_CODE) is halted."
+              echo "::error::A halted rollout is usually paused deliberately (crashes, bad reviews)."
+              echo "::error::Resume it manually in Play Console, or promote fresh from beta if superseded."
+              exit 1
+            fi
+            echo "Production's in-progress release (version code $PROD_VERSION_CODE) matches the target; adjusting its rollout percentage."
             echo "from-track=production" >> "$GITHUB_OUTPUT"
           else
-            echo "Production track is empty; promoting fresh from beta."
+            echo "Promoting version code $TARGET_VERSION_CODE fresh from beta."
             echo "from-track=beta" >> "$GITHUB_OUTPUT"
           fi
 
@@ -81,6 +96,7 @@ jobs:
         env:
           ANDROID_PUBLISHER_CREDENTIALS: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
           FROM_TRACK: ${{ steps.source.outputs.from-track }}
+          VERSION_CODE: ${{ steps.source.outputs.version-code }}
           ROLLOUT_PERCENTAGE: ${{ inputs.rollout-percentage }}
         run: |
           if ! [[ "$ROLLOUT_PERCENTAGE" =~ ^[0-9]+$ ]] || [ "$ROLLOUT_PERCENTAGE" -lt 1 ] || [ "$ROLLOUT_PERCENTAGE" -gt 100 ]; then
@@ -95,8 +111,8 @@ jobs:
           fi
 
           if [ "$ROLLOUT_PERCENTAGE" -eq 100 ]; then
-            ./gradlew :app:promoteArtifact "${TRACK_ARGS[@]}" --release-status completed
+            ./gradlew :app:promoteArtifact "${TRACK_ARGS[@]}" --version-code "$VERSION_CODE" --release-status completed
           else
             USER_FRACTION=$(awk "BEGIN { printf \"%.2f\", $ROLLOUT_PERCENTAGE / 100 }")
-            ./gradlew :app:promoteArtifact "${TRACK_ARGS[@]}" --release-status inProgress --user-fraction "$USER_FRACTION"
+            ./gradlew :app:promoteArtifact "${TRACK_ARGS[@]}" --version-code "$VERSION_CODE" --release-status inProgress --user-fraction "$USER_FRACTION"
           fi
