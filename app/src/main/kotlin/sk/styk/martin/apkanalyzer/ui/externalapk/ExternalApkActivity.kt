@@ -10,14 +10,18 @@ import androidx.activity.viewModels
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import sk.styk.martin.apkanalyzer.ui.ApkAnalyzerState
 import sk.styk.martin.apkanalyzer.ui.ApkAnalyzerThemeHost
 import sk.styk.martin.apkanalyzer.ui.ApkAnalyzerViewModel
+import sk.styk.martin.apkanalyzer.ui.KeepOnScreenWhile
+import sk.styk.martin.apkanalyzer.ui.installAnimatedSplashScreen
 
 @AndroidEntryPoint
 class ExternalApkActivity : ComponentActivity() {
     private val appViewModel: ApkAnalyzerViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installAnimatedSplashScreen()
         super.onCreate(savedInstanceState)
         val sourceUri = intent.externalApkUri()
         if (sourceUri == null) {
@@ -28,6 +32,7 @@ class ExternalApkActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val appState by appViewModel.state.collectAsStateWithLifecycle()
+            splashScreen.KeepOnScreenWhile(appState is ApkAnalyzerState.Loading)
             ApkAnalyzerThemeHost(state = appState) {
                 ExternalApkApp(
                     sourceUri = sourceUri,
