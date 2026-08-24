@@ -20,10 +20,13 @@ class ApkAnalyzerActivity : ComponentActivity() {
     lateinit var inAppReviewLauncher: InAppReviewLauncher
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installAnimatedSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             val state by viewModel.state.collectAsStateWithLifecycle()
+            splashScreen.KeepOnScreenWhile(state is ApkAnalyzerState.Loading)
             LaunchedEffect(Unit) {
                 viewModel.events.collect { event ->
                     when (event) {
