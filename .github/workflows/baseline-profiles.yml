@@ -83,13 +83,14 @@ jobs:
 
       - name: Commit and push baseline profile
         run: |
-          if git diff --quiet -- app/src/release/generated/baselineProfiles/; then
+          git add --all app/src/release/generated/baselineProfiles/
+
+          if git diff --cached --quiet; then
             echo "Baseline profile unchanged, nothing to push."
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add app/src/release/generated/baselineProfiles/
           git commit -m "Update baseline profile"
           git push origin HEAD:develop
