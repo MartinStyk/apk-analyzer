@@ -49,7 +49,7 @@ The distribution is evidence, and it usually names the root cause on its own:
 
 | Pattern | What it means |
 |---|---|
-| One OS version, or everything below/above an API level | An API availability or behaviour change — check the `minSdk`/`targetSdk` guard around that call |
+| One OS version, or everything below/above an API level | An API availability or behaviour change — check the runtime SDK guard around that call or use a backward-compatible API |
 | One manufacturer | An OEM-modified framework; often needs a defensive path, not a "correct" fix |
 | Starts exactly at one app version | A regression — `git log` between that tag and the previous one |
 | Spread evenly across everything | Logic or state bug, not environmental |
