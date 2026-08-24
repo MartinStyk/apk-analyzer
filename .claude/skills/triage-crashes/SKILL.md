@@ -47,7 +47,7 @@ re-authenticate on their behalf.
 version outranks a fresh release. Get the version from git instead:
 
 ```powershell
-git tag --sort=-v:refname | Select-Object -First 1
+git tag --sort=-v:refname | Where-Object { $_ -match '^\d+\.\d+\.\d+$' } | Select-Object -First 1
 ```
 
 Release tags are `MAJOR.MINOR.PATCH`; `.github/workflows/release.yml` computes
