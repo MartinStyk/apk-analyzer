@@ -1,10 +1,4 @@
 #!/usr/bin/env node
-// Bridges the Firebase MCP server's Crashlytics tools to the command line.
-//
-//   node crashlytics.js <repo-root> <calls.json>
-//
-// <calls.json> is an array of { "name": "<tool>", "arguments": { ... } } objects,
-// executed in order against one long-lived `firebase experimental:mcp` process.
 
 const { spawn } = require('child_process');
 const fs = require('fs');
