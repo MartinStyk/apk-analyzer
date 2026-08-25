@@ -13,7 +13,10 @@ re-deriving the module's structure.
 * Don't add a dependency. [`gradle/libs.versions.toml`](gradle/libs.versions.toml) is the only
   source of coordinates and versions; if a new library seems necessary, ask first.
 * Never write comments or KDoc — not even when the WHY seems non-obvious. Use self-documenting
-  names and structure. The only exception is an explicit request for a comment in that instance.
+  names and structure. The only exceptions are an explicit request for a comment in that instance,
+  and KDoc on `@AppFunction`/`@AppFunctionSerializable` declarations in `core:app-functions`, which
+  the App Functions platform reads as the agent-facing tool description — see that module's
+  `AGENTS.md`.
 * Never hardcode a user-facing string in a Composable. Use `stringResource` backed by
   `res/values/strings.xml` in the module that owns the UI.
 * Never hardcode SDK levels or the JVM toolchain in a module's `build.gradle.kts` — they come from
@@ -211,7 +214,7 @@ frontmatter states when it applies.
 `create-feature-module`, `create-core-module`, `create-compose-component`, `implement-navigation`,
 `spotless-fix`, `git-commit-author`, `setup-local-tools`, `analyze-ci-failure`, `run-app`,
 `navigate-app-adb`, `sync-design-changes`, `translate-strings`, `release-app`,
-`capture-app-flow-media`, `triage-crashes`, `fix-crash`, `verify`.
+`capture-app-flow-media`, `triage-crashes`, `fix-crash`, `verify`, `appfunctions`.
 
 All are shared by Claude and Copilot except `sync-design-changes`, which needs Claude's `DesignSync`
 tool.

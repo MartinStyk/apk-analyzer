@@ -43,6 +43,7 @@ play-review = "2.0.2"
 
 # On-device AI
 mlkit-genai-prompt = "1.0.0-beta4"
+androidx-appfunctions = "1.0.0-alpha10"
 
 # Third-party
 timber = "5.0.1"
@@ -108,6 +109,10 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 # On-device AI
 mlkit-genai-prompt = { module = "com.google.mlkit:genai-prompt", version.ref = "mlkit-genai-prompt" }
 
+# App Functions
+androidx-appfunctions = { module = "androidx.appfunctions:appfunctions", version.ref = "androidx-appfunctions" }
+androidx-appfunctions-compiler = { module = "androidx.appfunctions:appfunctions-compiler", version.ref = "androidx-appfunctions" }
+
 # Play Core
 play-review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "play-review" }
 
@@ -154,6 +159,7 @@ apkanalyzer-sarif-merge = { id = "apkanalyzer.sarif-merge" }
 apkanalyzer-compose = { id = "apkanalyzer.compose" }
 apkanalyzer-room = { id = "apkanalyzer.room" }
 apkanalyzer-baselineprofile = { id = "apkanalyzer.baselineprofile" }
+apkanalyzer-appfunctions = { id = "apkanalyzer.appfunctions" }
 
 [bundles]
 compose = ["androidx-compose-ui", "androidx-compose-ui-tooling", "androidx-compose-foundation", "androidx-compose-foundation-layout"]

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AppFunctionAppMetadata xmlns:appfn="http://schemas.android.com/apk/androidx.appfunctions"
+    appfn:description="Provides read-only lookups over apps installed on this device: version, target and minimum SDK, install source, size, last-used time, requested permissions and their grant state, and signing certificates.
+Operational Patterns:
+- 'findApps' searches and filters apps by name, permission, install source, target SDK, minimum size, and days unused, all combinable in one call — for example 'large unused apps from Google Play' is minTotalSizeMb + unusedForDays + installSource together, not three separate calls.
+- Call 'findApps' first when the user names an app by its display name rather than its exact package name, then pass the resolved packageName to 'getAppDetail', 'getAppCertificates', or 'getAppPermissions'.
+- Use 'findApps' sortBy to match what the user asked for: SizeDescending for 'largest apps', LastUsedAscending for 'most unused apps'.
+Constraints:
+- Every function is a read-only query; none of them change anything on the device.
+- Results are capped at 25 apps per call; ask the user to narrow the search if they need more."
+    appfn:displayDescription="@string/app_function_app_display_description" />

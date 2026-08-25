@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.apkanalyzer.hilt)
     alias(libs.plugins.apkanalyzer.compose)
     alias(libs.plugins.apkanalyzer.spotless)
+    alias(libs.plugins.apkanalyzer.appfunctions)
     alias(libs.plugins.parcelize)
 }
 
@@ -44,6 +45,7 @@ dependencies {
     implementation(projects.core.apps)
     implementation(projects.core.appPermissions)
     implementation(projects.core.appIndex)
+    implementation(projects.core.appFunctions)
     implementation(projects.core.common)
     implementation(projects.core.userPreferences)
     implementation(projects.core.navigation)
@@ -67,3 +69,5 @@ dependencies {
 
     debugImplementation(libs.leakcanary)
 }
+
+ksp { arg("appfunctions:aggregateAppFunctions", "true") }
