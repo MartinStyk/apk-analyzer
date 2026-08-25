@@ -85,9 +85,15 @@ by copying an existing file.
 | [`release-app`](../../.claude/skills/release-app/SKILL.md) | Shipping a `MAJOR.MINOR.PATCH` version — approved release notes in an annotated tag |
 | [`sync-design-changes`](../../.claude/skills/sync-design-changes/SKILL.md) | Bringing tweaks from the Claude Design project back into Compose code |
 | [`capture-app-flow-media`](../../.claude/skills/capture-app-flow-media/SKILL.md) | Recording README screenshots/GIFs of a real app flow via adb |
+| [`verify`](../../.claude/skills/verify/SKILL.md) | Before opening a PR — orchestrated diff review (bug/convention/security agents) plus the local build gates, grounded in `AGENTS.md` |
 
 All are shared by Claude and Copilot except `sync-design-changes`, which needs Claude's `DesignSync`
 tool.
+
+`verify` also dispatches sub-agents under [`.claude/agents/`](../../.claude/agents/)
+(`skip-checker`, `bug-reviewer`, `convention-reviewer`, `security-reviewer`, `issue-validator`,
+`verify-audit`) — these are not user-invocable skills themselves and aren't subject to
+`validateAgentContext`'s skill checks, but they read the same `AGENTS.md` files as ground truth.
 
 ## Working with an agent in this repository
 
