@@ -141,20 +141,27 @@ private fun AppDetail.toSource(canLaunch: Boolean, intentFiltersByComponent: Map
         componentsByType = mapOf(
             ComponentType.Activity to activities.map {
                 it.toItem(canLaunch, intentFiltersByComponent.filtersFor(ComponentIntentFilterKey(it.name, ComponentKind.Activity)))
-            }.distinctByStableKey().sortedForDisplay(),
+            }.mergeDuplicatesByStableKey().sortedForDisplay(),
             ComponentType.Service to services.map {
                 it.toItem(intentFiltersByComponent.filtersFor(ComponentIntentFilterKey(it.name, ComponentKind.Service)))
-            }.distinctByStableKey().sortedForDisplay(),
+            }.mergeDuplicatesByStableKey().sortedForDisplay(),
             ComponentType.Receiver to receivers.map {
                 it.toItem(canLaunch, intentFiltersByComponent.filtersFor(ComponentIntentFilterKey(it.name, ComponentKind.Receiver)))
-            }.distinctByStableKey().sortedForDisplay(),
+            }.mergeDuplicatesByStableKey().sortedForDisplay(),
             ComponentType.Provider to contentProviders.map {
                 it.toItem(intentFiltersByComponent.filtersFor(ComponentIntentFilterKey(it.name, ComponentKind.Provider)))
-            }.distinctByStableKey().sortedForDisplay(),
+            }.mergeDuplicatesByStableKey().sortedForDisplay(),
         ),
     )
 
-private fun List<ComponentItem>.distinctByStableKey() = distinctBy { it.stableKey }
+private fun List<ComponentItem>.mergeDuplicatesByStableKey(): List<ComponentItem> =
+    groupBy { it.stableKey }.values.map { duplicates -> duplicates.reduce(::moreExposed) }
+
+private fun moreExposed(a: ComponentItem, b: ComponentItem): ComponentItem = when {
+    a.isExported != b.isExported -> if (a.isExported) a else b
+    a.isUnprotected != b.isUnprotected -> if (a.isUnprotected) a else b
+    else -> a
+}
 
 private fun Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>?.filtersFor(key: ComponentIntentFilterKey): List<ComponentIntentFilter>? =
     this?.let { it[key].orEmpty() }
