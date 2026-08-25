@@ -141,18 +141,20 @@ private fun AppDetail.toSource(canLaunch: Boolean, intentFiltersByComponent: Map
         componentsByType = mapOf(
             ComponentType.Activity to activities.map {
                 it.toItem(canLaunch, intentFiltersByComponent.filtersFor(ComponentIntentFilterKey(it.name, ComponentKind.Activity)))
-            }.sortedForDisplay(),
+            }.distinctByStableKey().sortedForDisplay(),
             ComponentType.Service to services.map {
                 it.toItem(intentFiltersByComponent.filtersFor(ComponentIntentFilterKey(it.name, ComponentKind.Service)))
-            }.sortedForDisplay(),
+            }.distinctByStableKey().sortedForDisplay(),
             ComponentType.Receiver to receivers.map {
                 it.toItem(canLaunch, intentFiltersByComponent.filtersFor(ComponentIntentFilterKey(it.name, ComponentKind.Receiver)))
-            }.sortedForDisplay(),
+            }.distinctByStableKey().sortedForDisplay(),
             ComponentType.Provider to contentProviders.map {
                 it.toItem(intentFiltersByComponent.filtersFor(ComponentIntentFilterKey(it.name, ComponentKind.Provider)))
-            }.sortedForDisplay(),
+            }.distinctByStableKey().sortedForDisplay(),
         ),
     )
+
+private fun List<ComponentItem>.distinctByStableKey() = distinctBy { it.stableKey }
 
 private fun Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>?.filtersFor(key: ComponentIntentFilterKey): List<ComponentIntentFilter>? =
     this?.let { it[key].orEmpty() }
