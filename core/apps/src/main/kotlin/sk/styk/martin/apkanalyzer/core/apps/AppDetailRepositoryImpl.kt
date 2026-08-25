@@ -294,18 +294,21 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         )
     }
 
-    private fun getActivities(packageInfo: PackageInfo, launcherActivityNames: Set<String>?): List<Activity> = packageInfo.activities.orEmpty().map {
-        Activity(
-            name = it.name,
-            packageName = PackageName(it.packageName),
-            label = it.loadLabel(packageManager).toString(),
-            targetActivity = it.targetActivity,
-            permission = it.permission,
-            parentName = it.parentActivityName,
-            isExported = it.exported,
-            isLauncher = launcherActivityNames?.contains(it.name),
-        )
-    }
+    private fun getActivities(packageInfo: PackageInfo, launcherActivityNames: Set<String>?): List<Activity> =
+        packageInfo.activities.orEmpty()
+            .distinctBy { it.name }
+            .map {
+                Activity(
+                    name = it.name,
+                    packageName = PackageName(it.packageName),
+                    label = it.loadLabel(packageManager).toString(),
+                    targetActivity = it.targetActivity,
+                    permission = it.permission,
+                    parentName = it.parentActivityName,
+                    isExported = it.exported,
+                    isLauncher = launcherActivityNames?.contains(it.name),
+                )
+            }
 
     @SuppressLint("QueryPermissionsNeeded")
     private fun queryLauncherActivityNames(packageName: PackageName): Set<String> = launcherCategories
@@ -318,36 +321,45 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         }
         .toSet()
 
-    private fun getServices(packageInfo: PackageInfo): List<Service> = packageInfo.services.orEmpty().map {
-        Service(
-            name = it.name,
-            permission = it.permission,
-            isExported = it.exported,
-            isStopWithTask = it.flags and ServiceInfo.FLAG_STOP_WITH_TASK > 0,
-            isSingleUser = it.flags and ServiceInfo.FLAG_SINGLE_USER > 0,
-            isIsolatedProcess = it.flags and ServiceInfo.FLAG_ISOLATED_PROCESS > 0,
-            isExternalService = it.flags and ServiceInfo.FLAG_EXTERNAL_SERVICE > 0,
-        )
-    }
+    private fun getServices(packageInfo: PackageInfo): List<Service> =
+        packageInfo.services.orEmpty()
+            .distinctBy { it.name }
+            .map {
+                Service(
+                    name = it.name,
+                    permission = it.permission,
+                    isExported = it.exported,
+                    isStopWithTask = it.flags and ServiceInfo.FLAG_STOP_WITH_TASK > 0,
+                    isSingleUser = it.flags and ServiceInfo.FLAG_SINGLE_USER > 0,
+                    isIsolatedProcess = it.flags and ServiceInfo.FLAG_ISOLATED_PROCESS > 0,
+                    isExternalService = it.flags and ServiceInfo.FLAG_EXTERNAL_SERVICE > 0,
+                )
+            }
 
-    private fun getContentProviders(packageInfo: PackageInfo): List<ContentProvider> = packageInfo.providers.orEmpty().map {
-        ContentProvider(
-            name = it.name,
-            authority = it.authority,
-            readPermission = it.readPermission,
-            writePermission = it.writePermission,
-            isExported = it.exported,
-            pathPermissions = resolvePathPermissions(it.pathPermissions),
-        )
-    }
+    private fun getContentProviders(packageInfo: PackageInfo): List<ContentProvider> =
+        packageInfo.providers.orEmpty()
+            .distinctBy { it.name }
+            .map {
+                ContentProvider(
+                    name = it.name,
+                    authority = it.authority,
+                    readPermission = it.readPermission,
+                    writePermission = it.writePermission,
+                    isExported = it.exported,
+                    pathPermissions = resolvePathPermissions(it.pathPermissions),
+                )
+            }
 
-    private fun getBroadcastReceivers(packageInfo: PackageInfo): List<BroadcastReceiver> = packageInfo.receivers.orEmpty().map {
-        BroadcastReceiver(
-            name = it.name,
-            permission = it.permission,
-            isExported = it.exported,
-        )
-    }
+    private fun getBroadcastReceivers(packageInfo: PackageInfo): List<BroadcastReceiver> =
+        packageInfo.receivers.orEmpty()
+            .distinctBy { it.name }
+            .map {
+                BroadcastReceiver(
+                    name = it.name,
+                    permission = it.permission,
+                    isExported = it.exported,
+                )
+            }
 
     private fun getPermissions(packageInfo: PackageInfo): Permissions {
         val definedPermissions = getDefinedPermissions(packageInfo)
