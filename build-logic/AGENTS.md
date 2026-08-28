@@ -20,7 +20,7 @@ build scripts.
 | `apkanalyzer.spotless` | Applies the repository ktlint and Compose formatting rules. |
 | `apkanalyzer.detekt` | Applies baseline-free, type-resolved static analysis. |
 | `apkanalyzer.sarif-merge` | Merges module Detekt and Lint SARIF reports for CI upload. |
-| `apkanalyzer.appfunctions` | Applies KSP and the `androidx.appfunctions` runtime/compiler for App Functions declarations. Applied to both `core:app-functions` (declares functions) and `app` (aggregates schemas across modules via `ksp { arg("appfunctions:aggregateAppFunctions", "true") }` in `app/build.gradle.kts`, since only the application module aggregates). |
+| `apkanalyzer.appfunctions` | Applies KSP and the `androidx.appfunctions` runtime/compiler for App Functions declarations. |
 
 ## Non-Obvious Build Behavior
 

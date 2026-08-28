@@ -55,24 +55,21 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
         field = MutableStateFlow<Map<PackageName, AppSize>>(emptyMap())
 
     private val fetchMutex = Mutex()
-    private var loadedPackageNames: Set<PackageName> = emptySet()
 
     override fun onStart(owner: LifecycleOwner) {
         applicationScope.launch(dispatcherProvider.io()) {
-            fetchTotalSizesTracked(packageNames, "lifecycle_start")
+            fetchTotalSizesLocked(packageNames, "lifecycle_start")
         }
     }
 
     override suspend fun ensureLoaded(packageNames: List<PackageName>) {
-        fetchTotalSizesTracked(packageNames, "ensure_loaded")
+        fetchTotalSizesLocked(packageNames, "ensure_loaded")
     }
 
-    private suspend fun fetchTotalSizesTracked(packageNames: List<PackageName>, trigger: String) {
+    private suspend fun fetchTotalSizesLocked(packageNames: List<PackageName>, trigger: String) {
         fetchMutex.withLock {
-            if (loadedPackageNames.containsAll(packageNames)) return
             this.packageNames = packageNames
             fetchTotalSizes(packageNames, trigger)
-            loadedPackageNames = packageNames.toSet()
         }
     }
 
@@ -88,7 +85,7 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
     override fun requestTotalSizes(packageNames: List<PackageName>) {
         this.packageNames = packageNames
         applicationScope.launch(dispatcherProvider.io()) {
-            fetchTotalSizesTracked(packageNames, "installed_apps")
+            fetchTotalSizesLocked(packageNames, "installed_apps")
         }
     }
 

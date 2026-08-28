@@ -40,11 +40,8 @@ entry points in the app.
   authority.
 * Package visibility and usage-access permissions are intentional product requirements; preserve
   their lint suppressions when editing the manifest.
-* The App Functions service (`android.app.appfunctions.AppFunctionService`) and `res/xml/app_metadata.xml`
-  are registered here because only the application module aggregates App Function schemas across
-  modules (`ksp { arg("appfunctions:aggregateAppFunctions", "true") }`); the functions themselves are
-  declared in [`core:app-functions`](../core/app-functions/AGENTS.md). Requires API 36 — see that
-  module for the `MIN_SDK` 28 compatibility story.
+* The App Functions service and `res/xml/app_metadata.xml` are registered here; the functions
+  themselves are declared in [`core:app-functions`](../core/app-functions/AGENTS.md).
 
 Version name and code have local Gradle-property defaults. CI and release workflows override them;
 do not introduce a second version source.
