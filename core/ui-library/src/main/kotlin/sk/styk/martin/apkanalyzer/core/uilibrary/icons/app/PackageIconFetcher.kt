@@ -1,6 +1,7 @@
 package sk.styk.martin.apkanalyzer.core.uilibrary.icons.app
 
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
 import coil3.ImageLoader
@@ -32,28 +33,37 @@ internal class PackageIconFetcher(private val data: AppReference, private val pa
                         .getApplicationInfo(data.packageName.value, 0)
                         .loadIcon(packageManager)
 
-                is AppReference.ApkFile ->
-                    packageManager
+                is AppReference.ApkFile -> {
+                    val applicationInfo = packageManager
                         .getPackageArchiveInfo(data.path, 0)
                         ?.applicationInfo
                         ?.apply {
                             sourceDir = data.path
                             publicSourceDir = data.path
                         }
-                        ?.let { applicationInfo ->
-                            if (applicationInfo.icon == 0) {
-                                packageManager.defaultActivityIcon
-                            } else {
-                                ResourcesCompat.getDrawable(
-                                    packageManager.getResourcesForApplication(applicationInfo),
-                                    applicationInfo.icon,
-                                    null,
-                                )
-                            }
-                        } ?: error("Can not read APK icon")
+                        ?: throw ApkArchiveUnreadableException(data.path)
+
+                    if (applicationInfo.icon == 0) {
+                        packageManager.defaultActivityIcon
+                    } else {
+                        ResourcesCompat.getDrawable(
+                            packageManager.getResourcesForApplication(applicationInfo),
+                            applicationInfo.icon,
+                            null,
+                        ) ?: throw ApkIconUnresolvableException(data.path)
+                    }
+                }
             }
-        }.onFailure {
-            Logger.e(TAG, it, "Icon not available for $data")
+        }.onFailure { error ->
+            val expectedIconMiss = error is PackageManager.NameNotFoundException ||
+                error is Resources.NotFoundException ||
+                error is ApkArchiveUnreadableException ||
+                error is ApkIconUnresolvableException
+            if (expectedIconMiss) {
+                Logger.w(TAG, "Icon not available for $data: ${error.message}")
+            } else {
+                Logger.e(TAG, error, "Icon not available for $data")
+            }
         }.getOrNull() ?: return null
 
         val bitmap = drawable.toBitmap()
@@ -76,3 +86,7 @@ internal class PackageIconFetcher(private val data: AppReference, private val pa
         const val TAG = "PackageIconFetcher"
     }
 }
+
+private class ApkArchiveUnreadableException(path: String) : IllegalStateException("Can not parse APK archive: $path")
+
+private class ApkIconUnresolvableException(path: String) : IllegalStateException("Can not resolve APK icon resource: $path")
