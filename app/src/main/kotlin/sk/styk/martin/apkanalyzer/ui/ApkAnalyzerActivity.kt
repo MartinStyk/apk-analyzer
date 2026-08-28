@@ -35,7 +35,7 @@ class ApkAnalyzerActivity : ComponentActivity() {
                 }
             }
             ApkAnalyzerThemeHost(state = state) {
-                ApkAnalyzerApp()
+                ApkAnalyzerApp(onBackAtRoot = ::finish)
             }
         }
     }

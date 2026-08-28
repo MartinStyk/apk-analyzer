@@ -31,13 +31,13 @@ import sk.styk.martin.apkanalyzer.ui.navigation.TOP_LEVEL_DESTINATIONS
 import sk.styk.martin.apkanalyzer.ui.navigation.TOP_LEVEL_KEYS
 
 @Composable
-internal fun ApkAnalyzerApp() {
+internal fun ApkAnalyzerApp(onBackAtRoot: () -> Unit) {
     val navigationState = rememberNavigationState(
         startKey = AppsNavKey,
         topLevelKeys = TOP_LEVEL_KEYS,
     )
     val navigator = remember {
-        Navigator(navigationState)
+        Navigator(navigationState, onBackAtRoot = onBackAtRoot)
     }
 
     LaunchedEffect(navigationState.currentKey) {
