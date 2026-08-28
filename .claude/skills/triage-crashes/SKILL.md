@@ -7,7 +7,9 @@ description: Use to review production Crashlytics crashes and non-fatals for the
 
 > Reads Crashlytics for the latest released version, decides which issues are worth tracking, and
 > files one GitHub `bug` issue per untracked issue — linking both directions so the same crash is
-> never filed twice.
+> never filed twice. Not every non-fatal gets an issue: one that's already gracefully handled and
+> still gives us useful signal just to watch gets a Crashlytics note recording that judgement,
+> nothing more.
 
 Fixing a crash is a **different** skill: `fix-crash`. This skill only triages and files.
 
@@ -84,48 +86,34 @@ Each group gives you `issue.id`, `title`, `subtitle`, `errorType`, `state`, `sig
 `firstSeenVersion`, `lastSeenVersion`, a console `uri`, a `sampleEvent`, and per-window
 `eventsCount` / `impactedUsersCount`.
 
-## Step 3 — Skip anything already tracked
+## Step 3 — Skip anything already reviewed
 
-Check **both** directions before filing. An issue is already tracked if either is true:
+Check **both** directions before doing anything else. An issue was already reviewed if either is
+true:
 
-1. A Crashlytics note references a GitHub issue —
-   `crashlytics_list_notes` with the `issueId`, look for `github.com/MartinStyk/apk-analyzer/issues/`.
+1. A Crashlytics note records a prior triage decision — `crashlytics_list_notes` with the `issueId`.
+   This covers two shapes: a note linking a GitHub issue (`github.com/MartinStyk/apk-analyzer/issues/`),
+   and a note recording a **no-issue-needed** judgement from Step 5 (see below) with no GitHub link at
+   all.
 2. A GitHub issue references the Crashlytics issue id —
    `gh issue list --state all --limit 200 --search "<crashlytics-issue-id>"`.
 
 The Crashlytics issue id is the durable key. Never dedupe on the title: Crashlytics titles are
-derived from the top frame and change when the code moves.
+derived from the top frame and change when the code moves. This only catches the *same* `issueId`
+recurring (same stack signature) — a different occurrence of the same underlying condition (a
+different package name, path, or byte count producing a fresh `issueId`) is not caught here and
+reaches Step 5 again on its own merits. That's fine: Step 5's criteria are meant to be re-applied
+consistently, not memorized in a lookup table, so it reaches the same conclusion each time.
 
-When an issue is already tracked but the *note* is missing (i.e. only direction 2 matched),
-backfill the note — that keeps the console usable for whoever looks there first.
+When a GitHub issue exists but the *note* is missing (i.e. only direction 2 matched), backfill the
+note — that keeps the console usable for whoever looks there first. Skip the rest of triage for this
+issue either way.
 
-## Step 4 — Decide whether it deserves an issue
+## Step 4 — Gather detail before judging anything
 
-| Kind | Rule |
-|---|---|
-| `FATAL` | Always file. A crash in a shipped release is always worth tracking. |
-| `ANR` | Always file. |
-| `NON_FATAL` | Judgement call — see below. |
-
-Non-fatals split three ways, and **all three get an issue**; only the framing differs:
-
-* **Worth fixing** — a real defect the app swallowed (a caught exception that leaves a broken or
-  empty screen, a failed parse of a valid APK, a permission path that silently no-ops). File it as a
-  normal bug.
-* **Wrong / misreported** — the code reports a non-fatal for something that isn't actually a fault
-  (an expected `SecurityException` from a restricted package, a user-cancelled operation, an
-  expected null on an OS version). File it, and make the issue about **removing or downgrading the
-  report** — a noisy non-fatal hides the real ones. Say plainly in the body that the recommendation
-  is to stop reporting it, and why.
-* **Unnecessary / not actionable** — fires only on a rooted device, an ancient OEM ROM, an OS bug
-  with no app-side remedy. File it recommending the report be dropped or the condition handled
-  quietly, and state what evidence led there (use the top devices / top OS reports).
-
-Never silently discard a non-fatal. If it isn't worth fixing, that judgement *is* the issue.
-
-## Step 5 — Gather detail before writing the issue
-
-An issue with only a title and a link is not worth filing. For each one, pull:
+The judgement in Step 5 — especially telling "useful signal" apart from "noise" — needs the actual
+code, not just the title. Do this before deciding, not only before filing. For each issue still
+standing after Step 3, pull:
 
 ```json
 [
@@ -141,13 +129,63 @@ An issue with only a title and a link is not worth filing. For each one, pull:
 Then map the top stack frame onto this repo. The frames are package-qualified
 (`sk.styk.martin.apkanalyzer.core.userpreferences.searchhistory.SearchHistoryDao_Impl`), so the
 owning module follows directly from the package — see the module/package mapping in `AGENTS.md`.
-Read the actual source of the top app frame before writing the issue; a triage issue that names the
-wrong file wastes more time than no issue.
+Read the actual source of the top app frame before judging or writing anything; a triage issue that
+names the wrong file wastes more time than no issue, and a "no issue needed" judgement made without
+reading the code is just a guess.
 
 Ignore framework-only frames when locating the owner — find the deepest
 `sk.styk.martin.apkanalyzer.*` frame.
 
+## Step 5 — Decide whether it deserves an issue
+
+| Kind | Rule |
+|---|---|
+| `FATAL` | Always file — unless it matches the third-party/no-app-frame shape under **Not
+  actionable** below, which applies regardless of `errorType`. |
+| `ANR` | Same as `FATAL` — always file unless it matches **Not actionable** below. |
+| `NON_FATAL` | Judgement call — see below. |
+
+A non-fatal reaching this step never gets silently discarded — every one gets an explicit judgement,
+recorded via a Crashlytics note either way (Step 7). What varies is whether that judgement also
+produces a GitHub issue:
+
+* **Worth fixing** — a real defect the app swallowed (a caught exception that leaves a broken or
+  empty screen, a failed parse of a valid APK, a permission path that silently no-ops). File it as a
+  normal bug.
+* **Working as designed, useful signal — no issue.** The flow already degrades gracefully (caught,
+  no crash, a sensible fallback or error state), **and** knowing how often it happens is genuinely
+  useful: the user ends up with something materially worse than intended (a whole feature
+  unavailable, an action failing outright, a screen that won't load) rather than something cosmetic,
+  and a rising or falling rate could plausibly justify a future decision (raising a limit further,
+  pinning a dependency, prioritizing a real fix). There's nothing to *do* about it right now, so
+  don't file — just record the judgement in a Crashlytics note (Step 7) and leave the code exactly as
+  it is. Ask two questions to tell this apart from the next bucket:
+  1. Is the degraded outcome something a user would actually notice as worse, not just an invisible
+     fallback?
+  2. Would the occurrence rate, if it climbed, ever change what gets built or fixed?
+
+  Both "yes" → this bucket. Worked example: #216 (on-device AI model download fails from an SDK/
+  coroutines version mismatch — the feature stays unavailable, no fix exists yet without a dependency
+  decision, and the rate is worth watching in case that changes).
+* **Noise / mis-reported — file, recommend downgrading.** The flow degrades gracefully too, but the
+  degradation is cosmetic or so routine that per-occurrence tracking has no debugging value at all —
+  the answer to both questions above is "no." Recording it as a non-fatal actively hides real signal
+  behind volume. File an issue whose body says plainly that the recommendation is to downgrade or
+  remove the report, and why. Worked example: #204/#205/#213/#214/#215 (an app icon silently falling
+  back to a default — invisible to the user, and no plausible future decision depends on how often it
+  happens; one call site had produced five separate issues before this rule existed).
+* **Not actionable** — fires only on a rooted device, an ancient OEM ROM, an OS bug, or (for
+  `FATAL`/`ANR`) a trace with zero `sk.styk.martin.apkanalyzer.*` frames and a blamed owner that isn't
+  this app. Nothing in this repo can fix it. File an issue recommending the report be
+  closed/muted, stating the evidence (top devices / top OS reports, or the absent app frame). Worked
+  examples: #210 (third-party repackaging tool's injected `ComponentFactory`, crashes before any app
+  code runs), #219 (background ANR, Crashlytics itself reports the root cause unknown, no app frame
+  anywhere on the stack).
+
 ## Step 6 — File the GitHub issue
+
+Only for **worth fixing**, **noise / mis-reported**, and **not actionable** verdicts — a **working as
+designed, useful signal** verdict skips this step entirely and goes straight to Step 7.
 
 Use the `create_issue` tool (not `gh issue create`) so the user gets the confirmation card. Label
 it `bug`. If the crash is clearly scoped to one feature module and a matching scoped label exists
@@ -193,9 +231,12 @@ For a **non-fatal you judged wrong or unnecessary**, replace "Suspected cause" w
 `## Recommendation` section that states whether to remove the report, downgrade it, or handle the
 condition quietly, and why.
 
-## Step 7 — Link back to Crashlytics
+## Step 7 — Write the Crashlytics note
 
-Immediately after the issue is created, write the note so the next triage run skips it:
+Every issue judged in Step 5 gets a note — filed or not. That note is what lets Step 3 recognize this
+exact `issueId` on the next run without re-judging it.
+
+Filed:
 
 ```json
 [
@@ -205,13 +246,27 @@ Immediately after the issue is created, write the note so the next triage run sk
 ]
 ```
 
-A filed issue without its note is an incomplete triage — the next run will file a duplicate.
+Judged **working as designed, useful signal** (no issue filed) — record the judgement itself, not a
+link, so it reads as a decision rather than a gap:
+
+```json
+[
+  { "name": "crashlytics_create_note",
+    "arguments": { "appId": "...", "issueId": "<id>",
+      "note": "Reviewed: already handled gracefully, occurrence rate is worth watching, no code change and no GitHub issue needed. See triage-crashes SKILL.md, Step 5." } }
+]
+```
+
+A judged issue without its note is an incomplete triage — the next run repeats the work, or worse,
+files a duplicate.
 
 ## Step 8 — Report
 
-Summarise as a table: Crashlytics id (short), kind, events/users, the decision (filed / already
-tracked / recommended-for-removal), and the GitHub issue number. Call out anything you deliberately
-did not file and why.
+Summarise as a table: Crashlytics id (short), kind, events/users, the decision (filed as worth-fixing
+/ filed as noise-downgrade / filed as not-actionable / reviewed-no-issue / already reviewed), and the
+GitHub issue number where one exists. Call out every **working as designed, useful signal**
+judgement explicitly, with the two-question reasoning from Step 5 — that's the one disposition with
+no GitHub issue to point at, so the report is the only place it's visible.
 
 Never mark a Crashlytics issue closed with `crashlytics_update_issue` during triage — closing it is
 the `fix-crash` skill's job, after the fix actually ships.
@@ -221,9 +276,12 @@ the `fix-crash` skill's job, after the fix actually ships.
 - [ ] Latest version came from git tags, not the `topVersions` ordering
 - [ ] That version display name was confirmed present in Crashlytics
 - [ ] Fatals, non-fatals, and ANRs were all queried
-- [ ] Every issue was checked against both Crashlytics notes and GitHub search before filing
-- [ ] Each non-fatal got an explicit fix / wrong / unnecessary judgement, and an issue either way
+- [ ] Every issue was checked against Crashlytics notes and GitHub search before being judged
+- [ ] Each non-fatal reaching Step 5 got an explicit judgement — worth-fixing / useful-signal / noise
+      / not-actionable — not a default
+- [ ] A **useful-signal** verdict was reached by reading the actual code, not the title alone, and
+      answers both Step 5 questions
 - [ ] Every filed issue names a real file in this repo, verified by reading it
 - [ ] Every filed issue carries the Crashlytics issue id and console link
-- [ ] Every filed issue has a matching Crashlytics note pointing back at it
+- [ ] Every judged issue — filed or not — has a matching Crashlytics note
 - [ ] No Crashlytics issue state was changed
