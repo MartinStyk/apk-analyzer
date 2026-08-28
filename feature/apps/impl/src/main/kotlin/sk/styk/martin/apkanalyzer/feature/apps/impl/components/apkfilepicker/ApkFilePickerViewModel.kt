@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import sk.styk.martin.apkanalyzer.core.apkfiles.ApkTooLargeException
 import sk.styk.martin.apkanalyzer.core.apkfiles.TemporaryApkManager
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import java.io.File
@@ -65,7 +66,11 @@ internal class ApkFilePickerViewModel @Inject constructor(private val temporaryA
                     eventChannel.send(ApkFilePickerEvent.OpenApkDetail(file.absolutePath))
                 },
                 onFailure = { error ->
-                    Logger.e(TAG, error, "Unable to copy selected APK to cache")
+                    if (error is ApkTooLargeException) {
+                        Logger.w(TAG, error.message.orEmpty())
+                    } else {
+                        Logger.e(TAG, error, "Unable to copy selected APK to cache")
+                    }
                     state.value = ApkFilePickerState.Ready
                     eventChannel.send(ApkFilePickerEvent.ShowOpenError)
                 },

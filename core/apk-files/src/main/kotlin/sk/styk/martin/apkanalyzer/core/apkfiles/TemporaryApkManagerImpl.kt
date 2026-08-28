@@ -136,7 +136,7 @@ internal class TemporaryApkManagerImpl @Inject constructor(
             if (bytesRead < 0) return
             copiedBytes += bytesRead
             if (copiedBytes > maxBytes) {
-                throw IOException("APK exceeds the maximum supported size")
+                throw ApkTooLargeException(copiedBytes, maxBytes)
             }
             output.write(buffer, 0, bytesRead)
         }
@@ -149,6 +149,6 @@ internal class TemporaryApkManagerImpl @Inject constructor(
         const val FILE_PREFIX = "apk_"
         const val FILE_SUFFIX = ".apk"
         const val LEGACY_FILE_PREFIX = "temp_apk_"
-        const val MAX_APK_SIZE_BYTES = 1024L * 1024L * 1024L
+        const val MAX_APK_SIZE_BYTES = 2L * 1024L * 1024L * 1024L
     }
 }
