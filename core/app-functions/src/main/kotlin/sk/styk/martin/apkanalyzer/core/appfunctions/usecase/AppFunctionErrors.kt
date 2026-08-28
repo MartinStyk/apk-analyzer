@@ -10,5 +10,5 @@ internal fun notInstalled(packageName: String): AppFunctionElementNotFoundExcept
 
 internal fun appDetailLookupFailure(packageName: String, cause: Throwable): AppFunctionException = when (cause) {
     is PackageManager.NameNotFoundException -> notInstalled(packageName)
-    else -> AppFunctionAppUnknownException("Failed to analyze $packageName: ${cause.message}")
+    else -> AppFunctionAppUnknownException("Failed to analyze $packageName")
 }
