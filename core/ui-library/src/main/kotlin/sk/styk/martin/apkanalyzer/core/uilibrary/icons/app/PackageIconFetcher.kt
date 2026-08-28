@@ -2,6 +2,8 @@ package sk.styk.martin.apkanalyzer.core.uilibrary.icons.app
 
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
 import coil3.ImageLoader
@@ -12,6 +14,8 @@ import coil3.fetch.Fetcher
 import coil3.fetch.ImageFetchResult
 import coil3.key.Keyer
 import coil3.request.Options
+import coil3.size.Size
+import coil3.size.pxOrElse
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
@@ -23,7 +27,11 @@ internal class PackageIconKeyer : Keyer<AppReference> {
     }
 }
 
-internal class PackageIconFetcher(private val data: AppReference, private val packageManager: PackageManager) : Fetcher {
+internal class PackageIconFetcher(
+    private val data: AppReference,
+    private val packageManager: PackageManager,
+    private val size: Size,
+) : Fetcher {
 
     override suspend fun fetch(): FetchResult? {
         val drawable = runCatchingCancellable {
@@ -66,12 +74,23 @@ internal class PackageIconFetcher(private val data: AppReference, private val pa
             }
         }.getOrNull() ?: return null
 
-        val bitmap = drawable.toBitmap()
+        val bitmap = drawable.toBoundedBitmap(size)
         return ImageFetchResult(
             image = bitmap.asImage(),
-            isSampled = false,
+            isSampled = true,
             dataSource = DataSource.MEMORY,
         )
+    }
+
+    private fun Drawable.toBoundedBitmap(size: Size): Bitmap {
+        val intrinsicWidth = intrinsicWidth.takeIf { it > 0 } ?: MAX_ICON_PX
+        val intrinsicHeight = intrinsicHeight.takeIf { it > 0 } ?: MAX_ICON_PX
+        val maxWidth = size.width.pxOrElse { MAX_ICON_PX }.coerceAtMost(MAX_ICON_PX)
+        val maxHeight = size.height.pxOrElse { MAX_ICON_PX }.coerceAtMost(MAX_ICON_PX)
+        val scale = minOf(1f, maxWidth.toFloat() / intrinsicWidth, maxHeight.toFloat() / intrinsicHeight)
+        val width = (intrinsicWidth * scale).toInt().coerceAtLeast(1)
+        val height = (intrinsicHeight * scale).toInt().coerceAtLeast(1)
+        return toBitmap(width = width, height = height)
     }
 
     class Factory(private val packageManager: PackageManager) : Fetcher.Factory<AppReference> {
@@ -79,11 +98,12 @@ internal class PackageIconFetcher(private val data: AppReference, private val pa
             data: AppReference,
             options: Options,
             imageLoader: ImageLoader,
-        ): Fetcher = PackageIconFetcher(data, packageManager)
+        ): Fetcher = PackageIconFetcher(data, packageManager, options.size)
     }
 
     private companion object {
         const val TAG = "PackageIconFetcher"
+        const val MAX_ICON_PX = 2048
     }
 }
 
