@@ -14,6 +14,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
@@ -52,18 +54,26 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
     final override val totalSizes: StateFlow<Map<PackageName, AppSize>>
         field = MutableStateFlow<Map<PackageName, AppSize>>(emptyMap())
 
-    private var hasLoadedOnce = false
+    private val fetchMutex = Mutex()
+    private var loadedPackageNames: Set<PackageName> = emptySet()
 
     override fun onStart(owner: LifecycleOwner) {
         applicationScope.launch(dispatcherProvider.io()) {
-            fetchTotalSizes(packageNames, "lifecycle_start")
+            fetchTotalSizesTracked(packageNames, "lifecycle_start")
         }
     }
 
     override suspend fun ensureLoaded(packageNames: List<PackageName>) {
-        if (hasLoadedOnce) return
-        this.packageNames = packageNames
-        fetchTotalSizes(packageNames, "ensure_loaded")
+        fetchTotalSizesTracked(packageNames, "ensure_loaded")
+    }
+
+    private suspend fun fetchTotalSizesTracked(packageNames: List<PackageName>, trigger: String) {
+        fetchMutex.withLock {
+            if (loadedPackageNames.containsAll(packageNames)) return
+            this.packageNames = packageNames
+            fetchTotalSizes(packageNames, trigger)
+            loadedPackageNames = packageNames.toSet()
+        }
     }
 
     private fun checkPermission(): Boolean {
@@ -78,7 +88,7 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
     override fun requestTotalSizes(packageNames: List<PackageName>) {
         this.packageNames = packageNames
         applicationScope.launch(dispatcherProvider.io()) {
-            fetchTotalSizes(packageNames, "installed_apps")
+            fetchTotalSizesTracked(packageNames, "installed_apps")
         }
     }
 
@@ -173,7 +183,6 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
                 },
             )
         }
-        hasLoadedOnce = true
     }
 
     private fun queryPackageSize(user: UserHandle, packageName: PackageName): SizeQueryResult = try {

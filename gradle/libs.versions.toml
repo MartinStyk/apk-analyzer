@@ -43,7 +43,7 @@ play-review = "2.0.2"
 
 # On-device AI
 mlkit-genai-prompt = "1.0.0-beta4"
-androidx-appfunctions = "1.0.0-alpha10"
+androidx-appfunctions = "1.0.0-alpha11"
 
 # Third-party
 timber = "5.0.1"

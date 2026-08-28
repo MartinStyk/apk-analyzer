@@ -1,11 +1,14 @@
 package sk.styk.martin.apkanalyzer.core.appfunctions.usecase
 
 import androidx.appfunctions.AppFunctionInvalidArgumentException
+import androidx.appfunctions.AppFunctionPermissionRequiredException
 import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.appfunctions.model.AppSummary
 import sk.styk.martin.apkanalyzer.core.appfunctions.toAppFunctionLabel
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
+import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepository
+import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -15,6 +18,8 @@ private const val MAX_RESULTS = 25
 
 internal class FindAppsUseCase @Inject constructor(
     private val installedAppsRepository: InstalledAppsRepository,
+    private val storageStatsRepository: StorageStatsRepository,
+    private val usageStatsRepository: UsageStatsRepository,
     private val dispatcherProvider: DispatcherProvider,
 ) {
     suspend operator fun invoke(filters: SearchFilters, sortBy: SortBy?): List<AppSummary> = withContext(dispatcherProvider.io()) {
@@ -23,6 +28,8 @@ internal class FindAppsUseCase @Inject constructor(
                 "Provide at least one of query, permission, installSource, targetSdk, minTotalSizeMb, unusedForDays, or sortBy",
             )
         }
+        requireUsagePermission(filters, sortBy)
+        requireStoragePermission(filters, sortBy)
         val comparator = (sortBy ?: SortBy.Name).toComparator()
         val now = Instant.now()
 
@@ -31,6 +38,24 @@ internal class FindAppsUseCase @Inject constructor(
             .sortedWith(comparator)
             .take(MAX_RESULTS)
             .map { it.toAppSummary() }
+    }
+
+    private fun requireUsagePermission(filters: SearchFilters, sortBy: SortBy?) {
+        val needsUsageData = filters.unusedForDays != null || sortBy == SortBy.LastUsedAscending || sortBy == SortBy.LastUsedDescending
+        if (needsUsageData && !usageStatsRepository.isPermissionGranted.value) {
+            throw AppFunctionPermissionRequiredException(
+                "Usage Access permission is required for unusedForDays or a LastUsed sortBy. Ask the user to grant Usage Access to Apk Analyzer.",
+            )
+        }
+    }
+
+    private fun requireStoragePermission(filters: SearchFilters, sortBy: SortBy?) {
+        val needsStorageData = filters.minTotalSizeMb != null || sortBy == SortBy.SizeAscending || sortBy == SortBy.SizeDescending
+        if (needsStorageData && !storageStatsRepository.isPermissionGranted.value) {
+            throw AppFunctionPermissionRequiredException(
+                "Usage Access permission is required for minTotalSizeMb or a Size sortBy. Ask the user to grant Usage Access to Apk Analyzer.",
+            )
+        }
     }
 }
 
