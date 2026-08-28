@@ -1,4 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="external_apk_open_error">Tidak dapat membuka APK ini</string>
+    <string name="app_function_app_display_description">Memungkinkan asisten AI melihat detail aplikasi di perangkat ini: versi, izin, sumber instalasi, dan sertifikat penandatangan.</string>
 </resources>

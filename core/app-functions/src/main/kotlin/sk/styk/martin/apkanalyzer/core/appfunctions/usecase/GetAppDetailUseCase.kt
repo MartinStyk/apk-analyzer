@@ -16,7 +16,7 @@ internal class GetAppDetailUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(packageName: String): AppDetailResult = withContext(dispatcherProvider.io()) {
         appDetailRepository.details(AppReference.InstalledPackage(PackageName(packageName)))
-            .getOrElse { throw notInstalled(packageName) }
+            .getOrElse { throw appDetailLookupFailure(packageName, it) }
             .toAppDetailResult()
     }
 }
@@ -30,6 +30,6 @@ private fun AppDetail.toAppDetailResult() = AppDetailResult(
     minSdkLabel = info.minSdkLabel,
     installSourceLabel = info.source.toAppFunctionLabel(),
     isSystemApp = info.isSystemApp,
-    requestedPermissionCount = permissions.defined.size,
+    requestedPermissionCount = permissions.used.size,
     hasMultipleSigners = signing.hasMultipleSigners,
 )

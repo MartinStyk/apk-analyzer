@@ -2,6 +2,7 @@ package sk.styk.martin.apkanalyzer.core.appfunctions
 
 import androidx.annotation.RequiresApi
 import androidx.appfunctions.AppFunction
+import androidx.appfunctions.AppFunctionAppUnknownException
 import androidx.appfunctions.AppFunctionElementNotFoundException
 import androidx.appfunctions.AppFunctionInvalidArgumentException
 import androidx.appfunctions.AppFunctionService
@@ -16,6 +17,8 @@ import sk.styk.martin.apkanalyzer.core.appfunctions.usecase.FindAppsUseCase
 import sk.styk.martin.apkanalyzer.core.appfunctions.usecase.GetAppCertificatesUseCase
 import sk.styk.martin.apkanalyzer.core.appfunctions.usecase.GetAppDetailUseCase
 import sk.styk.martin.apkanalyzer.core.appfunctions.usecase.GetAppPermissionsUseCase
+import sk.styk.martin.apkanalyzer.core.appfunctions.usecase.SearchFilters
+import sk.styk.martin.apkanalyzer.core.appfunctions.usecase.SortBy
 import javax.inject.Inject
 
 /**
@@ -92,7 +95,10 @@ abstract class ApkAnalyzerAppFunctionService : AppFunctionService() {
             enumValues = ["Name", "SizeDescending", "SizeAscending", "LastUsedAscending", "LastUsedDescending"],
         )
         sortBy: String? = null,
-    ): List<AppSummary> = findAppsUseCase(query, permission, installSource, targetSdk, minTotalSizeMb, unusedForDays, sortBy)
+    ): List<AppSummary> = findAppsUseCase(
+        SearchFilters.parse(query, permission, installSource, targetSdk, minTotalSizeMb, unusedForDays),
+        SortBy.parse(sortBy),
+    )
 
     /**
      * Get version, SDK targeting, install source, permission count, and signing summary for one
@@ -105,6 +111,8 @@ abstract class ApkAnalyzerAppFunctionService : AppFunctionService() {
      * @return The app's detail summary.
      * @throws AppFunctionElementNotFoundException If no app with packageName is currently
      *   installed. If thrown, call "findApps" to search by name instead.
+     * @throws AppFunctionAppUnknownException If the app's details couldn't be read for another
+     *   reason. If thrown, tell the user the lookup failed unexpectedly.
      */
     @AppFunction(isDescribedByKDoc = true)
     suspend fun getAppDetail(packageName: String): AppDetailResult = getAppDetailUseCase(packageName)
@@ -120,6 +128,8 @@ abstract class ApkAnalyzerAppFunctionService : AppFunctionService() {
      *   means the app is signed with multiple simultaneous signers.
      * @throws AppFunctionElementNotFoundException If no app with packageName is currently
      *   installed. If thrown, call "findApps" to search by name instead.
+     * @throws AppFunctionAppUnknownException If the app's certificates couldn't be read for
+     *   another reason. If thrown, tell the user the lookup failed unexpectedly.
      */
     @AppFunction(isDescribedByKDoc = true)
     suspend fun getAppCertificates(packageName: String): List<CertificateSummary> = getAppCertificatesUseCase(packageName)
@@ -135,6 +145,8 @@ abstract class ApkAnalyzerAppFunctionService : AppFunctionService() {
      *   that are always granted at install time and never need user approval.
      * @throws AppFunctionElementNotFoundException If no app with packageName is currently
      *   installed. If thrown, call "findApps" to search by name instead.
+     * @throws AppFunctionAppUnknownException If the app's permissions couldn't be read for
+     *   another reason. If thrown, tell the user the lookup failed unexpectedly.
      */
     @AppFunction(isDescribedByKDoc = true)
     suspend fun getAppPermissions(packageName: String): List<PermissionGrantSummary> = getAppPermissionsUseCase(packageName)

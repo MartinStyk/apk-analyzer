@@ -15,7 +15,7 @@ internal class GetAppCertificatesUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(packageName: String): List<CertificateSummary> = withContext(dispatcherProvider.io()) {
         appDetailRepository.details(AppReference.InstalledPackage(PackageName(packageName)))
-            .getOrElse { throw notInstalled(packageName) }
+            .getOrElse { throw appDetailLookupFailure(packageName, it) }
             .signing.currentCertificates.map { it.toCertificateSummary() }
     }
 }

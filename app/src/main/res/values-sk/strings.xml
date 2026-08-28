@@ -1,4 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="external_apk_open_error">Nepodarilo sa otvoriť tento APK</string>
+    <string name="app_function_app_display_description">Umožňuje AI asistentovi zistiť podrobnosti o aplikáciách na tomto zariadení: verzie, povolenia, zdroje inštalácie a podpisové certifikáty.</string>
 </resources>

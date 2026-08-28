@@ -1,4 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="external_apk_open_error">Dieses APK konnte nicht geöffnet werden</string>
+    <string name="app_function_app_display_description">Ermöglicht einem KI-Assistenten, App-Details auf diesem Gerät abzurufen: Versionen, Berechtigungen, Installationsquellen und Signaturzertifikate.</string>
 </resources>
