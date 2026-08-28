@@ -52,10 +52,18 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
     final override val totalSizes: StateFlow<Map<PackageName, AppSize>>
         field = MutableStateFlow<Map<PackageName, AppSize>>(emptyMap())
 
+    private var hasLoadedOnce = false
+
     override fun onStart(owner: LifecycleOwner) {
         applicationScope.launch(dispatcherProvider.io()) {
             fetchTotalSizes(packageNames, "lifecycle_start")
         }
+    }
+
+    override suspend fun ensureLoaded(packageNames: List<PackageName>) {
+        if (hasLoadedOnce) return
+        this.packageNames = packageNames
+        fetchTotalSizes(packageNames, "ensure_loaded")
     }
 
     private fun checkPermission(): Boolean {
@@ -165,6 +173,7 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
                 },
             )
         }
+        hasLoadedOnce = true
     }
 
     private fun queryPackageSize(user: UserHandle, packageName: PackageName): SizeQueryResult = try {

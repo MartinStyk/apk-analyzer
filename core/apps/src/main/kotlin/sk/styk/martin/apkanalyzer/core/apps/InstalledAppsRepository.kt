@@ -5,4 +5,5 @@ import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
 
 interface InstalledAppsRepository {
     fun apps(): Flow<List<InstalledApp>>
+    suspend fun awaitFullyEnrichedApps(): List<InstalledApp>
 }

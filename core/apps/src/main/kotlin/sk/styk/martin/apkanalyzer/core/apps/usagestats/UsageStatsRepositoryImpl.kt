@@ -48,10 +48,17 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
     final override val lastUsedTimes: StateFlow<Map<PackageName, Instant>>
         field = MutableStateFlow<Map<PackageName, Instant>>(emptyMap())
 
+    private var hasLoadedOnce = false
+
     override fun onStart(owner: LifecycleOwner) {
         applicationScope.launch(dispatcherProvider.default()) {
             fetchUsageTimes()
         }
+    }
+
+    override suspend fun ensureLoaded() {
+        if (hasLoadedOnce) return
+        fetchUsageTimes()
     }
 
     override suspend fun queryLastUsedTime(packageName: PackageName): Instant? = lastUsedTimes.value[packageName] ?: if (checkPermission()) {
@@ -92,6 +99,7 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
                 },
             )
         }
+        hasLoadedOnce = true
     }
 
     @SuppressLint("MissingPermission")

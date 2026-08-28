@@ -1,7 +1,6 @@
 package sk.styk.martin.apkanalyzer.core.appfunctions.usecase
 
 import androidx.appfunctions.AppFunctionInvalidArgumentException
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.appfunctions.model.AppSummary
 import sk.styk.martin.apkanalyzer.core.appfunctions.toAppFunctionLabel
@@ -27,7 +26,7 @@ internal class FindAppsUseCase @Inject constructor(
         val comparator = (sortBy ?: SortBy.Name).toComparator()
         val now = Instant.now()
 
-        installedAppsRepository.apps().first()
+        installedAppsRepository.awaitFullyEnrichedApps()
             .filter { it.matches(filters, now) }
             .sortedWith(comparator)
             .take(MAX_RESULTS)

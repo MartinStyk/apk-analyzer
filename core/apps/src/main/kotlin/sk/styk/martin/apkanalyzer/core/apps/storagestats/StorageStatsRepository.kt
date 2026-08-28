@@ -9,4 +9,5 @@ interface StorageStatsRepository {
     val totalSizes: StateFlow<Map<PackageName, AppSize>>
     fun requestTotalSizes(packageNames: List<PackageName>)
     suspend fun queryTotalSize(packageName: PackageName): AppSize?
+    suspend fun ensureLoaded(packageNames: List<PackageName>)
 }
