@@ -88,7 +88,7 @@ internal class TemporaryApkManagerImpl @Inject constructor(
                 try {
                     appTask.taskInfo?.persistentId
                 } catch (error: IllegalArgumentException) {
-                    Logger.w(TAG, "Task already torn down: ${error.message}")
+                    Logger.w(TAG, "Task already torn down: ${error.message.orEmpty()}")
                     null
                 }
             }

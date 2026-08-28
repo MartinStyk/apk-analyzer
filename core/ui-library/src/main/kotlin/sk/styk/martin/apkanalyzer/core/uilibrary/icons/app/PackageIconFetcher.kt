@@ -68,7 +68,7 @@ internal class PackageIconFetcher(
                 error is ApkArchiveUnreadableException ||
                 error is ApkIconUnresolvableException
             if (expectedIconMiss) {
-                Logger.w(TAG, "Icon not available for $data: ${error.message}")
+                Logger.w(TAG, "Icon not available for $data: ${error.message.orEmpty()}")
             } else {
                 Logger.e(TAG, error, "Icon not available for $data")
             }
