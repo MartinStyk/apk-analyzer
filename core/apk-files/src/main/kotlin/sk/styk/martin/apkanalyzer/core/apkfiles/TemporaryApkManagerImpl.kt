@@ -84,7 +84,14 @@ internal class TemporaryApkManagerImpl @Inject constructor(
     @Suppress("DEPRECATION")
     private fun cleanupDiscardedTasks() {
         val activeTaskIds = activityManager.appTasks
-            .mapNotNull { appTask -> appTask.taskInfo?.persistentId }
+            .mapNotNull { appTask ->
+                try {
+                    appTask.taskInfo?.persistentId
+                } catch (error: IllegalArgumentException) {
+                    Logger.w(TAG, "Task already torn down: ${error.message}")
+                    null
+                }
+            }
             .toSet()
         cacheRoot.listFiles()
             ?.filter(File::isDirectory)
