@@ -10,7 +10,7 @@ document is for anyone who wants to know what those commands are checking and wh
 | Gate | Enforces | Configured in | Fails CI |
 |---|---|---|---|
 | Spotless (ktlint + compose-rules) | Formatting and Compose naming/parameter rules | [`SpotlessPlugin.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/SpotlessPlugin.kt) | Yes — `spotlessCheck` |
-| Detekt | Static analysis of Kotlin, including `build-logic` itself | [`config/detekt/detekt.yml`](../../config/detekt/detekt.yml), [`DetektPlugin.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/DetektPlugin.kt) | Yes — at **warning** severity |
+| Detekt | Static analysis of Kotlin, including `build-logic` itself | [`.detekt/detekt.yml`](../../.detekt/detekt.yml), [`DetektPlugin.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/DetektPlugin.kt) | Yes — at **warning** severity |
 | Android Lint | Android/API correctness, resources, manifest, accessibility | AGP defaults; `lint { }` in [`app/build.gradle.kts`](../../app/build.gradle.kts) | Yes — `lintDebug` |
 | `validateAgentContext` | Structure of the shared AI context files | [`ValidateAgentContextTask.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/ValidateAgentContextTask.kt) | Yes — in its own workflow |
 | LeakCanary | Activity/Fragment/ViewModel leaks at runtime | `debugImplementation` in [`app/build.gradle.kts`](../../app/build.gradle.kts) | No — advisory, debug builds only |
@@ -40,7 +40,7 @@ violations that `spotlessApply` can't resolve on its own.
 ## Detekt
 
 Detekt runs with `buildUponDefaultConfig`, the repository config at
-[`config/detekt/detekt.yml`](../../config/detekt/detekt.yml), and — the part people trip over —
+[`.detekt/detekt.yml`](../../.detekt/detekt.yml), and — the part people trip over —
 `failOnSeverity = Warning`. A Detekt *warning* fails the build, so there is no accumulating backlog
 of "known" findings.
 

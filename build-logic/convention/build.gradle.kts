@@ -21,7 +21,7 @@ dependencies {
 
 detekt {
     buildUponDefaultConfig.set(true)
-    config.setFrom(layout.projectDirectory.file("../../config/detekt/detekt.yml"))
+    config.setFrom(layout.projectDirectory.file("../../.detekt/detekt.yml"))
     basePath.set(layout.projectDirectory.dir("../.."))
     parallel.set(true)
     failOnSeverity.set(FailOnSeverity.Warning)

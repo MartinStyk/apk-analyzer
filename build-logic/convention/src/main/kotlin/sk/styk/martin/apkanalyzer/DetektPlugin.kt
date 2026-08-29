@@ -12,7 +12,7 @@ class DetektPlugin : Plugin<Project> {
 
         extensions.configure<DetektExtension> {
             buildUponDefaultConfig.set(true)
-            config.setFrom(rootProject.layout.projectDirectory.file("config/detekt/detekt.yml"))
+            config.setFrom(rootProject.layout.projectDirectory.file(".detekt/detekt.yml"))
             basePath.set(rootProject.layout.projectDirectory)
             parallel.set(true)
             failOnSeverity.set(FailOnSeverity.Warning)
