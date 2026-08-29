@@ -131,5 +131,6 @@ internal sealed interface AppDetailState {
         data class RequirementPreview(val name: String?, val isUnmetRequirement: Boolean)
     }
 
-    data object Error : AppDetailState
+    @Immutable
+    data class Error(val canRetry: Boolean) : AppDetailState
 }

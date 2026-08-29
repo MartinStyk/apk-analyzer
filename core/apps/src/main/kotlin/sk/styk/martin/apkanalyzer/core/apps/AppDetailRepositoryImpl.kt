@@ -158,7 +158,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         return runCatchingCancellable {
             val packageInfo = timedStage("package query", "package_query_ms", context) {
                 packageManager.getPackageArchiveInfoWithCorrectPath(accessibleFile.absolutePath, analysisFlags)
-            } ?: error("Cannot parse APK file: ${accessibleFile.absolutePath}")
+            } ?: throw UnparsableApkFileException(accessibleFile.absolutePath)
 
             getPackageDetails(
                 context = context,

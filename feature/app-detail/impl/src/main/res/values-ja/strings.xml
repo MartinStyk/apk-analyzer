@@ -34,6 +34,7 @@
     <string name="app_detail_no">いいえ</string>
     <string name="app_detail_unknown">不明</string>
     <string name="app_detail_error">アプリの詳細を読み込めませんでした</string>
+    <string name="app_detail_error_unsupported_apk">このファイルは有効なAPKではないため分析できません</string>
     <string name="app_detail_retry">再試行</string>
     <string name="app_detail_action_manifest">マニフェスト</string>
     <string name="app_detail_action_export_apk">APKをエクスポート</string>

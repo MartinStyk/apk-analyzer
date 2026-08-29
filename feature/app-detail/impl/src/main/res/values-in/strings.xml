@@ -34,6 +34,7 @@
     <string name="app_detail_no">Tidak</string>
     <string name="app_detail_unknown">Tidak diketahui</string>
     <string name="app_detail_error">Gagal memuat rincian aplikasi</string>
+    <string name="app_detail_error_unsupported_apk">File ini bukan APK yang valid dan tidak dapat dianalisis</string>
     <string name="app_detail_retry">Coba lagi</string>
     <string name="app_detail_action_manifest">Manifest</string>
     <string name="app_detail_action_export_apk">Ekspor APK</string>

@@ -34,6 +34,7 @@
     <string name="app_detail_no">아니오</string>
     <string name="app_detail_unknown">알 수 없음</string>
     <string name="app_detail_error">앱 세부정보를 로드하지 못했습니다</string>
+    <string name="app_detail_error_unsupported_apk">이 파일은 유효한 APK가 아니어서 분석할 수 없습니다</string>
     <string name="app_detail_retry">다시 시도</string>
     <string name="app_detail_action_manifest">매니페스트</string>
     <string name="app_detail_action_export_apk">APK 내보내기</string>

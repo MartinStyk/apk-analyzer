@@ -49,6 +49,7 @@
     <string name="app_detail_no">Nie</string>
     <string name="app_detail_unknown">Neznáme</string>
     <string name="app_detail_error">Nepodarilo sa načítať podrobnosti aplikácie</string>
+    <string name="app_detail_error_unsupported_apk">Tento súbor nie je platný súbor APK a nedá sa analyzovať</string>
     <string name="app_detail_retry">Skúste znova</string>
     <string name="app_detail_action_manifest">Manifest</string>
     <string name="app_detail_action_export_apk">Exportovať APK</string>

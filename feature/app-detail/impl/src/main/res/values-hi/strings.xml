@@ -39,6 +39,7 @@
     <string name="app_detail_no">नहीं</string>
     <string name="app_detail_unknown">अज्ञात</string>
     <string name="app_detail_error">ऐप विवरण लोड करने में विफल</string>
+    <string name="app_detail_error_unsupported_apk">यह फ़ाइल मान्य APK नहीं है और इसका विश्लेषण नहीं किया जा सकता</string>
     <string name="app_detail_retry">फिर से प्रयास करें</string>
     <string name="app_detail_action_manifest">Manifest</string>
     <string name="app_detail_action_export_apk">APK निर्यात करें</string>

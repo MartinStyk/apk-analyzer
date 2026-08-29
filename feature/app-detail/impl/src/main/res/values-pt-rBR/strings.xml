@@ -44,6 +44,7 @@
     <string name="app_detail_no">Não</string>
     <string name="app_detail_unknown">Desconhecido</string>
     <string name="app_detail_error">Falha ao carregar os detalhes do aplicativo</string>
+    <string name="app_detail_error_unsupported_apk">Este arquivo não é um APK válido e não pode ser analisado</string>
     <string name="app_detail_retry">Tente novamente</string>
     <string name="app_detail_action_manifest">Manifesto</string>
     <string name="app_detail_action_export_apk">Exportar APK</string>

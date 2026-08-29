@@ -39,6 +39,7 @@
     <string name="app_detail_no">Hayır</string>
     <string name="app_detail_unknown">Bilinmiyor</string>
     <string name="app_detail_error">Uygulama detayları yüklenemedi</string>
+    <string name="app_detail_error_unsupported_apk">Bu dosya geçerli bir APK değil ve analiz edilemiyor</string>
     <string name="app_detail_retry">Tekrar dene</string>
     <string name="app_detail_action_manifest">Manifest</string>
     <string name="app_detail_action_export_apk">APK\'yı Dışa Aktar</string>
