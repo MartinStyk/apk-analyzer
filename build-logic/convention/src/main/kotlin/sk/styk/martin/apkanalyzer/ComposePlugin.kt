@@ -16,8 +16,8 @@ class ComposePlugin : Plugin<Project> {
         }
 
         extensions.configure<ComposeCompilerGradlePluginExtension> {
-            reportsDestination = layout.buildDirectory.dir("compose_compiler")
-            metricsDestination = layout.buildDirectory.dir("compose_compiler")
+            reportsDestination.set(layout.buildDirectory.dir("compose_compiler"))
+            metricsDestination.set(layout.buildDirectory.dir("compose_compiler"))
         }
 
         dependencies {
