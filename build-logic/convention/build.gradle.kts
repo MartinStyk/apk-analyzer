@@ -13,6 +13,7 @@ kotlin {
 
 dependencies {
     compileOnly(libs.android.gradle.plugin)
+    compileOnly(libs.kotlin.compose.compiler.gradle.plugin)
     compileOnly(libs.kotlin.gradle.plugin)
     compileOnly(libs.ksp.gradle.plugin)
     compileOnly(libs.spotless.gradle.plugin)
