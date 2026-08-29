@@ -244,7 +244,7 @@ private fun AppDetailContent(
                     title = stringResource(R.string.app_detail_title),
                     onBack = onBack,
                 )
-                ErrorContent(onAction = onAction)
+                ErrorContent(canRetry = state.canRetry, onAction = onAction)
             }
 
             is AppDetailState.Loaded -> {
@@ -1064,22 +1064,28 @@ private fun LoadingContent(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun ErrorContent(onAction: (AppDetailAction) -> Unit, modifier: Modifier = Modifier) {
+private fun ErrorContent(
+    canRetry: Boolean,
+    onAction: (AppDetailAction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = stringResource(R.string.app_detail_error),
+            text = stringResource(if (canRetry) R.string.app_detail_error else R.string.app_detail_error_unsupported_apk),
             style = AppTheme.typography.bodyLarge,
             color = AppTheme.colors.onBackground,
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        TextButton(
-            text = stringResource(R.string.app_detail_retry),
-            onClick = { onAction(AppDetailAction.Retry) },
-        )
+        if (canRetry) {
+            Spacer(modifier = Modifier.height(16.dp))
+            TextButton(
+                text = stringResource(R.string.app_detail_retry),
+                onClick = { onAction(AppDetailAction.Retry) },
+            )
+        }
     }
 }
 
@@ -1116,8 +1122,21 @@ private fun AppDetailLoadingPreview() {
 private fun AppDetailErrorPreview() {
     ApkAnalyzerTheme {
         AppDetailContent(
-            state = AppDetailState.Error,
+            state = AppDetailState.Error(canRetry = true),
             appReference = AppReference.InstalledPackage(PackageName("com.spotify.music")),
+            onAction = {},
+            onBack = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun AppDetailErrorUnsupportedApkPreview() {
+    ApkAnalyzerTheme {
+        AppDetailContent(
+            state = AppDetailState.Error(canRetry = false),
+            appReference = AppReference.ApkFile(path = "/data/local/tmp/sample.apk"),
             onAction = {},
             onBack = {},
         )

@@ -49,6 +49,7 @@
     <string name="app_detail_no">Ні</string>
     <string name="app_detail_unknown">Невідомо</string>
     <string name="app_detail_error">Не вдалося завантажити деталі програми</string>
+    <string name="app_detail_error_unsupported_apk">Цей файл не є дійсним файлом APK і його не можна проаналізувати</string>
     <string name="app_detail_retry">Спробуйте ще раз</string>
     <string name="app_detail_action_manifest">Manifest</string>
     <string name="app_detail_action_export_apk">Експортувати APK</string>

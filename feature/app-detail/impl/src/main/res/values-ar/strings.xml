@@ -59,6 +59,7 @@
     <string name="app_detail_no">لا</string>
     <string name="app_detail_unknown">غير معروف</string>
     <string name="app_detail_error">فشل في تحميل تفاصيل التطبيق</string>
+    <string name="app_detail_error_unsupported_apk">هذا الملف ليس ملف APK صالحًا ولا يمكن تحليله</string>
     <string name="app_detail_retry">حاول مرة أخرى</string>
     <string name="app_detail_action_manifest">Manifest</string>
     <string name="app_detail_action_export_apk">تصدير APK</string>

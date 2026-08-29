@@ -49,6 +49,7 @@
     <string name="app_detail_no">Нет</string>
     <string name="app_detail_unknown">Неизвестно</string>
     <string name="app_detail_error">Не удалось загрузить данные приложения</string>
+    <string name="app_detail_error_unsupported_apk">Этот файл не является допустимым APK и не может быть проанализирован</string>
     <string name="app_detail_retry">Попробуйте снова</string>
     <string name="app_detail_action_manifest">Манифест</string>
     <string name="app_detail_action_export_apk">Экспорт APK</string>

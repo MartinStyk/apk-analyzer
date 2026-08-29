@@ -25,6 +25,7 @@ import sk.styk.martin.apkanalyzer.core.apkfiles.TemporaryApkManager
 import sk.styk.martin.apkanalyzer.core.apppermissions.PermissionLabelProvider
 import sk.styk.martin.apkanalyzer.core.apps.AppClassificationThresholds
 import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
+import sk.styk.martin.apkanalyzer.core.apps.UnparsableApkFileException
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.DeviceFeatures
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.DeviceFeaturesRepository
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Feature
@@ -80,7 +81,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
     val state: StateFlow<AppDetailState> = combine(source, exportInProgress) { source, exportInProgress ->
         when (source) {
             AppDetailSource.Loading -> AppDetailState.Loading
-            AppDetailSource.Error -> AppDetailState.Error
+            is AppDetailSource.Error -> AppDetailState.Error(canRetry = source.canRetry)
             is AppDetailSource.Ready -> source.state.copy(exportInProgress = exportInProgress)
         }
     }
@@ -298,7 +299,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
                     analytics.track(AppDetailAnalyticsEvent.Opened(appReference))
                     AppDetailSource.Ready(detail.toLoadedState(deviceFeatures).withComputedBadges(Instant.now()))
                 },
-                onFailure = { AppDetailSource.Error },
+                onFailure = { AppDetailSource.Error(canRetry = it !is UnparsableApkFileException) },
             )
             if (detailResult.isSuccess && appReference is AppReference.InstalledPackage) {
                 recentlyViewedAppsRepository.addRecent(appReference.packageName)
@@ -413,7 +414,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
 private sealed interface AppDetailSource {
     data object Loading : AppDetailSource
-    data object Error : AppDetailSource
+    data class Error(val canRetry: Boolean) : AppDetailSource
     data class Ready(val state: AppDetailState.Loaded) : AppDetailSource
 }
 

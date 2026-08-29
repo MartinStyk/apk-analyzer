@@ -34,6 +34,7 @@
     <string name="app_detail_no">Không</string>
     <string name="app_detail_unknown">Không xác định</string>
     <string name="app_detail_error">Không thể tải thông tin ứng dụng</string>
+    <string name="app_detail_error_unsupported_apk">Tệp này không phải là APK hợp lệ nên không thể phân tích</string>
     <string name="app_detail_retry">Thử lại</string>
     <string name="app_detail_action_manifest">Manifest</string>
     <string name="app_detail_action_export_apk">Xuất APK</string>

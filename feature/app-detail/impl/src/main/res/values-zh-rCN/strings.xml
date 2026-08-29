@@ -34,6 +34,7 @@
     <string name="app_detail_no">否</string>
     <string name="app_detail_unknown">未知</string>
     <string name="app_detail_error">加载应用详情失败</string>
+    <string name="app_detail_error_unsupported_apk">此文件不是有效的 APK，无法进行分析</string>
     <string name="app_detail_retry">再试一次</string>
     <string name="app_detail_action_manifest">清单</string>
     <string name="app_detail_action_export_apk">导出 APK</string>
