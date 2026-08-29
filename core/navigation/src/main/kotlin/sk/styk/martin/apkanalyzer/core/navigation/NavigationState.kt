@@ -21,13 +21,16 @@ import kotlinx.collections.immutable.toPersistentMap
 @Composable
 fun rememberNavigationState(startKey: NavKey, topLevelKeys: ImmutableList<NavKey>): NavigationState {
     val topLevelStack = rememberNavBackStack(startKey)
-    val subStacks = topLevelKeys.associateWith { key -> rememberNavBackStack(key) }.toPersistentMap()
+    val subStacks = mutableMapOf<NavKey, NavBackStack<NavKey>>()
+    for (key in topLevelKeys) {
+        subStacks[key] = rememberNavBackStack(key)
+    }
 
     return remember(startKey, topLevelKeys) {
         NavigationState(
             startKey = startKey,
             topLevelStack = topLevelStack,
-            subStacks = subStacks,
+            subStacks = subStacks.toPersistentMap(),
         )
     }
 }
