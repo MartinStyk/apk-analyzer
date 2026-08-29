@@ -77,10 +77,10 @@ abstract class ApkAnalyzerAppFunctionService : AppFunctionService() {
      *   is nothing to search or filter by), if installSource or sortBy isn't one of the accepted
      *   values, or if targetSdk, minTotalSizeMb, or unusedForDays isn't a positive number. If
      *   thrown, ask the user what to search for or narrow by.
-     * @throws AppFunctionPermissionRequiredException If unusedForDays or a "LastUsed" sortBy is
-     *   requested without Usage Access granted, or minTotalSizeMb or a "Size" sortBy is requested
-     *   without Storage Access granted. If thrown, tell the user to grant the relevant permission
-     *   to Apk Analyzer in system settings.
+     * @throws AppFunctionPermissionRequiredException If unusedForDays, minTotalSizeMb, a "LastUsed"
+     *   sortBy, or a "Size" sortBy is requested without Usage Access granted — this single system
+     *   permission covers both size and last-used data. If thrown, tell the user to grant Usage
+     *   Access to Apk Analyzer in system settings.
      */
     @AppFunction(isDescribedByKDoc = true)
     suspend fun findApps(
