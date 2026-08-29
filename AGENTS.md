@@ -214,7 +214,8 @@ frontmatter states when it applies.
 `create-feature-module`, `create-core-module`, `create-compose-component`, `implement-navigation`,
 `spotless-fix`, `git-commit-author`, `setup-local-tools`, `analyze-ci-failure`, `run-app`,
 `navigate-app-adb`, `sync-design-changes`, `translate-strings`, `release-app`,
-`capture-app-flow-media`, `triage-crashes`, `fix-crash`, `verify`, `appfunctions`.
+`capture-app-flow-media`, `triage-crashes`, `fix-crash`, `verify`, `appfunctions`,
+`store-listing-carousel`.
 
 All are shared by Claude and Copilot except `sync-design-changes`, which needs Claude's `DesignSync`
 tool.
