@@ -11,10 +11,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -70,19 +69,13 @@ fun SearchBarActive(
                     color = AppTheme.colors.onSurfaceVariant,
                 )
             }
-            var textFieldValueState by remember {
+            var textFieldValue by rememberSaveable(stateSaver = TextFieldValue.Saver) {
                 mutableStateOf(TextFieldValue(text = query, selection = TextRange(query.length)))
             }
-            val textFieldValue = textFieldValueState.copy(text = query)
-            SideEffect {
-                if (textFieldValue.selection != textFieldValueState.selection || textFieldValue.composition != textFieldValueState.composition) {
-                    textFieldValueState = textFieldValue
-                }
-            }
             BasicTextField(
-                value = textFieldValue,
+                value = textFieldValue.copy(text = query),
                 onValueChange = { newValue ->
-                    textFieldValueState = newValue
+                    textFieldValue = newValue
                     if (newValue.text != query) onQueryChange(newValue.text)
                 },
                 textStyle = textStyle,
