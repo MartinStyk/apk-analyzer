@@ -1,7 +1,7 @@
 package sk.styk.martin.apkanalyzer.ui.navigation
 
-import androidx.navigation3.runtime.NavKey
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.NavigationBarItem
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.feature.apps.api.AppsNavKey
@@ -25,4 +25,4 @@ internal val TOP_LEVEL_DESTINATIONS =
         ),
     )
 
-internal val TOP_LEVEL_KEYS: List<NavKey> = TOP_LEVEL_DESTINATIONS.map { it.navKey }
+internal val TOP_LEVEL_KEYS = TOP_LEVEL_DESTINATIONS.map { it.navKey }.toPersistentList()

@@ -18,6 +18,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
+import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.R
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.navigation.Navigator
@@ -70,7 +71,7 @@ private fun ExternalApkNavigation(
     modifier: Modifier = Modifier,
 ) {
     val rootKey = remember(input) { AppDetailNavKey(input) }
-    val topLevelKeys = remember(rootKey) { listOf(rootKey) }
+    val topLevelKeys = remember(rootKey) { persistentListOf(rootKey) }
     val navigationState = rememberNavigationState(
         startKey = rootKey,
         topLevelKeys = topLevelKeys,
