@@ -1,4 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="external_apk_open_error">このAPKを開けませんでした</string>
+    <string name="app_function_app_display_description">AIアシスタントがこのデバイスのアプリの詳細を確認できるようにします: バージョン、権限、インストール元、署名証明書。</string>
 </resources>

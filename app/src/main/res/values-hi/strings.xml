@@ -1,4 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="external_apk_open_error">इस APK को खोलने में असमर्थ</string>
+    <string name="app_function_app_display_description">यह AI सहायक को इस डिवाइस पर ऐप्लिकेशन का विवरण देखने देता है: वर्शन, अनुमतियां, इंस्टॉल स्रोत और साइनिंग प्रमाणपत्र।</string>
 </resources>

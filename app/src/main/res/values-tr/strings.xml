@@ -1,4 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="external_apk_open_error">Bu APK açılamadı</string>
+    <string name="app_function_app_display_description">Bir yapay zeka asistanının bu cihazdaki uygulama ayrıntılarını görüntülemesine olanak tanır: sürümler, izinler, kurulum kaynakları ve imza sertifikaları.</string>
 </resources>

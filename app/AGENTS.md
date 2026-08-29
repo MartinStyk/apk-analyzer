@@ -40,6 +40,8 @@ entry points in the app.
   authority.
 * Package visibility and usage-access permissions are intentional product requirements; preserve
   their lint suppressions when editing the manifest.
+* The App Functions service and `res/xml/app_metadata.xml` are registered here; the functions
+  themselves are declared in [`core:app-functions`](../core/app-functions/AGENTS.md).
 
 Version name and code have local Gradle-property defaults. CI and release workflows override them;
 do not introduce a second version source.

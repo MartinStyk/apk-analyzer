@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name" translatable="false">Apk Analyzer</string>
     <string name="external_apk_open_error">Couldn’t open this APK</string>
+    <string name="app_function_app_display_description">Lets an AI assistant look up app details on this device: versions, permissions, install sources, and signing certificates.</string>
 </resources>

@@ -8,6 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapLatest
@@ -43,8 +44,8 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
     private val installSourceResolver: InstallSourceResolver,
     packageChangesObserver: PackageChangesObserver,
     dispatcherProvider: DispatcherProvider,
-    storageStatsRepository: StorageStatsRepository,
-    usageStatsRepository: UsageStatsRepository,
+    private val storageStatsRepository: StorageStatsRepository,
+    private val usageStatsRepository: UsageStatsRepository,
     appScope: CoroutineScope,
     private val performanceTracker: PerformanceTracker,
 ) : InstalledAppsRepository {
@@ -73,6 +74,20 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
         .shareIn(appScope, SharingStarted.Eagerly, replay = 1)
 
     override fun apps(): Flow<List<InstalledApp>> = cachedApps
+
+    override suspend fun awaitFullyEnrichedApps(): List<InstalledApp> {
+        val currentApps = cachedApps.first()
+        usageStatsRepository.ensureLoaded()
+        storageStatsRepository.ensureLoaded(currentApps.map { it.packageName })
+        val totalSizes = storageStatsRepository.totalSizes.value
+        val lastUsedTimes = usageStatsRepository.lastUsedTimes.value
+        return currentApps.map { app ->
+            app.copy(
+                totalSize = totalSizes[app.packageName] ?: app.totalSize,
+                lastUsedTime = lastUsedTimes[app.packageName] ?: app.lastUsedTime,
+            )
+        }
+    }
 
     @SuppressLint("QueryPermissionsNeeded")
     private suspend fun loadAllApps(): List<InstalledApp> = performanceTracker.startCancellableTrace("installed_apps_load") {

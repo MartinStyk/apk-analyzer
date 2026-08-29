@@ -1,4 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="external_apk_open_error">Không thể mở APK này</string>
+    <string name="app_function_app_display_description">Cho phép trợ lý AI tra cứu thông tin chi tiết về ứng dụng trên thiết bị này: phiên bản, quyền, nguồn cài đặt và chứng chỉ ký.</string>
 </resources>

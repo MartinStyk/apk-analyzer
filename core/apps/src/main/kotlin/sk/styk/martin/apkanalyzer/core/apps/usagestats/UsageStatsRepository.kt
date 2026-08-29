@@ -8,4 +8,5 @@ interface UsageStatsRepository {
     val isPermissionGranted: StateFlow<Boolean>
     val lastUsedTimes: StateFlow<Map<PackageName, Instant>>
     suspend fun queryLastUsedTime(packageName: PackageName): Instant?
+    suspend fun ensureLoaded()
 }

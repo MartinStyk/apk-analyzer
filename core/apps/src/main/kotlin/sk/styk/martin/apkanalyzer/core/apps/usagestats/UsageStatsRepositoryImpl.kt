@@ -54,6 +54,10 @@ internal class UsageStatsRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun ensureLoaded() {
+        fetchUsageTimes()
+    }
+
     override suspend fun queryLastUsedTime(packageName: PackageName): Instant? = lastUsedTimes.value[packageName] ?: if (checkPermission()) {
         queryRawUsageStats()
             .filter { it.packageName == packageName.value }
