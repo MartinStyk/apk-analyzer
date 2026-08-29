@@ -107,5 +107,5 @@ for turning a red run into a root cause.
 ## Related
 
 * [Coding standards](coding-standards.md) — the rules behind the findings
-* [`docs/technical/kotlin-code-quality.md`](../technical/kotlin-code-quality.md) — the standing
+* [`docs/app/technical/kotlin-code-quality.md`](../app/technical/kotlin-code-quality.md) — the standing
   code-quality audit

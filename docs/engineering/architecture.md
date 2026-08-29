@@ -150,5 +150,5 @@ in [`build-logic`](../../build-logic/AGENTS.md). Nothing is pinned inside a modu
 
 * [Coding standards](coding-standards.md) — the conventions that apply inside these shapes
 * [Verification](verification.md) — what the static-analysis gates check
-* [`docs/technical/`](../technical/README.md) — cross-cutting decisions and audits, including
-  [repository load performance](../technical/repository-load-performance.md)
+* [`docs/app/technical/`](../app/technical/README.md) — cross-cutting decisions and audits, including
+  [repository load performance](../app/technical/repository-load-performance.md)

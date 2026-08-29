@@ -1,8 +1,8 @@
 # Engineering Documentation
 
 How this repository is built, and the rules a change is held to. Product scope and feature design
-live in [`docs/product/`](../product/README.md); one-off decisions and audits live in
-[`docs/technical/`](../technical/README.md).
+live in [`docs/app/product/`](../app/product/README.md); one-off decisions and audits live in
+[`docs/app/technical/`](../app/technical/README.md).
 
 | Document | Read it when |
 |---|---|

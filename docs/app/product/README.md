@@ -1,7 +1,7 @@
 # Product Documentation
 
 ```
-docs/product/
+docs/app/product/
   roadmap.md          what remains to be built and in what order — the single source of open scope
   shipped.md          terse archive of Done/Retired IDs, so cross-references still resolve
   features/           one design doc per feature, written before it is implemented

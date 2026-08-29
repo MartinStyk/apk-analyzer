@@ -26,9 +26,9 @@ multi-module Jetpack Compose app.*
 ## See it in action
 
 <p align="center">
-  <img src="docs/images/app-details.gif" width="250" alt="Viewing detailed information about an installed app" />
-  <img src="docs/images/filter-apps.gif" width="250" alt="Filtering installed apps by app attributes" />
-  <img src="docs/images/browse-apps.gif" width="250" alt="Browsing the installed apps list" />
+  <img src="docs/github/app-details.gif" width="250" alt="Viewing detailed information about an installed app" />
+  <img src="docs/github/filter-apps.gif" width="250" alt="Filtering installed apps by app attributes" />
+  <img src="docs/github/browse-apps.gif" width="250" alt="Browsing the installed apps list" />
 </p>
 <p align="center">
   <sub><b>App details</b></sub> &nbsp;&nbsp;&nbsp;&nbsp;
@@ -97,7 +97,7 @@ summary, and launch an app's components directly.
 Android tells you very little about the software you already run. Apk Analyzer surfaces the whole
 manifest-level truth about every installed app in a form a human can read — no root, no ads, no
 paywall on the raw data. Raw facts stay free by design; see the
-[roadmap](docs/product/roadmap.md) for where interpretation features are heading.
+[roadmap](docs/app/product/roadmap.md) for where interpretation features are heading.
 
 ## Privacy and permissions
 
@@ -234,9 +234,9 @@ manual promotion. The four workflows, their triggers, and the secrets they need 
 
 | Doc | What it covers |
 |---|---|
-| [`docs/product/roadmap.md`](docs/product/roadmap.md) | Open scope and sequencing, with stable IDs |
-| [`docs/product/shipped.md`](docs/product/shipped.md) | What has shipped or been deliberately retired, and why |
-| [`docs/product/features/`](docs/product/README.md) | One design doc per feature, written before it's built |
+| [`docs/app/product/roadmap.md`](docs/app/product/roadmap.md) | Open scope and sequencing, with stable IDs |
+| [`docs/app/product/shipped.md`](docs/app/product/shipped.md) | What has shipped or been deliberately retired, and why |
+| [`docs/app/product/features/`](docs/app/product/README.md) | One design doc per feature, written before it's built |
 | [`PRIVACY_POLICY.MD`](PRIVACY_POLICY.MD) | What leaves the device, and what doesn't |
 
 **For contributors and technical reviewers**
@@ -250,7 +250,7 @@ manual promotion. The four workflows, their triggers, and the secrets they need 
 | [`docs/engineering/verification.md`](docs/engineering/verification.md) | Spotless, Detekt, Lint, LeakCanary — what each enforces and what gates CI |
 | [`docs/engineering/ai-workflow.md`](docs/engineering/ai-workflow.md) | Per-module `AGENTS.md`, `validateAgentContext`, and the shared skills |
 | [`docs/engineering/ci-and-release.md`](docs/engineering/ci-and-release.md) | The GitHub Actions workflows, the release pipeline, and production promotion |
-| [`docs/technical/`](docs/technical/README.md) | Cross-cutting engineering decisions and audits |
+| [`docs/app/technical/`](docs/app/technical/README.md) | Cross-cutting engineering decisions and audits |
 | [`.claude/skills/`](.claude/skills) | Step-by-step procedures for recurring tasks, shared by Claude and Copilot |
 
 ---
@@ -264,7 +264,7 @@ and conventions. By participating you agree to the [Code of Conduct](CODE_OF_CON
 
 Good first contributions: a **translation** (the app currently ships English and Japanese, and a PR
 touching only `strings.xml` files needs no prior discussion), or anything marked open in the
-[roadmap](docs/product/roadmap.md).
+[roadmap](docs/app/product/roadmap.md).
 
 ## AI-assisted development
 

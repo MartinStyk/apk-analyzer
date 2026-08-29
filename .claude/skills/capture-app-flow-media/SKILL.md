@@ -74,16 +74,16 @@ For existing recordings, use the source MP4 directly and name the output after t
 $ffmpeg = (Get-Command ffmpeg).Source
 $palette = "$env:TEMP\browse-apps-palette.png"
 & $ffmpeg -y -i "$env:USERPROFILE\Desktop\browse-apps.mp4" -vf "fps=24,scale=360:-1:flags=lanczos,palettegen" $palette
-& $ffmpeg -y -i "$env:USERPROFILE\Desktop\browse-apps.mp4" -i $palette -filter_complex "fps=24,scale=360:-1:flags=lanczos[x];[x][1:v]paletteuse" "docs/images/browse-apps.gif"
+& $ffmpeg -y -i "$env:USERPROFILE\Desktop\browse-apps.mp4" -i $palette -filter_complex "fps=24,scale=360:-1:flags=lanczos[x];[x][1:v]paletteuse" "docs/github/browse-apps.gif"
 ```
 
 The current README demo recordings map to these assets:
 
 | Source recording | README asset |
 | --- | --- |
-| `Desktop\browse-apps.mp4` | `docs/images/browse-apps.gif` |
-| `Desktop\filter-apps.mp4` | `docs/images/filter-apps.gif` |
-| `Desktop\app-details.mp4` | `docs/images/app-details.gif` |
+| `Desktop\browse-apps.mp4` | `docs/github/browse-apps.gif` |
+| `Desktop\filter-apps.mp4` | `docs/github/filter-apps.gif` |
+| `Desktop\app-details.mp4` | `docs/github/app-details.gif` |
 
 Target 360px width and 24fps. Keep files reasonably small, but don't sacrifice
 legibility of on-screen text to hit an arbitrary size target — a longer flow covering several screens
@@ -91,7 +91,7 @@ legitimately runs larger than a single-interaction one.
 
 ## 5. Place files and update the README
 
-- Save finals as `docs/images/<kebab-case-flow-name>.gif` (create the directory if it doesn't exist
+- Save finals as `docs/github/<kebab-case-flow-name>.gif` (create the directory if it doesn't exist
   yet — it's assets only, not a module, so it needs no `AGENTS.md`).
 - The README has a `## Screenshots` section (with a matching Table of Contents entry) using
   HTML-in-markdown `<img>`/`<table>` markup consistent with the header block's existing style. Update

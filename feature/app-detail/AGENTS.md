@@ -143,5 +143,5 @@ Temporary APK ownership must be released on all terminal lifecycle paths.
 
 ## Product Reference
 
-[`docs/product/features/app-detail.md`](../../docs/product/features/app-detail.md) is the approved
+[`docs/app/product/features/app-detail.md`](../../docs/app/product/features/app-detail.md) is the approved
 design reference for remaining app-detail work.

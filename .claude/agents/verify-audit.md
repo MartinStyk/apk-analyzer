@@ -141,7 +141,7 @@ Audit row:
 
 ### Example 5: short-circuit (SKIPPED report)
 
-Input report verdict: `SKIPPED — doc-only diff at docs/product/roadmap.md`.
+Input report verdict: `SKIPPED — doc-only diff at docs/app/product/roadmap.md`.
 
 Audit table:
 

@@ -78,7 +78,7 @@ prompt template or output contract invalidates the cache on its own, with nothin
 
 `loadDescription` is wrapped in the `ai_summary_load` performance trace (`core:common`'s
 `PerformanceTracker`/`PerformanceTrace`, see
-[`docs/technical/repository-load-performance.md`](../../docs/technical/repository-load-performance.md)) —
+[`docs/app/technical/repository-load-performance.md`](../../docs/app/technical/repository-load-performance.md)) —
 one trace per coalesced generation, not per `getDescription` call, so concurrent callers for the same
 `AppReference` share it. `outcome=degraded` covers every expected `null` result (AI unavailable,
 metadata failure, no valid output after retry); `outcome=error` is reserved for a genuine unhandled

@@ -17,8 +17,8 @@ them: [architecture](docs/engineering/architecture.md),
 [verification](docs/engineering/verification.md), and the
 [AI-assisted workflow](docs/engineering/ai-workflow.md).
 
-**Check the [roadmap](docs/product/roadmap.md).** Open scope is tracked there with stable IDs, and
-finished or deliberately retired work is in [`shipped.md`](docs/product/shipped.md). If your idea is
+**Check the [roadmap](docs/app/product/roadmap.md).** Open scope is tracked there with stable IDs, and
+finished or deliberately retired work is in [`shipped.md`](docs/app/product/shipped.md). If your idea is
 already retired, the reasoning is recorded — worth reading before re-proposing it.
 
 **Open an issue first for anything non-trivial.** Bug fixes and small improvements can go straight

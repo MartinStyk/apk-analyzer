@@ -217,5 +217,5 @@ constructors of `AppsViewModel` and `FilterViewModel`.
 
 * [Architecture](architecture.md) — the module graph and the shapes these conventions live inside
 * [Verification](verification.md) — which of these rules a tool catches and which review catches
-* [`docs/technical/kotlin-code-quality.md`](../technical/kotlin-code-quality.md) — the standing
+* [`docs/app/technical/kotlin-code-quality.md`](../app/technical/kotlin-code-quality.md) — the standing
   code-quality audit
