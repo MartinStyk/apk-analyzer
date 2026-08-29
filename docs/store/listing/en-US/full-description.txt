@@ -1,0 +1,29 @@
+Looking for a powerful tool to inspect, dissect, and explore your apps? Apk Analyzer shows you everything Android knows about an app — permissions, certificates, components, full manifest, and much more. The most downloaded, trusted, and 100% open-source APK analysis tool on Google Play. 📱
+
+Inspect any app already on your device, or open an .apk file you haven't installed yet, and get the same full report before you install it.
+
+📋 <b>Every App Report Contains:</b>
+- <b>🔐 Permissions:</b> Every permission requested, with a plain-language description and protection level.
+- <b>✍️ Signing & Certificates:</b> Issuer, subject, validity, fingerprints, and signing-scheme versions.
+- <b>🏷️ App Metadata:</b> Package and app name, version, category, install and update dates.
+- <b>📶 SDK & Compatibility:</b> Target and minimum Android version, required and optional hardware features.
+- <b>🧩 Components Breakdown:</b> Activities, services, broadcast receivers, and content providers — with intent filters and launch options.
+- <b>🏬 Install Source:</b> The full install-source chain — which store or app actually installed it.
+- <b>📦 Packaging:</b> Native libraries, ABIs, split APKs, and storage size.
+- <b>📄 Full Manifest:</b> Decode and view the complete, readable AndroidManifest.xml, and export it directly to your storage.
+
+🧭 <b>Browse by Attribute</b>
+Turn the question around: which apps request a given permission, which share a signing certificate, which target a given Android version, where each app came from, and which apps share a UID.
+
+🤖 <b>On-Device AI Summary</b>
+A short, factual, plain-language read on what an app is and what its permissions imply — generated entirely on-device. Nothing about your apps is ever sent anywhere.
+
+📤 <b>Export & Share</b>
+Save an app's APK or icon to storage, share a text summary, or export the readable manifest — no root required.
+
+🔒 <b>Safe, Open-Source & Private</b>
+- No root access required.
+- 100% Ad-Free.
+- Fully open source, licensed under the GNU General Public License v3 (GPLv3).
+
+Take control of the apps on your device. Download Apk Analyzer today.
