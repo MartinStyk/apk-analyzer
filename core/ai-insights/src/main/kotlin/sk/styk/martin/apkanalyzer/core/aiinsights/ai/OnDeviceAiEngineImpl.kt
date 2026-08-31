@@ -1,5 +1,6 @@
 package sk.styk.martin.apkanalyzer.core.aiinsights.ai
 
+import android.os.Build
 import com.google.mlkit.genai.common.DownloadStatus
 import com.google.mlkit.genai.common.FeatureStatus
 import com.google.mlkit.genai.prompt.GenerativeModel
@@ -14,16 +15,22 @@ private const val TAG = "OnDeviceAiEngine"
 @Singleton
 internal class OnDeviceAiEngineImpl @Inject constructor(private val client: GenerativeModel) : OnDeviceAiEngine {
 
-    override suspend fun checkAvailability(): AiAvailability = runCatchingCancellable {
-        when (client.checkStatus()) {
-            FeatureStatus.AVAILABLE -> AiAvailability.Available
-            FeatureStatus.DOWNLOADABLE -> AiAvailability.Downloadable
-            FeatureStatus.DOWNLOADING -> AiAvailability.Downloading
-            else -> AiAvailability.Unavailable
+    override suspend fun checkAvailability(): AiAvailability {
+        if (isRunningOnEmulator()) {
+            Logger.d(TAG, "On-device AI unavailable: running on an emulator")
+            return AiAvailability.Unavailable
         }
-    }.onFailure {
-        Logger.w(TAG, it, "On-device AI availability check failed")
-    }.getOrDefault(AiAvailability.Unavailable)
+        return runCatchingCancellable {
+            when (client.checkStatus()) {
+                FeatureStatus.AVAILABLE -> AiAvailability.Available
+                FeatureStatus.DOWNLOADABLE -> AiAvailability.Downloadable
+                FeatureStatus.DOWNLOADING -> AiAvailability.Downloading
+                else -> AiAvailability.Unavailable
+            }
+        }.onFailure {
+            Logger.w(TAG, it, "On-device AI availability check failed")
+        }.getOrDefault(AiAvailability.Unavailable)
+    }
 
     override suspend fun downloadModel(): Boolean = runCatchingCancellable {
         Logger.d(TAG, "On-device AI model download started")
@@ -40,3 +47,15 @@ internal class OnDeviceAiEngineImpl @Inject constructor(private val client: Gene
         Logger.w(TAG, it, "On-device AI generation failed")
     }.getOrNull()
 }
+
+private fun isRunningOnEmulator(): Boolean = Build.FINGERPRINT.startsWith("generic") ||
+    Build.FINGERPRINT.startsWith("unknown") ||
+    Build.MODEL.contains("google_sdk") ||
+    Build.MODEL.contains("sdk_gphone") ||
+    Build.MODEL.contains("Emulator") ||
+    Build.MODEL.contains("Android SDK built for") ||
+    Build.MANUFACTURER.contains("Genymotion") ||
+    Build.PRODUCT.contains("sdk_gphone") ||
+    Build.HARDWARE.contains("goldfish") ||
+    Build.HARDWARE.contains("ranchu") ||
+    (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic"))
