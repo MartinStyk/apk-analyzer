@@ -109,11 +109,17 @@ When a GitHub issue exists but the *note* is missing (i.e. only direction 2 matc
 note — that keeps the console usable for whoever looks there first. Skip the rest of triage for this
 issue either way.
 
-## Step 4 — Gather detail before judging anything
+## Step 4 — Investigate each issue in parallel
 
-The judgement in Step 5 — especially telling "useful signal" apart from "noise" — needs the actual
-code, not just the title. Do this before deciding, not only before filing. For each issue still
-standing after Step 3, pull:
+Gathering event/device/OS data, mapping the crash to source, and reaching a judgement is read-only
+and independent per issue — spawn one forked subagent (`Agent` tool, `subagent_type: "fork"`) per
+issue still standing after Step 3, all launched in the same message so they run in parallel. A fork
+inherits this skill's instructions and the module/package mapping already in context, so the prompt
+only needs the issue id and appId.
+
+Each fork:
+
+1. Pulls its issue's detail:
 
 ```json
 [
@@ -126,17 +132,26 @@ standing after Step 3, pull:
 ]
 ```
 
-Then map the top stack frame onto this repo. The frames are package-qualified
-(`sk.styk.martin.apkanalyzer.core.userpreferences.searchhistory.SearchHistoryDao_Impl`), so the
-owning module follows directly from the package — see the module/package mapping in `AGENTS.md`.
-Read the actual source of the top app frame before judging or writing anything; a triage issue that
-names the wrong file wastes more time than no issue, and a "no issue needed" judgement made without
-reading the code is just a guess.
+2. Maps the top stack frame onto this repo. The frames are package-qualified
+   (`sk.styk.martin.apkanalyzer.core.userpreferences.searchhistory.SearchHistoryDao_Impl`), so the
+   owning module follows directly from the package — see the module/package mapping in `AGENTS.md`.
+   Ignore framework-only frames when locating the owner — find the deepest
+   `sk.styk.martin.apkanalyzer.*` frame.
+3. Reads the actual source of the top app frame before judging or writing anything. A triage issue
+   that names the wrong file wastes more time than no issue, and a verdict reached without reading
+   the code is just a guess.
+4. Applies the judgement criteria in Step 5 and returns a **proposed** verdict — worth-fixing /
+   useful-signal / noise-downgrade / not-actionable — with its reasoning, the owning file, and (for
+   every verdict except useful-signal) a draft title/body per Step 6's template.
 
-Ignore framework-only frames when locating the owner — find the deepest
-`sk.styk.martin.apkanalyzer.*` frame.
+A fork only investigates and proposes. It never calls `crashlytics_create_note`,
+`crashlytics_update_issue`, or files a GitHub issue — filing and notes happen in the coordinator
+(Steps 6–7) after reconciliation, so one place sees every issue in the batch before anything is
+written or filed.
 
-## Step 5 — Decide whether it deserves an issue
+## Step 5 — Reconcile proposed verdicts and decide
+
+Each fork judges its issue against the criteria below.
 
 | Kind | Rule |
 |---|---|
@@ -181,6 +196,16 @@ produces a GitHub issue:
   examples: #210 (third-party repackaging tool's injected `ComponentFactory`, crashes before any app
   code runs), #219 (background ANR, Crashlytics itself reports the root cause unknown, no app frame
   anywhere on the stack).
+
+Before accepting any fork's proposed verdict, compare it against every other fork's from this run.
+Two or more issues that trace back to the same underlying call site or root cause — even with
+different `issueId`s, different package names, paths, or byte counts on the stack — must not become
+separate GitHub issues. Fold them into one issue that lists every Crashlytics issue id it covers,
+rather than filing one per fork. #204/#205/#213/#214/#215 is exactly the failure this check exists to
+prevent: the same call site produced five separate issues before this reconciliation step existed.
+
+Once reconciled, each issue (or merged group of issues) has a final verdict — this is what Steps 6–7
+act on, not the fork's raw proposal.
 
 ## Step 6 — File the GitHub issue
 
@@ -234,7 +259,10 @@ condition quietly, and why.
 ## Step 7 — Write the Crashlytics note
 
 Every issue judged in Step 5 gets a note — filed or not. That note is what lets Step 3 recognize this
-exact `issueId` on the next run without re-judging it.
+exact `issueId` on the next run without re-judging it. For an issue folded into a merged group during
+reconciliation, write the note separately for **each** `issueId` in the group, all pointing at the
+same GitHub issue number — Step 3 dedupes per `issueId`, so a merged sibling without its own note
+looks unreviewed on the next run.
 
 Filed:
 
@@ -266,7 +294,9 @@ Summarise as a table: Crashlytics id (short), kind, events/users, the decision (
 / filed as noise-downgrade / filed as not-actionable / reviewed-no-issue / already reviewed), and the
 GitHub issue number where one exists. Call out every **working as designed, useful signal**
 judgement explicitly, with the two-question reasoning from Step 5 — that's the one disposition with
-no GitHub issue to point at, so the report is the only place it's visible.
+no GitHub issue to point at, so the report is the only place it's visible. Call out every group
+merged during Step 5 reconciliation too, listing every Crashlytics issue id folded into it — that's
+the other disposition a reader can't reconstruct from GitHub alone.
 
 Never mark a Crashlytics issue closed with `crashlytics_update_issue` during triage — closing it is
 the `fix-crash` skill's job, after the fix actually ships.
@@ -277,11 +307,16 @@ the `fix-crash` skill's job, after the fix actually ships.
 - [ ] That version display name was confirmed present in Crashlytics
 - [ ] Fatals, non-fatals, and ANRs were all queried
 - [ ] Every issue was checked against Crashlytics notes and GitHub search before being judged
-- [ ] Each non-fatal reaching Step 5 got an explicit judgement — worth-fixing / useful-signal / noise
-      / not-actionable — not a default
+- [ ] Every issue still standing after Step 3 was investigated by its own forked subagent, launched
+      in parallel with the others, and no fork filed a GitHub issue or wrote a Crashlytics note
+- [ ] Each non-fatal reaching Step 5 got an explicit proposed judgement — worth-fixing / useful-signal
+      / noise / not-actionable — not a default
 - [ ] A **useful-signal** verdict was reached by reading the actual code, not the title alone, and
       answers both Step 5 questions
+- [ ] Every fork's proposed verdict was cross-checked against the others for a shared call site or
+      root cause before filing, and any match was folded into one issue
 - [ ] Every filed issue names a real file in this repo, verified by reading it
 - [ ] Every filed issue carries the Crashlytics issue id and console link
-- [ ] Every judged issue — filed or not — has a matching Crashlytics note
+- [ ] Every judged issue — filed or not — has a matching Crashlytics note, including every sibling in
+      a merged group
 - [ ] No Crashlytics issue state was changed
