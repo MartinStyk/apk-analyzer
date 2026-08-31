@@ -19,6 +19,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.IconButton
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.IconButtonStyle
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
+import sk.styk.martin.apkanalyzer.core.uilibrary.launcher.launchSafely
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.feature.apps.impl.R
 
@@ -56,7 +57,11 @@ private fun ApkFilePickerButtonWithViewModel(
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
-                ApkFilePickerEvent.OpenDocument -> apkFileLauncher.launch(arrayOf(APK_MIME_TYPE))
+                ApkFilePickerEvent.OpenDocument -> {
+                    apkFileLauncher.launchSafely(arrayOf(APK_MIME_TYPE)) {
+                        Toast.makeText(context, R.string.apps_apk_open_error, Toast.LENGTH_LONG).show()
+                    }
+                }
 
                 is ApkFilePickerEvent.OpenApkDetail -> {
                     onApkDetails(event.apkFilePath)

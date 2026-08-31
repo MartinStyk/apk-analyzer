@@ -62,6 +62,7 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.TextButton
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
+import sk.styk.martin.apkanalyzer.core.uilibrary.launcher.launchSafely
 import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.collapsingToolbarScroll
 import sk.styk.martin.apkanalyzer.core.uilibrary.modifier.rememberCollapsingToolbarState
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
@@ -138,12 +139,11 @@ internal fun AppDetailScreen(
                 is AppDetailEvent.OpenAppInfo -> onOpenAppInfo(event.packageName)
 
                 is AppDetailEvent.CreateDocument -> {
-                    try {
-                        when (event.export) {
-                            AppDetailExport.Apk -> apkDocumentLauncher.launch(event.suggestedName)
-                            AppDetailExport.Icon -> iconDocumentLauncher.launch(event.suggestedName)
-                        }
-                    } catch (_: ActivityNotFoundException) {
+                    val launcher = when (event.export) {
+                        AppDetailExport.Apk -> apkDocumentLauncher
+                        AppDetailExport.Icon -> iconDocumentLauncher
+                    }
+                    launcher.launchSafely(event.suggestedName) {
                         viewModel.onAction(AppDetailAction.DocumentPickerUnavailable(event.export))
                     }
                 }
