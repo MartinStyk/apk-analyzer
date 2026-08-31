@@ -15,6 +15,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
 
 internal class TemporaryApkManagerImpl @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -49,6 +50,7 @@ internal class TemporaryApkManagerImpl @Inject constructor(
         releaseFile(file)
     }
 
+    @Suppress("ThrowsCount")
     private suspend fun copyToTaskDirectory(uri: Uri, taskId: Int): Result<File> {
         var destination: File? = null
         var copyCompleted = false
@@ -76,6 +78,8 @@ internal class TemporaryApkManagerImpl @Inject constructor(
             Result.failure(error)
         } catch (error: IllegalArgumentException) {
             Result.failure(error)
+        } catch (error: CancellationException) {
+            throw error
         } catch (error: IllegalStateException) {
             Result.failure(error)
         } finally {
