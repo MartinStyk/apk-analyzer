@@ -76,6 +76,8 @@ internal class TemporaryApkManagerImpl @Inject constructor(
             Result.failure(error)
         } catch (error: IllegalArgumentException) {
             Result.failure(error)
+        } catch (error: IllegalStateException) {
+            Result.failure(error)
         } finally {
             if (!copyCompleted) destination?.let(::releaseAfterCopyFailure)
         }
