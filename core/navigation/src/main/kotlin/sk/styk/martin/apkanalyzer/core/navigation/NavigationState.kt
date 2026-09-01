@@ -1,6 +1,7 @@
 package sk.styk.martin.apkanalyzer.core.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -13,25 +14,32 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberDecoratedNavEntries
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.toPersistentMap
 
 @Composable
-fun rememberNavigationState(startKey: NavKey, topLevelKeys: List<NavKey>): NavigationState {
+fun rememberNavigationState(startKey: NavKey, topLevelKeys: ImmutableList<NavKey>): NavigationState {
     val topLevelStack = rememberNavBackStack(startKey)
-    val subStacks = topLevelKeys.associateWith { key -> rememberNavBackStack(key) }
+    val subStacks = mutableMapOf<NavKey, NavBackStack<NavKey>>()
+    for (key in topLevelKeys) {
+        subStacks[key] = rememberNavBackStack(key)
+    }
 
     return remember(startKey, topLevelKeys) {
         NavigationState(
             startKey = startKey,
             topLevelStack = topLevelStack,
-            subStacks = subStacks,
+            subStacks = subStacks.toPersistentMap(),
         )
     }
 }
 
+@Stable
 class NavigationState(
     val startKey: NavKey,
     val topLevelStack: NavBackStack<NavKey>,
-    val subStacks: Map<NavKey, NavBackStack<NavKey>>,
+    val subStacks: ImmutableMap<NavKey, NavBackStack<NavKey>>,
 ) {
     val currentTopLevelKey: NavKey by derivedStateOf { topLevelStack.last() }
 

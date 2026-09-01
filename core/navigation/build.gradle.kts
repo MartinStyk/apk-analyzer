@@ -8,3 +8,7 @@ android {
 
     androidResources.enable = false
 }
+
+dependencies {
+    implementation(libs.kotlinx.collections.immutable)
+}
