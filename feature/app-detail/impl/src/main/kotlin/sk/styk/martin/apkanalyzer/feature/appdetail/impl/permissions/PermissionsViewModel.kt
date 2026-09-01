@@ -121,9 +121,11 @@ internal class PermissionsViewModel @AssistedInject constructor(
                         },
                     )
                 }
+                .mergeDuplicatesByName()
                 .sortedBy { it.label.lowercase() },
             defined = permissions.defined
                 .map { it.toItem(analysedPackage = info.packageName, grantState = null) }
+                .mergeDuplicatesByName()
                 .sortedBy { it.label.lowercase() },
         )
     }
@@ -139,6 +141,14 @@ internal class PermissionsViewModel @AssistedInject constructor(
         declaringPackage = details?.declaringPackage,
         isSelfDeclared = details?.declaringPackage == analysedPackage,
     )
+}
+
+private fun List<PermissionItem>.mergeDuplicatesByName(): List<PermissionItem> =
+    groupBy { it.name }.values.map { duplicates -> duplicates.reduce(::moreClassified) }
+
+private fun moreClassified(a: PermissionItem, b: PermissionItem): PermissionItem = when {
+    (a.protectionLevel == null) != (b.protectionLevel == null) -> if (a.protectionLevel != null) a else b
+    else -> a
 }
 
 private sealed interface PermissionsSource {
