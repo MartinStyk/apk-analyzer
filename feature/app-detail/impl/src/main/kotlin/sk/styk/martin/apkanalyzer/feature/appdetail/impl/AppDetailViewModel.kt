@@ -194,7 +194,8 @@ internal class AppDetailViewModel @AssistedInject constructor(
                 },
             ),
         )
-        sendEvent(AppDetailEvent.CreateDocument(export, "${state.packageName}.$extension"))
+        val fileNameBase = state.versionName?.let { "${state.packageName}_$it" } ?: state.packageName.toString()
+        sendEvent(AppDetailEvent.CreateDocument(export, "$fileNameBase.$extension"))
     }
 
     private fun viewSummary() = withLoadedState { state ->
