@@ -14,6 +14,8 @@ import javax.inject.Inject
 import javax.security.auth.x500.X500Principal
 
 private const val TAG = "CertificateExtractorImpl"
+private val unescapedCommaRegex = Regex("""(?<!\\),""")
+private val escapedCharRegex = Regex("""\\(.)""")
 
 internal class CertificateExtractorImpl @Inject constructor(private val digestManager: DigestManager) : CertificateExtractor {
 
@@ -76,7 +78,7 @@ internal class CertificateExtractorImpl @Inject constructor(private val digestMa
     }
 
     private fun X500Principal.toPrincipal(): CertificatePrincipal {
-        val fields = name.parseDistinguishedNameFields()
+        val fields = name.toDistinguishedNameFields()
         return CertificatePrincipal(
             name = fields["CN"],
             organization = fields["O"],
@@ -84,33 +86,16 @@ internal class CertificateExtractorImpl @Inject constructor(private val digestMa
         )
     }
 
-    private fun String.parseDistinguishedNameFields(): Map<String, String> {
+    private fun String.toDistinguishedNameFields(): Map<String, String> {
         val fields = mutableMapOf<String, String>()
-        var index = 0
-        while (index < length) {
-            while (index < length && (this[index] == ',' || this[index] == '+' || this[index] == ' ')) index++
-            val typeStart = index
-            while (index < length && this[index] != '=') index++
-            if (index >= length) break
-            val type = substring(typeStart, index).trim().uppercase(Locale.ROOT)
-            index++
-            val value = StringBuilder()
-            while (index < length && this[index] != ',' && this[index] != '+') {
-                if (this[index] == '\\' && index + 1 < length) {
-                    value.append(this[index + 1])
-                    index += 2
-                } else {
-                    value.append(this[index])
-                    index++
-                }
-            }
-            val trimmedValue = value.toString().trim()
-            if (type.isNotEmpty() && trimmedValue.isNotEmpty()) {
-                fields.putIfAbsent(type, trimmedValue)
-            }
+        for (rdn in unescapedCommaRegex.split(this)) {
+            val (type, value) = rdn.split('=', limit = 2).takeIf { it.size == 2 } ?: continue
+            fields.putIfAbsent(type.trim().uppercase(Locale.ROOT), value.unescapeDnValue())
         }
         return fields
     }
+
+    private fun String.unescapeDnValue(): String = escapedCharRegex.replace(this) { it.groupValues[1] }.trim()
 
     private fun resolveTrustLevel(certificate: X509Certificate): CertificateTrustLevel {
         val issuerDn = certificate.issuerX500Principal.name
