@@ -11,8 +11,6 @@ import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import java.util.Locale
 import javax.inject.Inject
-import javax.naming.ldap.LdapName
-import javax.naming.ldap.Rdn
 import javax.security.auth.x500.X500Principal
 
 private const val TAG = "CertificateExtractorImpl"
@@ -78,16 +76,41 @@ internal class CertificateExtractorImpl @Inject constructor(private val digestMa
     }
 
     private fun X500Principal.toPrincipal(): CertificatePrincipal {
-        val rdns = runCatching { LdapName(name).rdns }.getOrDefault(emptyList())
+        val fields = name.parseDistinguishedNameFields()
         return CertificatePrincipal(
-            name = rdns.getField("CN"),
-            organization = rdns.getField("O"),
-            country = rdns.getField("C"),
+            name = fields["CN"],
+            organization = fields["O"],
+            country = fields["C"],
         )
     }
 
-    private fun List<Rdn>.getField(type: String): String? =
-        firstOrNull { it.type.equals(type, ignoreCase = true) }?.value?.toString()?.takeUnless { it.isBlank() }
+    private fun String.parseDistinguishedNameFields(): Map<String, String> {
+        val fields = mutableMapOf<String, String>()
+        var index = 0
+        while (index < length) {
+            while (index < length && (this[index] == ',' || this[index] == '+' || this[index] == ' ')) index++
+            val typeStart = index
+            while (index < length && this[index] != '=') index++
+            if (index >= length) break
+            val type = substring(typeStart, index).trim().uppercase(Locale.ROOT)
+            index++
+            val value = StringBuilder()
+            while (index < length && this[index] != ',' && this[index] != '+') {
+                if (this[index] == '\\' && index + 1 < length) {
+                    value.append(this[index + 1])
+                    index += 2
+                } else {
+                    value.append(this[index])
+                    index++
+                }
+            }
+            val trimmedValue = value.toString().trim()
+            if (type.isNotEmpty() && trimmedValue.isNotEmpty()) {
+                fields.putIfAbsent(type, trimmedValue)
+            }
+        }
+        return fields
+    }
 
     private fun resolveTrustLevel(certificate: X509Certificate): CertificateTrustLevel {
         val issuerDn = certificate.issuerX500Principal.name
