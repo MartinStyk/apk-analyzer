@@ -11,8 +11,9 @@ import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import java.util.Locale
 import javax.inject.Inject
+import javax.naming.ldap.LdapName
+import javax.naming.ldap.Rdn
 import javax.security.auth.x500.X500Principal
-import javax.security.auth.x500.X500Principal.RFC1779
 
 private const val TAG = "CertificateExtractorImpl"
 
@@ -76,15 +77,17 @@ internal class CertificateExtractorImpl @Inject constructor(private val digestMa
         }
     }
 
-    private fun X500Principal.toPrincipal() = CertificatePrincipal(
-        name = getField("CN=([^,]*)"),
-        organization = getField("O=([^,]*)"),
-        country = getField("C=([^,]*)"),
-    )
+    private fun X500Principal.toPrincipal(): CertificatePrincipal {
+        val rdns = runCatching { LdapName(name).rdns }.getOrDefault(emptyList())
+        return CertificatePrincipal(
+            name = rdns.getField("CN"),
+            organization = rdns.getField("O"),
+            country = rdns.getField("C"),
+        )
+    }
 
-    private fun X500Principal.getField(pattern: String): String? = getName(RFC1779).takeUnless {
-        it.isNullOrBlank()
-    }?.let { Regex(pattern).find(it)?.groupValues?.get(1) }
+    private fun List<Rdn>.getField(type: String): String? =
+        firstOrNull { it.type.equals(type, ignoreCase = true) }?.value?.toString()?.takeUnless { it.isBlank() }
 
     private fun resolveTrustLevel(certificate: X509Certificate): CertificateTrustLevel {
         val issuerDn = certificate.issuerX500Principal.name
