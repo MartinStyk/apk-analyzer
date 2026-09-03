@@ -12,9 +12,10 @@ import java.security.cert.X509Certificate
 import java.util.Locale
 import javax.inject.Inject
 import javax.security.auth.x500.X500Principal
-import javax.security.auth.x500.X500Principal.RFC1779
 
 private const val TAG = "CertificateExtractorImpl"
+private val unescapedCommaRegex = Regex("""(?<!\\),""")
+private val escapedCharRegex = Regex("""\\(.)""")
 
 internal class CertificateExtractorImpl @Inject constructor(private val digestManager: DigestManager) : CertificateExtractor {
 
@@ -76,15 +77,25 @@ internal class CertificateExtractorImpl @Inject constructor(private val digestMa
         }
     }
 
-    private fun X500Principal.toPrincipal() = CertificatePrincipal(
-        name = getField("CN=([^,]*)"),
-        organization = getField("O=([^,]*)"),
-        country = getField("C=([^,]*)"),
-    )
+    private fun X500Principal.toPrincipal(): CertificatePrincipal {
+        val fields = name.toDistinguishedNameFields()
+        return CertificatePrincipal(
+            name = fields["CN"],
+            organization = fields["O"],
+            country = fields["C"],
+        )
+    }
 
-    private fun X500Principal.getField(pattern: String): String? = getName(RFC1779).takeUnless {
-        it.isNullOrBlank()
-    }?.let { Regex(pattern).find(it)?.groupValues?.get(1) }
+    private fun String.toDistinguishedNameFields(): Map<String, String> {
+        val fields = mutableMapOf<String, String>()
+        for (rdn in unescapedCommaRegex.split(this)) {
+            val (type, value) = rdn.split('=', limit = 2).takeIf { it.size == 2 } ?: continue
+            fields.putIfAbsent(type.trim().uppercase(Locale.ROOT), value.unescapeDnValue())
+        }
+        return fields
+    }
+
+    private fun String.unescapeDnValue(): String = escapedCharRegex.replace(this) { it.groupValues[1] }.trim()
 
     private fun resolveTrustLevel(certificate: X509Certificate): CertificateTrustLevel {
         val issuerDn = certificate.issuerX500Principal.name

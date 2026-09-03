@@ -3,10 +3,24 @@
 **Roadmap:** [FR-31](../product/roadmap.md#17-invisible-infrastructure),
 [HI-01, HI-02, HI-20](../product/roadmap.md#hi--snapshot--history-pillar-1--what-changed) — see
 [app-history.md](../product/features/app-history.md) for the product design this implements.
-**Status:** Proposed. Schema and capture algorithm agreed; `core:app-history` not yet created.
+**Status:** Implemented. `core:app-history` exists; the schema, capture pipeline, and both triggers
+(reconciliation on process start, fast-path broadcast) are built and running — see
+[`core/app-history/AGENTS.md`](../../../core/app-history/AGENTS.md) for the as-built module reference.
+Still not built: the diff engine (`HI-03`), UI (`HI-08`/`HI-14`), retention (`HI-04`), backup
+(`HI-16`/`HI-17`), the `HI-10` runtime-state tier, and periodic `WorkManager` reconciliation.
 **Scope:** The on-device Room schema for full-state app history snapshots, what is and isn't
 captured, the change-detection gate, and the two capture triggers. Does not cover the diff engine
 (`HI-03`), UI (`HI-08`/`HI-14`), retention (`HI-04`), or backup (`HI-16`/`HI-17`).
+
+**Implementation note (post-agreement correction):** this doc's "Why JSON Content" section below
+still describes the *originally agreed* design — serializing the `core:apps` domain models
+(`Activity`, `Certificate`, ...) directly. That was changed during implementation: those models are
+never made `@Serializable`, because doing so would let an ordinary `core:apps` rename/retype silently
+break deserialization of historical blobs. `core:app-history` instead defines its own mirror DTOs
+(`capture/snapshot/`) and maps to them at capture time — see
+[`core/app-history/AGENTS.md`](../../../core/app-history/AGENTS.md#dto-boundary--not-a-detail) for the
+full rationale. The content-addressing, per-package scoping, and "JSON absorbs a new field for free"
+arguments below are unaffected; only *which* type gets serialized changed.
 
 ## Reconstruction Target
 
@@ -317,23 +331,18 @@ Two capture paths, sharing the same gate and pipeline above:
 
 * **Fast path** — `PackageChangesObserver`'s install/update broadcast. Only fires while the process
   is alive (a context-registered receiver can't survive process death), so it's best-effort
-  latency, not the correctness guarantee.
-
-  **Prerequisite, not yet true today:** `PackageChangesObserverImpl` currently emits `Flow<Unit>` —
-  `onReceive` reads nothing off the `Intent` before calling `trySend(Unit)`, so there's no package
-  name to key the single-package gate query on. Its only current consumer
-  (`InstalledAppsRepositoryImpl`) only ever needed "something changed, reload everything," so this
-  was never a problem before. Using this as history's fast path requires extending the observer to
-  surface the changed package from the broadcast's `Intent.getData()` (`package:<name>` URI) —
-  and ideally the action (`ACTION_PACKAGE_ADDED`/`REMOVED`/`REPLACED`) — instead of a bare `Unit`.
-  Until that lands, the fast path can only fall back to the same all-packages batched query
-  reconciliation uses, which defeats its purpose as the low-latency path.
+  latency, not the correctness guarantee. `PackageChangesObserver` now emits
+  `PackageChangeEvent(packageName, action)` (extended for this — its other consumers, which only ever
+  needed "something changed, reload everything," were adapted to the new shape) instead of the bare
+  `Flow<Unit>` this section originally described as a prerequisite.
 * **Reconciliation** — sweeps every installed app (`InstalledAppsRepository`) through the batched
   gate query above. This is what actually guarantees completeness, since install/update broadcasts
-  missed while the app was dead are otherwise lost forever. Runs once per app process start today;
-  a periodic `WorkManager` job is an agreed follow-up once this pipeline is proven, to cover long
-  stretches where the app is never opened (`androidx.work` is not yet a dependency — needs adding
-  when that follow-up starts).
+  missed while the app was dead are otherwise lost forever. Runs once per app process start today —
+  implemented by `AppHistoryCaptureScheduler`, a `DefaultLifecycleObserver` whose `onCreate` (not
+  `onStart`, which re-fires on every foreground return) calls `start()`; see
+  [`core/app-history/AGENTS.md`](../../../core/app-history/AGENTS.md#triggers). A periodic `WorkManager`
+  job is an agreed follow-up once this pipeline is proven, to cover long stretches where the app is
+  never opened (`androidx.work` is not yet a dependency — needs adding when that follow-up starts).
 
 ## Removal Handling
 
@@ -399,9 +408,13 @@ Not yet resolved — flagging rather than silently deciding:
   schema here yet — they don't fit the content-addressed snapshot model (no new version, no full
   re-capture) and need their own lightweight append-only shape.
 * **`uid` inclusion.** Flagged above as borderline; kept for now, worth revisiting.
-* **`PackageChangesObserver` needs extending before the fast path can work as designed** — see the
-  prerequisite note under [Triggers](#triggers). Not a design gap, an implementation one, but capture
-  can't ship the fast path without it.
+* **Fast-path broadcast trigger not independently verified on-device.** Reconciliation was proven
+  end-to-end on an emulator (real snapshot/blob rows, content-addressing visibly working, zero
+  partial-capture failures). The fast path's `PackageChangesObserver` wiring compiles clean and
+  reuses the same proven `capture()` path, but `ACTION_PACKAGE_REPLACED` is a protected broadcast
+  `adb` can't synthesize, and a real reinstall kills the process before its own receiver reacts — so
+  this is reasoned, not demonstrated, confidence. Worth a real install/update test on a throwaway
+  package before relying on it.
 
 ## Changes to the Product Design
 

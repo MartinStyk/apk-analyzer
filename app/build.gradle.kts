@@ -46,6 +46,7 @@ dependencies {
     implementation(projects.core.appPermissions)
     implementation(projects.core.appIndex)
     implementation(projects.core.appFunctions)
+    implementation(projects.core.appHistory)
     implementation(projects.core.common)
     implementation(projects.core.userPreferences)
     implementation(projects.core.navigation)

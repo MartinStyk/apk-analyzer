@@ -32,6 +32,7 @@ include(
     ":core:app-functions",
     ":core:ai-insights",
     ":core:app-index",
+    ":core:app-history",
     ":core:common",
     ":core:user-preferences",
     ":core:ui-library",

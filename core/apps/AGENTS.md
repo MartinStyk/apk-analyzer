@@ -42,6 +42,16 @@ cached `AppDetail`; consumers combine app facts with device repositories separat
 `PackageChangesObserver` invalidates installed-package data. APK-file inputs and device state have
 different lifecycles and must not be smuggled into that cache key.
 
+`PackageChangesObserverImpl.observe()` is one `BroadcastReceiver` shared across every caller
+(`shareIn(appScope, SharingStarted.WhileSubscribed(), replay = 0)`), not a fresh registration per
+subscriber — seven independent consumers each registering their own receiver for the same broadcasts
+was the previous, wasteful shape. Every current consumer subscribes permanently at construction
+(either `.launchIn(appScope + ...)` in an `init` block, or its own `shareIn(appScope, Eagerly/Lazily,
+...)`), so in practice the shared receiver stays registered for the app's lifetime either way; a
+future consumer that subscribes and later fully unsubscribes would see the receiver tear down and
+re-register around that gap, which `replay = 0` makes safe to reason about (a late subscriber only
+ever sees events after it attaches, matching the original per-consumer `callbackFlow` semantics).
+
 Expensive device-wide signing work is shared lazily. Single-app signing-scheme inspection is itself
 expensive (it reads the APK's signing block directly) and only the Certificates screen shows it, so
 it is fetched lazily and separately by `SigningSchemeRepository` rather than being collected as part
