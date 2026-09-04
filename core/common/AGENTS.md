@@ -19,7 +19,9 @@ logic do not belong here.
 * `settings/` - generic typed DataStore persistence and preference keys.
 * `model/` - genuinely cross-module value types such as app references, source classification, and
   file sizes.
-* `resources/`, `clipboard/`, and `digest/` - shared platform adapters and focused utilities.
+* `resources/`, `clipboard/`, `digest/`, and `device/` - shared platform adapters and focused
+  utilities. `device/`'s `DeviceIdProvider` wraps `Settings.Secure.ANDROID_ID` behind an interface so
+  callers never touch `@SuppressLint("HardwareIds")` or `ContentResolver` directly.
 
 ## Durable Contracts
 
