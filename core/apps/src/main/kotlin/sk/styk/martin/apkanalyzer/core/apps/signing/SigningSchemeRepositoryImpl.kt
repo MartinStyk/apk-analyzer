@@ -2,10 +2,6 @@ package sk.styk.martin.apkanalyzer.core.apps.signing
 
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.plus
 import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.apps.PackageChangesObserver
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
@@ -33,7 +29,6 @@ internal class SigningSchemeRepositoryImpl @Inject constructor(
     private val packageManager: PackageManager,
     private val apkSigningBlockAnalyzer: ApkSigningBlockAnalyzer,
     packageChangesObserver: PackageChangesObserver,
-    appScope: CoroutineScope,
     private val dispatcherProvider: DispatcherProvider,
     private val performanceTracker: PerformanceTracker,
 ) : SigningSchemeRepository {
@@ -41,12 +36,10 @@ internal class SigningSchemeRepositoryImpl @Inject constructor(
     private val cache = ConcurrentHashMap<AppReferenceCacheKey, SigningSchemeResult>()
 
     init {
-        packageChangesObserver.observe()
-            .onEach {
-                Logger.d(TAG, "Package change detected, clearing cache")
-                cache.clear()
-            }
-            .launchIn(appScope + dispatcherProvider.default())
+        packageChangesObserver.runBeforeNotifying {
+            Logger.d(TAG, "Package change detected, clearing cache")
+            cache.clear()
+        }
     }
 
     override suspend fun signingSchemeVersions(reference: AppReference): Result<List<SigningSchemeVersion>?> =

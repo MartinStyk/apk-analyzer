@@ -9,20 +9,5 @@ import androidx.room.Entity
 internal data class AppHistoryBlobEntity(
     val packageName: String,
     val hash: String,
-    val sectionType: SectionType,
     val content: String,
 )
-
-internal enum class SectionType {
-    Permissions,
-    Activities,
-    Services,
-    Receivers,
-    Providers,
-    Features,
-    Signing,
-    IntentFilters,
-    NativeLibraries,
-    SigningScheme,
-    InstalledSplits,
-}

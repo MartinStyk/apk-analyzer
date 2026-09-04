@@ -191,27 +191,24 @@ matches something already stored for the same package just references the existi
 internal data class AppHistoryBlobEntity(
     val packageName: String,
     val hash: String,
-    val sectionType: SectionType,
     val content: String, // JSON
 )
-
-internal enum class SectionType {
-    Permissions,
-    Activities,
-    Services,
-    Receivers,
-    Providers,
-    Features,
-    Signing,
-    IntentFilters,
-    NativeLibraries,
-    SigningScheme,
-    InstalledSplits,
-}
 ```
 
 Insert with `OnConflictStrategy.IGNORE` against the composite `(packageName, hash)` key — no
 existence check needed first, since the hash is a deterministic function of the content.
+
+**Why no `sectionType` column.** An earlier version of this schema carried a `SectionType` enum
+column on every blob row, and hashed content alone. That's unsound: most apps have several
+genuinely empty sections (`"[]"` for `Receivers`, `Providers`, `Features`, ...), all identical
+bytes, so they'd hash identically and collide onto the same `(packageName, hash)` row — leaving that
+row's own `sectionType` correct for only whichever section won the insert race. On real captured
+data, 68% of snapshot rows already had two or more section-hash columns pointing at one shared blob.
+Forcing the section type into the hash to keep the column truthful would have turned every one of
+those legitimate, storage-saving duplicates into a separately-stored copy — trading away the actual
+point of content addressing to keep a column that nothing reads. A blob is just bytes; which
+section(s) it represents is already fully answered by whichever snapshot column points at it
+(`permissionsHash`, `activitiesHash`, ...), so the row doesn't need its own opinion.
 
 **Why per-package, not global.** A globally-shared blob (keyed by `hash` alone) can be referenced by
 any package's snapshots, so deleting one app's history can't safely delete its blobs without first
@@ -320,8 +317,7 @@ Runs once per package that the gate says changed:
    content always hashes identically) and hash it — including a successful-but-legitimately-unknown
    result (`signingScheme`'s inner `null`), so a hash column is only ever absent when extraction
    truly failed. See [Partial-Capture Marking](#partial-capture-marking).
-5. `INSERT OR IGNORE` each section's `(packageName, hash, sectionType, content)` into
-   `app_history_blob`.
+5. `INSERT OR IGNORE` each section's `(packageName, hash, content)` into `app_history_blob`.
 6. Insert one new `AppHistorySnapshotEntity` row with the scalars and the section hashes. Always a
    new row, never an update.
 
@@ -414,7 +410,14 @@ Not yet resolved — flagging rather than silently deciding:
   reuses the same proven `capture()` path, but `ACTION_PACKAGE_REPLACED` is a protected broadcast
   `adb` can't synthesize, and a real reinstall kills the process before its own receiver reacts — so
   this is reasoned, not demonstrated, confidence. Worth a real install/update test on a throwaway
-  package before relying on it.
+  package before relying on it. A real ordering bug was found (review, not on-device) and fixed on
+  this path before it ever shipped: `AppDetailRepository` and its three siblings each independently
+  subscribed to `PackageChangesObserver.observe()` to clear their caches, racing the fast path's own
+  subscription with no ordering guarantee between them — a lost race could persist stale cached
+  content under the new install timestamp, permanently, since the gate only compares timestamps and
+  would never revisit it. Fixed by moving invalidation out of `observe()`'s independent collectors
+  and into `PackageChangesObserver.runBeforeNotifying`, which runs synchronously inside `onReceive`
+  before any event is emitted — see [`core/apps/AGENTS.md`](../../../core/apps/AGENTS.md).
 
 ## Changes to the Product Design
 

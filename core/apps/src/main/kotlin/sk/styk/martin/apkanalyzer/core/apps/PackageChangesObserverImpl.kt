@@ -13,9 +13,16 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.shareIn
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
+import java.util.concurrent.CopyOnWriteArrayList
 import javax.inject.Inject
 
-class PackageChangesObserverImpl @Inject constructor(@ApplicationContext private val context: Context, appScope: CoroutineScope) : PackageChangesObserver {
+class PackageChangesObserverImpl @Inject constructor(@ApplicationContext appContext: Context, appScope: CoroutineScope) : PackageChangesObserver {
+
+    private val actionsBeforeNotifying = CopyOnWriteArrayList<(PackageChangeEvent) -> Unit>()
+
+    override fun runBeforeNotifying(action: (PackageChangeEvent) -> Unit) {
+        actionsBeforeNotifying += action
+    }
 
     private val events = callbackFlow {
         val receiver = object : BroadcastReceiver() {
@@ -23,10 +30,11 @@ class PackageChangesObserverImpl @Inject constructor(@ApplicationContext private
                 Logger.d(INSTALLED_APPS, "Received package change event $intent")
                 val event = intent.toPackageChangeEvent()
                 if (event == null) {
-                    Logger.w(INSTALLED_APPS, "Package change broadcast with unparsable data or action: ${intent.action}")
+                    Logger.w(INSTALLED_APPS, "Package change broadcast with unparsable data or action: ${intent.action ?: "none"}")
                     return
                 }
                 Logger.i(INSTALLED_APPS, "Package change detected: $event")
+                actionsBeforeNotifying.forEach { it(event) }
                 trySend(event)
             }
         }
@@ -38,8 +46,8 @@ class PackageChangesObserverImpl @Inject constructor(@ApplicationContext private
             addDataScheme("package")
         }
 
-        context.registerReceiver(receiver, filter)
-        awaitClose { context.unregisterReceiver(receiver) }
+        appContext.registerReceiver(receiver, filter)
+        awaitClose { appContext.unregisterReceiver(receiver) }
     }.shareIn(
         scope = appScope,
         started = SharingStarted.WhileSubscribed(),

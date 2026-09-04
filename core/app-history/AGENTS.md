@@ -29,7 +29,7 @@ that populates it:
   consumer, the capture repository, injects the gate and write DAOs but never the read one), not
   because Room requires it — Room happily supports one `@Dao` per database too.
   `storage/entity/` holds the two `@Entity` classes, `AppHistorySnapshotEntity` and
-  `AppHistoryBlobEntity` (+ its `SectionType` column enum).
+  `AppHistoryBlobEntity`.
 * `capture/` — the pipeline and its two triggers:
   * `AppHistoryCaptureRepository` (+ `Impl`) — *how* to capture: `reconcile(packageName)` and
     `reconcileAll()`.
@@ -127,8 +127,10 @@ module's needs.
 `AppHistoryCaptureRepositoryImpl` implements the schema doc's Capture Gate and Capture Pipeline
 sections exactly:
 
-1. Resolve the package's current identity — `InstalledApp` from `InstalledAppsRepository` (already
-   cached, so this is cheap even on the fast path), never a fresh device-wide `PackageManager` scan
+1. Resolve the package's current identity — `InstalledApp` from `InstalledAppsRepository`.
+   `reconcileAll()` uses the already-cached `apps()` flow (loaded once for the whole sweep); the
+   fast path uses `app(packageName)`, an uncached single-package `PackageManager.getPackageInfo()`
+   call — not free, but still cheap, since it's scoped to one package and never a device-wide scan
    from this module.
 2. Compare `lastUpdateTime`/`firstInstallTime` against the latest stored row (`AppHistoryGateDao`'s
    gate queries). Unchanged → return, no further work.
@@ -139,7 +141,19 @@ sections exactly:
    the legitimate `signingSchemeVersions` inner-`null` "structurally ambiguous" result, so a `null`
    hash column only ever means a genuine extraction failure, never a real answer.
 4. Map each section to its `capture/snapshot/` DTO, encode with one shared `Json` instance, hash with
-   `DigestManager.sha256Digest` (`core:common/digest`).
+   `DigestManager.sha256Digest` (`core:common/digest`) — content only, nothing else mixed into the
+   hash input. `AppHistoryBlobEntity` deliberately has no `sectionType` column: an earlier version
+   added one (and folded the section type into the hash to keep it truthful, since most apps have
+   several genuinely empty sections — `"[]"` for `Receivers`, `Providers`, `Features`, ... all
+   identical bytes — which would otherwise collide onto one blob row and leave that row's own
+   `sectionType` correct for only one of them). That traded away the actual point of content
+   addressing: on real captured data, 68% of snapshot rows had two or more section-hash columns
+   already pointing at the same shared blob, and forcing the section type into the hash would have
+   turned every one of those genuine, harmless duplicates into a separate stored copy. A blob is
+   just bytes; which section(s) it represents is already fully answered by whichever snapshot column
+   points at it — `permissionsHash`, `activitiesHash`, ... — so a blob's own opinion about its
+   section type was redundant at best and wrong (post-collision) at worst. Removing the column
+   restores real cross-section dedup with no loss: nothing ever read `sectionType`.
 5. `INSERT OR IGNORE` each blob, then insert one new snapshot row. Always a new row, never an update.
 
 **Observability.** `reconcileAll()` runs inside a `PerformanceTracker` trace (`app_history_reconcile`:
@@ -147,10 +161,14 @@ sections exactly:
 capture failed) and each `capture()` call inside its own (`app_history_capture`: `degraded_sections`
 count, outcome `Error`/`Degraded`/`Success`) — matching the `<operation>_load` trace convention
 `core:apps` already uses everywhere else. `capture()` itself returns a private `CaptureOutcome`
-(`Aborted` / `Completed(degradedSectionCount)`) rather than owning its own trace, since it needs
-`coroutineScope` for its `async`/`await` fan-out — making it a `PerformanceTrace` extension function
-would shadow that receiver with `CoroutineScope` and force `this@capture` disambiguation everywhere;
-the caller (`captureIfGateOpen`) owns the trace instead. `reconcileAll()`'s own started/finished
+(`Aborted(cause)` / `Completed(degradedSectionCount)`) rather than owning its own trace, since it
+needs `coroutineScope` for its `async`/`await` fan-out — making it a `PerformanceTrace` extension
+function would shadow that receiver with `CoroutineScope` and force `this@capture` disambiguation
+everywhere; the caller (`captureIfGateOpen`) owns the trace instead. `captureIfGateOpen` records the
+trace outcome for `Aborted` the same as any other capture, then rethrows `cause` after the trace
+closes — an aborted capture is a real failure, not a captured-but-empty result, so both `reconcile`
+and `reconcileAll` must see it as one (`reconcileAll`'s `failed_count`/scheduler `onFailure` handling
+and `reconcile`'s own `Result.failure` both depend on this). `reconcileAll()`'s own started/finished
 `Logger.i` pair (`InstalledAppsRepositoryImpl.loadAllApps()`'s same convention) only logs "finished"
 on genuine completion — a thrown exception skips it, and the scheduler's existing `onFailure` warning
 covers that case instead.
@@ -177,9 +195,12 @@ authoritative single-package re-check only runs for packages that pass it, not t
 Both triggers live in `AppHistoryCaptureSchedulerImpl.start()`, called once from its
 `onCreate(owner)` override:
 
-* **Reconciliation** — `reconcileAll()` sweeps every installed app
-  (`InstalledAppsRepository.awaitFullyEnrichedApps()`) through the batched gate query. This is what
-  guarantees completeness; broadcasts missed while the process was dead are otherwise lost.
+* **Reconciliation** — `reconcileAll()` sweeps every installed app (`InstalledAppsRepository.apps()
+  .first()`) through the batched gate query. Deliberately not `awaitFullyEnrichedApps()`: the gate
+  only ever compares `lastUpdateTime`/`firstInstallTime`, so waiting for usage-stats/storage-stats
+  enrichment before the sweep can even start would be pure latency with no correctness benefit. This
+  sweep is what guarantees completeness; broadcasts missed while the process was dead are otherwise
+  lost.
 * **Fast path** — collects `PackageChangesObserver.observe()` and calls `reconcile` on
   `Added`/`Replaced`, skipping `Removed` (reconciliation only ever visits currently-installed
   packages, so a removal needs no capture-side handling at all).

@@ -3,7 +3,7 @@
 kotlin = "2.4.10"
 ksp = "2.3.11"
 kotlinx-collections-immutable = "0.5.2"
-kotlinx-serialization = "1.7.3"
+kotlinx-serialization = "1.11.0"
 
 # Android
 agp = "9.3.2"

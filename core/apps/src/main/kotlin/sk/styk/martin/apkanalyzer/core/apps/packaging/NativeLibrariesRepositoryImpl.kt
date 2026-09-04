@@ -3,13 +3,9 @@ package sk.styk.martin.apkanalyzer.core.apps.packaging
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.plus
 import sk.styk.martin.apkanalyzer.core.apps.PackageChangesObserver
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
@@ -40,7 +36,6 @@ private val nativeLibraryEntryRegex = Regex("""^lib/([^/]+)/([^/]+\.so)$""")
 internal class NativeLibrariesRepositoryImpl @Inject constructor(
     private val packageManager: PackageManager,
     packageChangesObserver: PackageChangesObserver,
-    appScope: CoroutineScope,
     private val dispatcherProvider: DispatcherProvider,
     private val performanceTracker: PerformanceTracker,
 ) : NativeLibrariesRepository {
@@ -48,12 +43,10 @@ internal class NativeLibrariesRepositoryImpl @Inject constructor(
     private val cache = ConcurrentHashMap<AppReferenceCacheKey, NativeLibraries>()
 
     init {
-        packageChangesObserver.observe()
-            .onEach {
-                Logger.d(TAG, "Package change detected, clearing cache")
-                cache.clear()
-            }
-            .launchIn(appScope + dispatcherProvider.default())
+        packageChangesObserver.runBeforeNotifying {
+            Logger.d(TAG, "Package change detected, clearing cache")
+            cache.clear()
+        }
     }
 
     override suspend fun nativeLibraries(reference: AppReference): Result<NativeLibraries> = performanceTracker.startCancellableTrace("native_libraries_load") {

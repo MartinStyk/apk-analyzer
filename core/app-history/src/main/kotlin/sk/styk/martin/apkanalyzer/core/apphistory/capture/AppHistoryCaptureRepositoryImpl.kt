@@ -13,7 +13,6 @@ import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryGateDao
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryWriteDao
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.entity.AppHistoryBlobEntity
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.entity.AppHistorySnapshotEntity
-import sk.styk.martin.apkanalyzer.core.apphistory.storage.entity.SectionType
 import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
@@ -103,16 +102,19 @@ internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
         if (!app.hasChangedSince(gate?.lastUpdateTime, gate?.firstInstallTime)) {
             return@withLock false
         }
-        performanceTracker.startCancellableTrace("app_history_capture") {
-            when (val result = capture(app)) {
-                CaptureOutcome.Aborted -> outcome = TraceOutcome.Error
+        val result = performanceTracker.startCancellableTrace("app_history_capture") {
+            val captureOutcome = capture(app)
+            when (captureOutcome) {
+                is CaptureOutcome.Aborted -> outcome = TraceOutcome.Error
 
                 is CaptureOutcome.Completed -> {
-                    this["degraded_sections"] = result.degradedSectionCount
-                    outcome = if (result.degradedSectionCount == 0) TraceOutcome.Success else TraceOutcome.Degraded
+                    this["degraded_sections"] = captureOutcome.degradedSectionCount
+                    outcome = if (captureOutcome.degradedSectionCount == 0) TraceOutcome.Success else TraceOutcome.Degraded
                 }
             }
+            captureOutcome
         }
+        if (result is CaptureOutcome.Aborted) throw result.cause
         true
     }
 
@@ -130,7 +132,7 @@ internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
 
         val detail = detailResult.getOrElse {
             Logger.w(APP_HISTORY, it, "App detail load failed for ${app.packageName.value}, skipping capture")
-            return@coroutineScope CaptureOutcome.Aborted
+            return@coroutineScope CaptureOutcome.Aborted(it)
         }
 
         val sections = hashSections(app.packageName, detail, intentFiltersResult, nativeLibrariesResult, signingSchemeResult)
@@ -147,15 +149,14 @@ internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
     ): CapturedSections {
         val packageNameValue = packageName.value
         return CapturedSections(
-            permissions = hashSection(SectionType.Permissions, packageNameValue, detail.permissions.toSnapshot()),
-            activities = hashSection(SectionType.Activities, packageNameValue, detail.activities.map { it.toSnapshot() }.sortedBy { it.name }),
-            services = hashSection(SectionType.Services, packageNameValue, detail.services.map { it.toSnapshot() }.sortedBy { it.name }),
-            receivers = hashSection(SectionType.Receivers, packageNameValue, detail.receivers.map { it.toSnapshot() }.sortedBy { it.name }),
-            providers = hashSection(SectionType.Providers, packageNameValue, detail.contentProviders.map { it.toSnapshot() }.sortedBy { it.name }),
-            features = hashSection(SectionType.Features, packageNameValue, detail.features.map { it.toSnapshot() }.sortedBy { Json.encodeToString(it) }),
-            signing = hashSection(SectionType.Signing, packageNameValue, detail.signing.toSnapshot()),
+            permissions = hashSection(packageNameValue, detail.permissions.toSnapshot()),
+            activities = hashSection(packageNameValue, detail.activities.map { it.toSnapshot() }.sortedBy { it.name }),
+            services = hashSection(packageNameValue, detail.services.map { it.toSnapshot() }.sortedBy { it.name }),
+            receivers = hashSection(packageNameValue, detail.receivers.map { it.toSnapshot() }.sortedBy { it.name }),
+            providers = hashSection(packageNameValue, detail.contentProviders.map { it.toSnapshot() }.sortedBy { it.name }),
+            features = hashSection(packageNameValue, detail.features.map { it.toSnapshot() }.sortedBy { Json.encodeToString(it) }),
+            signing = hashSection(packageNameValue, detail.signing.toSnapshot()),
             installedSplits = hashSection(
-                SectionType.InstalledSplits,
                 packageNameValue,
                 detail.info.installedSplits.map { it.toSnapshot() }.sortedBy { it.fileName },
             ),
@@ -164,19 +165,19 @@ internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
                     val entries = filters.map { (key, value) ->
                         ComponentIntentFilterEntrySnapshot(key.toSnapshot(), value.map { it.toSnapshot() }.sortedBy { Json.encodeToString(it) })
                     }.sortedWith(compareBy({ it.key.name }, { it.key.kind }))
-                    hashSection(SectionType.IntentFilters, packageNameValue, entries)
+                    hashSection(packageNameValue, entries)
                 },
                 onFailure = { logSectionFailure(packageName, "Intent filters", it) },
             ),
             nativeLibraries = nativeLibrariesResult.fold(
                 onSuccess = { libraries ->
                     val sorted = libraries.files.map { it.toSnapshot() }.sortedWith(compareBy({ it.name }, { it.abi }, { it.containingApkFileName }))
-                    hashSection(SectionType.NativeLibraries, packageNameValue, sorted)
+                    hashSection(packageNameValue, sorted)
                 },
                 onFailure = { logSectionFailure(packageName, "Native libraries", it) },
             ),
             signingScheme = signingSchemeResult.fold(
-                onSuccess = { versions -> hashSection(SectionType.SigningScheme, packageNameValue, versions?.map { it.name }?.sorted()) },
+                onSuccess = { versions -> hashSection(packageNameValue, versions?.map { it.name }?.sorted()) },
                 onFailure = { logSectionFailure(packageName, "Signing scheme", it) },
             ),
         )
@@ -191,14 +192,10 @@ internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
         return null
     }
 
-    private inline fun <reified T> hashSection(
-        sectionType: SectionType,
-        packageName: String,
-        content: T,
-    ): SectionHash {
+    private inline fun <reified T> hashSection(packageName: String, content: T): SectionHash {
         val serialized = Json.encodeToString(content)
         val hash = digestManager.sha256Digest(serialized)
-        val blob = AppHistoryBlobEntity(packageName = packageName, hash = hash, sectionType = sectionType, content = serialized)
+        val blob = AppHistoryBlobEntity(packageName = packageName, hash = hash, content = serialized)
         return SectionHash(hash, blob)
     }
 
@@ -272,7 +269,7 @@ internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
     }
 
     private sealed interface CaptureOutcome {
-        data object Aborted : CaptureOutcome
+        data class Aborted(val cause: Throwable) : CaptureOutcome
         data class Completed(val degradedSectionCount: Int) : CaptureOutcome
     }
 }
