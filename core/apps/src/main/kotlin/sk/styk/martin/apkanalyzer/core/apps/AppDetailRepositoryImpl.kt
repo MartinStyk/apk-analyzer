@@ -7,10 +7,6 @@ import android.content.pm.FeatureInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.plus
 import sk.styk.martin.apkanalyzer.core.apps.components.Activity
 import sk.styk.martin.apkanalyzer.core.apps.components.BroadcastReceiver
 import sk.styk.martin.apkanalyzer.core.apps.components.ContentProvider
@@ -70,8 +66,6 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     private val storageStatsRepository: StorageStatsRepository,
     private val usageStatsRepository: UsageStatsRepository,
     packageChangesObserver: PackageChangesObserver,
-    appScope: CoroutineScope,
-    private val dispatcherProvider: DispatcherProvider,
     private val performanceTracker: PerformanceTracker,
 ) : AppDetailRepository {
 
@@ -86,12 +80,10 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         PackageManager.GET_CONFIGURATIONS
 
     init {
-        packageChangesObserver.observe()
-            .onEach {
-                Logger.d(TAG, "Package change detected, clearing cache")
-                cache.clear()
-            }
-            .launchIn(appScope + dispatcherProvider.default())
+        packageChangesObserver.runBeforeNotifying {
+            Logger.d(TAG, "Package change detected, clearing cache")
+            cache.clear()
+        }
     }
 
     override suspend fun details(reference: AppReference): Result<AppDetail> = performanceTracker.startCancellableTrace("app_detail_load") {

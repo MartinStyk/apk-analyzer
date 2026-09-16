@@ -1,14 +1,9 @@
 package sk.styk.martin.apkanalyzer.core.apps.intentfilters
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.plus
 import sk.styk.martin.apkanalyzer.core.apps.PackageChangesObserver
 import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
 import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilterKey
 import sk.styk.martin.apkanalyzer.core.apps.manifest.ManifestParser
-import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppReferenceCacheKey
@@ -31,20 +26,16 @@ private const val CACHE_HIT_ATTRIBUTE = "cache_hit"
 internal class IntentFiltersRepositoryImpl @Inject constructor(
     private val manifestParser: ManifestParser,
     packageChangesObserver: PackageChangesObserver,
-    appScope: CoroutineScope,
-    dispatcherProvider: DispatcherProvider,
     private val performanceTracker: PerformanceTracker,
 ) : IntentFiltersRepository {
 
     private val cache = ConcurrentHashMap<AppReferenceCacheKey, Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>>()
 
     init {
-        packageChangesObserver.observe()
-            .onEach {
-                Logger.d(TAG, "Package change detected, clearing cache")
-                cache.clear()
-            }
-            .launchIn(appScope + dispatcherProvider.default())
+        packageChangesObserver.runBeforeNotifying {
+            Logger.d(TAG, "Package change detected, clearing cache")
+            cache.clear()
+        }
     }
 
     override suspend fun componentIntentFilters(reference: AppReference): Result<Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>> =

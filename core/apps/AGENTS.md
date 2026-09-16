@@ -42,6 +42,29 @@ cached `AppDetail`; consumers combine app facts with device repositories separat
 `PackageChangesObserver` invalidates installed-package data. APK-file inputs and device state have
 different lifecycles and must not be smuggled into that cache key.
 
+`PackageChangesObserverImpl.observe()` is one `BroadcastReceiver` shared across every caller
+(`shareIn(appScope, SharingStarted.WhileSubscribed(), replay = 0)`), not a fresh registration per
+subscriber — independent consumers each registering their own receiver for the same broadcasts was
+the previous, wasteful shape. `InstalledAppsRepositoryImpl`, `AppSigningRepositoryImpl`, and
+`core:app-history`'s fast-path capture are genuine reactive consumers of the event stream and still
+subscribe via `observe()`; each subscribes permanently at construction (`shareIn(appScope,
+Eagerly/Lazily, ...)` or `.launchIn(appScope + ...)`), so in practice the shared receiver stays
+registered for the app's lifetime; a future consumer that subscribes and later fully unsubscribes
+would see the receiver tear down and re-register around that gap, which `replay = 0` makes safe to
+reason about (a late subscriber only ever sees events after it attaches).
+
+`AppDetailRepositoryImpl`, `IntentFiltersRepositoryImpl`, `NativeLibrariesRepositoryImpl`, and
+`SigningSchemeRepositoryImpl` don't need the event stream at all — they only ever clear their cache
+on any change — so they call `PackageChangesObserver.runBeforeNotifying { cache.clear() }` instead of
+subscribing to `observe()`. This isn't just a simpler call site: it fixes a real race. Their old
+`.onEach { cache.clear() }.launchIn(...)` collectors ran as independent coroutines with no ordering
+guarantee relative to any other `observe()` collector reacting to the same broadcast — including
+`core:app-history`'s fast-path capture, which could read a stale cached `AppDetail` before the
+invalidating collector got scheduled, and permanently persist it under the new install timestamp.
+`runBeforeNotifying`'s registered actions run synchronously inside `onReceive`, before `trySend`, so
+every cache is guaranteed clear before the event is observable by anyone — a structural
+happens-before, not a probabilistic one from coroutine scheduling.
+
 Expensive device-wide signing work is shared lazily. Single-app signing-scheme inspection is itself
 expensive (it reads the APK's signing block directly) and only the Certificates screen shows it, so
 it is fetched lazily and separately by `SigningSchemeRepository` rather than being collected as part

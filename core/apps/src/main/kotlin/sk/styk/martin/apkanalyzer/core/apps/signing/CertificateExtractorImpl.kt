@@ -15,6 +15,7 @@ import javax.security.auth.x500.X500Principal
 
 private const val TAG = "CertificateExtractorImpl"
 private val unescapedCommaRegex = Regex("""(?<!\\),""")
+private val unescapedPlusRegex = Regex("""(?<!\\)\+""")
 private val escapedCharRegex = Regex("""\\(.)""")
 
 internal class CertificateExtractorImpl @Inject constructor(private val digestManager: DigestManager) : CertificateExtractor {
@@ -89,8 +90,10 @@ internal class CertificateExtractorImpl @Inject constructor(private val digestMa
     private fun String.toDistinguishedNameFields(): Map<String, String> {
         val fields = mutableMapOf<String, String>()
         for (rdn in unescapedCommaRegex.split(this)) {
-            val (type, value) = rdn.split('=', limit = 2).takeIf { it.size == 2 } ?: continue
-            fields.putIfAbsent(type.trim().uppercase(Locale.ROOT), value.unescapeDnValue())
+            for (attributeTypeAndValue in unescapedPlusRegex.split(rdn)) {
+                val (type, value) = attributeTypeAndValue.split('=', limit = 2).takeIf { it.size == 2 } ?: continue
+                fields.putIfAbsent(type.trim().uppercase(Locale.ROOT), value.unescapeDnValue())
+            }
         }
         return fields
     }

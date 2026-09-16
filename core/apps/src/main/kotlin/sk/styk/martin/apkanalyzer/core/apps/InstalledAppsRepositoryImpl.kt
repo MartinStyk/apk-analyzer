@@ -11,10 +11,12 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceResolver
 import sk.styk.martin.apkanalyzer.core.apps.installsource.isSystemInstalledApp
 import sk.styk.martin.apkanalyzer.core.apps.installsource.resolveAppInstallSource
@@ -43,13 +45,14 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
     private val packageManager: PackageManager,
     private val installSourceResolver: InstallSourceResolver,
     packageChangesObserver: PackageChangesObserver,
-    dispatcherProvider: DispatcherProvider,
+    private val dispatcherProvider: DispatcherProvider,
     private val storageStatsRepository: StorageStatsRepository,
     private val usageStatsRepository: UsageStatsRepository,
     appScope: CoroutineScope,
     private val performanceTracker: PerformanceTracker,
 ) : InstalledAppsRepository {
     private val cachedApps = packageChangesObserver.observe()
+        .map { Unit }
         .onStart { emit(Unit) }
         .mapLatest { loadAllApps() }
         .onEach { apps -> storageStatsRepository.requestTotalSizes(apps.map { it.packageName }) }
@@ -87,6 +90,12 @@ internal class InstalledAppsRepositoryImpl @Inject constructor(
                 lastUsedTime = lastUsedTimes[app.packageName] ?: app.lastUsedTime,
             )
         }
+    }
+
+    override suspend fun app(packageName: PackageName): InstalledApp? = withContext(dispatcherProvider.io()) {
+        runCatchingCancellable {
+            packageManager.getPackageInfo(packageName.value, PackageManager.GET_PERMISSIONS).toInstalledApp()
+        }.getOrNull()
     }
 
     @SuppressLint("QueryPermissionsNeeded")
