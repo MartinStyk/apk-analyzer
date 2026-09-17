@@ -81,5 +81,9 @@ gradlePlugin {
             id = "apkanalyzer.appfunctions"
             implementationClass = "sk.styk.martin.apkanalyzer.AppFunctionsPlugin"
         }
+        register("apkanalyzer.work") {
+            id = "apkanalyzer.work"
+            implementationClass = "sk.styk.martin.apkanalyzer.WorkPlugin"
+        }
     }
 }

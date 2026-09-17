@@ -17,6 +17,8 @@ androidx-test-uiautomator = "2.4.0"
 androidx-benchmark-macro-junit4 = "1.5.0-rc02"
 androidx-profileinstaller = "1.4.1"
 androidx-baselineprofile = "1.5.0-rc02"
+androidx-work = "2.10.1"
+androidx-hilt-work = "1.4.0"
 
 # Compose
 compose-bom = "2026.08.00"
@@ -71,6 +73,9 @@ androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", 
 androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-ext-junit" }
 androidx-test-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "androidx-test-uiautomator" }
 androidx-benchmark-macro-junit4 = { module = "androidx.benchmark:benchmark-macro-junit4", version.ref = "androidx-benchmark-macro-junit4" }
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidx-work" }
+androidx-hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "androidx-hilt-work" }
+androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "androidx-hilt-work" }
 
 # Compose (BOM-managed)
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
@@ -163,6 +168,7 @@ apkanalyzer-compose = { id = "apkanalyzer.compose" }
 apkanalyzer-room = { id = "apkanalyzer.room" }
 apkanalyzer-baselineprofile = { id = "apkanalyzer.baselineprofile" }
 apkanalyzer-appfunctions = { id = "apkanalyzer.appfunctions" }
+apkanalyzer-work = { id = "apkanalyzer.work" }
 
 [bundles]
 compose = ["androidx-compose-ui", "androidx-compose-ui-tooling", "androidx-compose-foundation", "androidx-compose-foundation-layout"]

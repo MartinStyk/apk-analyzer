@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.apkanalyzer.library)
     alias(libs.plugins.apkanalyzer.hilt)
     alias(libs.plugins.apkanalyzer.room)
+    alias(libs.plugins.apkanalyzer.work)
     alias(libs.plugins.kotlin.serialization)
 }
 

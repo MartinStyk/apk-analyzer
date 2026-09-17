@@ -1,9 +1,13 @@
 package sk.styk.martin.apkanalyzer.core.apphistory.capture.di
 
+import android.content.Context
 import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.work.WorkManager
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
 import sk.styk.martin.apkanalyzer.core.apphistory.capture.AppHistoryCaptureRepository
@@ -27,4 +31,12 @@ internal interface AppHistoryCaptureModule {
     @Singleton
     @IntoSet
     fun bindAppHistoryCaptureSchedulerAsLifecycleObserver(impl: AppHistoryCaptureSchedulerImpl): DefaultLifecycleObserver
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+internal class AppHistoryWorkModule {
+    @Provides
+    @Singleton
+    fun provideWorkManager(@ApplicationContext context: Context): WorkManager = WorkManager.getInstance(context)
 }
