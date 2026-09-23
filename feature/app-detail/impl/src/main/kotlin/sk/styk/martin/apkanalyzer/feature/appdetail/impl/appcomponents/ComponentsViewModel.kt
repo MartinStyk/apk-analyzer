@@ -6,8 +6,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -206,7 +204,7 @@ private fun Service.toItem(intentFilters: List<ComponentIntentFilter>?) = Compon
         if (isSingleUser) add(ComponentFlag.SingleUser)
         if (isIsolatedProcess) add(ComponentFlag.IsolatedProcess)
         if (isExternalService) add(ComponentFlag.ExternalService)
-    }.toImmutableList(),
+    },
     intentFilters = intentFilters?.toItems(),
     details = ComponentDetails.ServiceDetails(permission = permission),
 )
@@ -247,11 +245,11 @@ private fun ContentProvider.toItem(intentFilters: List<ComponentIntentFilter>?) 
                 readPermission = it.readPermission,
                 writePermission = it.writePermission,
             )
-        }.toImmutableList(),
+        },
     ),
 )
 
-private val emptyImmutableFlags = emptyList<ComponentFlag>().toImmutableList()
+private val emptyImmutableFlags = emptyList<ComponentFlag>()
 
 private val scopeTypes = mapOf(
     ComponentScope.Activities to ComponentType.Activity,
@@ -266,7 +264,7 @@ private fun ComponentsSource.Ready.narrowedBy(narrowing: Narrowing): ComponentsS
         scopeTypes.forEach { (scope, type) ->
             if (componentsByType[type].orEmpty().isNotEmpty()) add(scope)
         }
-    }.toImmutableList()
+    }
     val scope = narrowing.scope.takeIf { it in scopeOptions } ?: ComponentScope.All
     val scopedTypes = when (scope) {
         ComponentScope.All -> ComponentType.entries
@@ -278,14 +276,13 @@ private fun ComponentsSource.Ready.narrowedBy(narrowing: Narrowing): ComponentsS
             componentsByType[type].orEmpty()
                 .filter { it.matches(narrowing.query) && it.satisfies(narrowing.filters) }
                 .takeIf { it.isNotEmpty() }
-                ?.let { ComponentSection(type, it.toImmutableList()) }
+                ?.let { ComponentSection(type, it) }
         }
-        .toImmutableList()
 
     return ComponentsState.Loaded(
         scope = scope,
         scopeOptions = scopeOptions,
-        selectedFilters = narrowing.filters.toImmutableSet(),
+        selectedFilters = narrowing.filters,
         query = narrowing.query,
         scopeTotal = scopeTotal,
         sections = sections,

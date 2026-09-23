@@ -1,8 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl
 
 import androidx.compose.runtime.Immutable
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
@@ -60,7 +58,7 @@ internal sealed interface AppDetailState {
         val totalPermissionsCount: Int,
         val dangerousPermissionsCount: Int,
         val grantedDangerousPermissionsCount: Int?,
-        val dangerousPermissionPreviews: ImmutableList<PermissionPreview>,
+        val dangerousPermissionPreviews: List<PermissionPreview>,
         val definedPermissionsCount: Int,
         val activitiesCount: Int,
         val servicesCount: Int,
@@ -71,10 +69,10 @@ internal sealed interface AppDetailState {
         val requiredFeaturesCount: Int,
         val optionalFeaturesCount: Int,
         val unmetRequirementsCount: Int,
-        val requirementPreviews: ImmutableList<RequirementPreview>,
+        val requirementPreviews: List<RequirementPreview>,
         val certificate: CertificateState? = null,
-        val badges: ImmutableList<AppDetailBadge> = persistentListOf(),
-        val insights: ImmutableList<AppDetailInsight> = persistentListOf(),
+        val badges: List<AppDetailBadge> = listOf(),
+        val insights: List<AppDetailInsight> = listOf(),
         val exportInProgress: AppDetailExport? = null,
     ) : AppDetailState {
         val isTargetSdkOutdated: Boolean

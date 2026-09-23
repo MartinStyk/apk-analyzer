@@ -26,7 +26,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceChain
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
@@ -593,9 +592,9 @@ private fun sampleGeneralInfoState() = GeneralInfoState.Loaded(
     installLocation = "Internal",
     apkSize = 152.megabytes,
     totalSize = 510.megabytes,
-    nativeLibraryAbis = persistentListOf("arm64-v8a", "armeabi-v7a"),
-    nativeLibraryNames = persistentListOf("libapp.so", "libcrashlytics.so", "libcrypto.so"),
-    deviceSupportedAbis = persistentListOf("arm64-v8a", "armeabi-v7a"),
+    nativeLibraryAbis = listOf("arm64-v8a", "armeabi-v7a"),
+    nativeLibraryNames = listOf("libapp.so", "libcrashlytics.so", "libcrypto.so"),
+    deviceSupportedAbis = listOf("arm64-v8a", "armeabi-v7a"),
     isNativeLibraryDeviceIncompatible = false,
     installedSplitsCount = 3,
 )

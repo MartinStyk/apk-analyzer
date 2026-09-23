@@ -6,7 +6,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -97,7 +96,7 @@ internal class BrowseAppsViewModel @AssistedInject constructor(
             BrowseAppsState.Loaded(
                 query = query,
                 totalApps = apps.size,
-                apps = filtered.toImmutableList(),
+                apps = filtered,
                 bucketDetail = bucketDetail,
             )
         }

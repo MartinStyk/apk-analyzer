@@ -6,9 +6,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -136,7 +133,7 @@ internal class PermissionsViewModel @AssistedInject constructor(
         description = permissionDescriptionProvider.describe(this),
         groupName = details?.groupName,
         protectionLevel = details?.protectionLevel,
-        protectionFlags = details?.protectionFlags.orEmpty().toImmutableList(),
+        protectionFlags = details?.protectionFlags.orEmpty().toList(),
         grantState = grantState,
         declaringPackage = details?.declaringPackage,
         isSelfDeclared = details?.declaringPackage == analysedPackage,
@@ -168,9 +165,9 @@ private data class Narrowing(
 
 private fun PermissionsSource.Ready.narrowedBy(narrowing: Narrowing): PermissionsState.Loaded {
     val scopeOptions = if (defined.isEmpty()) {
-        persistentListOf(PermissionScope.Requested)
+        listOf(PermissionScope.Requested)
     } else {
-        persistentListOf(PermissionScope.Requested, PermissionScope.Defined)
+        listOf(PermissionScope.Requested, PermissionScope.Defined)
     }
     val scope = narrowing.scope.takeIf { it in scopeOptions } ?: PermissionScope.Requested
     val scoped = when (scope) {
@@ -180,11 +177,10 @@ private fun PermissionsSource.Ready.narrowedBy(narrowing: Narrowing): Permission
     val presentProtectionLevels = scoped.mapTo(mutableSetOf()) { it.protectionLevel }
     val protectionLevelOptions = orderedProtectionLevels
         .filter { it in presentProtectionLevels }
-        .toImmutableList()
     val grantStateOptions = if (scoped.any { it.grantState != null }) {
-        GrantState.entries.toImmutableList()
+        GrantState.entries
     } else {
-        persistentListOf()
+        listOf()
     }
     val selectedProtectionLevels = narrowing.protectionLevels.intersect(protectionLevelOptions)
     val selectedGrantStates = narrowing.grantStates.intersect(grantStateOptions)
@@ -199,9 +195,9 @@ private fun PermissionsSource.Ready.narrowedBy(narrowing: Narrowing): Permission
     return PermissionsState.Loaded(
         scope = scope,
         scopeOptions = scopeOptions,
-        selectedProtectionLevels = selectedProtectionLevels.toImmutableSet(),
+        selectedProtectionLevels = selectedProtectionLevels,
         protectionLevelOptions = protectionLevelOptions,
-        selectedGrantStates = selectedGrantStates.toImmutableSet(),
+        selectedGrantStates = selectedGrantStates,
         grantStateOptions = grantStateOptions,
         query = narrowing.query,
         scopeTotal = scoped.size,
@@ -209,9 +205,8 @@ private fun PermissionsSource.Ready.narrowedBy(narrowing: Narrowing): Permission
             .mapNotNull { level ->
                 matching.filter { it.protectionLevel == level }
                     .takeIf { it.isNotEmpty() }
-                    ?.let { PermissionSection(level, it.toImmutableList()) }
-            }
-            .toImmutableList(),
+                    ?.let { PermissionSection(level, it) }
+            },
     )
 }
 

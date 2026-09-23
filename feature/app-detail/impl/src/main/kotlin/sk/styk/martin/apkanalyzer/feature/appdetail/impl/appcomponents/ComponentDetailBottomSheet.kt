@@ -21,7 +21,6 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.apps.components.IntentFilterDataRuleType
 import sk.styk.martin.apkanalyzer.core.apps.components.ProviderPathMatchType
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.BottomSheet
@@ -272,21 +271,21 @@ private fun ComponentDetailBottomSheetActivityPreview() {
                 isGuarded = false,
                 isUnprotected = false,
                 isLaunchable = true,
-                flags = persistentListOf(),
-                intentFilters = persistentListOf(
+                flags = listOf(),
+                intentFilters = listOf(
                     ComponentIntentFilterItem(
                         index = 0,
-                        actions = persistentListOf("android.intent.action.VIEW"),
-                        categories = persistentListOf(
+                        actions = listOf("android.intent.action.VIEW"),
+                        categories = listOf(
                             "android.intent.category.DEFAULT",
                             "android.intent.category.BROWSABLE",
                         ),
-                        dataRules = persistentListOf(
+                        dataRules = listOf(
                             IntentFilterDataRuleItem(IntentFilterDataRuleType.Scheme, "https"),
                             IntentFilterDataRuleItem(IntentFilterDataRuleType.Host, "open.spotify.com"),
                             IntentFilterDataRuleItem(IntentFilterDataRuleType.PathPrefix, "/track/"),
                         ),
-                        uriRelativeGroups = persistentListOf(),
+                        uriRelativeGroups = listOf(),
                         priority = 0,
                         order = 0,
                         isAutoVerify = true,
@@ -321,7 +320,7 @@ private fun ComponentDetailBottomSheetServicePreview() {
                 isGuarded = true,
                 isUnprotected = false,
                 isLaunchable = false,
-                flags = persistentListOf(ComponentFlag.IsolatedProcess, ComponentFlag.StopWithTask),
+                flags = listOf(ComponentFlag.IsolatedProcess, ComponentFlag.StopWithTask),
                 details = ComponentDetails.ServiceDetails(permission = "android.permission.BIND_JOB_SERVICE"),
             ),
             onCopy = { _, _ -> },
@@ -345,12 +344,12 @@ private fun ComponentDetailBottomSheetProviderPreview() {
                 isGuarded = false,
                 isUnprotected = false,
                 isLaunchable = false,
-                flags = persistentListOf(),
+                flags = listOf(),
                 details = ComponentDetails.ProviderDetails(
                     authority = "com.spotify.music.androidx-startup",
                     readPermission = null,
                     writePermission = null,
-                    pathPermissions = persistentListOf(),
+                    pathPermissions = listOf(),
                 ),
             ),
             onCopy = { _, _ -> },
@@ -374,12 +373,12 @@ private fun ComponentDetailBottomSheetProviderPathPermissionPreview() {
                 isGuarded = false,
                 isUnprotected = true,
                 isLaunchable = false,
-                flags = persistentListOf(),
+                flags = listOf(),
                 details = ComponentDetails.ProviderDetails(
                     authority = "com.spotify.music.sharing",
                     readPermission = "com.spotify.music.permission.ACCESS_SHARING",
                     writePermission = "com.spotify.music.permission.ACCESS_SHARING",
-                    pathPermissions = persistentListOf(
+                    pathPermissions = listOf(
                         ProviderPathPermissionItem(
                             path = "/public",
                             matchType = ProviderPathMatchType.Prefix,

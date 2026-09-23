@@ -1,9 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain
 
 import androidx.compose.runtime.Immutable
-import kotlinx.collections.immutable.ImmutableSet
-import kotlinx.collections.immutable.persistentSetOf
-import kotlinx.collections.immutable.toPersistentSet
 import sk.styk.martin.apkanalyzer.core.apps.AppClassificationThresholds
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
@@ -13,15 +10,15 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.toJavaDuration
 
 data class AppFilterState(
-    val selectedSources: ImmutableSet<AppSource> = persistentSetOf(),
-    val selectedSdkVersions: ImmutableSet<Int> = persistentSetOf(),
+    val selectedSources: Set<AppSource> = setOf(),
+    val selectedSdkVersions: Set<Int> = setOf(),
     val apkSizeRange: AppSizeRange? = null,
     val totalSizeRange: AppSizeRange? = null,
     val installTimeRange: DateRange? = null,
     val updateTimeRange: DateRange? = null,
     val unusedPeriod: UnusedAppsPeriod? = null,
     val recentlyUsedDays: Int? = null,
-    val selectedPermissions: ImmutableSet<String> = persistentSetOf(),
+    val selectedPermissions: Set<String> = setOf(),
     val permissionMatchAll: Boolean = false,
 ) {
     val isActive: Boolean
@@ -47,12 +44,12 @@ data class AppFilterState(
     val isRecentlyUsedActive: Boolean get() = recentlyUsedDays != null
     val isSensitivePermissionsFilterActive: Boolean get() = PermissionPreset.Sensitive.permissions.all { it in selectedPermissions }
 
-    val activeSourceQuickFilters: ImmutableSet<SourceQuickFilter>
+    val activeSourceQuickFilters: Set<SourceQuickFilter>
         get() = buildSet {
             if (isSystemFilterActive) add(SourceQuickFilter.System)
             if (isGooglePlayFilterActive) add(SourceQuickFilter.GooglePlay)
             if (isSideloadedFilterActive) add(SourceQuickFilter.Sideloaded)
-        }.toPersistentSet()
+        }.toSet()
 
     val activeActivityQuickFilter: ActivityQuickFilter?
         get() = when {

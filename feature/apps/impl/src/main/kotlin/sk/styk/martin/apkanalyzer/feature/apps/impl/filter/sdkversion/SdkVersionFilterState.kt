@@ -1,11 +1,9 @@
 package sk.styk.martin.apkanalyzer.feature.apps.impl.filter.sdkversion
 
 import androidx.compose.runtime.Immutable
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
-data class SdkVersionFilterState(val options: ImmutableList<SdkVersionOption> = persistentListOf())
+data class SdkVersionFilterState(val options: List<SdkVersionOption> = listOf())
 
 @Immutable
 data class SdkVersionOption(

@@ -3,10 +3,6 @@ package sk.styk.martin.apkanalyzer.feature.apps.impl.filter.permission
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.ImmutableSet
-import kotlinx.collections.immutable.persistentSetOf
-import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -29,7 +25,7 @@ class PermissionFilterViewModel @Inject constructor(
 
     private val input = permissionFilterCoordinator.consumeInput()
 
-    private val selectedPermissions: MutableStateFlow<ImmutableSet<String>> = MutableStateFlow(input.selectedPermissions.toPersistentSet())
+    private val selectedPermissions: MutableStateFlow<Set<String>> = MutableStateFlow(input.selectedPermissions.toSet())
     private val matchMode = MutableStateFlow(if (input.matchAll) MatchMode.All else MatchMode.Any)
     private val searchQuery = MutableStateFlow("")
     private val showOnlySelected = MutableStateFlow(false)
@@ -50,14 +46,13 @@ class PermissionFilterViewModel @Inject constructor(
 
         val items = filteredPermissions
             .map { perm -> PermissionItem(permission = perm, isSelected = perm.name in selected) }
-            .toImmutableList()
 
         val presets = PermissionPreset.all.map { preset ->
             PermissionPresetState(
                 preset = preset,
                 isSelected = preset.permissions.isNotEmpty() && preset.permissions.all { it in selected },
             )
-        }.toImmutableList()
+        }
 
         PermissionFilterState(
             matchMode = mode,
@@ -73,9 +68,9 @@ class PermissionFilterViewModel @Inject constructor(
         when (action) {
             is PermissionFilterAction.PermissionToggled -> selectedPermissions.update { current ->
                 if (action.permissionName in current) {
-                    (current - action.permissionName).toPersistentSet()
+                    current - action.permissionName
                 } else {
-                    (current + action.permissionName).toPersistentSet()
+                    current + action.permissionName
                 }
             }
 
@@ -83,9 +78,9 @@ class PermissionFilterViewModel @Inject constructor(
                 val preset = action.preset
                 val allSelected = preset.permissions.all { it in current }
                 if (allSelected) {
-                    (current - preset.permissions).toPersistentSet()
+                    current - preset.permissions
                 } else {
-                    (current + preset.permissions).toPersistentSet()
+                    current + preset.permissions
                 }
             }
 
@@ -96,7 +91,7 @@ class PermissionFilterViewModel @Inject constructor(
             PermissionFilterAction.ShowOnlySelectedToggled -> showOnlySelected.update { !it }
 
             PermissionFilterAction.Reset -> {
-                selectedPermissions.value = persistentSetOf()
+                selectedPermissions.value = setOf()
                 matchMode.value = MatchMode.Any
                 showOnlySelected.value = false
             }

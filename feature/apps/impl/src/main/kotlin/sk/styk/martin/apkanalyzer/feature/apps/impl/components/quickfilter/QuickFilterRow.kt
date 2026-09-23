@@ -18,9 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentSetOf
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Chip
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.MultiSelectorChip
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.SelectorChip
@@ -86,7 +83,7 @@ private fun QuickFilterRowContent(
         MultiSelectorChip(
             sheetTitle = stringResource(R.string.quick_filter_source_sheet_title),
             defaultLabel = stringResource(R.string.quick_filter_source_sheet_title),
-            options = persistentListOf(SourceQuickFilter.System, SourceQuickFilter.GooglePlay, SourceQuickFilter.Sideloaded),
+            options = listOf(SourceQuickFilter.System, SourceQuickFilter.GooglePlay, SourceQuickFilter.Sideloaded),
             selected = state.activeSourceQuickFilters,
             optionLabel = { it.displayName() },
             selectionLabel = { it.selectionLabel() },
@@ -95,7 +92,7 @@ private fun QuickFilterRowContent(
 
         SelectorChip(
             sheetTitle = stringResource(R.string.quick_filter_activity_sheet_title),
-            options = persistentListOf(null, ActivityQuickFilter.RecentlyUsed, ActivityQuickFilter.Unused),
+            options = listOf(null, ActivityQuickFilter.RecentlyUsed, ActivityQuickFilter.Unused),
             selected = state.activeActivityQuickFilter,
             label = { it.displayName() },
             chipLabel = { it.chipDisplayName() },
@@ -139,7 +136,7 @@ private fun SourceQuickFilter.displayName(): String = when (this) {
 }
 
 @Composable
-private fun ImmutableList<SourceQuickFilter>.selectionLabel(): String {
+private fun List<SourceQuickFilter>.selectionLabel(): String {
     val firstLabel = first().displayName()
     return if (size == 1) firstLabel else stringResource(R.string.quick_filter_selection_more, firstLabel, size - 1)
 }
@@ -184,8 +181,8 @@ private fun QuickFilterRowActivePreview() {
     ApkAnalyzerTheme {
         QuickFilterRowContent(
             state = QuickFilterRowState(
-                activeQuickFilters = persistentSetOf(QuickFilter.Large),
-                activeSourceQuickFilters = persistentSetOf(SourceQuickFilter.GooglePlay, SourceQuickFilter.Sideloaded),
+                activeQuickFilters = setOf(QuickFilter.Large),
+                activeSourceQuickFilters = setOf(SourceQuickFilter.GooglePlay, SourceQuickFilter.Sideloaded),
                 activeActivityQuickFilter = ActivityQuickFilter.RecentlyUsed,
                 isDeepFilterActive = true,
             ),

@@ -152,9 +152,11 @@ is the authoritative list.
   `:core:ui-library`.
 * Check the component inventory in [`core/ui-library/AGENTS.md`](core/ui-library/AGENTS.md) before
   calling a component — names don't always match file names.
-* Every list property in State classes and Composable parameters is an `ImmutableList` from
-  `kotlinx.collections.immutable`. `@Immutable` on State data classes; `@Stable` on non-data
-  classes used as Composable parameters.
+* Collections in State classes and Composable parameters are plain read-only `List`, `Set`, and
+  `Map`. [`.compose/stability.conf`](.compose/stability.conf) declares them stable to the Compose
+  compiler, so never put a `MutableList`, `ArrayList`, or other mutable collection there — Compose
+  would miss in-place changes. `@Immutable` on State data classes; `@Stable` on non-data classes
+  used as Composable parameters.
 * Every file with `@Composable` functions has `@Preview` functions: `private`, suffixed `Preview`,
   wrapped in `ApkAnalyzerTheme { }`, with realistic sample data. Preview the stateless content
   composable, never the ViewModel-dependent screen.

@@ -32,8 +32,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.HashBox
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.LoadingSpinner
@@ -303,7 +301,7 @@ private fun BrowseOptionsCertificatePreview() {
             dimension = BrowseDimension.SigningCertificate,
             state = sampleLoadedState().copy(
                 subAttribute = BrowseSubAttribute.CertificateSha256,
-                options = persistentListOf(
+                options = listOf(
                     BrowseOption.CertificateHash(
                         key = "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2",
                         label = "A1:B2:C3:D4:E5:F6:A7:B8:C9:D0:E1:F2:A3:B4:C5:D6:E7:F8:A9:B0:C1:D2:E3:F4:A5:B6:C7:D8:E9:F0:A1:B2",
@@ -316,7 +314,7 @@ private fun BrowseOptionsCertificatePreview() {
                         algorithm = BrowseSubAttribute.CertificateSha256,
                         count = 3,
                     ),
-                ).toImmutableList(),
+                ),
             ),
             onAction = {},
             onBack = {},
@@ -331,11 +329,11 @@ private fun BrowseOptionsNoSearchPreview() {
         BrowseOptionsContent(
             dimension = BrowseDimension.InstallSource,
             state = sampleLoadedState().copy(
-                options = persistentListOf(
+                options = listOf(
                     BrowseOption.Labeled(key = "GooglePlay", label = "Google Play", rawIdentifier = null, count = 150),
                     BrowseOption.Labeled(key = "SystemPreinstalled", label = "System", rawIdentifier = null, count = 30),
                     BrowseOption.Labeled(key = "Unknown", label = "Unknown", rawIdentifier = null, count = 7),
-                ).toImmutableList(),
+                ),
             ),
             onAction = {},
             onBack = {},
@@ -349,7 +347,7 @@ private fun BrowseOptionsEmptyPreview() {
     ApkAnalyzerTheme {
         BrowseOptionsContent(
             dimension = BrowseDimension.Permission,
-            state = sampleLoadedState().copy(query = "xyz", options = persistentListOf()),
+            state = sampleLoadedState().copy(query = "xyz", options = listOf()),
             onAction = {},
             onBack = {},
         )
@@ -360,7 +358,7 @@ private fun sampleLoadedState() = BrowseOptionsState.Loaded(
     query = "",
     subAttribute = null,
     totalOptions = 3,
-    options = persistentListOf(
+    options = listOf(
         BrowseOption.Labeled(
             key = "android.permission.INTERNET",
             label = "Full network access",
@@ -379,5 +377,5 @@ private fun sampleLoadedState() = BrowseOptionsState.Loaded(
             rawIdentifier = "android.permission.ACCESS_FINE_LOCATION",
             count = 18,
         ),
-    ).toImmutableList(),
+    ),
 )

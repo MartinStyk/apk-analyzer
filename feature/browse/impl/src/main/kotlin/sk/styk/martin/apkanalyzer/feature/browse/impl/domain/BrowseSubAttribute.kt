@@ -1,8 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.browse.impl.domain
 
 import androidx.annotation.StringRes
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.Serializable
 import sk.styk.martin.apkanalyzer.feature.browse.impl.R
 import sk.styk.martin.apkanalyzer.feature.browse.impl.model.BrowseDimension
@@ -16,8 +14,8 @@ internal enum class BrowseSubAttribute(@StringRes val labelRes: Int) {
     CertificateCountry(R.string.browse_certificate_attribute_country),
 }
 
-internal fun BrowseDimension.subAttributes(): ImmutableList<BrowseSubAttribute> = when (this) {
-    BrowseDimension.SigningCertificate -> persistentListOf(
+internal fun BrowseDimension.subAttributes(): List<BrowseSubAttribute> = when (this) {
+    BrowseDimension.SigningCertificate -> listOf(
         BrowseSubAttribute.CertificateSha256,
         BrowseSubAttribute.CertificateSha1,
         BrowseSubAttribute.CertificateMd5,
@@ -31,7 +29,7 @@ internal fun BrowseDimension.subAttributes(): ImmutableList<BrowseSubAttribute> 
     BrowseDimension.InstallSource,
     BrowseDimension.SharedUserId,
     BrowseDimension.AppCategory,
-    -> persistentListOf()
+    -> listOf()
 }
 
 internal val BrowseSubAttribute?.isCertificateHash: Boolean

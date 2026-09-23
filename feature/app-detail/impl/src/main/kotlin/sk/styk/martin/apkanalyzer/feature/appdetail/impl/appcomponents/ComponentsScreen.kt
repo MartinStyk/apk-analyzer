@@ -41,9 +41,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.collections.immutable.ImmutableSet
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentSetOf
 import sk.styk.martin.apkanalyzer.core.common.util.sendForeignBroadcast
 import sk.styk.martin.apkanalyzer.core.common.util.startForeignActivity
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Chip
@@ -73,7 +70,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.impl.components.SectionLoadi
 internal fun ComponentsScreen(
     appDetailInput: AppDetailInput,
     initialScope: ComponentScope,
-    initialFilters: ImmutableSet<ComponentFilter>,
+    initialFilters: Set<ComponentFilter>,
     onBack: () -> Unit,
     onNavigateToIntentFilters: (componentName: String, componentType: ComponentType) -> Unit,
     modifier: Modifier = Modifier,
@@ -439,7 +436,7 @@ private fun ComponentsLoadedPreview() {
 private fun ComponentsEmptyResultPreview() {
     ApkAnalyzerTheme {
         ComponentsContent(
-            state = sampleLoadedState().copy(query = "widget", sections = persistentListOf()),
+            state = sampleLoadedState().copy(query = "widget", sections = listOf()),
             onAction = {},
             onBack = {},
             onNavigateToIntentFilters = { _, _ -> },
@@ -449,19 +446,19 @@ private fun ComponentsEmptyResultPreview() {
 
 private fun sampleLoadedState() = ComponentsState.Loaded(
     scope = ComponentScope.All,
-    scopeOptions = persistentListOf(
+    scopeOptions = listOf(
         ComponentScope.All,
         ComponentScope.Activities,
         ComponentScope.Services,
         ComponentScope.Providers,
     ),
-    selectedFilters = persistentSetOf(),
+    selectedFilters = setOf(),
     query = "",
     scopeTotal = 428,
-    sections = persistentListOf(
+    sections = listOf(
         ComponentSection(
             type = ComponentType.Activity,
-            components = persistentListOf(
+            components = listOf(
                 ComponentItem(
                     name = "com.spotify.music.features.home.HomeActivity",
                     simpleName = "HomeActivity",
@@ -471,7 +468,7 @@ private fun sampleLoadedState() = ComponentsState.Loaded(
                     isGuarded = false,
                     isUnprotected = false,
                     isLaunchable = true,
-                    flags = persistentListOf(),
+                    flags = listOf(),
                     details = ComponentDetails.ActivityDetails(
                         label = "Spotify",
                         targetActivity = null,
@@ -489,7 +486,7 @@ private fun sampleLoadedState() = ComponentsState.Loaded(
                     isGuarded = false,
                     isUnprotected = false,
                     isLaunchable = false,
-                    flags = persistentListOf(),
+                    flags = listOf(),
                     details = ComponentDetails.ActivityDetails(
                         label = null,
                         targetActivity = null,
@@ -502,7 +499,7 @@ private fun sampleLoadedState() = ComponentsState.Loaded(
         ),
         ComponentSection(
             type = ComponentType.Service,
-            components = persistentListOf(
+            components = listOf(
                 ComponentItem(
                     name = "com.spotify.music.playback.PlaybackService",
                     simpleName = "PlaybackService",
@@ -512,7 +509,7 @@ private fun sampleLoadedState() = ComponentsState.Loaded(
                     isGuarded = true,
                     isUnprotected = false,
                     isLaunchable = false,
-                    flags = persistentListOf(ComponentFlag.IsolatedProcess),
+                    flags = listOf(ComponentFlag.IsolatedProcess),
                     details = ComponentDetails.ServiceDetails(permission = "android.permission.BIND_JOB_SERVICE"),
                 ),
             ),

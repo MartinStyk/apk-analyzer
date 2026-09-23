@@ -3,8 +3,6 @@ package sk.styk.martin.apkanalyzer.feature.apps.impl.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -44,13 +42,13 @@ class AppSearchViewModel @Inject constructor(
 
     private val filteredAppsFlow = combine(allApps, appFilterRepository.filter) { apps, filter ->
         FilteredSearchApps(
-            items = filterApps(apps, filter).map { it.toListItem() }.toImmutableList(),
+            items = filterApps(apps, filter).map { it.toListItem() },
             totalCount = apps.size,
         )
     }.flowOn(dispatcherProvider.default())
 
     private val searchResultsFlow = combine(filteredAppsFlow, query) { (apps, _), query ->
-        searchApps(query, apps).toImmutableList()
+        searchApps(query, apps)
     }.flowOn(dispatcherProvider.default())
 
     private val searchHistoryFlow = searchHistoryRepository.history().map { entries ->
@@ -60,7 +58,7 @@ class AppSearchViewModel @Inject constructor(
                 query = entry.query,
                 app = entry.app?.toListItem(),
             )
-        }.toImmutableList()
+        }
     }.flowOn(dispatcherProvider.default())
 
     val state = combine(
@@ -136,4 +134,4 @@ class AppSearchViewModel @Inject constructor(
     }
 }
 
-private data class FilteredSearchApps(val items: ImmutableList<AppListItem>, val totalCount: Int)
+private data class FilteredSearchApps(val items: List<AppListItem>, val totalCount: Int)

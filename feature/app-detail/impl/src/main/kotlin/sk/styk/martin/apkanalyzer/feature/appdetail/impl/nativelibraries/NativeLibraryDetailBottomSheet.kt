@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.common.model.kilobytes
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.BottomSheet
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
@@ -106,10 +105,10 @@ private fun NativeLibraryDetailBottomSheetPreview() {
         NativeLibraryDetailBottomSheet(
             item = NativeLibraryItem(
                 name = "libcrashlytics.so",
-                abis = persistentListOf("arm64-v8a", "armeabi-v7a"),
+                abis = listOf("arm64-v8a", "armeabi-v7a"),
                 totalSize = 640.kilobytes,
                 isDeviceCompatible = true,
-                variants = persistentListOf(
+                variants = listOf(
                     NativeLibraryVariant("arm64-v8a", 340.kilobytes, "base.apk"),
                     NativeLibraryVariant("armeabi-v7a", 300.kilobytes, "base.apk"),
                 ),
@@ -127,10 +126,10 @@ private fun NativeLibraryDetailBottomSheetIncompatiblePreview() {
         NativeLibraryDetailBottomSheet(
             item = NativeLibraryItem(
                 name = "libx86only.so",
-                abis = persistentListOf("x86"),
+                abis = listOf("x86"),
                 totalSize = 640.kilobytes,
                 isDeviceCompatible = false,
-                variants = persistentListOf(
+                variants = listOf(
                     NativeLibraryVariant("x86", 640.kilobytes, "split_config.x86.apk"),
                 ),
             ),

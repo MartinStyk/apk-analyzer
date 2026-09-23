@@ -29,8 +29,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
@@ -145,7 +143,7 @@ private fun AppSearchContent(
 }
 
 @Composable
-private fun SearchResults(results: ImmutableList<AppListItem>, onAppClick: (AppListItem) -> Unit) {
+private fun SearchResults(results: List<AppListItem>, onAppClick: (AppListItem) -> Unit) {
     val resultsListState = rememberLazyListState()
     LaunchedEffect(results) {
         resultsListState.scrollToItem(0)
@@ -170,7 +168,7 @@ private fun SearchResults(results: ImmutableList<AppListItem>, onAppClick: (AppL
 
 @Composable
 private fun RecentSearchesContent(
-    history: ImmutableList<SearchHistoryItem>,
+    history: List<SearchHistoryItem>,
     onItemClick: (SearchHistoryItem) -> Unit,
     onDeleteItem: (PackageName) -> Unit,
     onClearAll: () -> Unit,
@@ -342,7 +340,7 @@ private fun AppSearchContentResultsPreview() {
         AppSearchContent(
             state = AppSearchState(
                 query = "insta",
-                results = persistentListOf(
+                results = listOf(
                     AppListItem(
                         packageName = PackageName("com.instagram.android"),
                         applicationName = "Instagram",
@@ -369,7 +367,7 @@ private fun AppSearchContentHistoryPreview() {
     ApkAnalyzerTheme {
         AppSearchContent(
             state = AppSearchState(
-                searchHistory = persistentListOf(
+                searchHistory = listOf(
                     SearchHistoryItem(
                         packageName = PackageName("com.instagram.android"),
                         query = "insta",

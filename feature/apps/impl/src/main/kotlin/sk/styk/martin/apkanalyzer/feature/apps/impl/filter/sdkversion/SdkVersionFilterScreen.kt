@@ -26,7 +26,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Checkbox
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.TextButton
@@ -145,7 +144,7 @@ private fun SdkVersionFilterContentPreview() {
     ApkAnalyzerTheme {
         SdkVersionFilterContent(
             state = SdkVersionFilterState(
-                options = persistentListOf(
+                options = listOf(
                     SdkVersionOption(35, isSelected = true, androidVersionName = "Android 15"),
                     SdkVersionOption(34, isSelected = true, androidVersionName = "Android 14"),
                     SdkVersionOption(33, isSelected = false, androidVersionName = "Android 13"),

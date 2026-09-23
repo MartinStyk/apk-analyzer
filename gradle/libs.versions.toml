@@ -2,7 +2,6 @@
 # Kotlin
 kotlin = "2.4.20"
 ksp = "2.3.11"
-kotlinx-collections-immutable = "0.5.2"
 kotlinx-serialization = "1.11.0"
 
 # Android
@@ -107,7 +106,6 @@ firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-performance = { module = "com.google.firebase:firebase-perf" }
 
 # Kotlin
-kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 

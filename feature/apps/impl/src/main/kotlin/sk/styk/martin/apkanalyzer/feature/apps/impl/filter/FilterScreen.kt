@@ -39,10 +39,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.ImmutableSet
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentSetOf
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.BottomSheet
@@ -227,8 +223,8 @@ private fun FilterContent(
 
 @Composable
 private fun SourceSection(
-    availableSources: ImmutableList<AppSource>,
-    selectedSources: ImmutableSet<AppSource>,
+    availableSources: List<AppSource>,
+    selectedSources: Set<AppSource>,
     onSourceToggle: (AppSource, Boolean) -> Unit,
     onOpenSourceFilter: () -> Unit,
     modifier: Modifier = Modifier,
@@ -253,8 +249,8 @@ private fun SourceSection(
 
 @Composable
 private fun SdkVersionSection(
-    availableSdkVersions: ImmutableList<SdkVersionEntry>,
-    selectedSdkVersions: ImmutableSet<Int>,
+    availableSdkVersions: List<SdkVersionEntry>,
+    selectedSdkVersions: Set<Int>,
     onSdkVersionToggle: (Int) -> Unit,
     onOpenSdkVersionFilter: () -> Unit,
     modifier: Modifier = Modifier,
@@ -582,7 +578,7 @@ private fun LockedContent(
 
 @Composable
 private fun PermissionsSection(
-    activePermissionPresets: ImmutableList<PermissionPreset>,
+    activePermissionPresets: List<PermissionPreset>,
     extraPermissionCount: Int,
     onPresetToggle: (PermissionPreset) -> Unit,
     onOpenPermissionFilter: () -> Unit,
@@ -715,7 +711,7 @@ private fun UnusedAppsPeriod.label(): String = when (this) {
 
 private fun Instant.toShortDate(): String = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault()).format(Date.from(this))
 
-private val previewAvailableSdkVersions = persistentListOf(
+private val previewAvailableSdkVersions = listOf(
     SdkVersionEntry(35, "Android 15"),
     SdkVersionEntry(34, "Android 14"),
     SdkVersionEntry(33, "Android 13"),
@@ -736,7 +732,7 @@ private fun FilterContentDefaultPreview() {
                 totalSizeSectionState = TotalSizeSectionState.PermissionMissing,
                 unusedAppsSectionState = UnusedAppsSectionState.PermissionMissing,
                 availableSdkVersions = previewAvailableSdkVersions,
-                availableSources = persistentListOf(AppSource.GooglePlay, AppSource.SystemPreinstalled, AppSource.Sideloaded, AppSource.Unknown),
+                availableSources = listOf(AppSource.GooglePlay, AppSource.SystemPreinstalled, AppSource.Sideloaded, AppSource.Unknown),
             ),
             onAction = {},
         )
@@ -750,8 +746,8 @@ private fun FilterContentPreview() {
         FilterContent(
             state = FilterState(
                 filter = AppFilterState(
-                    selectedSources = persistentSetOf(AppSource.GooglePlay),
-                    selectedSdkVersions = persistentSetOf(34, 35),
+                    selectedSources = setOf(AppSource.GooglePlay),
+                    selectedSdkVersions = setOf(34, 35),
                     apkSizeRange = AppSizeRange(10.megabytes, 200.megabytes),
                     installTimeRange = DateRange(
                         start = Instant.ofEpochMilli(1_700_000_000_000L),
@@ -762,7 +758,7 @@ private fun FilterContentPreview() {
                 totalSizeSectionState = TotalSizeSectionState.RangeAvailable(AppSizeRange(1.megabytes, 2048.megabytes)),
                 unusedAppsSectionState = UnusedAppsSectionState.Available,
                 availableSdkVersions = previewAvailableSdkVersions,
-                availableSources = persistentListOf(AppSource.GooglePlay, AppSource.SystemPreinstalled, AppSource.Sideloaded, AppSource.Unknown),
+                availableSources = listOf(AppSource.GooglePlay, AppSource.SystemPreinstalled, AppSource.Sideloaded, AppSource.Unknown),
             ),
             onAction = {},
         )
@@ -779,9 +775,9 @@ private fun FilterContentWithPermissionsPreview() {
                 apkSizeSectionState = ApkSizeSectionState.Loading,
                 totalSizeSectionState = TotalSizeSectionState.PermissionMissing,
                 unusedAppsSectionState = UnusedAppsSectionState.PermissionMissing,
-                availableSdkVersions = persistentListOf(SdkVersionEntry(35, "Android 15"), SdkVersionEntry(34, "Android 14")),
-                availableSources = persistentListOf(AppSource.GooglePlay, AppSource.SystemPreinstalled),
-                activePermissionPresets = persistentListOf(
+                availableSdkVersions = listOf(SdkVersionEntry(35, "Android 15"), SdkVersionEntry(34, "Android 14")),
+                availableSources = listOf(AppSource.GooglePlay, AppSource.SystemPreinstalled),
+                activePermissionPresets = listOf(
                     PermissionPreset.Camera,
                     PermissionPreset.Location,
                 ),

@@ -1,7 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl.appcomponents
 
 import androidx.compose.runtime.Immutable
-import kotlinx.collections.immutable.ImmutableList
 
 internal sealed interface IntentFiltersState {
     data object Loading : IntentFiltersState
@@ -16,7 +15,7 @@ internal sealed interface IntentFiltersState {
         val componentType: ComponentType,
         val query: String,
         val totalCount: Int,
-        val filters: ImmutableList<ComponentIntentFilterItem>,
+        val filters: List<ComponentIntentFilterItem>,
     ) : IntentFiltersState {
         val simpleComponentName: String
             get() = componentName.substringAfterLast('.')

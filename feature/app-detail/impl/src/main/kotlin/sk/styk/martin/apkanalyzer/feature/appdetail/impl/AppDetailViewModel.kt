@@ -8,7 +8,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
@@ -323,7 +322,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
                 if (lastUsed.isAfter(now.minus(AppClassificationThresholds.RECENTLY_USED_DAYS.days.toJavaDuration()))) add(AppDetailBadge.RecentlyUsed)
             }
             if (source == AppSource.GooglePlay) add(AppDetailBadge.GooglePlay)
-        }.take(MAX_BADGES).toImmutableList(),
+        }.take(MAX_BADGES),
     )
 
     private fun AppDetail.toLoadedState(deviceFeatures: DeviceFeatures): AppDetailState.Loaded {
@@ -374,8 +373,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
                         groupName = it.permissionData.details?.groupName,
                         label = permissionLabelProvider.getLabel(it.permissionData.name),
                     )
-                }
-                .toImmutableList(),
+                },
             definedPermissionsCount = permissions.defined.size,
             activitiesCount = activities.size,
             servicesCount = services.size,
@@ -394,8 +392,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
                         name = (it as? Feature.Hardware)?.name,
                         isUnmetRequirement = it.isRequired && deviceFeatures.availabilityOf(it) == FeatureAvailability.Missing,
                     )
-                }
-                .toImmutableList(),
+                },
             certificate = currentCertificate?.let { cert ->
                 AppDetailState.Loaded.CertificateState(
                     signAlgorithm = cert.signAlgorithm,

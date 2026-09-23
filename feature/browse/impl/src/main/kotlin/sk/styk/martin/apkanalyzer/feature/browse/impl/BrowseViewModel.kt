@@ -3,7 +3,6 @@ package sk.styk.martin.apkanalyzer.feature.browse.impl
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -71,10 +70,9 @@ internal class BrowseViewModel @Inject constructor(
                     topLabels = buckets.entries
                         .sortedByDescending { it.value.size }
                         .take(TOP_LABELS_COUNT)
-                        .map { labeler.label(dimension, it.key, previewSubAttribute) }
-                        .toImmutableList(),
+                        .map { labeler.label(dimension, it.key, previewSubAttribute) },
                 )
-            }.toImmutableList(),
+            },
         )
     }
 }

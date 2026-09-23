@@ -3,9 +3,6 @@ package sk.styk.martin.apkanalyzer.feature.apps.impl.filter.sdkversion
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.persistentSetOf
-import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -27,7 +24,7 @@ class SdkVersionFilterViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val input = sdkVersionFilterCoordinator.consumeInput()
-    private val selectedSdkVersions = MutableStateFlow(input.selectedSdkVersions.toPersistentSet())
+    private val selectedSdkVersions = MutableStateFlow(input.selectedSdkVersions.toSet())
 
     private val eventChannel = Channel<SdkVersionFilterEvent>(Channel.BUFFERED)
     val events = eventChannel.receiveAsFlow()
@@ -42,7 +39,6 @@ class SdkVersionFilterViewModel @Inject constructor(
                     androidVersionName = sdkVersionResolver.resolveVersion(sdkVersion),
                 )
             }
-            .toImmutableList()
         SdkVersionFilterState(options = options)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), SdkVersionFilterState())
 
@@ -50,13 +46,13 @@ class SdkVersionFilterViewModel @Inject constructor(
         when (action) {
             is SdkVersionFilterAction.SdkVersionToggled -> selectedSdkVersions.update { current ->
                 if (action.sdkVersion in current) {
-                    (current - action.sdkVersion).toPersistentSet()
+                    current - action.sdkVersion
                 } else {
-                    (current + action.sdkVersion).toPersistentSet()
+                    current + action.sdkVersion
                 }
             }
 
-            SdkVersionFilterAction.Reset -> selectedSdkVersions.value = persistentSetOf()
+            SdkVersionFilterAction.Reset -> selectedSdkVersions.value = setOf()
 
             SdkVersionFilterAction.NavigateBack -> {
                 sdkVersionFilterCoordinator.submitResult(SdkVersionFilterDraft(selectedSdkVersions = selectedSdkVersions.value))

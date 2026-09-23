@@ -1,7 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl.manifest
 
 import androidx.compose.runtime.Immutable
-import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
 internal data class ManifestLine(
@@ -18,7 +17,7 @@ internal sealed interface ManifestState {
     @Immutable
     data class Loaded(
         val query: String,
-        val displayedLines: ImmutableList<ManifestLine>,
+        val displayedLines: List<ManifestLine>,
         val lineCount: Int,
         val matchCount: Int,
         val additionalInstalledSplits: Int,

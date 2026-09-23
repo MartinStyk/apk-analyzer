@@ -39,7 +39,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.apps.packaging.InstalledSplitApk
 import sk.styk.martin.apkanalyzer.core.apps.packaging.SplitApkKind
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
@@ -315,7 +314,7 @@ private fun SplitApksLoadedPreview() {
             state = SplitApksState.Loaded(
                 query = "",
                 totalCount = 4,
-                items = persistentListOf(
+                items = listOf(
                     InstalledSplitApk(
                         fileName = "split_config.arm64_v8a.apk",
                         filePath = "/data/app/com.spotify.music/split_config.arm64_v8a.apk",
@@ -359,7 +358,7 @@ private fun SplitApksEmptyPreview() {
             state = SplitApksState.Loaded(
                 query = "widget",
                 totalCount = 4,
-                items = persistentListOf(),
+                items = listOf(),
             ),
             onAction = {},
         )

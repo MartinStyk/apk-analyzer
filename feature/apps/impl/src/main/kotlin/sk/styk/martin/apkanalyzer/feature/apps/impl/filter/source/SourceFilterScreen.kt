@@ -26,7 +26,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Checkbox
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
@@ -160,7 +159,7 @@ private fun SourceFilterContentPreview() {
     ApkAnalyzerTheme {
         SourceFilterContent(
             state = SourceFilterState(
-                options = persistentListOf(
+                options = listOf(
                     SourceOption(AppSource.GooglePlay, isSelected = true),
                     SourceOption(AppSource.SystemPreinstalled, isSelected = false),
                     SourceOption(AppSource.Sideloaded, isSelected = false),

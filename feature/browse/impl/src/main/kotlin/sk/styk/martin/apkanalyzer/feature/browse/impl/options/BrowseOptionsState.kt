@@ -1,7 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.browse.impl.options
 
 import androidx.compose.runtime.Immutable
-import kotlinx.collections.immutable.ImmutableList
 import sk.styk.martin.apkanalyzer.feature.browse.impl.domain.BrowseSubAttribute
 
 @Immutable
@@ -14,7 +13,7 @@ internal sealed interface BrowseOptionsState {
         val query: String,
         val subAttribute: BrowseSubAttribute?,
         val totalOptions: Int,
-        val options: ImmutableList<BrowseOption>,
+        val options: List<BrowseOption>,
     ) : BrowseOptionsState
 }
 

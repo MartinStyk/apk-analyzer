@@ -38,8 +38,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.apps.signing.SignatureAlgorithmAssessment
@@ -223,7 +221,7 @@ private fun CertificateCard(
     onShowRationale: (InfoRow) -> Unit,
     modifier: Modifier = Modifier,
     hasMultipleSigners: Boolean = false,
-    signingSchemeVersions: ImmutableList<SigningSchemeVersion>? = null,
+    signingSchemeVersions: List<SigningSchemeVersion>? = null,
 ) {
     val serialLabel = stringResource(R.string.certificates_serial)
     val selfSignedLabel = stringResource(R.string.certificates_self_signed)
@@ -470,7 +468,7 @@ private fun SigningSection(
     hasMultipleSigners: Boolean,
     algorithm: String,
     algorithmAssessment: SignatureAlgorithmAssessment,
-    signingSchemeVersions: ImmutableList<SigningSchemeVersion>?,
+    signingSchemeVersions: List<SigningSchemeVersion>?,
     onShowRationale: (InfoRow) -> Unit,
     onCopy: (label: String, value: String) -> Unit,
     modifier: Modifier = Modifier,
@@ -512,7 +510,7 @@ private fun SigningSection(
 
 @Composable
 private fun SchemeFact(
-    versions: ImmutableList<SigningSchemeVersion>,
+    versions: List<SigningSchemeVersion>,
     onShowRationale: (InfoRow) -> Unit,
     onCopy: (label: String, value: String) -> Unit,
     modifier: Modifier = Modifier,
@@ -531,7 +529,7 @@ private fun SchemeFact(
 }
 
 @Composable
-private fun schemeVersionLabels(versions: ImmutableList<SigningSchemeVersion>): List<String> {
+private fun schemeVersionLabels(versions: List<SigningSchemeVersion>): List<String> {
     val v1 = stringResource(R.string.certificates_scheme_v1)
     val v2 = stringResource(R.string.certificates_scheme_v2)
     val v3 = stringResource(R.string.certificates_scheme_v3)
@@ -838,14 +836,14 @@ private fun CertificatesRotationHistoryPreview() {
     ApkAnalyzerTheme {
         CertificatesContent(
             state = CertificatesState.Loaded(
-                currentCertificates = persistentListOf(
+                currentCertificates = listOf(
                     sampleCertificate().copy(
                         certificateHashSha256 = "B2:C3:D4:E5:F6:A7:B8:C9:D0:E1:F2:A3:B4:C5:D6:E7:F8:A9:B0:C1:D2:E3:F4:A5:B6:C7:D8:E9:F0:A1:B2:C3",
                     ),
                 ),
-                pastCertificates = persistentListOf(sampleCertificate()),
+                pastCertificates = listOf(sampleCertificate()),
                 hasMultipleSigners = false,
-                signingSchemeVersions = persistentListOf(SigningSchemeVersion.V2, SigningSchemeVersion.V3),
+                signingSchemeVersions = listOf(SigningSchemeVersion.V2, SigningSchemeVersion.V3),
             ),
             onAction = {},
             onBack = {},
@@ -883,8 +881,8 @@ private fun CertificatesEmptyPreview() {
     ApkAnalyzerTheme {
         CertificatesContent(
             state = CertificatesState.Loaded(
-                currentCertificates = persistentListOf(),
-                pastCertificates = persistentListOf(),
+                currentCertificates = listOf(),
+                pastCertificates = listOf(),
                 hasMultipleSigners = false,
                 signingSchemeVersions = null,
             ),
@@ -895,10 +893,10 @@ private fun CertificatesEmptyPreview() {
 }
 
 private fun sampleLoadedState(certificate: CertificateItem = sampleCertificate()) = CertificatesState.Loaded(
-    currentCertificates = persistentListOf(certificate),
-    pastCertificates = persistentListOf(),
+    currentCertificates = listOf(certificate),
+    pastCertificates = listOf(),
     hasMultipleSigners = false,
-    signingSchemeVersions = persistentListOf(SigningSchemeVersion.V2, SigningSchemeVersion.V3),
+    signingSchemeVersions = listOf(SigningSchemeVersion.V2, SigningSchemeVersion.V3),
 )
 
 private fun sampleCertificate() = CertificateItem(

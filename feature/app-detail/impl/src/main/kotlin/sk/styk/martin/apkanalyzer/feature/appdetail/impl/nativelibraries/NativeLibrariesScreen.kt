@@ -39,7 +39,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.common.model.kilobytes
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.SearchBarActive
@@ -325,32 +324,32 @@ private fun NativeLibrariesLoadedPreview() {
             state = NativeLibrariesState.Loaded(
                 query = "",
                 totalCount = 3,
-                items = persistentListOf(
+                items = listOf(
                     NativeLibraryItem(
                         name = "libapp.so",
-                        abis = persistentListOf("arm64-v8a", "armeabi-v7a"),
+                        abis = listOf("arm64-v8a", "armeabi-v7a"),
                         totalSize = 8600.kilobytes,
                         isDeviceCompatible = true,
-                        variants = persistentListOf(
+                        variants = listOf(
                             NativeLibraryVariant("arm64-v8a", 4800.kilobytes, "base.apk"),
                             NativeLibraryVariant("armeabi-v7a", 3800.kilobytes, "base.apk"),
                         ),
                     ),
                     NativeLibraryItem(
                         name = "libcrashlytics.so",
-                        abis = persistentListOf("arm64-v8a"),
+                        abis = listOf("arm64-v8a"),
                         totalSize = 210.kilobytes,
                         isDeviceCompatible = true,
-                        variants = persistentListOf(
+                        variants = listOf(
                             NativeLibraryVariant("arm64-v8a", 210.kilobytes, "split_config.arm64_v8a.apk"),
                         ),
                     ),
                     NativeLibraryItem(
                         name = "libx86only.so",
-                        abis = persistentListOf("x86"),
+                        abis = listOf("x86"),
                         totalSize = 640.kilobytes,
                         isDeviceCompatible = false,
-                        variants = persistentListOf(
+                        variants = listOf(
                             NativeLibraryVariant("x86", 640.kilobytes, "split_config.x86.apk"),
                         ),
                     ),
@@ -369,7 +368,7 @@ private fun NativeLibrariesEmptyPreview() {
             state = NativeLibrariesState.Loaded(
                 query = "widget",
                 totalCount = 3,
-                items = persistentListOf(),
+                items = listOf(),
             ),
             onAction = {},
         )

@@ -6,7 +6,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -131,7 +130,7 @@ private fun OptionsSource.Ready.narrowedBy(narrowing: Narrowing): BrowseOptionsS
         query = narrowing.query,
         subAttribute = effectiveSubAttribute,
         totalOptions = allOptions.size,
-        options = filtered.toImmutableList(),
+        options = filtered,
     )
 }
 

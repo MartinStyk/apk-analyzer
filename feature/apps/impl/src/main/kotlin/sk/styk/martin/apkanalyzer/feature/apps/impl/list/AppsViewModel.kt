@@ -3,7 +3,6 @@ package sk.styk.martin.apkanalyzer.feature.apps.impl.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -49,7 +48,7 @@ class AppsViewModel @Inject constructor(
             if (apps.isEmpty()) {
                 RecentsState.NoRecents
             } else {
-                RecentsState.Content(apps.map { it.toListItem() }.toImmutableList())
+                RecentsState.Content(apps.map { it.toListItem() })
             }
         }
 
@@ -58,7 +57,7 @@ class AppsViewModel @Inject constructor(
         appFilterRepository.filter,
     ) { rawApps, filter ->
         val filtered = filterApps(rawApps, filter)
-        filtered.map { it.toListItem() }.toImmutableList() to filter
+        filtered.map { it.toListItem() } to filter
     }.flowOn(dispatcherProvider.default())
 
     val state = combine(
@@ -79,7 +78,6 @@ class AppsViewModel @Inject constructor(
 
         val sortedItems = filteredApps
             .sortedWith(effectiveSortType.comparator(effectiveAscending))
-            .toImmutableList()
 
         AppsState(
             apps = AppListState.Content(apps = sortedItems),

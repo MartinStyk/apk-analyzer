@@ -8,8 +8,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -110,7 +108,7 @@ private sealed interface IntentFiltersSource {
     data class Ready(
         val componentName: String,
         val componentType: ComponentType,
-        val filters: ImmutableList<ComponentIntentFilterItem>,
+        val filters: List<ComponentIntentFilterItem>,
     ) : IntentFiltersSource
 }
 
@@ -119,7 +117,7 @@ private fun IntentFiltersSource.Ready.filteredBy(query: String, context: Context
     componentType = componentType,
     query = query,
     totalCount = filters.size,
-    filters = filters.filter { it.matches(query, componentType, context) }.toImmutableList(),
+    filters = filters.filter { it.matches(query, componentType, context) },
 )
 
 private fun ComponentIntentFilterItem.matches(

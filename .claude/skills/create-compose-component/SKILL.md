@@ -92,11 +92,11 @@ data class <Name>Data(
 
 ### List Parameters
 
-Use `ImmutableList` from `kotlinx.collections.immutable`:
+Use a plain read-only `List` — `.compose/stability.conf` makes it stable. Never a `MutableList`:
 ```kotlin
 @Composable
 fun <Name>List(
-    items: ImmutableList<<Name>Data>,
+    items: List<<Name>Data>,
     onSelect: (String) -> Unit,
     modifier: Modifier = Modifier,
 )

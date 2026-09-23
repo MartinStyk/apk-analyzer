@@ -1,7 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl.certificates
 
 import androidx.compose.runtime.Immutable
-import kotlinx.collections.immutable.ImmutableList
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.apps.signing.SignatureAlgorithmAssessment
@@ -42,9 +41,9 @@ internal sealed interface CertificatesState {
 
     @Immutable
     data class Loaded(
-        val currentCertificates: ImmutableList<CertificateItem>,
-        val pastCertificates: ImmutableList<CertificateItem>,
+        val currentCertificates: List<CertificateItem>,
+        val pastCertificates: List<CertificateItem>,
         val hasMultipleSigners: Boolean,
-        val signingSchemeVersions: ImmutableList<SigningSchemeVersion>?,
+        val signingSchemeVersions: List<SigningSchemeVersion>?,
     ) : CertificatesState
 }

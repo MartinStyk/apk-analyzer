@@ -2,8 +2,6 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.impl.insight
 
 import android.Manifest
 import android.annotation.SuppressLint
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import sk.styk.martin.apkanalyzer.core.apps.AppClassificationThresholds
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
@@ -18,7 +16,7 @@ internal object AppDetailInsightEvaluator {
         appDetail: AppDetail,
         now: Instant,
         deviceSdk: Int,
-    ): ImmutableList<AppDetailInsight> = with(appDetail) {
+    ): List<AppDetailInsight> = with(appDetail) {
         buildList {
             if (info.isDebuggable) {
                 add(AppDetailInsight.Debuggable)
@@ -61,7 +59,7 @@ internal object AppDetailInsightEvaluator {
                     }
                 }
             }
-        }.toImmutableList()
+        }
     }
 }
 

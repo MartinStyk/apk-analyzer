@@ -6,7 +6,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -87,7 +86,7 @@ private fun AppDetail.toRequirementsState(deviceFeatures: DeviceFeatures): Requi
         sections = listOfNotNull(
             required.toSectionOrNull(isRequired = true),
             optional.toSectionOrNull(isRequired = false),
-        ).toImmutableList(),
+        ),
         missingRequiredCount = required.count { it.availability == FeatureAvailability.Missing },
     )
 }
@@ -96,7 +95,7 @@ private fun List<RequirementItem>.toSectionOrNull(isRequired: Boolean) = takeIf 
     ?.let {
         RequirementSection(
             isRequired = isRequired,
-            requirements = it.sortedWith(requirementOrder).toImmutableList(),
+            requirements = it.sortedWith(requirementOrder),
         )
     }
 

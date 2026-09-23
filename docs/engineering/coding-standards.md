@@ -175,8 +175,10 @@ constructors of `AppsViewModel` and `FilterViewModel`.
 * No hardcoded user-facing strings. Use `stringResource` backed by the owning module's
   `res/values/strings.xml`, and follow the
   [`translate-strings`](../../.claude/skills/translate-strings/SKILL.md) skill when copy changes.
-* Every list in a State class or Composable parameter is an `ImmutableList` from
-  `kotlinx.collections.immutable`. `@Immutable` on State data classes, `@Stable` on non-data classes
+* Collections in a State class or Composable parameter are plain read-only `List`, `Set`, and `Map`.
+  [`.compose/stability.conf`](../../.compose/stability.conf) declares them stable to the Compose
+  compiler, so a `MutableList`, `ArrayList`, or other mutable collection never goes there — Compose
+  would miss in-place changes. `@Immutable` on State data classes, `@Stable` on non-data classes
   used as Composable parameters.
 * Every file with `@Composable` functions carries `@Preview` functions: private, suffixed `Preview`,
   wrapped in `ApkAnalyzerTheme { }`, with realistic sample data. Preview the stateless content

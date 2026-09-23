@@ -30,8 +30,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Chip
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.ChipVariant
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
@@ -246,31 +244,31 @@ private fun BrowseContentLoadedPreview() {
 
 private fun sampleLoadedState() = BrowseState.Loaded(
     totalApps = 187,
-    dimensions = persistentListOf(
+    dimensions = listOf(
         DimensionSummary(
             dimension = BrowseDimension.Permission,
             optionCount = 143,
-            topLabels = persistentListOf("Full network access", "Camera", "Precise location", "Contacts"),
+            topLabels = listOf("Full network access", "Camera", "Precise location", "Contacts"),
         ),
         DimensionSummary(
             dimension = BrowseDimension.SigningCertificate,
             optionCount = 96,
-            topLabels = persistentListOf("Google LLC", "Samsung Electronics", "Unknown signer"),
+            topLabels = listOf("Google LLC", "Samsung Electronics", "Unknown signer"),
         ),
         DimensionSummary(
             dimension = BrowseDimension.TargetSdk,
             optionCount = 12,
-            topLabels = persistentListOf("Android 14", "Android 13", "Android 15"),
+            topLabels = listOf("Android 14", "Android 13", "Android 15"),
         ),
         DimensionSummary(
             dimension = BrowseDimension.MinSdk,
             optionCount = 9,
-            topLabels = persistentListOf("Android 8.0", "Android 7.0", "Android 10"),
+            topLabels = listOf("Android 8.0", "Android 7.0", "Android 10"),
         ),
         DimensionSummary(
             dimension = BrowseDimension.InstallSource,
             optionCount = 3,
-            topLabels = persistentListOf("Google Play", "System", "Unknown"),
+            topLabels = listOf("Google Play", "System", "Unknown"),
         ),
-    ).toImmutableList(),
+    ),
 )

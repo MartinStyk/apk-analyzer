@@ -6,7 +6,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -81,10 +80,10 @@ internal class CertificatesViewModel @AssistedInject constructor(
 private fun AppDetail.toCertificatesState(signingSchemeVersions: List<SigningSchemeVersion>?): CertificatesState.Loaded {
     val now = Instant.now()
     return CertificatesState.Loaded(
-        currentCertificates = signing.currentCertificates.map { it.toCertificateItem(now) }.toImmutableList(),
-        pastCertificates = signing.pastCertificates.reversed().map { it.toCertificateItem(now) }.toImmutableList(),
+        currentCertificates = signing.currentCertificates.map { it.toCertificateItem(now) },
+        pastCertificates = signing.pastCertificates.reversed().map { it.toCertificateItem(now) },
         hasMultipleSigners = signing.hasMultipleSigners,
-        signingSchemeVersions = signingSchemeVersions?.toImmutableList(),
+        signingSchemeVersions = signingSchemeVersions,
     )
 }
 

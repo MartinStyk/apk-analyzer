@@ -35,7 +35,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Feature
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.FeatureAvailability
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Icon
@@ -344,7 +343,7 @@ private fun RequirementsLoadedPreview() {
 private fun RequirementsEmptyPreview() {
     ApkAnalyzerTheme {
         RequirementsContent(
-            state = RequirementsState.Loaded(sections = persistentListOf(), missingRequiredCount = 0),
+            state = RequirementsState.Loaded(sections = listOf(), missingRequiredCount = 0),
             onAction = {},
             onBack = {},
         )
@@ -353,10 +352,10 @@ private fun RequirementsEmptyPreview() {
 
 private fun sampleLoadedState() = RequirementsState.Loaded(
     missingRequiredCount = 4,
-    sections = persistentListOf(
+    sections = listOf(
         RequirementSection(
             isRequired = true,
-            requirements = persistentListOf(
+            requirements = listOf(
                 RequirementItem.Hardware(
                     name = "android.hardware.nfc",
                     requiredVersion = Feature.VERSION_UNSPECIFIED,
@@ -403,7 +402,7 @@ private fun sampleLoadedState() = RequirementsState.Loaded(
         ),
         RequirementSection(
             isRequired = false,
-            requirements = persistentListOf(
+            requirements = listOf(
                 RequirementItem.Hardware(
                     name = "android.hardware.bluetooth_le",
                     requiredVersion = Feature.VERSION_UNSPECIFIED,

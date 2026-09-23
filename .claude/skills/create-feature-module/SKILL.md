@@ -61,7 +61,6 @@ dependencies {
     api(projects.feature.<name>.api)
     // Add core module dependencies as needed:
     // implementation(projects.core.apps)
-    // implementation(libs.kotlinx.collections.immutable)
     // implementation(libs.coil.compose)
 }
 ```

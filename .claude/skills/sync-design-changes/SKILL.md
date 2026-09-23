@@ -83,7 +83,7 @@ All paths under `core/ui-library` are rooted at
 - All colors via `AppTheme.colors.*`; never a hardcoded hex outside `Color.kt` itself.
 - All text styles via `AppTheme.typography.*`; never an inline `TextStyle` literal in a screen.
 - No comments in generated/edited code — self-documenting names only.
-- `ImmutableList` / `@Immutable` / `@Stable` conventions for any state shapes touched or added.
+- Read-only collections / `@Immutable` / `@Stable` conventions for any state shapes touched or added.
 - Every touched or new composable keeps (or gains) `@Preview` functions — at least one light, one
   dark.
 - Run `./gradlew spotlessApply` before considering the change done.

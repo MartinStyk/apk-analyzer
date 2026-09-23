@@ -1,8 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.apps.impl.filter
 
 import androidx.compose.runtime.Immutable
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppFilterState
 import sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain.AppSizeRange
@@ -37,9 +35,9 @@ data class FilterState(
     val apkSizeSectionState: ApkSizeSectionState = ApkSizeSectionState.Loading,
     val totalSizeSectionState: TotalSizeSectionState = TotalSizeSectionState.Loading,
     val unusedAppsSectionState: UnusedAppsSectionState = UnusedAppsSectionState.Loading,
-    val availableSdkVersions: ImmutableList<SdkVersionEntry> = persistentListOf(),
-    val availableSources: ImmutableList<AppSource> = persistentListOf(),
-    val activePermissionPresets: ImmutableList<PermissionPreset> = persistentListOf(),
+    val availableSdkVersions: List<SdkVersionEntry> = listOf(),
+    val availableSources: List<AppSource> = listOf(),
+    val activePermissionPresets: List<PermissionPreset> = listOf(),
     val extraPermissionCount: Int = 0,
     val hasUnsavedChanges: Boolean = false,
     val showUnsavedChangesSheet: Boolean = false,

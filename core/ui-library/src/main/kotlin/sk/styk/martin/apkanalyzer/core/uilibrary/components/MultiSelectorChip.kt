@@ -17,11 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.ImmutableSet
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentSetOf
-import kotlinx.collections.immutable.toImmutableList
 import sk.styk.martin.apkanalyzer.core.uilibrary.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
@@ -30,15 +25,15 @@ import sk.styk.martin.apkanalyzer.core.uilibrary.theme.AppTheme
 fun <T> MultiSelectorChip(
     sheetTitle: String,
     defaultLabel: String,
-    options: ImmutableList<T>,
-    selected: ImmutableSet<T>,
+    options: List<T>,
+    selected: Set<T>,
     optionLabel: @Composable (T) -> String,
-    selectionLabel: @Composable (ImmutableList<T>) -> String,
+    selectionLabel: @Composable (List<T>) -> String,
     onToggleOption: (T) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var showSheet by remember { mutableStateOf(false) }
-    val selectedOptions = options.filter { it in selected }.toImmutableList()
+    val selectedOptions = options.filter { it in selected }
 
     OutlinedChip(
         label = if (selectedOptions.isEmpty()) defaultLabel else selectionLabel(selectedOptions),
@@ -104,8 +99,8 @@ private fun MultiSelectorChipDefaultPreview() {
         MultiSelectorChip(
             sheetTitle = "Protection level",
             defaultLabel = "Protection level",
-            options = persistentListOf("Dangerous", "Signature", "Normal"),
-            selected = persistentSetOf(),
+            options = listOf("Dangerous", "Signature", "Normal"),
+            selected = setOf(),
             optionLabel = { it },
             selectionLabel = { it.first() },
             onToggleOption = {},
@@ -120,8 +115,8 @@ private fun MultiSelectorChipSelectedDarkPreview() {
         MultiSelectorChip(
             sheetTitle = "Protection level",
             defaultLabel = "Protection level",
-            options = persistentListOf("Dangerous", "Signature", "Normal"),
-            selected = persistentSetOf("Dangerous", "Signature"),
+            options = listOf("Dangerous", "Signature", "Normal"),
+            selected = setOf("Dangerous", "Signature"),
             optionLabel = { it },
             selectionLabel = { "${it.first()} +${it.size - 1}" },
             onToggleOption = {},

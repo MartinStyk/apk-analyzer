@@ -42,9 +42,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentSetOf
-import kotlinx.collections.immutable.toImmutableList
 import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionFlag
 import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
@@ -441,7 +438,7 @@ private fun PermissionsLoadedPreview() {
 private fun PermissionsEmptyResultPreview() {
     ApkAnalyzerTheme {
         PermissionsContent(
-            state = sampleLoadedState().copy(query = "bluetooth", sections = persistentListOf()),
+            state = sampleLoadedState().copy(query = "bluetooth", sections = listOf()),
             onAction = {},
             onBack = {},
         )
@@ -450,24 +447,24 @@ private fun PermissionsEmptyResultPreview() {
 
 private fun sampleLoadedState() = PermissionsState.Loaded(
     scope = PermissionScope.Requested,
-    scopeOptions = persistentListOf(PermissionScope.Requested, PermissionScope.Defined),
-    selectedProtectionLevels = persistentSetOf(),
-    protectionLevelOptions = (ProtectionLevel.entries + null).toImmutableList(),
-    selectedGrantStates = persistentSetOf(),
-    grantStateOptions = GrantState.entries.toImmutableList(),
+    scopeOptions = listOf(PermissionScope.Requested, PermissionScope.Defined),
+    selectedProtectionLevels = setOf(),
+    protectionLevelOptions = (ProtectionLevel.entries + null),
+    selectedGrantStates = setOf(),
+    grantStateOptions = GrantState.entries,
     query = "",
     scopeTotal = 32,
-    sections = persistentListOf(
+    sections = listOf(
         PermissionSection(
             protectionLevel = ProtectionLevel.Dangerous,
-            permissions = persistentListOf(
+            permissions = listOf(
                 PermissionItem(
                     name = "android.permission.CAMERA",
                     label = "Camera",
                     description = "Take pictures and record video with the device camera.",
                     groupName = "android.permission-group.CAMERA",
                     protectionLevel = ProtectionLevel.Dangerous,
-                    protectionFlags = persistentListOf(),
+                    protectionFlags = listOf(),
                     grantState = GrantState.Granted,
                     declaringPackage = PackageName("android"),
                     isSelfDeclared = false,
@@ -478,7 +475,7 @@ private fun sampleLoadedState() = PermissionsState.Loaded(
                     description = "Read the device's exact location from GPS and network sources.",
                     groupName = "android.permission-group.LOCATION",
                     protectionLevel = ProtectionLevel.Dangerous,
-                    protectionFlags = persistentListOf(ProtectionFlag.AppOp),
+                    protectionFlags = listOf(ProtectionFlag.AppOp),
                     grantState = GrantState.NotGranted,
                     declaringPackage = PackageName("android"),
                     isSelfDeclared = false,
@@ -487,14 +484,14 @@ private fun sampleLoadedState() = PermissionsState.Loaded(
         ),
         PermissionSection(
             protectionLevel = ProtectionLevel.Normal,
-            permissions = persistentListOf(
+            permissions = listOf(
                 PermissionItem(
                     name = "android.permission.INTERNET",
                     label = "Full network access",
                     description = "Open network connections.",
                     groupName = null,
                     protectionLevel = ProtectionLevel.Normal,
-                    protectionFlags = persistentListOf(),
+                    protectionFlags = listOf(),
                     grantState = GrantState.Granted,
                     declaringPackage = PackageName("android"),
                     isSelfDeclared = false,
@@ -503,14 +500,14 @@ private fun sampleLoadedState() = PermissionsState.Loaded(
         ),
         PermissionSection(
             protectionLevel = null,
-            permissions = persistentListOf(
+            permissions = listOf(
                 PermissionItem(
                     name = "com.sonymobile.home.permission.PROVIDER_INSERT_BADGE",
                     label = "Provider Insert Badge",
                     description = null,
                     groupName = null,
                     protectionLevel = null,
-                    protectionFlags = persistentListOf(),
+                    protectionFlags = listOf(),
                     grantState = GrantState.NotGranted,
                     declaringPackage = null,
                     isSelfDeclared = false,

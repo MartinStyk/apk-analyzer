@@ -1,7 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl.requirements
 
 import androidx.compose.runtime.Immutable
-import kotlinx.collections.immutable.ImmutableList
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.FeatureAvailability
 
 @Immutable
@@ -9,7 +8,7 @@ sealed interface RequirementsState {
     data object Loading : RequirementsState
 
     @Immutable
-    data class Loaded(val sections: ImmutableList<RequirementSection>, val missingRequiredCount: Int) : RequirementsState {
+    data class Loaded(val sections: List<RequirementSection>, val missingRequiredCount: Int) : RequirementsState {
         val hasRequirements: Boolean
             get() = sections.isNotEmpty()
     }
@@ -18,7 +17,7 @@ sealed interface RequirementsState {
 }
 
 @Immutable
-data class RequirementSection(val isRequired: Boolean, val requirements: ImmutableList<RequirementItem>)
+data class RequirementSection(val isRequired: Boolean, val requirements: List<RequirementItem>)
 
 @Immutable
 sealed interface RequirementItem {

@@ -6,8 +6,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -76,11 +74,11 @@ internal class ManifestViewModel @AssistedInject constructor(
 private sealed interface ManifestSource {
     data object Loading : ManifestSource
     data object Error : ManifestSource
-    data class Ready(val lines: ImmutableList<String>, val additionalInstalledSplits: Int) : ManifestSource
+    data class Ready(val lines: List<String>, val additionalInstalledSplits: Int) : ManifestSource
 }
 
 private fun ParsedManifest.toSource() = ManifestSource.Ready(
-    lines = xml.lineSequence().toImmutableList(),
+    lines = xml.lineSequence().toList(),
     additionalInstalledSplits = additionalInstalledSplits,
 )
 
@@ -109,7 +107,7 @@ private fun ManifestSource.Ready.filteredBy(query: String): ManifestState.Loaded
                 text = lines[index],
                 isMatch = query.isNotBlank() && index in matchingIndexSet,
             )
-        }.toImmutableList(),
+        },
         lineCount = lines.size,
         matchCount = if (query.isBlank()) 0 else matchingIndices.size,
         additionalInstalledSplits = additionalInstalledSplits,

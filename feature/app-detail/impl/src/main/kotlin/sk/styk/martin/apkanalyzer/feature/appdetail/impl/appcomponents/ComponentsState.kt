@@ -1,9 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl.appcomponents
 
 import androidx.compose.runtime.Immutable
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.ImmutableSet
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.Serializable
 import sk.styk.martin.apkanalyzer.core.apps.components.IntentFilterDataRuleType
 import sk.styk.martin.apkanalyzer.core.apps.components.ProviderPathMatchType
@@ -61,7 +58,7 @@ internal sealed interface ComponentDetails {
         val authority: String?,
         val readPermission: String?,
         val writePermission: String?,
-        val pathPermissions: ImmutableList<ProviderPathPermissionItem>,
+        val pathPermissions: List<ProviderPathPermissionItem>,
     ) : ComponentDetails
 }
 
@@ -83,8 +80,8 @@ internal data class ComponentItem(
     val isGuarded: Boolean,
     val isUnprotected: Boolean,
     val isLaunchable: Boolean,
-    val flags: ImmutableList<ComponentFlag>,
-    val intentFilters: ImmutableList<ComponentIntentFilterItem>? = persistentListOf(),
+    val flags: List<ComponentFlag>,
+    val intentFilters: List<ComponentIntentFilterItem>? = listOf(),
     val details: ComponentDetails,
 ) {
     val stableKey: String
@@ -97,23 +94,23 @@ internal data class ComponentItem(
 @Immutable
 internal data class ComponentIntentFilterItem(
     val index: Int,
-    val actions: ImmutableList<String>,
-    val categories: ImmutableList<String>,
-    val dataRules: ImmutableList<IntentFilterDataRuleItem>,
-    val uriRelativeGroups: ImmutableList<IntentFilterUriRelativeGroupItem>,
+    val actions: List<String>,
+    val categories: List<String>,
+    val dataRules: List<IntentFilterDataRuleItem>,
+    val uriRelativeGroups: List<IntentFilterUriRelativeGroupItem>,
     val priority: Int,
     val order: Int,
     val isAutoVerify: Boolean,
 )
 
 @Immutable
-internal data class IntentFilterUriRelativeGroupItem(val isAllowed: Boolean, val dataRules: ImmutableList<IntentFilterDataRuleItem>)
+internal data class IntentFilterUriRelativeGroupItem(val isAllowed: Boolean, val dataRules: List<IntentFilterDataRuleItem>)
 
 @Immutable
 internal data class IntentFilterDataRuleItem(val type: IntentFilterDataRuleType, val value: String)
 
 @Immutable
-internal data class ComponentSection(val type: ComponentType, val components: ImmutableList<ComponentItem>)
+internal data class ComponentSection(val type: ComponentType, val components: List<ComponentItem>)
 
 @Immutable
 internal sealed interface ComponentsState {
@@ -124,11 +121,11 @@ internal sealed interface ComponentsState {
     @Immutable
     data class Loaded(
         val scope: ComponentScope,
-        val scopeOptions: ImmutableList<ComponentScope>,
-        val selectedFilters: ImmutableSet<ComponentFilter>,
+        val scopeOptions: List<ComponentScope>,
+        val selectedFilters: Set<ComponentFilter>,
         val query: String,
         val scopeTotal: Int,
-        val sections: ImmutableList<ComponentSection>,
+        val sections: List<ComponentSection>,
     ) : ComponentsState {
         val hasResults: Boolean
             get() = sections.isNotEmpty()

@@ -11,7 +11,6 @@ android {
 dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons.extended)
-    implementation(libs.kotlinx.collections.immutable)
     implementation(libs.coil.core)
     implementation(libs.coil.compose)
     implementation(libs.androidx.navigation3.ui)

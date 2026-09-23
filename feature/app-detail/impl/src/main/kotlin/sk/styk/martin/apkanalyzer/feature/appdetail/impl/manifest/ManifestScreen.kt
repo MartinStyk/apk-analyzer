@@ -286,7 +286,7 @@ private fun ManifestLoadedPreview() {
         ManifestContent(
             state = ManifestState.Loaded(
                 query = "exported",
-                displayedLines = kotlinx.collections.immutable.persistentListOf(
+                displayedLines = listOf(
                     ManifestLine(number = 23, text = "  <activity", isMatch = false),
                     ManifestLine(number = 24, text = "    android:exported=\"true\"", isMatch = true),
                     ManifestLine(number = 50, text = "  <receiver", isMatch = false),

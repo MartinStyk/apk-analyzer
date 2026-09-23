@@ -1,8 +1,5 @@
 package sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain
 
-import kotlinx.collections.immutable.ImmutableSet
-import kotlinx.collections.immutable.persistentSetOf
-import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,10 +19,10 @@ class AppFilterRepository @Inject constructor() {
     private val _filter = MutableStateFlow(AppFilterState())
     val filter: StateFlow<AppFilterState> = _filter.asStateFlow()
 
-    val activeQuickFilters: Flow<ImmutableSet<QuickFilter>>
+    val activeQuickFilters: Flow<Set<QuickFilter>>
         get() = _filter.map { deriveActiveQuickFilters(it) }
 
-    val activeSourceQuickFilters: Flow<ImmutableSet<SourceQuickFilter>>
+    val activeSourceQuickFilters: Flow<Set<SourceQuickFilter>>
         get() = _filter.map { it.activeSourceQuickFilters }
 
     val activeActivityQuickFilter: Flow<ActivityQuickFilter?>
@@ -56,9 +53,9 @@ class AppFilterRepository @Inject constructor() {
             val allSelected = sources.all { it in current.selectedSources }
             current.copy(
                 selectedSources = if (allSelected) {
-                    (current.selectedSources - sources).toPersistentSet()
+                    current.selectedSources - sources
                 } else {
-                    (current.selectedSources + sources).toPersistentSet()
+                    current.selectedSources + sources
                 },
             )
         }
@@ -81,9 +78,9 @@ class AppFilterRepository @Inject constructor() {
 
     private fun toggleSensitivePermissions(current: AppFilterState): AppFilterState = current.copy(
         selectedPermissions = if (current.isSensitivePermissionsFilterActive) {
-            persistentSetOf()
+            setOf()
         } else {
-            PermissionPreset.Sensitive.permissions.toPersistentSet()
+            PermissionPreset.Sensitive.permissions.toSet()
         },
         permissionMatchAll = false,
     )
@@ -119,9 +116,9 @@ class AppFilterRepository @Inject constructor() {
     }
 }
 
-private fun deriveActiveQuickFilters(state: AppFilterState): ImmutableSet<QuickFilter> = buildList {
+private fun deriveActiveQuickFilters(state: AppFilterState): Set<QuickFilter> = buildList {
     if (state.isSensitivePermissionsFilterActive) add(QuickFilter.SensitivePermissions)
     if (state.isLargeTotalFilterActive) add(QuickFilter.Large)
     if (state.isRecentInstallActive) add(QuickFilter.RecentlyInstalled)
     if (state.isRecentUpdateActive) add(QuickFilter.RecentlyUpdated)
-}.toPersistentSet()
+}.toSet()

@@ -47,7 +47,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
@@ -1172,7 +1171,7 @@ private fun AppDetailLoadedPreview() {
         totalPermissionsCount = 32,
         dangerousPermissionsCount = 6,
         grantedDangerousPermissionsCount = 4,
-        dangerousPermissionPreviews = persistentListOf(
+        dangerousPermissionPreviews = listOf(
             AppDetailState.Loaded.PermissionPreview(
                 name = "android.permission.CAMERA",
                 groupName = "android.permission-group.CAMERA",
@@ -1214,7 +1213,7 @@ private fun AppDetailLoadedPreview() {
         requiredFeaturesCount = 9,
         optionalFeaturesCount = 3,
         unmetRequirementsCount = 1,
-        requirementPreviews = persistentListOf(
+        requirementPreviews = listOf(
             AppDetailState.Loaded.RequirementPreview(name = "android.hardware.nfc", isUnmetRequirement = true),
             AppDetailState.Loaded.RequirementPreview(name = "android.hardware.camera", isUnmetRequirement = false),
             AppDetailState.Loaded.RequirementPreview(name = "android.hardware.wifi", isUnmetRequirement = false),
@@ -1227,7 +1226,7 @@ private fun AppDetailLoadedPreview() {
             issuer = CertificatePrincipal(name = "Android", organization = "Google Inc."),
             trustLevel = CertificateTrustLevel.Valid,
         ),
-        insights = persistentListOf(
+        insights = listOf(
             AppDetailInsight.Debuggable,
             AppDetailInsight.Sideloaded,
             AppDetailInsight.Unused(monthsSinceLastUsed = 8),

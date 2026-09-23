@@ -6,8 +6,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -82,7 +80,7 @@ internal class SplitApksViewModel @AssistedInject constructor(
         viewModelScope.launch {
             source.value = withContext(dispatcherProvider.default()) {
                 appDetailRepository.details(appDetailInput.toAppReference()).fold(
-                    onSuccess = { detail -> SplitApksSource.Ready(detail.info.installedSplits.sortedForDisplay().toImmutableList()) },
+                    onSuccess = { detail -> SplitApksSource.Ready(detail.info.installedSplits.sortedForDisplay()) },
                     onFailure = { SplitApksSource.Error },
                 )
             }
@@ -93,13 +91,13 @@ internal class SplitApksViewModel @AssistedInject constructor(
 private sealed interface SplitApksSource {
     data object Loading : SplitApksSource
     data object Error : SplitApksSource
-    data class Ready(val splits: ImmutableList<InstalledSplitApk>) : SplitApksSource
+    data class Ready(val splits: List<InstalledSplitApk>) : SplitApksSource
 }
 
 private fun SplitApksSource.Ready.filteredBy(query: String) = SplitApksState.Loaded(
     query = query,
     totalCount = splits.size,
-    items = splits.filter { it.matches(query) }.toImmutableList(),
+    items = splits.filter { it.matches(query) },
 )
 
 private fun InstalledSplitApk.matches(query: String): Boolean {

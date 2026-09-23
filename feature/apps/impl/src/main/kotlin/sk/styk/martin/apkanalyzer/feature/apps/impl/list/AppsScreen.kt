@@ -39,8 +39,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
@@ -426,7 +424,7 @@ private fun RecentsSkeleton(modifier: Modifier = Modifier) {
 
 @Composable
 private fun RecentsContent(
-    recentApps: ImmutableList<AppListItem>,
+    recentApps: List<AppListItem>,
     onAppClick: (PackageName) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -512,7 +510,7 @@ private fun AppsContentReadyPreview() {
         AppsContent(
             state = AppsState(
                 apps = AppListState.Content(
-                    apps = persistentListOf(
+                    apps = listOf(
                         AppListItem(
                             packageName = PackageName("com.instagram.android"),
                             applicationName = "Instagram",
@@ -551,7 +549,7 @@ private fun AppsContentEmptyFilteredPreview() {
     ApkAnalyzerTheme {
         AppsContent(
             state = AppsState(
-                apps = AppListState.Content(apps = persistentListOf()),
+                apps = AppListState.Content(apps = listOf()),
                 recents = RecentsState.NoRecents,
             ),
             onAction = {},
@@ -578,7 +576,7 @@ private fun AppsContentActiveFiltersPreview() {
     ApkAnalyzerTheme {
         AppsContent(
             state = AppsState(
-                apps = AppListState.Content(apps = persistentListOf()),
+                apps = AppListState.Content(apps = listOf()),
                 recents = RecentsState.NoRecents,
             ),
             onAction = {},

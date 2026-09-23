@@ -14,6 +14,5 @@ dependencies {
     implementation(projects.core.apps)
     implementation(projects.core.userPreferences)
     implementation(projects.core.appPermissions)
-    implementation(libs.kotlinx.collections.immutable)
     implementation(libs.coil.compose)
 }

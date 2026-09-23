@@ -1,8 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.apps.impl.filter.domain
 
 import androidx.compose.runtime.Immutable
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
 sealed class PermissionPreset(val permissions: Set<String>) {
@@ -79,8 +77,8 @@ sealed class PermissionPreset(val permissions: Set<String>) {
     )
 
     companion object {
-        val all: ImmutableList<PermissionPreset> by lazy {
-            persistentListOf(
+        val all: List<PermissionPreset> by lazy {
+            listOf(
                 Sensitive,
                 Camera,
                 Microphone,

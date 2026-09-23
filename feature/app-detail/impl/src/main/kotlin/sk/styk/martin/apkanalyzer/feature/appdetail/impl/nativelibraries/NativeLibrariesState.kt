@@ -1,7 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl.nativelibraries
 
 import androidx.compose.runtime.Immutable
-import kotlinx.collections.immutable.ImmutableList
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 
 @Immutable
@@ -14,7 +13,7 @@ internal sealed interface NativeLibrariesState {
     data class Loaded(
         val query: String,
         val totalCount: Int,
-        val items: ImmutableList<NativeLibraryItem>,
+        val items: List<NativeLibraryItem>,
     ) : NativeLibrariesState {
         val hasResults: Boolean get() = items.isNotEmpty()
     }
@@ -23,10 +22,10 @@ internal sealed interface NativeLibrariesState {
 @Immutable
 internal data class NativeLibraryItem(
     val name: String,
-    val abis: ImmutableList<String>,
+    val abis: List<String>,
     val totalSize: AppSize,
     val isDeviceCompatible: Boolean,
-    val variants: ImmutableList<NativeLibraryVariant>,
+    val variants: List<NativeLibraryVariant>,
 )
 
 @Immutable

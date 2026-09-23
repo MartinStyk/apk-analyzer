@@ -18,7 +18,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionFlag
 import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
@@ -168,7 +167,7 @@ private fun PermissionDetailBottomSheetPreview() {
                 description = "Read the exact position of the device from GPS and nearby networks.",
                 groupName = "android.permission-group.LOCATION",
                 protectionLevel = ProtectionLevel.Dangerous,
-                protectionFlags = persistentListOf(ProtectionFlag.AppOp, ProtectionFlag.Instant),
+                protectionFlags = listOf(ProtectionFlag.AppOp, ProtectionFlag.Instant),
                 grantState = GrantState.NotGranted,
                 declaringPackage = PackageName("android"),
                 isSelfDeclared = false,
@@ -190,7 +189,7 @@ private fun PermissionDetailBottomSheetSignaturePreview() {
                 description = null,
                 groupName = null,
                 protectionLevel = ProtectionLevel.Signature,
-                protectionFlags = persistentListOf(),
+                protectionFlags = listOf(),
                 grantState = GrantState.NotGranted,
                 declaringPackage = PackageName("com.facebook.katana"),
                 isSelfDeclared = false,
@@ -212,7 +211,7 @@ private fun PermissionDetailBottomSheetSelfDeclaredPreview() {
                 description = null,
                 groupName = null,
                 protectionLevel = ProtectionLevel.Signature,
-                protectionFlags = persistentListOf(),
+                protectionFlags = listOf(),
                 grantState = GrantState.Granted,
                 declaringPackage = PackageName("com.instagram.android"),
                 isSelfDeclared = true,
@@ -234,7 +233,7 @@ private fun PermissionDetailBottomSheetUnresolvedPreview() {
                 description = null,
                 groupName = null,
                 protectionLevel = null,
-                protectionFlags = persistentListOf(),
+                protectionFlags = listOf(),
                 grantState = GrantState.NotGranted,
                 declaringPackage = null,
                 isSelfDeclared = false,

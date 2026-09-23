@@ -3,9 +3,6 @@ package sk.styk.martin.apkanalyzer.feature.apps.impl.filter
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toImmutableSet
-import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -55,7 +52,7 @@ class FilterViewModel @Inject constructor(
             permissionFilterCoordinator.results.collect { draft ->
                 localFilter.update { current ->
                     current.copy(
-                        selectedPermissions = draft.selectedPermissions.toImmutableSet(),
+                        selectedPermissions = draft.selectedPermissions,
                         permissionMatchAll = draft.matchAll,
                     )
                 }
@@ -63,12 +60,12 @@ class FilterViewModel @Inject constructor(
         }
         viewModelScope.launch {
             sourceFilterCoordinator.results.collect { draft ->
-                localFilter.update { current -> current.copy(selectedSources = draft.selectedSources.toImmutableSet()) }
+                localFilter.update { current -> current.copy(selectedSources = draft.selectedSources) }
             }
         }
         viewModelScope.launch {
             sdkVersionFilterCoordinator.results.collect { draft ->
-                localFilter.update { current -> current.copy(selectedSdkVersions = draft.selectedSdkVersions.toImmutableSet()) }
+                localFilter.update { current -> current.copy(selectedSdkVersions = draft.selectedSdkVersions) }
             }
         }
     }
@@ -105,7 +102,6 @@ class FilterViewModel @Inject constructor(
 
         val activePresets = PermissionPreset.all
             .filter { preset -> preset.permissions.all { it in effectiveFilter.selectedPermissions } }
-            .toImmutableList()
         val coveredByPresets = activePresets.flatMapTo(mutableSetOf()) { it.permissions }
         val extraPermissionCount = effectiveFilter.selectedPermissions.count { it !in coveredByPresets }
 
@@ -125,9 +121,8 @@ class FilterViewModel @Inject constructor(
                 else -> UnusedAppsSectionState.Available
             },
             availableSdkVersions = metadata.sdkVersions
-                .map { sdkVersion -> SdkVersionEntry(sdkVersion, sdkVersionResolver.resolveVersion(sdkVersion)) }
-                .toImmutableList(),
-            availableSources = metadata.sources.toImmutableList(),
+                .map { sdkVersion -> SdkVersionEntry(sdkVersion, sdkVersionResolver.resolveVersion(sdkVersion)) },
+            availableSources = metadata.sources,
             activePermissionPresets = activePresets,
             extraPermissionCount = extraPermissionCount,
             showUnsavedChangesSheet = showSheet,
@@ -201,9 +196,9 @@ class FilterViewModel @Inject constructor(
     private fun toggleSource(action: FilterAction.SourceToggled) {
         localFilter.update { current ->
             val newSources = if (action.selected) {
-                (current.selectedSources + action.source).toPersistentSet()
+                current.selectedSources + action.source
             } else {
-                (current.selectedSources - action.source).toPersistentSet()
+                current.selectedSources - action.source
             }
             current.copy(selectedSources = newSources)
         }
@@ -212,9 +207,9 @@ class FilterViewModel @Inject constructor(
     private fun toggleSdkVersion(action: FilterAction.SdkVersionToggled) {
         localFilter.update { current ->
             val newSdks = if (action.sdkVersion in current.selectedSdkVersions) {
-                (current.selectedSdkVersions - action.sdkVersion).toPersistentSet()
+                current.selectedSdkVersions - action.sdkVersion
             } else {
-                (current.selectedSdkVersions + action.sdkVersion).toPersistentSet()
+                current.selectedSdkVersions + action.sdkVersion
             }
             current.copy(selectedSdkVersions = newSdks)
         }
@@ -239,9 +234,9 @@ class FilterViewModel @Inject constructor(
             val preset = action.preset
             val allSelected = preset.permissions.all { it in current.selectedPermissions }
             val newPermissions = if (allSelected) {
-                (current.selectedPermissions - preset.permissions).toPersistentSet()
+                current.selectedPermissions - preset.permissions
             } else {
-                (current.selectedPermissions + preset.permissions).toPersistentSet()
+                current.selectedPermissions + preset.permissions
             }
             current.copy(selectedPermissions = newPermissions)
         }

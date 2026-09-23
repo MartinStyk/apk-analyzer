@@ -52,8 +52,8 @@ Categories worth flagging, all grounded in root `AGENTS.md` / the touched module
   an empty collection, a hardcoded `Dispatchers.IO`/`Dispatchers.Default` instead of
   `DispatcherProvider`, plain `runCatching` instead of `runCatchingCancellable` inside a coroutine.
 - Compose — a feature module importing `androidx.compose.material3`, a hardcoded color instead of
-  `AppTheme.colors`/`AppTheme.typography`, a mutable `List` instead of `ImmutableList` in a State
-  class or Composable parameter, a missing `@Preview`, a past-tense callback name
+  `AppTheme.colors`/`AppTheme.typography`, a mutable collection (`MutableList`, `ArrayList`, ...)
+  in a State class or Composable parameter, a missing `@Preview`, a past-tense callback name
   (`onClicked`/`onItemSelected`/`onBackPressed`), a `LazyColumn` key that's only unique per section.
 - Naming/module conventions — a plain `object` where `data object` is required in a sealed
   hierarchy, a `Boolean?`/nullable-`String?` encoding a third state instead of an enum or sealed

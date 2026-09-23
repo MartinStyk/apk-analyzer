@@ -1,7 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.apps.impl.list
 
 import androidx.compose.runtime.Immutable
-import kotlinx.collections.immutable.ImmutableList
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
@@ -23,7 +22,7 @@ sealed interface AppListState {
     data object Loading : AppListState
 
     @Immutable
-    data class Content(val apps: ImmutableList<AppListItem>) : AppListState
+    data class Content(val apps: List<AppListItem>) : AppListState
 }
 
 sealed interface RecentsState {
@@ -31,7 +30,7 @@ sealed interface RecentsState {
     data object NoRecents : RecentsState
 
     @Immutable
-    data class Content(val apps: ImmutableList<AppListItem>) : RecentsState
+    data class Content(val apps: List<AppListItem>) : RecentsState
 }
 
 @Immutable

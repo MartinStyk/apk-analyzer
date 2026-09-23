@@ -34,8 +34,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.apps.signing.SignatureAlgorithmAssessment
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
@@ -389,7 +387,7 @@ private fun BrowseAppsEmptyPreview() {
     ApkAnalyzerTheme {
         BrowseAppsContent(
             bucketLabel = "Camera",
-            state = sampleLoadedState().copy(query = "xyz", apps = persistentListOf()),
+            state = sampleLoadedState().copy(query = "xyz", apps = listOf()),
             onAction = {},
             onBack = {},
         )
@@ -430,9 +428,9 @@ private fun BrowseBucketDetailCertificatePreview() {
 private fun sampleLoadedState() = BrowseAppsState.Loaded(
     query = "",
     totalApps = 2,
-    apps = persistentListOf(
+    apps = listOf(
         BrowseAppItem(packageName = PackageName("com.instagram.android"), applicationName = "Instagram"),
         BrowseAppItem(packageName = PackageName("com.spotify.music"), applicationName = "Spotify"),
-    ).toImmutableList(),
+    ),
     bucketDetail = BrowseBucketDetail.Permission(protectionLevel = ProtectionLevel.Dangerous, description = null),
 )

@@ -58,8 +58,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.uilibrary.R
@@ -90,7 +88,7 @@ data class NavigationBarItem(
 
 @Composable
 fun NavigationBar(
-    items: ImmutableList<NavigationBarItem>,
+    items: List<NavigationBarItem>,
     selectedKey: NavKey,
     isVisible: Boolean,
     onSelectKey: (NavKey) -> Unit,
@@ -122,7 +120,7 @@ fun NavigationBar(
 
 @Composable
 private fun NavigationPill(
-    items: ImmutableList<NavigationBarItem>,
+    items: List<NavigationBarItem>,
     selectedKey: NavKey,
     onSelectKey: (NavKey) -> Unit,
     modifier: Modifier = Modifier,
@@ -297,7 +295,7 @@ private data object PreviewAppsKey : NavKey
 
 private data object PreviewBrowseKey : NavKey
 
-private val previewItems = persistentListOf(
+private val previewItems = listOf(
     NavigationBarItem(
         navKey = PreviewAppsKey,
         selectedIcon = ApkAnalyzerIcons.Apps,

@@ -11,8 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import sk.styk.martin.apkanalyzer.core.apps.components.IntentFilterDataRuleType
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.BottomSheet
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Text
@@ -134,7 +132,7 @@ internal fun ComponentIntentFilterItem.displayTitle(componentType: ComponentType
     ?: stringResource(R.string.intent_filters_filter_fallback)
 
 @Composable
-private fun ImmutableList<IntentFilterDataRuleItem>.toDisplayText(): String = map { rule ->
+private fun List<IntentFilterDataRuleItem>.toDisplayText(): String = map { rule ->
     stringResource(
         R.string.components_detail_intent_data_rule,
         stringResource(rule.type.labelRes),
@@ -149,17 +147,17 @@ private fun IntentFilterDetailBottomSheetPreview() {
         IntentFilterDetailBottomSheet(
             filter = ComponentIntentFilterItem(
                 index = 0,
-                actions = persistentListOf("android.intent.action.VIEW"),
-                categories = persistentListOf(
+                actions = listOf("android.intent.action.VIEW"),
+                categories = listOf(
                     "android.intent.category.DEFAULT",
                     "android.intent.category.BROWSABLE",
                 ),
-                dataRules = persistentListOf(
+                dataRules = listOf(
                     IntentFilterDataRuleItem(IntentFilterDataRuleType.Scheme, "https"),
                     IntentFilterDataRuleItem(IntentFilterDataRuleType.Host, "open.spotify.com"),
                     IntentFilterDataRuleItem(IntentFilterDataRuleType.PathPrefix, "/track/"),
                 ),
-                uriRelativeGroups = persistentListOf(),
+                uriRelativeGroups = listOf(),
                 priority = 0,
                 order = 0,
                 isAutoVerify = true,

@@ -36,9 +36,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import sk.styk.martin.apkanalyzer.core.apppermissions.model.DevicePermission
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.BottomSheet
 import sk.styk.martin.apkanalyzer.core.uilibrary.components.Checkbox
@@ -279,7 +276,7 @@ private fun PermissionRow(
 
 @Composable
 private fun PresetsBottomSheet(
-    presets: ImmutableList<PermissionPresetState>,
+    presets: List<PermissionPresetState>,
     onPresetToggle: (PermissionPreset) -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -519,10 +516,9 @@ private fun PermissionFilterWithSelectionPreview() {
             state = PermissionFilterState(
                 matchMode = MatchMode.All,
                 presets = PermissionPreset.all
-                    .map { PermissionPresetState(it, false) }
-                    .toImmutableList(),
+                    .map { PermissionPresetState(it, false) },
                 permissionListState = PermissionListState.Permissions(
-                    items = persistentListOf(
+                    items = listOf(
                         PermissionItem(DevicePermission("android.permission.CAMERA", "Camera"), isSelected = true),
                         PermissionItem(DevicePermission("android.permission.RECORD_AUDIO", "Microphone"), isSelected = true),
                         PermissionItem(DevicePermission("android.permission.ACCESS_FINE_LOCATION", "Precise Location"), isSelected = false),
@@ -542,8 +538,8 @@ private fun PermissionFilterEmptyPreview() {
         PermissionFilterContent(
             state = PermissionFilterState(
                 searchQuery = "camera",
-                permissionListState = PermissionListState.Permissions(items = persistentListOf()),
-                presets = PermissionPreset.all.map { PermissionPresetState(it, false) }.toImmutableList(),
+                permissionListState = PermissionListState.Permissions(items = listOf()),
+                presets = PermissionPreset.all.map { PermissionPresetState(it, false) },
             ),
             onAction = {},
         )

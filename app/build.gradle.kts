@@ -66,7 +66,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.profileinstaller)
     implementation(libs.androidx.compose.material3)
-    implementation(libs.kotlinx.collections.immutable)
     implementation(libs.coil.compose)
 
     debugImplementation(libs.leakcanary)

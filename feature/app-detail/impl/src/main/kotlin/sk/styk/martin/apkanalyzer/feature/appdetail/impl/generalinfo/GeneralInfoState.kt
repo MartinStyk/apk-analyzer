@@ -1,7 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.impl.generalinfo
 
 import androidx.compose.runtime.Immutable
-import kotlinx.collections.immutable.ImmutableList
 import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceChain
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
@@ -40,9 +39,9 @@ sealed interface GeneralInfoState {
         val installLocation: String,
         val apkSize: AppSize,
         val totalSize: AppSize?,
-        val nativeLibraryAbis: ImmutableList<String>,
-        val nativeLibraryNames: ImmutableList<String>,
-        val deviceSupportedAbis: ImmutableList<String>,
+        val nativeLibraryAbis: List<String>,
+        val nativeLibraryNames: List<String>,
+        val deviceSupportedAbis: List<String>,
         val isNativeLibraryDeviceIncompatible: Boolean,
         val installedSplitsCount: Int,
     ) : GeneralInfoState

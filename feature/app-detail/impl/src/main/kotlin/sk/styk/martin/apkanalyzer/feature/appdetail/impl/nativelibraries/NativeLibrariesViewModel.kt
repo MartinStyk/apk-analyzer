@@ -7,8 +7,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -86,7 +84,7 @@ internal class NativeLibrariesViewModel @AssistedInject constructor(
                 nativeLibrariesRepository.nativeLibraries(appDetailInput.toAppReference()).fold(
                     onSuccess = { libraries ->
                         val items = libraries.files.toItems(Build.SUPPORTED_ABIS.toSet())
-                        NativeLibrariesSource.Ready(items.toImmutableList())
+                        NativeLibrariesSource.Ready(items)
                     },
                     onFailure = { NativeLibrariesSource.Error },
                 )
@@ -98,13 +96,13 @@ internal class NativeLibrariesViewModel @AssistedInject constructor(
 private sealed interface NativeLibrariesSource {
     data object Loading : NativeLibrariesSource
     data object Error : NativeLibrariesSource
-    data class Ready(val items: ImmutableList<NativeLibraryItem>) : NativeLibrariesSource
+    data class Ready(val items: List<NativeLibraryItem>) : NativeLibrariesSource
 }
 
 private fun NativeLibrariesSource.Ready.filteredBy(query: String) = NativeLibrariesState.Loaded(
     query = query,
     totalCount = items.size,
-    items = items.filter { it.matches(query) }.toImmutableList(),
+    items = items.filter { it.matches(query) },
 )
 
 private fun NativeLibraryItem.matches(query: String): Boolean {
@@ -117,12 +115,11 @@ private fun List<NativeLibraryFile>.toItems(deviceAbis: Set<String>): List<Nativ
         val abis = files.map { it.abi }.distinct().sorted()
         NativeLibraryItem(
             name = name,
-            abis = abis.toImmutableList(),
+            abis = abis,
             totalSize = files.fold(0.bytes) { acc, file -> acc + file.size },
             isDeviceCompatible = abis.any { it in deviceAbis },
             variants = files.sortedBy { it.abi }
-                .map { NativeLibraryVariant(abi = it.abi, size = it.size, containingApkFileName = it.containingApkFileName) }
-                .toImmutableList(),
+                .map { NativeLibraryVariant(abi = it.abi, size = it.size, containingApkFileName = it.containingApkFileName) },
         )
     }
     .sortedBy { it.name.lowercase() }
