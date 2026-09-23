@@ -89,7 +89,7 @@ class AppFilterRepository @Inject constructor() {
         current.copy(totalSizeRange = null)
     } else {
         val min = AppClassificationThresholds.LARGE_SIZE
-        val max = current.totalSizeRange?.max ?: Long.MAX_VALUE.bytes
+        val max = current.totalSizeRange?.max?.takeIf { it >= min } ?: Long.MAX_VALUE.bytes
         current.copy(totalSizeRange = AppSizeRange(min = min, max = max))
     }
 

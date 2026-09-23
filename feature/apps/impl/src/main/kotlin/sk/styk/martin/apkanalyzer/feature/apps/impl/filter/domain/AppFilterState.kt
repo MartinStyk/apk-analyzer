@@ -62,6 +62,11 @@ data class AppFilterState(
 @Immutable
 data class AppSizeRange(val min: AppSize, val max: AppSize) {
     operator fun contains(size: AppSize): Boolean = size in min..max
+
+    fun coerceIn(bounds: AppSizeRange): AppSizeRange {
+        val coercedMin = min.coerceIn(bounds.min, bounds.max)
+        return AppSizeRange(min = coercedMin, max = max.coerceIn(coercedMin, bounds.max))
+    }
 }
 
 @Immutable

@@ -92,21 +92,13 @@ class FilterViewModel @Inject constructor(
         usageStatsRepository.isPermissionGranted,
         storageStatsRepository.isPermissionGranted,
     ) { filter, metadata, showSheet, savedFilter, usagePerm, storagePerm ->
-        val effectiveFilter = if (metadata.apkSizeRange != null && filter.apkSizeRange != null &&
-            filter.apkSizeRange.max > metadata.apkSizeRange.max
-        ) {
-            filter.copy(apkSizeRange = filter.apkSizeRange.copy(max = metadata.apkSizeRange.max))
-        } else {
-            filter
-        }
-
         val activePresets = PermissionPreset.all
-            .filter { preset -> preset.permissions.all { it in effectiveFilter.selectedPermissions } }
+            .filter { preset -> preset.permissions.all { it in filter.selectedPermissions } }
         val coveredByPresets = activePresets.flatMapTo(mutableSetOf()) { it.permissions }
-        val extraPermissionCount = effectiveFilter.selectedPermissions.count { it !in coveredByPresets }
+        val extraPermissionCount = filter.selectedPermissions.count { it !in coveredByPresets }
 
         FilterState(
-            filter = effectiveFilter,
+            filter = filter,
             apkSizeSectionState = when {
                 metadata.apkSizeRange == null -> ApkSizeSectionState.Loading
                 else -> ApkSizeSectionState.RangeAvailable(metadata.apkSizeRange)
@@ -126,7 +118,7 @@ class FilterViewModel @Inject constructor(
             activePermissionPresets = activePresets,
             extraPermissionCount = extraPermissionCount,
             showUnsavedChangesSheet = showSheet,
-            hasUnsavedChanges = effectiveFilter != savedFilter,
+            hasUnsavedChanges = filter != savedFilter,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), FilterState())
 

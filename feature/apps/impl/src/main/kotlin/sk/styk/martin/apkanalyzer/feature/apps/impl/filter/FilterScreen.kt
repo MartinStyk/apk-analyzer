@@ -342,37 +342,11 @@ private fun ApkSizeSection(
             )
 
             is ApkSizeSectionState.RangeAvailable -> {
-                val effectiveRange = selectedRange ?: sectionState.bounds
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Text(
-                        text = effectiveRange.min.formatted(),
-                        style = AppTheme.typography.bodySmall,
-                        color = AppTheme.colors.onSurfaceVariant,
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    RangeSlider(
-                        value = effectiveRange.min.megabytes.toFloat()..effectiveRange.max.megabytes.toFloat(),
-                        onValueChange = { floatRange ->
-                            onRangeChange(
-                                AppSizeRange(
-                                    min = floatRange.start.megabytes,
-                                    max = floatRange.endInclusive.megabytes,
-                                ),
-                            )
-                        },
-                        valueRange = sectionState.bounds.min.megabytes.toFloat()..sectionState.bounds.max.megabytes.toFloat(),
-                        modifier = Modifier.weight(1f),
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = effectiveRange.max.formatted(),
-                        style = AppTheme.typography.bodySmall,
-                        color = AppTheme.colors.onSurfaceVariant,
-                    )
-                }
+                SizeRangeSlider(
+                    bounds = sectionState.bounds,
+                    selectedRange = selectedRange,
+                    onRangeChange = onRangeChange,
+                )
             }
         }
     }
@@ -406,39 +380,53 @@ private fun TotalSizeSection(
                     color = AppTheme.colors.onSurfaceVariant,
                 )
                 Spacer(modifier = Modifier.height(12.dp))
-                val effectiveRange = selectedRange ?: sectionState.bounds
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Text(
-                        text = effectiveRange.min.formatted(),
-                        style = AppTheme.typography.bodySmall,
-                        color = AppTheme.colors.onSurfaceVariant,
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    RangeSlider(
-                        value = effectiveRange.min.megabytes.toFloat()..effectiveRange.max.megabytes.toFloat(),
-                        onValueChange = { floatRange ->
-                            onRangeChange(
-                                AppSizeRange(
-                                    min = floatRange.start.megabytes,
-                                    max = floatRange.endInclusive.megabytes,
-                                ),
-                            )
-                        },
-                        valueRange = sectionState.bounds.min.megabytes.toFloat()..sectionState.bounds.max.megabytes.toFloat(),
-                        modifier = Modifier.weight(1f),
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = effectiveRange.max.formatted(),
-                        style = AppTheme.typography.bodySmall,
-                        color = AppTheme.colors.onSurfaceVariant,
-                    )
-                }
+                SizeRangeSlider(
+                    bounds = sectionState.bounds,
+                    selectedRange = selectedRange,
+                    onRangeChange = onRangeChange,
+                )
             }
         }
+    }
+}
+
+@Composable
+private fun SizeRangeSlider(
+    bounds: AppSizeRange,
+    selectedRange: AppSizeRange?,
+    onRangeChange: (AppSizeRange) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val effectiveRange = (selectedRange ?: bounds).coerceIn(bounds)
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier.fillMaxWidth(),
+    ) {
+        Text(
+            text = effectiveRange.min.formatted(),
+            style = AppTheme.typography.bodySmall,
+            color = AppTheme.colors.onSurfaceVariant,
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        RangeSlider(
+            value = effectiveRange.min.megabytes.toFloat()..effectiveRange.max.megabytes.toFloat(),
+            onValueChange = { floatRange ->
+                onRangeChange(
+                    AppSizeRange(
+                        min = floatRange.start.megabytes,
+                        max = floatRange.endInclusive.megabytes,
+                    ),
+                )
+            },
+            valueRange = bounds.min.megabytes.toFloat()..bounds.max.megabytes.toFloat(),
+            modifier = Modifier.weight(1f),
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = effectiveRange.max.formatted(),
+            style = AppTheme.typography.bodySmall,
+            color = AppTheme.colors.onSurfaceVariant,
+        )
     }
 }
 
