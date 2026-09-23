@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import androidx.core.content.ContextCompat
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
@@ -46,7 +47,7 @@ class PackageChangesObserverImpl @Inject constructor(@ApplicationContext appCont
             addDataScheme("package")
         }
 
-        appContext.registerReceiver(receiver, filter)
+        ContextCompat.registerReceiver(appContext, receiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
         awaitClose { appContext.unregisterReceiver(receiver) }
     }.shareIn(
         scope = appScope,

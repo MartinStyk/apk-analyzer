@@ -7,6 +7,7 @@ kotlinx-serialization = "1.11.0"
 
 # Android
 agp = "9.4.1"
+core-ktx = "1.18.0"
 core-splashscreen = "1.2.0"
 appcompat = "1.8.0"
 activity = "1.13.0"
@@ -59,6 +60,7 @@ triplet-play = "4.1.1"
 
 [libraries]
 # AndroidX Core
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "core-splashscreen" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
