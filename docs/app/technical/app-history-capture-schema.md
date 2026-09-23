@@ -3,13 +3,14 @@
 **Roadmap:** [FR-31](../product/roadmap.md#17-invisible-infrastructure),
 [HI-01, HI-02, HI-20](../product/roadmap.md#hi--snapshot--history-pillar-1--what-changed) — see
 [app-history.md](../product/features/app-history.md) for the product design this implements.
-**Status:** Implemented. `core:app-history` exists; the schema, capture pipeline, and both triggers
-(reconciliation on process start, fast-path broadcast) are built and running — see
+**Status:** Implemented. `core:app-history` exists; the schema, capture pipeline, and all three
+triggers (reconciliation on process start, fast-path broadcast, periodic `WorkManager`
+reconciliation) are built and running — see
 [`core/app-history/AGENTS.md`](../../../core/app-history/AGENTS.md) for the as-built module reference.
 Still not built: the diff engine (`HI-03`), UI (`HI-08`/`HI-14`), retention (`HI-04`), backup
-(`HI-16`/`HI-17`), the `HI-10` runtime-state tier, and periodic `WorkManager` reconciliation.
+(`HI-16`/`HI-17`), and the `HI-10` runtime-state tier.
 **Scope:** The on-device Room schema for full-state app history snapshots, what is and isn't
-captured, the change-detection gate, and the two capture triggers. Does not cover the diff engine
+captured, the change-detection gate, and the three capture triggers. Does not cover the diff engine
 (`HI-03`), UI (`HI-08`/`HI-14`), retention (`HI-04`), or backup (`HI-16`/`HI-17`).
 
 **Implementation note (post-agreement correction):** this doc's "Why JSON Content" section below
@@ -337,12 +338,16 @@ Two capture paths, sharing the same gate and pipeline above:
   `Flow<Unit>` this section originally described as a prerequisite.
 * **Reconciliation** — sweeps every installed app (`InstalledAppsRepository`) through the batched
   gate query above. This is what actually guarantees completeness, since install/update broadcasts
-  missed while the app was dead are otherwise lost forever. Runs once per app process start today —
+  missed while the app was dead are otherwise lost forever. Runs once per app process start,
   implemented by `AppHistoryCaptureScheduler`, a `DefaultLifecycleObserver` whose `onCreate` (not
   `onStart`, which re-fires on every foreground return) calls `start()`; see
-  [`core/app-history/AGENTS.md`](../../../core/app-history/AGENTS.md#triggers). A periodic `WorkManager`
-  job is an agreed follow-up once this pipeline is proven, to cover long stretches where the app is
-  never opened (`androidx.work` is not yet a dependency — needs adding when that follow-up starts).
+  [`core/app-history/AGENTS.md`](../../../core/app-history/AGENTS.md#triggers).
+* **Periodic `WorkManager` reconciliation** — a weekly `AppHistoryReconciliationWorker` covers long
+  stretches where the app is never opened, when neither of the above two triggers ever fires.
+  Constrained to battery-not-low and storage-not-low ("favorable conditions"); no network constraint,
+  since reconciliation never leaves the device. See
+  [`core/app-history/AGENTS.md`](../../../core/app-history/AGENTS.md#triggers) for the scheduling and
+  `HiltWorkerFactory` wiring.
 
 ## Removal Handling
 

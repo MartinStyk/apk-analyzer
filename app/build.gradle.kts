@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.apkanalyzer.compose)
     alias(libs.plugins.apkanalyzer.spotless)
     alias(libs.plugins.apkanalyzer.appfunctions)
+    alias(libs.plugins.apkanalyzer.work)
     alias(libs.plugins.parcelize)
 }
 

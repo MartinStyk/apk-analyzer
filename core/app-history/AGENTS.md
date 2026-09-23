@@ -6,10 +6,10 @@ Room-backed storage for full-state app history snapshots — one row per capture
 enough to reconstruct the existing app-detail screens against a past point in time. The package is
 `sk.styk.martin.apkanalyzer.core.apphistory`.
 
-**Status:** capture is implemented and running (schema, pipeline, both triggers). Not yet built: the
+**Status:** capture is implemented and running (schema, pipeline, all three triggers — fast-path
+broadcast, on-launch reconciliation, and periodic `WorkManager` reconciliation). Not yet built: the
 diff engine (`HI-03`), any UI (`HI-06`/`HI-08`/`HI-14`), retention/pruning (`HI-04`), Drive backup
-(`HI-16`/`HI-17`), the `HI-10` runtime-state (enabled/install-source) tier, and periodic `WorkManager`
-reconciliation (today's reconciliation runs once per app process start only). See
+(`HI-16`/`HI-17`), and the `HI-10` runtime-state (enabled/install-source) tier. See
 [`docs/app/technical/app-history-capture-schema.md`](../../docs/app/technical/app-history-capture-schema.md)
 for the full design, including the entity/DAO schema — read it before touching this module; it is the
 source of truth for schema and capture semantics, not this file.
@@ -98,7 +98,7 @@ per-package re-check inside the lock is authoritative.
 
 ## Triggers
 
-Both triggers live in `AppHistoryCaptureSchedulerImpl.start()`, called once from its
+All three triggers live in `AppHistoryCaptureSchedulerImpl.start()`, called once from its
 `onCreate(owner)` override — not `onStart`, which re-fires on every foreground return and would
 double-run reconciliation and double-subscribe the fast-path collector. `onCreate` fires once, when
 `ProcessLifecycleOwner` reaches `CREATED`; Lifecycle dispatches the backlog of already-passed states
@@ -116,6 +116,34 @@ idempotent.
 `PackageChangesObserver` (`core:apps`) surfaces the changed package name and
 `PackageChangeAction` (`Added`/`Removed`/`Replaced`) parsed from the broadcast `Intent`; this module
 was the reason that observer was extended off a bare `Flow<Unit>`.
+
+**Periodic `WorkManager` reconciliation.** Covers the case the other two triggers can't: the app
+never opened for a long stretch, so no process ever runs to fire the on-launch sweep or observe a
+broadcast. `schedulePeriodicReconciliation()` enqueues a weekly `AppHistoryReconciliationWorker`
+(`@HiltWorker`, delegates straight to `captureRepository.reconcileAll()`) via
+`enqueueUniquePeriodicWork(..., ExistingPeriodicWorkPolicy.KEEP, ...)` — `KEEP` so calling `start()`
+on every app launch re-affirms the schedule without resetting its window each time. Constraints
+(`setRequiresBatteryNotLow`, `setRequiresStorageNotLow`) are the "favorable conditions" gate; no
+network constraint, since reconciliation is entirely on-device. This worker races the other two
+triggers' calls to `reconcileAll()`/`reconcile()` under the same per-package `Mutex` described in
+[Capture Pipeline](#capture-pipeline) — no additional synchronization needed here.
+
+`HiltWorkerFactory` wiring lives in `app`: `ApkAnalyzer` implements `Configuration.Provider` and the
+manifest removes `androidx.work`'s default `WorkManagerInitializer` startup entry, since Hilt must
+construct the worker to inject `AppHistoryCaptureRepository` into it. `apkanalyzer.work` (this
+module and `app`) is the convention plugin adding `androidx.work`/`androidx.hilt.work` and the
+`androidx.hilt` KSP compiler that generates the `@HiltWorker` binding.
+
+`AppHistoryCaptureSchedulerImpl` takes `Lazy<WorkManager>`, not `WorkManager` directly — this isn't
+a style choice. `ApkAnalyzer` field-injects `lifecycleObservers: Set<DefaultLifecycleObserver>`
+(which eagerly constructs this singleton) before it field-injects `workerFactory: HiltWorkerFactory`.
+Resolving a bare `WorkManager` while building that set calls `WorkManager.getInstance(context)`,
+which — since the manifest disabled the default initializer — falls into WorkManager's on-demand
+path and reads `ApkAnalyzer.workManagerConfiguration`, which reads `workerFactory` back off the very
+`ApkAnalyzer` instance still being injected: `UninitializedPropertyAccessException`, reproduced on a
+real device, not caught by any compile-time check. `Lazy<WorkManager>` defers that resolution to
+`schedulePeriodicReconciliation()` inside `start()`, called from `lifecycleObservers.forEach { ... }`
+in `ApkAnalyzer.onCreate()` — after `super.onCreate()`'s field injection has fully completed.
 
 ## Module Wiring
 
