@@ -16,8 +16,10 @@ class ComposePlugin : Plugin<Project> {
             apply("org.jetbrains.kotlin.plugin.serialization")
         }
 
-        if (stringProperty("composeCompilerReports").toBoolean()) {
-            extensions.configure<ComposeCompilerGradlePluginExtension> {
+        extensions.configure<ComposeCompilerGradlePluginExtension> {
+            stabilityConfigurationFiles.add(rootProject.layout.projectDirectory.file(".compose/stability.conf"))
+
+            if (stringProperty("composeCompilerReports").toBoolean()) {
                 reportsDestination.set(layout.buildDirectory.dir("compose_compiler"))
                 metricsDestination.set(layout.buildDirectory.dir("compose_compiler"))
             }

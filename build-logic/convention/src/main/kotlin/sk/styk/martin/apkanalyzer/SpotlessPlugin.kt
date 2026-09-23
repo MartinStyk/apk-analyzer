@@ -29,6 +29,7 @@ class SpotlessPlugin : Plugin<Project> {
                             "ktlint_class_signature_rule_force_multiline_when_parameter_count_greater_or_equal_than" to "3",
                             "ktlint_compose_compositionlocal-allowlist" to "disabled",
                             "ktlint_compose_lambda-param-in-effect" to "disabled",
+                            "ktlint_compose_unstable-collections" to "disabled",
                             "ktlint_function_naming_ignore_when_annotated_with" to "Composable",
                         ),
                     )
