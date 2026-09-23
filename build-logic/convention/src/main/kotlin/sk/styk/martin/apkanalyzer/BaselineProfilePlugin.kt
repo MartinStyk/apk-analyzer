@@ -1,5 +1,6 @@
 package sk.styk.martin.apkanalyzer
 
+import com.android.build.api.dsl.ManagedVirtualDevice
 import com.android.build.api.dsl.TestExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -39,6 +40,7 @@ class BaselineProfilePlugin : Plugin<Project> {
                         apiLevel = TARGET_SDK
                         systemImageSource = "google"
                         testedAbi = "x86_64"
+                        pageAlignment = ManagedVirtualDevice.PageAlignment.FORCE_4KB_PAGES
                     }
                 }
             }

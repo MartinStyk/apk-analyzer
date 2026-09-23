@@ -1,12 +1,12 @@
 [versions]
 # Kotlin
-kotlin = "2.4.10"
+kotlin = "2.4.20"
 ksp = "2.3.11"
 kotlinx-collections-immutable = "0.5.2"
 kotlinx-serialization = "1.11.0"
 
 # Android
-agp = "9.3.2"
+agp = "9.4.1"
 core-splashscreen = "1.2.0"
 appcompat = "1.8.0"
 activity = "1.13.0"
@@ -14,18 +14,18 @@ lifecycle = "2.11.0"
 datastore = "1.2.1"
 androidx-test-ext-junit = "1.3.0"
 androidx-test-uiautomator = "2.4.0"
-androidx-benchmark-macro-junit4 = "1.5.0-rc02"
+androidx-benchmark-macro-junit4 = "1.5.0"
 androidx-profileinstaller = "1.4.1"
-androidx-baselineprofile = "1.5.0-rc02"
-androidx-work = "2.10.1"
+androidx-baselineprofile = "1.5.0"
+androidx-work = "2.12.0"
 androidx-hilt-work = "1.4.0"
 
 # Compose
-compose-bom = "2026.08.00"
-compose-foundation = "1.12.0"
+compose-bom = "2026.09.00"
+compose-foundation = "1.12.1"
 
 # Navigation
-navigation3 = "1.1.7"
+navigation3 = "1.2.0"
 lifecycle-viewmodel-nav3 = "2.11.0"
 hilt-navigation-compose = "1.4.0"
 
@@ -33,26 +33,26 @@ hilt-navigation-compose = "1.4.0"
 hilt = "2.60.1"
 
 # Firebase
-firebase-bom = "34.18.0"
+firebase-bom = "34.19.0"
 firebase-crashlytics-plugin = "3.0.8"
 firebase-perf-plugin = "2.0.2"
 google-services = "4.5.0"
 
 # Persistence
-room = "2.8.4"
+room = "2.8.5"
 
 # Play Core
 play-review = "2.0.2"
 
 # On-device AI
 mlkit-genai-prompt = "1.0.0-beta4"
-androidx-appfunctions = "1.0.0-alpha11"
+androidx-appfunctions = "1.0.0-alpha12"
 
 # Third-party
 timber = "5.0.1"
 leakcanary = "2.14"
-coil = "3.6.1"
-spotless = "8.10.1"
+coil = "3.6.3"
+spotless = "8.10.2"
 compose-rules-ktlint = "0.6.6"
 detekt = "2.0.0-alpha.6"
 triplet-play = "4.1.1"
