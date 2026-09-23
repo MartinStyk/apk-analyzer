@@ -37,6 +37,9 @@ build scripts.
   Gradle properties aren't set, so a local `assembleRelease`/`bundleRelease` is always a signed,
   installable build rather than failing or producing an unsigned one. CI supplies the real `-P`
   properties, decoding the keystore from the `SIGN_KEY` secret first.
+* Compose compiler stability reports and metrics are opt-in: pass `-PcomposeCompilerReports=true`
+  and each Compose module writes them to `build/compose_compiler/`. Strong skipping is on, so an
+  unstable class alone is not a finding; a composable that is restartable but not skippable is.
 * `ApplicationPlugin` applies `com.github.triplet.play` (Gradle Play Publisher) by string ID with no
   extension configuration — every real invocation (`publishBundle`, `promoteArtifact`) passes its
   track/status/artifact-dir explicitly via CLI flags from the release workflows, so build-script
