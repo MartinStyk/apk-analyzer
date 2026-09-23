@@ -19,9 +19,17 @@ logic do not belong here.
 * `settings/` - generic typed DataStore persistence and preference keys.
 * `model/` - genuinely cross-module value types such as app references, source classification, and
   file sizes.
-* `resources/`, `clipboard/`, `digest/`, and `device/` - shared platform adapters and focused
+* `resources/`, `clipboard/`, `digest/`, `device/`, and `io/` - shared platform adapters and focused
   utilities. `device/`'s `DeviceIdProvider` wraps `Settings.Secure.ANDROID_ID` behind an interface so
-  callers never touch `@SuppressLint("HardwareIds")` or `ContentResolver` directly.
+  callers never touch `@SuppressLint("HardwareIds")` or `ContentResolver` directly. `io/`'s
+  `InputStream.limited(byteCount)` wraps a stream so it EOFs after exactly `byteCount` bytes without
+  ever closing the underlying stream — for callers handed a stream they don't own the lifecycle of,
+  e.g. a platform callback multiplexing several files over one shared file descriptor, where closing
+  or over-reading breaks delivery of whatever comes next. Wrapping first lets the caller use ordinary
+  `copyTo` (check its `Long` return against the expected count to detect truncation) and, on failure,
+  call `LimitedInputStream.drainRemaining()` to consume whatever of that byte range was never read,
+  so the shared stream's position is still correct for the next consumer. Ordinary "copy this whole
+  file" callers still want a plain `use { input.copyTo(output) }`.
 
 ## Durable Contracts
 

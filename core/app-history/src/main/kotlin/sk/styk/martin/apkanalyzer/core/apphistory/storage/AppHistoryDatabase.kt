@@ -5,6 +5,9 @@ import androidx.room.RoomDatabase
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.entity.AppHistoryBlobEntity
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.entity.AppHistorySnapshotEntity
 
+internal const val APP_HISTORY_DATABASE_NAME = "app_history.db"
+internal const val APP_HISTORY_STAGING_DATABASE_NAME = "app_history_restore_staging.db"
+
 @Database(
     entities = [AppHistorySnapshotEntity::class, AppHistoryBlobEntity::class],
     version = 1,
