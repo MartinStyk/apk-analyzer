@@ -56,9 +56,13 @@ Turn the log into notes for users of the app, not for contributors:
 
 ## Step 4 — Get approval, always
 
-**Never create the tag from a draft the user has not approved.** Show the proposed version and the
-full notes verbatim, and ask for approval or edits. Repeat until the user approves. If the user
-supplies their own notes, use them as given rather than rewriting them.
+**Never create the tag from a draft the user has not approved.** Print the proposed version and
+the full notes verbatim as plain text in the response itself — not only inside a question tool's
+option text, where the user may not see it — then ask for approval or edits. Repeat until the user
+approves. If the user supplies their own notes, use them as given rather than rewriting them.
+
+Approving the notes also approves creating and pushing the tag from them — steps 5 and 6 follow
+without a separate confirmation.
 
 ## Step 5 — Create the annotated tag
 
@@ -82,7 +86,8 @@ If either check disagrees, delete the tag locally (`git tag -d 3.6.0`) and redo 
 
 ## Step 6 — Push the tag
 
-Pushing starts the release. An agent cannot push, so hand the exact command to the user:
+Pushing starts the release. The approval gate is Step 4 (notes) and Step 5 (tag verification) —
+once both are done, proceed to push:
 
 ```bash
 git push origin 3.6.0
