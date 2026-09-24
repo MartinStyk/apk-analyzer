@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
+import sk.styk.martin.apkanalyzer.core.apphistory.restore.AppHistoryRestoreMerger
 import sk.styk.martin.apkanalyzer.core.apps.PackageChangeAction
 import sk.styk.martin.apkanalyzer.core.apps.PackageChangesObserver
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
@@ -28,6 +29,7 @@ internal class AppHistoryCaptureSchedulerImpl @Inject constructor(
     private val captureRepository: AppHistoryCaptureRepository,
     private val packageChangesObserver: PackageChangesObserver,
     private val workManager: Lazy<WorkManager>,
+    private val restoreMerger: AppHistoryRestoreMerger,
     private val appScope: CoroutineScope,
     private val dispatcherProvider: DispatcherProvider,
 ) : AppHistoryCaptureScheduler,
@@ -41,6 +43,10 @@ internal class AppHistoryCaptureSchedulerImpl @Inject constructor(
 
     override fun start() {
         if (!started.compareAndSet(false, true)) return
+
+        appScope.launch(dispatcherProvider.default()) {
+            restoreMerger.mergeIfPending()
+        }
 
         appScope.launch(dispatcherProvider.default()) {
             delay(1.minutes)

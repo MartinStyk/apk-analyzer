@@ -7,21 +7,25 @@ enough to reconstruct the existing app-detail screens against a past point in ti
 `sk.styk.martin.apkanalyzer.core.apphistory`.
 
 **Status:** capture is implemented and running (schema, pipeline, all three triggers — fast-path
-broadcast, on-launch reconciliation, and periodic `WorkManager` reconciliation). Not yet built: the
-diff engine (`HI-03`), any UI (`HI-06`/`HI-08`/`HI-14`), retention/pruning (`HI-04`), Drive backup
-(`HI-16`/`HI-17`), and the `HI-10` runtime-state (enabled/install-source) tier. See
+broadcast, on-launch reconciliation, and periodic `WorkManager` reconciliation). Restore merging
+(`HI-17`'s "merge, don't overwrite" for Android's free Auto Backup path) is also implemented — see
+[Restore Merge](#restore-merge). Not yet built: the diff engine (`HI-03`), any UI
+(`HI-06`/`HI-08`/`HI-14`), retention/pruning (`HI-04`), the Pro-gated Drive backup half of `HI-16`,
+and the `HI-10` runtime-state (enabled/install-source) tier. See
 [`docs/app/technical/app-history-capture-schema.md`](../../docs/app/technical/app-history-capture-schema.md)
 for the full design, including the entity/DAO schema — read it before touching this module; it is the
 source of truth for schema and capture semantics, not this file.
 
 ## Package Map
 
-Two domain subpackages: `storage/` (Room schema and DAOs — persistence only, no capture logic) and
-`capture/` (the pipeline, its two triggers, the wire DTOs in `capture/snapshot/`, and Hilt bindings
-in `capture/di/`). See [Reading a Snapshot](#reading-a-snapshot) for `storage/`'s read path — not
-consumed by anything yet — and [Capture Pipeline](#capture-pipeline) / [Triggers](#triggers) for
-`capture/`'s. Everything in both subpackages stays `internal`; nothing outside this module reads
-Room or wire-format types, or calls the scheduler/repository, directly today.
+Three domain subpackages: `storage/` (Room schema and DAOs — persistence only, no capture logic),
+`capture/` (the pipeline, its triggers, the wire DTOs in `capture/snapshot/`, and Hilt bindings in
+`capture/di/`), and `restore/` (the `BackupAgent` and the restore-merge routine — see
+[Restore Merge](#restore-merge)). See [Reading a Snapshot](#reading-a-snapshot) for `storage/`'s read
+path — not consumed by anything yet — and [Capture Pipeline](#capture-pipeline) / [Triggers](#triggers)
+for `capture/`'s. Everything in all three subpackages stays `internal` except
+`AppHistoryBackupAgent`, which the manifest instantiates by name; nothing else outside this module
+reads Room or wire-format types, or calls the scheduler/repository, directly today.
 
 `storage/` splits gate-checking, writing, and reading into three separate `@Dao` interfaces rather
 than one combined DAO — not because Room requires it, but because those are genuinely different
@@ -144,6 +148,116 @@ path and reads `ApkAnalyzer.workManagerConfiguration`, which reads `workerFactor
 real device, not caught by any compile-time check. `Lazy<WorkManager>` defers that resolution to
 `schedulePeriodicReconciliation()` inside `start()`, called from `lifecycleObservers.forEach { ... }`
 in `ApkAnalyzer.onCreate()` — after `super.onCreate()`'s field injection has fully completed.
+
+## Restore Merge
+
+`AppHistoryBackupAgent` (`restore/`, public — the manifest names it directly, same pattern as
+`core:app-functions`'s service) is wired via `app`'s `android:backupAgent` manifest attribute. It
+exists because Android's default Auto Backup (`android:allowBackup="true"`, already set for other
+reasons) includes `app_history.db` in whole-app backups by default, and restoring it verbatim onto
+a fresh install — the observed, verified-on-device behavior before this existed — silently replaces
+the fresh capture with whatever was last backed up, discarding anything captured since. That is
+exactly the gap `app-history.md`'s `HI-17` ("Restore & reconcile... merge by install instance and
+mark the gap rather than overwriting or silently dropping") describes; this implements the merge
+half of it against the free Auto Backup path, not the Pro-gated Drive backup (`HI-16`) — no new
+dependency, no product decision on `OQ-08` (Drive vs. Auto Backup) required first.
+
+**`android:fullBackupOnly="true"` is required, not optional.** A custom `BackupAgent` (as opposed
+to `BackupAgentHelper`) defaults to *key/value* backup — `onBackup`/`onRestore`, both intentionally
+no-ops here — unless this flag opts it into full-data Auto Backup instead. Without it, verified via
+`bmgr backupnow` invoking `KeyValueBackupTask` against this agent, the app's backups (not just
+`app_history.db` — everything Auto Backup used to carry) silently stop happening at all, and
+`onRestoreFile` never fires on restore. `bmgr fullbackup` bypasses this distinction (it forces the
+full-data path directly), which is why testing with it alone looked fine before this flag existed.
+
+**Mechanism.** `onRestoreFile` intercepts only `app_history.db`(`-wal`/`-shm`) by filename and
+manually copies exactly `size` bytes to `app_history_restore_staging.db` instead of the live path.
+Matching by filename alone, not also the restored file's parent directory: an earlier version of
+this also required `destination.parentFile == getDatabasePath(APP_HISTORY_DATABASE_NAME).parentFile`
+as a guard against a same-named file landing somewhere unexpected (e.g. device-protected storage,
+not applicable to this app today), and that comparison — `File.equals()` between a `File` the
+framework hands `onRestoreFile` and one built locally via `getDatabasePath()` — was reproduced on a
+real device to always evaluate false, silently routing *every* restored file (including
+`app_history.db` itself) through `super.onRestoreFile(...)` instead, defeating the whole feature
+with no error or log line, since the non-matching branch logs nothing. Reverted rather than fixed
+with a canonical-path comparison, since the scenario it guarded against cannot occur here.
+This must read exactly `size` bytes from a plain `FileInputStream(data.fileDescriptor)` and never
+close `data`: the platform contract reuses one shared pipe across every file restored for the
+package, so an unbounded `copyTo` (reads to EOF) or closing the descriptor breaks delivery of
+whichever file comes after this one. `android.app.backup.FullBackup.restoreFile`, which the default
+`onRestoreFile` uses internally, is `@hide` and unavailable to app code — no platform or stdlib API
+does a bounded, non-closing copy either, hence [`core:common`'s `InputStream.limited`](../common/AGENTS.md)
+(`core/common/io/`), not a hand-rolled loop here: the input is wrapped with `.limited(size)` first, so
+an ordinary `copyTo` naturally stops at exactly `size` bytes, and its `Long` return is checked against
+`size` to catch a truncated transfer instead of silently staging a short file. On any failure —
+truncation included — `LimitedInputStream.drainRemaining()` consumes whatever of that byte range was
+never read, so the shared pipe still lands on the right offset for the next file even when staging
+this one failed outright. Every non-matching file falls through to `super.onRestoreFile(...)`
+unchanged. Redirecting instead of merging in-place matters because restore typically runs before the
+live database has ever been opened this process lifetime — landing bytes on the live path directly
+would make the restored copy *become* the live database, the exact behavior being fixed.
+
+`AppHistoryRestoreMergerImpl.mergeIfPending()` runs from `AppHistoryCaptureSchedulerImpl.start()`
+(fired first, before the other triggers) on the next ordinary app launch, not from
+`onRestoreFinished()` — the restore-time callback's process invocation is not guaranteed to have a
+live `AppHistoryDatabase` ready to merge into, whereas by the time `start()` runs the database is.
+It is a no-op unless the staging file exists. When it does: opens the staging file as a second,
+ordinary `Room.databaseBuilder(..., AppHistoryDatabase::class.java, ...)` instance and imports its
+rows via `AppHistoryWriteDao.mergeSnapshotsWithBlobs`, one `@Transaction` (matching the shape of the
+capture path's own `insertSnapshotWithBlobs`, so a mid-import failure can never leave orphaned blob
+rows with no matching snapshot). Blobs insert IGNORE-on-conflict, safe because they're
+content-addressed by `(packageName, hash)`. Snapshots also insert IGNORE-on-conflict, relying on the
+table's `UNIQUE(packageName, lastUpdateTime, firstInstallTime)` index to skip ones the live database
+already has — but only after resetting each row's `id` to `0` first, never carrying a foreign
+autoincrement id into the live table (Room would insert at that literal id, potentially colliding
+with an unrelated live row that happens to share the number).
+
+That `id` reset is exactly why [the capture gate](../../docs/app/technical/app-history-capture-schema.md#capture-gate)
+orders by `lastUpdateTime` rather than raw `id` — a restored row always lands with a higher `id` than
+anything already live (autoincrement only grows), so if the gate still picked "latest" by `id`, an
+imported row that is chronologically *older* than the live data would outrank it, and every future
+capture attempt for that package would keep colliding with the now-"latest" stale natural key
+(`OnConflictStrategy.ABORT` on the ordinary capture path) forever, not just once.
+
+The merge is split into two `runCatchingCancellable`-wrapped phases, each owning its own outcome
+because a failure means something different depending on which side it happens on. Reading the
+staging file (`readStagedData()`) is the untrusted half — a corrupt file, a truncated transfer, or
+(once this module's `@Database` version ever moves past 1) a staging file from an incompatible
+schema will fail here, and there is no version of "retry" that fixes an unusable file, so any
+non-cancelled failure deletes the staging files immediately and gives up on that restore. Writing
+the already-validated rows into the live database (`liveWriteDao.mergeSnapshotsWithBlobs`) is the
+trusted half — the staged data is known-good by this point, so a failure here (disk full, an I/O
+hiccup) is assumed transient and the staging files are deliberately *not* deleted, leaving the whole
+merge to retry from scratch on the next launch. That retry is safe because the merge is idempotent —
+blobs and snapshots both insert IGNORE-on-conflict — so replaying an already-partially-merged staging
+file only re-skips what already landed. Neither phase deletes the staging files after a
+`CancellationException`, which propagates instead of being caught, per
+[`core:common`'s contract](../../core/common/AGENTS.md#durable-contracts): a cancelled merge (e.g.
+process teardown mid-import) leaves the staging file in place to retry whole on the next launch,
+rather than discarding a pending restore no coroutine ever got to finish.
+
+The merge's bulk insert is not guarded by the per-package `Mutex` [Capture Pipeline](#capture-pipeline)
+uses to serialize the fast path against reconciliation, so it is possible in principle for a live
+capture and the merge to race on the same package's natural key at the exact same instant, aborting
+that one capture attempt with a constraint violation. Deliberately not fixed with a shared lock here:
+`reconcileAll()` already catches and logs each package's capture failure individually and continues
+the sweep (see [Capture Pipeline](#capture-pipeline)'s concurrent-capture note), so a raced package
+simply gets picked up again on the next trigger — exactly the tolerance already built for the fast
+path racing reconciliation. That tolerance only holds because of the gate-ordering fix above; without
+it, a raced (or even non-raced) restored row would poison the gate permanently instead of just once.
+
+**Verifying this on-device is slow, not instant.** `bmgr backupnow <pkg>` exercises *key/value*
+backup (`onBackup`, intentionally a no-op here) — it does not touch `onRestoreFile` at all. Use
+`bmgr fullbackup <pkg>` for the actual full-data path this feature depends on. Even then, restoring
+immediately after a same-session `bmgr fullbackup`/`bmgr backup`+`bmgr run` against the real Google
+transport consistently reported `initiateOneRestore packageName=@pm@` /
+`No more packages; finishing restore` on the device this was verified on — the transport appears to
+need real server-side propagation time before a backup is exposed as restorable, independent of any
+on-device command. `com.android.localtransport` doesn't help either: it does not persist a full-data
+backup across an app uninstall, so `restoreAtInstall` finds nothing for it post-reinstall regardless.
+The one clean, real reproduction of the original bug (and thus the only way this fix's `onRestoreFile`
+path has been observed running end-to-end) came from a *naturally aged* backup the OS had already
+propagated days earlier — not from anything forced in the same session.
 
 ## Module Wiring
 

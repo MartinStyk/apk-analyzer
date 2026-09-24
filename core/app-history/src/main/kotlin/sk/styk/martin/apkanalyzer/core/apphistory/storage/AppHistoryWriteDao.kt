@@ -21,4 +21,13 @@ internal interface AppHistoryWriteDao {
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertSnapshot(snapshot: AppHistorySnapshotEntity)
+
+    @Transaction
+    suspend fun mergeSnapshotsWithBlobs(snapshots: List<AppHistorySnapshotEntity>, blobs: List<AppHistoryBlobEntity>) {
+        insertBlobs(blobs)
+        insertSnapshotsIgnoringConflicts(snapshots)
+    }
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertSnapshotsIgnoringConflicts(snapshots: List<AppHistorySnapshotEntity>)
 }

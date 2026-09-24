@@ -3,6 +3,7 @@ package sk.styk.martin.apkanalyzer.core.apphistory.storage
 import androidx.room.Dao
 import androidx.room.Embedded
 import androidx.room.Query
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.entity.AppHistoryBlobEntity
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.entity.AppHistorySnapshotEntity
 
 internal data class AppHistorySnapshot(
@@ -53,4 +54,10 @@ internal interface AppHistoryReadDao {
         """,
     )
     suspend fun snapshotWithSections(id: Long): AppHistorySnapshot?
+
+    @Query("SELECT * FROM app_history_snapshot")
+    suspend fun allSnapshots(): List<AppHistorySnapshotEntity>
+
+    @Query("SELECT * FROM app_history_blob")
+    suspend fun allBlobs(): List<AppHistoryBlobEntity>
 }

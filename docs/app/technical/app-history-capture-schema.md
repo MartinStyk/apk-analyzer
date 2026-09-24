@@ -285,16 +285,26 @@ index — never a per-column filter, always a full-row projection compared in Ko
 ```sql
 SELECT lastUpdateTime, firstInstallTime FROM app_history_snapshot
 WHERE packageName = :packageName
-ORDER BY id DESC LIMIT 1
+ORDER BY lastUpdateTime DESC, id DESC LIMIT 1
 ```
 
 **All packages in one round trip** (reconciliation — never loop this per package):
 
 ```sql
 SELECT packageName, lastUpdateTime, firstInstallTime
-FROM app_history_snapshot
-WHERE id IN (SELECT MAX(id) FROM app_history_snapshot GROUP BY packageName)
+FROM app_history_snapshot s1
+WHERE NOT EXISTS (
+    SELECT 1 FROM app_history_snapshot s2
+    WHERE s2.packageName = s1.packageName
+    AND (s2.lastUpdateTime > s1.lastUpdateTime OR (s2.lastUpdateTime = s1.lastUpdateTime AND s2.id > s1.id))
+)
 ```
+
+Ordering by `lastUpdateTime` (with `id` only as a tiebreak), not by `id` alone, matters once restore
+merge ([`core/app-history/AGENTS.md`](../../../core/app-history/AGENTS.md#restore-merge)) can insert
+a row that is chronologically older than what is already live but numerically higher in `id` — the
+gate's job is "what does the device look like most recently," which is a fact about the data, not
+about insertion order.
 
 Load the batch result into an in-memory `Map<packageName, LatestGate>` once, then compare every
 installed app against it purely in memory — zero further DB round trips during the sweep.
