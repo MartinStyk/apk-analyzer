@@ -10,8 +10,8 @@ secrets it needs. What the verification gates themselves check is in
 |---|---|---|---|
 | [`ci.yml`](../../.github/workflows/ci.yml) | Push and PR to `develop` | `verify`, `build-apk`, `distribute` | SARIF results, a debug APK artifact, an internal-tester build on push |
 | [`agent-context.yml`](../../.github/workflows/agent-context.yml) | Push and PR to `develop` touching a context file, a skill, or the module graph | `validate` | Pass/fail on `validateAgentContext` |
-| [`release.yml`](../../.github/workflows/release.yml) | Push of a `MAJOR.MINOR.PATCH` tag | `check-tag`, `verify`, `build-release`, `publish-github-release`, `publish-play-store`, `distribute-app-distribution` | Signed AAB and APK, a GitHub release, a Play beta release, an internal-tester build |
-| [`promote-release.yml`](../../.github/workflows/promote-release.yml) | Manual `workflow_dispatch` | `promote` | A Play production release at the chosen rollout percentage |
+| [`release.yml`](../../.github/workflows/release.yml) | Push of a `MAJOR.MINOR.PATCH` tag | `check-tag`, `verify`, `build-release`, `publish-github-release`, `publish-play-store`, `distribute-app-distribution` | Signed phone and TV AABs and APKs, a GitHub release, Play beta releases for both apps, an internal-tester build |
+| [`promote-release.yml`](../../.github/workflows/promote-release.yml) | Manual `workflow_dispatch` | `promote` | A Play production release of the phone app, the TV app, or both, at the chosen rollout percentage |
 
 `ci.yml` and `agent-context.yml` cancel in-progress runs for the same ref. `ci.yml` skips runs for
 pushes that only touch Markdown, `.claude/`, `LICENSE`, `.editorconfig`, or `.gitignore` — the
@@ -39,44 +39,36 @@ Non-obvious details:
 
 ## Release
 
-Pushing an annotated `MAJOR.MINOR.PATCH` tag starts the release. The tag is the only input: it
-supplies the version name, the version code, and the release notes.
+Pushing an annotated `MAJOR.MINOR.PATCH` tag starts the release of both apps. The tag is the only
+input: it supplies the version name, the version codes, and the release notes. Whether a release
+reaches phone or TV users is decided later, at promotion.
 
 | Job | What it does |
 |---|---|
 | `check-tag` | Fails with a remediation message if the tag annotation is empty — a lightweight tag can't provide release notes. The annotation body becomes the GitHub release body |
 | `verify` | Repeats the CI gates against the release variant (`lintRelease` rather than `lintDebug`) |
-| `build-release` | Derives `versionCode` from the tag, decodes the signing keystore, runs `:app:bundleRelease :app:assembleRelease`, and uploads the AAB, APK, and ProGuard `mapping.txt` as separate artifacts |
-| `publish-github-release` | Attaches the APK to a GitHub release named after the tag |
-| `publish-play-store` | Runs `:app:publishBundle --track beta` — new releases always land on **beta**, never production |
-| `distribute-app-distribution` | Sends the release APK to `internal-testers`, tagged with the release notes |
+| `build-release` | One matrix leg per app (`app`, `tv`): derives `versionCode` from the tag, decodes the signing keystore, runs `bundleRelease assembleRelease`, and uploads the AAB, APK, and ProGuard `mapping.txt` as separate artifacts |
+| `publish-github-release` | Attaches both APKs to a GitHub release named after the tag |
+| `publish-play-store` | One matrix leg per app: the phone bundle goes to `beta`, the TV bundle to `tv:Beta TV`. New releases never land on production |
+| `distribute-app-distribution` | Sends the phone release APK to `internal-testers`, tagged with the release notes |
 
 Non-obvious details:
 
 * `versionCode` is `MAJOR * 10000 + MINOR * 100 + PATCH`, plus `10000000` for the TV app because
   Play requires unique version codes across all tracks of the same application ID. It is computed
   only by [`version-code.sh`](../../.github/scripts/version-code.sh); the tag itself becomes
-  `version.name`.
+  `version.name` for both apps.
 * `build-release` fails outright if any of the four signing secrets is missing, rather than falling
   back to the debug key — a debug-signed release that uploads successfully is worse than a failed
   build.
-* The three publishing jobs run in parallel once `build-release` finishes.
-
-## TV release
-
-The TV app ships on its own schedule. A `MAJOR.MINOR.PATCH` tag releases only the phone app; an
-annotated `MAJOR.MINOR.PATCH.tv` tag starts [`release-tv.yml`](../../.github/workflows/release-tv.yml),
-which releases only the TV app. The jobs mirror the phone release, except:
-
-* `version.name` is the tag without `.tv`, and the version code uses the TV offset.
-* The GitHub release is named `TV <version>` and is never marked as latest, so the latest release
-  stays the phone APK.
-* The bundle goes to `tv:Beta TV` — the closed testing track named "Beta TV" on Play's dedicated
-  Android TV form factor; a custom track's API name is `tv:` plus its exact name — and there is no
-  Firebase App Distribution step.
-
-Promote with `promote-tv-release.yml`, which takes the same inputs as the phone promotion and runs
-`promote-release.yml` from `tv:Beta TV` to `tv:production`.
+* The phone and TV legs are independent: `fail-fast` is off, and the Play and App Distribution jobs
+  run whenever `verify` passed, so a TV build failure doesn't block the phone upload (the TV publish
+  leg then fails on its missing artifact). The GitHub release needs both builds.
+* Both apps share one application ID, so concurrent Play edits would invalidate each other. The
+  `publish-play-store` legs, and the `both` legs of `promote-release.yml`, run with
+  `max-parallel: 1`.
+* `tv:Beta TV` is the closed testing track named "Beta TV" on Play's dedicated Android TV form
+  factor; a custom track's API name is `tv:` plus its exact name.
 
 ## Promotion to production
 
@@ -85,15 +77,20 @@ step.
 
 | Input | Required | Meaning |
 |---|---|---|
-| `version` | Yes | The version being promoted, e.g. `3.5.0`. Used for the run name and the log only — it does not select which release is promoted |
+| `version` | Yes | The version being promoted, e.g. `3.5.0`. Selects the version code to promote on each app's track |
+| `form-factor` | Yes, defaults to `phone` | `phone`, `tv`, or `both`. `both` runs one independent matrix leg per app, one after the other |
 | `rollout-percentage` | No, defaults to `100` | Share of production users receiving the update, 1–100 |
 
-* If production already has a release, the run **updates** its rollout instead of promoting again;
-  otherwise it promotes from **beta**.
+* Promote an app only when the release changes something its users can see. Every release still
+  lands on both beta tracks, so production versions of the two apps diverge and skip numbers.
+* Each upload replaces the previous release on a beta track. A version can only be promoted while
+  it is still there — once a newer tag has been released, promote that one instead; it contains
+  everything earlier.
+* If production already has an in-progress release of the same version, the run **updates** its
+  rollout instead of promoting again; otherwise it promotes from the app's beta track. A halted
+  production rollout fails the run on purpose.
 * A rollout of `100` finishes the release as `completed`; anything lower sets `inProgress` at that
   percentage, so re-running with a higher number widens a staged rollout.
-* The promoted release is whatever currently sits on beta, so promote soon after the release run
-  finishes — or check the beta track first.
 
 ## Shared pieces
 

@@ -6,24 +6,21 @@ on:
       version:
         description: 'Version being promoted (e.g. 3.5.0)'
         required: true
+      form-factor:
+        description: 'Which app to promote'
+        type: choice
+        required: true
+        default: phone
+        options:
+          - phone
+          - tv
+          - both
       rollout-percentage:
         description: 'Percentage of production users to receive the update (1-100)'
         required: false
         default: '100'
-  workflow_call:
-    inputs:
-      version:
-        type: string
-        required: true
-      rollout-percentage:
-        type: string
-        required: false
-        default: '100'
-      form-factor:
-        type: string
-        required: true
 
-run-name: Promote ${{ inputs.version }} to production (${{ inputs.rollout-percentage }}%)
+run-name: Promote ${{ inputs.version }} (${{ inputs.form-factor }}) to production (${{ inputs.rollout-percentage }}%)
 
 permissions:
   contents: read
@@ -31,11 +28,16 @@ permissions:
 jobs:
   promote:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        form-factor: ${{ fromJSON(inputs.form-factor == 'both' && '["phone","tv"]' || format('["{0}"]', inputs.form-factor)) }}
     env:
-      FORM_FACTOR: ${{ inputs.form-factor || 'phone' }}
-      MODULE: ${{ inputs.form-factor == 'tv' && 'tv' || 'app' }}
-      TESTING_TRACK: ${{ inputs.form-factor == 'tv' && 'tv:Beta TV' || 'beta' }}
-      PRODUCTION_TRACK: ${{ inputs.form-factor == 'tv' && 'tv:production' || 'production' }}
+      FORM_FACTOR: ${{ matrix.form-factor }}
+      MODULE: ${{ matrix.form-factor == 'tv' && 'tv' || 'app' }}
+      TESTING_TRACK: ${{ matrix.form-factor == 'tv' && 'tv:Beta TV' || 'beta' }}
+      PRODUCTION_TRACK: ${{ matrix.form-factor == 'tv' && 'tv:production' || 'production' }}
 
     steps:
       - uses: actions/checkout@v7
@@ -57,7 +59,7 @@ jobs:
           ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
           VERSION: ${{ inputs.version }}
         run: |
-          TARGET_VERSION_CODE=$(bash .github/scripts/version-code.sh "${VERSION%.tv}" "$FORM_FACTOR")
+          TARGET_VERSION_CODE=$(bash .github/scripts/version-code.sh "$VERSION" "$FORM_FACTOR")
           echo "version-code=$TARGET_VERSION_CODE" >> "$GITHUB_OUTPUT"
 
           BASE="https://androidpublisher.googleapis.com/androidpublisher/v3/applications/sk.styk.martin.apkanalyzer"

@@ -59,9 +59,16 @@ jobs:
   build-release:
     needs: [ check-tag ]
     runs-on: ubuntu-latest
-    outputs:
-      apk_name: apk-analyzer-${{ github.ref_name }}.apk
-      aab_name: apk-analyzer-${{ github.ref_name }}.aab
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - form-factor: phone
+            module: app
+            artifact: apk-analyzer
+          - form-factor: tv
+            module: tv
+            artifact: apk-analyzer-tv
 
     steps:
       - uses: actions/checkout@v7
@@ -79,7 +86,7 @@ jobs:
       - name: Compute versionCode from tag
         id: version
         run: |
-          CODE=$(bash .github/scripts/version-code.sh "$GITHUB_REF_NAME")
+          CODE=$(bash .github/scripts/version-code.sh "$GITHUB_REF_NAME" "${{ matrix.form-factor }}")
           echo "code=$CODE" >> "$GITHUB_OUTPUT"
 
       - name: Set up release signing
@@ -92,36 +99,36 @@ jobs:
 
       - name: Build and sign release AAB and APK
         run: |
-          ./gradlew :app:bundleRelease :app:assembleRelease \
+          ./gradlew :${{ matrix.module }}:bundleRelease :${{ matrix.module }}:assembleRelease \
             -Pversion.code=${{ steps.version.outputs.code }} \
             -Pversion.name="$GITHUB_REF_NAME"
 
       - name: Rename release artifacts
         run: |
-          mv app/build/outputs/bundle/release/*.aab "app/build/outputs/bundle/release/apk-analyzer-${{ github.ref_name }}.aab"
-          mv app/build/outputs/apk/release/*.apk "app/build/outputs/apk/release/apk-analyzer-${{ github.ref_name }}.apk"
+          mv ${{ matrix.module }}/build/outputs/bundle/release/*.aab "${{ matrix.module }}/build/outputs/bundle/release/${{ matrix.artifact }}-${{ github.ref_name }}.aab"
+          mv ${{ matrix.module }}/build/outputs/apk/release/*.apk "${{ matrix.module }}/build/outputs/apk/release/${{ matrix.artifact }}-${{ github.ref_name }}.apk"
 
       - name: Upload AAB artifact
         uses: actions/upload-artifact@v7
         with:
-          name: apk-analyzer-aab
-          path: app/build/outputs/bundle/release/apk-analyzer-${{ github.ref_name }}.aab
+          name: ${{ matrix.artifact }}-aab
+          path: ${{ matrix.module }}/build/outputs/bundle/release/${{ matrix.artifact }}-${{ github.ref_name }}.aab
           compression-level: 0
           if-no-files-found: error
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v7
         with:
-          name: apk-analyzer-apk
-          path: app/build/outputs/apk/release/apk-analyzer-${{ github.ref_name }}.apk
+          name: ${{ matrix.artifact }}-apk
+          path: ${{ matrix.module }}/build/outputs/apk/release/${{ matrix.artifact }}-${{ github.ref_name }}.apk
           compression-level: 0
           if-no-files-found: error
 
       - name: Upload mapping file artifact
         uses: actions/upload-artifact@v7
         with:
-          name: apk-analyzer-mapping
-          path: app/build/outputs/mapping/release/mapping.txt
+          name: ${{ matrix.artifact }}-mapping
+          path: ${{ matrix.module }}/build/outputs/mapping/release/mapping.txt
           if-no-files-found: error
 
   publish-github-release:
@@ -131,10 +138,11 @@ jobs:
       contents: write
 
     steps:
-      - name: Download APK artifact
+      - name: Download APK artifacts
         uses: actions/download-artifact@v8
         with:
-          name: apk-analyzer-apk
+          pattern: '*-apk'
+          merge-multiple: true
           path: artifacts
 
       - name: Create GitHub release
@@ -143,11 +151,25 @@ jobs:
           name: ${{ github.ref_name }}
           tag_name: ${{ github.ref_name }}
           body: ${{ needs.check-tag.outputs.notes }}
-          files: artifacts/${{ needs['build-release'].outputs.apk_name }}
+          files: |
+            artifacts/apk-analyzer-${{ github.ref_name }}.apk
+            artifacts/apk-analyzer-tv-${{ github.ref_name }}.apk
 
   publish-play-store:
     needs: [ verify, build-release ]
+    if: ${{ !cancelled() && needs.verify.result == 'success' }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include:
+          - module: app
+            artifact: apk-analyzer
+            track: beta
+          - module: tv
+            artifact: apk-analyzer-tv
+            track: 'tv:Beta TV'
 
     steps:
       - uses: actions/checkout@v7
@@ -158,16 +180,18 @@ jobs:
       - name: Download AAB artifact
         uses: actions/download-artifact@v8
         with:
-          name: apk-analyzer-aab
+          name: ${{ matrix.artifact }}-aab
           path: artifacts
 
-      - name: Publish to Play Store beta track
+      - name: Publish to Play Store ${{ matrix.track }} track
         env:
           ANDROID_PUBLISHER_CREDENTIALS: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
-        run: ./gradlew :app:publishBundle --artifact-dir artifacts --track beta
+          TRACK: ${{ matrix.track }}
+        run: ./gradlew :${{ matrix.module }}:publishBundle --artifact-dir artifacts --track "$TRACK"
 
   distribute-app-distribution:
     needs: [ verify, build-release ]
+    if: ${{ !cancelled() && needs.verify.result == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -182,7 +206,7 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
         run: |
-          npx --yes firebase-tools@15.26.0 appdistribution:distribute "artifacts/${{ needs['build-release'].outputs.apk_name }}" \
+          npx --yes firebase-tools@15.26.0 appdistribution:distribute "artifacts/apk-analyzer-${{ github.ref_name }}.apk" \
             --app "$FIREBASE_APP_ID" \
             --groups "internal-testers" \
             --release-notes "${{ github.ref_name }}"
