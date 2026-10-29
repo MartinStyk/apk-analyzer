@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apphistory.storage.entity
+package sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity
 
 import androidx.room.Entity
 
@@ -6,8 +6,8 @@ import androidx.room.Entity
     tableName = "app_history_blob",
     primaryKeys = ["packageName", "hash"],
 )
-internal data class AppHistoryBlobEntity(
+internal class AppHistoryBlobEntity(
     val packageName: String,
     val hash: String,
-    val content: String,
+    val content: ByteArray,
 )

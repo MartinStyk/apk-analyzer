@@ -5,11 +5,11 @@ import androidx.room.Room
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.apphistory.capture.APP_HISTORY
-import sk.styk.martin.apkanalyzer.core.apphistory.storage.APP_HISTORY_STAGING_DATABASE_NAME
-import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryDatabase
-import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryWriteDao
-import sk.styk.martin.apkanalyzer.core.apphistory.storage.entity.AppHistoryBlobEntity
-import sk.styk.martin.apkanalyzer.core.apphistory.storage.entity.AppHistorySnapshotEntity
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.APP_HISTORY_STAGING_DATABASE_NAME
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryDatabase
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryWriteDao
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity.AppHistoryBlobEntity
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity.AppHistorySnapshotEntity
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger

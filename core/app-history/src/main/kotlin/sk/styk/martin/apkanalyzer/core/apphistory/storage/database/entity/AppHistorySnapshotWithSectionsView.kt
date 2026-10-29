@@ -1,31 +1,11 @@
-package sk.styk.martin.apkanalyzer.core.apphistory.storage
+package sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity
 
-import androidx.room.Dao
+import androidx.room.DatabaseView
 import androidx.room.Embedded
-import androidx.room.Query
-import sk.styk.martin.apkanalyzer.core.apphistory.storage.entity.AppHistoryBlobEntity
-import sk.styk.martin.apkanalyzer.core.apphistory.storage.entity.AppHistorySnapshotEntity
 
-internal data class AppHistorySnapshot(
-    @Embedded val snapshot: AppHistorySnapshotEntity,
-    val permissionsContent: String?,
-    val activitiesContent: String?,
-    val servicesContent: String?,
-    val receiversContent: String?,
-    val providersContent: String?,
-    val featuresContent: String?,
-    val signingContent: String?,
-    val intentFiltersContent: String?,
-    val nativeLibrariesContent: String?,
-    val signingSchemeContent: String?,
-    val installedSplitsContent: String?,
-)
-
-@Dao
-internal interface AppHistoryReadDao {
-
-    @Query(
-        """
+@DatabaseView(
+    viewName = "app_history_snapshot_with_sections",
+    value = """
         SELECT s.*,
             pb.content AS permissionsContent,
             ab.content AS activitiesContent,
@@ -50,14 +30,19 @@ internal interface AppHistoryReadDao {
         LEFT JOIN app_history_blob nlb ON nlb.packageName = s.packageName AND nlb.hash = s.nativeLibrariesHash
         LEFT JOIN app_history_blob ssb ON ssb.packageName = s.packageName AND ssb.hash = s.signingSchemeHash
         LEFT JOIN app_history_blob isb ON isb.packageName = s.packageName AND isb.hash = s.installedSplitsHash
-        WHERE s.id = :id
-        """,
-    )
-    suspend fun snapshotWithSections(id: Long): AppHistorySnapshot?
-
-    @Query("SELECT * FROM app_history_snapshot")
-    suspend fun allSnapshots(): List<AppHistorySnapshotEntity>
-
-    @Query("SELECT * FROM app_history_blob")
-    suspend fun allBlobs(): List<AppHistoryBlobEntity>
-}
+    """,
+)
+internal class AppHistorySnapshotWithSectionsView(
+    @Embedded val snapshot: AppHistorySnapshotEntity,
+    val permissionsContent: ByteArray?,
+    val activitiesContent: ByteArray?,
+    val servicesContent: ByteArray?,
+    val receiversContent: ByteArray?,
+    val providersContent: ByteArray?,
+    val featuresContent: ByteArray?,
+    val signingContent: ByteArray?,
+    val intentFiltersContent: ByteArray?,
+    val nativeLibrariesContent: ByteArray?,
+    val signingSchemeContent: ByteArray?,
+    val installedSplitsContent: ByteArray?,
+)

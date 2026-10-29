@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apphistory.capture.snapshot
+package sk.styk.martin.apkanalyzer.core.apphistory.storage.database.snapshot
 
 import kotlinx.serialization.Serializable
 import sk.styk.martin.apkanalyzer.core.apps.components.Service
@@ -15,6 +15,16 @@ internal data class ServiceSnapshot(
 )
 
 internal fun Service.toSnapshot() = ServiceSnapshot(
+    name = name,
+    permission = permission,
+    isExported = isExported,
+    isStopWithTask = isStopWithTask,
+    isSingleUser = isSingleUser,
+    isIsolatedProcess = isIsolatedProcess,
+    isExternalService = isExternalService,
+)
+
+internal fun ServiceSnapshot.toDomain() = Service(
     name = name,
     permission = permission,
     isExported = isExported,

@@ -1,7 +1,8 @@
-package sk.styk.martin.apkanalyzer.core.apphistory.capture.snapshot
+package sk.styk.martin.apkanalyzer.core.apphistory.storage.database.snapshot
 
 import kotlinx.serialization.Serializable
 import sk.styk.martin.apkanalyzer.core.apps.components.Activity
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 
 @Serializable
 internal data class ActivitySnapshot(
@@ -18,6 +19,17 @@ internal data class ActivitySnapshot(
 internal fun Activity.toSnapshot() = ActivitySnapshot(
     name = name,
     packageName = packageName.value,
+    label = label,
+    targetActivity = targetActivity,
+    permission = permission,
+    parentName = parentName,
+    isExported = isExported,
+    isLauncher = isLauncher,
+)
+
+internal fun ActivitySnapshot.toDomain() = Activity(
+    name = name,
+    packageName = PackageName(packageName),
     label = label,
     targetActivity = targetActivity,
     permission = permission,

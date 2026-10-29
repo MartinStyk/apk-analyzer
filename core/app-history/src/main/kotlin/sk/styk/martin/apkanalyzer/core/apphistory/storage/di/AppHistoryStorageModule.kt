@@ -7,11 +7,11 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import sk.styk.martin.apkanalyzer.core.apphistory.storage.APP_HISTORY_DATABASE_NAME
-import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryDatabase
-import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryGateDao
-import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryReadDao
-import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryWriteDao
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.APP_HISTORY_DATABASE_NAME
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryDatabase
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryGateDao
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryReadDao
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryWriteDao
 import javax.inject.Singleton
 
 @Module

@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apphistory.storage.entity
+package sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity
 
 import androidx.room.Entity
 import androidx.room.Index
@@ -6,12 +6,13 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "app_history_snapshot",
-    indices = [Index(value = ["packageName", "lastUpdateTime", "firstInstallTime"], unique = true)],
+    indices = [Index(value = ["packageName", "capturedAt", "lastUpdateTime", "firstInstallTime"], unique = true)],
 )
 internal data class AppHistorySnapshotEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val packageName: String,
     val deviceId: String,
+    val capturedAt: Long,
     val firstInstallTime: Long,
     val lastUpdateTime: Long,
     val applicationName: String,

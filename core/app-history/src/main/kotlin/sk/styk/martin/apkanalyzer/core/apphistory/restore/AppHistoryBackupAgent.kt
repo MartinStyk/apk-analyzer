@@ -5,8 +5,8 @@ import android.app.backup.BackupDataInput
 import android.app.backup.BackupDataOutput
 import android.os.ParcelFileDescriptor
 import sk.styk.martin.apkanalyzer.core.apphistory.capture.APP_HISTORY
-import sk.styk.martin.apkanalyzer.core.apphistory.storage.APP_HISTORY_DATABASE_NAME
-import sk.styk.martin.apkanalyzer.core.apphistory.storage.APP_HISTORY_STAGING_DATABASE_NAME
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.APP_HISTORY_DATABASE_NAME
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.APP_HISTORY_STAGING_DATABASE_NAME
 import sk.styk.martin.apkanalyzer.core.common.io.limited
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import java.io.File

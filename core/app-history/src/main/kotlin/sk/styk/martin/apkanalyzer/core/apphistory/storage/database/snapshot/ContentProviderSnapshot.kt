@@ -1,7 +1,8 @@
-package sk.styk.martin.apkanalyzer.core.apphistory.capture.snapshot
+package sk.styk.martin.apkanalyzer.core.apphistory.storage.database.snapshot
 
 import kotlinx.serialization.Serializable
 import sk.styk.martin.apkanalyzer.core.apps.components.ContentProvider
+import sk.styk.martin.apkanalyzer.core.apps.components.ProviderPathMatchType
 import sk.styk.martin.apkanalyzer.core.apps.components.ProviderPathPermission
 
 @Serializable
@@ -34,6 +35,22 @@ internal fun ContentProvider.toSnapshot() = ContentProviderSnapshot(
 internal fun ProviderPathPermission.toSnapshot() = ProviderPathPermissionSnapshot(
     path = path,
     matchType = matchType.name,
+    readPermission = readPermission,
+    writePermission = writePermission,
+)
+
+internal fun ContentProviderSnapshot.toDomain() = ContentProvider(
+    name = name,
+    authority = authority,
+    readPermission = readPermission,
+    writePermission = writePermission,
+    isExported = isExported,
+    pathPermissions = pathPermissions.map { it.toDomain() },
+)
+
+internal fun ProviderPathPermissionSnapshot.toDomain() = ProviderPathPermission(
+    path = path,
+    matchType = ProviderPathMatchType.valueOf(matchType),
     readPermission = readPermission,
     writePermission = writePermission,
 )

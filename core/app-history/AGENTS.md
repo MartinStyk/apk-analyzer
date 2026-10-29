@@ -9,35 +9,78 @@ enough to reconstruct the existing app-detail screens against a past point in ti
 **Status:** capture is implemented and running (schema, pipeline, all three triggers — fast-path
 broadcast, on-launch reconciliation, and periodic `WorkManager` reconciliation). Restore merging
 (`HI-17`'s "merge, don't overwrite" for Android's free Auto Backup path) is also implemented — see
-[Restore Merge](#restore-merge). Not yet built: the diff engine (`HI-03`), any UI
-(`HI-06`/`HI-08`/`HI-14`), retention/pruning (`HI-04`), the Pro-gated Drive backup half of `HI-16`,
-and the `HI-10` runtime-state (enabled/install-source) tier. See
+[Restore Merge](#restore-merge). The diff engine (`HI-03`) is implemented as the per-app timeline
+read API — see [Timeline and Diff](#timeline-and-diff) — but nothing consumes it yet. Not yet
+built: any UI (`HI-06`/`HI-08`/`HI-14`), the significance rules (`HI-18`), retention/pruning
+(`HI-04`), the Pro-gated Drive backup half of `HI-16`, and the `HI-10` runtime-state
+(enabled/install-source) tier. See
 [`docs/app/technical/app-history-capture-schema.md`](../../docs/app/technical/app-history-capture-schema.md)
 for the full design, including the entity/DAO schema — read it before touching this module; it is the
 source of truth for schema and capture semantics, not this file.
 
 ## Package Map
 
-Three domain subpackages: `storage/` (Room schema and DAOs — persistence only, no capture logic),
-`capture/` (the pipeline, its triggers, the wire DTOs in `capture/snapshot/`, and Hilt bindings in
-`capture/di/`), and `restore/` (the `BackupAgent` and the restore-merge routine — see
-[Restore Merge](#restore-merge)). See [Reading a Snapshot](#reading-a-snapshot) for `storage/`'s read
-path — not consumed by anything yet — and [Capture Pipeline](#capture-pipeline) / [Triggers](#triggers)
-for `capture/`'s. Everything in all three subpackages stays `internal` except
-`AppHistoryBackupAgent`, which the manifest instantiates by name; nothing else outside this module
-reads Room or wire-format types, or calls the scheduler/repository, directly today.
+Four domain subpackages: `storage/` (`AppHistoryPersistenceRepository` at the root, its
+`AppHistoryRecordEncoder`/`AppHistoryRecordDecoder` in `storage/util/`, and everything that is the stored
+data in `storage/database/` — the Room database, DAOs, `entity/`, the serialized blob DTOs in
+`snapshot/`, and blob compression; see [Persistence Repository](#persistence-repository)),
+`capture/` (the pipeline, its triggers, and
+Hilt bindings in `capture/di/`), `restore/` (the `BackupAgent` and the restore-merge routine — see
+[Restore Merge](#restore-merge)), and `timeline/` (the public `AppHistoryRepository`, its
+implementation, and the internal differ, with its public read models — `AppHistoryTimeline`,
+`AppHistoryEntry`, `AppHistoryDiff` and their parts — in `timeline/model/`; see
+[Timeline and Diff](#timeline-and-diff)). See
+[Reading a Snapshot](#reading-a-snapshot) for `storage/`'s read path and
+[Capture Pipeline](#capture-pipeline) / [Triggers](#triggers) for `capture/`'s. Everything stays
+`internal` except `timeline/`'s repository interface and `timeline/model/`, and `AppHistoryBackupAgent`, which
+the manifest instantiates by name; nothing outside this module reads Room or wire-format types, or
+calls the scheduler/capture repository, directly.
 
 `storage/` splits gate-checking, writing, and reading into three separate `@Dao` interfaces rather
 than one combined DAO — not because Room requires it, but because those are genuinely different
-callers with different needs (today's only real consumer, the capture repository, injects the gate
-and write DAOs but never the read one).
+call sites with different needs. Outside `storage/`, only the restore merge touches DAOs directly
+(it copies raw rows between two databases of the same schema, a storage job with no domain step);
+capture and the timeline go through `AppHistoryPersistenceRepository`.
+
+## Persistence Repository
+
+`AppHistoryPersistenceRepository` (internal, `storage/`) is the only translation layer between
+`core:apps` domain types and the stored format, in both directions. Callers hand it and get back an
+`AppHistoryRecord`: the capture identity (`AppHistoryCaptureKey` — `deviceId` plus the app's own
+`firstInstallTime`/`lastUpdateTime`, compared by the gate), `capturedAt`, a full `AppDetail`, and the
+three separately fetched sections as `CapturedSection<T>` (`Captured(value)` / `Unavailable`). The key
+holds exactly what the *live* app can be compared on: `deviceId` belongs in it, because install
+timestamps can be identical across devices and a restored row from another device must not match the
+live app; `capturedAt` deliberately does not, because the live app has no capture time and including
+it would make every app look changed on every sweep.
+
+* **Write** (`save`, via `AppHistoryRecordEncoder`): maps to the `storage/database/snapshot/` DTOs, serializes canonical JSON, hashes,
+  compresses, and inserts the row plus blobs in one transaction. An `Unavailable` section is stored as
+  a `null` hash.
+* **Read** (`observe`, via `AppHistoryRecordDecoder`): decodes every row from the view back into an `AppDetail` with
+  `AnalysisMode.Historical`, recomputing what the schema doc says is derived rather than stored
+  (`source` via `resolveAppInstallSource`, SDK labels via `SdkVersionResolver`, certificate trust via
+  `resolveCertificateTrustLevel`, `hasMultipleSigners`). Grant state is not stored, so every
+  `UsedPermission.isGranted` is `false`; every consumer already reports grant state only for
+  `InstalledPackage`. Split file paths are not stored, so `InstalledSplitApk.filePath` is `null`.
+  Each distinct blob is decoded once per emission, and re-decoding only happens when the package's
+  snapshot rows change (`distinctUntilChangedBy` on the entities — the joined `ByteArray`s compare by
+  identity, but the hash columns already determine the content).
+* **Failure granularity.** A missing or undecodable blob for one of the three separate sections
+  degrades that section to `Unavailable` with a logged non-fatal. The eight `AppDetail` sections are
+  written together from one `AppDetail` (capture aborts otherwise), so one of them missing or
+  undecodable is corruption, not a partial capture: `observe` emits a failed `Result`, which the
+  timeline reports as `AppHistoryTimeline.Unavailable`, and completes. One `catch` covers this and a
+  failing Room query alike; there is no per-emission recovery, because every emission re-decodes all of
+  the package's rows and a corrupt one would fail each of them.
 
 ## DTO Boundary — Not a Detail
 
 `core:apps` domain types (`Activity`, `Certificate`, `Permissions`, ...) are **never** `@Serializable`
 and never serialized directly into a blob. `core:app-history` defines its own mirror types in
-`capture/snapshot/` (one `@Serializable internal` DTO + a `toSnapshot()` mapper per captured section)
-and maps to them at capture time.
+`storage/database/snapshot/` (one `@Serializable internal` DTO per captured section, with a `toSnapshot()`
+mapper from the domain type and a `toDomain()` mapper back), used only by
+`AppHistoryRecordEncoder` and `AppHistoryRecordDecoder`.
 
 This was a deliberate correction mid-implementation, not the original design. Serializing the live
 domain model straight into permanent storage means an ordinary `core:apps` change unrelated to
@@ -49,7 +92,8 @@ polymorphic DTO (`FeatureSnapshot`'s `Hardware`/`OpenGlEs` variants) carries an 
 `@SerialName` on every variant for the same reason — the default discriminator is the Kotlin class
 name, which would tie the wire format to a name nobody would think twice about renaming. Nested
 enums, by contrast, are stored as their plain `.name` string rather than mirrored as DTO enums, to
-keep file count down — lossless either way since nothing decodes this data yet (no diff engine).
+keep file count down — lossless either way; `toDomain()` maps them back with `valueOf`, so a stored
+name the enum no longer has fails that section's decode rather than being guessed.
 
 The `kotlin-serialization` plugin and every `@Serializable` annotation are scoped to this module
 alone — `core:apps`/`core:common` carry no serialization dependency or annotations because of this
@@ -57,18 +101,91 @@ module's needs.
 
 ## Reading a Snapshot
 
-`AppHistoryReadDao.snapshotWithSections(id)` resolves one snapshot's full content — the scalar row
-plus all eleven sections' JSON — as a single flat `@Query`, no `@Relation` and no `@Transaction`
-needed: a single `SELECT` is already atomic. It joins `app_history_blob` once per section (aliased,
-each on `(packageName, <that section's hash column>)`) with `LEFT JOIN`, not `INNER` — that's what
-makes a `NULL` hash column resolve to a `NULL` content column instead of dropping the row — plus one
-`s.*` to pull in every scalar column via `@Embedded`. An earlier version normalized this through a
-`@DatabaseView`/`@Relation` into a `List<AppHistoryResolvedSectionView>` callers had to search by
-`sectionType`; named columns fit this data's actual shape better — fetch one snapshot, read its
-named fields.
+`AppHistorySnapshotWithSectionsView` (`storage/database/entity/`, the `app_history_snapshot_with_sections`
+`@DatabaseView`) is the one place the snapshot-to-blob join is written: the scalar row plus all eleven
+sections' compressed blobs, flat, no `@Relation` and no `@Transaction` needed — a single `SELECT` is
+already atomic. It joins `app_history_blob` once per section (aliased, each on
+`(packageName, <that section's hash column>)`) with `LEFT JOIN`, not `INNER` — that's what makes a
+`NULL` hash column resolve to a `NULL` content column instead of dropping the row — plus one `s.*` to
+pull in every scalar column via `@Embedded`. Queries filter the view rather than repeating the join;
+`AppHistoryReadDao.observeSnapshotsWithSections(packageName)` is every snapshot of one package,
+oldest first. An earlier version normalized this through a `@DatabaseView`/`@Relation` into a
+`List<AppHistoryResolvedSectionView>` callers had to search by `sectionType`; named columns fit this
+data's actual shape better — fetch a snapshot, read its named fields.
 
-Content stays JSON `String` here too — decoding into `capture/snapshot/` DTOs is a future reader's
-job (there is none yet); this module's contract ends at handing back the stored bytes correctly.
+The view is part of the schema: changing its SQL changes Room's identity hash, so once
+`app_history_v2.db` has shipped it needs a version bump and a migration that drops and recreates the
+view.
+
+The join copies a blob shared by several snapshots into every row, and Room re-runs the query on
+any write to either table, including captures of other packages. Both were judged acceptable once
+blobs were compressed (Google Play services, the largest app measured, is about 100 KB per row), in
+exchange for a single read path. Before splitting this into a snapshot query plus a hash-filtered
+blob fetch, measure: the split would only load blobs whose hashes differ and could skip unchanged
+re-queries before touching any blob bytes.
+
+Blob content is Deflate-compressed JSON (`ByteArray`), compressed and decompressed only through
+`storage/database/util/BlobCompression.kt`; the hash is over the uncompressed JSON. The database file is
+`app_history_v2.db` — the uncompressed `app_history.db` from 4.1.3–4.2.0 is deleted on startup rather
+than migrated, see the schema doc's
+[`app_history_blob`](../../docs/app/technical/app-history-capture-schema.md#app_history_blob) for why.
+Blobs decode with `ignoreUnknownKeys`, so removing a DTO field never breaks old history.
+
+## Timeline and Diff
+
+`AppHistoryRepository.timeline(packageName)` is the module's only public read API: newest first, one
+`AppHistoryEntry` per snapshot — `FirstSeen` for the oldest, then one `Change` per later snapshot,
+carrying the previous snapshot, an `AppHistoryDiff` against it, and a `Change.Kind`: `NewDevice`
+(adjacent snapshots with different `deviceId`, i.e. history continued after a restore onto another
+device; checked first, since a device move usually also changes `firstInstallTime`), `Reinstalled`
+(different `firstInstallTime`, the schema doc's chain break), or `Updated`. The kind is the only thing
+the three differ in besides their date, so they are one class rather than three; `Change.timestamp`
+switches on it. `NewDevice` is dated by `capturedAt`, since the new device's install timestamps say
+nothing about when history moved. Two devices restored from one backup and both still capturing would
+interleave and alternate `NewDevice` changes; grouping a timeline per device is an open product
+question, not handled here. Diffs are computed on read and never stored, per the schema doc. Snapshots
+are ordered by `capturedAt`, never by `lastUpdateTime`, which moves backwards on a system-app rollback;
+for the same reason an `Updated` change whose `lastUpdateTime` went backwards is dated by its
+`capturedAt` instead of the factory timestamp it rolled back to.
+
+It emits `AppHistoryTimeline`, not a bare list: `Available(entries)` — where an empty list honestly
+means "no history" — or `Unavailable` when the database read fails, so a screen can show an error
+instead of an empty timeline that looks like "nothing recorded". The failure is logged once, as a
+non-fatal, in the repository; `Unavailable` carries no `Throwable` into UI state. `catch` completes the
+flow, so a retry is a fresh collection of `timeline()`. There is deliberately no `Loading` variant —
+the consuming ViewModel's initial state covers it. An `Unavailable` separately fetched section is not a
+timeline failure: it degrades to `SetChange.Uncomparable` inside an otherwise `Available` timeline.
+
+**The differ works on domain objects only.** `AppHistoryDiffer` compares two `AppHistoryRecord`s —
+`AppDetail` plus the three `CapturedSection`s — with plain equality; it knows nothing about hashes,
+JSON, or compression. `Unavailable` on either side, or a signing scheme captured as unknown (`null`),
+is `SetChange.Uncomparable` (`HI-20` — a failed section must never read as "removed everything").
+
+**Categories come from the decoded diff, not from raw hash inequality.** `HI-19` describes stub labels
+as "which set IDs differ", but a differing hash does not always mean a visible change — a requested
+permission's description changes when its *declaring* package updates, and that changes this app's
+permissions hash with no added/removed name. `AppHistoryDiff.changedCategories` is derived from the
+same `SetChange`/`ValueChange` values a detail screen renders, so a row label can never name a
+category whose detail is empty. For the same reason localized text (activity labels, defined-permission
+descriptions) is excluded from "modified": a device language change would otherwise read as an app
+change on the next update.
+
+Diffed: version, min/target SDK, APK size, install source, the three manifest flags, requested and
+defined permissions, the four component types, current signing certificates, signing schemes, and
+native libraries. Captured but deliberately not diffed, per `HI-03`: intent filters, features,
+installed splits.
+
+`SetChange.Changed` carries the `core:apps` items themselves — `UsedPermission`, `Permission`,
+`Activity`, `Service`, `BroadcastReceiver`, `ContentProvider`, `Certificate`, `NativeLibraryFile`,
+`SigningSchemeVersion` — not just their keys, and `modified` holds a `ValueChange` with both versions,
+so a detail screen can explain an item ("dangerous permission", "signed by …") and show what changed
+in it ("exported: no → yes") without going back to the store. Each set is matched by a key (component
+or permission name, certificate SHA-256, native library name + ABI + containing APK) and judged
+"modified" by a comparison value: the item minus its localized text for activities and defined
+permissions, and never for requested permissions and certificates — a requested permission's details
+belong to its declaring package, and a certificate with the same SHA-256 is the same certificate.
+Native libraries are keyed by containing APK too, so a library moving between base and split APKs
+reads as removed plus added.
 
 ## Capture Pipeline
 
@@ -170,8 +287,11 @@ no-ops here — unless this flag opts it into full-data Auto Backup instead. Wit
 `onRestoreFile` never fires on restore. `bmgr fullbackup` bypasses this distinction (it forces the
 full-data path directly), which is why testing with it alone looked fine before this flag existed.
 
-**Mechanism.** `onRestoreFile` intercepts only `app_history.db`(`-wal`/`-shm`) by filename and
-manually copies exactly `size` bytes to `app_history_restore_staging.db` instead of the live path.
+**Mechanism.** `onRestoreFile` intercepts only `app_history_v2.db`(`-wal`/`-shm`) by filename and
+manually copies exactly `size` bytes to `app_history_v2_restore_staging.db` instead of the live path.
+A backup taken before the v2 rename carries the old `app_history.db`, which this agent ignores, so
+it restores through the default path and the scheduler's startup cleanup deletes it — see the schema
+doc's [`app_history_blob`](../../docs/app/technical/app-history-capture-schema.md#app_history_blob).
 Matching by filename alone, not also the restored file's parent directory: an earlier version of
 this also required `destination.parentFile == getDatabasePath(APP_HISTORY_DATABASE_NAME).parentFile`
 as a guard against a same-named file landing somewhere unexpected (e.g. device-protected storage,
@@ -207,17 +327,19 @@ rows via `AppHistoryWriteDao.mergeSnapshotsWithBlobs`, one `@Transaction` (match
 capture path's own `insertSnapshotWithBlobs`, so a mid-import failure can never leave orphaned blob
 rows with no matching snapshot). Blobs insert IGNORE-on-conflict, safe because they're
 content-addressed by `(packageName, hash)`. Snapshots also insert IGNORE-on-conflict, relying on the
-table's `UNIQUE(packageName, lastUpdateTime, firstInstallTime)` index to skip ones the live database
+table's `UNIQUE(packageName, capturedAt, lastUpdateTime, firstInstallTime)` index to skip ones the live database
 already has — but only after resetting each row's `id` to `0` first, never carrying a foreign
 autoincrement id into the live table (Room would insert at that literal id, potentially colliding
 with an unrelated live row that happens to share the number).
 
 That `id` reset is exactly why [the capture gate](../../docs/app/technical/app-history-capture-schema.md#capture-gate)
-orders by `lastUpdateTime` rather than raw `id` — a restored row always lands with a higher `id` than
+orders by `capturedAt` rather than raw `id` — a restored row always lands with a higher `id` than
 anything already live (autoincrement only grows), so if the gate still picked "latest" by `id`, an
-imported row that is chronologically *older* than the live data would outrank it, and every future
-capture attempt for that package would keep colliding with the now-"latest" stale natural key
-(`OnConflictStrategy.ABORT` on the ordinary capture path) forever, not just once.
+imported row that is chronologically *older* than the live data would outrank it and the gate would
+keep re-capturing that package. A restored row keeps its original `capturedAt`, so it sorts where it
+was observed. (`lastUpdateTime` was the ordering key before and is not safe either: it moves
+backwards when a system app's updates are uninstalled — see the schema doc's
+[Capture Gate](../../docs/app/technical/app-history-capture-schema.md#capture-gate).)
 
 The merge is split into two `runCatchingCancellable`-wrapped phases, each owning its own outcome
 because a failure means something different depending on which side it happens on. Reading the

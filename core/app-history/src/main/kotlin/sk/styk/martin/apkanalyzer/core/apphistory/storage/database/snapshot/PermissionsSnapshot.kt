@@ -1,9 +1,13 @@
-package sk.styk.martin.apkanalyzer.core.apphistory.capture.snapshot
+package sk.styk.martin.apkanalyzer.core.apphistory.storage.database.snapshot
 
 import kotlinx.serialization.Serializable
 import sk.styk.martin.apkanalyzer.core.apps.permissions.Permission
 import sk.styk.martin.apkanalyzer.core.apps.permissions.PermissionDetails
 import sk.styk.martin.apkanalyzer.core.apps.permissions.Permissions
+import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionFlag
+import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.apps.permissions.UsedPermission
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 
 @Serializable
 internal data class PermissionsSnapshot(val defined: List<PermissionSnapshot>, val used: List<PermissionSnapshot>)
@@ -36,4 +40,22 @@ internal fun PermissionDetails.toSnapshot() = PermissionDetailsSnapshot(
     protectionFlags = protectionFlags.map { it.name }.sorted().toSet(),
     description = description,
     declaringPackage = declaringPackage.value,
+)
+
+internal fun PermissionsSnapshot.toDomain() = Permissions(
+    defined = defined.map { it.toDomain() },
+    used = used.map { UsedPermission(permissionData = it.toDomain(), isGranted = false) },
+)
+
+internal fun PermissionSnapshot.toDomain() = Permission(
+    name = name,
+    details = details?.toDomain(),
+)
+
+internal fun PermissionDetailsSnapshot.toDomain() = PermissionDetails(
+    groupName = groupName,
+    protectionLevel = ProtectionLevel.valueOf(protectionLevel),
+    protectionFlags = protectionFlags.map { ProtectionFlag.valueOf(it) }.toSet(),
+    description = description,
+    declaringPackage = PackageName(declaringPackage),
 )
