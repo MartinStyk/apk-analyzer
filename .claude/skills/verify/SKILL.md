@@ -1,6 +1,6 @@
 ---
 name: verify
-description: Unified IDE-local verification gate for ApkAnalyzer. Diff-vs-base review pipeline — skip-check → context discovery → parallel reviewers (bug + convention + security) → issue-validator → local build gates (spotlessApply, per-module compile, conditional validateAgentContext/full whole-app check) → verify-audit → high-signal report (HIGH-confidence BLOCKER/MAJOR only).
+description: Unified IDE-local verification gate for ApkAnalyzer. Diff-vs-base review pipeline — skip-check → context discovery → parallel reviewers (bug + convention + security) → issue-validator → local build gates (spotlessApply, per-module compile and Detekt, conditional validateAgentContext/full whole-app check) → verify-audit → high-signal report (HIGH-confidence BLOCKER/MAJOR only).
 argument-hint: "[--base=<ref>] [--full]"
 user-invocable: true
 disable-model-invocation: false
@@ -31,7 +31,7 @@ The user invoked: `/verify $ARGUMENTS`
 - `--base=<ref>` — git ref to diff against. Default: `develop` (this repo's main branch).
 - `--full` — also run the whole-app check (`spotlessCheck detektDebug
   :build-logic:convention:detektMain lintDebug :app:assembleDebug :tv:assembleDebug`) in Stage 5, matching what CI
-  gates on. Without it, Stage 5 only runs `spotlessApply` plus a compile of the touched modules —
+  gates on. Without it, Stage 5 only runs `spotlessApply` plus a compile and Detekt pass of the touched modules —
   fast, matching the "iterate on a single-module compile" guidance in root `AGENTS.md`.
 
 Any other token, any malformed flag, or any unrecognized form → emit `INVALID_INVOCATION` (Stage 8
@@ -121,9 +121,13 @@ Collect every JSON response. Build a single `findings` list of issues (each tagg
    re-reviewed by Stage 4.
 2. **Always, per module in `changed_modules`:** `./gradlew <module>:compileDebugKotlin` (use
    `<module>:compileKotlin` for a module with no Android debug variant).
-3. **Conditional — `context_files_touched` is `true` OR `--full` was passed:**
+3. **Always, per module in `changed_modules`:** `./gradlew <module>:detektDebug` (use
+   `<module>:detektMain` for a module with no Android debug variant, including
+   `:build-logic:convention`). Detekt fails on warnings (`failOnSeverity = Warning`), so this
+   catches the same per-module findings CI's `detektDebug` would, without the whole-app run.
+4. **Conditional — `context_files_touched` is `true` OR `--full` was passed:**
    `./gradlew validateAgentContext`.
-4. **Conditional — `--full` was passed:** the whole-app check —
+5. **Conditional — `--full` was passed:** the whole-app check —
    `./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug :app:assembleDebug :tv:assembleDebug`.
 
 Capture PASS / FAIL and the full failing-task output verbatim for every task actually run.
