@@ -6,7 +6,8 @@ Secondary destination for color-scheme selection and the recently viewed apps pr
 reached through explicit navigation rather than the bottom navigation bar.
 
 The API module exposes only the navigation key. Implementation code uses the package
-`sk.styk.martin.apkanalyzer.feature.settings.phone`.
+`sk.styk.martin.apkanalyzer.feature.settings.phone`. This feature has no `tv` module; the TV app has
+no settings screen.
 
 ## State and Navigation Rules
 

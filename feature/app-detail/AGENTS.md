@@ -6,8 +6,9 @@ Displays detailed analysis for an installed package or APK file: general informa
 components, certificates, device requirements, manifest, split APKs, and native libraries.
 
 The API module owns the cross-feature navigation input and distinguishes installed packages from APK
-files. Implementation code uses the package
-`sk.styk.martin.apkanalyzer.feature.appdetail.phone`.
+files. The phone implementation uses the package
+`sk.styk.martin.apkanalyzer.feature.appdetail.phone`; the TV one, which opens installed packages
+only, is described under [TV Module](#tv-module).
 
 ## Package Map
 

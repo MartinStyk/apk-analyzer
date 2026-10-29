@@ -9,6 +9,13 @@ Drives the running app by dumping the on-screen UI tree, locating an element, an
 center — the same loop repeated for each hop. Use this **after** the app is installed and running
 (see the `run-app` skill for that part).
 
+The loop below drives the phone app. On Android TV the dump works the same, but move with the
+remote's keys instead of tapping, so the test exercises focus the way a user would:
+`adb shell input keyevent DPAD_UP|DPAD_DOWN|DPAD_LEFT|DPAD_RIGHT`, `DPAD_CENTER` to select, and
+`BACK`. The focused node carries `focused="true"` in the dump; step until your target has it, then
+press `DPAD_CENTER`. The string table at the end of this skill lists phone labels; TV labels live
+in `feature/*/tv/src/main/res/values/strings.xml`.
+
 ## The loop: dump → locate → tap → verify
 
 ### 1. Dump the current screen

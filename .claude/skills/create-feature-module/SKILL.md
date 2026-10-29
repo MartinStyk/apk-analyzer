@@ -1,6 +1,6 @@
 ---
 name: create-feature-module
-description: Use when creating a new feature module, screen, or feature area. Triggered by phrases like "create feature", "add feature module", "new feature", "create a screen for", "add new screen".
+description: Use when creating a new feature module, screen, or feature area — the api and phone modules, plus a tv module when the feature also ships on Android TV. Triggered by phrases like "create feature", "add feature module", "new feature", "create a screen for", "add new screen".
 ---
 
 # Create Feature Module
@@ -175,12 +175,50 @@ Add to `app/src/main/kotlin/sk/styk/martin/apkanalyzer/ui/navigation/TopLevelDes
 - Choose icons from `ApkAnalyzerIcons`
 - Add string resource in the api module: `feature/<name>/api/src/main/res/values/strings.xml`
 
-## Step 9 — Create module docs
+## Step 9 — If the feature also ships on Android TV
 
-Every feature carries one `AGENTS.md` at `feature/<name>/AGENTS.md` covering **both** its `api`
-and `phone` submodules (not two separate files — see `feature/settings/AGENTS.md` or
-`feature/app-detail/AGENTS.md` for the exact format: Purpose, Sub-modules, API module key types,
-Phone Structure, Key Patterns, Dependencies), plus a one-line `CLAUDE.md` pointer at the same level:
+Ask whether the feature belongs on TV; not every one does (`feature:settings` has no TV module). A
+TV module is a sibling of `phone`, never a dependant of it — logic both need moves to `core`.
+
+**`feature/<name>/tv/build.gradle.kts`**
+```kotlin
+plugins {
+    alias(libs.plugins.apkanalyzer.feature.tv)
+}
+
+android {
+    namespace = "sk.styk.martin.apkanalyzer.feature.<name>.tv"
+}
+
+dependencies {
+    api(projects.feature.<name>.api)
+    // implementation(projects.core.apps)
+}
+```
+
+Mirror Steps 3–4 under `feature/<name>/tv/src/main/kotlin/sk/styk/martin/apkanalyzer/feature/<name>/tv/`
+with these differences:
+
+* The entry provider is `tv<Name>Entries(navigator: Navigator)` in `tv/navigation/`, and internal
+  NavKeys are prefixed `Tv` (`TvBrowseOptionsNavKey`).
+* Screens import from `sk.styk.martin.apkanalyzer.core.designsystem.tv.components` and preview with
+  `@Preview(device = Devices.TV_1080p)` in `ApkAnalyzerTvTheme { }` from `core.designsystem.tv.theme`.
+  Never Material3 or a phone component.
+* Every clickable component needs `pointerClickable` and a restorable focus key — see
+  [`core/design-system/AGENTS.md`](../../../core/design-system/AGENTS.md).
+
+Then register `":feature:<name>:tv"` in `settings.gradle.kts`, add
+`implementation(projects.feature.<name>.tv)` to `tv/build.gradle.kts`, and call `tv<Name>Entries(navigator)`
+inside the `entryProvider` in `tv/src/main/kotlin/sk/styk/martin/apkanalyzer/tv/TvApkAnalyzerApp.kt`.
+A top-level TV destination also needs its key in `TOP_LEVEL_KEYS` and a `NavigationDrawerItem` in
+that file, reusing the tab-label string from the `api` module.
+
+## Step 10 — Create module docs
+
+Every feature carries one `AGENTS.md` at `feature/<name>/AGENTS.md` covering **all** its submodules
+— `api`, `phone`, and `tv` if present — not one file per submodule. Follow
+`feature/browse/AGENTS.md` or `feature/apps/AGENTS.md`: Purpose, Package Map, a TV Module section
+when there is one, then the feature's own rules. Add a one-line `CLAUDE.md` pointer at the same level:
 
 **`feature/<name>/CLAUDE.md`**
 ```
@@ -188,9 +226,8 @@ Phone Structure, Key Patterns, Dependencies), plus a one-line `CLAUDE.md` pointe
 ```
 
 If the feature starts as a placeholder screen (Step 4's stub), say so explicitly in the `AGENTS.md`
-purpose line — e.g. "Status: stub/placeholder — not yet implemented" (see
-`feature/browse/AGENTS.md`) — so a future agent doesn't assume real behavior exists. Update it
-once the feature is actually built out.
+purpose line — e.g. "Status: stub/placeholder — not yet implemented" — so a future agent doesn't
+assume real behavior exists. Update it once the feature is actually built out.
 
 The root `AGENTS.md` does not list individual modules, so there is nothing to update there. Run
 `./gradlew validateAgentContext` to confirm the new module has the AGENTS/CLAUDE pair it requires.
@@ -204,3 +241,4 @@ The root `AGENTS.md` does not list individual modules, so there is nothing to up
 | Package segment | concatenated lowercase | `feature.appdetail.phone` |
 | NavKey class | PascalCase + `NavKey` | `AppDetailNavKey` |
 | Entry provider function | camelCase + `Entries` | `appDetailEntries` |
+| TV entry provider function | `tv` + PascalCase + `Entries` | `tvAppDetailEntries` |

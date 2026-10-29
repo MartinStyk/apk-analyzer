@@ -5,8 +5,9 @@
 The start destination for browsing installed apps, searching, filtering, sorting, opening APK files,
 and navigating to app details or settings.
 
-The API module exposes only the top-level navigation key. Implementation code uses the package
-`sk.styk.martin.apkanalyzer.feature.apps.phone`.
+The API module exposes only the top-level navigation key. The phone implementation uses the package
+`sk.styk.martin.apkanalyzer.feature.apps.phone`; the TV one is described under [TV Module](#tv-module).
+Opening APK files and navigating to settings are phone-only.
 
 ## Package Map
 
@@ -75,7 +76,7 @@ The apps destination opens search and filter internally. Filter opens permission
 details and settings are cross-feature destinations and must use their API modules.
 
 Register all internal destinations through this feature's entry provider, then register that provider
-once in the app host.
+once in its app host — `appEntries` in `ApkAnalyzerApp.kt`, `tvAppEntries` in `TvApkAnalyzerApp.kt`.
 
 ## State and Ownership Rules
 

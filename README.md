@@ -2,9 +2,10 @@
 
 <img src="app/src/main/res/mipmap-xxhdpi/ic_launcher.png" width="96" alt="Apk Analyzer icon" />
 
-# ApkAnalyzer
+# Apk Analyzer
 
-**Detailed reports of every app on your device — no root, no ads, nothing leaves the phone.** 📱
+**Everything Android knows about the apps on your phone or TV — no root, no ads, and your app data
+stays on the device.**
 
 [![Continuous integration](https://github.com/MartinStyk/AndroidApkAnalyzer/actions/workflows/ci.yml/badge.svg)](https://github.com/MartinStyk/AndroidApkAnalyzer/actions/workflows/ci.yml)
 [![Release](https://github.com/MartinStyk/AndroidApkAnalyzer/actions/workflows/release.yml/badge.svg)](https://github.com/MartinStyk/AndroidApkAnalyzer/actions/workflows/release.yml)
@@ -14,8 +15,8 @@
 [![Google Play](https://img.shields.io/badge/Google%20Play-2M%2B%20downloads-34A853.svg?logo=googleplay&logoColor=white)](https://play.google.com/store/apps/details?id=sk.styk.martin.apkanalyzer)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-*The most downloaded APK analysis app on Google Play — shipping since 2017, now rebuilt as a
-multi-module Jetpack Compose app.*
+*The most downloaded APK analysis app on Google Play. Shipping since 2017, now rebuilt in Jetpack
+Compose for phones, tablets, and Android TV.*
 
 <a href='https://play.google.com/store/apps/details?id=sk.styk.martin.apkanalyzer'><img alt='Get it on Google Play' height="60" src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
 
@@ -28,7 +29,7 @@ multi-module Jetpack Compose app.*
 <p align="center">
   <img src="docs/github/app-details.gif" width="250" alt="Viewing detailed information about an installed app" />
   <img src="docs/github/filter-apps.gif" width="250" alt="Filtering installed apps by app attributes" />
-  <img src="docs/github/browse-apps.gif" width="250" alt="Browsing the installed apps list" />
+  <img src="docs/github/browse-apps.gif" width="250" alt="Browsing installed apps by attribute" />
 </p>
 <p align="center">
   <sub><b>App details</b></sub> &nbsp;&nbsp;&nbsp;&nbsp;
@@ -39,7 +40,7 @@ multi-module Jetpack Compose app.*
 ## Table of contents
 
 - [What it does](#what-it-does)
-- [See it in action](#see-it-in-action)
+- [On Android TV](#on-android-tv)
 - [Why it exists](#why-it-exists)
 - [Privacy and permissions](#privacy-and-permissions)
 - [Requirements](#requirements)
@@ -56,67 +57,89 @@ multi-module Jetpack Compose app.*
 
 ## What it does
 
-- 🔎 **See what Android hides.** Every permission, certificate, component, and manifest flag,
-  translated out of API-speak.
-- 🔒 **100% on-device.** App data never leaves your phone — the on-device AI summary runs locally
-  too.
-- 🧭 **Browse by attribute, not just by app.** Flip the question around: which apps want this
-  permission, share this signer, target this SDK.
+- 🔎 **See what Android hides.** Every permission, certificate, component, and manifest flag, in
+  plain language.
+- 🔒 **On-device analysis.** App data never leaves your device — the AI summary runs locally too.
+- 🧭 **Start from an attribute, not an app.** Which apps want this permission, share this signer,
+  or target this Android version.
+- 📺 **Phone and TV.** One Play listing, a dedicated interface for each.
 - 🆓 **Free and open source.** No ads, no paywall on the raw data, GPLv3.
 
-**Inspect one app — everything Android knows about it, in one report.**
+**One report per app, with everything Android knows about it.**
 
 | Group | What you get |
 |---|---|
 | 🪪 Identity | Package and app name, version name and code, app category, install and update dates |
 | 📶 Compatibility | Target and minimum Android version, required and optional hardware features |
-| 🏬 Origin | Full install-source chain — which store or app actually installed it |
+| 🏬 Origin | The full install-source chain — which store or app actually installed it |
 | 🔏 Signing | Certificate details, issuer and subject, validity, fingerprints, signing-scheme versions |
-| 🔐 Permissions | Requested and declared permissions with plain-language descriptions and protection levels |
-| 🧩 Components | Activities, services, receivers and providers with intent filters, exported state, path permissions, and launch options |
+| 🔐 Permissions | Requested and declared permissions, with plain-language descriptions and protection levels |
+| 🧩 Components | Activities, services, receivers, and providers, with intent filters, exported state, path permissions, and launch options |
 | 📦 Packaging | Native libraries and ABIs, split APKs, shared UID group, manifest security flags, storage size |
-| 📄 Manifest | The complete `AndroidManifest.xml`, readable |
+| 📄 Manifest | The complete `AndroidManifest.xml`, formatted for reading |
 
-**🧭 Browse by attribute.** Turn the question around and start from the attribute instead of the
-app: which apps request a given permission, which are signed by a given certificate, what targets
-each Android version, where each app came from, which share a UID, how apps spread across
-categories.
+**🧭 Browse by attribute.** Pick a permission, a signing certificate, an Android version, an install
+source, a shared UID, or a category, and see every app that matches.
 
-**📂 Analyze `.apk` files.** Open an `.apk` from another app or pick one from storage and get the
-same full report for something you haven't installed.
+**📂 Analyze `.apk` files.** Open an `.apk` from another app or from storage and get the same full
+report without installing it.
 
-**🤖 On-device AI summary.** A short, factual, plain-language read on what an app is and what its
-permissions and components imply — generated locally with ML Kit's GenAI prompt API. The app data
-never leaves the device.
+**🤖 On-device AI summary.** A short, factual read on what an app is and what its permissions and
+components imply, generated locally with ML Kit's GenAI Prompt API.
 
-**📤 Export and share.** Export or share the APK itself, save the app icon, copy or share a text
-summary, and launch an app's components directly.
+**📤 Export and share.** Export or share the APK, save the app icon, copy or share a text summary,
+and launch an app's components directly.
+
+## On Android TV
+
+📺 The same reports, built for the remote. The TV app lists, searches, and filters your installed
+apps, opens the full report for any of them, and browses by every attribute the phone app does.
+Install it from the same Play listing on any Android TV device.
+
+Analyzing `.apk` files, the AI summary, and export and share are phone-only.
+
+<p align="center">
+  <img src="docs/github/tv-app-tour.gif" width="780" alt="Browsing installed apps, an app report, and apps by attribute on Android TV with the remote" />
+</p>
+<p align="center">
+  <sub><b>Apk Analyzer on Android TV</b></sub>
+</p>
+
+<p align="center">
+  <img src="docs/store/graphics/tv-screenshots/01-installed-apps.png" width="280" alt="Installed apps on Android TV" />
+  <img src="docs/store/graphics/tv-screenshots/02-app-detail.png" width="280" alt="App details on Android TV" />
+  <img src="docs/store/graphics/tv-screenshots/06-browse-attribute.png" width="280" alt="Browsing apps by attribute on Android TV" />
+</p>
+<p align="center">
+  <sub><b>Installed apps</b></sub> &nbsp;&nbsp;&nbsp;&nbsp;
+  <sub><b>App details</b></sub> &nbsp;&nbsp;&nbsp;&nbsp;
+  <sub><b>Browse by attribute</b></sub>
+</p>
 
 ## Why it exists
 
-Android tells you very little about the software you already run. Apk Analyzer surfaces the whole
-manifest-level truth about every installed app in a form a human can read — no root, no ads, no
-paywall on the raw data. Raw facts stay free by design; see the
-[roadmap](docs/app/product/roadmap.md) for where interpretation features are heading.
+Android tells you very little about the software you already run. Apk Analyzer shows the full
+manifest-level picture of every installed app in a form a person can read — no root, no ads. The
+raw facts stay free by design; the [roadmap](docs/app/product/roadmap.md) covers where
+interpretation features are heading.
 
 ## Privacy and permissions
 
-App analysis runs entirely on device. The app declares exactly two sensitive permissions, both
-needed for the core feature:
+App analysis runs entirely on the device. The phone and TV apps each declare two sensitive
+permissions, both for the core feature:
 
 | Permission | Why |
 |---|---|
-| `QUERY_ALL_PACKAGES` | Read the list and details of installed apps — this is what the app is for |
-| `PACKAGE_USAGE_STATS` | Optional. Powers last-used times and storage size breakdowns; granted by you in system settings |
+| `QUERY_ALL_PACKAGES` | Read the list and details of installed apps — the reason the app exists |
+| `PACKAGE_USAGE_STATS` | Optional. Powers last-used times and storage breakdowns; you grant it in system settings |
 
-App-analysis data is processed on device. Network use is limited to Firebase telemetry (Analytics,
-Crashlytics, Performance) and ML Kit downloading the on-device AI model. See
-[`PRIVACY_POLICY.MD`](PRIVACY_POLICY.MD).
+The network is used only for Firebase telemetry (Analytics, Crashlytics, Performance) and for ML Kit
+to download the on-device AI model. See [`PRIVACY_POLICY.MD`](PRIVACY_POLICY.MD).
 
 ## Requirements
 
-Android 9 (API 28) or newer. The AI summary additionally needs a device that supports on-device
-generative AI; everything else works everywhere.
+Android 9 (API 28) or newer, on a phone, tablet, or Android TV. The AI summary also needs a phone
+that supports on-device generative AI.
 
 ---
 
@@ -124,108 +147,124 @@ generative AI; everything else works everywhere.
 
 | Layer | Choice |
 |---|---|
-| Language | Kotlin, coroutines + `Flow` exclusively for async work |
-| UI | Jetpack Compose only — no XML layouts |
+| Language | Kotlin; coroutines and `Flow` for all async work |
+| UI | Jetpack Compose only — Material 3 on phone, Compose for TV on TV, no XML layouts |
 | DI | Hilt |
 | Navigation | Navigation 3 (`androidx.navigation3`) |
 | Persistence | Room, DataStore Preferences |
 | On-device AI | ML Kit GenAI Prompt API |
 | Images | Coil 3 |
-| Build | Gradle version catalog + custom convention plugins (`build-logic/`) |
+| Build | Gradle version catalog and custom convention plugins (`build-logic/`) |
 | Backend services | Firebase (Analytics, Crashlytics, Performance, App Distribution) |
 | Static analysis | Spotless (ktlint + compose-rules-ktlint), Detekt, Android Lint, LeakCanary in debug |
 | Min / target SDK | 28 / 37 |
 
-Exact versions live in [`gradle/libs.versions.toml`](gradle/libs.versions.toml) — that file is the
-single source of truth; nothing pins a version elsewhere.
+Exact versions live only in [`gradle/libs.versions.toml`](gradle/libs.versions.toml); nothing pins a
+version anywhere else.
 
 ## Architecture
 
-A multi-module Gradle project with one strict dependency direction: `app` → `feature/*/phone` →
-`feature/*/api` + `core/*`, and `core/*` never looks back at a feature.
+A multi-module Gradle project where dependencies point one way. Each app — `app` for phones, `tv`
+for Android TV — depends on its own feature modules, features depend on `api` and `core` modules,
+and `core` never depends on a feature.
 
 ```mermaid
 graph TD
-    app[":app<br/>Activities, nav host, Hilt graph"]
-    fphone["feature/&lt;name&gt;/phone<br/>screens + ViewModels"]
+    app[":app<br/>phone app, wiring only"]
+    tv[":tv<br/>Android TV app, wiring only"]
+    fphone["feature/&lt;name&gt;/phone<br/>phone screens + ViewModels"]
+    ftv["feature/&lt;name&gt;/tv<br/>TV screens + ViewModels"]
     fapi["feature/&lt;name&gt;/api<br/>NavKeys only"]
     core["core/*<br/>domain, data, design system"]
 
     app --> fphone
     app --> core
+    tv --> ftv
+    tv --> core
     fphone --> fapi
     fphone --> core
+    ftv --> fapi
+    ftv --> core
     core --> core
 ```
 
 `feature/*/api` holds only NavKeys, so features navigate to each other without compiling against
-each other's implementation; `core/*` never depends on a feature; `app` is wiring only. The same
-three shapes repeat everywhere, which is why an unfamiliar file is rarely a surprise: one ViewModel
-shape (a single `StateFlow<State>`, a single `onAction`, one-shot `Event`s over a `Channel`), one
-data-layer shape (public `interface` + `internal Impl`, never throwing, injected dispatchers), and a
-design system rather than Material scattered across features. Every module carries its own
-`AGENTS.md` with its boundary and package map.
+each other's code. The phone and TV apps share every domain and data module in `core`; TV code never
+touches `app`, a phone feature module, or Material 3, and has its own design system built on TV
+Material.
 
-**Full details → [`docs/engineering/architecture.md`](docs/engineering/architecture.md)** — dependency
-rules, the module ownership table, navigation, and each shape with production references.
+Three shapes repeat everywhere, so an unfamiliar file is rarely a surprise:
+
+- **ViewModels** expose a single `StateFlow<State>`, a single `onAction`, and one-shot `Event`s over
+  a `Channel`.
+- **Repositories** are a public `interface` plus an `internal Impl`; they never throw and take
+  injected dispatchers.
+- **UI** comes from a design system, never from Material components scattered across features.
+
+Every module carries an `AGENTS.md` with its boundary and package map.
+
+**Full details → [`docs/engineering/architecture.md`](docs/engineering/architecture.md)** —
+dependency rules, module ownership, navigation, and each shape with production references.
 
 ## Getting started
 
-**Prerequisites:** Android Studio (latest stable). That's genuinely it — the Gradle setup
-auto-provisions a matching JDK on first build, and Android Studio's SDK Manager covers the Android
-SDK. The [`setup-local-tools`](.claude/skills/setup-local-tools/SKILL.md) skill has the full
-breakdown, including headless/CLI-only setup and optional tools.
+**Prerequisites:** the latest stable Android Studio. Gradle provisions a matching JDK on the first
+build, and Android Studio's SDK Manager covers the Android SDK. The
+[`setup-local-tools`](.claude/skills/setup-local-tools/SKILL.md) skill covers headless setup and
+optional tools.
 
 ```bash
 git clone https://github.com/MartinStyk/AndroidApkAnalyzer.git
 cd AndroidApkAnalyzer
-./gradlew assembleDebug   # first build downloads Gradle, the JDK, and all dependencies
+./gradlew assembleDebug   # the first build downloads Gradle, the JDK, and all dependencies
 ```
 
-`app/google-services.json` is committed, so the Firebase Gradle plugins compile out of the box with
-nothing to configure. CI replaces it with a freshly fetched config at build time.
+`app/google-services.json` is committed, so the Firebase Gradle plugins build with nothing to
+configure. CI swaps in a freshly fetched config at build time.
 
 **Common tasks:**
 
 ```bash
-./gradlew installDebug          # build + install debug on a connected device/emulator
-./gradlew spotlessApply         # auto-fix formatting — run before every commit
+./gradlew :app:installDebug     # install the phone app on a connected device or emulator
+./gradlew :tv:installDebug      # install the TV app on a connected Android TV device or emulator
+./gradlew spotlessApply         # fix formatting — run before every commit
 ./gradlew :feature:apps:phone:compileDebugKotlin   # fast single-module check while iterating
-./gradlew spotlessCheck detektDebug lintDebug :app:assembleDebug :tv:assembleDebug   # what CI gates on
-./gradlew validateAgentContext  # verify the shared Claude/Copilot context files
+./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug :app:assembleDebug :tv:assembleDebug   # what CI gates on
+./gradlew validateAgentContext  # check the shared Claude and Copilot context files
 ```
 
 Version name and code come from Gradle properties (`-Pversion.name=`, `-Pversion.code=`) and default
 to a local `dev` build.
 
-Spotless auto-fixes formatting, Detekt fails on warnings, Android Lint checks Android correctness,
-and LeakCanary watches for leaks in debug builds. What each one enforces, and the two things no gate
-catches, are in [`docs/engineering/verification.md`](docs/engineering/verification.md).
+Spotless fixes formatting, Detekt fails on warnings, Android Lint checks Android correctness, and
+LeakCanary watches for leaks in debug builds. What each enforces — and the two problems no gate
+catches — is in [`docs/engineering/verification.md`](docs/engineering/verification.md).
 
-Writing code? Conventions — the no-comments policy, returning `Result`/nullable instead of throwing,
-injected dispatchers, keeping `MutableStateFlow` private behind a read-only view, and combining
-sources into a single screen state — are in
-[`docs/engineering/coding-standards.md`](docs/engineering/coding-standards.md).
+Writing code? The conventions — no comments, `Result` or nullable returns instead of exceptions,
+injected dispatchers, private `MutableStateFlow` behind a read-only view, one combined screen state
+— are in [`docs/engineering/coding-standards.md`](docs/engineering/coding-standards.md).
 
 ## Repository layout
 
 ```
-app/           Activities, nav host, app-scoped Hilt bindings — wiring only
+app/           Phone app: Activities, nav host, app-scoped Hilt bindings — wiring only
+tv/            Android TV app, shipped under the same application ID — wiring only
 core/          Domain, data, and design-system modules
-feature/       api + phone (+ tv) modules per feature area
+feature/       api, phone, and tv modules per feature area
 build-logic/   Convention plugins; SDK levels and the JVM toolchain live here
 config/        Detekt and static-analysis configuration
-docs/          Product roadmap and feature design, engineering docs, technical decision records
+docs/          Product roadmap, feature designs, engineering docs, technical decision records
 .claude/       Task skills shared by Claude and Copilot
 gradle/        Version catalog and wrapper
 ```
 
 ## CI and releases
 
-Every push and PR to `develop` verifies the project and builds a debug APK artifact; pushes also go
-out to internal testers. An annotated `MAJOR.MINOR.PATCH` tag builds and signs an AAB and APK,
-publishes a GitHub release, and uploads to the Play Store beta track — production is a separate,
-manual promotion. The four workflows, their triggers, and the secrets they need are in
+Every push and pull request to `develop` runs the checks and builds a debug APK; pushes also go to
+internal testers. An annotated `MAJOR.MINOR.PATCH` tag builds and signs both apps, publishes one
+GitHub release with both APKs, and uploads each app to its Play Store beta track. Promotion to
+production is a separate manual step for the phone app, the TV app, or both, so a release reaches
+only the apps it changes. Workflows, triggers, and secrets are in
 [`docs/engineering/ci-and-release.md`](docs/engineering/ci-and-release.md).
 
 ## Documentation
@@ -244,12 +283,12 @@ manual promotion. The four workflows, their triggers, and the secrets they need 
 | Doc | What it covers |
 |---|---|
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | How to propose, build, and submit a change |
-| [`AGENTS.md`](AGENTS.md) | The canonical, terse engineering rules — humans and agents read this first |
+| [`AGENTS.md`](AGENTS.md) | The canonical engineering rules — humans and agents read this first |
 | [`docs/engineering/architecture.md`](docs/engineering/architecture.md) | Module graph, dependency rules, module ownership, the three repeating shapes |
-| [`docs/engineering/coding-standards.md`](docs/engineering/coding-standards.md) | Conventions before you write code, with real examples from the codebase |
+| [`docs/engineering/coding-standards.md`](docs/engineering/coding-standards.md) | Conventions to know before writing code, with examples from the codebase |
 | [`docs/engineering/verification.md`](docs/engineering/verification.md) | Spotless, Detekt, Lint, LeakCanary — what each enforces and what gates CI |
 | [`docs/engineering/ai-workflow.md`](docs/engineering/ai-workflow.md) | Per-module `AGENTS.md`, `validateAgentContext`, and the shared skills |
-| [`docs/engineering/ci-and-release.md`](docs/engineering/ci-and-release.md) | The GitHub Actions workflows, the release pipeline, and production promotion |
+| [`docs/engineering/ci-and-release.md`](docs/engineering/ci-and-release.md) | The GitHub Actions workflows, the release pipeline, and promotion to production |
 | [`docs/app/technical/`](docs/app/technical/README.md) | Cross-cutting engineering decisions and audits |
 | [`.claude/skills/`](.claude/skills) | Step-by-step procedures for recurring tasks, shared by Claude and Copilot |
 
@@ -260,24 +299,23 @@ manual promotion. The four workflows, their triggers, and the secrets they need 
 Contributions are welcome. Start with [`CONTRIBUTING.md`](CONTRIBUTING.md) for the workflow, then
 [`docs/engineering/architecture.md`](docs/engineering/architecture.md) and
 [`docs/engineering/coding-standards.md`](docs/engineering/coding-standards.md) for module boundaries
-and conventions. By participating you agree to the [Code of Conduct](CODE_OF_CONDUCT.md).
+and conventions. By taking part you agree to the [Code of Conduct](CODE_OF_CONDUCT.md).
 
-Good first contributions: a **translation** (the app currently ships English and Japanese, and a PR
-touching only `strings.xml` files needs no prior discussion), or anything marked open in the
-[roadmap](docs/app/product/roadmap.md).
+Good first contributions: a **translation** — the phone app ships in 19 languages, the TV screens are
+still English-only, and a pull request that touches only `strings.xml` files needs no prior
+discussion — or anything marked open in the [roadmap](docs/app/product/roadmap.md).
 
 ## AI-assisted development
 
-Both Claude and GitHub Copilot are supported for working on this codebase, reading the same
-`AGENTS.md` context files and shared `.claude/skills/`. Details →
-[`docs/engineering/ai-workflow.md`](docs/engineering/ai-workflow.md).
+Claude and GitHub Copilot both work on this codebase from the same `AGENTS.md` context files and the
+shared `.claude/skills/`. Details → [`docs/engineering/ai-workflow.md`](docs/engineering/ai-workflow.md).
 
 ## Support
 
 * **Bugs and feature requests** — [open an issue](https://github.com/MartinStyk/AndroidApkAnalyzer/issues)
 * **Security vulnerabilities** — see [`SECURITY.md`](SECURITY.md); please don't file a public issue
-* **Using the app** — the [Play Store listing](https://play.google.com/store/apps/details?id=sk.styk.martin.apkanalyzer)
-  is the place for reviews and general feedback
+* **Using the app** — leave reviews and general feedback on the
+  [Play Store listing](https://play.google.com/store/apps/details?id=sk.styk.martin.apkanalyzer)
 
 ## License
 

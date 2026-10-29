@@ -119,6 +119,10 @@ same key set.
 Translate module by module. Don't merge keys from different modules into one file, and don't create a
 locale folder for a module that has no `values/strings.xml`.
 
+That includes the Android TV modules — `feature/*/tv` and `tv` — which hold their own screen copy,
+separate from the phone module of the same feature. Translating a phone screen does not translate its
+TV counterpart. Shared explanations live in `core` and serve both apps.
+
 ## Order of Work: String-by-String vs Language-by-Language
 
 For a small batch of **new or changed strings**, translate string-by-string across all languages, not
@@ -177,7 +181,7 @@ multiple reviewers (human or agent) are available.
      omitting the placeholder is not permission to omit it — the count is always passed to
      `pluralStringResource`. Check with:
      ```bash
-     grep -n '<item quantity=' feature/*/phone/src/main/res/values-{fr,pt-rBR,hi,ru,uk}/strings.xml \
+     grep -n '<item quantity=' feature/*/{phone,tv}/src/main/res/values-{fr,pt-rBR,hi,ru,uk}/strings.xml \
        | grep -v '%'
      ```
    - `content_description_*` strings stay terse (they're for screen readers, not visible copy).

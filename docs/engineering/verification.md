@@ -13,7 +13,7 @@ document is for anyone who wants to know what those commands are checking and wh
 | Detekt | Static analysis of Kotlin, including `build-logic` itself | [`.detekt/detekt.yml`](../../.detekt/detekt.yml), [`DetektPlugin.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/DetektPlugin.kt) | Yes — at **warning** severity |
 | Android Lint | Android/API correctness, resources, manifest, accessibility | AGP defaults; `lint { }` in [`app/build.gradle.kts`](../../app/build.gradle.kts) | Yes — `lintDebug` |
 | `validateAgentContext` | Structure of the shared AI context files | [`ValidateAgentContextTask.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/ValidateAgentContextTask.kt) | Yes — in its own workflow |
-| LeakCanary | Activity/Fragment/ViewModel leaks at runtime | `debugImplementation` in [`app/build.gradle.kts`](../../app/build.gradle.kts) | No — advisory, debug builds only |
+| LeakCanary | Activity/Fragment/ViewModel leaks at runtime | `debugImplementation` in [`app/build.gradle.kts`](../../app/build.gradle.kts) — phone app only | No — advisory, debug builds only |
 
 There is no unit or instrumentation test suite, by choice. See
 [coding standards](coding-standards.md#dependencies-and-tests).
@@ -61,8 +61,8 @@ log.
 problems, obsolete or unsafe platform calls, accessibility issues. Given `minSdk` 28 and `targetSdk`
 37, Lint is the gate that catches "this call needs an API check" before a device does.
 
-The only suppression is `MissingTranslation` in [`app/build.gradle.kts`](../../app/build.gradle.kts),
-because locales ship incrementally — a string is added in English first and translated in a follow-up
+The only suppression is `MissingTranslation` in [`app/build.gradle.kts`](../../app/build.gradle.kts)
+(the `tv` app module sets none), because locales ship incrementally — a string is added in English first and translated in a follow-up
 (see the [`translate-strings`](../../.claude/skills/translate-strings/SKILL.md) skill).
 
 ## LeakCanary

@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Provides the Navigation 3 infrastructure for independent bottom-navigation stacks. The package is
+Provides the Navigation 3 infrastructure for independent top-level stacks — the phone's bottom
+navigation bar and the TV side menu both use it. The package is
 `sk.styk.martin.apkanalyzer.core.navigation`.
 
 ## Navigation Model

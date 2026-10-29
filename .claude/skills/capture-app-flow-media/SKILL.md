@@ -84,8 +84,10 @@ The current README demo recordings map to these assets:
 | `Desktop\browse-apps.mp4` | `docs/github/browse-apps.gif` |
 | `Desktop\filter-apps.mp4` | `docs/github/filter-apps.gif` |
 | `Desktop\app-details.mp4` | `docs/github/app-details.gif` |
+| A 4K Android TV screen recording (`.webm`) | `docs/github/tv-app-tour.gif` |
 
-Target 360px width and 24fps. Keep files reasonably small, but don't sacrifice
+Target 360px width and 24fps for phone recordings. For landscape Android TV recordings, scale to
+780px width instead — the phone GIFs' long edge — so TV text stays legible. Keep files reasonably small, but don't sacrifice
 legibility of on-screen text to hit an arbitrary size target — a longer flow covering several screens
 legitimately runs larger than a single-interaction one.
 

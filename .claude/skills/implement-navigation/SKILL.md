@@ -109,6 +109,23 @@ onAppDetails = { packageName ->
 
 ---
 
+## Scenario C — The same destination on Android TV
+
+A feature with a `tv` module registers its TV screens separately; phone and TV never share an entry
+provider or a screen.
+
+* Internal TV keys live in `feature/<feature>/tv/navigation/` and are prefixed `Tv`
+  (`internal data class TvBrowseAppsNavKey(...)`). Cross-feature keys are the same `api` keys the
+  phone uses — TV opens app detail with `AppDetailNavKey`, exactly like the phone.
+* Add the `entry<>` block to `tv<Feature>Entries(navigator)` in that package, using the same
+  transition metadata as the phone counterpart.
+* TV screens take no `onBack`: the remote's Back goes through the host's `Navigator`.
+* A new TV entry provider is called inside the `entryProvider` in
+  `tv/src/main/kotlin/sk/styk/martin/apkanalyzer/tv/TvApkAnalyzerApp.kt`; a top-level TV
+  destination also goes into `TOP_LEVEL_KEYS` and the side menu's `NavigationDrawerItem`s there.
+
+---
+
 ## Transition Metadata
 
 Import from `sk.styk.martin.apkanalyzer.core.designsystem.foundation.animation.*`
@@ -183,4 +200,6 @@ fun EntryProviderScope<NavKey>.<feature>Entries(navigator: Navigator) {
 - [ ] Navigation call added in source entry block
 - [ ] For **new top-level features**: entry provider called in `ApkAnalyzerApp.kt`
 - [ ] For **cross-feature**: API module dependency added in `build.gradle.kts`
+- [ ] For a feature with a **`tv` module**: does the destination belong on TV too? If so, Scenario C,
+      and the TV entry provider is called in `TvApkAnalyzerApp.kt`
 

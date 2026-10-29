@@ -1,6 +1,6 @@
 ---
 name: run-app
-description: Use to build, install, and launch ApkAnalyzer on a connected device or emulator, or to verify a code change actually works at runtime rather than just compiling. Triggered by phrases like "run the app", "install on device", "launch the app", "try it on my phone", "deploy to device", "see if this works", "run it".
+description: Use to build, install, and launch ApkAnalyzer's phone or Android TV app on a connected device or emulator, or to verify a code change actually works at runtime rather than just compiling. Triggered by phrases like "run the app", "install on device", "launch the app", "try it on my phone", "deploy to device", "see if this works", "run it".
 ---
 
 # Skill: Build, Install, and Run ApkAnalyzer on a Device
@@ -30,17 +30,20 @@ below.
 ## Step 2 — Build and install
 
 ```bash
-./gradlew installDebug
+./gradlew :app:installDebug   # phone or tablet
+./gradlew :tv:installDebug    # Android TV device or emulator
 ```
 
-This assembles `:app:debug` and installs it via the AGP-managed install task. If it succeeds,
-skip to Step 4.
+Always name the module. The phone and TV apps share one `applicationId`, so a bare
+`./gradlew installDebug` installs both, and whichever lands second replaces the other on the
+device. If it succeeds, skip to Step 4.
 
 ## Step 3 — If install fails with `INSTALL_FAILED_VERSION_DOWNGRADE`
 
 This happens when the device already has a build with a **higher** `versionCode` than the debug
-build's `versionCode = 1` (see `app/build.gradle.kts`) — typically a release build (from the Play
-Store, a manual release, or a prior CI artifact) already on the device.
+build's `versionCode = 1` (`version.code` in `gradle.properties`) — typically a release build (from
+the Play Store, a manual release, or a prior CI artifact) already on the device. On a TV, use
+`tv/build/outputs/apk/debug/tv-debug.apk` and `:tv:installDebug` in the commands below.
 
 1. Check whether `-d` (allow downgrade) is enough — **it only works if the existing install is
    itself debuggable**, so this recovers cleanly with no data loss when the device already has a
@@ -55,7 +58,7 @@ Store, a manual release, or a prior CI artifact) already on the device.
    assumption:
    ```bash
    adb uninstall sk.styk.martin.apkanalyzer
-   ./gradlew installDebug
+   ./gradlew :app:installDebug
    ```
 
 ## Step 4 — Launch and verify it's actually running
@@ -64,7 +67,8 @@ Installing is not running. Launch the main activity and confirm the process is a
 immediate crash:
 
 ```bash
-adb shell am start -n sk.styk.martin.apkanalyzer/.ui.ApkAnalyzerActivity
+adb shell am start -n sk.styk.martin.apkanalyzer/.ui.ApkAnalyzerActivity                              # phone
+adb shell am start -n sk.styk.martin.apkanalyzer/sk.styk.martin.apkanalyzer.tv.TvApkAnalyzerActivity   # TV
 sleep 2
 adb shell pidof sk.styk.martin.apkanalyzer   # a PID means it's running; empty means it crashed on launch
 ```

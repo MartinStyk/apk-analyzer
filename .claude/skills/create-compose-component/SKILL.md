@@ -1,12 +1,16 @@
 ---
 name: create-compose-component
-description: Use when creating a new reusable Compose UI component that should live in core:design-system:phone. Triggered by phrases like "add UI component", "create component", "add reusable composable", "new composable component", "create a card", "create a button variant", "add to ui library".
+description: Use when creating a new reusable Compose UI component that should live in core:design-system:phone or core:design-system:tv. Triggered by phrases like "add UI component", "create component", "add reusable composable", "new composable component", "create a card", "create a button variant", "add to ui library".
 ---
 
 # Create Compose UI Component
 
-All reusable components belong in:
+Phone components belong in:
 `core/design-system/phone/src/main/kotlin/sk/styk/martin/apkanalyzer/core/designsystem/phone/components/<Name>.kt`
+
+TV components belong in `core/design-system/tv/.../core/designsystem/tv/components/<Name>.kt` — see
+[TV components](#tv-components). Anything both apps need without Material (icons, palette,
+transitions) belongs in `core:design-system:foundation`. `phone` and `tv` never depend on each other.
 
 ## Component Template
 
@@ -109,6 +113,19 @@ Annotate with `@Stable` if used as a Composable parameter but is not a data clas
 @Stable
 class <Name>State(...)
 ```
+
+## TV Components
+
+The template and rules above apply, with these substitutions:
+
+- Wrap `androidx.tv.material3`, not Material3; TV code never imports either directly outside this
+  module. Opt in to experimental TV Material APIs only inside the wrapper.
+- Preview with `@Preview(device = Devices.TV_1080p)` inside `ApkAnalyzerTvTheme` from
+  `core.designsystem.tv.theme`. TV is dark-only — preview one theme.
+- A clickable component applies `pointerClickable` (from `core.designsystem.tv.modifier`) with the
+  same callback and shape it passes to TV Material, so pointer remotes and air mice work.
+- It must be operable with the D-pad alone, and a focusable card or row reuses the focus border and
+  lift from `FocusStyle.kt` rather than adding its own effect.
 
 ## Before Creating a New Component
 

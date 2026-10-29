@@ -171,7 +171,7 @@ constructors of `AppsViewModel` and `FilterViewModel`.
 ## Compose
 
 * Feature modules never import `androidx.compose.material3` — see
-  [architecture](architecture.md#shape-3--a-design-system-not-scattered-material).
+  [architecture](architecture.md#design-system-conventions).
 * No hardcoded user-facing strings. Use `stringResource` backed by the owning module's
   `res/values/strings.xml`, and follow the
   [`translate-strings`](../../.claude/skills/translate-strings/SKILL.md) skill when copy changes.

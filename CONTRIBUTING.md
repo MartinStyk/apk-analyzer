@@ -51,6 +51,7 @@ These come from [`AGENTS.md`](AGENTS.md); they're the ones PRs most often trip o
   `strings.xml`.
 * **Feature modules never import `androidx.compose.material3`.** Use the wrappers in
   [`core:design-system:phone`](core/design-system/AGENTS.md); add one there first if it doesn't exist.
+  TV modules follow the same rule with `androidx.tv.material3` and `core:design-system:tv`.
 * **Never hardcode SDK levels or the JVM toolchain** in a module's `build.gradle.kts` — they come
   from `build-logic`.
 * **Don't add tests or test dependencies** unless the issue explicitly asks. There is no test

@@ -143,7 +143,8 @@ Modules live under `app/`, `tv/`, `core/<name>/`, and `feature/<name>/{api,phone
 * Register screens via `EntryProviderScope<NavKey>.<feature>Entries(navigator: Navigator)` in
   `feature/*/phone/navigation/`, then wire that call into the `entryProvider { }` block in
   `app/src/main/kotlin/sk/styk/martin/apkanalyzer/ui/ApkAnalyzerApp.kt`. A screen that isn't wired
-  there is unreachable.
+  there is unreachable. TV screens register via `tv<Feature>Entries(navigator)` in
+  `feature/*/tv/navigation/`, wired into `tv/src/main/kotlin/sk/styk/martin/apkanalyzer/tv/TvApkAnalyzerApp.kt`.
 * Transitions: `bottomEntryMetadata()` / `slideFromEndEntryMetadata()` from
   `sk.styk.martin.apkanalyzer.core.designsystem.foundation.animation`.
 * Multi-stack state lives in `:core:navigation` — see [`core/navigation/AGENTS.md`](core/navigation/AGENTS.md).
@@ -166,7 +167,7 @@ Modules live under `app/`, `tv/`, `core/<name>/`, and `feature/<name>/{api,phone
   would miss in-place changes. `@Immutable` on State data classes; `@Stable` on non-data classes
   used as Composable parameters.
 * Every file with `@Composable` functions has `@Preview` functions: `private`, suffixed `Preview`,
-  wrapped in `ApkAnalyzerTheme { }`, with realistic sample data. Preview the stateless content
+  wrapped in `ApkAnalyzerTheme { }` (`ApkAnalyzerTvTheme { }` in TV code), with realistic sample data. Preview the stateless content
   composable, never the ViewModel-dependent screen.
 * Composable callbacks are present tense — `onClick`, `onSelectItem`, `onBack`. Never
   `onClicked`, `onItemSelected`, `onBackPressed`.

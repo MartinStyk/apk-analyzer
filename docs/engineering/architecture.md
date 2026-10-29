@@ -9,17 +9,27 @@ reviewer who wants the reasoning, not just the rule.
 
 ```mermaid
 graph TD
-    app[":app<br/>Activities, nav host, Hilt graph"]
-    fphone["feature/&lt;name&gt;/phone<br/>screens + ViewModels"]
+    app[":app<br/>phone app: Activities, nav host, Hilt graph"]
+    tv[":tv<br/>Android TV app: Activity, nav host, Hilt graph"]
+    fphone["feature/&lt;name&gt;/phone<br/>phone screens + ViewModels"]
+    ftv["feature/&lt;name&gt;/tv<br/>TV screens + ViewModels"]
     fapi["feature/&lt;name&gt;/api<br/>NavKeys only"]
     core["core/*<br/>domain, data, design system"]
 
     app --> fphone
     app --> core
+    tv --> ftv
+    tv --> core
     fphone --> fapi
     fphone --> core
+    ftv --> fapi
+    ftv --> core
     core --> core
 ```
+
+Two apps ship from this graph under the same application ID: `app` for phones and tablets, and `tv`
+for Android TV. They share every `core` domain and data module and every feature `api` module; each
+has its own feature screens and its own design-system variant.
 
 [`settings.gradle.kts`](../../settings.gradle.kts) is the authoritative module list.
 
@@ -30,9 +40,17 @@ graph TD
   implementation — the whole point of the api split.
 * **`feature/*/phone` depends on its own `api` plus whichever `core` modules it needs.** Never on
   another feature's `phone` or `tv`. If two features need the same behaviour, it moves into a `core` module.
+* **`feature/*/tv` follows the same rules, with `:core:design-system:tv` in place of the phone design
+  system.** It never depends on its sibling `phone` module; logic both need moves to `core` when the
+  second consumer appears.
 * **`core/*` may depend on other `core` modules, never on a `feature`.**
 * **`app` is wiring only** — the launcher Activity, the external-APK document Activity, nav hosts,
   and app-scoped Hilt bindings. No feature logic lands here.
+* **`tv` is wiring only too** — the `LEANBACK_LAUNCHER` Activity, the TV nav host, and the TV
+  manifest. It depends only on shared `core` modules, `:core:design-system:tv`, and feature `api`
+  and `tv` modules; never on `app`, `:core:design-system:phone`, Material 3, a feature `phone`
+  module, or a phone-only core module. Phone code never depends on TV modules either. See
+  [`tv/AGENTS.md`](../../tv/AGENTS.md).
 * A module's package matches its directory with hyphens removed: `core/user-preferences` →
   `core.userpreferences`, `feature/app-detail/phone` → `feature.appdetail.phone`.
 
@@ -41,18 +59,20 @@ graph TD
 | Module | Owns |
 |---|---|
 | [`core:apps`](../../core/apps/AGENTS.md) | Installed-app and APK analysis: extraction, normalization, caching, domain models |
-| [`core:apk-files`](../../core/apk-files/AGENTS.md) | Temporary materialization and cleanup of APKs received via content URIs |
+| [`core:apk-files`](../../core/apk-files/AGENTS.md) | Temporary materialization and cleanup of APKs received via content URIs — phone only |
 | [`core:app-index`](../../core/app-index/AGENTS.md) | Device-wide `attribute → apps` indexes behind Browse |
 | [`core:app-permissions`](../../core/app-permissions/AGENTS.md) | The deduplicated device-wide permission list |
-| [`core:ai-insights`](../../core/ai-insights/AGENTS.md) | On-device AI features and the ML Kit engine wrapper |
+| [`core:ai-insights`](../../core/ai-insights/AGENTS.md) | On-device AI features and the ML Kit engine wrapper — phone only |
+| [`core:app-functions`](../../core/app-functions/AGENTS.md) | App Functions that expose app analysis to on-device assistants — phone only |
+| [`core:app-history`](../../core/app-history/AGENTS.md) | Room-backed snapshots of each app's state over time, for app history |
 | [`core:user-preferences`](../../core/user-preferences/AGENTS.md) | Recently viewed apps and search history |
 | [`core:navigation`](../../core/navigation/AGENTS.md) | Navigation 3 infrastructure for independent bottom-nav stacks |
 | [`core:design-system`](../../core/design-system/AGENTS.md) | The design system: shared `foundation` (palette, icons), Material3 `phone` components, TV Material `tv` components |
 | [`core:common`](../../core/common/AGENTS.md) | Dispatchers, logging, and models shared across domains |
-| [`feature:apps`](../../feature/apps/AGENTS.md) | The installed-app list: search, filter, sort |
-| [`feature:app-detail`](../../feature/app-detail/AGENTS.md) | The full report for one app or APK |
-| [`feature:browse`](../../feature/browse/AGENTS.md) | Browse by attribute |
-| [`feature:settings`](../../feature/settings/AGENTS.md) | Theme and app settings |
+| [`feature:apps`](../../feature/apps/AGENTS.md) | The installed-app list: search, filter, sort — phone and TV |
+| [`feature:app-detail`](../../feature/app-detail/AGENTS.md) | The full report for one app or APK — phone and TV (installed apps only on TV) |
+| [`feature:browse`](../../feature/browse/AGENTS.md) | Browse by attribute — phone and TV |
+| [`feature:settings`](../../feature/settings/AGENTS.md) | Theme and app settings — phone only, no TV module |
 
 A core module packages by domain once it holds more than one repository/manager family:
 [`core:apps`](../../core/apps/AGENTS.md) is the worked example, with `signing/`, `permissions/`,
@@ -123,6 +143,10 @@ the only exception in the repository.
 Colors and type come from `AppTheme.colors` / `AppTheme.typography`, icons from `ApkAnalyzerIcons`.
 `MaterialTheme.colorScheme` is never reached for outside `core:design-system:phone`.
 
+TV code follows the same rule with `androidx.tv.material3` and the wrappers in
+[`core:design-system:tv`](../../core/design-system/AGENTS.md); the shared palette and icons come from
+`core:design-system:foundation`.
+
 ## Navigation
 
 Navigation 3 (`androidx.navigation3`) only — no legacy Jetpack Navigation. NavKeys are
@@ -133,7 +157,8 @@ feature live in that feature's `phone/navigation/` or `tv/navigation/`.
 Each feature exposes `EntryProviderScope<NavKey>.<feature>Entries(navigator: Navigator)`, which is
 wired into the `entryProvider { }` block in
 [`ApkAnalyzerApp.kt`](../../app/src/main/kotlin/sk/styk/martin/apkanalyzer/ui/ApkAnalyzerApp.kt). A
-screen that isn't wired there is unreachable. Multi-stack state for the bottom navigation lives in
+screen that isn't wired there is unreachable. TV screens register the same way through
+`tv<Feature>Entries`, wired into `TvApkAnalyzerApp.kt` in the `tv` module. Multi-stack state for the bottom navigation lives in
 [`core:navigation`](../../core/navigation/AGENTS.md), and the step-by-step procedure is the
 [`implement-navigation`](../../.claude/skills/implement-navigation/SKILL.md) skill.
 
