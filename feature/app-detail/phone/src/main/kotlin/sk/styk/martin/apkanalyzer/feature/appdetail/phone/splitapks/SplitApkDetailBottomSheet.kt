@@ -78,11 +78,13 @@ internal fun SplitApkDetailBottomSheet(
                 value = split.size.formatted(),
                 onCopy = onCopy,
             )
-            DetailField(
-                label = stringResource(AppsR.string.splitapks_detail_path),
-                value = split.filePath,
-                onCopy = onCopy,
-            )
+            split.filePath?.let { filePath ->
+                DetailField(
+                    label = stringResource(AppsR.string.splitapks_detail_path),
+                    value = filePath,
+                    onCopy = onCopy,
+                )
+            }
         }
     }
 }

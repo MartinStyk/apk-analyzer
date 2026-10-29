@@ -22,5 +22,6 @@ data class AppDetail(
     enum class AnalysisMode {
         InstalledPackage,
         ApkFile,
+        Historical,
     }
 }

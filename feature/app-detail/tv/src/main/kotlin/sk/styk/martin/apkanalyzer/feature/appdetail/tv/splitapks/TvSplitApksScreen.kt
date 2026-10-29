@@ -90,11 +90,11 @@ private fun splitRow(split: InstalledSplitApk): InfoRow {
         key = split.fileName,
         label = split.kind.friendlyQualifier(split.qualifier, LocalResources.current),
         value = stringResource(R.string.tv_value_pair, kind, split.size.formatted()),
-        explanation = listOf(
+        explanation = listOfNotNull(
             stringResource(AppsR.string.splitapks_explanation),
             stringResource(R.string.tv_label_value, stringResource(AppsR.string.splitapks_detail_identifier), split.qualifier),
             stringResource(R.string.tv_label_value, stringResource(AppsR.string.splitapks_detail_file_name), split.fileName),
-            stringResource(R.string.tv_label_value, stringResource(AppsR.string.splitapks_detail_path), split.filePath),
+            split.filePath?.let { stringResource(R.string.tv_label_value, stringResource(AppsR.string.splitapks_detail_path), it) },
         ).joinToString(separator = "\n\n"),
         icon = icon,
         status = kind,

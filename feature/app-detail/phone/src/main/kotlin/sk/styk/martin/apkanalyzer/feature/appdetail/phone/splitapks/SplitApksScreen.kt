@@ -124,9 +124,9 @@ private fun SplitApksLoadedContent(
     onAction: (SplitApksAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var detailPath by rememberSaveable { mutableStateOf<String?>(null) }
-    val detailSplit = remember(detailPath, state.items) {
-        state.items.firstOrNull { it.filePath == detailPath }
+    var detailFileName by rememberSaveable { mutableStateOf<String?>(null) }
+    val detailSplit = remember(detailFileName, state.items) {
+        state.items.firstOrNull { it.fileName == detailFileName }
     }
     val collapsingState = rememberCollapsingHeaderState()
     val listState = rememberLazyListState()
@@ -177,10 +177,10 @@ private fun SplitApksLoadedContent(
                     .fillMaxWidth()
                     .offset { collapsingState.contentOffset },
             ) {
-                items(items = state.items, key = { it.filePath }) { split ->
+                items(items = state.items, key = { it.fileName }) { split ->
                     SplitApkRow(
                         split = split,
-                        onClick = { detailPath = split.filePath },
+                        onClick = { detailFileName = split.fileName },
                         onCopy = { label, value -> onAction(SplitApksAction.CopyValue(label, value)) },
                     )
                 }
@@ -199,7 +199,7 @@ private fun SplitApksLoadedContent(
         SplitApkDetailBottomSheet(
             split = split,
             onCopy = { label, value -> onAction(SplitApksAction.CopyValue(label, value)) },
-            onDismiss = { detailPath = null },
+            onDismiss = { detailFileName = null },
         )
     }
 }
