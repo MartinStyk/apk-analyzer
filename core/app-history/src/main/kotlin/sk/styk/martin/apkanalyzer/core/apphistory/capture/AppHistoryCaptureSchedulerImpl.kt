@@ -1,5 +1,6 @@
 package sk.styk.martin.apkanalyzer.core.apphistory.capture
 
+import android.content.Context
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.work.Constraints
@@ -7,6 +8,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import dagger.Lazy
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
@@ -14,6 +16,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import sk.styk.martin.apkanalyzer.core.apphistory.restore.AppHistoryRestoreMerger
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.UNCOMPRESSED_APP_HISTORY_DATABASE_NAMES
 import sk.styk.martin.apkanalyzer.core.apps.PackageChangeAction
 import sk.styk.martin.apkanalyzer.core.apps.PackageChangesObserver
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
@@ -23,9 +26,10 @@ import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
+
 @Singleton
 internal class AppHistoryCaptureSchedulerImpl @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val captureRepository: AppHistoryCaptureRepository,
     private val packageChangesObserver: PackageChangesObserver,
     private val workManager: Lazy<WorkManager>,
@@ -43,6 +47,10 @@ internal class AppHistoryCaptureSchedulerImpl @Inject constructor(
 
     override fun start() {
         if (!started.compareAndSet(false, true)) return
+
+        appScope.launch(dispatcherProvider.io()) {
+            deleteUncompressedDatabases()
+        }
 
         appScope.launch(dispatcherProvider.default()) {
             restoreMerger.mergeIfPending()
@@ -64,6 +72,12 @@ internal class AppHistoryCaptureSchedulerImpl @Inject constructor(
             .launchIn(appScope + dispatcherProvider.default())
 
         schedulePeriodicReconciliation()
+    }
+
+    private fun deleteUncompressedDatabases() {
+        UNCOMPRESSED_APP_HISTORY_DATABASE_NAMES
+            .filter { context.deleteDatabase(it) }
+            .forEach { Logger.i(APP_HISTORY, "Deleted uncompressed history database $it") }
     }
 
     private fun schedulePeriodicReconciliation() {

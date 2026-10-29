@@ -1,10 +1,11 @@
-package sk.styk.martin.apkanalyzer.core.apphistory.storage
+package sk.styk.martin.apkanalyzer.core.apphistory.storage.database
 
 import androidx.room.Dao
 import androidx.room.Query
 
 internal data class AppHistoryGateState(
     val packageName: String,
+    val deviceId: String,
     val lastUpdateTime: Long,
     val firstInstallTime: Long,
 )
@@ -14,10 +15,10 @@ internal interface AppHistoryGateDao {
 
     @Query(
         """
-        SELECT packageName, lastUpdateTime, firstInstallTime
+        SELECT packageName, deviceId, lastUpdateTime, firstInstallTime
         FROM app_history_snapshot
         WHERE packageName = :packageName
-        ORDER BY lastUpdateTime DESC, id DESC
+        ORDER BY capturedAt DESC, id DESC
         LIMIT 1
         """,
     )
@@ -25,12 +26,12 @@ internal interface AppHistoryGateDao {
 
     @Query(
         """
-        SELECT packageName, lastUpdateTime, firstInstallTime
+        SELECT packageName, deviceId, lastUpdateTime, firstInstallTime
         FROM app_history_snapshot s1
         WHERE NOT EXISTS (
             SELECT 1 FROM app_history_snapshot s2
             WHERE s2.packageName = s1.packageName
-            AND (s2.lastUpdateTime > s1.lastUpdateTime OR (s2.lastUpdateTime = s1.lastUpdateTime AND s2.id > s1.id))
+            AND (s2.capturedAt > s1.capturedAt OR (s2.capturedAt = s1.capturedAt AND s2.id > s1.id))
         )
         """,
     )

@@ -1,11 +1,13 @@
-package sk.styk.martin.apkanalyzer.core.apphistory.capture.snapshot
+package sk.styk.martin.apkanalyzer.core.apphistory.storage.database.snapshot
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
 import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilterKey
+import sk.styk.martin.apkanalyzer.core.apps.components.ComponentKind
 import sk.styk.martin.apkanalyzer.core.apps.components.IntentFilterDataRule
+import sk.styk.martin.apkanalyzer.core.apps.components.IntentFilterDataRuleType
 import sk.styk.martin.apkanalyzer.core.apps.components.IntentFilterUriRelativeGroup
 
 @Serializable
@@ -51,3 +53,22 @@ internal fun IntentFilterUriRelativeGroup.toSnapshot() = IntentFilterUriRelative
 internal fun IntentFilterDataRule.toSnapshot() = IntentFilterDataRuleSnapshot(type = type.name, value = value)
 
 private fun List<IntentFilterDataRuleSnapshot>.sortedDataRules() = sortedWith(compareBy({ it.type }, { it.value }))
+
+internal fun ComponentIntentFilterKeySnapshot.toDomain() = ComponentIntentFilterKey(name = name, kind = ComponentKind.valueOf(kind))
+
+internal fun ComponentIntentFilterSnapshot.toDomain() = ComponentIntentFilter(
+    actions = actions,
+    categories = categories,
+    dataRules = dataRules.map { it.toDomain() },
+    uriRelativeGroups = uriRelativeGroups.map { it.toDomain() },
+    priority = priority,
+    order = order,
+    isAutoVerify = isAutoVerify,
+)
+
+internal fun IntentFilterUriRelativeGroupSnapshot.toDomain() = IntentFilterUriRelativeGroup(
+    isAllowed = isAllowed,
+    dataRules = dataRules.map { it.toDomain() },
+)
+
+internal fun IntentFilterDataRuleSnapshot.toDomain() = IntentFilterDataRule(type = IntentFilterDataRuleType.valueOf(type), value = value)

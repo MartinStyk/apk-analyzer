@@ -185,7 +185,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
                 queryLauncherActivityNames(PackageName(packageInfo.packageName))
             }
 
-            AppDetail.AnalysisMode.ApkFile -> null
+            AppDetail.AnalysisMode.ApkFile, AppDetail.AnalysisMode.Historical -> null
         }
 
         val components = timedStage("components", "components_ms", context) {

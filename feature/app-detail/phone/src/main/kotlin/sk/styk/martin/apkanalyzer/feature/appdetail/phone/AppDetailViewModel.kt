@@ -305,7 +305,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
         val dangerousPermissions = permissions.used.filter { it.isDangerous }
         val relevantDangerousPermissions = when (analysisMode) {
             AppDetail.AnalysisMode.InstalledPackage -> dangerousPermissions.filter { it.isGranted }
-            AppDetail.AnalysisMode.ApkFile -> dangerousPermissions
+            AppDetail.AnalysisMode.ApkFile, AppDetail.AnalysisMode.Historical -> dangerousPermissions
         }
         val currentCertificate = signing.currentCertificates.firstOrNull()
         val now = Instant.now()

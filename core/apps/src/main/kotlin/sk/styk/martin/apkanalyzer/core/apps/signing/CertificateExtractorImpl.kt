@@ -49,6 +49,7 @@ internal class CertificateExtractorImpl @Inject constructor(private val digestMa
             CertificateFactory.getInstance("X509").generateCertificate(stream) as X509Certificate
         }
         val publicKey = certificate.publicKey.encoded
+        val issuer = certificate.issuerX500Principal.toPrincipal()
 
         return Certificate(
             signAlgorithm = certificate.sigAlgName,
@@ -61,9 +62,9 @@ internal class CertificateExtractorImpl @Inject constructor(private val digestMa
             validFrom = certificate.notBefore.toInstant(),
             validUntil = certificate.notAfter.toInstant(),
             serialNumber = certificate.serialNumber.toColonSeparatedHex(),
-            issuer = certificate.issuerX500Principal.toPrincipal(),
+            issuer = issuer,
             subject = certificate.subjectX500Principal.toPrincipal(),
-            trustLevel = resolveTrustLevel(certificate),
+            trustLevel = resolveCertificateTrustLevel(issuer),
             isSelfSigned = certificate.isSelfSigned(),
         )
     }
@@ -99,14 +100,6 @@ internal class CertificateExtractorImpl @Inject constructor(private val digestMa
     }
 
     private fun String.unescapeDnValue(): String = escapedCharRegex.replace(this) { it.groupValues[1] }.trim()
-
-    private fun resolveTrustLevel(certificate: X509Certificate): CertificateTrustLevel {
-        val issuerDn = certificate.issuerX500Principal.name
-        val isDebug = issuerDn.contains("CN=Android Debug") &&
-            issuerDn.contains("O=Android") &&
-            issuerDn.contains("C=US")
-        return if (isDebug) CertificateTrustLevel.Debug else CertificateTrustLevel.Valid
-    }
 
     private fun BigInteger.toColonSeparatedHex(): String {
         val hex = toString(16).uppercase(Locale.ROOT).let { if (it.length % 2 == 0) it else "0$it" }

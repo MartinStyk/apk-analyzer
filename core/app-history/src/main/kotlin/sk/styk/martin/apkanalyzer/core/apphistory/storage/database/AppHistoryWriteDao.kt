@@ -1,11 +1,11 @@
-package sk.styk.martin.apkanalyzer.core.apphistory.storage
+package sk.styk.martin.apkanalyzer.core.apphistory.storage.database
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Transaction
-import sk.styk.martin.apkanalyzer.core.apphistory.storage.entity.AppHistoryBlobEntity
-import sk.styk.martin.apkanalyzer.core.apphistory.storage.entity.AppHistorySnapshotEntity
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity.AppHistoryBlobEntity
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity.AppHistorySnapshotEntity
 
 @Dao
 internal interface AppHistoryWriteDao {

@@ -7,7 +7,8 @@
 triggers (reconciliation on process start, fast-path broadcast, periodic `WorkManager`
 reconciliation) are built and running — see
 [`core/app-history/AGENTS.md`](../../../core/app-history/AGENTS.md) for the as-built module reference.
-Still not built: the diff engine (`HI-03`), UI (`HI-08`/`HI-14`), retention (`HI-04`), backup
+The diff engine (`HI-03`) is built as `core:app-history`'s timeline read API, not yet consumed by UI.
+Still not built: UI (`HI-08`/`HI-14`), retention (`HI-04`), backup
 (`HI-16`/`HI-17`), and the `HI-10` runtime-state tier.
 **Scope:** The on-device Room schema for full-state app history snapshots, what is and isn't
 captured, the change-detection gate, and the three capture triggers. Does not cover the diff engine
@@ -18,7 +19,7 @@ still describes the *originally agreed* design — serializing the `core:apps` d
 (`Activity`, `Certificate`, ...) directly. That was changed during implementation: those models are
 never made `@Serializable`, because doing so would let an ordinary `core:apps` rename/retype silently
 break deserialization of historical blobs. `core:app-history` instead defines its own mirror DTOs
-(`capture/snapshot/`) and maps to them at capture time — see
+(`storage/database/snapshot/`) and maps to them inside the persistence repository — see
 [`core/app-history/AGENTS.md`](../../../core/app-history/AGENTS.md#dto-boundary--not-a-detail) for the
 full rationale. The content-addressing, per-package scoping, and "JSON absorbs a new field for free"
 arguments below are unaffected; only *which* type gets serialized changed.
@@ -71,10 +72,23 @@ moment — there's no real scenario where `firstInstallTime` changes without `la
 changing. No synthetic "latest APK change" field is needed; the two raw values are stored and
 compared as-is.
 
+**`lastUpdateTime` is not monotonic, so it is never the ordering key.** A system app whose updates are
+uninstalled (or replaced by a system-image version) falls back to its factory `lastUpdateTime`, which
+can be years older than rows already stored — and can equal the key of a row captured before the
+update. Ordering by it once put that rolled-back state at the *start* of the timeline and made the
+gate's "latest" row a stale one forever, surfacing in production as a recurring
+`UNIQUE constraint failed` non-fatal on Samsung Keyboard during an ordinary reconciliation sweep.
+Snapshots are therefore ordered by `capturedAt` — when this app observed the state — with `id` as a
+tiebreak; the two install timestamps stay the identity compared by the gate, not the sort.
+
 `deviceId` (read live from `Settings.Secure.ANDROID_ID`, never a self-generated persisted value —
 a persisted UUID would itself be swept up by app-data backup/restore and defeat the purpose) is
-stored per snapshot so a future timeline renderer can distinguish "this app was updated" from "this
-history continued on a new device," without changing the gate itself.
+stored per snapshot so the timeline can distinguish "this app was updated" from "this history
+continued on a new device" (`AppHistoryEntry.Change.Kind.NewDevice`). It is also part of the gate's identity:
+install timestamps are facts about one device and can be identical on another — a never-updated
+system app carries the same factory timestamps on every device of a model — so after a restore the
+latest row, captured on the old device, could otherwise match the new device's live app and the new
+device would never be captured.
 
 Not speculative on `HI-16`/`HI-17` (Drive backup, gated on unresolved `OQ-08`) specifically: Android's
 own Auto Backup can already restore this app's private data — including the Room DB itself — to a new
@@ -95,7 +109,7 @@ grouping/junction table.
   evolve on its schedule. `core:user-preferences/AGENTS.md` requires a `Migration` for every schema
   change — fine for one or two small, stable entities, but a real ongoing tax across nine-plus
   actively-evolving domain models this module doesn't control. JSON can absorb a schema change
-  without a `Migration`, but not automatically: a field added to a `capture/snapshot/` DTO must
+  without a `Migration`, but not automatically: a field added to a `storage/database/snapshot/` DTO must
   declare a Kotlin default, or decoding an old blob that lacks it throws
   `MissingFieldException` instead of defaulting; a future reader also needs
   `Json { ignoreUnknownKeys = true }` to tolerate blobs written by a newer app version. That
@@ -108,10 +122,10 @@ grouping/junction table.
   re-store an unchanged activity list on every version that doesn't touch it), a normalized schema
   still needs some way to decide "does this exact set of child rows already exist" before inserting —
   which converges back to hashing the set's content, just with nine extra tables and their
-  join/grouping logic on top, for a storage-granularity benefit that doesn't matter at the data
-  volumes already established here (low single-digit MB).
+  join/grouping logic on top, for a storage-granularity benefit that doesn't matter once blobs are
+  compressed (see [`app_history_blob`](#app_history_blob)).
 
-The real cost: a raw SQLite browse of `app_history_blob` shows opaque JSON text, not scannable
+The real cost: a raw SQLite browse of `app_history_blob` shows opaque compressed bytes, not scannable
 columns — genuinely less convenient in the Database Inspector during development. That's a
 dev-time-convenience cost, not a correctness or performance one.
 
@@ -124,12 +138,13 @@ One row per captured install instance/version. Append-only — never updated in 
 ```kotlin
 @Entity(
     tableName = "app_history_snapshot",
-    indices = [Index(value = ["packageName", "lastUpdateTime", "firstInstallTime"])],
+    indices = [Index(value = ["packageName", "capturedAt", "lastUpdateTime", "firstInstallTime"], unique = true)],
 )
 internal data class AppHistorySnapshotEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val packageName: String,
     val deviceId: String,
+    val capturedAt: Long,
     val firstInstallTime: Long,
     val lastUpdateTime: Long,
     val applicationName: String,
@@ -193,15 +208,34 @@ matches something already stored for the same package just references the existi
     tableName = "app_history_blob",
     primaryKeys = ["packageName", "hash"],
 )
-internal data class AppHistoryBlobEntity(
+internal class AppHistoryBlobEntity(
     val packageName: String,
     val hash: String,
-    val content: String, // JSON
+    val content: ByteArray, // Deflate-compressed JSON
 )
 ```
 
 Insert with `OnConflictStrategy.IGNORE` against the composite `(packageName, hash)` key — no
 existence check needed first, since the hash is a deterministic function of the content.
+
+**Compressed, hashed uncompressed.** `content` is the section's JSON compressed with zlib Deflate
+(level 6, `java.util.zip`, `storage/database/util/BlobCompression.kt`); the hash is still computed over the
+uncompressed JSON, so content addressing never depends on compressor output. Measured on a real
+480-app device after one full capture: blob content went from 14.2 MB of JSON to 1.9 MB (7.3×), and
+the vacuumed database file from 16.7 MB to 3.6 MB. The trigger was Android Auto Backup's 25 MB
+per-app quota — exceeding it fails the whole app's backup, not just this file — which uncompressed
+history would have crossed within weeks on a heavy device. Decompression costs about the same as the
+JSON decode a reader already pays, and only for the blobs whose hashes differ.
+
+The uncompressed (`String`) format shipped from 4.1.3 under the file name `app_history.db`. It was
+abandoned rather than migrated: no UI read the history yet, Room's destructive fallback would drop
+tables but leave the old file's freed pages counting against the backup quota, and an in-place
+migration needs a Kotlin row rewrite plus a separate `VACUUM` that can't run inside Room's migration
+transaction. Instead the database moved to `app_history_v2.db` and
+`AppHistoryCaptureSchedulerImpl.start()` deletes `app_history.db` and its old staging file. The next
+reconciliation sweep recaptures every installed app, so only the change history recorded before the
+switch is lost. An old backup still restores `app_history.db` through the default path; that same
+deletion removes it on the next launch.
 
 **Why no `sectionType` column.** An earlier version of this schema carried a `SectionType` enum
 column on every blob row, and hashed content alone. That's unsound: most apps have several
@@ -256,7 +290,7 @@ Both are captured; only `used`'s per-entry `isGranted` is dropped.
 | `permissions` | Both of `Permissions`' lists: `defined` (custom permissions this app declares for others) in full, and `used.map { it.permissionData }` (permissions this app requests — `name`, `PermissionDetails`) with `isGranted` stripped | — | `UsedPermission.isGranted` (grant state) |
 | `activities` / `services` / `providers` / `receivers` | Every field on `Activity`, `Service`, `ContentProvider` (incl. `ProviderPathPermission`), `BroadcastReceiver` | — | — |
 | `features` | `Feature.Hardware`, `Feature.OpenGlEs` in full | `OpenGlEs.versionName` (already a computed getter, never a stored field) | — |
-| `signing` | `Certificate`: `signAlgorithm`, all six MD5/SHA1/SHA256 hashes, `validFrom`, `validUntil`, `serialNumber`, `issuer`/`subject`, `isSelfSigned` (a genuine verification result, not recomputable without the raw cert) | `AppSigning.hasMultipleSigners` (`= currentCertificates.size > 1`), `Certificate.trustLevel` (recomputed from `certificateHashSha256` against the known debug-cert hash), `signatureAlgorithmAssessment`, `formattedSha256Fingerprint` (already computed getters) | — |
+| `signing` | `Certificate`: `signAlgorithm`, all six MD5/SHA1/SHA256 hashes, `validFrom`, `validUntil`, `serialNumber`, `issuer`/`subject`, `isSelfSigned` (a genuine verification result, not recomputable without the raw cert) | `AppSigning.hasMultipleSigners` (`= currentCertificates.size > 1`), `Certificate.trustLevel` (recomputed from the stored issuer by `resolveCertificateTrustLevel`, the same predicate the live extractor uses), `signatureAlgorithmAssessment`, `formattedSha256Fingerprint` (already computed getters) | — |
 | `intentFilters` | `ComponentIntentFilter` in full (`actions`, `categories`, `dataRules`, `uriRelativeGroups`, `priority`, `order`, `isAutoVerify`) | — | — |
 | `nativeLibraries` | `NativeLibraryFile` (`name`, `abi`, `size`, `containingApkFileName`) | `abis`, `libraryNames`, `hasNativeCode` (already computed getters on `NativeLibraries`) | — |
 | `signingScheme` | `List<SigningSchemeVersion>`, or `null` for unknown (never a guessed list) | — | — |
@@ -277,7 +311,7 @@ uses for list-shaped sections.
 
 ## Capture Gate
 
-Two query shapes, both satisfied by the `(packageName, lastUpdateTime, firstInstallTime)` covering
+Two query shapes, both served by the `(packageName, capturedAt, lastUpdateTime, firstInstallTime)`
 index — never a per-column filter, always a full-row projection compared in Kotlin:
 
 **Single package** (fast path):
@@ -285,7 +319,7 @@ index — never a per-column filter, always a full-row projection compared in Ko
 ```sql
 SELECT lastUpdateTime, firstInstallTime FROM app_history_snapshot
 WHERE packageName = :packageName
-ORDER BY lastUpdateTime DESC, id DESC LIMIT 1
+ORDER BY capturedAt DESC, id DESC LIMIT 1
 ```
 
 **All packages in one round trip** (reconciliation — never loop this per package):
@@ -296,23 +330,31 @@ FROM app_history_snapshot s1
 WHERE NOT EXISTS (
     SELECT 1 FROM app_history_snapshot s2
     WHERE s2.packageName = s1.packageName
-    AND (s2.lastUpdateTime > s1.lastUpdateTime OR (s2.lastUpdateTime = s1.lastUpdateTime AND s2.id > s1.id))
+    AND (s2.capturedAt > s1.capturedAt OR (s2.capturedAt = s1.capturedAt AND s2.id > s1.id))
 )
 ```
 
-Ordering by `lastUpdateTime` (with `id` only as a tiebreak), not by `id` alone, matters once restore
-merge ([`core/app-history/AGENTS.md`](../../../core/app-history/AGENTS.md#restore-merge)) can insert
-a row that is chronologically older than what is already live but numerically higher in `id` — the
-gate's job is "what does the device look like most recently," which is a fact about the data, not
-about insertion order.
+Ordering by `capturedAt` (with `id` only as a tiebreak) is the gate's "what did we see most
+recently." Not `id` alone: restore merge ([`core/app-history/AGENTS.md`](../../../core/app-history/AGENTS.md#restore-merge))
+inserts rows that are older than live data but numerically higher in `id`, and a restored row keeps
+its original `capturedAt`. Not `lastUpdateTime`: it moves backwards on a system-app rollback (see
+[Identity](#identity-packagename--firstinstalltime--lastupdatetime)), which left the gate comparing
+against a stale row and re-attempting the same insert on every sweep.
+
+The unique index includes `capturedAt` so a package returning to an earlier `(lastUpdateTime,
+firstInstallTime)` — the rollback case — can be recorded as a new observation instead of colliding
+with the old row. It does not admit duplicates in practice: the gate only writes when the live
+timestamps differ from the latest captured row, so an unchanged app is never re-captured, and
+concurrent captures of one package are serialized by the per-package `Mutex`. Its remaining job is
+deduplicating a replayed restore, whose rows carry their original `capturedAt`.
 
 Load the batch result into an in-memory `Map<packageName, LatestGate>` once, then compare every
 installed app against it purely in memory — zero further DB round trips during the sweep.
 
-Write a new snapshot only if `current.lastUpdateTime != latest.lastUpdateTime ||
-current.firstInstallTime != latest.firstInstallTime` (or no prior row exists). Comparing both,
-rather than relying on `lastUpdateTime` alone, costs nothing extra and matches the stated identity
-key explicitly.
+Write a new snapshot only if the live `(deviceId, firstInstallTime, lastUpdateTime)` differs from the
+latest captured row's (or no prior row exists). Comparing all three, rather than relying on
+`lastUpdateTime` alone, costs nothing extra and matches the stated identity explicitly; `deviceId`
+is the current device's, so a row restored from another device never counts as "unchanged".
 
 ## Capture Pipeline
 
@@ -388,7 +430,7 @@ handler for this design.
 
 `app-history.md`'s `HI-20`: "diffing an incomplete snapshot as though it were complete... fabricates
 changes." No schema mechanism is needed for this, and no separate "completeness" concept — the
-future diff engine (`HI-03`, not started) is always comparing one section's hash against another
+diff engine (`HI-03`) is always comparing one section's hash against another
 section's hash, never a whole snapshot at once (that's what the "Permissions · Components · Size"
 stub label is built from), so a `null` hash on either side simply makes that one section
 uncomparable. Ordinary null-handling in that comparison is the entire safeguard; nothing above it

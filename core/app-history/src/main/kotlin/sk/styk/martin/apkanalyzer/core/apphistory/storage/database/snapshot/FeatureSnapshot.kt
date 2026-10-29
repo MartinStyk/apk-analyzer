@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apphistory.capture.snapshot
+package sk.styk.martin.apkanalyzer.core.apphistory.storage.database.snapshot
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -23,4 +23,9 @@ internal sealed interface FeatureSnapshot {
 internal fun Feature.toSnapshot(): FeatureSnapshot = when (this) {
     is Feature.Hardware -> FeatureSnapshot.Hardware(name = name, version = version, isRequired = isRequired)
     is Feature.OpenGlEs -> FeatureSnapshot.OpenGlEs(reqGlEsVersion = reqGlEsVersion, isRequired = isRequired)
+}
+
+internal fun FeatureSnapshot.toDomain(): Feature = when (this) {
+    is FeatureSnapshot.Hardware -> Feature.Hardware(name = name, version = version, isRequired = isRequired)
+    is FeatureSnapshot.OpenGlEs -> Feature.OpenGlEs(reqGlEsVersion = reqGlEsVersion, isRequired = isRequired)
 }
