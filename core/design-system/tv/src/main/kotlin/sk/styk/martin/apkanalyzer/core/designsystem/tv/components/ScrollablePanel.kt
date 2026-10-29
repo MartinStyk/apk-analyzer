@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
+import sk.styk.martin.apkanalyzer.core.designsystem.tv.modifier.pointerClickable
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.theme.ApkAnalyzerTvTheme
 
 @Composable
@@ -86,6 +87,7 @@ fun ScrollablePanel(
                     coroutineScope.launch { scrollState.animateScrollBy(step) }
                     true
                 }
+                .then(if (onClick != null) Modifier.pointerClickable(PanelShape, onClick) else Modifier)
                 .focusable(enabled = onClick != null || scrollState.maxValue > 0)
                 .verticalScroll(scrollState)
                 .padding(contentPadding),

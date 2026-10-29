@@ -31,6 +31,9 @@ function in its `feature/*/tv/navigation/` package and wires it into the `entryP
 
 * `android.software.leanback` is required, so Play offers this bundle only to TVs.
 * `android.hardware.touchscreen` is not required.
+* `android.software.leanback.supports_touch` is `true`, telling Play the app works with pointer
+  remotes and mice. That promise holds only while every clickable TV component applies
+  `pointerClickable` (see [`core/design-system/AGENTS.md`](../core/design-system/AGENTS.md)).
 * `QUERY_ALL_PACKAGES` and `PACKAGE_USAGE_STATS` match the phone manifest. Without the first,
   Android hides most installed apps from the list; without the second, the TV usage access screen
   never lists the app.

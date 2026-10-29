@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,6 +23,7 @@ import androidx.tv.material3.Button
 import androidx.tv.material3.OutlinedButton
 import androidx.tv.material3.SurfaceDefaults
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
+import sk.styk.martin.apkanalyzer.core.designsystem.tv.modifier.pointerClickable
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.theme.ApkAnalyzerTvTheme
 import androidx.tv.material3.Surface as TvMaterialSurface
 
@@ -79,10 +81,10 @@ private fun ConfirmDialogContent(
                     .padding(top = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.End),
             ) {
-                OutlinedButton(onClick = onDismiss) {
+                OutlinedButton(onClick = onDismiss, modifier = Modifier.pointerClickable(CircleShape, onDismiss)) {
                     Text(text = dismissLabel, style = AppTheme.typography.labelLarge)
                 }
-                Button(onClick = onConfirm, modifier = Modifier.focusRequester(confirmFocusRequester)) {
+                Button(onClick = onConfirm, modifier = Modifier.focusRequester(confirmFocusRequester).pointerClickable(CircleShape, onConfirm)) {
                     Text(text = confirmLabel, style = AppTheme.typography.labelLarge)
                 }
             }

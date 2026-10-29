@@ -31,6 +31,7 @@ import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.AppIcon
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.rememberAppAccentColor
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
+import sk.styk.martin.apkanalyzer.core.designsystem.tv.modifier.pointerClickable
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.theme.ApkAnalyzerTvTheme
 import kotlin.math.roundToInt
 import androidx.tv.material3.Card as TvMaterialCard
@@ -53,7 +54,7 @@ fun AppCard(
     )
     TvMaterialCard(
         onClick = onClick,
-        modifier = modifier,
+        modifier = modifier.pointerClickable(CardShape, onClick),
         shape = CardDefaults.shape(shape = CardShape),
         colors = CardDefaults.colors(
             containerColor = AppTheme.colors.surface,

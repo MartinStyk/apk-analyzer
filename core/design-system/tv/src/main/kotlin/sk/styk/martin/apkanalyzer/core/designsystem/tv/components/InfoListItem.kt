@@ -19,6 +19,7 @@ import androidx.tv.material3.ListItemDefaults
 import androidx.tv.material3.LocalContentColor
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
+import sk.styk.martin.apkanalyzer.core.designsystem.tv.modifier.pointerClickable
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.theme.ApkAnalyzerTvTheme
 import androidx.tv.material3.ListItem as TvMaterialListItem
 
@@ -36,7 +37,7 @@ fun InfoListItem(
     TvMaterialListItem(
         selected = false,
         onClick = onClick,
-        modifier = modifier,
+        modifier = modifier.pointerClickable(ItemShape, onClick),
         shape = ListItemDefaults.shape(shape = ItemShape),
         colors = ListItemDefaults.colors(
             containerColor = Color.Transparent,

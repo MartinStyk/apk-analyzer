@@ -22,6 +22,7 @@ import androidx.tv.material3.Border
 import androidx.tv.material3.CardDefaults
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
+import sk.styk.martin.apkanalyzer.core.designsystem.tv.modifier.pointerClickable
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.theme.ApkAnalyzerTvTheme
 import androidx.tv.material3.Card as TvMaterialCard
 
@@ -45,7 +46,7 @@ fun InfoCard(
     }
     TvMaterialCard(
         onClick = onClick,
-        modifier = modifier,
+        modifier = modifier.pointerClickable(CardShape, onClick),
         shape = CardDefaults.shape(shape = CardShape),
         colors = CardDefaults.colors(
             containerColor = container,

@@ -35,6 +35,9 @@
         </activity>
 
         <meta-data
+            android:name="android.software.leanback.supports_touch"
+            android:value="true" />
+        <meta-data
             android:name="google_analytics_automatic_screen_reporting_enabled"
             android:value="false" />
         <meta-data

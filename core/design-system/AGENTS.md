@@ -81,7 +81,11 @@ exception is `InactiveSearchBar`, which lives in `SearchBarInactive.kt`.
   text over the keystroke the keyboard just sent and typed letters disappear.
 * `modifier/` - `bleedHorizontally` lets a horizontal row extend past the screen margins so a
   focused item's scale and border are not clipped at the row edges; pair it with matching
-  horizontal content padding.
+  horizontal content padding. `pointerClickable` makes a component work with pointer remotes and air
+  mice: hovering draws a quiet outline without moving focus, so the list never scrolls under the
+  pointer, and a click focuses the item and runs `onClick`. TV Material's clickables react only to
+  the D-pad center key, so every clickable wrapper here applies it with the same callback and shape
+  it passes to TV Material; a new clickable wrapper must too.
 * `focus/` - `rememberRestorableFocus` gives a screen keyed focus restoration: give each focusable a
   stable key that carries its section, list the keys currently on screen so a vanished item falls
   back to the default, and it retries until something on the screen actually has focus.

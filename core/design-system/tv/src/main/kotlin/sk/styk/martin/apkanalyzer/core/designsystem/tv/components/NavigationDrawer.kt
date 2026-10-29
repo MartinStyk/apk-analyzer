@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,6 +18,7 @@ import androidx.navigation3.runtime.NavKey
 import androidx.tv.material3.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
+import sk.styk.martin.apkanalyzer.core.designsystem.tv.modifier.pointerClickable
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.theme.ApkAnalyzerTvTheme
 import androidx.tv.material3.ModalNavigationDrawer as TvMaterialModalNavigationDrawer
 import androidx.tv.material3.NavigationDrawerItem as TvMaterialNavigationDrawerItem
@@ -43,6 +45,7 @@ fun NavigationDrawer(
                     TvMaterialNavigationDrawerItem(
                         selected = item.navKey == selectedKey,
                         onClick = { onSelectKey(item.navKey) },
+                        modifier = Modifier.pointerClickable(CircleShape) { onSelectKey(item.navKey) },
                         leadingContent = { Icon(imageVector = item.icon, contentDescription = null) },
                     ) {
                         Text(text = item.title, maxLines = 1)
