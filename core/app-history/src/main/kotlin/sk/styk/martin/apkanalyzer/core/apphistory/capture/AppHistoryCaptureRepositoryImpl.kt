@@ -135,8 +135,8 @@ internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
                     degradedSectionCount = listOf(
                         record.intentFilters,
                         record.nativeLibraries,
-                        record.signingScheme
-                    ).count { it is CapturedSection.Unavailable },
+                        record.signingScheme,
+                    ).count { section -> section is CapturedSection.Unavailable },
                 )
             },
             onFailure = {
