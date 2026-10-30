@@ -12,7 +12,6 @@ import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryRecord
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.CapturedSection
 import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
-import sk.styk.martin.apkanalyzer.core.apps.intentfilters.IntentFiltersRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibrariesRepository
 import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeRepository
@@ -38,7 +37,6 @@ internal const val APP_HISTORY = "AppHistory"
 internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
     private val installedAppsRepository: InstalledAppsRepository,
     private val appDetailRepository: AppDetailRepository,
-    private val intentFiltersRepository: IntentFiltersRepository,
     private val nativeLibrariesRepository: NativeLibrariesRepository,
     private val signingSchemeRepository: SigningSchemeRepository,
     private val persistenceRepository: AppHistoryPersistenceRepository,
@@ -120,7 +118,6 @@ internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
     private suspend fun capture(app: InstalledApp): CaptureOutcome = coroutineScope {
         val reference = AppReference.InstalledPackage(app.packageName)
         val detailDeferred = async(dispatcherProvider.io()) { appDetailRepository.details(reference) }
-        val intentFiltersDeferred = async(dispatcherProvider.io()) { intentFiltersRepository.componentIntentFilters(reference) }
         val nativeLibrariesDeferred = async(dispatcherProvider.io()) { nativeLibrariesRepository.nativeLibraries(reference) }
         val signingSchemeDeferred = async(dispatcherProvider.io()) { signingSchemeRepository.signingSchemeVersions(reference) }
 
@@ -134,18 +131,13 @@ internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
             capturedAt = Instant.now(),
             captureKey = app.captureKey,
             detail = detail,
-            intentFilters = intentFiltersDeferred.await().toCapturedSection(app.packageName, "Intent filters"),
             nativeLibraries = nativeLibrariesDeferred.await().toCapturedSection(app.packageName, "Native libraries"),
             signingScheme = signingSchemeDeferred.await().toCapturedSection(app.packageName, "Signing scheme"),
         )
         persistenceRepository.save(record, device).fold(
             onSuccess = {
                 CaptureOutcome.Completed(
-                    degradedSectionCount = listOf(
-                        record.intentFilters,
-                        record.nativeLibraries,
-                        record.signingScheme,
-                    ).count { section -> section is CapturedSection.Unavailable },
+                    degradedSectionCount = listOf(record.nativeLibraries, record.signingScheme).count { section -> section is CapturedSection.Unavailable },
                 )
             },
             onFailure = {

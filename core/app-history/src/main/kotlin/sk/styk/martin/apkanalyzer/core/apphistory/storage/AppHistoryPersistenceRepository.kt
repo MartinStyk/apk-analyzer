@@ -1,8 +1,6 @@
 package sk.styk.martin.apkanalyzer.core.apphistory.storage
 
 import kotlinx.coroutines.flow.Flow
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilterKey
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraries
 import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeVersion
@@ -30,7 +28,6 @@ internal data class AppHistoryRecord(
     val capturedAt: Instant,
     val captureKey: AppHistoryCaptureKey,
     val detail: AppDetail,
-    val intentFilters: CapturedSection<Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>>,
     val nativeLibraries: CapturedSection<NativeLibraries>,
     val signingScheme: CapturedSection<List<SigningSchemeVersion>?>,
 )

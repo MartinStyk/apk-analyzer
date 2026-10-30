@@ -8,7 +8,6 @@ import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 internal data class ActivitySnapshot(
     val name: String,
     val packageName: String,
-    val label: String?,
     val targetActivity: String?,
     val permission: String?,
     val parentName: String?,
@@ -19,7 +18,6 @@ internal data class ActivitySnapshot(
 internal fun Activity.toSnapshot() = ActivitySnapshot(
     name = name,
     packageName = packageName.value,
-    label = label,
     targetActivity = targetActivity,
     permission = permission,
     parentName = parentName,
@@ -30,7 +28,7 @@ internal fun Activity.toSnapshot() = ActivitySnapshot(
 internal fun ActivitySnapshot.toDomain() = Activity(
     name = name,
     packageName = PackageName(packageName),
-    label = label,
+    label = null,
     targetActivity = targetActivity,
     permission = permission,
     parentName = parentName,

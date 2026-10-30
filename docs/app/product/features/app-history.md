@@ -74,8 +74,9 @@ version comparison and "full detail at this version" both need complete state at
 which consecutive diffs cannot reconstruct — so a stored diff is duplicated derivable data with two
 long-term costs: a diff-engine fix would need a migration and a recompute pass instead of repairing
 all history for free, and any field added to the diff later would apply only to changes recorded
-after that release. Intent filters are the concrete case: R1 doesn't diff them, and a read-time
-projection means a decision to start would light up across every user's entire existing history.
+after that release. That retroactivity only reaches what a snapshot stores: intent filters are not
+captured at all (they were nearly a quarter of history storage and R1 never diffs them), so a
+decision to start diffing them would cover only history recorded after capture begins.
 
 Storage is handled by **content addressing** rather than by delta chains. Permission sets, component
 sets, certificates and library lists are hashed into per-package tables; a snapshot row is scalars

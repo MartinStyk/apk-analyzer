@@ -20,7 +20,6 @@ internal data class PermissionDetailsSnapshot(
     val groupName: String?,
     val protectionLevel: String,
     val protectionFlags: Set<String>,
-    val description: String?,
     val declaringPackage: String,
 )
 
@@ -38,7 +37,6 @@ internal fun PermissionDetails.toSnapshot() = PermissionDetailsSnapshot(
     groupName = groupName,
     protectionLevel = protectionLevel.name,
     protectionFlags = protectionFlags.map { it.name }.sorted().toSet(),
-    description = description,
     declaringPackage = declaringPackage.value,
 )
 
@@ -56,6 +54,6 @@ internal fun PermissionDetailsSnapshot.toDomain() = PermissionDetails(
     groupName = groupName,
     protectionLevel = ProtectionLevel.valueOf(protectionLevel),
     protectionFlags = protectionFlags.map { ProtectionFlag.valueOf(it) }.toSet(),
-    description = description,
+    description = null,
     declaringPackage = PackageName(declaringPackage),
 )

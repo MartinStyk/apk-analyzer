@@ -48,7 +48,7 @@ capture and the timeline go through `AppHistoryPersistenceRepository`.
 `core:apps` domain types and the stored format, in both directions. Callers hand it and get back an
 `AppHistoryRecord`: the capture identity (`AppHistoryCaptureKey` — `deviceId` plus the app's own
 `firstInstallTime`/`lastUpdateTime`/`versionCode`, compared by the gate), `capturedAt`, a full `AppDetail`, and the
-three separately fetched sections as `CapturedSection<T>` (`Captured(value)` / `Unavailable`). The key
+two separately fetched sections as `CapturedSection<T>` (`Captured(value)` / `Unavailable`). The key
 holds exactly what the *live* app can be compared on: `deviceId` belongs in it, because install
 timestamps can be identical across devices and a restored row from another device must not match the
 live app; `capturedAt` deliberately does not, because the live app has no capture time and including
@@ -58,22 +58,26 @@ it would make every app look changed on every sweep.
   compresses, and inserts the device row (`IGNORE`), blobs, and snapshot row in one transaction, so
   the snapshot's `deviceId` foreign key always resolves. An `Unavailable` section is stored as
   a `null` hash.
-* **Read** (`observe`, via `AppHistoryRecordDecoder`): decodes every row from the view back into an `AppDetail` with
+* **Read** (`observe`, via `AppHistoryRecordDecoder`): decodes every snapshot row, with its package's blobs, back into an `AppDetail` with
   `AnalysisMode.Historical`, recomputing what the schema doc says is derived rather than stored
   (`source` via `resolveAppInstallSource`, SDK labels via `SdkVersionResolver`, certificate trust via
   `resolveCertificateTrustLevel`, `hasMultipleSigners`). Grant state is not stored, so every
   `UsedPermission.isGranted` is `false`; every consumer already reports grant state only for
   `InstalledPackage`. Split file paths are not stored, so `InstalledSplitApk.filePath` is `null`.
-  Each distinct blob is decoded once per emission, and re-decoding only happens when the package's
-  snapshot rows change (`distinctUntilChangedBy` on the entities — the joined `ByteArray`s compare by
-  identity, but the hash columns already determine the content).
-* **Failure granularity.** A missing or undecodable blob for one of the three separate sections
+  Permission descriptions are not stored, so every `PermissionDetails.description` is `null`: they
+  are localized text that belongs to the declaring package, and were the largest part of the
+  permissions blob. Activity labels are not stored either, so every `Activity.label` is `null`: a
+  device language change would otherwise rewrite every app's activities blob on its next update.
+  Each distinct section is decoded and mapped to its domain value once per emission, so snapshots
+  with equal hashes share one domain instance; re-decoding only happens when the package's snapshot
+  rows change (see [Reading a Snapshot](#reading-a-snapshot)).
+* **Failure granularity.** A missing or undecodable blob for one of the two separately fetched sections
   degrades that section to `Unavailable` with a logged non-fatal. The eight `AppDetail` sections are
   written together from one `AppDetail` (capture aborts otherwise), so one of them missing or
-  undecodable is corruption, not a partial capture: `observe` emits a failed `Result`, which the
-  timeline reports as `AppHistoryTimeline.Unavailable`, and completes. One `catch` covers this and a
-  failing Room query alike; there is no per-emission recovery, because every emission re-decodes all of
-  the package's rows and a corrupt one would fail each of them.
+  undecodable is corruption, not a partial capture: that one snapshot is left out with a logged
+  non-fatal, so its neighbours diff against each other and the rest of the history stays readable. A
+  failing Room query emits a failed `Result` for that emission, which the timeline reports as
+  `AppHistoryTimeline.Unavailable`; the flow keeps running, so the next change can recover.
 
 ## DTO Boundary — Not a Detail
 
@@ -103,34 +107,35 @@ the first update after release would report that default changing to the real va
 → yes" for an app that changed nothing. The same holds when a `core:apps` fix changes how a captured
 value is computed.
 
+**Bump `BLOB_FORMAT_VERSION` (`storage/database/util/SnapshotJson.kt`) whenever the serialized form
+changes** — a DTO field added, removed, renamed or retyped, an enum name stored differently, or a
+`snapshotJson` setting changed. Every snapshot row records the version its sections were encoded
+with in `blobFormatVersion`, so old content stays identifiable: a decoder that has to treat a past
+format differently, or a one-off job that rewrites old blobs, can select exactly those rows. Room
+cannot see this change — the blob columns stay `BLOB` — so the constant is the only record of it.
+A blob shared between snapshots of different versions has byte-identical content, since the hash
+matched, so it decodes the same under either.
+
 The `kotlin-serialization` plugin and every `@Serializable` annotation are scoped to this module
 alone — `core:apps`/`core:common` carry no serialization dependency or annotations because of this
 module's needs.
 
 ## Reading a Snapshot
 
-`AppHistorySnapshotWithSectionsView` (`storage/database/entity/`, the `app_history_snapshot_with_sections`
-`@DatabaseView`) is the one place the snapshot-to-blob join is written: the scalar row plus all eleven
-sections' compressed blobs, flat, no `@Relation` and no `@Transaction` needed — a single `SELECT` is
-already atomic. It joins `app_history_blob` once per section (aliased, each on
-`(packageName, <that section's hash column>)`) with `LEFT JOIN`, not `INNER` — that's what makes a
-`NULL` hash column resolve to a `NULL` content column instead of dropping the row — plus one `s.*` to
-pull in every scalar column via `@Embedded`. Queries filter the view rather than repeating the join;
-`AppHistoryReadDao.observeSnapshotsWithSections(packageName)` is every snapshot of one package,
-oldest first. An earlier version normalized this through a `@DatabaseView`/`@Relation` into a
-`List<AppHistoryResolvedSectionView>` callers had to search by `sectionType`; named columns fit this
-data's actual shape better — fetch a snapshot, read its named fields.
+`AppHistoryReadDao.observeSnapshots(packageName)` watches only the package's `app_history_snapshot`
+rows, oldest first: no blob bytes and no joins. Room invalidates per table, so every capture of any
+package re-runs it, which is why it must stay cheap; `distinctUntilChanged` on the entities then
+stops anything that did not change this package. Only a real change reaches `mapLatest`, which loads
+the package's blobs once each with `AppHistoryReadDao.blobs(packageName)` and hands rows and blobs
+to the decoder; a newer change cancels a decode still in progress. The two reads need no
+transaction: blobs are inserted before their snapshot in one transaction and never deleted, so
+every row the first read sees already has its blobs. An earlier version joined all eleven blobs in
+one `@DatabaseView`, which repeated a shared blob's bytes in every row and re-ran the whole join on
+unrelated captures.
 
-The view is part of the schema: changing its SQL changes Room's identity hash, so once
-`app_history_v2.db` has shipped it needs a version bump and a migration that drops and recreates the
-view.
-
-The join copies a blob shared by several snapshots into every row, and Room re-runs the query on
-any write to either table, including captures of other packages. Both were judged acceptable once
-blobs were compressed (Google Play services, the largest app measured, is about 100 KB per row), in
-exchange for a single read path. Before splitting this into a snapshot query plus a hash-filtered
-blob fetch, measure: the split would only load blobs whose hashes differ and could skip unchanged
-re-queries before touching any blob bytes.
+Hashes stay inside `storage/`: callers above it receive full `AppDetail`s, and the differ compares
+domain data only. Skipping unchanged sections by hash comparison was considered and rejected for
+that reason; per-hash caching already limits decoding to distinct section contents.
 
 Blob content is Deflate-compressed JSON (`ByteArray`), compressed and decompressed only through
 `storage/database/util/BlobCompression.kt`; the hash is the first 64 bits of SHA-256 over the
@@ -138,7 +143,10 @@ uncompressed JSON, stored as a `Long`. The database file is
 `app_history_v2.db` — the uncompressed `app_history.db` from 4.1.3–4.2.0 is deleted on startup rather
 than migrated, see the schema doc's
 [`app_history_blob`](../../docs/app/technical/app-history-capture-schema.md#app_history_blob) for why.
-Blobs decode with `ignoreUnknownKeys`, so removing a DTO field never breaks old history.
+Blobs decode with `ignoreUnknownKeys`, so removing a DTO field never breaks old history. Encoding,
+hashing, and decoding all go through the one `snapshotJson` in `storage/database/util/SnapshotJson.kt`,
+which sets `explicitNulls = false`: a `null` field is left out of the JSON and decodes back as `null`.
+Hashing with any other `Json` configuration would give identical content a different hash.
 
 ## Timeline and Diff
 
@@ -174,23 +182,23 @@ the consuming ViewModel's initial state covers it. An `Unavailable` separately f
 timeline failure: it degrades to `SetChange.Uncomparable` inside an otherwise `Available` timeline.
 
 **The differ works on domain objects only.** `AppHistoryDiffer` compares two `AppHistoryRecord`s —
-`AppDetail` plus the three `CapturedSection`s — with plain equality; it knows nothing about hashes,
+`AppDetail` plus the two `CapturedSection`s — with plain equality; it knows nothing about hashes,
 JSON, or compression. `Unavailable` on either side, or a signing scheme captured as unknown (`null`),
 is `SetChange.Uncomparable` (`HI-20` — a failed section must never read as "removed everything").
 
 **Categories come from the decoded diff, not from raw hash inequality.** `HI-19` describes stub labels
 as "which set IDs differ", but a differing hash does not always mean a visible change — a requested
-permission's description changes when its *declaring* package updates, and that changes this app's
-permissions hash with no added/removed name. `AppHistoryDiff.changedCategories` is derived from the
+permission's details (protection level, group) change when its *declaring* package updates, and that
+changes this app's permissions hash with no added/removed name. `AppHistoryDiff.changedCategories` is derived from the
 same `SetChange`/`ValueChange` values a detail screen renders, so a row label can never name a
-category whose detail is empty. For the same reason localized text (activity labels, defined-permission
-descriptions) is excluded from "modified": a device language change would otherwise read as an app
-change on the next update.
+category whose detail is empty. Localized text (permission descriptions, activity labels) is not
+stored at all, so a device language change can never read as an app change.
 
 Diffed: version, min/target SDK, APK size, install source, the three manifest flags, requested and
 defined permissions, the four component types, current signing certificates, signing schemes, and
-native libraries. Captured but deliberately not diffed, per `HI-03`: intent filters, features,
-installed splits.
+native libraries. Captured but deliberately not diffed, per `HI-03`: features, installed splits.
+Intent filters are not captured at all: they were the second-largest section, the differ never read
+them, and starting to capture them later only covers history recorded from then on.
 
 `SetChange.Changed` carries the `core:apps` items themselves — `UsedPermission`, `Permission`,
 `Activity`, `Service`, `BroadcastReceiver`, `ContentProvider`, `Certificate`, `NativeLibraryFile`,
@@ -198,8 +206,8 @@ installed splits.
 so a detail screen can explain an item ("dangerous permission", "signed by …") and show what changed
 in it ("exported: no → yes") without going back to the store. Each set is matched by a key (component
 or permission name, certificate SHA-256, native library name + ABI + containing APK) and judged
-"modified" by a comparison value: the item minus its localized text for activities and defined
-permissions, and never for requested permissions and certificates — a requested permission's details
+"modified" by a comparison value: the whole item, except never for requested permissions and
+certificates — a requested permission's details
 belong to its declaring package, and a certificate with the same SHA-256 is the same certificate.
 Native libraries are keyed by containing APK too, so a library moving between base and split APKs
 reads as removed plus added.

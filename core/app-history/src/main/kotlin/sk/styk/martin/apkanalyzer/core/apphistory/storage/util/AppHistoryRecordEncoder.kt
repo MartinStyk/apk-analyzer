@@ -1,13 +1,13 @@
 package sk.styk.martin.apkanalyzer.core.apphistory.storage.util
 
-import kotlinx.serialization.json.Json
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryRecord
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.CapturedSection
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity.AppHistoryBlobEntity
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity.AppHistorySnapshotEntity
-import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.snapshot.ComponentIntentFilterEntrySnapshot
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.snapshot.toSnapshot
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.util.BLOB_FORMAT_VERSION
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.util.compressBlob
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.util.snapshotJson
 import sk.styk.martin.apkanalyzer.core.common.digest.DigestManager
 import javax.inject.Inject
 
@@ -31,15 +31,9 @@ internal class AppHistoryRecordEncoder @Inject constructor(private val digestMan
             services = hashSection(packageName, detail.services.map { it.toSnapshot() }.sortedBy { it.name }),
             receivers = hashSection(packageName, detail.receivers.map { it.toSnapshot() }.sortedBy { it.name }),
             providers = hashSection(packageName, detail.contentProviders.map { it.toSnapshot() }.sortedBy { it.name }),
-            features = hashSection(packageName, detail.features.map { it.toSnapshot() }.sortedBy { Json.encodeToString(it) }),
+            features = hashSection(packageName, detail.features.map { it.toSnapshot() }.sortedBy { snapshotJson.encodeToString(it) }),
             signing = hashSection(packageName, detail.signing.toSnapshot()),
             installedSplits = hashSection(packageName, detail.info.installedSplits.map { it.toSnapshot() }.sortedBy { it.fileName }),
-            intentFilters = record.intentFilters.valueOrNull()?.let { filters ->
-                val entries = filters.map { (key, value) ->
-                    ComponentIntentFilterEntrySnapshot(key.toSnapshot(), value.map { it.toSnapshot() }.sortedBy { Json.encodeToString(it) })
-                }.sortedWith(compareBy({ it.key.name }, { it.key.kind }))
-                hashSection(packageName, entries)
-            },
             nativeLibraries = record.nativeLibraries.valueOrNull()?.let { libraries ->
                 val sorted = libraries.files.map { it.toSnapshot() }.sortedWith(compareBy({ it.name }, { it.abi }, { it.containingApkFileName }))
                 hashSection(packageName, sorted)
@@ -51,7 +45,7 @@ internal class AppHistoryRecordEncoder @Inject constructor(private val digestMan
     }
 
     private inline fun <reified T> hashSection(packageName: String, content: T): HashedSection {
-        val serialized = Json.encodeToString(content)
+        val serialized = snapshotJson.encodeToString(content)
         val hash = digestManager.sha256Digest(serialized).take(SECTION_HASH_HEX_LENGTH).toULong(radix = 16).toLong()
         return HashedSection(hash, AppHistoryBlobEntity(packageName = packageName, hash = hash, content = serialized.compressBlob()))
     }
@@ -62,6 +56,7 @@ internal class AppHistoryRecordEncoder @Inject constructor(private val digestMan
             packageName = packageName.value,
             deviceId = captureKey.deviceId,
             capturedAt = capturedAt.toEpochMilli(),
+            blobFormatVersion = BLOB_FORMAT_VERSION,
             firstInstallTime = captureKey.firstInstallTime.toEpochMilli(),
             lastUpdateTime = captureKey.lastUpdateTime.toEpochMilli(),
             applicationName = info.applicationName,
@@ -89,7 +84,6 @@ internal class AppHistoryRecordEncoder @Inject constructor(private val digestMan
             providersHash = sections.providers.hash,
             featuresHash = sections.features.hash,
             signingHash = sections.signing.hash,
-            intentFiltersHash = sections.intentFilters?.hash,
             nativeLibrariesHash = sections.nativeLibraries?.hash,
             signingSchemeHash = sections.signingScheme?.hash,
             installedSplitsHash = sections.installedSplits.hash,
@@ -107,7 +101,6 @@ internal class AppHistoryRecordEncoder @Inject constructor(private val digestMan
         val features: HashedSection,
         val signing: HashedSection,
         val installedSplits: HashedSection,
-        val intentFilters: HashedSection?,
         val nativeLibraries: HashedSection?,
         val signingScheme: HashedSection?,
     ) {
@@ -115,7 +108,7 @@ internal class AppHistoryRecordEncoder @Inject constructor(private val digestMan
             get() = listOfNotNull(
                 permissions.blob, activities.blob, services.blob, receivers.blob, providers.blob,
                 features.blob, signing.blob, installedSplits.blob,
-                intentFilters?.blob, nativeLibraries?.blob, signingScheme?.blob,
+                nativeLibraries?.blob, signingScheme?.blob,
             )
     }
 }

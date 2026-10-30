@@ -2,9 +2,9 @@ package sk.styk.martin.apkanalyzer.core.apphistory.storage
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryGateDao
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryGateState
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryReadDao
@@ -42,12 +42,11 @@ internal class AppHistoryPersistenceRepositoryImpl @Inject constructor(
         appHistoryWriteDao.insertSnapshotWithBlobs(device.toEntity(record), encoded.snapshot, encoded.blobs)
     }
 
-    override fun observe(packageName: PackageName): Flow<Result<List<StoredAppHistoryRecord>>> =
-        appHistoryReadDao.observeSnapshotsWithSections(packageName.value)
-            .distinctUntilChangedBy { rows -> rows.map { it.snapshot } }
-            .map { rows -> Result.success(decoder.decode(rows)) }
-            .catch { emit(Result.failure(it)) }
-            .flowOn(dispatcherProvider.default())
+    override fun observe(packageName: PackageName): Flow<Result<List<StoredAppHistoryRecord>>> = appHistoryReadDao.observeSnapshots(packageName.value)
+        .distinctUntilChanged()
+        .mapLatest { rows -> runCatchingCancellable { decoder.decode(rows, appHistoryReadDao.blobs(packageName.value)) } }
+        .catch { emit(Result.failure(it)) }
+        .flowOn(dispatcherProvider.default())
 }
 
 private fun AppHistoryGateState.toCaptureKey() = AppHistoryCaptureKey(

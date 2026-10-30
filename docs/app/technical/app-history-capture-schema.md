@@ -31,11 +31,13 @@ per `app-history.md`'s "state one tap down" requirement. That target is exactly:
 
 * `AppDetail` (`core:apps`): `info`, `signing`, `activities`, `services`, `contentProviders`,
   `receivers`, `permissions`, `features`.
-* The three sections `AppDetail` deliberately excludes because they're expensive and only one
-  screen each needs them live: intent filters (`IntentFiltersRepository`), native libraries
-  (`NativeLibrariesRepository`), signing scheme (`SigningSchemeRepository`). History captures all
-  three unconditionally, device-wide, reusing these repositories rather than re-implementing
-  extraction.
+* Two of the three sections `AppDetail` deliberately excludes because they're expensive and only one
+  screen each needs them live: native libraries (`NativeLibrariesRepository`) and signing scheme
+  (`SigningSchemeRepository`). History captures both unconditionally, device-wide, reusing these
+  repositories rather than re-implementing extraction. The third, intent filters
+  (`IntentFiltersRepository`), is not captured: measured on a 480-app device it was 23% of all blob
+  bytes, the second-largest section, and `HI-03` never diffs it. A historical intent-filter screen
+  therefore has nothing to show, and capturing them later only covers history recorded from then on.
 
 **Explicitly excluded**, all for the same reason `AppDetail`'s own cache boundary excludes
 device-dependent facts (`core/apps/AGENTS.md`):
@@ -111,7 +113,7 @@ Considered and rejected in favor of it: one table per section (`app_history_acti
 grouping/junction table.
 
 * **The captured domain models aren't owned by this module.** `Activity`, `Certificate`,
-  `PermissionDetails`, `ComponentIntentFilter`, `NativeLibraryFile` all live in `core:apps` and
+  `PermissionDetails`, `NativeLibraryFile` all live in `core:apps` and
   evolve on its schedule. `core:user-preferences/AGENTS.md` requires a `Migration` for every schema
   change — fine for one or two small, stable entities, but a real ongoing tax across nine-plus
   actively-evolving domain models this module doesn't control. JSON can absorb a schema change
@@ -155,6 +157,7 @@ internal data class AppHistorySnapshotEntity(
     val packageName: String,
     val deviceId: String,
     val capturedAt: Long,
+    val blobFormatVersion: Int, // BLOB_FORMAT_VERSION the sections were encoded with
     val firstInstallTime: Long,
     val lastUpdateTime: Long,
     val applicationName: String,
@@ -182,7 +185,6 @@ internal data class AppHistorySnapshotEntity(
     val providersHash: Long?,
     val featuresHash: Long?,
     val signingHash: Long?,
-    val intentFiltersHash: Long?,
     val nativeLibrariesHash: Long?,
     val signingSchemeHash: Long?,
     val installedSplitsHash: Long?,
@@ -338,11 +340,10 @@ Both are captured; only `used`'s per-entry `isGranted` is dropped.
 
 | Section | Stored as-is | Derived at read time, not stored | Dropped |
 |---|---|---|---|
-| `permissions` | Both of `Permissions`' lists: `defined` (custom permissions this app declares for others) in full, and `used.map { it.permissionData }` (permissions this app requests — `name`, `PermissionDetails`) with `isGranted` stripped | — | `UsedPermission.isGranted` (grant state) |
-| `activities` / `services` / `providers` / `receivers` | Every field on `Activity`, `Service`, `ContentProvider` (incl. `ProviderPathPermission`), `BroadcastReceiver` | — | — |
+| `permissions` | Both of `Permissions`' lists: `defined` (custom permissions this app declares for others) and `used.map { it.permissionData }` (permissions this app requests — `name`, `PermissionDetails`) with `isGranted` stripped | — | `UsedPermission.isGranted` (grant state); `PermissionDetails.description` in both lists (localized text owned by the declaring package — 46% of the permissions section when measured, and it changed this app's hash on a language change or a declaring-package update) |
+| `activities` / `services` / `providers` / `receivers` | Every field on `Activity`, `Service`, `ContentProvider` (incl. `ProviderPathPermission`), `BroadcastReceiver`, except `Activity.label` | — | `Activity.label` (localized text: a device language change would rewrite every app's activities blob on its next update; 9% of the activities section when measured) |
 | `features` | `Feature.Hardware`, `Feature.OpenGlEs` in full | `OpenGlEs.versionName` (already a computed getter, never a stored field) | — |
 | `signing` | `Certificate`: `signAlgorithm`, all six MD5/SHA1/SHA256 hashes, `validFrom`, `validUntil`, `serialNumber`, `issuer`/`subject`, `isSelfSigned` (a genuine verification result, not recomputable without the raw cert) | `AppSigning.hasMultipleSigners` (`= currentCertificates.size > 1`), `Certificate.trustLevel` (recomputed from the stored issuer by `resolveCertificateTrustLevel`, the same predicate the live extractor uses), `signatureAlgorithmAssessment`, `formattedSha256Fingerprint` (already computed getters) | — |
-| `intentFilters` | `ComponentIntentFilter` in full (`actions`, `categories`, `dataRules`, `uriRelativeGroups`, `priority`, `order`, `isAutoVerify`) | — | — |
 | `nativeLibraries` | `NativeLibraryFile` (`name`, `abi`, `size`, `containingApkFileName`) | `abis`, `libraryNames`, `hasNativeCode` (already computed getters on `NativeLibraries`) | — |
 | `signingScheme` | `List<SigningSchemeVersion>`, or `null` for unknown (never a guessed list) | — | — |
 | `installedSplits` | `InstalledSplitApk`: `fileName`, `size`, `kind`, `qualifier` | — | `filePath` (filesystem path) |
@@ -424,10 +425,10 @@ Runs once per package that the gate says changed:
    Not installed → nothing to do (see [Removal Handling](#removal-handling)); this only happens via
    reconciliation racing an uninstall, since reconciliation only visits currently-installed packages.
 2. Compare against the gate (above). Unchanged → return, no further work.
-3. Gate open → concurrently call `AppDetailRepository.details()`, `IntentFiltersRepository`,
-   `NativeLibrariesRepository`, `SigningSchemeRepository` on `DispatcherProvider.io()`.
+3. Gate open → concurrently call `AppDetailRepository.details()`, `NativeLibrariesRepository`,
+   `SigningSchemeRepository` on `DispatcherProvider.io()`.
    `AppDetailRepository` failing aborts the capture entirely — nothing is written, try again next
-   time the gate opens. Any of the other three failing (`Result.isFailure`, not merely returning a
+   time the gate opens. Either of the other two failing (`Result.isFailure`, not merely returning a
    legitimate `null`/empty content) for this one app records that section's hash as absent and
    keeps the rest — same tolerance `core:apps` already applies to a failed manifest split.
 4. Serialize each list/nested section to canonical JSON (stable key/field ordering, so identical
@@ -503,18 +504,18 @@ the *inner* `null` is a legitimate, successfully-determined "structurally ambigu
 answer (`core:apps/AGENTS.md`), not a failure — left as a bare `null` it would be indistinguishable
 from a failed capture. Capture must hash that legitimate-unknown result too (a canonical sentinel,
 e.g. serialized JSON `null`), so it dedups into its own shared blob like any other repeated value.
-Every other section's success type is non-nullable (`Result<AppDetail>`, `Result<NativeLibraries>`,
-`Result<Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>>`), so this ambiguity doesn't
-exist for them — a successful call always has real content to hash, even an empty list.
+Every other section's success type is non-nullable (`Result<AppDetail>`, `Result<NativeLibraries>`),
+so this ambiguity doesn't exist for them — a successful call always has real content to hash, even an
+empty list.
 
-Worth being precise about: `permissionsHash` through `installedSplitsHash` (eight of the eleven hash
+Worth being precise about: `permissionsHash` through `installedSplitsHash` (eight of the ten hash
 columns) all derive from the single `AppDetailRepository.details()` call, and a failure there aborts
 the whole row (step 3) rather than producing a partial one — so in any row that exists, those eight
-are always all-present together, never independently null. Only `intentFiltersHash`,
-`nativeLibrariesHash`, and `signingSchemeHash` (each its own separately-fetched repository) can
-genuinely vary independently today. Modeling all eleven symmetrically isn't wrong — it's headroom for
-`AppDetail` itself later being decomposed the way these three already are — but it's headroom, not a
-reflection of today's real failure granularity.
+are always all-present together, never independently null. Only `nativeLibrariesHash` and
+`signingSchemeHash` (each its own separately-fetched repository) can genuinely vary independently
+today. Modeling all ten symmetrically isn't wrong — it's headroom for `AppDetail` itself later being
+decomposed the way these two already are — but it's headroom, not a reflection of today's real
+failure granularity.
 
 ## Open Questions
 
