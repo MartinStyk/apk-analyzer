@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryCaptureKey
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryDevice
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryPersistenceRepository
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryRecord
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.CapturedSection
@@ -17,7 +18,7 @@ import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibrariesRepository
 import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
-import sk.styk.martin.apkanalyzer.core.common.device.DeviceIdProvider
+import sk.styk.martin.apkanalyzer.core.common.device.DeviceInfoProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
@@ -41,15 +42,23 @@ internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
     private val nativeLibrariesRepository: NativeLibrariesRepository,
     private val signingSchemeRepository: SigningSchemeRepository,
     private val persistenceRepository: AppHistoryPersistenceRepository,
-    private val deviceIdProvider: DeviceIdProvider,
+    private val deviceInfoProvider: DeviceInfoProvider,
     private val dispatcherProvider: DispatcherProvider,
     private val performanceTracker: PerformanceTracker,
 ) : AppHistoryCaptureRepository {
 
     private val perPackageMutexes = ConcurrentHashMap<PackageName, Mutex>()
 
+    private val device: AppHistoryDevice
+        get() = AppHistoryDevice(manufacturer = deviceInfoProvider.manufacturer, model = deviceInfoProvider.model)
+
     private val InstalledApp.captureKey: AppHistoryCaptureKey
-        get() = AppHistoryCaptureKey(deviceId = deviceIdProvider.deviceId, firstInstallTime = installTime, lastUpdateTime = lastUpdateTime)
+        get() = AppHistoryCaptureKey(
+            deviceId = deviceInfoProvider.deviceId,
+            firstInstallTime = installTime,
+            lastUpdateTime = lastUpdateTime,
+            versionCode = version,
+        )
 
     override suspend fun reconcile(packageName: PackageName): Result<Unit> = runCatchingCancellable {
         Logger.i(APP_HISTORY, "Package reconcile loading started for ${packageName.value}")
@@ -129,7 +138,7 @@ internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
             nativeLibraries = nativeLibrariesDeferred.await().toCapturedSection(app.packageName, "Native libraries"),
             signingScheme = signingSchemeDeferred.await().toCapturedSection(app.packageName, "Signing scheme"),
         )
-        persistenceRepository.save(record).fold(
+        persistenceRepository.save(record, device).fold(
             onSuccess = {
                 CaptureOutcome.Completed(
                     degradedSectionCount = listOf(

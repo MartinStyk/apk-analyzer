@@ -72,6 +72,12 @@ moment — there's no real scenario where `firstInstallTime` changes without `la
 changing. No synthetic "latest APK change" field is needed; the two raw values are stored and
 compared as-is.
 
+`versionCode` is compared by the gate too, though it is not part of the install identity. A system
+app that was never updated through an app store reports the system image's file time as both
+timestamps, and a system update can replace that app with a new version without moving either one.
+In every other case `versionCode` moves together with `lastUpdateTime`, so it adds no rows of its
+own.
+
 **`lastUpdateTime` is not monotonic, so it is never the ordering key.** A system app whose updates are
 uninstalled (or replaced by a system-image version) falls back to its factory `lastUpdateTime`, which
 can be years older than rows already stored — and can equal the key of a row captured before the
@@ -138,7 +144,11 @@ One row per captured install instance/version. Append-only — never updated in 
 ```kotlin
 @Entity(
     tableName = "app_history_snapshot",
-    indices = [Index(value = ["packageName", "capturedAt", "lastUpdateTime", "firstInstallTime"], unique = true)],
+    foreignKeys = [ForeignKey(entity = AppHistoryDeviceEntity::class, parentColumns = ["deviceId"], childColumns = ["deviceId"])],
+    indices = [
+        Index(value = ["packageName", "capturedAt", "lastUpdateTime", "firstInstallTime"], unique = true),
+        Index(value = ["deviceId"]),
+    ],
 )
 internal data class AppHistorySnapshotEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
@@ -165,17 +175,17 @@ internal data class AppHistorySnapshotEntity(
     val apkSize: Long,
     val targetSdkVersion: Int?,
     val minSdkVersion: Int?,
-    val permissionsHash: String?,
-    val activitiesHash: String?,
-    val servicesHash: String?,
-    val receiversHash: String?,
-    val providersHash: String?,
-    val featuresHash: String?,
-    val signingHash: String?,
-    val intentFiltersHash: String?,
-    val nativeLibrariesHash: String?,
-    val signingSchemeHash: String?,
-    val installedSplitsHash: String?,
+    val permissionsHash: Long?,
+    val activitiesHash: Long?,
+    val servicesHash: Long?,
+    val receiversHash: Long?,
+    val providersHash: Long?,
+    val featuresHash: Long?,
+    val signingHash: Long?,
+    val intentFiltersHash: Long?,
+    val nativeLibrariesHash: Long?,
+    val signingSchemeHash: Long?,
+    val installedSplitsHash: Long?,
 )
 ```
 
@@ -188,9 +198,16 @@ than a bare `null`.
 The index deliberately omits `id`: it's a Room `@PrimaryKey(autoGenerate = true) Long`, which maps
 to SQLite's `INTEGER PRIMARY KEY` — a direct alias for `rowid`. Every SQLite index on a rowid table
 implicitly carries the rowid in each entry, so `id`-ordering within a `packageName` group is
-already available for free; declaring it again would be redundant. `lastUpdateTime` and
-`firstInstallTime` *do* need to be explicit index columns — they're not implicit — so both queries
-below can be satisfied entirely from the index (a covering scan), without a table row lookup.
+already available for free; declaring it again would be redundant. The index serves the timeline's
+per-package `capturedAt` order and the gate's grouping by package. The gate queries also read
+`deviceId` and `versionCode`, which are not in the index, so they cost one row lookup per package —
+see [Capture Gate](#capture-gate).
+
+`deviceId` references [`app_history_device`](#app_history_device). The second index exists only for
+that foreign key. Inserting a snapshot checks the key against `app_history_device`'s primary key, not
+this index; SQLite only uses it when a device row is deleted or its `deviceId` changes, which never
+happens today. It is kept so Room's missing-index warning stays clean without a suppression, and
+so a future device cleanup does not scan the whole snapshot table.
 
 `uid` is included as a borderline call: OS-assigned rather than declared by the app, and can differ
 across reinstalls/devices the same way timestamps can, but it's already surfaced in the live
@@ -210,13 +227,21 @@ matches something already stored for the same package just references the existi
 )
 internal class AppHistoryBlobEntity(
     val packageName: String,
-    val hash: String,
+    val hash: Long,
     val content: ByteArray, // Deflate-compressed JSON
 )
 ```
 
 Insert with `OnConflictStrategy.IGNORE` against the composite `(packageName, hash)` key — no
 existence check needed first, since the hash is a deterministic function of the content.
+
+**The hash is the first 64 bits of SHA-256, stored as a `Long`.** A hash only has to be unique among
+one package's blobs, and an accidental collision there is around 10⁻¹⁷ for a typical app's history.
+A deliberately crafted collision was considered and dismissed: its only payoff is hiding a change in
+this app's own timeline, not in Android. Storing an integer keeps the hash portable across databases
+and devices — unlike a database-assigned blob id, which the restore merge would have to remap — while
+taking about 90 bytes per snapshot row instead of the 700 that 64-character hex strings took. Equality
+is by value, unlike a `ByteArray` column.
 
 **Compressed, hashed uncompressed.** `content` is the section's JSON compressed with zlib Deflate
 (level 6, `java.util.zip`, `storage/database/util/BlobCompression.kt`); the hash is still computed over the
@@ -274,6 +299,32 @@ scan (`DELETE FROM app_history_blob WHERE packageName = ? AND hash NOT IN (SELEC
 app_history_snapshot WHERE packageName = ?)`), not a global one, and doesn't need full design until
 that milestone.
 
+### `app_history_device`
+
+Which hardware each `deviceId` was. Every capture inserts the current device with `IGNORE` in the
+same transaction as its snapshot (`AppHistoryWriteDao.insertSnapshotWithBlobs`), so the device's
+first capture writes the row, `firstSeenAt` is that capture's `capturedAt`, and every later insert
+is a no-op.
+
+```kotlin
+@Entity(tableName = "app_history_device")
+internal data class AppHistoryDeviceEntity(
+    @PrimaryKey val deviceId: String,
+    val firstSeenAt: Long,
+    val manufacturer: String,
+    val model: String,
+)
+```
+
+Recorded before anything reads it because it cannot be backfilled: once history has moved to another
+device, nothing reveals what the old `deviceId` was. Manufacturer and model never change for a
+`deviceId`, so one row is enough. The Android version is deliberately not stored: a single row would
+freeze it at the first launch and go stale with the first system update, and tracking every update
+is a separate table to add when a feature reads it. Snapshots reference this table with a foreign key,
+which holds because the device row is written in the same transaction as the snapshot, so readers
+can inner join it. The restore merge inserts staged devices before staged snapshots for the same
+reason, skipping devices the live database already has.
+
 ## Field Audit
 
 Every list/nested section, and what's stored in its blob versus derived at read time versus
@@ -317,7 +368,8 @@ index — never a per-column filter, always a full-row projection compared in Ko
 **Single package** (fast path):
 
 ```sql
-SELECT lastUpdateTime, firstInstallTime FROM app_history_snapshot
+SELECT packageName, deviceId, lastUpdateTime, firstInstallTime, versionCode, capturedAt
+FROM app_history_snapshot
 WHERE packageName = :packageName
 ORDER BY capturedAt DESC, id DESC LIMIT 1
 ```
@@ -325,14 +377,18 @@ ORDER BY capturedAt DESC, id DESC LIMIT 1
 **All packages in one round trip** (reconciliation — never loop this per package):
 
 ```sql
-SELECT packageName, lastUpdateTime, firstInstallTime
-FROM app_history_snapshot s1
-WHERE NOT EXISTS (
-    SELECT 1 FROM app_history_snapshot s2
-    WHERE s2.packageName = s1.packageName
-    AND (s2.capturedAt > s1.capturedAt OR (s2.capturedAt = s1.capturedAt AND s2.id > s1.id))
-)
+SELECT packageName, deviceId, lastUpdateTime, firstInstallTime, versionCode, MAX(capturedAt) AS capturedAt
+FROM app_history_snapshot
+GROUP BY packageName
 ```
+
+SQLite guarantees that with a single `MAX()` aggregate, the other selected columns come from the row
+holding the maximum. Only the `id` tiebreak is lost, and two rows of one package can share a
+`capturedAt` only through a restore landing on the same millisecond. An earlier correlated
+`NOT EXISTS` form was replaced because its cost depended on SQLite's planner statistics, which Room
+never collects: without them the planner searches the index by `packageName` alone, so the sweep grew
+with the square of each package's snapshot count — 824 ms against 78 ms for this form, measured with
+500 packages × 200 snapshots on a desktop.
 
 Ordering by `capturedAt` (with `id` only as a tiebreak) is the gate's "what did we see most
 recently." Not `id` alone: restore merge ([`core/app-history/AGENTS.md`](../../../core/app-history/AGENTS.md#restore-merge))
@@ -351,10 +407,14 @@ deduplicating a replayed restore, whose rows carry their original `capturedAt`.
 Load the batch result into an in-memory `Map<packageName, LatestGate>` once, then compare every
 installed app against it purely in memory — zero further DB round trips during the sweep.
 
-Write a new snapshot only if the live `(deviceId, firstInstallTime, lastUpdateTime)` differs from the
-latest captured row's (or no prior row exists). Comparing all three, rather than relying on
-`lastUpdateTime` alone, costs nothing extra and matches the stated identity explicitly; `deviceId`
-is the current device's, so a row restored from another device never counts as "unchanged".
+Write a new snapshot only if the live `(deviceId, firstInstallTime, lastUpdateTime, versionCode)`
+differs from the latest captured row's (or no prior row exists). Comparing all four, rather than
+relying on `lastUpdateTime` alone, costs nothing extra and matches the stated identity explicitly;
+`deviceId` is the current device's, so a row restored from another device never counts as
+"unchanged", and `versionCode` catches a system update that replaces a system app without moving its
+timestamps (see [Identity](#identity-packagename--firstinstalltime--lastupdatetime)). Content is never
+compared at write time: a key change whose content turns out identical still writes a row, and the
+timeline hides it on read (see [`core/app-history/AGENTS.md`](../../../core/app-history/AGENTS.md#timeline-and-diff)).
 
 ## Capture Pipeline
 

@@ -8,6 +8,8 @@ internal data class AppHistoryGateState(
     val deviceId: String,
     val lastUpdateTime: Long,
     val firstInstallTime: Long,
+    val versionCode: Long,
+    val capturedAt: Long,
 )
 
 @Dao
@@ -15,25 +17,21 @@ internal interface AppHistoryGateDao {
 
     @Query(
         """
-        SELECT packageName, deviceId, lastUpdateTime, firstInstallTime
+        SELECT packageName, deviceId, lastUpdateTime, firstInstallTime, versionCode, capturedAt
         FROM app_history_snapshot
         WHERE packageName = :packageName
         ORDER BY capturedAt DESC, id DESC
         LIMIT 1
         """,
     )
-    suspend fun latestGateTimestamps(packageName: String): AppHistoryGateState?
+    suspend fun latestGateState(packageName: String): AppHistoryGateState?
 
     @Query(
         """
-        SELECT packageName, deviceId, lastUpdateTime, firstInstallTime
-        FROM app_history_snapshot s1
-        WHERE NOT EXISTS (
-            SELECT 1 FROM app_history_snapshot s2
-            WHERE s2.packageName = s1.packageName
-            AND (s2.capturedAt > s1.capturedAt OR (s2.capturedAt = s1.capturedAt AND s2.id > s1.id))
-        )
+        SELECT packageName, deviceId, lastUpdateTime, firstInstallTime, versionCode, MAX(capturedAt) AS capturedAt
+        FROM app_history_snapshot
+        GROUP BY packageName
         """,
     )
-    suspend fun latestGateTimestampsForAllPackages(): List<AppHistoryGateState>
+    suspend fun latestGateStatesForAllPackages(): List<AppHistoryGateState>
 }

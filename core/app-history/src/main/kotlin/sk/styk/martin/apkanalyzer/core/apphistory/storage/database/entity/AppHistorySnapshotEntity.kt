@@ -1,12 +1,17 @@
 package sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity
 
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "app_history_snapshot",
-    indices = [Index(value = ["packageName", "capturedAt", "lastUpdateTime", "firstInstallTime"], unique = true)],
+    foreignKeys = [ForeignKey(entity = AppHistoryDeviceEntity::class, parentColumns = ["deviceId"], childColumns = ["deviceId"])],
+    indices = [
+        Index(value = ["packageName", "capturedAt", "lastUpdateTime", "firstInstallTime"], unique = true),
+        Index(value = ["deviceId"]),
+    ],
 )
 internal data class AppHistorySnapshotEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
@@ -33,15 +38,15 @@ internal data class AppHistorySnapshotEntity(
     val apkSize: Long,
     val targetSdkVersion: Int?,
     val minSdkVersion: Int?,
-    val permissionsHash: String?,
-    val activitiesHash: String?,
-    val servicesHash: String?,
-    val receiversHash: String?,
-    val providersHash: String?,
-    val featuresHash: String?,
-    val signingHash: String?,
-    val intentFiltersHash: String?,
-    val nativeLibrariesHash: String?,
-    val signingSchemeHash: String?,
-    val installedSplitsHash: String?,
+    val permissionsHash: Long?,
+    val activitiesHash: Long?,
+    val servicesHash: Long?,
+    val receiversHash: Long?,
+    val providersHash: Long?,
+    val featuresHash: Long?,
+    val signingHash: Long?,
+    val intentFiltersHash: Long?,
+    val nativeLibrariesHash: Long?,
+    val signingSchemeHash: Long?,
+    val installedSplitsHash: Long?,
 )

@@ -12,6 +12,10 @@ android {
     androidResources.enable = false
 }
 
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 dependencies {
     implementation(projects.core.common)
     api(projects.core.apps)

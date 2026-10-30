@@ -108,6 +108,7 @@ internal class AppHistoryRecordDecoder @Inject constructor(private val sdkVersio
                 deviceId = row.deviceId,
                 firstInstallTime = Instant.ofEpochMilli(row.firstInstallTime),
                 lastUpdateTime = Instant.ofEpochMilli(row.lastUpdateTime),
+                versionCode = row.versionCode,
             ),
             detail = detail,
             intentFilters = decodeOptional<List<ComponentIntentFilterEntrySnapshot>, _>(
@@ -137,7 +138,7 @@ internal class AppHistoryRecordDecoder @Inject constructor(private val sdkVersio
 
     private inline fun <reified T, R> decodeRequired(
         section: String,
-        hash: String?,
+        hash: Long?,
         content: ByteArray?,
         decodedByHash: MutableMap<String, Any?>,
         transform: (T) -> R,
@@ -150,7 +151,7 @@ internal class AppHistoryRecordDecoder @Inject constructor(private val sdkVersio
     private inline fun <reified T, R> decodeOptional(
         section: String,
         packageName: String,
-        hash: String?,
+        hash: Long?,
         content: ByteArray?,
         decodedByHash: MutableMap<String, Any?>,
         transform: (T) -> R,
@@ -174,7 +175,7 @@ internal class AppHistoryRecordDecoder @Inject constructor(private val sdkVersio
     @Suppress("UNCHECKED_CAST")
     private inline fun <reified T> decodeCached(
         section: String,
-        hash: String,
+        hash: Long,
         content: ByteArray,
         decodedByHash: MutableMap<String, Any?>,
     ): T = decodedByHash.getOrPut("$section:$hash") { snapshotJson.decodeFromString<T>(content.decompressBlob()) } as T

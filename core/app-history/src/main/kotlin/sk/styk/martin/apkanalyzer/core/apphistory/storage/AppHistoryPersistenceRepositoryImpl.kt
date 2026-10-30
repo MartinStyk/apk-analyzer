@@ -9,6 +9,7 @@ import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryGat
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryGateState
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryReadDao
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryWriteDao
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity.AppHistoryDeviceEntity
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.util.AppHistoryRecordDecoder
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.util.AppHistoryRecordEncoder
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
@@ -29,16 +30,16 @@ internal class AppHistoryPersistenceRepositoryImpl @Inject constructor(
 ) : AppHistoryPersistenceRepository {
 
     override suspend fun latestCaptureKey(packageName: PackageName): Result<AppHistoryCaptureKey?> = runCatchingCancellable {
-        appHistoryGateDao.latestGateTimestamps(packageName.value)?.toCaptureKey()
+        appHistoryGateDao.latestGateState(packageName.value)?.toCaptureKey()
     }
 
     override suspend fun latestCaptureKeys(): Result<Map<PackageName, AppHistoryCaptureKey>> = runCatchingCancellable {
-        appHistoryGateDao.latestGateTimestampsForAllPackages().associate { PackageName(it.packageName) to it.toCaptureKey() }
+        appHistoryGateDao.latestGateStatesForAllPackages().associate { PackageName(it.packageName) to it.toCaptureKey() }
     }
 
-    override suspend fun save(record: AppHistoryRecord): Result<Unit> = runCatchingCancellable {
+    override suspend fun save(record: AppHistoryRecord, device: AppHistoryDevice): Result<Unit> = runCatchingCancellable {
         val encoded = encoder.encode(record)
-        appHistoryWriteDao.insertSnapshotWithBlobs(encoded.snapshot, encoded.blobs)
+        appHistoryWriteDao.insertSnapshotWithBlobs(device.toEntity(record), encoded.snapshot, encoded.blobs)
     }
 
     override fun observe(packageName: PackageName): Flow<Result<List<StoredAppHistoryRecord>>> =
@@ -53,4 +54,12 @@ private fun AppHistoryGateState.toCaptureKey() = AppHistoryCaptureKey(
     deviceId = deviceId,
     firstInstallTime = Instant.ofEpochMilli(firstInstallTime),
     lastUpdateTime = Instant.ofEpochMilli(lastUpdateTime),
+    versionCode = versionCode,
+)
+
+private fun AppHistoryDevice.toEntity(record: AppHistoryRecord) = AppHistoryDeviceEntity(
+    deviceId = record.captureKey.deviceId,
+    firstSeenAt = record.capturedAt.toEpochMilli(),
+    manufacturer = manufacturer,
+    model = model,
 )

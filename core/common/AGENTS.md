@@ -20,8 +20,9 @@ logic do not belong here.
 * `model/` - genuinely cross-module value types such as app references, source classification, and
   file sizes.
 * `resources/`, `clipboard/`, `digest/`, `device/`, and `io/` - shared platform adapters and focused
-  utilities. `device/`'s `DeviceIdProvider` wraps `Settings.Secure.ANDROID_ID` behind an interface so
-  callers never touch `@SuppressLint("HardwareIds")` or `ContentResolver` directly. `io/`'s
+  utilities. `device/`'s `DeviceInfoProvider` wraps `Settings.Secure.ANDROID_ID` and the `android.os.Build`
+  manufacturer and model behind an interface so callers never touch `@SuppressLint("HardwareIds")`,
+  `ContentResolver`, or `Build` directly. `io/`'s
   `InputStream.limited(byteCount)` wraps a stream so it EOFs after exactly `byteCount` bytes without
   ever closing the underlying stream — for callers handed a stream they don't own the lifecycle of,
   e.g. a platform callback multiplexing several files over one shared file descriptor, where closing

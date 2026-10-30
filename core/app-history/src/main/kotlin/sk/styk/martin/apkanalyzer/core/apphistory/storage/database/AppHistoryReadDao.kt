@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity.AppHistoryBlobEntity
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity.AppHistoryDeviceEntity
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity.AppHistorySnapshotEntity
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity.AppHistorySnapshotWithSectionsView
 
@@ -18,4 +19,7 @@ internal interface AppHistoryReadDao {
 
     @Query("SELECT * FROM app_history_blob")
     suspend fun allBlobs(): List<AppHistoryBlobEntity>
+
+    @Query("SELECT * FROM app_history_device")
+    suspend fun allDevices(): List<AppHistoryDeviceEntity>
 }

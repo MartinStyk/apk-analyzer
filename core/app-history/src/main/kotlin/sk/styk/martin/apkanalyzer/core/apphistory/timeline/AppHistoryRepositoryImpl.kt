@@ -45,10 +45,13 @@ internal class AppHistoryRepositoryImpl @Inject constructor(
                 else -> AppHistoryEntry.Change.Kind.Updated
             }
             AppHistoryEntry.Change(kind = kind, snapshot = current.toSummary(), previous = previous.toSummary(), diff = diff)
-        }
+        }.filterNot { it.isUpdateWithoutVisibleChange }
         return changes.asReversed() + AppHistoryEntry.FirstSeen(first.toSummary())
     }
 }
+
+private val AppHistoryEntry.Change.isUpdateWithoutVisibleChange: Boolean
+    get() = kind == AppHistoryEntry.Change.Kind.Updated && diff.changedCategories.isEmpty() && diff.uncomparableCategories.isEmpty()
 
 private infix fun StoredAppHistoryRecord.isOnNewDeviceAfter(previous: StoredAppHistoryRecord): Boolean =
     record.captureKey.deviceId != previous.record.captureKey.deviceId

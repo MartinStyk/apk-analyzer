@@ -1,0 +1,323 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "59ed90eb55a71fdc681c4d160d441a1b",
+    "entities": [
+      {
+        "tableName": "app_history_snapshot",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `packageName` TEXT NOT NULL, `deviceId` TEXT NOT NULL, `capturedAt` INTEGER NOT NULL, `firstInstallTime` INTEGER NOT NULL, `lastUpdateTime` INTEGER NOT NULL, `applicationName` TEXT NOT NULL, `processName` TEXT, `versionCode` INTEGER NOT NULL, `versionName` TEXT, `isSystemApp` INTEGER NOT NULL, `isDebuggable` INTEGER NOT NULL, `allowsBackup` INTEGER NOT NULL, `usesCleartextTraffic` INTEGER NOT NULL, `uid` INTEGER, `sharedUserId` TEXT, `description` TEXT, `installLocation` TEXT NOT NULL, `installingPackage` TEXT, `initiatingPackage` TEXT, `originatingPackage` TEXT, `apkSize` INTEGER NOT NULL, `targetSdkVersion` INTEGER, `minSdkVersion` INTEGER, `permissionsHash` INTEGER, `activitiesHash` INTEGER, `servicesHash` INTEGER, `receiversHash` INTEGER, `providersHash` INTEGER, `featuresHash` INTEGER, `signingHash` INTEGER, `intentFiltersHash` INTEGER, `nativeLibrariesHash` INTEGER, `signingSchemeHash` INTEGER, `installedSplitsHash` INTEGER, FOREIGN KEY(`deviceId`) REFERENCES `app_history_device`(`deviceId`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "packageName",
+            "columnName": "packageName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deviceId",
+            "columnName": "deviceId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "capturedAt",
+            "columnName": "capturedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "firstInstallTime",
+            "columnName": "firstInstallTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastUpdateTime",
+            "columnName": "lastUpdateTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "applicationName",
+            "columnName": "applicationName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "processName",
+            "columnName": "processName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "versionCode",
+            "columnName": "versionCode",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "versionName",
+            "columnName": "versionName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "isSystemApp",
+            "columnName": "isSystemApp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isDebuggable",
+            "columnName": "isDebuggable",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "allowsBackup",
+            "columnName": "allowsBackup",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "usesCleartextTraffic",
+            "columnName": "usesCleartextTraffic",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "uid",
+            "columnName": "uid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "sharedUserId",
+            "columnName": "sharedUserId",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "installLocation",
+            "columnName": "installLocation",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "installingPackage",
+            "columnName": "installingPackage",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "initiatingPackage",
+            "columnName": "initiatingPackage",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "originatingPackage",
+            "columnName": "originatingPackage",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "apkSize",
+            "columnName": "apkSize",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "targetSdkVersion",
+            "columnName": "targetSdkVersion",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "minSdkVersion",
+            "columnName": "minSdkVersion",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "permissionsHash",
+            "columnName": "permissionsHash",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "activitiesHash",
+            "columnName": "activitiesHash",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "servicesHash",
+            "columnName": "servicesHash",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "receiversHash",
+            "columnName": "receiversHash",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "providersHash",
+            "columnName": "providersHash",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "featuresHash",
+            "columnName": "featuresHash",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "signingHash",
+            "columnName": "signingHash",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "intentFiltersHash",
+            "columnName": "intentFiltersHash",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "nativeLibrariesHash",
+            "columnName": "nativeLibrariesHash",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "signingSchemeHash",
+            "columnName": "signingSchemeHash",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "installedSplitsHash",
+            "columnName": "installedSplitsHash",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_app_history_snapshot_packageName_capturedAt_lastUpdateTime_firstInstallTime",
+            "unique": true,
+            "columnNames": [
+              "packageName",
+              "capturedAt",
+              "lastUpdateTime",
+              "firstInstallTime"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_app_history_snapshot_packageName_capturedAt_lastUpdateTime_firstInstallTime` ON `${TABLE_NAME}` (`packageName`, `capturedAt`, `lastUpdateTime`, `firstInstallTime`)"
+          },
+          {
+            "name": "index_app_history_snapshot_deviceId",
+            "unique": false,
+            "columnNames": [
+              "deviceId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_app_history_snapshot_deviceId` ON `${TABLE_NAME}` (`deviceId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "app_history_device",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "deviceId"
+            ],
+            "referencedColumns": [
+              "deviceId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "app_history_blob",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`packageName` TEXT NOT NULL, `hash` INTEGER NOT NULL, `content` BLOB NOT NULL, PRIMARY KEY(`packageName`, `hash`))",
+        "fields": [
+          {
+            "fieldPath": "packageName",
+            "columnName": "packageName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hash",
+            "columnName": "hash",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "content",
+            "columnName": "content",
+            "affinity": "BLOB",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "packageName",
+            "hash"
+          ]
+        }
+      },
+      {
+        "tableName": "app_history_device",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`deviceId` TEXT NOT NULL, `firstSeenAt` INTEGER NOT NULL, `manufacturer` TEXT NOT NULL, `model` TEXT NOT NULL, PRIMARY KEY(`deviceId`))",
+        "fields": [
+          {
+            "fieldPath": "deviceId",
+            "columnName": "deviceId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "firstSeenAt",
+            "columnName": "firstSeenAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "manufacturer",
+            "columnName": "manufacturer",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "model",
+            "columnName": "model",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "deviceId"
+          ]
+        }
+      }
+    ],
+    "views": [
+      {
+        "viewName": "app_history_snapshot_with_sections",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT s.*,\n            pb.content AS permissionsContent,\n            ab.content AS activitiesContent,\n            svb.content AS servicesContent,\n            rb.content AS receiversContent,\n            prb.content AS providersContent,\n            fb.content AS featuresContent,\n            sib.content AS signingContent,\n            ifb.content AS intentFiltersContent,\n            nlb.content AS nativeLibrariesContent,\n            ssb.content AS signingSchemeContent,\n            isb.content AS installedSplitsContent\n        FROM app_history_snapshot s\n        LEFT JOIN app_history_blob pb ON pb.packageName = s.packageName AND pb.hash = s.permissionsHash\n        LEFT JOIN app_history_blob ab ON ab.packageName = s.packageName AND ab.hash = s.activitiesHash\n        LEFT JOIN app_history_blob svb ON svb.packageName = s.packageName AND svb.hash = s.servicesHash\n        LEFT JOIN app_history_blob rb ON rb.packageName = s.packageName AND rb.hash = s.receiversHash\n        LEFT JOIN app_history_blob prb ON prb.packageName = s.packageName AND prb.hash = s.providersHash\n        LEFT JOIN app_history_blob fb ON fb.packageName = s.packageName AND fb.hash = s.featuresHash\n        LEFT JOIN app_history_blob sib ON sib.packageName = s.packageName AND sib.hash = s.signingHash\n        LEFT JOIN app_history_blob ifb ON ifb.packageName = s.packageName AND ifb.hash = s.intentFiltersHash\n        LEFT JOIN app_history_blob nlb ON nlb.packageName = s.packageName AND nlb.hash = s.nativeLibrariesHash\n        LEFT JOIN app_history_blob ssb ON ssb.packageName = s.packageName AND ssb.hash = s.signingSchemeHash\n        LEFT JOIN app_history_blob isb ON isb.packageName = s.packageName AND isb.hash = s.installedSplitsHash"
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '59ed90eb55a71fdc681c4d160d441a1b')"
+    ]
+  }
+}

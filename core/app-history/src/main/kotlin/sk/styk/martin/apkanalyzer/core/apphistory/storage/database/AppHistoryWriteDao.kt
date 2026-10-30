@@ -5,13 +5,19 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Transaction
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity.AppHistoryBlobEntity
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity.AppHistoryDeviceEntity
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity.AppHistorySnapshotEntity
 
 @Dao
 internal interface AppHistoryWriteDao {
 
     @Transaction
-    suspend fun insertSnapshotWithBlobs(snapshot: AppHistorySnapshotEntity, blobs: List<AppHistoryBlobEntity>) {
+    suspend fun insertSnapshotWithBlobs(
+        device: AppHistoryDeviceEntity,
+        snapshot: AppHistorySnapshotEntity,
+        blobs: List<AppHistoryBlobEntity>,
+    ) {
+        insertDevices(listOf(device))
         insertBlobs(blobs)
         insertSnapshot(snapshot)
     }
@@ -22,8 +28,16 @@ internal interface AppHistoryWriteDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertSnapshot(snapshot: AppHistorySnapshotEntity)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertDevices(devices: List<AppHistoryDeviceEntity>)
+
     @Transaction
-    suspend fun mergeSnapshotsWithBlobs(snapshots: List<AppHistorySnapshotEntity>, blobs: List<AppHistoryBlobEntity>) {
+    suspend fun mergeRestoredData(
+        snapshots: List<AppHistorySnapshotEntity>,
+        blobs: List<AppHistoryBlobEntity>,
+        devices: List<AppHistoryDeviceEntity>,
+    ) {
+        insertDevices(devices)
         insertBlobs(blobs)
         insertSnapshotsIgnoringConflicts(snapshots)
     }

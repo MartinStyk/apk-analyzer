@@ -9,6 +9,7 @@ import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.APP_HISTORY_S
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryDatabase
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryWriteDao
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity.AppHistoryBlobEntity
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity.AppHistoryDeviceEntity
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity.AppHistorySnapshotEntity
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
@@ -23,7 +24,11 @@ internal class AppHistoryRestoreMergerImpl @Inject constructor(
     private val dispatcherProvider: DispatcherProvider,
 ) : AppHistoryRestoreMerger {
 
-    private data class StagedData(val snapshots: List<AppHistorySnapshotEntity>, val blobs: List<AppHistoryBlobEntity>)
+    private data class StagedData(
+        val snapshots: List<AppHistorySnapshotEntity>,
+        val blobs: List<AppHistoryBlobEntity>,
+        val devices: List<AppHistoryDeviceEntity>,
+    )
 
     override suspend fun mergeIfPending(): Result<Unit> = withContext(dispatcherProvider.io()) {
         if (!context.getDatabasePath(APP_HISTORY_STAGING_DATABASE_NAME).exists()) {
@@ -37,9 +42,9 @@ internal class AppHistoryRestoreMergerImpl @Inject constructor(
                 Logger.w(APP_HISTORY, it, "Restore merge failed to read the staged backup, discarding it")
                 deleteStagingFiles()
             }
-        val (snapshots, blobs) = staged.getOrElse { return@withContext Result.failure(it) }
+        val (snapshots, blobs, devices) = staged.getOrElse { return@withContext Result.failure(it) }
 
-        runCatchingCancellable { liveWriteDao.mergeSnapshotsWithBlobs(snapshots, blobs) }
+        runCatchingCancellable { liveWriteDao.mergeRestoredData(snapshots, blobs, devices) }
             .onSuccess {
                 Logger.i(APP_HISTORY, "Restore merge successful")
                 deleteStagingFiles()
@@ -53,7 +58,7 @@ internal class AppHistoryRestoreMergerImpl @Inject constructor(
         val stagingDatabase = Room.databaseBuilder(context, AppHistoryDatabase::class.java, APP_HISTORY_STAGING_DATABASE_NAME).build()
         return try {
             val readDao = stagingDatabase.appHistoryReadDao()
-            StagedData(readDao.allSnapshots().map { it.copy(id = 0) }, readDao.allBlobs())
+            StagedData(readDao.allSnapshots().map { it.copy(id = 0) }, readDao.allBlobs(), readDao.allDevices())
         } finally {
             stagingDatabase.close()
         }

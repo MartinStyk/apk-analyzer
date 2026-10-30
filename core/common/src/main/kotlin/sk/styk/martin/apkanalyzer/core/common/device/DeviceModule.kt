@@ -11,5 +11,5 @@ import javax.inject.Singleton
 internal interface DeviceModule {
     @Binds
     @Singleton
-    fun bindDeviceIdProvider(impl: DeviceIdProviderImpl): DeviceIdProvider
+    fun bindDeviceInfoProvider(impl: DeviceInfoProviderImpl): DeviceInfoProvider
 }

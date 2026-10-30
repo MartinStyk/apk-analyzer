@@ -11,6 +11,8 @@ import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.util.compress
 import sk.styk.martin.apkanalyzer.core.common.digest.DigestManager
 import javax.inject.Inject
 
+private const val SECTION_HASH_HEX_LENGTH = 16
+
 internal class EncodedAppHistoryRecord(val snapshot: AppHistorySnapshotEntity, val blobs: List<AppHistoryBlobEntity>)
 
 internal class AppHistoryRecordEncoder @Inject constructor(private val digestManager: DigestManager) {
@@ -50,7 +52,7 @@ internal class AppHistoryRecordEncoder @Inject constructor(private val digestMan
 
     private inline fun <reified T> hashSection(packageName: String, content: T): HashedSection {
         val serialized = Json.encodeToString(content)
-        val hash = digestManager.sha256Digest(serialized)
+        val hash = digestManager.sha256Digest(serialized).take(SECTION_HASH_HEX_LENGTH).toULong(radix = 16).toLong()
         return HashedSection(hash, AppHistoryBlobEntity(packageName = packageName, hash = hash, content = serialized.compressBlob()))
     }
 
@@ -94,7 +96,7 @@ internal class AppHistoryRecordEncoder @Inject constructor(private val digestMan
         )
     }
 
-    private class HashedSection(val hash: String, val blob: AppHistoryBlobEntity)
+    private class HashedSection(val hash: Long, val blob: AppHistoryBlobEntity)
 
     private class HashedSections(
         val permissions: HashedSection,

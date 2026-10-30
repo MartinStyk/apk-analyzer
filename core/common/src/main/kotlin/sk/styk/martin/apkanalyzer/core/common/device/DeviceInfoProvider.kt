@@ -1,5 +1,7 @@
 package sk.styk.martin.apkanalyzer.core.common.device
 
-interface DeviceIdProvider {
+interface DeviceInfoProvider {
     val deviceId: String
+    val manufacturer: String
+    val model: String
 }

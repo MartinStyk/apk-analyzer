@@ -8,6 +8,6 @@ import androidx.room.Entity
 )
 internal class AppHistoryBlobEntity(
     val packageName: String,
-    val hash: String,
+    val hash: Long,
     val content: ByteArray,
 )

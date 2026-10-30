@@ -12,7 +12,7 @@ import java.time.Instant
 internal interface AppHistoryPersistenceRepository {
     suspend fun latestCaptureKey(packageName: PackageName): Result<AppHistoryCaptureKey?>
     suspend fun latestCaptureKeys(): Result<Map<PackageName, AppHistoryCaptureKey>>
-    suspend fun save(record: AppHistoryRecord): Result<Unit>
+    suspend fun save(record: AppHistoryRecord, device: AppHistoryDevice): Result<Unit>
     fun observe(packageName: PackageName): Flow<Result<List<StoredAppHistoryRecord>>>
 }
 
@@ -20,7 +20,10 @@ internal data class AppHistoryCaptureKey(
     val deviceId: String,
     val firstInstallTime: Instant,
     val lastUpdateTime: Instant,
+    val versionCode: Long,
 )
+
+internal data class AppHistoryDevice(val manufacturer: String, val model: String)
 
 internal data class AppHistoryRecord(
     val packageName: PackageName,

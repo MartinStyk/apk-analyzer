@@ -47,7 +47,7 @@ capture and the timeline go through `AppHistoryPersistenceRepository`.
 `AppHistoryPersistenceRepository` (internal, `storage/`) is the only translation layer between
 `core:apps` domain types and the stored format, in both directions. Callers hand it and get back an
 `AppHistoryRecord`: the capture identity (`AppHistoryCaptureKey` — `deviceId` plus the app's own
-`firstInstallTime`/`lastUpdateTime`, compared by the gate), `capturedAt`, a full `AppDetail`, and the
+`firstInstallTime`/`lastUpdateTime`/`versionCode`, compared by the gate), `capturedAt`, a full `AppDetail`, and the
 three separately fetched sections as `CapturedSection<T>` (`Captured(value)` / `Unavailable`). The key
 holds exactly what the *live* app can be compared on: `deviceId` belongs in it, because install
 timestamps can be identical across devices and a restored row from another device must not match the
@@ -55,7 +55,8 @@ live app; `capturedAt` deliberately does not, because the live app has no captur
 it would make every app look changed on every sweep.
 
 * **Write** (`save`, via `AppHistoryRecordEncoder`): maps to the `storage/database/snapshot/` DTOs, serializes canonical JSON, hashes,
-  compresses, and inserts the row plus blobs in one transaction. An `Unavailable` section is stored as
+  compresses, and inserts the device row (`IGNORE`), blobs, and snapshot row in one transaction, so
+  the snapshot's `deviceId` foreign key always resolves. An `Unavailable` section is stored as
   a `null` hash.
 * **Read** (`observe`, via `AppHistoryRecordDecoder`): decodes every row from the view back into an `AppDetail` with
   `AnalysisMode.Historical`, recomputing what the schema doc says is derived rather than stored
@@ -95,6 +96,13 @@ enums, by contrast, are stored as their plain `.name` string rather than mirrore
 keep file count down — lossless either way; `toDomain()` maps them back with `valueOf`, so a stored
 name the enum no longer has fails that section's decode rather than being guessed.
 
+**A field added to an existing DTO must be nullable with a `null` default, meaning "not recorded",
+and the differ must ignore it when either side is `null`.** Old blobs decode without the field, so a
+non-null default would stand in for the real value in every snapshot written before the change, and
+the first update after release would report that default changing to the real value — "exported: no
+→ yes" for an app that changed nothing. The same holds when a `core:apps` fix changes how a captured
+value is computed.
+
 The `kotlin-serialization` plugin and every `@Serializable` annotation are scoped to this module
 alone — `core:apps`/`core:common` carry no serialization dependency or annotations because of this
 module's needs.
@@ -125,7 +133,8 @@ blob fetch, measure: the split would only load blobs whose hashes differ and cou
 re-queries before touching any blob bytes.
 
 Blob content is Deflate-compressed JSON (`ByteArray`), compressed and decompressed only through
-`storage/database/util/BlobCompression.kt`; the hash is over the uncompressed JSON. The database file is
+`storage/database/util/BlobCompression.kt`; the hash is the first 64 bits of SHA-256 over the
+uncompressed JSON, stored as a `Long`. The database file is
 `app_history_v2.db` — the uncompressed `app_history.db` from 4.1.3–4.2.0 is deleted on startup rather
 than migrated, see the schema doc's
 [`app_history_blob`](../../docs/app/technical/app-history-capture-schema.md#app_history_blob) for why.
@@ -147,6 +156,14 @@ question, not handled here. Diffs are computed on read and never stored, per the
 are ordered by `capturedAt`, never by `lastUpdateTime`, which moves backwards on a system-app rollback;
 for the same reason an `Updated` change whose `lastUpdateTime` went backwards is dated by its
 `capturedAt` instead of the factory timestamp it rolled back to.
+
+An `Updated` change with no changed and no uncomparable category is dropped from the timeline. The
+gate writes a row whenever the key moves — a same-APK reinstall or a Play re-delivery moves it
+without changing content — and skipping those at write time would need somewhere to record the
+observed key, or the gate would re-capture the app on every trigger. Hiding on read costs about 1 KB
+per such row, since its blobs dedupe. The next change still diffs against the hidden row, whose
+visible content equals the one before it. `Reinstalled` and `NewDevice` are never dropped: the event
+itself is the information.
 
 It emits `AppHistoryTimeline`, not a bare list: `Available(entries)` — where an empty list honestly
 means "no history" — or `Unavailable` when the database read fails, so a screen can show an error
@@ -323,9 +340,19 @@ would make the restored copy *become* the live database, the exact behavior bein
 live `AppHistoryDatabase` ready to merge into, whereas by the time `start()` runs the database is.
 It is a no-op unless the staging file exists. When it does: opens the staging file as a second,
 ordinary `Room.databaseBuilder(..., AppHistoryDatabase::class.java, ...)` instance and imports its
-rows via `AppHistoryWriteDao.mergeSnapshotsWithBlobs`, one `@Transaction` (matching the shape of the
+rows via `AppHistoryWriteDao.mergeRestoredData`, one `@Transaction` (matching the shape of the
 capture path's own `insertSnapshotWithBlobs`, so a mid-import failure can never leave orphaned blob
-rows with no matching snapshot). Blobs insert IGNORE-on-conflict, safe because they're
+rows with no matching snapshot). Device rows are imported first in the same transaction, skipping
+ones the live database already has, because staged snapshots reference them through the
+[`app_history_device`](../../docs/app/technical/app-history-capture-schema.md#app_history_device)
+foreign key.
+
+**Every migration must also apply to the staging database.** The staging file is a backup from
+whatever app version wrote it, so once `AppHistoryDatabase` moves past version 1, an older backup is
+an older schema. The staging builder here has no migrations today; opening an older file would fail,
+and the read-failure path below deletes it as unusable — silently losing that restore. The first
+version bump must give the live and staging builders one shared set of migrations. The schema is
+exported to `core/app-history/schemas/` for writing them. Blobs insert IGNORE-on-conflict, safe because they're
 content-addressed by `(packageName, hash)`. Snapshots also insert IGNORE-on-conflict, relying on the
 table's `UNIQUE(packageName, capturedAt, lastUpdateTime, firstInstallTime)` index to skip ones the live database
 already has — but only after resetting each row's `id` to `0` first, never carrying a foreign
@@ -347,7 +374,7 @@ staging file (`readStagedData()`) is the untrusted half — a corrupt file, a tr
 (once this module's `@Database` version ever moves past 1) a staging file from an incompatible
 schema will fail here, and there is no version of "retry" that fixes an unusable file, so any
 non-cancelled failure deletes the staging files immediately and gives up on that restore. Writing
-the already-validated rows into the live database (`liveWriteDao.mergeSnapshotsWithBlobs`) is the
+the already-validated rows into the live database (`liveWriteDao.mergeRestoredData`) is the
 trusted half — the staged data is known-good by this point, so a failure here (disk full, an I/O
 hiccup) is assumed transient and the staging files are deliberately *not* deleted, leaving the whole
 merge to retry from scratch on the next launch. That retry is safe because the merge is idempotent —
