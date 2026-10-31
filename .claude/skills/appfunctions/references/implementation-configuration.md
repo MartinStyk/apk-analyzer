@@ -72,7 +72,7 @@ within the `<application>` tag:
 When generating Kotlin code for AppFunctions, you MUST adhere to these rules:
 
 1. **Annotations** :
-   - Annotate the function with `@AppFunction(isDescribedByKDoc = true)`.
+   - Annotate the function with `@AppFunctionDeclaration(isDescribedByKDoc = true)`.
    - Annotate associated data classes with `@AppFunctionSerializable(isDescribedByKDoc = true)`.
 2. **Parameter strategy** :
    - **Specificity**: Keep parameters specific. State objects must be unambiguous.
@@ -117,7 +117,7 @@ repositories or use cases using standard `@Inject internal lateinit var`:
 abstract class BaseAppFunctionServiceHeader : AppFunctionService() {
     @Inject internal lateinit var messageRepository: MessageRepository
 
-    @AppFunction(isDescribedByKDoc = true)
+    @AppFunctionDeclaration(isDescribedByKDoc = true)
     internal suspend fun send(
         name: String,
         endpointValue: String,
@@ -154,7 +154,7 @@ abstract class BaseAppFunctionServiceLocator : AppFunctionService() {
     // Or with Koin / alternative DI locators:
     // private val messageRepository: MessageRepository by inject()
 
-    @AppFunction(isDescribedByKDoc = true)
+    @AppFunctionDeclaration(isDescribedByKDoc = true)
     internal suspend fun send(
         name: String,
         endpointValue: String,
@@ -171,7 +171,7 @@ abstract class BaseAppFunctionServiceLocator : AppFunctionService() {
 
 Don't attempt to make an `AppFunction` class or method OS-agnostic---App Functions are inherently part of the Android platform integration in `androidx.appfunctions`. For architectural cleanliness, use existing
 application functionality (such as existing repositories, use cases, or domain
-orchestrators) to execute the behavior within your `@AppFunction` methods rather
+orchestrators) to execute the behavior within your `@AppFunctionDeclaration` methods rather
 than creating redundant abstraction layers around the OS service.
 
 <br />
@@ -186,7 +186,7 @@ property definition. Don't use class-level `@param` or `@property` tags.
 
 ### Package integrity
 
-Configuration APIs and the `@AppFunction` annotation are located in
+Configuration APIs and the `@AppFunctionDeclaration` annotation are located in
 `androidx.appfunctions`.
 
 ## Examples
@@ -238,7 +238,7 @@ abstract class BaseTaskAppFunctionService : AppFunctionService() {
      *
      * @param createTaskParams The parameter to describe how to create the task.
      */
-    @AppFunction(isDescribedByKDoc = true)
+    @AppFunctionDeclaration(isDescribedByKDoc = true)
     suspend fun createTask(
         createTaskParams: CreateTaskParams,
     ): Task = withContext(Dispatchers.IO) {

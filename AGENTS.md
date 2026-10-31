@@ -14,9 +14,9 @@ re-deriving the module's structure.
   source of coordinates and versions; if a new library seems necessary, ask first.
 * Never write comments or KDoc — not even when the WHY seems non-obvious. Use self-documenting
   names and structure. The only exceptions are an explicit request for a comment in that instance,
-  and KDoc on `@AppFunction`/`@AppFunctionSerializable` declarations in `core:app-functions`, which
-  the App Functions platform reads as the agent-facing tool description — see that module's
-  `AGENTS.md`.
+  and KDoc on `@AppFunctionDeclaration`/`@AppFunctionSerializable` declarations in
+  `core:app-functions`, which the App Functions platform reads as the agent-facing tool
+  description — see that module's `AGENTS.md`.
 * Never hardcode a user-facing string in a Composable. Use `stringResource` backed by
   `res/values/strings.xml` in the module that owns the UI.
 * Never hardcode SDK levels or the JVM toolchain in a module's `build.gradle.kts` — they come from

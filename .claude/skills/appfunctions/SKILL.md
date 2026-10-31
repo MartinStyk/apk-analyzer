@@ -52,12 +52,12 @@ If they apply, you must load the following references:
 
 - **Modular consistency**: You must refine KDocs immediately after you generate AppFunction implementations.
 - **Security**: Don't expose sensitive data or run destructive actions without user confirmation.
-- **This repo's KDoc rule**: outside `core:app-functions`'s `@AppFunction`/`@AppFunctionSerializable`
+- **This repo's KDoc rule**: outside `core:app-functions`'s `@AppFunctionDeclaration`/`@AppFunctionSerializable`
   declarations, this repo never writes comments or KDoc. Do not let AppFunction-style documentation
   leak into other modules.
 - **Multi-module aggregation**: only the `app` module sets
   `ksp { arg("appfunctions:aggregateAppFunctions", "true") }`; a module that only declares
-  `@AppFunction`s needs the `appfunctions` runtime + compiler dependencies but not that argument —
+  `@AppFunctionDeclaration`s needs the `appfunctions` runtime + compiler dependencies but not that argument —
   see `core:app-functions/build.gradle.kts` and `app/build.gradle.kts`.
 
 ## Troubleshooting

@@ -18,10 +18,10 @@ Do not duplicate extraction here — add it to `core:apps` and call it from here
 ## Structure
 
 * `ApkAnalyzerAppFunctionService` — the single `@AppFunctionServiceEntryPoint` abstract class.
-  Every `@AppFunction` is declared directly on this class per the framework's requirement, but each
+  Every `@AppFunctionDeclaration` is declared directly on this class per the framework's requirement, but each
   one is a one-line delegation to an injected use case in `usecase/` — the framework requires the
   annotation and KDoc to sit on this class's methods, not that the logic does.
-* `usecase/` — one `internal class ...UseCase @Inject constructor(...)` per `@AppFunction`, each a
+* `usecase/` — one `internal class ...UseCase @Inject constructor(...)` per `@AppFunctionDeclaration`, each a
   `suspend operator fun invoke(...)`. `FindAppsUseCase` holds the combined filter/sort/validate
   logic; `GetAppDetailUseCase`, `GetAppCertificatesUseCase`, and `GetAppPermissionsUseCase` each
   wrap one `AppDetailRepository.details()` call and a mapping function. `AppFunctionErrors.kt` holds
@@ -54,7 +54,7 @@ rather than looking under `intermediates/assets/`, which stays empty.
 ## The KDoc Exception
 
 The root `AGENTS.md` non-negotiable "never write comments or KDoc" has exactly one carve-out, scoped
-to this module: KDoc on `@AppFunction` and `@AppFunctionSerializable` declarations (functions,
+to this module: KDoc on `@AppFunctionDeclaration` and `@AppFunctionSerializable` declarations (functions,
 parameters, and serializable properties) is how `isDescribedByKDoc = true` tells the agent what a
 function does and how to use it — the KDoc *is* the tool description the platform indexes, not
 incidental documentation. Follow the agent-facing style already used throughout this module: an
@@ -66,7 +66,7 @@ fields, mapping functions) — the exception is for agent-indexed declarations o
 Every `@AppFunctionSerializable` class needs inline KDoc on each property; KSP does not read
 class-level `@param`/`@property` tags for these classes.
 
-An optional `@AppFunction` parameter must be a nullable type with a `null` default — KSP fails the
+An optional `@AppFunctionDeclaration` parameter must be a nullable type with a `null` default — KSP fails the
 build (`Type kotlin.String cannot be optional`) on a non-nullable type with a non-null default like
 `sortBy: String = "Name"`. Use `sortBy: String? = null` and resolve the default inside the use case
 instead, the same way every other optional filter on `findApps` does.

@@ -19,7 +19,7 @@ a standalone `appfunctions-service` library.
 
 Service entry point pattern:
 Version 1.0.0-alpha10 introduced this architectural pattern. You
-declare `@AppFunction` methods directly inside an abstract class extending
+declare `@AppFunctionDeclaration` methods directly inside an abstract class extending
 `AppFunctionService`. This class uses `@AppFunctionServiceEntryPoint` and
 `@AndroidEntryPoint` annotations. These annotations let you inject data
 sources or repositories directly, without an intermediate business logic

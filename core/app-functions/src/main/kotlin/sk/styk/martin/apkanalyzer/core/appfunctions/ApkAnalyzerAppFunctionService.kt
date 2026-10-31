@@ -1,8 +1,8 @@
 package sk.styk.martin.apkanalyzer.core.appfunctions
 
 import androidx.annotation.RequiresApi
-import androidx.appfunctions.AppFunction
 import androidx.appfunctions.AppFunctionAppUnknownException
+import androidx.appfunctions.AppFunctionDeclaration
 import androidx.appfunctions.AppFunctionElementNotFoundException
 import androidx.appfunctions.AppFunctionInvalidArgumentException
 import androidx.appfunctions.AppFunctionPermissionRequiredException
@@ -82,7 +82,7 @@ abstract class ApkAnalyzerAppFunctionService : AppFunctionService() {
      *   permission covers both size and last-used data. If thrown, tell the user to grant Usage
      *   Access to Apk Analyzer in system settings.
      */
-    @AppFunction(isDescribedByKDoc = true)
+    @AppFunctionDeclaration(isDescribedByKDoc = true)
     suspend fun findApps(
         query: String? = null,
         permission: String? = null,
@@ -120,7 +120,7 @@ abstract class ApkAnalyzerAppFunctionService : AppFunctionService() {
      * @throws AppFunctionAppUnknownException If the app's details couldn't be read for another
      *   reason. If thrown, tell the user the lookup failed unexpectedly.
      */
-    @AppFunction(isDescribedByKDoc = true)
+    @AppFunctionDeclaration(isDescribedByKDoc = true)
     suspend fun getAppDetail(packageName: String): AppDetailResult = getAppDetailUseCase(packageName)
 
     /**
@@ -137,7 +137,7 @@ abstract class ApkAnalyzerAppFunctionService : AppFunctionService() {
      * @throws AppFunctionAppUnknownException If the app's certificates couldn't be read for
      *   another reason. If thrown, tell the user the lookup failed unexpectedly.
      */
-    @AppFunction(isDescribedByKDoc = true)
+    @AppFunctionDeclaration(isDescribedByKDoc = true)
     suspend fun getAppCertificates(packageName: String): List<CertificateSummary> = getAppCertificatesUseCase(packageName)
 
     /**
@@ -154,6 +154,6 @@ abstract class ApkAnalyzerAppFunctionService : AppFunctionService() {
      * @throws AppFunctionAppUnknownException If the app's permissions couldn't be read for
      *   another reason. If thrown, tell the user the lookup failed unexpectedly.
      */
-    @AppFunction(isDescribedByKDoc = true)
+    @AppFunctionDeclaration(isDescribedByKDoc = true)
     suspend fun getAppPermissions(packageName: String): List<PermissionGrantSummary> = getAppPermissionsUseCase(packageName)
 }

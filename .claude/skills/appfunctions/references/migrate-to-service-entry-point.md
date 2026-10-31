@@ -29,7 +29,7 @@ strict requirements that you must complete:
 
 1. **Build dependency consolidation** : Remove the merged `appfunctions-service` dependency while retaining core `appfunctions` and the KSP compiler.
 2. **Service wrapper creation** : Replace the legacy `AppFunctionConfiguration.Provider` on the `Application` class with an abstract class extending `AppFunctionService`, annotated with `@AppFunctionServiceEntryPoint`.
-3. **Annotation and context decoupling** : Move `@AppFunction` annotations to the new wrapper methods and drop `AppFunctionContext` parameters because `AppFunctionService` inherits directly from `Context`.
+3. **Annotation and context decoupling** : Move `@AppFunctionDeclaration` annotations to the new wrapper methods and drop `AppFunctionContext` parameters because `AppFunctionService` inherits directly from `Context`.
 4. **Manifest registration** : Register the KSP-generated concrete service in `AndroidManifest.xml` with `BIND_APP_FUNCTION_SERVICE`, the `AppFunctionService` intent filter, and metadata property tags.
 
 *** ** * ** ***
@@ -87,7 +87,7 @@ repositories or use cases using standard `@Inject internal lateinit var`:
 abstract class BaseAppFunctionService : AppFunctionService() {
     @Inject internal lateinit var messageRepository: MessageRepository
 
-    @AppFunction(isDescribedByKDoc = true)
+    @AppFunctionDeclaration(isDescribedByKDoc = true)
     internal suspend fun send(
         name: String,
         endpointValue: String,
@@ -124,7 +124,7 @@ abstract class ServiceLocatorBaseAppFunctionService : AppFunctionService() {
     // Or with Koin / alternative DI locators:
     // private val messageRepository: MessageRepository by inject()
 
-    @AppFunction(isDescribedByKDoc = true)
+    @AppFunctionDeclaration(isDescribedByKDoc = true)
     internal suspend fun send(
         name: String,
         endpointValue: String,
@@ -170,7 +170,7 @@ Don't attempt to make an `AppFunction` class or method OS-agnostic---AppFunction
 are inherently part of the Android platform integration through the
 `androidx.appfunctions` package. For architectural cleanliness, use existing
 application functionality, such as existing repositories, use cases, or domain
-orchestrators, to execute the behavior within your `@AppFunction` methods rather
+orchestrators, to execute the behavior within your `@AppFunctionDeclaration` methods rather
 than creating redundant abstraction layers around the OS service.
 
 *** ** * ** ***
