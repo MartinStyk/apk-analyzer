@@ -70,10 +70,14 @@ follow-up commit instead of gating local iteration on them.
 | Whole-app check (what CI gates on — don't run this locally unless debugging a CI failure) | `./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug :app:assembleDebug :tv:assembleDebug` |
 | After changing a context file, skill, adapter, or the module graph | `./gradlew validateAgentContext` — skip this too; CI covers it |
 
-A successful compile is not proof a Compose layout is correct. For visual or layout changes, use
-the `run-app` skill and look at it on a device. Two failure modes that pass every gate: text that
-wraps to three lines inside a fixed-width column, and two indicators that disagree because each
-derived its own answer.
+A successful compile is not proof a Compose layout is correct. For visual or layout changes, render
+the touched file's `@Preview` and look at the image:
+`android studio render-compose-preview <file> <PreviewFunction> --project=ApkAnalyzer --output-image-file=<png>`.
+It needs Android Studio open with the project `READY` in `android studio check`, but no device or
+Gradle build. Fall back to the `run-app` skill when Studio isn't running or the change depends on
+runtime state a preview can't fake. Two failure modes that pass every gate: text that wraps to three
+lines inside a fixed-width column, and two indicators that disagree because each derived its own
+answer.
 
 `spotlessCheck` does not flag unused imports. Deleting the last use of something does not delete its
 import, and no gate will tell you — check by hand.
