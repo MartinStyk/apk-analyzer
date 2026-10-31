@@ -13,7 +13,7 @@ running.
 ## 1. Script the flow before touching the device
 
 Don't improvise taps against a live recording — look up the exact on-screen strings first so the
-`navigate-app-adb` dump→locate→tap loop finds them on the first try instead of burning device time on
+`navigate-app-adb` look→tap loop finds them on the first try instead of burning device time on
 trial and error:
 
 ```bash
@@ -27,6 +27,10 @@ interaction per recording beats a long tour.
 ## 2. Find the tools
 
 - `adb`: often not on `PATH` — see the `run-app` skill's Step 1 (`$env:ANDROID_HOME\platform-tools\adb.exe`).
+- `android` (Android CLI, optional): drives the taps by selector — see the `navigate-app-adb` skill.
+  Make one `android layout` call before recording. The first call on a device installs a helper
+  and takes over a minute, which would otherwise land in the recording as a frozen screen — or
+  let the device lock mid-take.
 - `ffmpeg`: check `Get-Command ffmpeg`. If missing, install with
   `winget install --id Gyan.FFmpeg -e --accept-package-agreements --accept-source-agreements` — ask
   first, since installing software is a system change. The current shell won't pick up the new `PATH`
@@ -53,10 +57,15 @@ adb -s <serial> shell rm /sdcard/flow.mp4
   concatenate before converting: list the segment paths in a text file (`file '<path>'` per line) and
   run `ffmpeg -f concat -safe 0 -i list.txt -c copy combined.mp4`. Prioritize each sub-screen being on
   screen long enough to read over cramming everything into one fast take.
-- Drive `adb` from PowerShell on Windows, not the Bash tool (Git Bash rewrites `/sdcard/...` paths) —
-  see the `navigate-app-adb` skill's Windows gotchas. This doesn't apply to `screenrecord`/`pull`
-  themselves (binary files pulled by the `adb` tool, not piped through shell redirection), but does
-  apply to any `uiautomator dump` / `screencap` calls used to locate taps along the way.
+- **The Android CLI's helper shows up as an installed app.** It lists as "Android CLI
+  Instrumentation Server" among the A's in the apps list. For a flow that shows that part of the
+  list, run `adb uninstall com.android.cli.interact.instrumentation` before recording and drive
+  those taps with plain `adb` — any `android` call reinstalls it.
+- **`screenrecord` crashes on some devices.** If it exits with code 139 and leaves no file on
+  `/sdcard`, the device's recorder is broken (seen on a OnePlus 8T) — record on an emulator instead.
+- Drive `adb` from PowerShell on Windows, not the Bash tool (Git Bash rewrites `/sdcard/...` paths).
+  This matters for `screenrecord`'s output path and for any `uiautomator dump` / `screencap` calls
+  from the `navigate-app-adb` fallback; the `android` commands write locally and are unaffected.
 
 ## 4. Convert to GIF
 
@@ -105,9 +114,8 @@ legitimately runs larger than a single-interaction one.
 
 - Delete recordings and any files copied onto `/sdcard` for the flow (e.g. an APK copied into
   `Download/` to pick from a file picker) — `adb shell rm`.
-- Check the repo root for a stray `window_dump.xml` — a `uiautomator dump` run from the wrong shell
-  can leave one behind (see the `navigate-app-adb` skill's Windows gotcha) even when driven correctly
-  most of the time; delete it if present.
+- Check the repo root for a stray `window_dump.xml` or `layout.json` — write dumps to the scratchpad,
+  and delete any that landed in the repo.
 - Don't commit — leave the new/changed files in the working tree for review, per the root `AGENTS.md`
   commit-authorship rule and the general "don't commit unless asked" convention.
 - Don't run `spotlessApply`, `detektDebug`, or other Gradle verification — this is a markdown/asset
@@ -115,7 +123,7 @@ legitimately runs larger than a single-interaction one.
 
 ## Delegating the capture work
 
-This is a long, tool-noisy loop (many `uiautomator dump`s, recordings, ffmpeg passes) that produces
+This is a long, tool-noisy loop (many layout dumps, recordings, ffmpeg passes) that produces
 little the coordinating conversation needs to keep in its own context beyond the final file list and
 README diff. If you're an agent capable of forking or spawning a sub-task for this, that's a good fit
 — hand the sub-task the exact scripted flow from step 1, the tool paths from step 2, and steps 3-6
