@@ -1,27 +1,12 @@
-package sk.styk.martin.apkanalyzer.core.appexport
+package sk.styk.martin.apkanalyzer.core.appexport.appdata
 
+import sk.styk.martin.apkanalyzer.core.appexport.InventoryAttribute
+import sk.styk.martin.apkanalyzer.core.appexport.writer.InventoryValue
 import sk.styk.martin.apkanalyzer.core.apps.model.AppCategory
-import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.model.InstallLocation
-import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
-import sk.styk.martin.apkanalyzer.core.apps.signing.AppSigning
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import java.time.Instant
-
-internal sealed interface InventoryValue {
-    data class Text(val value: String) : InventoryValue
-    data class Number(val value: Long) : InventoryValue
-    data class Flag(val value: Boolean) : InventoryValue
-    data class TextList(val values: List<String>) : InventoryValue
-    data object Missing : InventoryValue
-}
-
-internal class InventoryAppData(
-    val app: InstalledApp,
-    val signing: AppSigning?,
-    val detail: AppDetail?,
-)
 
 @Suppress("CyclomaticComplexMethod")
 internal fun InventoryAttribute.valueOf(data: InventoryAppData): InventoryValue {

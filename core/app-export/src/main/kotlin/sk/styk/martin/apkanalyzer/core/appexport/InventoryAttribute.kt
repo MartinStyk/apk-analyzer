@@ -14,6 +14,7 @@ enum class InventoryAttributeGroup {
 
 internal enum class InventoryDataSource {
     AppList,
+    UsageStats,
     SigningIndex,
     AppAnalysis,
 }
@@ -40,9 +41,9 @@ enum class InventoryAttribute(
     InstallOriginator("install_originator", InventoryAttributeGroup.Installation, InventoryDataSource.AppList),
     FirstInstalled("first_installed", InventoryAttributeGroup.Installation, InventoryDataSource.AppList),
     LastUpdated("last_updated", InventoryAttributeGroup.Installation, InventoryDataSource.AppList),
-    LastUsed("last_used", InventoryAttributeGroup.Installation, InventoryDataSource.AppList),
+    LastUsed("last_used", InventoryAttributeGroup.Installation, InventoryDataSource.UsageStats),
     ApkSize("apk_size_bytes", InventoryAttributeGroup.Storage, InventoryDataSource.AppList),
-    TotalSize("total_size_bytes", InventoryAttributeGroup.Storage, InventoryDataSource.AppList),
+    TotalSize("total_size_bytes", InventoryAttributeGroup.Storage, InventoryDataSource.UsageStats),
     SplitApks("split_apks", InventoryAttributeGroup.Storage, InventoryDataSource.AppAnalysis),
     InstallLocation("install_location", InventoryAttributeGroup.Storage, InventoryDataSource.AppAnalysis),
     ApkDirectory("apk_directory", InventoryAttributeGroup.Storage, InventoryDataSource.AppAnalysis),
@@ -64,7 +65,7 @@ enum class InventoryAttribute(
         get() = source == InventoryDataSource.AppAnalysis
 
     val requiresUsageAccess: Boolean
-        get() = this == LastUsed || this == TotalSize
+        get() = source == InventoryDataSource.UsageStats
 
     companion object {
         val Defaults: Set<InventoryAttribute> = setOf(
