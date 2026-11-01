@@ -12,6 +12,7 @@ import sk.styk.martin.apkanalyzer.core.appexport.destination.ExportDestinations
 import sk.styk.martin.apkanalyzer.core.appexport.writer.createWriter
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
+import sk.styk.martin.apkanalyzer.core.common.file.ShareFileManager
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import java.io.StringWriter
 import java.io.Writer
@@ -21,10 +22,12 @@ import javax.inject.Inject
 private const val TAG = "InventoryExport"
 private const val PREVIEW_APP_COUNT = 3
 private const val PREVIEW_MAX_LINES = 40
+private const val SHARE_DIRECTORY = "inventory"
 
 internal class InventoryExportManagerImpl @Inject constructor(
     private val appDataLoader: InventoryAppDataLoader,
     private val destinations: ExportDestinations,
+    private val shareFileManager: ShareFileManager,
     private val dispatcherProvider: DispatcherProvider,
 ) : InventoryExportManager {
 
@@ -66,13 +69,8 @@ internal class InventoryExportManagerImpl @Inject constructor(
         send(result)
     }.flowOn(dispatcherProvider.io())
 
-    override suspend fun createShareDestination(fileName: String): Result<Uri> = withContext(dispatcherProvider.io()) {
-        runCatchingCancellable {
-            destinations.createShareFile(fileName)
-        }.onFailure {
-            Logger.e(TAG, it, "Can not prepare the inventory for sharing")
-        }
-    }
+    override suspend fun createShareDestination(fileName: String): Result<Uri> =
+        shareFileManager.createShareFile(directory = SHARE_DIRECTORY, fileName = fileName)
 
     private suspend fun writeInventory(
         request: InventoryExportRequest,

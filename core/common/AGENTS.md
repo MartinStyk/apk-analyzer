@@ -19,8 +19,11 @@ logic do not belong here.
 * `settings/` - generic typed DataStore persistence and preference keys.
 * `model/` - genuinely cross-module value types such as app references, source classification, and
   file sizes.
-* `resources/`, `clipboard/`, `digest/`, `device/`, and `io/` - shared platform adapters and focused
-  utilities. `device/`'s `DeviceInfoProvider` wraps `Settings.Secure.ANDROID_ID` and the `android.os.Build`
+* `resources/`, `clipboard/`, `digest/`, `device/`, `file/`, and `io/` - shared platform adapters and
+  focused utilities. `file/`'s `ShareFileManager` creates an empty file in a cache subdirectory and
+  returns its `content://` URI for sharing; it recreates the subdirectory on every call so only the
+  latest shared file stays on disk. The URI comes from the app's `FileProvider` (authority =
+  application ID), whose `cache-path` in `app` must keep covering the cache directory. `device/`'s `DeviceInfoProvider` wraps `Settings.Secure.ANDROID_ID` and the `android.os.Build`
   manufacturer and model behind an interface so callers never touch `@SuppressLint("HardwareIds")`,
   `ContentResolver`, or `Build` directly. `io/`'s
   `InputStream.limited(byteCount)` wraps a stream so it EOFs after exactly `byteCount` bytes without
