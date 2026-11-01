@@ -33,10 +33,13 @@ import sk.styk.martin.apkanalyzer.core.apps.sorting.AppSortType
 import sk.styk.martin.apkanalyzer.core.apps.sorting.comparator
 import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.common.file.ShareFileManager
 import sk.styk.martin.apkanalyzer.feature.apps.phone.list.AppListState
 import sk.styk.martin.apkanalyzer.feature.apps.phone.list.toListItem
 import java.time.LocalDateTime
 import javax.inject.Inject
+
+private const val SHARE_DIRECTORY = "inventory"
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
@@ -46,6 +49,7 @@ class InventoryExportViewModel @Inject constructor(
     @InventoryExportFilter private val exportFilterRepository: AppFilterRepository,
     usageStatsRepository: UsageStatsRepository,
     private val inventoryExportManager: InventoryExportManager,
+    private val shareFileManager: ShareFileManager,
     dispatcherProvider: DispatcherProvider,
 ) : ViewModel() {
 
@@ -156,7 +160,7 @@ class InventoryExportViewModel @Inject constructor(
             InventoryExportAction.Share -> {
                 val format = form.value.format
                 val fileName = format.fileName(LocalDateTime.now())
-                startExport(ExportTarget.Share, format) { inventoryExportManager.createShareDestination(fileName) }
+                startExport(ExportTarget.Share, format) { shareFileManager.createShareFile(directory = SHARE_DIRECTORY, fileName = fileName) }
             }
 
             InventoryExportAction.ShareUnavailable -> showFeedback(InventoryExportFeedback.ShareUnavailable)

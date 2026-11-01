@@ -31,5 +31,4 @@ sealed interface InventoryExportProgress {
 interface InventoryExportManager {
     suspend fun preview(request: InventoryExportRequest): Result<InventoryPreview>
     fun export(request: InventoryExportRequest, destination: Uri): Flow<InventoryExportProgress>
-    suspend fun createShareDestination(fileName: String): Result<Uri>
 }

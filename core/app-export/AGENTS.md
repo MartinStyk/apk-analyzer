@@ -18,8 +18,9 @@ It is a consumer of public `core:apps` repositories (`InstalledAppsRepository`, 
 * `appdata/`: `InventoryAppDataLoader` gathers each app's data from the repositories its attributes
   need, and maps attributes to typed values.
 * `writer/`: `InventoryValue` and one `InventoryWriter` per `InventoryFormat`.
-* `destination/`: `ExportDestinations` owns user-chosen document URIs: writing the document and
-  reading its display name. Share files come from `core:common`'s `ShareFileManager`.
+* `destination/`: `ExportDestinations` owns destination URIs: writing the document and reading its
+  display name. The module never creates destinations; callers pass a user-chosen document or a
+  share file from `core:common`'s `ShareFileManager`.
 
 ## Attributes
 
@@ -44,7 +45,5 @@ It is a consumer of public `core:apps` repositories (`InstalledAppsRepository`, 
   and counted in `incompleteAppCount`; it never fails the whole export.
 * `ExportDestinations.write()` truncates the destination and deletes it when writing fails or is
   cancelled, so a cancelled export never leaves a partial file behind.
-* `createShareDestination()` asks `ShareFileManager` for a file in `cache/inventory/`, which is
-  recreated for every share so at most one shared inventory stays on disk.
 * `preview()` renders the first few apps through the same writer as the real export, so the preview
   can never disagree with the file.
