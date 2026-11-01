@@ -41,11 +41,11 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.SearchBarAc
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.lazylist.ListItemPosition
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.lazylist.itemsPositioned
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.lazylist.shape
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.apps.phone.R
 import sk.styk.martin.apkanalyzer.feature.apps.phone.components.appitem.AppListItemRow
-import sk.styk.martin.apkanalyzer.feature.apps.phone.components.appitem.listItemShape
 import sk.styk.martin.apkanalyzer.feature.apps.phone.components.quickfilter.QuickFilterRow
 import sk.styk.martin.apkanalyzer.feature.apps.phone.list.AppListItem
 import java.time.Instant
@@ -239,7 +239,7 @@ private fun SearchHistoryRow(
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
                 .fillMaxWidth()
-                .background(AppTheme.colors.surface, listItemShape(position))
+                .background(AppTheme.colors.surface, position.shape())
                 .padding(2.dp)
                 .clip(Shapes.CardShape)
                 .clickable(onClick = onClick)

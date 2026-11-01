@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="inventory_export_title">Xuất danh sách ứng dụng</string>
+    <string name="inventory_export_step_apps">Ứng dụng</string>
+    <string name="inventory_export_step_columns">Cột</string>
+    <string name="inventory_export_step_export">Xuất</string>
+    <string name="inventory_export_next">Tiếp theo</string>
+    <string name="inventory_export_apps_loading">Đang tải ứng dụng…</string>
+    <plurals name="inventory_export_app_count">
+        <item quantity="other">%1$d ứng dụng</item>
+    </plurals>
+    <string name="inventory_export_apps_all">Bao gồm tất cả ứng dụng đã cài đặt.</string>
+    <string name="inventory_export_apps_filtered">Chỉ bao gồm các ứng dụng khớp với bộ lọc.</string>
+    <string name="inventory_export_edit_filters">Bộ lọc</string>
+    <string name="inventory_export_include_all_apps">Bao gồm tất cả ứng dụng</string>
+    <string name="inventory_export_no_apps">Không có ứng dụng nào khớp với các bộ lọc này</string>
+    <string name="inventory_export_no_apps_available">Không có ứng dụng nào để xuất</string>
+    <string name="inventory_export_change_filters">Thay đổi bộ lọc</string>
+    <string name="inventory_export_columns_selected">%1$d trên %2$d cột</string>
+    <string name="inventory_export_select_all">Chọn tất cả</string>
+    <string name="inventory_export_clear">Bỏ chọn</string>
+    <string name="inventory_export_no_columns_hint">Chọn ít nhất một cột để tiếp tục.</string>
+    <string name="inventory_export_slower_tag">Chậm hơn</string>
+    <string name="inventory_export_slow_hint">Một số cột đã chọn cần kiểm tra kỹ hơn từng ứng dụng nên quá trình xuất mất nhiều thời gian hơn.</string>
+    <string name="inventory_export_usage_access_hint">Thời gian sử dụng lần cuối và dung lượng lưu trữ sẽ để trống cho đến khi bạn cho phép truy cập dữ liệu sử dụng.</string>
+    <string name="inventory_export_grant_access">Cho phép truy cập</string>
+    <string name="inventory_export_attribute_category">Danh mục</string>
+    <string name="inventory_export_attribute_certificate_sha256">SHA-256 của chứng chỉ</string>
+    <string name="inventory_export_attribute_certificate_subject">Chủ thể chứng chỉ</string>
+    <string name="inventory_export_attribute_requested_permissions">Quyền được yêu cầu</string>
+    <string name="inventory_export_attribute_granted_permissions">Quyền đã cấp</string>
+    <plurals name="inventory_export_column_count">
+        <item quantity="other">%1$d cột</item>
+    </plurals>
+    <string name="inventory_export_summary">%1$s · %2$s</string>
+    <string name="inventory_export_format_title">Định dạng</string>
+    <string name="inventory_export_change">Thay đổi</string>
+    <string name="inventory_export_format_csv">Bảng tính CSV</string>
+    <string name="inventory_export_format_csv_description">Mở được bằng Excel, Google Trang tính và các ứng dụng bảng tính khác.</string>
+    <string name="inventory_export_format_json">JSON</string>
+    <string name="inventory_export_format_json_description">Dữ liệu có cấu trúc dành cho tập lệnh và các công cụ khác.</string>
+    <string name="inventory_export_preview_title">Xem trước</string>
+    <plurals name="inventory_export_preview_caption">
+        <item quantity="other">Chỉ hiển thị %1$d ứng dụng đầu tiên.</item>
+    </plurals>
+    <string name="inventory_export_preview_unavailable">Hiện không thể xem trước.</string>
+    <string name="inventory_export_save">Lưu</string>
+    <string name="inventory_export_share">Chia sẻ</string>
+    <string name="inventory_export_cancel">Hủy</string>
+    <string name="inventory_export_progress">Đang xuất %1$d trên %2$d ứng dụng…</string>
+    <plurals name="inventory_export_saved">
+        <item quantity="other">Đã lưu %1$d ứng dụng vào %2$s</item>
+    </plurals>
+    <plurals name="inventory_export_incomplete">
+        <item quantity="other">Một số thông tin của %1$d ứng dụng bị thiếu.</item>
+    </plurals>
+    <string name="inventory_export_failed">Không thể xuất danh sách ứng dụng</string>
+    <string name="inventory_export_picker_unavailable">Không có ứng dụng nào để lưu tệp</string>
+    <string name="inventory_export_share_unavailable">Không có ứng dụng nào để chia sẻ tệp</string>
+</resources>

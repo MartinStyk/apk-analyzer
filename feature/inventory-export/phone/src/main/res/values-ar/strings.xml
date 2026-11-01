@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="inventory_export_title">تصدير قائمة التطبيقات</string>
+    <string name="inventory_export_step_apps">التطبيقات</string>
+    <string name="inventory_export_step_columns">الأعمدة</string>
+    <string name="inventory_export_step_export">تصدير</string>
+    <string name="inventory_export_next">التالي</string>
+    <string name="inventory_export_apps_loading">جارٍ تحميل التطبيقات…</string>
+    <plurals name="inventory_export_app_count">
+        <item quantity="zero">%1$d تطبيق</item>
+        <item quantity="one">تطبيق واحد</item>
+        <item quantity="two">تطبيقان</item>
+        <item quantity="few">%1$d تطبيقات</item>
+        <item quantity="many">%1$d تطبيقًا</item>
+        <item quantity="other">%1$d تطبيق</item>
+    </plurals>
+    <string name="inventory_export_apps_all">تشمل جميع التطبيقات المثبتة.</string>
+    <string name="inventory_export_apps_filtered">تشمل فقط التطبيقات التي تطابق الفلاتر التي اخترتها.</string>
+    <string name="inventory_export_edit_filters">الفلاتر</string>
+    <string name="inventory_export_include_all_apps">تضمين جميع التطبيقات</string>
+    <string name="inventory_export_no_apps">لا توجد تطبيقات تطابق هذه الفلاتر</string>
+    <string name="inventory_export_no_apps_available">لا توجد تطبيقات متاحة للتصدير</string>
+    <string name="inventory_export_change_filters">تغيير الفلاتر</string>
+    <string name="inventory_export_columns_selected">الأعمدة: %1$d من %2$d</string>
+    <string name="inventory_export_select_all">تحديد الكل</string>
+    <string name="inventory_export_clear">إلغاء التحديد</string>
+    <string name="inventory_export_no_columns_hint">اختر عمودًا واحدًا على الأقل للمتابعة.</string>
+    <string name="inventory_export_slower_tag">أبطأ</string>
+    <string name="inventory_export_slow_hint">تحتاج بعض الأعمدة المحددة إلى فحص كل تطبيق بمزيد من التفصيل، لذا يستغرق التصدير وقتًا أطول.</string>
+    <string name="inventory_export_usage_access_hint">يبقى وقت آخر استخدام وحجم التخزين فارغين حتى تسمح بالوصول إلى بيانات الاستخدام.</string>
+    <string name="inventory_export_grant_access">السماح بالوصول</string>
+    <string name="inventory_export_attribute_category">الفئة</string>
+    <string name="inventory_export_attribute_certificate_sha256">SHA-256 للشهادة</string>
+    <string name="inventory_export_attribute_certificate_subject">صاحب الشهادة</string>
+    <string name="inventory_export_attribute_requested_permissions">الأذونات المطلوبة</string>
+    <string name="inventory_export_attribute_granted_permissions">الأذونات الممنوحة</string>
+    <plurals name="inventory_export_column_count">
+        <item quantity="zero">%1$d عمود</item>
+        <item quantity="one">عمود واحد</item>
+        <item quantity="two">عمودان</item>
+        <item quantity="few">%1$d أعمدة</item>
+        <item quantity="many">%1$d عمودًا</item>
+        <item quantity="other">%1$d عمود</item>
+    </plurals>
+    <string name="inventory_export_summary">%1$s · %2$s</string>
+    <string name="inventory_export_format_title">التنسيق</string>
+    <string name="inventory_export_change">تغيير</string>
+    <string name="inventory_export_format_csv">جدول بيانات CSV</string>
+    <string name="inventory_export_format_csv_description">يمكن فتحه في Excel وجداول بيانات Google وتطبيقات جداول البيانات الأخرى.</string>
+    <string name="inventory_export_format_json">JSON</string>
+    <string name="inventory_export_format_json_description">بيانات منظّمة للبرامج النصية والأدوات الأخرى.</string>
+    <string name="inventory_export_preview_title">معاينة</string>
+    <plurals name="inventory_export_preview_caption">
+        <item quantity="zero">لا تعرض أي تطبيقات (%1$d).</item>
+        <item quantity="one">تعرض التطبيق الأول فقط.</item>
+        <item quantity="two">تعرض التطبيقين الأولين فقط.</item>
+        <item quantity="few">تعرض أول %1$d تطبيقات فقط.</item>
+        <item quantity="many">تعرض أول %1$d تطبيقًا فقط.</item>
+        <item quantity="other">تعرض أول %1$d تطبيق فقط.</item>
+    </plurals>
+    <string name="inventory_export_preview_unavailable">المعاينة غير متاحة الآن.</string>
+    <string name="inventory_export_save">حفظ</string>
+    <string name="inventory_export_share">مشاركة</string>
+    <string name="inventory_export_cancel">إلغاء</string>
+    <string name="inventory_export_progress">جارٍ تصدير التطبيقات: %1$d من %2$d…</string>
+    <plurals name="inventory_export_saved">
+        <item quantity="zero">تم حفظ %1$d تطبيق في %2$s</item>
+        <item quantity="one">تم حفظ تطبيق واحد في %2$s</item>
+        <item quantity="two">تم حفظ تطبيقين في %2$s</item>
+        <item quantity="few">تم حفظ %1$d تطبيقات في %2$s</item>
+        <item quantity="many">تم حفظ %1$d تطبيقًا في %2$s</item>
+        <item quantity="other">تم حفظ %1$d تطبيق في %2$s</item>
+    </plurals>
+    <plurals name="inventory_export_incomplete">
+        <item quantity="zero">تنقص بعض البيانات لـ %1$d تطبيق.</item>
+        <item quantity="one">تنقص بعض البيانات لتطبيق واحد.</item>
+        <item quantity="two">تنقص بعض البيانات لتطبيقين.</item>
+        <item quantity="few">تنقص بعض البيانات لـ %1$d تطبيقات.</item>
+        <item quantity="many">تنقص بعض البيانات لـ %1$d تطبيقًا.</item>
+        <item quantity="other">تنقص بعض البيانات لـ %1$d تطبيق.</item>
+    </plurals>
+    <string name="inventory_export_failed">تعذّر تصدير قائمة التطبيقات</string>
+    <string name="inventory_export_picker_unavailable">لا يوجد تطبيق متاح لحفظ الملف</string>
+    <string name="inventory_export_share_unavailable">لا يوجد تطبيق متاح لمشاركة الملف</string>
+</resources>

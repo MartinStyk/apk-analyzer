@@ -48,6 +48,9 @@ exception is `InactiveSearchBar`, which lives in `SearchBarInactive.kt`.
   shared component owns semantics and its shape-clipped ripple.
 * `Chip` is an interactive selector with a full touch target. `Tag` is a compact, non-interactive
   inline fact on a row. Do not use them interchangeably.
+* `AppRow` (and `AppRowSkeleton`) is the shared installed-app row: icon, name, package, and a
+  caller-supplied trailing slot, shaped by its `ListItemPosition` through `ListItemPosition.shape()`
+  in `lazylist/`. Build app lists on it instead of a feature-local row.
 
 ## tv
 

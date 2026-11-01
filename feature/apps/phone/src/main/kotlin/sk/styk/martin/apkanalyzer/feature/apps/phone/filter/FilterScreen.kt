@@ -61,6 +61,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.TextButton
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.card
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
+import sk.styk.martin.apkanalyzer.feature.apps.api.AppFilterScope
 import sk.styk.martin.apkanalyzer.feature.apps.phone.R
 import java.text.DateFormat
 import java.time.Instant

@@ -47,6 +47,7 @@ import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.AppIcon
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.AppRowSkeleton
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.BottomSheet
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Chip
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
@@ -66,7 +67,6 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.apps.phone.R
 import sk.styk.martin.apkanalyzer.feature.apps.phone.components.AppDataPermission
-import sk.styk.martin.apkanalyzer.feature.apps.phone.components.AppListItemRowSkeleton
 import sk.styk.martin.apkanalyzer.feature.apps.phone.components.PermissionRationaleBottomSheet
 import sk.styk.martin.apkanalyzer.feature.apps.phone.components.RecentAppsRowSkeleton
 import sk.styk.martin.apkanalyzer.feature.apps.phone.components.apkfilepicker.ApkFilePickerButton
@@ -291,7 +291,7 @@ private fun LazyListScope.appsSectionItems(
             count = 8,
             key = { "app_skeleton_$it" },
         ) { position ->
-            AppListItemRowSkeleton(
+            AppRowSkeleton(
                 position = position,
                 modifier = Modifier.animateItem(),
             )

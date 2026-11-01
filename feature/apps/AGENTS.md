@@ -5,7 +5,7 @@
 The start destination for browsing installed apps, searching, filtering, sorting, opening APK files,
 and navigating to app details or settings.
 
-The API module exposes only the top-level navigation key. The phone implementation uses the package
+The API module exposes the top-level navigation key and the filter key (see below). The phone implementation uses the package
 `sk.styk.martin.apkanalyzer.feature.apps.phone`; the TV one is described under [TV Module](#tv-module).
 Opening APK files and navigating to settings are phone-only.
 
@@ -18,9 +18,6 @@ Opening APK files and navigating to settings are phone-only.
   `filter/source/`, and `filter/sdkversion/` each own a nested full-screen multiselect destination
   opened from a card on the main filter screen.
 * `components/` - feature-owned reusable UI, including APK document selection and app rows.
-* `inventory/` - the three-step inventory export wizard (apps, columns, export), opened from the
-  Export button beside Sort. Export logic lives in `core:app-export`; this package owns only the
-  wizard state, labels, and the document/share hand-off.
 * `navigation/` - the top-level and internal Navigation 3 destinations.
 
 Each user-visible destination owns its State/Action/Event/ViewModel set. Do not centralize search,
@@ -35,9 +32,9 @@ bridged in through its own `Singleton` coordinator (`PermissionFilterCoordinator
 because the nested screen is a separate Navigation 3 destination with its own `HiltViewModel` and
 cannot share `FilterViewModel`'s in-memory state directly.
 
-`AppFilterNavKey` carries an `AppFilterScope`. `AppList` edits the shared list filter;
-`InventoryExport` edits the `@InventoryExportFilter` repository, which the wizard seeds from the list
-filter on entry. The nested coordinators only touch the draft, so they serve both scopes unchanged.
+`AppFilterNavKey` lives in the API module because `feature:inventory-export` opens it too. It carries
+an `AppFilterScope`: `AppList` edits the shared list filter; `InventoryExport` edits the
+`@InventoryExportFilter` repository, which the export wizard seeds from the list filter on entry. The nested coordinators only touch the draft, so they serve both scopes unchanged.
 
 ## TV Module
 
@@ -79,8 +76,9 @@ it hides the row while filters are active, so everything on screen matches the f
 
 ## Navigation Topology
 
-The apps destination opens search, filter, and inventory export internally. Filter opens permission selection. App
-details and settings are cross-feature destinations and must use their API modules.
+The apps destination opens search and filter internally. Filter opens permission selection. App
+details, settings, and inventory export (the Export button beside Sort) are cross-feature
+destinations and must use their API modules.
 
 Register all internal destinations through this feature's entry provider, then register that provider
 once in its app host — `appEntries` in `ApkAnalyzerApp.kt`, `tvAppEntries` in `TvApkAnalyzerApp.kt`.

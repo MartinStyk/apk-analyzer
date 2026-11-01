@@ -26,6 +26,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.phone.navigation.appDetailEn
 import sk.styk.martin.apkanalyzer.feature.apps.api.AppsNavKey
 import sk.styk.martin.apkanalyzer.feature.apps.phone.navigation.appEntries
 import sk.styk.martin.apkanalyzer.feature.browse.phone.navigation.browseEntries
+import sk.styk.martin.apkanalyzer.feature.inventoryexport.phone.navigation.inventoryExportEntries
 import sk.styk.martin.apkanalyzer.feature.settings.phone.navigation.settingsEntries
 import sk.styk.martin.apkanalyzer.ui.navigation.TOP_LEVEL_DESTINATIONS
 import sk.styk.martin.apkanalyzer.ui.navigation.TOP_LEVEL_KEYS
@@ -56,6 +57,7 @@ internal fun ApkAnalyzerApp(onBackAtRoot: () -> Unit) {
                         appEntries(navigator)
                         appDetailEntries(navigator)
                         browseEntries(navigator)
+                        inventoryExportEntries(navigator)
                         settingsEntries(navigator)
                     }
                     NavDisplay(

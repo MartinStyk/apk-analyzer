@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="inventory_export_title">Exportar lista de aplicativos</string>
+    <string name="inventory_export_step_apps">Aplicativos</string>
+    <string name="inventory_export_step_columns">Colunas</string>
+    <string name="inventory_export_step_export">Exportar</string>
+    <string name="inventory_export_next">Próximo</string>
+    <string name="inventory_export_apps_loading">Carregando aplicativos…</string>
+    <plurals name="inventory_export_app_count">
+        <item quantity="one">%1$d aplicativo</item>
+        <item quantity="many">%1$d aplicativos</item>
+        <item quantity="other">%1$d aplicativos</item>
+    </plurals>
+    <string name="inventory_export_apps_all">Inclui todos os aplicativos instalados.</string>
+    <string name="inventory_export_apps_filtered">Inclui apenas os aplicativos que correspondem aos seus filtros.</string>
+    <string name="inventory_export_edit_filters">Filtros</string>
+    <string name="inventory_export_include_all_apps">Incluir todos os aplicativos</string>
+    <string name="inventory_export_no_apps">Nenhum aplicativo corresponde a estes filtros</string>
+    <string name="inventory_export_no_apps_available">Não há aplicativos disponíveis para exportar</string>
+    <string name="inventory_export_change_filters">Alterar filtros</string>
+    <string name="inventory_export_columns_selected">%1$d de %2$d colunas</string>
+    <string name="inventory_export_select_all">Selecionar tudo</string>
+    <string name="inventory_export_clear">Limpar seleção</string>
+    <string name="inventory_export_no_columns_hint">Escolha pelo menos uma coluna para continuar.</string>
+    <string name="inventory_export_slower_tag">Mais lento</string>
+    <string name="inventory_export_slow_hint">Algumas colunas selecionadas exigem uma análise mais detalhada de cada aplicativo, então a exportação demora mais.</string>
+    <string name="inventory_export_usage_access_hint">O horário do último uso e o tamanho de armazenamento ficam vazios até você permitir o acesso aos dados de uso.</string>
+    <string name="inventory_export_grant_access">Permitir acesso</string>
+    <string name="inventory_export_attribute_category">Categoria</string>
+    <string name="inventory_export_attribute_certificate_sha256">SHA-256 do certificado</string>
+    <string name="inventory_export_attribute_certificate_subject">Titular do certificado</string>
+    <string name="inventory_export_attribute_requested_permissions">Permissões solicitadas</string>
+    <string name="inventory_export_attribute_granted_permissions">Permissões concedidas</string>
+    <plurals name="inventory_export_column_count">
+        <item quantity="one">%1$d coluna</item>
+        <item quantity="many">%1$d colunas</item>
+        <item quantity="other">%1$d colunas</item>
+    </plurals>
+    <string name="inventory_export_summary">%1$s · %2$s</string>
+    <string name="inventory_export_format_title">Formato</string>
+    <string name="inventory_export_change">Alterar</string>
+    <string name="inventory_export_format_csv">Planilha CSV</string>
+    <string name="inventory_export_format_csv_description">Abre no Excel, no Planilhas Google e em outros aplicativos de planilhas.</string>
+    <string name="inventory_export_format_json">JSON</string>
+    <string name="inventory_export_format_json_description">Dados estruturados para scripts e outras ferramentas.</string>
+    <string name="inventory_export_preview_title">Prévia</string>
+    <plurals name="inventory_export_preview_caption">
+        <item quantity="one">Mostra apenas %1$d aplicativo do início da lista.</item>
+        <item quantity="many">Mostra apenas os primeiros %1$d aplicativos.</item>
+        <item quantity="other">Mostra apenas os primeiros %1$d aplicativos.</item>
+    </plurals>
+    <string name="inventory_export_preview_unavailable">A prévia não está disponível no momento.</string>
+    <string name="inventory_export_save">Salvar</string>
+    <string name="inventory_export_share">Compartilhar</string>
+    <string name="inventory_export_cancel">Cancelar</string>
+    <string name="inventory_export_progress">Exportando %1$d de %2$d aplicativos…</string>
+    <plurals name="inventory_export_saved">
+        <item quantity="one">%1$d aplicativo salvo em %2$s</item>
+        <item quantity="many">%1$d aplicativos salvos em %2$s</item>
+        <item quantity="other">%1$d aplicativos salvos em %2$s</item>
+    </plurals>
+    <plurals name="inventory_export_incomplete">
+        <item quantity="one">Faltam alguns dados de %1$d aplicativo.</item>
+        <item quantity="many">Faltam alguns dados de %1$d aplicativos.</item>
+        <item quantity="other">Faltam alguns dados de %1$d aplicativos.</item>
+    </plurals>
+    <string name="inventory_export_failed">Não foi possível exportar a lista de aplicativos</string>
+    <string name="inventory_export_picker_unavailable">Não há nenhum aplicativo disponível para salvar o arquivo</string>
+    <string name="inventory_export_share_unavailable">Não há nenhum aplicativo disponível para compartilhar o arquivo</string>
+</resources>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="inventory_export_title">导出应用列表</string>
+    <string name="inventory_export_step_apps">应用</string>
+    <string name="inventory_export_step_columns">列</string>
+    <string name="inventory_export_step_export">导出</string>
+    <string name="inventory_export_next">下一步</string>
+    <string name="inventory_export_apps_loading">正在加载应用…</string>
+    <plurals name="inventory_export_app_count">
+        <item quantity="other">%1$d 个应用</item>
+    </plurals>
+    <string name="inventory_export_apps_all">包含所有已安装的应用。</string>
+    <string name="inventory_export_apps_filtered">仅包含符合过滤条件的应用。</string>
+    <string name="inventory_export_edit_filters">过滤条件</string>
+    <string name="inventory_export_include_all_apps">包含所有应用</string>
+    <string name="inventory_export_no_apps">没有应用符合这些过滤条件</string>
+    <string name="inventory_export_no_apps_available">没有可导出的应用</string>
+    <string name="inventory_export_change_filters">更改过滤条件</string>
+    <string name="inventory_export_columns_selected">已选 %1$d 列，共 %2$d 列</string>
+    <string name="inventory_export_select_all">全选</string>
+    <string name="inventory_export_clear">取消选择</string>
+    <string name="inventory_export_no_columns_hint">请至少选择一列以继续。</string>
+    <string name="inventory_export_slower_tag">较慢</string>
+    <string name="inventory_export_slow_hint">部分已选列需要更详细地检查每个应用，因此导出会耗时更长。</string>
+    <string name="inventory_export_usage_access_hint">在您允许访问使用情况数据之前，最后使用时间和存储大小将保持为空。</string>
+    <string name="inventory_export_grant_access">允许访问</string>
+    <string name="inventory_export_attribute_category">类别</string>
+    <string name="inventory_export_attribute_certificate_sha256">证书 SHA-256</string>
+    <string name="inventory_export_attribute_certificate_subject">证书主体</string>
+    <string name="inventory_export_attribute_requested_permissions">请求的权限</string>
+    <string name="inventory_export_attribute_granted_permissions">已授予的权限</string>
+    <plurals name="inventory_export_column_count">
+        <item quantity="other">%1$d 列</item>
+    </plurals>
+    <string name="inventory_export_summary">%1$s · %2$s</string>
+    <string name="inventory_export_format_title">格式</string>
+    <string name="inventory_export_change">更改</string>
+    <string name="inventory_export_format_csv">CSV 电子表格</string>
+    <string name="inventory_export_format_csv_description">可在 Excel、Google 表格和其他电子表格应用中打开。</string>
+    <string name="inventory_export_format_json">JSON</string>
+    <string name="inventory_export_format_json_description">适用于脚本和其他工具的结构化数据。</string>
+    <string name="inventory_export_preview_title">预览</string>
+    <plurals name="inventory_export_preview_caption">
+        <item quantity="other">仅显示前 %1$d 个应用。</item>
+    </plurals>
+    <string name="inventory_export_preview_unavailable">暂时无法显示预览。</string>
+    <string name="inventory_export_save">保存</string>
+    <string name="inventory_export_share">分享</string>
+    <string name="inventory_export_cancel">取消</string>
+    <string name="inventory_export_progress">正在导出 %1$d 个应用，共 %2$d 个…</string>
+    <plurals name="inventory_export_saved">
+        <item quantity="other">已将 %1$d 个应用保存到 %2$s</item>
+    </plurals>
+    <plurals name="inventory_export_incomplete">
+        <item quantity="other">%1$d 个应用缺少部分详细信息。</item>
+    </plurals>
+    <string name="inventory_export_failed">无法导出应用列表</string>
+    <string name="inventory_export_picker_unavailable">没有可用于保存文件的应用</string>
+    <string name="inventory_export_share_unavailable">没有可用于分享文件的应用</string>
+</resources>

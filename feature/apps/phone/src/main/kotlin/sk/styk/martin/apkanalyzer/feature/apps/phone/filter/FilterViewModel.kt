@@ -25,6 +25,7 @@ import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepository
 import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.combine
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
+import sk.styk.martin.apkanalyzer.feature.apps.api.AppFilterScope
 import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.domain.PermissionFilterCoordinator
 import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.domain.PermissionFilterDraft
 import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.domain.SdkVersionFilterCoordinator
