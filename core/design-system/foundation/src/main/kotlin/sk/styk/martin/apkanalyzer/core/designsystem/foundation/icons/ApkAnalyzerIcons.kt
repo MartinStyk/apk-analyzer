@@ -23,8 +23,10 @@ import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.Contacts
 import androidx.compose.material.icons.rounded.ContentCopy
+import androidx.compose.material.icons.rounded.DataObject
 import androidx.compose.material.icons.rounded.DataUsage
 import androidx.compose.material.icons.rounded.DirectionsRun
+import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Explore
 import androidx.compose.material.icons.rounded.FilterList
 import androidx.compose.material.icons.rounded.Fingerprint
@@ -62,6 +64,7 @@ import androidx.compose.material.icons.rounded.Sms
 import androidx.compose.material.icons.rounded.Storage
 import androidx.compose.material.icons.rounded.SwapVert
 import androidx.compose.material.icons.rounded.Sync
+import androidx.compose.material.icons.rounded.TableChart
 import androidx.compose.material.icons.rounded.TouchApp
 import androidx.compose.material.icons.rounded.Tv
 import androidx.compose.material.icons.rounded.UploadFile
@@ -138,6 +141,9 @@ data object ApkAnalyzerIcons {
     val Search = Icons.Rounded.Search
     val Settings = Icons.Rounded.Settings
     val Share = Icons.Rounded.Share
+    val Export = Icons.Rounded.Download
+    val Table = Icons.Rounded.TableChart
+    val DataObject = Icons.Rounded.DataObject
     val Sort = Icons.Rounded.SwapVert
     val Sync = Icons.Rounded.Sync
     val FileUpload = Icons.Rounded.UploadFile

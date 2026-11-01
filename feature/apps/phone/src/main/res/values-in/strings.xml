@@ -136,4 +136,62 @@
     <string name="filter_permissions_empty_title">Tidak ada izin yang ditemukan</string>
     <string name="filter_permissions_empty_subtitle">Perangkat ini tidak memiliki izin untuk ditampilkan.</string>
     <string name="quick_filter_sensitive_permissions">Izin sensitif</string>
+    <string name="content_description_export_app_list">Ekspor daftar aplikasi</string>
+    <string name="inventory_export_title">Ekspor daftar aplikasi</string>
+    <string name="inventory_export_step_apps">Aplikasi</string>
+    <string name="inventory_export_step_columns">Kolom</string>
+    <string name="inventory_export_step_export">Ekspor</string>
+    <string name="inventory_export_next">Berikutnya</string>
+    <string name="inventory_export_apps_loading">Memuat aplikasi…</string>
+    <plurals name="inventory_export_app_count">
+        <item quantity="other">%1$d aplikasi</item>
+    </plurals>
+    <string name="inventory_export_apps_all">Mencakup semua aplikasi yang terinstal.</string>
+    <string name="inventory_export_apps_filtered">Hanya mencakup aplikasi yang cocok dengan filter.</string>
+    <string name="inventory_export_edit_filters">Filter</string>
+    <string name="inventory_export_include_all_apps">Sertakan semua aplikasi</string>
+    <string name="inventory_export_no_apps">Tidak ada aplikasi yang cocok dengan filter ini</string>
+    <string name="inventory_export_no_apps_available">Tidak ada aplikasi yang dapat diekspor</string>
+    <string name="inventory_export_change_filters">Ubah filter</string>
+    <string name="inventory_export_columns_selected">%1$d dari %2$d kolom</string>
+    <string name="inventory_export_select_all">Pilih semua</string>
+    <string name="inventory_export_clear">Batalkan pilihan</string>
+    <string name="inventory_export_no_columns_hint">Pilih setidaknya satu kolom untuk melanjutkan.</string>
+    <string name="inventory_export_slower_tag">Lebih lambat</string>
+    <string name="inventory_export_slow_hint">Beberapa kolom yang dipilih memerlukan pemeriksaan lebih rinci pada setiap aplikasi, sehingga ekspor membutuhkan waktu lebih lama.</string>
+    <string name="inventory_export_usage_access_hint">Waktu terakhir digunakan dan ukuran penyimpanan tetap kosong hingga Anda mengizinkan akses data penggunaan.</string>
+    <string name="inventory_export_grant_access">Izinkan akses</string>
+    <string name="inventory_export_attribute_category">Kategori</string>
+    <string name="inventory_export_attribute_certificate_sha256">SHA-256 sertifikat</string>
+    <string name="inventory_export_attribute_certificate_subject">Subjek sertifikat</string>
+    <string name="inventory_export_attribute_requested_permissions">Izin yang diminta</string>
+    <string name="inventory_export_attribute_granted_permissions">Izin yang diberikan</string>
+    <plurals name="inventory_export_column_count">
+        <item quantity="other">%1$d kolom</item>
+    </plurals>
+    <string name="inventory_export_summary">%1$s · %2$s</string>
+    <string name="inventory_export_format_title">Format</string>
+    <string name="inventory_export_change">Ubah</string>
+    <string name="inventory_export_format_csv">Spreadsheet CSV</string>
+    <string name="inventory_export_format_csv_description">Dapat dibuka di Excel, Google Spreadsheet, dan aplikasi spreadsheet lainnya.</string>
+    <string name="inventory_export_format_json">JSON</string>
+    <string name="inventory_export_format_json_description">Data terstruktur untuk skrip dan alat lainnya.</string>
+    <string name="inventory_export_preview_title">Pratinjau</string>
+    <plurals name="inventory_export_preview_caption">
+        <item quantity="other">Hanya menampilkan %1$d aplikasi pertama.</item>
+    </plurals>
+    <string name="inventory_export_preview_unavailable">Pratinjau tidak tersedia saat ini.</string>
+    <string name="inventory_export_save">Simpan</string>
+    <string name="inventory_export_share">Bagikan</string>
+    <string name="inventory_export_cancel">Batal</string>
+    <string name="inventory_export_progress">Mengekspor %1$d dari %2$d aplikasi…</string>
+    <plurals name="inventory_export_saved">
+        <item quantity="other">%1$d aplikasi disimpan ke %2$s</item>
+    </plurals>
+    <plurals name="inventory_export_incomplete">
+        <item quantity="other">Beberapa detail tidak tersedia untuk %1$d aplikasi.</item>
+    </plurals>
+    <string name="inventory_export_failed">Tidak dapat mengekspor daftar aplikasi</string>
+    <string name="inventory_export_picker_unavailable">Tidak ada aplikasi yang dapat menyimpan file</string>
+    <string name="inventory_export_share_unavailable">Tidak ada aplikasi yang dapat membagikan file</string>
 </resources>

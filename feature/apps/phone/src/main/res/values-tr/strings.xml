@@ -142,4 +142,67 @@
     <string name="filter_permissions_empty_title">Hiçbir izin bulunamadı</string>
     <string name="filter_permissions_empty_subtitle">Bu cihazda görüntülenecek izin yok.</string>
     <string name="quick_filter_sensitive_permissions">Hassas izinler</string>
+    <string name="content_description_export_app_list">Uygulama listesini dışa aktar</string>
+    <string name="inventory_export_title">Uygulama listesini dışa aktar</string>
+    <string name="inventory_export_step_apps">Uygulamalar</string>
+    <string name="inventory_export_step_columns">Sütunlar</string>
+    <string name="inventory_export_step_export">Dışa aktar</string>
+    <string name="inventory_export_next">İleri</string>
+    <string name="inventory_export_apps_loading">Uygulamalar yükleniyor…</string>
+    <plurals name="inventory_export_app_count">
+        <item quantity="one">%1$d uygulama</item>
+        <item quantity="other">%1$d uygulama</item>
+    </plurals>
+    <string name="inventory_export_apps_all">Yüklü tüm uygulamaları içerir.</string>
+    <string name="inventory_export_apps_filtered">Yalnızca filtrelerinizle eşleşen uygulamaları içerir.</string>
+    <string name="inventory_export_edit_filters">Filtreler</string>
+    <string name="inventory_export_include_all_apps">Tüm uygulamaları dahil et</string>
+    <string name="inventory_export_no_apps">Bu filtrelerle eşleşen uygulama yok</string>
+    <string name="inventory_export_no_apps_available">Dışa aktarılabilecek uygulama yok</string>
+    <string name="inventory_export_change_filters">Filtreleri değiştir</string>
+    <string name="inventory_export_columns_selected">%2$d sütundan %1$d tanesi</string>
+    <string name="inventory_export_select_all">Tümünü seç</string>
+    <string name="inventory_export_clear">Seçimi temizle</string>
+    <string name="inventory_export_no_columns_hint">Devam etmek için en az bir sütun seçin.</string>
+    <string name="inventory_export_slower_tag">Daha yavaş</string>
+    <string name="inventory_export_slow_hint">Seçilen bazı sütunlar her uygulamanın daha ayrıntılı incelenmesini gerektirir, bu nedenle dışa aktarma daha uzun sürer.</string>
+    <string name="inventory_export_usage_access_hint">Kullanım verilerine erişime izin verene kadar son kullanım zamanı ve depolama boyutu boş kalır.</string>
+    <string name="inventory_export_grant_access">Erişime izin ver</string>
+    <string name="inventory_export_attribute_category">Kategori</string>
+    <string name="inventory_export_attribute_certificate_sha256">Sertifika SHA-256</string>
+    <string name="inventory_export_attribute_certificate_subject">Sertifika öznesi</string>
+    <string name="inventory_export_attribute_requested_permissions">İstenen izinler</string>
+    <string name="inventory_export_attribute_granted_permissions">Verilen izinler</string>
+    <plurals name="inventory_export_column_count">
+        <item quantity="one">%1$d sütun</item>
+        <item quantity="other">%1$d sütun</item>
+    </plurals>
+    <string name="inventory_export_summary">%1$s · %2$s</string>
+    <string name="inventory_export_format_title">Biçim</string>
+    <string name="inventory_export_change">Değiştir</string>
+    <string name="inventory_export_format_csv">CSV e-tablosu</string>
+    <string name="inventory_export_format_csv_description">Excel, Google E-Tablolar ve diğer e-tablo uygulamalarında açılır.</string>
+    <string name="inventory_export_format_json">JSON</string>
+    <string name="inventory_export_format_json_description">Betikler ve diğer araçlar için yapılandırılmış veriler.</string>
+    <string name="inventory_export_preview_title">Önizleme</string>
+    <plurals name="inventory_export_preview_caption">
+        <item quantity="one">Yalnızca ilk uygulamayı gösterir.</item>
+        <item quantity="other">Yalnızca ilk %1$d uygulamayı gösterir.</item>
+    </plurals>
+    <string name="inventory_export_preview_unavailable">Önizleme şu anda kullanılamıyor.</string>
+    <string name="inventory_export_save">Kaydet</string>
+    <string name="inventory_export_share">Paylaş</string>
+    <string name="inventory_export_cancel">İptal</string>
+    <string name="inventory_export_progress">%2$d uygulamadan %1$d tanesi dışa aktarılıyor…</string>
+    <plurals name="inventory_export_saved">
+        <item quantity="one">%1$d uygulama %2$s dosyasına kaydedildi</item>
+        <item quantity="other">%1$d uygulama %2$s dosyasına kaydedildi</item>
+    </plurals>
+    <plurals name="inventory_export_incomplete">
+        <item quantity="one">%1$d uygulamanın bazı bilgileri eksik.</item>
+        <item quantity="other">%1$d uygulamanın bazı bilgileri eksik.</item>
+    </plurals>
+    <string name="inventory_export_failed">Uygulama listesi dışa aktarılamadı</string>
+    <string name="inventory_export_picker_unavailable">Dosyayı kaydedebilecek uygulama yok</string>
+    <string name="inventory_export_share_unavailable">Dosyayı paylaşabilecek uygulama yok</string>
 </resources>

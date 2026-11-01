@@ -83,6 +83,7 @@ internal fun AppsScreen(
     onSettings: () -> Unit,
     onApkDetails: (String) -> Unit,
     onFilter: () -> Unit,
+    onInventoryExport: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AppsViewModel = hiltViewModel(),
 ) {
@@ -96,6 +97,7 @@ internal fun AppsScreen(
                 is AppsEvent.NavigateToSearch -> onSearch()
                 is AppsEvent.NavigateToSettings -> onSettings()
                 is AppsEvent.NavigateToFilter -> onFilter()
+                is AppsEvent.NavigateToInventoryExport -> onInventoryExport()
                 is AppsEvent.OpenUsageAccessSettings -> context.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
             }
         }
@@ -195,6 +197,7 @@ private fun AppsContent(
                     onAppClicked = { onAction(AppsAction.AppClicked(it)) },
                     onClearFilters = { onAction(AppsAction.ClearAllFilters) },
                     onShowSort = { showSortSheet = true },
+                    onExport = { onAction(AppsAction.ExportClicked) },
                 )
             }
         }
@@ -251,6 +254,7 @@ private fun LazyListScope.appsSectionItems(
     onAppClicked: (PackageName) -> Unit,
     onClearFilters: () -> Unit,
     onShowSort: () -> Unit,
+    onExport: () -> Unit,
 ) {
     item(key = "installed_apps_header") {
         Column {
@@ -262,6 +266,13 @@ private fun LazyListScope.appsSectionItems(
                     color = AppTheme.colors.onBackground,
                     modifier = Modifier.weight(1f),
                 )
+                IconButton(
+                    imageVector = ApkAnalyzerIcons.Export,
+                    onClick = onExport,
+                    iconSize = 22.dp,
+                    contentDescription = stringResource(R.string.content_description_export_app_list),
+                )
+                Spacer(modifier = Modifier.width(4.dp))
                 IconButton(
                     imageVector = ApkAnalyzerIcons.Sort,
                     style = if (sortType == AppSortType.Name) IconButtonStyle.Standard else IconButtonStyle.Highlighted,

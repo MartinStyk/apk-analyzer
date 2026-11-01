@@ -25,12 +25,15 @@ models, implementation, and private analysis helpers together.
 * `devicefeatures/` - device capabilities and app/device requirement comparison.
 * `packaging/` - installed splits, native-library existence and breakdown, and APK size.
 * `usagestats/` and `storagestats/` - permission-gated device statistics.
-* `export/` - APK and icon export.
+* `export/` - single-app APK and icon export. Multi-app inventory export lives in
+  [`core:app-export`](../app-export/AGENTS.md).
 * `sdkversion/` - Android version labels.
 * `sorting/` - `AppSortType` and its comparator over `InstalledApp`, shared by the phone and TV app
   lists so both order apps identically. Which options a screen offers stays with the screen.
 * `filtering/` - `AppFilterState`, the `filterBy` predicate, permission presets, quick filters, and
-  the in-memory `AppFilterRepository` both app lists filter through.
+  the in-memory `AppFilterRepository` both app lists filter through. A second, independent
+  instance qualified `@InventoryExportFilter` picks the apps for inventory export, so narrowing an
+  export never changes the visible app list.
 * `insight/` - the "Worth knowing" evaluator and the app badges, with their labels. Phone and TV
   app detail both read them, so a finding shows identically on both.
 * `search/` - `List<InstalledApp>.search(query)`, the fuzzy name-and-package matcher both search

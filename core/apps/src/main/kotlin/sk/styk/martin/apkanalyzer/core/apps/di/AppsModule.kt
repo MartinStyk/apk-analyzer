@@ -26,6 +26,7 @@ import sk.styk.martin.apkanalyzer.core.apps.export.AppExportManager
 import sk.styk.martin.apkanalyzer.core.apps.export.AppExportManagerImpl
 import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterRepository
 import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterRepositoryImpl
+import sk.styk.martin.apkanalyzer.core.apps.filtering.InventoryExportFilter
 import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceResolver
 import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceResolverImpl
 import sk.styk.martin.apkanalyzer.core.apps.intentfilters.IntentFiltersRepository
@@ -158,6 +159,11 @@ internal interface AppsModule {
     fun bindAppExportManager(impl: AppExportManagerImpl): AppExportManager
 
     companion object {
+        @Provides
+        @Singleton
+        @InventoryExportFilter
+        fun provideInventoryExportFilterRepository(): AppFilterRepository = AppFilterRepositoryImpl()
+
         @Provides
         @Singleton
         fun providePackageManager(application: Application): PackageManager = application.packageManager

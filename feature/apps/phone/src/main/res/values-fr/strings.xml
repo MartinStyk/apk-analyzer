@@ -148,4 +148,72 @@
     <string name="filter_permissions_empty_title">Aucune permission trouvée</string>
     <string name="filter_permissions_empty_subtitle">Cet appareil n\'a aucune permission à afficher.</string>
     <string name="quick_filter_sensitive_permissions">Permissions sensibles</string>
+    <string name="content_description_export_app_list">Exporter la liste des applications</string>
+    <string name="inventory_export_title">Exporter la liste des applications</string>
+    <string name="inventory_export_step_apps">Applications</string>
+    <string name="inventory_export_step_columns">Colonnes</string>
+    <string name="inventory_export_step_export">Exportation</string>
+    <string name="inventory_export_next">Suivant</string>
+    <string name="inventory_export_apps_loading">Chargement des applications…</string>
+    <plurals name="inventory_export_app_count">
+        <item quantity="one">%1$d application</item>
+        <item quantity="many">%1$d applications</item>
+        <item quantity="other">%1$d applications</item>
+    </plurals>
+    <string name="inventory_export_apps_all">Inclut toutes les applications installées.</string>
+    <string name="inventory_export_apps_filtered">Inclut uniquement les applications qui correspondent à vos filtres.</string>
+    <string name="inventory_export_edit_filters">Filtres</string>
+    <string name="inventory_export_include_all_apps">Inclure toutes les applications</string>
+    <string name="inventory_export_no_apps">Aucune application ne correspond à ces filtres</string>
+    <string name="inventory_export_no_apps_available">Aucune application à exporter</string>
+    <string name="inventory_export_change_filters">Modifier les filtres</string>
+    <string name="inventory_export_columns_selected">%1$d colonnes sur %2$d</string>
+    <string name="inventory_export_select_all">Tout sélectionner</string>
+    <string name="inventory_export_clear">Tout désélectionner</string>
+    <string name="inventory_export_no_columns_hint">Sélectionnez au moins une colonne pour continuer.</string>
+    <string name="inventory_export_slower_tag">Plus lent</string>
+    <string name="inventory_export_slow_hint">Certaines colonnes sélectionnées nécessitent un examen plus détaillé de chaque application, ce qui ralentit l\'exportation.</string>
+    <string name="inventory_export_usage_access_hint">La date de dernière utilisation et la taille du stockage restent vides tant que vous n\'autorisez pas l\'accès aux données d\'utilisation.</string>
+    <string name="inventory_export_grant_access">Autoriser l\'accès</string>
+    <string name="inventory_export_attribute_category">Catégorie</string>
+    <string name="inventory_export_attribute_certificate_sha256">SHA-256 du certificat</string>
+    <string name="inventory_export_attribute_certificate_subject">Sujet du certificat</string>
+    <string name="inventory_export_attribute_requested_permissions">Permissions demandées</string>
+    <string name="inventory_export_attribute_granted_permissions">Permissions accordées</string>
+    <plurals name="inventory_export_column_count">
+        <item quantity="one">%1$d colonne</item>
+        <item quantity="many">%1$d colonnes</item>
+        <item quantity="other">%1$d colonnes</item>
+    </plurals>
+    <string name="inventory_export_summary">%1$s · %2$s</string>
+    <string name="inventory_export_format_title">Format</string>
+    <string name="inventory_export_change">Modifier</string>
+    <string name="inventory_export_format_csv">Tableau CSV</string>
+    <string name="inventory_export_format_csv_description">S\'ouvre dans Excel, Google Sheets et d\'autres tableurs.</string>
+    <string name="inventory_export_format_json">JSON</string>
+    <string name="inventory_export_format_json_description">Données structurées pour les scripts et d\'autres outils.</string>
+    <string name="inventory_export_preview_title">Aperçu</string>
+    <plurals name="inventory_export_preview_caption">
+        <item quantity="one">Aperçu limité à %1$d application du début de la liste.</item>
+        <item quantity="many">Aperçu limité aux %1$d premières applications de la liste.</item>
+        <item quantity="other">Aperçu limité aux %1$d premières applications de la liste.</item>
+    </plurals>
+    <string name="inventory_export_preview_unavailable">L\'aperçu est indisponible pour le moment.</string>
+    <string name="inventory_export_save">Enregistrer</string>
+    <string name="inventory_export_share">Partager</string>
+    <string name="inventory_export_cancel">Annuler</string>
+    <string name="inventory_export_progress">Exportation de %1$d applications sur %2$d…</string>
+    <plurals name="inventory_export_saved">
+        <item quantity="one">%1$d application enregistrée dans %2$s</item>
+        <item quantity="many">%1$d applications enregistrées dans %2$s</item>
+        <item quantity="other">%1$d applications enregistrées dans %2$s</item>
+    </plurals>
+    <plurals name="inventory_export_incomplete">
+        <item quantity="one">Certaines données manquent pour %1$d application.</item>
+        <item quantity="many">Certaines données manquent pour %1$d applications.</item>
+        <item quantity="other">Certaines données manquent pour %1$d applications.</item>
+    </plurals>
+    <string name="inventory_export_failed">Impossible d\'exporter la liste des applications</string>
+    <string name="inventory_export_picker_unavailable">Aucune application disponible pour enregistrer le fichier</string>
+    <string name="inventory_export_share_unavailable">Aucune application disponible pour partager le fichier</string>
 </resources>

@@ -69,12 +69,15 @@ import java.util.Locale
 
 @Composable
 internal fun FilterScreen(
+    scope: AppFilterScope,
     onBack: () -> Unit,
     onPermissionFilter: () -> Unit,
     onSourceFilter: () -> Unit,
     onSdkVersionFilter: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: FilterViewModel = hiltViewModel(),
+    viewModel: FilterViewModel = hiltViewModel { factory: FilterViewModel.Factory ->
+        factory.create(scope)
+    },
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current

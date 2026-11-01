@@ -20,7 +20,7 @@ import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.apps.search.search
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.userpreferences.searchhistory.SearchHistoryRepository
-import sk.styk.martin.apkanalyzer.feature.apps.phone.list.AppListItem
+import sk.styk.martin.apkanalyzer.feature.apps.phone.list.toListItem
 import javax.inject.Inject
 
 @HiltViewModel
@@ -114,18 +114,6 @@ class AppSearchViewModel @Inject constructor(
             }
         }
     }
-
-    private fun InstalledApp.toListItem() = AppListItem(
-        packageName = packageName,
-        applicationName = applicationName,
-        targetSdk = targetSdk,
-        apkSize = apkSize,
-        totalSize = totalSize,
-        installTime = installTime,
-        lastUpdateTime = lastUpdateTime,
-        lastUsedTime = lastUsedTime,
-        source = source,
-    )
 
     private companion object {
         const val MIN_QUERY_LENGTH = 2

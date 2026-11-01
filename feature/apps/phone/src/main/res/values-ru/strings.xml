@@ -154,4 +154,77 @@
     <string name="filter_permissions_empty_title">Разрешения не найдены</string>
     <string name="filter_permissions_empty_subtitle">На этом устройстве нет разрешений для отображения.</string>
     <string name="quick_filter_sensitive_permissions">Чувствительные разрешения</string>
+    <string name="content_description_export_app_list">Экспортировать список приложений</string>
+    <string name="inventory_export_title">Экспорт списка приложений</string>
+    <string name="inventory_export_step_apps">Приложения</string>
+    <string name="inventory_export_step_columns">Столбцы</string>
+    <string name="inventory_export_step_export">Экспорт</string>
+    <string name="inventory_export_next">Далее</string>
+    <string name="inventory_export_apps_loading">Загрузка приложений…</string>
+    <plurals name="inventory_export_app_count">
+        <item quantity="one">%1$d приложение</item>
+        <item quantity="few">%1$d приложения</item>
+        <item quantity="many">%1$d приложений</item>
+        <item quantity="other">%1$d приложения</item>
+    </plurals>
+    <string name="inventory_export_apps_all">Включает все установленные приложения.</string>
+    <string name="inventory_export_apps_filtered">Включает только приложения, соответствующие вашим фильтрам.</string>
+    <string name="inventory_export_edit_filters">Фильтры</string>
+    <string name="inventory_export_include_all_apps">Включить все приложения</string>
+    <string name="inventory_export_no_apps">Нет приложений, соответствующих этим фильтрам</string>
+    <string name="inventory_export_no_apps_available">Нет доступных приложений для экспорта</string>
+    <string name="inventory_export_change_filters">Изменить фильтры</string>
+    <string name="inventory_export_columns_selected">%1$d из %2$d столбцов</string>
+    <string name="inventory_export_select_all">Выбрать всё</string>
+    <string name="inventory_export_clear">Снять выделение</string>
+    <string name="inventory_export_no_columns_hint">Выберите хотя бы один столбец, чтобы продолжить.</string>
+    <string name="inventory_export_slower_tag">Медленнее</string>
+    <string name="inventory_export_slow_hint">Некоторые выбранные столбцы требуют более подробной проверки каждого приложения, поэтому экспорт занимает больше времени.</string>
+    <string name="inventory_export_usage_access_hint">Время последнего использования и размер хранилища остаются пустыми, пока вы не разрешите доступ к данным об использовании.</string>
+    <string name="inventory_export_grant_access">Разрешить доступ</string>
+    <string name="inventory_export_attribute_category">Категория</string>
+    <string name="inventory_export_attribute_certificate_sha256">SHA-256 сертификата</string>
+    <string name="inventory_export_attribute_certificate_subject">Субъект сертификата</string>
+    <string name="inventory_export_attribute_requested_permissions">Запрошенные разрешения</string>
+    <string name="inventory_export_attribute_granted_permissions">Предоставленные разрешения</string>
+    <plurals name="inventory_export_column_count">
+        <item quantity="one">%1$d столбец</item>
+        <item quantity="few">%1$d столбца</item>
+        <item quantity="many">%1$d столбцов</item>
+        <item quantity="other">%1$d столбца</item>
+    </plurals>
+    <string name="inventory_export_summary">%1$s · %2$s</string>
+    <string name="inventory_export_format_title">Формат</string>
+    <string name="inventory_export_change">Изменить</string>
+    <string name="inventory_export_format_csv">Таблица CSV</string>
+    <string name="inventory_export_format_csv_description">Открывается в Excel, Google Таблицах и других приложениях для работы с таблицами.</string>
+    <string name="inventory_export_format_json">JSON</string>
+    <string name="inventory_export_format_json_description">Структурированные данные для скриптов и других инструментов.</string>
+    <string name="inventory_export_preview_title">Предпросмотр</string>
+    <plurals name="inventory_export_preview_caption">
+        <item quantity="one">В предпросмотре — только %1$d приложение с начала списка.</item>
+        <item quantity="few">В предпросмотре — только %1$d приложения с начала списка.</item>
+        <item quantity="many">В предпросмотре — только %1$d приложений с начала списка.</item>
+        <item quantity="other">В предпросмотре — только %1$d приложения с начала списка.</item>
+    </plurals>
+    <string name="inventory_export_preview_unavailable">Предпросмотр сейчас недоступен.</string>
+    <string name="inventory_export_save">Сохранить</string>
+    <string name="inventory_export_share">Поделиться</string>
+    <string name="inventory_export_cancel">Отмена</string>
+    <string name="inventory_export_progress">Экспорт %1$d из %2$d приложений…</string>
+    <plurals name="inventory_export_saved">
+        <item quantity="one">Сохранено %1$d приложение в %2$s</item>
+        <item quantity="few">Сохранено %1$d приложения в %2$s</item>
+        <item quantity="many">Сохранено %1$d приложений в %2$s</item>
+        <item quantity="other">Сохранено %1$d приложения в %2$s</item>
+    </plurals>
+    <plurals name="inventory_export_incomplete">
+        <item quantity="one">Для %1$d приложения отсутствуют некоторые данные.</item>
+        <item quantity="few">Для %1$d приложений отсутствуют некоторые данные.</item>
+        <item quantity="many">Для %1$d приложений отсутствуют некоторые данные.</item>
+        <item quantity="other">Для %1$d приложения отсутствуют некоторые данные.</item>
+    </plurals>
+    <string name="inventory_export_failed">Не удалось экспортировать список приложений</string>
+    <string name="inventory_export_picker_unavailable">Нет приложения для сохранения файла</string>
+    <string name="inventory_export_share_unavailable">Нет приложения для отправки файла</string>
 </resources>

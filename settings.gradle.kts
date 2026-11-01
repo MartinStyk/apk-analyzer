@@ -34,6 +34,7 @@ include(
     ":core:ai-insights",
     ":core:app-index",
     ":core:app-history",
+    ":core:app-export",
     ":core:common",
     ":core:user-preferences",
     ":core:design-system:foundation",

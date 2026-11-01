@@ -15,7 +15,6 @@ import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterRepository
 import sk.styk.martin.apkanalyzer.core.apps.filtering.filterBy
-import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.apps.sorting.AppSortType
 import sk.styk.martin.apkanalyzer.core.apps.sorting.comparator
 import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepository
@@ -120,6 +119,8 @@ class AppsViewModel @Inject constructor(
 
             is AppsAction.FilterClicked -> eventChannel.trySend(AppsEvent.NavigateToFilter)
 
+            is AppsAction.ExportClicked -> eventChannel.trySend(AppsEvent.NavigateToInventoryExport)
+
             is AppsAction.ClearAllFilters -> appFilterRepository.clear()
 
             is AppsAction.DismissSortPermissionRationale -> sortPermissionRationale.value = null
@@ -130,16 +131,4 @@ class AppsViewModel @Inject constructor(
             }
         }
     }
-
-    private fun InstalledApp.toListItem() = AppListItem(
-        packageName = packageName,
-        applicationName = applicationName,
-        targetSdk = targetSdk,
-        apkSize = apkSize,
-        totalSize = totalSize,
-        installTime = installTime,
-        lastUpdateTime = lastUpdateTime,
-        lastUsedTime = lastUsedTime,
-        source = source,
-    )
 }

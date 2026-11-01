@@ -14,10 +14,12 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.api.ApkFileLifetime
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailNavKey
 import sk.styk.martin.apkanalyzer.feature.apps.api.AppsNavKey
+import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.AppFilterScope
 import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.FilterScreen
 import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.permission.PermissionFilterScreen
 import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.sdkversion.SdkVersionFilterScreen
 import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.source.SourceFilterScreen
+import sk.styk.martin.apkanalyzer.feature.apps.phone.inventory.InventoryExportScreen
 import sk.styk.martin.apkanalyzer.feature.apps.phone.list.AppsScreen
 import sk.styk.martin.apkanalyzer.feature.apps.phone.search.AppSearchScreen
 import sk.styk.martin.apkanalyzer.feature.settings.api.SettingsNavKey
@@ -45,7 +47,26 @@ fun EntryProviderScope<NavKey>.appEntries(navigator: Navigator) {
                 )
             },
             onFilter = {
-                navigator.navigate(AppFilterNavKey)
+                navigator.navigate(AppFilterNavKey(AppFilterScope.AppList))
+            },
+            onInventoryExport = {
+                navigator.navigate(InventoryExportNavKey)
+            },
+        )
+    }
+
+    entry<InventoryExportNavKey>(
+        metadata = slideFromEndEntryMetadata(),
+    ) {
+        InventoryExportScreen(
+            onBack = {
+                navigator.goBack()
+            },
+            onEditFilters = {
+                navigator.navigate(AppFilterNavKey(AppFilterScope.InventoryExport))
+            },
+            onAppDetails = { packageName ->
+                navigator.navigate(AppDetailNavKey(AppDetailInput.InstalledPackage(packageName.value)))
             },
         )
     }
@@ -63,15 +84,16 @@ fun EntryProviderScope<NavKey>.appEntries(navigator: Navigator) {
                 navigator.goBack()
             },
             onFilter = {
-                navigator.navigate(AppFilterNavKey)
+                navigator.navigate(AppFilterNavKey(AppFilterScope.AppList))
             },
         )
     }
 
     entry<AppFilterNavKey>(
         metadata = bottomEntryMetadata(),
-    ) {
+    ) { key ->
         FilterScreen(
+            scope = key.scope,
             onBack = {
                 navigator.goBack()
             },

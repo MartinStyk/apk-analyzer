@@ -7,6 +7,7 @@ import android.content.pm.FeatureInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
+import android.util.LruCache
 import sk.styk.martin.apkanalyzer.core.apps.components.Activity
 import sk.styk.martin.apkanalyzer.core.apps.components.BroadcastReceiver
 import sk.styk.martin.apkanalyzer.core.apps.components.ContentProvider
@@ -49,7 +50,6 @@ import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
 import sk.styk.martin.apkanalyzer.core.common.performance.timedSection
 import java.io.File
 import java.time.Instant
-import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -69,7 +69,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     private val performanceTracker: PerformanceTracker,
 ) : AppDetailRepository {
 
-    private val cache = ConcurrentHashMap<AppReferenceCacheKey, AppDetail>()
+    private val cache = LruCache<AppReferenceCacheKey, AppDetail>(MAX_CACHED_DETAILS)
 
     private val analysisFlags = PackageManager.GET_SIGNING_CERTIFICATES or
         PackageManager.GET_ACTIVITIES or
@@ -82,7 +82,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     init {
         packageChangesObserver.runBeforeNotifying {
             Logger.d(TAG, "Package change detected, clearing cache")
-            cache.clear()
+            cache.evictAll()
         }
     }
 
@@ -128,7 +128,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
                 lastUsedTime = lastUsedTime,
             )
         }.onSuccess { detail ->
-            cache[cacheKey] = detail
+            cache.put(cacheKey, detail)
             Logger.i(TAG, "App detail loading finished: $context")
         }.onFailure {
             Logger.e(TAG, it, "App detail loading failed: $context")
@@ -158,7 +158,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
                 packageInfo = packageInfo,
             )
         }.onSuccess { detail ->
-            cache[cacheKey] = detail
+            cache.put(cacheKey, detail)
             Logger.i(TAG, "App detail loading finished: $context")
         }.onFailure {
             Logger.e(TAG, it, "App detail loading failed: $context")
@@ -397,6 +397,7 @@ private fun PerformanceTrace.recordErrorPreserving(failure: Throwable) {
 }
 
 private const val CACHE_HIT_ATTRIBUTE = "cache_hit"
+private const val MAX_CACHED_DETAILS = 32
 
 private val SPLIT_ABI_QUALIFIERS = mapOf(
     "armeabi" to "armeabi",
