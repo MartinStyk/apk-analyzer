@@ -1,0 +1,1178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://martinstyk.github.io/apk-analyzer/inventory-export/v1/schema.json",
+  "title": "Apk Analyzer app inventory export",
+  "description": "JSON file written by Apk Analyzer's app inventory export. Each app object holds only the columns the user selected; null means the value is unavailable for that app.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "const": "https://martinstyk.github.io/apk-analyzer/inventory-export/v1/schema.json"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "generated_at": {
+      "$ref": "#/$defs/timestamp"
+    },
+    "apps": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/app"
+      }
+    }
+  },
+  "required": [
+    "$schema",
+    "schema_version",
+    "generated_at",
+    "apps"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "app": {
+      "type": "object",
+      "properties": {
+        "application_name": {
+          "type": "string",
+          "description": "App name shown on the device."
+        },
+        "package_name": {
+          "type": "string",
+          "description": "Unique Android package name."
+        },
+        "process_name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Default process the app runs in."
+        },
+        "uid": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Linux user ID assigned to the app."
+        },
+        "shared_user_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Shared user ID declared in the manifest, if any."
+        },
+        "category": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/category"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Category the app declares; null when it declares none."
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Description the app declares in its manifest."
+        },
+        "version_name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Version shown to users."
+        },
+        "version_code": {
+          "type": "integer",
+          "description": "Internal version number."
+        },
+        "min_sdk": {
+          "type": "integer",
+          "description": "Lowest Android API level the app supports."
+        },
+        "target_sdk": {
+          "type": "integer",
+          "description": "Android API level the app targets."
+        },
+        "app_type": {
+          "$ref": "#/$defs/app_type",
+          "description": "Whether the app is preinstalled with the system or installed by the user."
+        },
+        "install_source": {
+          "$ref": "#/$defs/install_source",
+          "description": "Where the app was installed from."
+        },
+        "installer_package": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Package that installed the app."
+        },
+        "install_initiator": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Package that started the installation."
+        },
+        "install_originator": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Package the installation originally came from."
+        },
+        "first_installed": {
+          "$ref": "#/$defs/timestamp",
+          "description": "When the app was first installed."
+        },
+        "last_updated": {
+          "$ref": "#/$defs/timestamp",
+          "description": "When the app was last updated."
+        },
+        "last_used": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/timestamp"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "When the app was last used. Needs usage access."
+        },
+        "apk_size_bytes": {
+          "type": "integer",
+          "description": "Size of the app's APK files in bytes."
+        },
+        "total_size_bytes": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "App, data, and cache size in bytes. Needs usage access."
+        },
+        "split_apks": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "description": "File names of installed split APKs."
+        },
+        "split_apk_details": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/split_apk"
+          },
+          "description": "Installed split APKs with size and kind. JSON only."
+        },
+        "install_location": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/install_location"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Preferred install location from the manifest."
+        },
+        "apk_directory": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Directory holding the app's APK files."
+        },
+        "data_directory": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Directory holding the app's private data."
+        },
+        "native_library_abis": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "description": "CPU architectures the app ships native code for, sorted."
+        },
+        "native_library_files": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/native_library"
+          },
+          "description": "Every bundled native library. JSON only."
+        },
+        "debuggable": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Whether the app can be debugged."
+        },
+        "allows_backup": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Whether the app allows backup of its data."
+        },
+        "cleartext_traffic": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Whether the app allows unencrypted network traffic."
+        },
+        "signing_certificate_sha256": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/fingerprint"
+          },
+          "description": "SHA-256 fingerprint of each current signing certificate."
+        },
+        "signing_certificate_sha1": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/fingerprint"
+          },
+          "description": "SHA-1 fingerprint of each current signing certificate."
+        },
+        "signing_certificate_md5": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/fingerprint"
+          },
+          "description": "MD5 fingerprint of each current signing certificate."
+        },
+        "signing_public_key_sha256": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/fingerprint"
+          },
+          "description": "SHA-256 fingerprint of each current signer's public key."
+        },
+        "signing_public_key_sha1": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/fingerprint"
+          },
+          "description": "SHA-1 fingerprint of each current signer's public key."
+        },
+        "signing_public_key_md5": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/fingerprint"
+          },
+          "description": "MD5 fingerprint of each current signer's public key."
+        },
+        "signing_certificate_subject": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "description": "Organization, or name when there is none, of each current signer."
+        },
+        "has_multiple_signers": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Whether the app is signed by more than one certificate."
+        },
+        "signing_schemes": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/signing_scheme"
+          },
+          "description": "APK signature schemes the app is signed with."
+        },
+        "signing_certificates": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/certificate"
+          },
+          "description": "Full records of the current signing certificates. JSON only."
+        },
+        "signing_certificate_history": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/certificate"
+          },
+          "description": "Full records of past certificates from key rotation. JSON only."
+        },
+        "requested_permissions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Permissions the app requests."
+        },
+        "granted_permissions": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "description": "Requested permissions that are currently granted."
+        },
+        "defined_permissions": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/permission"
+          },
+          "description": "Permissions the app defines for other apps. JSON only."
+        },
+        "permission_details": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/requested_permission"
+          },
+          "description": "Requested permissions with details and grant state. JSON only."
+        },
+        "activity_count": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Number of activities."
+        },
+        "service_count": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Number of services."
+        },
+        "receiver_count": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Number of broadcast receivers."
+        },
+        "provider_count": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Number of content providers."
+        },
+        "activities": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/activity"
+          },
+          "description": "Every activity. JSON only."
+        },
+        "services": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/service"
+          },
+          "description": "Every service. JSON only."
+        },
+        "receivers": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/receiver"
+          },
+          "description": "Every broadcast receiver. JSON only."
+        },
+        "providers": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/provider"
+          },
+          "description": "Every content provider. JSON only."
+        },
+        "intent_filters": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/component_intent_filters"
+          },
+          "description": "Intent filters grouped by component. JSON only."
+        },
+        "features": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/feature"
+          },
+          "description": "Hardware and OpenGL ES features the app uses. JSON only."
+        },
+        "manifest": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/manifest"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Readable AndroidManifest.xml. JSON only."
+        }
+      },
+      "minProperties": 1
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 instant in UTC."
+    },
+    "fingerprint": {
+      "type": "string",
+      "pattern": "^[0-9a-f]+$",
+      "description": "Lowercase hexadecimal digest without separators."
+    },
+    "category": {
+      "enum": [
+        "game",
+        "audio",
+        "video",
+        "image",
+        "social",
+        "news",
+        "maps",
+        "productivity",
+        "accessibility"
+      ]
+    },
+    "app_type": {
+      "enum": [
+        "system",
+        "user"
+      ]
+    },
+    "install_source": {
+      "enum": [
+        "google_play",
+        "samsung_galaxy_store",
+        "amazon_appstore",
+        "huawei_app_gallery",
+        "xiaomi_get_apps",
+        "f_droid",
+        "aurora_store",
+        "sideloaded",
+        "local_install",
+        "system_preinstalled",
+        "unknown"
+      ]
+    },
+    "install_location": {
+      "enum": [
+        "auto",
+        "internal_only",
+        "prefer_external"
+      ]
+    },
+    "signing_scheme": {
+      "enum": [
+        "v1",
+        "v2",
+        "v3",
+        "v3.1"
+      ]
+    },
+    "split_apk": {
+      "type": "object",
+      "properties": {
+        "file_name": {
+          "type": "string"
+        },
+        "file_path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "size_bytes": {
+          "type": "integer"
+        },
+        "kind": {
+          "enum": [
+            "dynamic_feature",
+            "abi",
+            "screen_density",
+            "language"
+          ]
+        },
+        "qualifier": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "file_name",
+        "file_path",
+        "size_bytes",
+        "kind",
+        "qualifier"
+      ],
+      "additionalProperties": false
+    },
+    "native_library": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "abi": {
+          "type": "string"
+        },
+        "size_bytes": {
+          "type": "integer"
+        },
+        "containing_apk": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "abi",
+        "size_bytes",
+        "containing_apk"
+      ],
+      "additionalProperties": false
+    },
+    "principal": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "organization": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "country": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "organization",
+        "country"
+      ],
+      "additionalProperties": false
+    },
+    "certificate": {
+      "type": "object",
+      "properties": {
+        "signature_algorithm": {
+          "type": "string"
+        },
+        "certificate_md5": {
+          "$ref": "#/$defs/fingerprint"
+        },
+        "certificate_sha1": {
+          "$ref": "#/$defs/fingerprint"
+        },
+        "certificate_sha256": {
+          "$ref": "#/$defs/fingerprint"
+        },
+        "public_key_md5": {
+          "$ref": "#/$defs/fingerprint"
+        },
+        "public_key_sha1": {
+          "$ref": "#/$defs/fingerprint"
+        },
+        "public_key_sha256": {
+          "$ref": "#/$defs/fingerprint"
+        },
+        "valid_from": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "valid_until": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "serial_number": {
+          "type": "string"
+        },
+        "issuer": {
+          "$ref": "#/$defs/principal"
+        },
+        "subject": {
+          "$ref": "#/$defs/principal"
+        },
+        "trust_level": {
+          "enum": [
+            "valid",
+            "debug"
+          ]
+        },
+        "self_signed": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "signature_algorithm",
+        "certificate_md5",
+        "certificate_sha1",
+        "certificate_sha256",
+        "public_key_md5",
+        "public_key_sha1",
+        "public_key_sha256",
+        "valid_from",
+        "valid_until",
+        "serial_number",
+        "issuer",
+        "subject",
+        "trust_level",
+        "self_signed"
+      ],
+      "additionalProperties": false
+    },
+    "permission": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "details": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "group_name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "protection_level": {
+              "enum": [
+                "dangerous",
+                "signature",
+                "internal",
+                "normal"
+              ]
+            },
+            "protection_flags": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "privileged",
+                  "app_op",
+                  "instant",
+                  "development"
+                ]
+              }
+            },
+            "description": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "declaring_package": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "group_name",
+            "protection_level",
+            "protection_flags",
+            "description",
+            "declaring_package"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "details"
+      ],
+      "additionalProperties": false
+    },
+    "requested_permission": {
+      "type": "object",
+      "properties": {
+        "permission": {
+          "$ref": "#/$defs/permission"
+        },
+        "granted": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "permission",
+        "granted"
+      ],
+      "additionalProperties": false
+    },
+    "activity": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "package_name": {
+          "type": "string"
+        },
+        "label": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "target_activity": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "permission": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "parent_activity": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "exported": {
+          "type": "boolean"
+        },
+        "launcher": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "package_name",
+        "label",
+        "target_activity",
+        "permission",
+        "parent_activity",
+        "exported",
+        "launcher"
+      ],
+      "additionalProperties": false
+    },
+    "service": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "permission": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "exported": {
+          "type": "boolean"
+        },
+        "stop_with_task": {
+          "type": "boolean"
+        },
+        "single_user": {
+          "type": "boolean"
+        },
+        "isolated_process": {
+          "type": "boolean"
+        },
+        "external_service": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name",
+        "permission",
+        "exported",
+        "stop_with_task",
+        "single_user",
+        "isolated_process",
+        "external_service"
+      ],
+      "additionalProperties": false
+    },
+    "receiver": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "permission": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "exported": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name",
+        "permission",
+        "exported"
+      ],
+      "additionalProperties": false
+    },
+    "provider": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "authority": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "read_permission": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "write_permission": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "exported": {
+          "type": "boolean"
+        },
+        "path_permissions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "match_type": {
+                "enum": [
+                  "literal",
+                  "prefix",
+                  "simple_glob",
+                  "advanced_glob",
+                  "suffix"
+                ]
+              },
+              "read_permission": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "write_permission": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "path",
+              "match_type",
+              "read_permission",
+              "write_permission"
+            ]
+          }
+        }
+      },
+      "required": [
+        "name",
+        "authority",
+        "read_permission",
+        "write_permission",
+        "exported",
+        "path_permissions"
+      ],
+      "additionalProperties": false
+    },
+    "data_rule": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": [
+            "scheme",
+            "host",
+            "port",
+            "path",
+            "pathPrefix",
+            "pathSuffix",
+            "pathPattern",
+            "pathAdvancedPattern",
+            "ssp",
+            "sspPrefix",
+            "sspSuffix",
+            "sspPattern",
+            "sspAdvancedPattern",
+            "query",
+            "queryPrefix",
+            "querySuffix",
+            "queryPattern",
+            "queryAdvancedPattern",
+            "fragment",
+            "fragmentPrefix",
+            "fragmentSuffix",
+            "fragmentPattern",
+            "fragmentAdvancedPattern",
+            "mimeType",
+            "mimeGroup"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    "intent_filter": {
+      "type": "object",
+      "properties": {
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "data_rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/data_rule"
+          }
+        },
+        "uri_relative_groups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "allowed": {
+                "type": "boolean"
+              },
+              "data_rules": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/data_rule"
+                }
+              }
+            },
+            "required": [
+              "allowed",
+              "data_rules"
+            ]
+          }
+        },
+        "priority": {
+          "type": "integer"
+        },
+        "order": {
+          "type": "integer"
+        },
+        "auto_verify": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "actions",
+        "categories",
+        "data_rules",
+        "uri_relative_groups",
+        "priority",
+        "order",
+        "auto_verify"
+      ],
+      "additionalProperties": false
+    },
+    "component_intent_filters": {
+      "type": "object",
+      "properties": {
+        "component_name": {
+          "type": "string"
+        },
+        "component_kind": {
+          "enum": [
+            "activity",
+            "service",
+            "receiver",
+            "provider"
+          ]
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/intent_filter"
+          }
+        }
+      },
+      "required": [
+        "component_name",
+        "component_kind",
+        "filters"
+      ],
+      "additionalProperties": false
+    },
+    "feature": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "hardware"
+            },
+            "name": {
+              "type": "string"
+            },
+            "version": {
+              "type": "integer"
+            },
+            "required": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "kind",
+            "name",
+            "version",
+            "required"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "opengl_es"
+            },
+            "version": {
+              "type": "integer"
+            },
+            "version_name": {
+              "type": "string"
+            },
+            "required": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "kind",
+            "version",
+            "version_name",
+            "required"
+          ]
+        }
+      ]
+    },
+    "manifest": {
+      "type": "object",
+      "properties": {
+        "xml": {
+          "type": "string"
+        },
+        "additional_installed_splits": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "xml",
+        "additional_installed_splits"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

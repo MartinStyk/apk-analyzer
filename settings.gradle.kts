@@ -50,8 +50,8 @@ include(
     ":feature:browse:api",
     ":feature:browse:phone",
     ":feature:browse:tv",
-    ":feature:inventory-export:api",
-    ":feature:inventory-export:phone",
+    ":feature:app-export:api",
+    ":feature:app-export:phone",
     ":feature:settings:api",
     ":feature:settings:phone",
 )

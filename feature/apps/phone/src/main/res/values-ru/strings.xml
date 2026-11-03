@@ -154,5 +154,11 @@
     <string name="filter_permissions_empty_title">Разрешения не найдены</string>
     <string name="filter_permissions_empty_subtitle">На этом устройстве нет разрешений для отображения.</string>
     <string name="quick_filter_sensitive_permissions">Чувствительные разрешения</string>
-    <string name="content_description_export_app_list">Экспортировать список приложений</string>
+    <string name="export_apps">Экспорт</string>
+    <plurals name="export_apps_count">
+        <item quantity="one">Экспортировать %1$d приложение</item>
+        <item quantity="few">Экспортировать %1$d приложения</item>
+        <item quantity="many">Экспортировать %1$d приложений</item>
+        <item quantity="other">Экспортировать %1$d приложения</item>
+    </plurals>
 </resources>

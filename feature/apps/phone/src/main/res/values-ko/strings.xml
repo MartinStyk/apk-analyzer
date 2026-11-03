@@ -136,5 +136,8 @@
     <string name="filter_permissions_empty_title">찾을 수 있는 권한이 없습니다.</string>
     <string name="filter_permissions_empty_subtitle">이 장치에는 표시할 권한이 없습니다.</string>
     <string name="quick_filter_sensitive_permissions">민감한 권한</string>
-    <string name="content_description_export_app_list">앱 목록 내보내기</string>
+    <string name="export_apps">내보내기</string>
+    <plurals name="export_apps_count">
+        <item quantity="other">앱 %1$d개 내보내기</item>
+    </plurals>
 </resources>

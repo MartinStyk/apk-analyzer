@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,6 +51,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.AppRowSkeleton
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.BottomSheet
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Chip
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ChipVariant
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.IconButton
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.IconButtonStyle
@@ -258,21 +260,28 @@ private fun LazyListScope.appsSectionItems(
 ) {
     item(key = "installed_apps_header") {
         Column {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(2.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = stringResource(R.string.installed_apps),
                     style = AppTheme.typography.titleMedium,
                     color = AppTheme.colors.onBackground,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f),
                 )
-                IconButton(
-                    imageVector = ApkAnalyzerIcons.Export,
+                val exportCount = (apps as? AppListState.Content)?.apps?.size?.takeIf { isFiltering }
+                Chip(
+                    label = if (exportCount != null) {
+                        pluralStringResource(R.plurals.export_apps_count, exportCount, exportCount)
+                    } else {
+                        stringResource(R.string.export_apps)
+                    },
+                    variant = ChipVariant.Default,
+                    leadingIcon = ApkAnalyzerIcons.Export,
                     onClick = onExport,
-                    iconSize = 22.dp,
-                    contentDescription = stringResource(R.string.content_description_export_app_list),
                 )
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.width(12.dp))
                 IconButton(
                     imageVector = ApkAnalyzerIcons.Sort,
                     style = if (sortType == AppSortType.Name) IconButtonStyle.Standard else IconButtonStyle.Highlighted,
@@ -281,8 +290,6 @@ private fun LazyListScope.appsSectionItems(
                     contentDescription = stringResource(R.string.content_description_sort),
                 )
             }
-
-            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 

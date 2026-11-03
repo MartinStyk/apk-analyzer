@@ -24,9 +24,10 @@ import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.DeviceFeaturesReposit
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.DeviceFeaturesRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apps.export.AppExportManager
 import sk.styk.martin.apkanalyzer.core.apps.export.AppExportManagerImpl
+import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterRepositories
+import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterRepositoriesImpl
 import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterRepository
 import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterRepositoryImpl
-import sk.styk.martin.apkanalyzer.core.apps.filtering.InventoryExportFilter
 import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceResolver
 import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceResolverImpl
 import sk.styk.martin.apkanalyzer.core.apps.intentfilters.IntentFiltersRepository
@@ -133,6 +134,10 @@ internal interface AppsModule {
     @Singleton
     fun bindAppFilterRepository(impl: AppFilterRepositoryImpl): AppFilterRepository
 
+    @Binds
+    @Singleton
+    fun bindAppFilterRepositories(impl: AppFilterRepositoriesImpl): AppFilterRepositories
+
     // usagestats
     @Binds
     @Singleton
@@ -159,11 +164,6 @@ internal interface AppsModule {
     fun bindAppExportManager(impl: AppExportManagerImpl): AppExportManager
 
     companion object {
-        @Provides
-        @Singleton
-        @InventoryExportFilter
-        fun provideInventoryExportFilterRepository(): AppFilterRepository = AppFilterRepositoryImpl()
-
         @Provides
         @Singleton
         fun providePackageManager(application: Application): PackageManager = application.packageManager

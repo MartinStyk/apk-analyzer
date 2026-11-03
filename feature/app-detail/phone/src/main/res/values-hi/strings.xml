@@ -44,6 +44,7 @@
     <string name="app_detail_action_summary">सारांश</string>
     <string name="app_detail_action_copy_summary">कॉपी करें</string>
     <string name="app_detail_action_share_summary">शेयर करें</string>
+    <string name="app_detail_action_export_inventory">जानकारी निर्यात करें</string>
     <string name="app_detail_summary_sheet_title">ऐप सारांश</string>
     <string name="app_detail_action_play_store">प्ले स्टोर</string>
     <string name="app_detail_action_app_info">ऐप जानकारी</string>

@@ -15,17 +15,16 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
-import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterRepository
+import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterRepositories
+import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterScope
 import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterState
 import sk.styk.martin.apkanalyzer.core.apps.filtering.AppSizeRange
-import sk.styk.martin.apkanalyzer.core.apps.filtering.InventoryExportFilter
 import sk.styk.martin.apkanalyzer.core.apps.filtering.PermissionPreset
 import sk.styk.martin.apkanalyzer.core.apps.sdkversion.SdkVersionResolver
 import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepository
 import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.combine
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
-import sk.styk.martin.apkanalyzer.feature.apps.api.AppFilterScope
 import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.domain.PermissionFilterCoordinator
 import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.domain.PermissionFilterDraft
 import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.domain.SdkVersionFilterCoordinator
@@ -35,9 +34,8 @@ import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.domain.SourceFilterD
 
 @HiltViewModel(assistedFactory = FilterViewModel.Factory::class)
 class FilterViewModel @AssistedInject constructor(
-    @Assisted scope: AppFilterScope,
-    listFilterRepository: AppFilterRepository,
-    @InventoryExportFilter inventoryExportFilterRepository: AppFilterRepository,
+    @Assisted scopeId: String,
+    appFilterRepositories: AppFilterRepositories,
     private val permissionFilterCoordinator: PermissionFilterCoordinator,
     private val sourceFilterCoordinator: SourceFilterCoordinator,
     private val sdkVersionFilterCoordinator: SdkVersionFilterCoordinator,
@@ -47,10 +45,7 @@ class FilterViewModel @AssistedInject constructor(
     storageStatsRepository: StorageStatsRepository,
 ) : ViewModel() {
 
-    private val appFilterRepository = when (scope) {
-        AppFilterScope.AppList -> listFilterRepository
-        AppFilterScope.InventoryExport -> inventoryExportFilterRepository
-    }
+    private val appFilterRepository = appFilterRepositories.forScope(AppFilterScope(scopeId))
 
     private val localFilter = MutableStateFlow(appFilterRepository.filter.value)
     private val showUnsavedChangesSheet = MutableStateFlow(false)
@@ -271,7 +266,7 @@ class FilterViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(scope: AppFilterScope): FilterViewModel
+        fun create(scopeId: String): FilterViewModel
     }
 
     private data class AppsMetadata(

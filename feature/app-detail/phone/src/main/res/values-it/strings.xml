@@ -49,6 +49,7 @@
     <string name="app_detail_action_summary">Riepilogo</string>
     <string name="app_detail_action_copy_summary">Copia</string>
     <string name="app_detail_action_share_summary">Condividi</string>
+    <string name="app_detail_action_export_inventory">Esporta dettagli</string>
     <string name="app_detail_summary_sheet_title">Riepilogo dell\'app</string>
     <string name="app_detail_action_play_store">Play Store</string>
     <string name="app_detail_action_app_info">Informazioni sull\'app</string>

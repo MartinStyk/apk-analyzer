@@ -154,5 +154,11 @@
     <string name="filter_permissions_empty_title">Не знайдено жодних дозволів</string>
     <string name="filter_permissions_empty_subtitle">Цей пристрій не має дозволів для відображення.</string>
     <string name="quick_filter_sensitive_permissions">Чутливі дозволи</string>
-    <string name="content_description_export_app_list">Експортувати список програм</string>
+    <string name="export_apps">Експорт</string>
+    <plurals name="export_apps_count">
+        <item quantity="one">Експортувати %1$d програму</item>
+        <item quantity="few">Експортувати %1$d програми</item>
+        <item quantity="many">Експортувати %1$d програм</item>
+        <item quantity="other">Експортувати %1$d програми</item>
+    </plurals>
 </resources>

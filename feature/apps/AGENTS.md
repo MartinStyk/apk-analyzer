@@ -32,9 +32,10 @@ bridged in through its own `Singleton` coordinator (`PermissionFilterCoordinator
 because the nested screen is a separate Navigation 3 destination with its own `HiltViewModel` and
 cannot share `FilterViewModel`'s in-memory state directly.
 
-`AppFilterNavKey` lives in the API module because `feature:inventory-export` opens it too. It carries
-an `AppFilterScope`: `AppList` edits the shared list filter; `InventoryExport` edits the
-`@InventoryExportFilter` repository, which the export wizard seeds from the list filter on entry. The nested coordinators only touch the draft, so they serve both scopes unchanged.
+`AppFilterNavKey` lives in the API module because `feature:app-export` opens it too. It carries
+only a scope id string, so the API module never names a caller; `FilterViewModel` resolves it through
+`AppFilterRepositories`. The list uses `AppFilterScope.List`; another feature picks its own id and
+seeds that scope itself. The nested coordinators only touch the draft, so they serve every scope unchanged.
 
 ## TV Module
 

@@ -51,6 +51,8 @@ exception is `InactiveSearchBar`, which lives in `SearchBarInactive.kt`.
 * `AppRow` (and `AppRowSkeleton`) is the shared installed-app row: icon, name, package, and a
   caller-supplied trailing slot, shaped by its `ListItemPosition` through `ListItemPosition.shape()`
   in `lazylist/`. Build app lists on it instead of a feature-local row.
+* `ConfirmDialog` wraps the phone Material alert dialog with a title, message, and explicit confirm
+  and dismiss actions. Outside taps and system Back dismiss without confirming.
 
 ## tv
 

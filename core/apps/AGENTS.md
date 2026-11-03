@@ -31,9 +31,10 @@ models, implementation, and private analysis helpers together.
 * `sorting/` - `AppSortType` and its comparator over `InstalledApp`, shared by the phone and TV app
   lists so both order apps identically. Which options a screen offers stays with the screen.
 * `filtering/` - `AppFilterState`, the `filterBy` predicate, permission presets, quick filters, and
-  the in-memory `AppFilterRepository` both app lists filter through. A second, independent
-  instance qualified `@InventoryExportFilter` picks the apps for inventory export, so narrowing an
-  export never changes the visible app list.
+  the in-memory `AppFilterRepository` both app lists filter through. `AppFilterRepositories` hands out
+  an independent repository per `AppFilterScope` id (the list scope is the shared one above), so a
+  feature that filters apps for its own purpose, such as inventory export, never changes the
+  visible app list and `core:apps` never names that feature.
 * `insight/` - the "Worth knowing" evaluator and the app badges, with their labels. Phone and TV
   app detail both read them, so a finding shows identically on both.
 * `search/` - `List<InstalledApp>.search(query)`, the fuzzy name-and-package matcher both search

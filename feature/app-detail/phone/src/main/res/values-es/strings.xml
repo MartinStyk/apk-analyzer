@@ -49,6 +49,7 @@
     <string name="app_detail_action_summary">Resumen</string>
     <string name="app_detail_action_copy_summary">Copiar</string>
     <string name="app_detail_action_share_summary">Compartir</string>
+    <string name="app_detail_action_export_inventory">Exportar detalles</string>
     <string name="app_detail_summary_sheet_title">Resumen de la aplicación</string>
     <string name="app_detail_action_play_store">Play Store</string>
     <string name="app_detail_action_app_info">Información de la aplicación</string>

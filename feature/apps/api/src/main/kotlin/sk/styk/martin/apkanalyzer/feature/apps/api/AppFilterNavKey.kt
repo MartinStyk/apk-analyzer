@@ -4,4 +4,4 @@ import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AppFilterNavKey(val scope: AppFilterScope) : NavKey
+data class AppFilterNavKey(val scopeId: String) : NavKey

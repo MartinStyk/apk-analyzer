@@ -56,6 +56,7 @@ internal sealed interface AppDetailAnalyticsEvent {
         ViewSummary,
         CopySummary,
         ShareSummary,
+        ExportInventory,
         OpenPlayStore,
         OpenAppInfo,
     }
@@ -88,6 +89,7 @@ private val AppDetailAnalyticsEvent.Action.analyticsValue: String
         AppDetailAnalyticsEvent.Action.ViewSummary -> "view_summary"
         AppDetailAnalyticsEvent.Action.CopySummary -> "copy_summary"
         AppDetailAnalyticsEvent.Action.ShareSummary -> "share_summary"
+        AppDetailAnalyticsEvent.Action.ExportInventory -> "export_inventory"
         AppDetailAnalyticsEvent.Action.OpenPlayStore -> "open_play_store"
         AppDetailAnalyticsEvent.Action.OpenAppInfo -> "open_app_info"
     }

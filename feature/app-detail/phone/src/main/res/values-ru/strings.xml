@@ -54,6 +54,7 @@
     <string name="app_detail_action_summary">Сводка</string>
     <string name="app_detail_action_copy_summary">Копировать</string>
     <string name="app_detail_action_share_summary">Поделиться</string>
+    <string name="app_detail_action_export_inventory">Экспорт сведений</string>
     <string name="app_detail_summary_sheet_title">Сводка приложения</string>
     <string name="app_detail_action_play_store">Play Store</string>
     <string name="app_detail_action_app_info">Информация о приложении</string>

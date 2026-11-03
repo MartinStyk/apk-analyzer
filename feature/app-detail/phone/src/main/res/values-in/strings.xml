@@ -39,6 +39,7 @@
     <string name="app_detail_action_summary">Ringkasan</string>
     <string name="app_detail_action_copy_summary">Salin</string>
     <string name="app_detail_action_share_summary">Bagikan</string>
+    <string name="app_detail_action_export_inventory">Ekspor detail</string>
     <string name="app_detail_summary_sheet_title">Ringkasan aplikasi</string>
     <string name="app_detail_action_play_store">Play Store</string>
     <string name="app_detail_action_app_info">Info aplikasi</string>

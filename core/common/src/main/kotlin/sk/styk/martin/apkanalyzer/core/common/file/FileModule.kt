@@ -13,4 +13,8 @@ internal interface FileModule {
     @Binds
     @Singleton
     fun bindShareFileManager(impl: ShareFileManagerImpl): ShareFileManager
+
+    @Binds
+    @Singleton
+    fun bindDocumentFileManager(impl: DocumentFileManagerImpl): DocumentFileManager
 }

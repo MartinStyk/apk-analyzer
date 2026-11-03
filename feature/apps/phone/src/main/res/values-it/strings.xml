@@ -148,5 +148,10 @@
     <string name="filter_permissions_empty_title">Nessuna autorizzazione trovata</string>
     <string name="filter_permissions_empty_subtitle">Questo dispositivo non ha autorizzazioni da visualizzare.</string>
     <string name="quick_filter_sensitive_permissions">Autorizzazioni sensibili</string>
-    <string name="content_description_export_app_list">Esporta elenco delle app</string>
+    <string name="export_apps">Esporta</string>
+    <plurals name="export_apps_count">
+        <item quantity="one">Esporta %1$d app</item>
+        <item quantity="many">Esporta %1$d app</item>
+        <item quantity="other">Esporta %1$d app</item>
+    </plurals>
 </resources>

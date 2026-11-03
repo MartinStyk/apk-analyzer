@@ -136,5 +136,8 @@
     <string name="filter_permissions_empty_title">Không tìm thấy quyền nào</string>
     <string name="filter_permissions_empty_subtitle">Thiết bị này không có quyền nào để hiển thị.</string>
     <string name="quick_filter_sensitive_permissions">Quyền nhạy cảm</string>
-    <string name="content_description_export_app_list">Xuất danh sách ứng dụng</string>
+    <string name="export_apps">Xuất</string>
+    <plurals name="export_apps_count">
+        <item quantity="other">Xuất %1$d ứng dụng</item>
+    </plurals>
 </resources>

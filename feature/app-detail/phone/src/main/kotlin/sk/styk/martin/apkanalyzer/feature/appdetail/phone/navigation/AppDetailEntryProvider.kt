@@ -19,6 +19,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.phone.nativelibraries.Native
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.permissions.PermissionsScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.requirements.RequirementsScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.splitapks.SplitApksScreen
+import sk.styk.martin.apkanalyzer.feature.appexport.api.AppInventoryExportNavKey
 
 fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
     entry<AppDetailNavKey>(
@@ -40,6 +41,7 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
             onNavigateToProviders = { navigator.navigate(ComponentsNavKey(key.detailInput, ComponentScope.Providers)) },
             onNavigateToCertificates = { navigator.navigate(CertificatesNavKey(key.detailInput)) },
             onNavigateToFeatures = { navigator.navigate(RequirementsNavKey(key.detailInput)) },
+            onNavigateToInventoryExport = { packageName -> navigator.navigate(AppInventoryExportNavKey(packageName.value)) },
         )
     }
 

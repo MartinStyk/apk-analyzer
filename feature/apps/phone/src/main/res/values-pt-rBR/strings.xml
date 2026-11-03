@@ -148,5 +148,10 @@
     <string name="filter_permissions_empty_title">Nenhuma permissão encontrada</string>
     <string name="filter_permissions_empty_subtitle">Este dispositivo não tem permissões para exibir.</string>
     <string name="quick_filter_sensitive_permissions">Permissões sensíveis</string>
-    <string name="content_description_export_app_list">Exportar lista de aplicativos</string>
+    <string name="export_apps">Exportar</string>
+    <plurals name="export_apps_count">
+        <item quantity="one">Exportar %1$d aplicativo</item>
+        <item quantity="many">Exportar %1$d aplicativos</item>
+        <item quantity="other">Exportar %1$d aplicativos</item>
+    </plurals>
 </resources>

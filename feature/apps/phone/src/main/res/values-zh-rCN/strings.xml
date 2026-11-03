@@ -136,5 +136,8 @@
     <string name="filter_permissions_empty_title">未找到权限</string>
     <string name="filter_permissions_empty_subtitle">此设备没有权限可显示。</string>
     <string name="quick_filter_sensitive_permissions">敏感权限</string>
-    <string name="content_description_export_app_list">导出应用列表</string>
+    <string name="export_apps">导出</string>
+    <plurals name="export_apps_count">
+        <item quantity="other">导出 %1$d 个应用</item>
+    </plurals>
 </resources>

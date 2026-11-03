@@ -154,5 +154,11 @@
     <string name="filter_permissions_empty_title">Žiadne povolenia neboli nájdené</string>
     <string name="filter_permissions_empty_subtitle">Toto zariadenie nemá žiadne povolenia na zobrazenie.</string>
     <string name="quick_filter_sensitive_permissions">Citlivé povolenia</string>
-    <string name="content_description_export_app_list">Exportovať zoznam aplikácií</string>
+    <string name="export_apps">Exportovať</string>
+    <plurals name="export_apps_count">
+        <item quantity="one">Exportovať %1$d aplikáciu</item>
+        <item quantity="few">Exportovať %1$d aplikácie</item>
+        <item quantity="many">Exportovať %1$d aplikácie</item>
+        <item quantity="other">Exportovať %1$d aplikácií</item>
+    </plurals>
 </resources>

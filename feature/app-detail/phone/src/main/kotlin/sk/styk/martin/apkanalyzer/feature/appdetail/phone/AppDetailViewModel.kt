@@ -111,6 +111,8 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
             is AppDetailAction.ShareSummary -> shareSummary()
 
+            is AppDetailAction.ExportInventory -> exportInventory()
+
             is AppDetailAction.ShareSummaryUnavailable -> sendEvent(AppDetailEvent.ShowFeedback(AppDetailFeedback.ShareUnavailable))
 
             is AppDetailAction.OpenPlayStore -> withLoadedState {
@@ -210,6 +212,12 @@ internal class AppDetailViewModel @AssistedInject constructor(
         engaged = true
         analytics.track(AppDetailAnalyticsEvent.ActionPerformed(AppDetailAnalyticsEvent.Action.ShareSummary))
         sendEvent(AppDetailEvent.ShareSummary(summaryTextFormatter.summary(state)))
+    }
+
+    private fun exportInventory() = withLoadedState { state ->
+        engaged = true
+        analytics.track(AppDetailAnalyticsEvent.ActionPerformed(AppDetailAnalyticsEvent.Action.ExportInventory))
+        sendEvent(AppDetailEvent.NavigateToInventoryExport(state.packageName))
     }
 
     private fun navigateToInsight(insight: AppDetailInsight) {

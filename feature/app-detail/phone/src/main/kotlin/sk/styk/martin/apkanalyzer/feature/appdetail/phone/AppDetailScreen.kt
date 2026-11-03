@@ -104,6 +104,7 @@ internal fun AppDetailScreen(
     onNavigateToProviders: () -> Unit,
     onNavigateToCertificates: () -> Unit,
     onNavigateToFeatures: () -> Unit,
+    onNavigateToInventoryExport: (PackageName) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AppDetailViewModel = hiltViewModel { factory: AppDetailViewModel.Factory ->
         factory.create(appDetailInput)
@@ -192,6 +193,8 @@ internal fun AppDetailScreen(
                 is AppDetailEvent.NavigateToCertificates -> onNavigateToCertificates()
 
                 is AppDetailEvent.NavigateToFeatures -> onNavigateToFeatures()
+
+                is AppDetailEvent.NavigateToInventoryExport -> onNavigateToInventoryExport(event.packageName)
             }
         }
     }
@@ -212,12 +215,17 @@ internal fun AppDetailScreen(
     summaryPreview?.let { summary ->
         AppSummaryBottomSheet(
             summary = summary,
+            canExportInventory = (state as? AppDetailState.Loaded)?.analysisMode == AppDetail.AnalysisMode.InstalledPackage,
             onCopy = {
                 viewModel.onAction(AppDetailAction.CopySummary)
                 summaryPreview = null
             },
             onShare = {
                 viewModel.onAction(AppDetailAction.ShareSummary)
+                summaryPreview = null
+            },
+            onExportInventory = {
+                viewModel.onAction(AppDetailAction.ExportInventory)
                 summaryPreview = null
             },
             onDismiss = { summaryPreview = null },

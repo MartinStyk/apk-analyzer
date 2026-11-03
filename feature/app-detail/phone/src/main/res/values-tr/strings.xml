@@ -44,6 +44,7 @@
     <string name="app_detail_action_summary">Özet</string>
     <string name="app_detail_action_copy_summary">Kopyala</string>
     <string name="app_detail_action_share_summary">Paylaş</string>
+    <string name="app_detail_action_export_inventory">Ayrıntıları dışa aktar</string>
     <string name="app_detail_summary_sheet_title">Uygulama özeti</string>
     <string name="app_detail_action_play_store">Play Store</string>
     <string name="app_detail_action_app_info">Uygulama Bilgisi</string>

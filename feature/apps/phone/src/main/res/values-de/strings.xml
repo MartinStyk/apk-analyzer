@@ -142,5 +142,9 @@
     <string name="filter_permissions_empty_title">Keine Berechtigungen gefunden</string>
     <string name="filter_permissions_empty_subtitle">Dieses Gerät hat keine Berechtigungen zur Anzeige.</string>
     <string name="quick_filter_sensitive_permissions">Empfindliche Berechtigungen</string>
-    <string name="content_description_export_app_list">App-Liste exportieren</string>
+    <string name="export_apps">Exportieren</string>
+    <plurals name="export_apps_count">
+        <item quantity="one">Exportieren %1$d App</item>
+        <item quantity="other">Exportieren %1$d Apps</item>
+    </plurals>
 </resources>

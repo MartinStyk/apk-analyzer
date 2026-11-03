@@ -136,5 +136,8 @@
     <string name="filter_permissions_empty_title">権限が見つかりません</string>
     <string name="filter_permissions_empty_subtitle">このデバイスには表示する権限がありません。</string>
     <string name="quick_filter_sensitive_permissions">センシティブな権限</string>
-    <string name="content_description_export_app_list">アプリ一覧をエクスポート</string>
+    <string name="export_apps">エクスポート</string>
+    <plurals name="export_apps_count">
+        <item quantity="other">%1$d 個のアプリをエクスポート</item>
+    </plurals>
 </resources>
