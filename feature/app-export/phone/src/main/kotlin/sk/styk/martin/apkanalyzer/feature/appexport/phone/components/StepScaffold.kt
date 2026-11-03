@@ -24,7 +24,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
@@ -189,10 +190,13 @@ private fun StepScaffoldPreview() {
     }
 }
 
-private const val COMPACT_HEIGHT_DP = 480
+private val CompactHeight = 480.dp
 
 @Composable
-internal fun rememberIsCompactHeight(): Boolean = LocalConfiguration.current.screenHeightDp < COMPACT_HEIGHT_DP
+internal fun rememberIsCompactHeight(): Boolean {
+    val windowHeight = LocalWindowInfo.current.containerSize.height
+    return with(LocalDensity.current) { windowHeight.toDp() } < CompactHeight
+}
 
 @Composable
 internal fun CompactStepIndicator(

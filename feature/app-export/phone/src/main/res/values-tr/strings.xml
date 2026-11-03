@@ -42,7 +42,10 @@
     <string name="inventory_export_save">Kaydet</string>
     <string name="inventory_export_share">Paylaş</string>
     <string name="inventory_export_cancel">İptal</string>
-    <string name="inventory_export_progress">%2$d uygulamadan %1$d tanesi dışa aktarılıyor…</string>
+    <plurals name="inventory_export_progress">
+        <item quantity="one">%2$d uygulamadan %1$d tanesi dışa aktarılıyor…</item>
+        <item quantity="other">%2$d uygulamadan %1$d tanesi dışa aktarılıyor…</item>
+    </plurals>
     <plurals name="inventory_export_saved">
         <item quantity="one">%1$d uygulama %2$s dosyasına kaydedildi</item>
         <item quantity="other">%1$d uygulama %2$s dosyasına kaydedildi</item>

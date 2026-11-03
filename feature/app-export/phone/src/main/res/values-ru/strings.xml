@@ -48,7 +48,12 @@
     <string name="inventory_export_save">Сохранить</string>
     <string name="inventory_export_share">Поделиться</string>
     <string name="inventory_export_cancel">Отмена</string>
-    <string name="inventory_export_progress">Экспорт %1$d из %2$d приложений…</string>
+    <plurals name="inventory_export_progress">
+        <item quantity="one">Экспорт %1$d из %2$d приложения…</item>
+        <item quantity="few">Экспорт %1$d из %2$d приложений…</item>
+        <item quantity="many">Экспорт %1$d из %2$d приложений…</item>
+        <item quantity="other">Экспорт %1$d из %2$d приложения…</item>
+    </plurals>
     <plurals name="inventory_export_saved">
         <item quantity="one">Сохранено %1$d приложение в %2$s</item>
         <item quantity="few">Сохранено %1$d приложения в %2$s</item>

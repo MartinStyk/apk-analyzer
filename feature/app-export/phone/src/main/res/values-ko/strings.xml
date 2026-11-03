@@ -39,7 +39,9 @@
     <string name="inventory_export_save">저장</string>
     <string name="inventory_export_share">공유</string>
     <string name="inventory_export_cancel">취소</string>
-    <string name="inventory_export_progress">앱 %2$d개 중 %1$d개 내보내는 중…</string>
+    <plurals name="inventory_export_progress">
+        <item quantity="other">앱 %2$d개 중 %1$d개 내보내는 중…</item>
+    </plurals>
     <plurals name="inventory_export_saved">
         <item quantity="other">앱 %1$d개를 %2$s에 저장했습니다</item>
     </plurals>

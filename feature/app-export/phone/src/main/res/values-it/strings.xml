@@ -26,6 +26,7 @@
     <string name="inventory_export_attribute_granted_permissions">Autorizzazioni concesse</string>
     <plurals name="inventory_export_column_count">
         <item quantity="one">%1$d dettaglio</item>
+        <item quantity="many">%1$d dettagli</item>
         <item quantity="other">%1$d dettagli</item>
     </plurals>
     <string name="inventory_export_format_title">Formato</string>
@@ -44,7 +45,11 @@
     <string name="inventory_export_save">Salva</string>
     <string name="inventory_export_share">Condividi</string>
     <string name="inventory_export_cancel">Annulla</string>
-    <string name="inventory_export_progress">Esportazione di %1$d app su %2$d…</string>
+    <plurals name="inventory_export_progress">
+        <item quantity="one">Esportazione di %1$d app su %2$d…</item>
+        <item quantity="many">Esportazione di %1$d app su %2$d…</item>
+        <item quantity="other">Esportazione di %1$d app su %2$d…</item>
+    </plurals>
     <plurals name="inventory_export_saved">
         <item quantity="one">%1$d app salvata in %2$s</item>
         <item quantity="many">%1$d app salvate in %2$s</item>

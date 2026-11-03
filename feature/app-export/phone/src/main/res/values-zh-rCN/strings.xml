@@ -39,7 +39,9 @@
     <string name="inventory_export_save">保存</string>
     <string name="inventory_export_share">分享</string>
     <string name="inventory_export_cancel">取消</string>
-    <string name="inventory_export_progress">正在导出 %1$d 个应用，共 %2$d 个…</string>
+    <plurals name="inventory_export_progress">
+        <item quantity="other">正在导出 %1$d 个应用，共 %2$d 个…</item>
+    </plurals>
     <plurals name="inventory_export_saved">
         <item quantity="other">已将 %1$d 个应用保存到 %2$s</item>
     </plurals>

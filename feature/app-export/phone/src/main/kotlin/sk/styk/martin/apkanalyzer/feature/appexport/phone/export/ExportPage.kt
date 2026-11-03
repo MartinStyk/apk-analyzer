@@ -340,7 +340,12 @@ internal fun ExportBottomBar(
             modifier = modifier.fillMaxWidth(),
         ) {
             Text(
-                text = stringResource(R.string.inventory_export_progress, progress.processedApps, progress.totalApps),
+                text = pluralStringResource(
+                    R.plurals.inventory_export_progress,
+                    progress.totalApps,
+                    progress.processedApps,
+                    progress.totalApps,
+                ),
                 style = AppTheme.typography.bodyMedium,
                 color = AppTheme.colors.onSurface,
             )

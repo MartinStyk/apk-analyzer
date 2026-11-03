@@ -39,7 +39,9 @@
     <string name="inventory_export_save">Lưu</string>
     <string name="inventory_export_share">Chia sẻ</string>
     <string name="inventory_export_cancel">Hủy</string>
-    <string name="inventory_export_progress">Đang xuất %1$d trên %2$d ứng dụng…</string>
+    <plurals name="inventory_export_progress">
+        <item quantity="other">Đang xuất %1$d trên %2$d ứng dụng…</item>
+    </plurals>
     <plurals name="inventory_export_saved">
         <item quantity="other">Đã lưu %1$d ứng dụng vào %2$s</item>
     </plurals>

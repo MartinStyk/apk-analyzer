@@ -54,7 +54,14 @@
     <string name="inventory_export_save">حفظ</string>
     <string name="inventory_export_share">مشاركة</string>
     <string name="inventory_export_cancel">إلغاء</string>
-    <string name="inventory_export_progress">جارٍ تصدير التطبيقات: %1$d من %2$d…</string>
+    <plurals name="inventory_export_progress">
+        <item quantity="zero">جارٍ تصدير التطبيقات: %1$d من %2$d…</item>
+        <item quantity="one">جارٍ تصدير التطبيقات: %1$d من %2$d…</item>
+        <item quantity="two">جارٍ تصدير التطبيقات: %1$d من %2$d…</item>
+        <item quantity="few">جارٍ تصدير التطبيقات: %1$d من %2$d…</item>
+        <item quantity="many">جارٍ تصدير التطبيقات: %1$d من %2$d…</item>
+        <item quantity="other">جارٍ تصدير التطبيقات: %1$d من %2$d…</item>
+    </plurals>
     <plurals name="inventory_export_saved">
         <item quantity="zero">تم حفظ %1$d تطبيق في %2$s</item>
         <item quantity="one">تم حفظ تطبيق واحد في %2$s</item>

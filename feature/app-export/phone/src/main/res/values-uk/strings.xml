@@ -48,7 +48,12 @@
     <string name="inventory_export_save">Зберегти</string>
     <string name="inventory_export_share">Поділитися</string>
     <string name="inventory_export_cancel">Скасувати</string>
-    <string name="inventory_export_progress">Експортується %1$d із %2$d програм…</string>
+    <plurals name="inventory_export_progress">
+        <item quantity="one">Експортується %1$d із %2$d програми…</item>
+        <item quantity="few">Експортується %1$d із %2$d програм…</item>
+        <item quantity="many">Експортується %1$d із %2$d програм…</item>
+        <item quantity="other">Експортується %1$d із %2$d програми…</item>
+    </plurals>
     <plurals name="inventory_export_saved">
         <item quantity="one">Збережено %1$d програму у %2$s</item>
         <item quantity="few">Збережено %1$d програми у %2$s</item>

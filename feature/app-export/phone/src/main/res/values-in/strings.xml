@@ -39,7 +39,9 @@
     <string name="inventory_export_save">Simpan</string>
     <string name="inventory_export_share">Bagikan</string>
     <string name="inventory_export_cancel">Batal</string>
-    <string name="inventory_export_progress">Mengekspor %1$d dari %2$d aplikasi…</string>
+    <plurals name="inventory_export_progress">
+        <item quantity="other">Mengekspor %1$d dari %2$d aplikasi…</item>
+    </plurals>
     <plurals name="inventory_export_saved">
         <item quantity="other">%1$d aplikasi disimpan ke %2$s</item>
     </plurals>

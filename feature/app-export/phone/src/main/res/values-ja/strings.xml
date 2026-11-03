@@ -39,7 +39,9 @@
     <string name="inventory_export_save">保存</string>
     <string name="inventory_export_share">共有</string>
     <string name="inventory_export_cancel">キャンセル</string>
-    <string name="inventory_export_progress">%2$d 個中 %1$d 個のアプリをエクスポート中…</string>
+    <plurals name="inventory_export_progress">
+        <item quantity="other">%2$d 個中 %1$d 個のアプリをエクスポート中…</item>
+    </plurals>
     <plurals name="inventory_export_saved">
         <item quantity="other">%1$d 個のアプリを %2$s に保存しました</item>
     </plurals>

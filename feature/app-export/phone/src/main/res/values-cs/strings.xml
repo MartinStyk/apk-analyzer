@@ -48,7 +48,12 @@
     <string name="inventory_export_save">Uložit</string>
     <string name="inventory_export_share">Sdílet</string>
     <string name="inventory_export_cancel">Zrušit</string>
-    <string name="inventory_export_progress">Exportuje se %1$d z %2$d aplikací…</string>
+    <plurals name="inventory_export_progress">
+        <item quantity="one">Exportuje se %1$d z %2$d aplikace…</item>
+        <item quantity="few">Exportuje se %1$d z %2$d aplikací…</item>
+        <item quantity="many">Exportuje se %1$d z %2$d aplikace…</item>
+        <item quantity="other">Exportuje se %1$d z %2$d aplikací…</item>
+    </plurals>
     <plurals name="inventory_export_saved">
         <item quantity="one">%1$d aplikace byla uložena do %2$s</item>
         <item quantity="few">%1$d aplikace byly uloženy do %2$s</item>

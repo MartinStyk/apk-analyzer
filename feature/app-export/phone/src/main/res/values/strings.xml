@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="inventory_export_title">Export app information</string>
     <string name="inventory_export_apps_title">Apps</string>
     <string name="inventory_export_apps_page_title">Choose apps</string>
@@ -15,7 +15,7 @@
     <string name="inventory_export_apps_left_out">Apps left out: %1$d</string>
     <string name="inventory_export_apps_all">Includes every installed app.</string>
     <string name="inventory_export_apps_filtered">Includes only apps that match your filters.</string>
-    <string name="inventory_export_apps_selected">%1$d of %2$d selected</string>
+    <string name="inventory_export_apps_selected" tools:ignore="PluralsCandidate">%1$d of %2$d selected</string>
     <string name="inventory_export_search_apps">Search apps</string>
     <string name="inventory_export_edit_filters">Filters</string>
     <string name="inventory_export_no_apps">No apps match these filters</string>
@@ -25,8 +25,8 @@
     <string name="inventory_export_preset_security_audit">Security audit</string>
     <string name="inventory_export_preset_permissions">Permissions and components</string>
     <string name="inventory_export_preset_everything">Everything</string>
-    <string name="inventory_export_columns_more">%1$s and %2$d more</string>
-    <string name="inventory_export_columns_selected">%1$d of %2$d details selected</string>
+    <string name="inventory_export_columns_more" tools:ignore="PluralsCandidate">%1$s and %2$d more</string>
+    <string name="inventory_export_columns_selected" tools:ignore="PluralsCandidate">%1$d of %2$d details selected</string>
     <string name="inventory_export_select_all">Select all</string>
     <string name="inventory_export_clear">Clear</string>
     <string name="inventory_export_no_columns_hint">Choose at least one detail to export.</string>
@@ -58,7 +58,10 @@
     <string name="inventory_export_save">Save</string>
     <string name="inventory_export_share">Share</string>
     <string name="inventory_export_cancel">Cancel</string>
-    <string name="inventory_export_progress">Exporting %1$d of %2$d apps…</string>
+    <plurals name="inventory_export_progress">
+        <item quantity="one">Exporting %1$d of %2$d app…</item>
+        <item quantity="other">Exporting %1$d of %2$d apps…</item>
+    </plurals>
     <plurals name="inventory_export_saved">
         <item quantity="one">Saved %1$d app to %2$s</item>
         <item quantity="other">Saved %1$d apps to %2$s</item>

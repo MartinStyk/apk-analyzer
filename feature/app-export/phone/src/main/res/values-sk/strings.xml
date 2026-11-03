@@ -48,7 +48,12 @@
     <string name="inventory_export_save">Uložiť</string>
     <string name="inventory_export_share">Zdieľať</string>
     <string name="inventory_export_cancel">Zrušiť</string>
-    <string name="inventory_export_progress">Exportuje sa %1$d z %2$d aplikácií…</string>
+    <plurals name="inventory_export_progress">
+        <item quantity="one">Exportuje sa %1$d z %2$d aplikácie…</item>
+        <item quantity="few">Exportuje sa %1$d z %2$d aplikácií…</item>
+        <item quantity="many">Exportuje sa %1$d z %2$d aplikácie…</item>
+        <item quantity="other">Exportuje sa %1$d z %2$d aplikácií…</item>
+    </plurals>
     <plurals name="inventory_export_saved">
         <item quantity="one">%1$d aplikácia bola uložená do %2$s</item>
         <item quantity="few">%1$d aplikácie boli uložené do %2$s</item>

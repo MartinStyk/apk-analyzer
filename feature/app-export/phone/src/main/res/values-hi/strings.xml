@@ -42,7 +42,10 @@
     <string name="inventory_export_save">सेव करें</string>
     <string name="inventory_export_share">शेयर करें</string>
     <string name="inventory_export_cancel">रद्द करें</string>
-    <string name="inventory_export_progress">%2$d में से %1$d ऐप एक्सपोर्ट हो रहे हैं…</string>
+    <plurals name="inventory_export_progress">
+        <item quantity="one">%2$d में से %1$d ऐप एक्सपोर्ट हो रहा है…</item>
+        <item quantity="other">%2$d में से %1$d ऐप एक्सपोर्ट हो रहे हैं…</item>
+    </plurals>
     <plurals name="inventory_export_saved">
         <item quantity="one">%1$d ऐप %2$s में सेव किया गया</item>
         <item quantity="other">%1$d ऐप %2$s में सेव किए गए</item>

@@ -42,7 +42,10 @@
     <string name="inventory_export_save">Speichern</string>
     <string name="inventory_export_share">Teilen</string>
     <string name="inventory_export_cancel">Abbrechen</string>
-    <string name="inventory_export_progress">%1$d von %2$d Apps werden exportiert…</string>
+    <plurals name="inventory_export_progress">
+        <item quantity="one">%1$d von %2$d App wird exportiert…</item>
+        <item quantity="other">%1$d von %2$d Apps werden exportiert…</item>
+    </plurals>
     <plurals name="inventory_export_saved">
         <item quantity="one">%1$d App in %2$s gespeichert</item>
         <item quantity="other">%1$d Apps in %2$s gespeichert</item>
