@@ -89,9 +89,9 @@ Document I/O uses `core:common`'s `DocumentFileManager`. A caller passes an `Inv
 
 ## Published Reference
 
-The user-facing contract lives in [`docs/site/inventory-export/`](../../docs/site/inventory-export/index.md):
+The user-facing contract lives in [`site/inventory-export/`](../../site/inventory-export/index.md):
 a readable reference and `v1/schema.json` (JSON Schema 2020-12). The `Pages` workflow publishes
-`docs/site/` to GitHub Pages from `develop`, at the address in `INVENTORY_REFERENCE_URL`; the feature
+`site/` to GitHub Pages from `develop`, at the address in `INVENTORY_REFERENCE_URL`; the feature
 links to it from the Export step.
 
 * Any change to a column, key, token, record field, or nullability updates the schema and the
