@@ -7,12 +7,15 @@ import androidx.compose.animation.togetherWith
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.ui.NavDisplay
+import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterScope
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.animation.bottomEntryMetadata
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.animation.slideFromEndEntryMetadata
 import sk.styk.martin.apkanalyzer.core.navigation.Navigator
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.ApkFileLifetime
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailNavKey
+import sk.styk.martin.apkanalyzer.feature.appexport.api.InventoryExportNavKey
+import sk.styk.martin.apkanalyzer.feature.apps.api.AppFilterNavKey
 import sk.styk.martin.apkanalyzer.feature.apps.api.AppsNavKey
 import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.FilterScreen
 import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.permission.PermissionFilterScreen
@@ -45,7 +48,10 @@ fun EntryProviderScope<NavKey>.appEntries(navigator: Navigator) {
                 )
             },
             onFilter = {
-                navigator.navigate(AppFilterNavKey)
+                navigator.navigate(AppFilterNavKey(AppFilterScope.List.id))
+            },
+            onInventoryExport = {
+                navigator.navigate(InventoryExportNavKey)
             },
         )
     }
@@ -63,15 +69,16 @@ fun EntryProviderScope<NavKey>.appEntries(navigator: Navigator) {
                 navigator.goBack()
             },
             onFilter = {
-                navigator.navigate(AppFilterNavKey)
+                navigator.navigate(AppFilterNavKey(AppFilterScope.List.id))
             },
         )
     }
 
     entry<AppFilterNavKey>(
         metadata = bottomEntryMetadata(),
-    ) {
+    ) { key ->
         FilterScreen(
+            scopeId = key.scopeId,
             onBack = {
                 navigator.goBack()
             },

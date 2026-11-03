@@ -8,6 +8,7 @@ internal sealed interface AppDetailEvent {
     data class CreateDocument(val export: AppDetailExport, val suggestedName: String) : AppDetailEvent
     data class ShowSummaryPreview(val text: String) : AppDetailEvent
     data class ShareSummary(val text: String) : AppDetailEvent
+    data class NavigateToInventoryExport(val packageName: PackageName) : AppDetailEvent
     data class ShowFeedback(val feedback: AppDetailFeedback) : AppDetailEvent
     data object NavigateToManifest : AppDetailEvent
     data object NavigateToGeneralDetails : AppDetailEvent

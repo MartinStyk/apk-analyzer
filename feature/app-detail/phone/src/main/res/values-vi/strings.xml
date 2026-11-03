@@ -39,6 +39,7 @@
     <string name="app_detail_action_summary">Tóm tắt</string>
     <string name="app_detail_action_copy_summary">Sao chép</string>
     <string name="app_detail_action_share_summary">Chia sẻ</string>
+    <string name="app_detail_action_export_inventory">Xuất thông tin</string>
     <string name="app_detail_summary_sheet_title">Tóm tắt ứng dụng</string>
     <string name="app_detail_action_play_store">Cửa hàng Play</string>
     <string name="app_detail_action_app_info">Thông tin ứng dụng</string>

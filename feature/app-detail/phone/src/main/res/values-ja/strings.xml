@@ -39,6 +39,7 @@
     <string name="app_detail_action_summary">概要</string>
     <string name="app_detail_action_copy_summary">コピー</string>
     <string name="app_detail_action_share_summary">共有</string>
+    <string name="app_detail_action_export_inventory">情報をエクスポート</string>
     <string name="app_detail_summary_sheet_title">アプリの概要</string>
     <string name="app_detail_action_play_store">Playストア</string>
     <string name="app_detail_action_app_info">アプリ情報</string>

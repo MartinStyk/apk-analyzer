@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="inventory_export_title">Export app information</string>
+    <string name="inventory_export_apps_title">Apps</string>
+    <string name="inventory_export_apps_page_title">Choose apps</string>
+    <string name="inventory_export_columns_title">Details</string>
+    <string name="inventory_export_columns_page_title">Choose details</string>
+    <string name="inventory_export_next">Next</string>
+    <string name="inventory_export_step_export">Export</string>
+    <string name="inventory_export_apps_loading">Loading apps…</string>
+    <plurals name="inventory_export_app_count">
+        <item quantity="one">%1$d app</item>
+        <item quantity="other">%1$d apps</item>
+    </plurals>
+    <string name="inventory_export_apps_left_out">Apps left out: %1$d</string>
+    <string name="inventory_export_apps_all">Includes every installed app.</string>
+    <string name="inventory_export_apps_filtered">Includes only apps that match your filters.</string>
+    <string name="inventory_export_apps_selected" tools:ignore="PluralsCandidate">%1$d of %2$d selected</string>
+    <string name="inventory_export_search_apps">Search apps</string>
+    <string name="inventory_export_edit_filters">Filters</string>
+    <string name="inventory_export_no_apps">No apps match these filters</string>
+    <string name="inventory_export_no_apps_available">No apps are available to export</string>
+    <string name="inventory_export_no_search_results">No apps match your search</string>
+    <string name="inventory_export_preset_basics">Basics</string>
+    <string name="inventory_export_preset_security_audit">Security audit</string>
+    <string name="inventory_export_preset_permissions">Permissions and components</string>
+    <string name="inventory_export_preset_everything">Everything</string>
+    <string name="inventory_export_columns_more" tools:ignore="PluralsCandidate">%1$s and %2$d more</string>
+    <string name="inventory_export_columns_selected" tools:ignore="PluralsCandidate">%1$d of %2$d details selected</string>
+    <string name="inventory_export_select_all">Select all</string>
+    <string name="inventory_export_clear">Clear</string>
+    <string name="inventory_export_no_columns_hint">Choose at least one detail to export.</string>
+    <string name="inventory_export_slower_tag">Slower</string>
+    <string name="inventory_export_slow_hint">Some selected details need a closer look at each app, so the export takes longer.</string>
+    <string name="inventory_export_usage_access_hint">Last used time and storage size stay empty until you allow usage access.</string>
+    <string name="inventory_export_grant_access">Allow access</string>
+    <string name="inventory_export_attribute_category">Category</string>
+    <string name="inventory_export_attribute_certificate_sha256">Certificate SHA-256</string>
+    <string name="inventory_export_attribute_certificate_subject">Certificate subject</string>
+    <string name="inventory_export_attribute_requested_permissions">Requested permissions</string>
+    <string name="inventory_export_attribute_granted_permissions">Granted permissions</string>
+    <plurals name="inventory_export_column_count">
+        <item quantity="one">%1$d detail</item>
+        <item quantity="other">%1$d details</item>
+    </plurals>
+    <string name="inventory_export_format_title">Format</string>
+    <string name="inventory_export_format_csv">CSV spreadsheet</string>
+    <string name="inventory_export_format_csv_description">Opens in Excel, Google Sheets, and other spreadsheet apps.</string>
+    <string name="inventory_export_format_json">JSON</string>
+    <string name="inventory_export_format_json_description">Structured data for scripts and other tools.</string>
+    <string name="inventory_export_format_reference">File format reference</string>
+    <string name="inventory_export_preview_title">Preview</string>
+    <plurals name="inventory_export_preview_caption">
+        <item quantity="one">Shows the first app only.</item>
+        <item quantity="other">Shows the first %1$d apps only.</item>
+    </plurals>
+    <string name="inventory_export_preview_unavailable">The preview is not available right now.</string>
+    <string name="inventory_export_save">Save</string>
+    <string name="inventory_export_share">Share</string>
+    <string name="inventory_export_cancel">Cancel</string>
+    <plurals name="inventory_export_progress">
+        <item quantity="one">Exporting %1$d of %2$d app…</item>
+        <item quantity="other">Exporting %1$d of %2$d apps…</item>
+    </plurals>
+    <plurals name="inventory_export_saved">
+        <item quantity="one">Saved %1$d app to %2$s</item>
+        <item quantity="other">Saved %1$d apps to %2$s</item>
+    </plurals>
+    <plurals name="inventory_export_incomplete">
+        <item quantity="one">Some details are missing for %1$d app.</item>
+        <item quantity="other">Some details are missing for %1$d apps.</item>
+    </plurals>
+    <string name="inventory_export_failed">Could not export app information</string>
+    <string name="inventory_export_picker_unavailable">No app is available to save the file</string>
+    <string name="inventory_export_share_unavailable">No app is available to share the file</string>
+    <string name="inventory_export_attribute_activity_count">Activity count</string>
+    <string name="inventory_export_attribute_service_count">Service count</string>
+    <string name="inventory_export_attribute_receiver_count">Receiver count</string>
+    <string name="inventory_export_attribute_provider_count">Provider count</string>
+    <string name="inventory_export_attribute_split_details">Split APK details</string>
+    <string name="inventory_export_attribute_permission_details">Requested permission details</string>
+    <string name="inventory_export_attribute_intent_filters">Intent filters</string>
+    <string name="inventory_export_attribute_certificate_md5">Certificate MD5</string>
+    <string name="inventory_export_attribute_certificate_sha1">Certificate SHA-1</string>
+    <string name="inventory_export_attribute_public_key_md5">Public key MD5</string>
+    <string name="inventory_export_attribute_public_key_sha1">Public key SHA-1</string>
+    <string name="inventory_export_attribute_public_key_sha256">Public key SHA-256</string>
+    <string name="inventory_export_structured_hint">JSON-only details include full records, not just counts. CSV files leave them out.</string>
+    <string name="inventory_export_columns_omitted">Left out of the CSV file: %1$s. CSV cannot hold full records.</string>
+    <string name="inventory_export_use_json">Use JSON</string>
+    <string name="inventory_export_json_only">JSON only</string>
+    <string name="inventory_export_stop_title">Stop export?</string>
+    <string name="inventory_export_stop_message">The unfinished file will be deleted. Your selected apps, details, and format will be kept.</string>
+    <string name="inventory_export_stop_and_back">Stop and go back</string>
+    <string name="inventory_export_keep_exporting">Keep exporting</string>
+    <string name="inventory_export_intro_title">Create an app inventory</string>
+    <string name="inventory_export_intro_description">Export information about multiple apps in one CSV or JSON file.</string>
+    <string name="inventory_export_intro_got_it">Got it</string>
+    <string name="inventory_export_intro_about">About this export</string>
+    <string name="inventory_export_apps_guidance">Every app is included unless you untick it. Use filters to narrow the list.</string>
+    <string name="inventory_export_columns_guidance">Choose which details to include for each app.</string>
+    <string name="inventory_export_format_guidance">Choose CSV for spreadsheets or JSON for full details, then save or share.</string>
+    <string name="inventory_export_preset_basics_description">Name, version, SDK levels, install source and last update.</string>
+    <string name="inventory_export_preset_security_audit_description">Debug and backup settings, signing certificates and schemes.</string>
+    <string name="inventory_export_preset_permissions_description">Requested and granted permissions, plus component counts.</string>
+    <string name="inventory_export_preset_everything_description">Every available detail, including full records.</string>
+</resources>

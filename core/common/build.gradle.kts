@@ -17,4 +17,5 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.play.review.ktx)
+    implementation(libs.androidx.core.ktx)
 }

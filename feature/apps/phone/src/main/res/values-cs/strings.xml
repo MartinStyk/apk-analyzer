@@ -154,4 +154,11 @@
     <string name="filter_permissions_empty_title">Žádná oprávnění nebyla nalezena</string>
     <string name="filter_permissions_empty_subtitle">Toto zařízení nemá žádná oprávnění k zobrazení.</string>
     <string name="quick_filter_sensitive_permissions">Citlivá oprávnění</string>
+    <string name="export_apps">Exportovat</string>
+    <plurals name="export_apps_count">
+        <item quantity="one">Exportovat %1$d aplikaci</item>
+        <item quantity="few">Exportovat %1$d aplikace</item>
+        <item quantity="many">Exportovat %1$d aplikace</item>
+        <item quantity="other">Exportovat %1$d aplikací</item>
+    </plurals>
 </resources>

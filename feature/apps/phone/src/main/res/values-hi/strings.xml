@@ -142,4 +142,9 @@
     <string name="filter_permissions_empty_title">कोई अनुमति नहीं मिली</string>
     <string name="filter_permissions_empty_subtitle">इस डिवाइस में प्रदर्शित करने के लिए कोई अनुमति नहीं है।</string>
     <string name="quick_filter_sensitive_permissions">संवेदनशील अनुमतियाँ</string>
+    <string name="export_apps">एक्सपोर्ट</string>
+    <plurals name="export_apps_count">
+        <item quantity="one">%1$d ऐप एक्सपोर्ट करें</item>
+        <item quantity="other">%1$d ऐप एक्सपोर्ट करें</item>
+    </plurals>
 </resources>

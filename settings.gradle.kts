@@ -34,6 +34,7 @@ include(
     ":core:ai-insights",
     ":core:app-index",
     ":core:app-history",
+    ":core:app-export",
     ":core:common",
     ":core:user-preferences",
     ":core:design-system:foundation",
@@ -49,6 +50,8 @@ include(
     ":feature:browse:api",
     ":feature:browse:phone",
     ":feature:browse:tv",
+    ":feature:app-export:api",
+    ":feature:app-export:phone",
     ":feature:settings:api",
     ":feature:settings:phone",
 )

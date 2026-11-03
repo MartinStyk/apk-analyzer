@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="inventory_export_title">ऐप्लिकेशन की जानकारी एक्सपोर्ट करें</string>
+    <string name="inventory_export_apps_loading">ऐप लोड हो रहे हैं…</string>
+    <plurals name="inventory_export_app_count">
+        <item quantity="one">%1$d ऐप</item>
+        <item quantity="other">%1$d ऐप</item>
+    </plurals>
+    <string name="inventory_export_apps_all">इसमें सभी इंस्टॉल किए गए ऐप शामिल हैं।</string>
+    <string name="inventory_export_apps_filtered">इसमें केवल आपके फ़िल्टर से मेल खाने वाले ऐप शामिल हैं।</string>
+    <string name="inventory_export_edit_filters">फ़िल्टर</string>
+    <string name="inventory_export_no_apps">इन फ़िल्टर से कोई ऐप मेल नहीं खाता</string>
+    <string name="inventory_export_no_apps_available">एक्सपोर्ट करने के लिए कोई ऐप उपलब्ध नहीं है</string>
+    <string name="inventory_export_columns_selected">%2$d में से %1$d जानकारी के फ़ील्ड चुने गए</string>
+    <string name="inventory_export_select_all">सभी चुनें</string>
+    <string name="inventory_export_clear">चयन हटाएँ</string>
+    <string name="inventory_export_slower_tag">ज़्यादा समय</string>
+    <string name="inventory_export_slow_hint">चुनी गई कुछ जानकारी के लिए हर ऐप्लिकेशन की गहराई से जाँच करनी होती है, इसलिए एक्सपोर्ट में ज़्यादा समय लगता है।</string>
+    <string name="inventory_export_usage_access_hint">जब तक आप उपयोग के डेटा का ऐक्सेस नहीं देते, आखिरी बार इस्तेमाल करने का समय और स्टोरेज का आकार खाली रहते हैं।</string>
+    <string name="inventory_export_grant_access">ऐक्सेस दें</string>
+    <string name="inventory_export_attribute_category">श्रेणी</string>
+    <string name="inventory_export_attribute_certificate_sha256">प्रमाणपत्र का SHA-256</string>
+    <string name="inventory_export_attribute_certificate_subject">प्रमाणपत्र का धारक</string>
+    <string name="inventory_export_attribute_requested_permissions">माँगी गई अनुमतियाँ</string>
+    <string name="inventory_export_attribute_granted_permissions">दी गई अनुमतियाँ</string>
+    <plurals name="inventory_export_column_count">
+        <item quantity="one">%1$d जानकारी का फ़ील्ड</item>
+        <item quantity="other">%1$d जानकारी के फ़ील्ड</item>
+    </plurals>
+    <string name="inventory_export_format_title">फ़ॉर्मैट</string>
+    <string name="inventory_export_format_csv">CSV स्प्रेडशीट</string>
+    <string name="inventory_export_format_csv_description">Excel, Google Sheets और अन्य स्प्रेडशीट ऐप में खुलती है।</string>
+    <string name="inventory_export_format_json">JSON</string>
+    <string name="inventory_export_format_json_description">स्क्रिप्ट और अन्य टूल के लिए संरचित डेटा।</string>
+    <string name="inventory_export_format_reference">फ़ाइल फ़ॉर्मैट संदर्भ</string>
+    <string name="inventory_export_preview_title">झलक</string>
+    <plurals name="inventory_export_preview_caption">
+        <item quantity="one">केवल पहले %1$d ऐप की झलक दिखाता है।</item>
+        <item quantity="other">केवल पहले %1$d ऐप की झलक दिखाता है।</item>
+    </plurals>
+    <string name="inventory_export_preview_unavailable">अभी झलक उपलब्ध नहीं है।</string>
+    <string name="inventory_export_save">सेव करें</string>
+    <string name="inventory_export_share">शेयर करें</string>
+    <string name="inventory_export_cancel">रद्द करें</string>
+    <plurals name="inventory_export_progress">
+        <item quantity="one">%2$d में से %1$d ऐप एक्सपोर्ट हो रहा है…</item>
+        <item quantity="other">%2$d में से %1$d ऐप एक्सपोर्ट हो रहे हैं…</item>
+    </plurals>
+    <plurals name="inventory_export_saved">
+        <item quantity="one">%1$d ऐप %2$s में सेव किया गया</item>
+        <item quantity="other">%1$d ऐप %2$s में सेव किए गए</item>
+    </plurals>
+    <plurals name="inventory_export_incomplete">
+        <item quantity="one">%1$d ऐप की कुछ जानकारी उपलब्ध नहीं है।</item>
+        <item quantity="other">%1$d ऐप की कुछ जानकारी उपलब्ध नहीं है।</item>
+    </plurals>
+    <string name="inventory_export_failed">ऐप्लिकेशन की जानकारी एक्सपोर्ट नहीं हो सकी</string>
+    <string name="inventory_export_picker_unavailable">फ़ाइल सेव करने के लिए कोई ऐप उपलब्ध नहीं है</string>
+    <string name="inventory_export_share_unavailable">फ़ाइल शेयर करने के लिए कोई ऐप उपलब्ध नहीं है</string>
+    <string name="inventory_export_attribute_activity_count">Activities की संख्या</string>
+    <string name="inventory_export_attribute_service_count">Services की संख्या</string>
+    <string name="inventory_export_attribute_receiver_count">Receivers की संख्या</string>
+    <string name="inventory_export_attribute_provider_count">Providers की संख्या</string>
+    <string name="inventory_export_attribute_split_details">विभाजित APK का विवरण</string>
+    <string name="inventory_export_attribute_permission_details">मांगी गई अनुमतियों का विवरण</string>
+    <string name="inventory_export_attribute_intent_filters">Intent फ़िल्टर</string>
+    <string name="inventory_export_attribute_certificate_md5">प्रमाणपत्र का MD5</string>
+    <string name="inventory_export_attribute_certificate_sha1">प्रमाणपत्र का SHA-1</string>
+    <string name="inventory_export_attribute_public_key_md5">सार्वजनिक कुंजी का MD5</string>
+    <string name="inventory_export_attribute_public_key_sha1">सार्वजनिक कुंजी का SHA-1</string>
+    <string name="inventory_export_attribute_public_key_sha256">सार्वजनिक कुंजी का SHA-256</string>
+    <string name="inventory_export_json_only">केवल JSON</string>
+    <string name="inventory_export_stop_title">एक्सपोर्ट रोकें?</string>
+    <string name="inventory_export_stop_message">अधूरी फ़ाइल मिटा दी जाएगी। आपके चुने हुए ऐप्लिकेशन, जानकारी और फ़ॉर्मैट बने रहेंगे।</string>
+    <string name="inventory_export_stop_and_back">रोकें और वापस जाएँ</string>
+    <string name="inventory_export_keep_exporting">एक्सपोर्ट जारी रखें</string>
+    <string name="inventory_export_apps_title">ऐप</string>
+    <string name="inventory_export_apps_page_title">ऐप्लिकेशन चुनें</string>
+    <string name="inventory_export_columns_title">जानकारी</string>
+    <string name="inventory_export_columns_page_title">जानकारी चुनें</string>
+    <string name="inventory_export_apps_left_out">बाहर रखे गए ऐप: %1$d</string>
+    <string name="inventory_export_apps_selected">%2$d में से %1$d चुने गए</string>
+    <string name="inventory_export_search_apps">ऐप खोजें</string>
+    <string name="inventory_export_no_search_results">आपकी खोज से कोई ऐप मेल नहीं खाता</string>
+    <string name="inventory_export_preset_basics">बुनियादी</string>
+    <string name="inventory_export_preset_security_audit">सुरक्षा ऑडिट</string>
+    <string name="inventory_export_preset_permissions">अनुमतियाँ और कॉम्पोनेंट</string>
+    <string name="inventory_export_preset_everything">सब कुछ</string>
+    <string name="inventory_export_columns_more">%1$s और %2$d अन्य</string>
+    <string name="inventory_export_no_columns_hint">एक्सपोर्ट करने के लिए जानकारी का कम से कम एक फ़ील्ड चुनें।</string>
+    <string name="inventory_export_step_export">एक्सपोर्ट</string>
+    <string name="inventory_export_next">अगला</string>
+    <string name="inventory_export_columns_omitted">CSV फ़ाइल में शामिल नहीं होंगे: %1$s. CSV में पूरे रिकॉर्ड सेव नहीं हो सकते।</string>
+    <string name="inventory_export_use_json">JSON इस्तेमाल करें</string>
+    <string name="inventory_export_structured_hint">सिर्फ़ JSON वाली जानकारी में केवल गिनती नहीं, बल्कि पूरे रिकॉर्ड शामिल होते हैं। CSV फ़ाइलों में ये शामिल नहीं होती हैं।</string>
+    <string name="inventory_export_intro_got_it">समझ गया</string>
+    <string name="inventory_export_intro_about">इस एक्सपोर्ट के बारे में</string>
+    <string name="inventory_export_apps_guidance">आप चयन हटाएँ नहीं, तब तक सभी ऐप शामिल रहते हैं। सूची छोटी करने के लिए फ़िल्टर इस्तेमाल करें।</string>
+    <string name="inventory_export_preset_basics_description">नाम, वर्शन, SDK स्तर, इंस्टॉल का स्रोत और आखिरी अपडेट।</string>
+    <string name="inventory_export_preset_security_audit_description">डीबग और बैकअप सेटिंग, साइनिंग सर्टिफ़िकेट और स्कीम।</string>
+    <string name="inventory_export_preset_permissions_description">माँगी गई और दी गई अनुमतियाँ, और कॉम्पोनेंट की संख्या।</string>
+    <string name="inventory_export_preset_everything_description">सभी उपलब्ध जानकारी, पूरे रिकॉर्ड सहित।</string>
+    <string name="inventory_export_intro_title">ऐप की इन्वेंटरी बनाएँ</string>
+    <string name="inventory_export_intro_description">कई ऐप की जानकारी एक CSV या JSON फ़ाइल में एक्सपोर्ट करें।</string>
+    <string name="inventory_export_columns_guidance">हर ऐप के लिए शामिल की जाने वाली जानकारी चुनें।</string>
+    <string name="inventory_export_format_guidance">स्प्रेडशीट के लिए CSV या पूरी जानकारी के लिए JSON चुनें, फिर सेव करें या शेयर करें।</string>
+</resources>

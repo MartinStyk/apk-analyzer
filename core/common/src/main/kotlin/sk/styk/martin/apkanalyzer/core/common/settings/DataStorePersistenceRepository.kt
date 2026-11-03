@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -23,6 +24,9 @@ private val KEY_APP_START_NUMBER = intPreferencesKey("app_start_number")
 private val KEY_RECENTLY_VIEWED_ENABLED = booleanPreferencesKey("recently_viewed_apps_enabled")
 private val KEY_APP_DETAIL_QUALIFIED_SESSION_COUNT = intPreferencesKey("app_detail_qualified_session_count")
 private val KEY_REVIEW_FLOW_REQUESTED = booleanPreferencesKey("review_flow_requested")
+private val KEY_INVENTORY_EXPORT_COLUMNS = stringSetPreferencesKey("inventory_export_columns")
+private val KEY_INVENTORY_EXPORT_FORMAT = stringPreferencesKey("inventory_export_format")
+private val KEY_INVENTORY_EXPORT_INTRO_DISMISSED = booleanPreferencesKey("inventory_export_intro_dismissed")
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
     name = "app_settings",
@@ -83,6 +87,18 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
         Key.ReviewFlowRequested -> {
             prefs[KEY_REVIEW_FLOW_REQUESTED] ?: false
         }
+
+        Key.InventoryExportColumns -> {
+            prefs[KEY_INVENTORY_EXPORT_COLUMNS] ?: emptySet<String>()
+        }
+
+        Key.InventoryExportFormat -> {
+            prefs[KEY_INVENTORY_EXPORT_FORMAT] ?: ""
+        }
+
+        Key.InventoryExportIntroDismissed -> {
+            prefs[KEY_INVENTORY_EXPORT_INTRO_DISMISSED] ?: false
+        }
     } as T
 
     private fun <T : Any> Key<T>.write(prefs: MutablePreferences, value: T) = when (this) {
@@ -113,6 +129,18 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
 
         Key.ReviewFlowRequested -> {
             prefs[KEY_REVIEW_FLOW_REQUESTED] = value as Boolean
+        }
+
+        Key.InventoryExportColumns -> {
+            prefs[KEY_INVENTORY_EXPORT_COLUMNS] = value as Set<String>
+        }
+
+        Key.InventoryExportFormat -> {
+            prefs[KEY_INVENTORY_EXPORT_FORMAT] = value as String
+        }
+
+        Key.InventoryExportIntroDismissed -> {
+            prefs[KEY_INVENTORY_EXPORT_INTRO_DISMISSED] = value as Boolean
         }
     }
 }

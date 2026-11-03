@@ -54,6 +54,7 @@
     <string name="app_detail_action_summary">Зведення</string>
     <string name="app_detail_action_copy_summary">Копіювати</string>
     <string name="app_detail_action_share_summary">Поділитися</string>
+    <string name="app_detail_action_export_inventory">Експортувати відомості</string>
     <string name="app_detail_summary_sheet_title">Зведення програми</string>
     <string name="app_detail_action_play_store">Play Store</string>
     <string name="app_detail_action_app_info">Інформація про програму</string>

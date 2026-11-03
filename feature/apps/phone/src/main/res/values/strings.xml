@@ -144,4 +144,9 @@
     <string name="filter_permissions_empty_title">No permissions found</string>
     <string name="filter_permissions_empty_subtitle">This device has no permissions to display.</string>
     <string name="quick_filter_sensitive_permissions">Sensitive permissions</string>
+    <string name="export_apps">Export</string>
+    <plurals name="export_apps_count">
+        <item quantity="one">Export %1$d app</item>
+        <item quantity="other">Export %1$d apps</item>
+    </plurals>
 </resources>

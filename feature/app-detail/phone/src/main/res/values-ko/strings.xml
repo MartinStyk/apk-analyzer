@@ -39,6 +39,7 @@
     <string name="app_detail_action_summary">요약</string>
     <string name="app_detail_action_copy_summary">복사</string>
     <string name="app_detail_action_share_summary">공유</string>
+    <string name="app_detail_action_export_inventory">정보 내보내기</string>
     <string name="app_detail_summary_sheet_title">앱 요약</string>
     <string name="app_detail_action_play_store">플레이 스토어</string>
     <string name="app_detail_action_app_info">앱 정보</string>

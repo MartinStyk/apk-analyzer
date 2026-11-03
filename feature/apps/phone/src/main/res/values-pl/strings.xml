@@ -154,4 +154,11 @@
     <string name="filter_permissions_empty_title">Nie znaleziono żadnych uprawnień</string>
     <string name="filter_permissions_empty_subtitle">To urządzenie nie ma uprawnień do wyświetlenia.</string>
     <string name="quick_filter_sensitive_permissions">Wrażliwe uprawnienia</string>
+    <string name="export_apps">Eksportuj</string>
+    <plurals name="export_apps_count">
+        <item quantity="one">Eksportuj %1$d aplikację</item>
+        <item quantity="few">Eksportuj %1$d aplikacje</item>
+        <item quantity="many">Eksportuj %1$d aplikacji</item>
+        <item quantity="other">Eksportuj %1$d aplikacji</item>
+    </plurals>
 </resources>

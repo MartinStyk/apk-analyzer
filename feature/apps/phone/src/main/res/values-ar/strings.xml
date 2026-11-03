@@ -166,4 +166,13 @@
     <string name="filter_permissions_empty_title">لم يتم العثور على أذونات</string>
     <string name="filter_permissions_empty_subtitle">لا توجد أذونات لعرضها على هذا الجهاز.</string>
     <string name="quick_filter_sensitive_permissions">أذونات حساسة</string>
+    <string name="export_apps">تصدير</string>
+    <plurals name="export_apps_count">
+        <item quantity="zero">تصدير %1$d تطبيق</item>
+        <item quantity="one">تصدير تطبيق واحد</item>
+        <item quantity="two">تصدير تطبيقين</item>
+        <item quantity="few">تصدير %1$d تطبيقات</item>
+        <item quantity="many">تصدير %1$d تطبيقًا</item>
+        <item quantity="other">تصدير %1$d تطبيق</item>
+    </plurals>
 </resources>

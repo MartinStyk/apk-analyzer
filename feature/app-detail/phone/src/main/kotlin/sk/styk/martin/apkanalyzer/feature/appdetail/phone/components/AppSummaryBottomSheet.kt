@@ -28,8 +28,10 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
 @Composable
 internal fun AppSummaryBottomSheet(
     summary: String,
+    canExportInventory: Boolean,
     onCopy: () -> Unit,
     onShare: () -> Unit,
+    onExportInventory: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -74,11 +76,19 @@ internal fun AppSummaryBottomSheet(
                     onClick = onCopy,
                     modifier = Modifier.weight(1f),
                 )
-                Button(
-                    text = stringResource(R.string.app_detail_action_share_summary),
-                    onClick = onShare,
-                    modifier = Modifier.weight(1f),
-                )
+                if (canExportInventory) {
+                    Button(
+                        text = stringResource(R.string.app_detail_action_export_inventory),
+                        onClick = onExportInventory,
+                        modifier = Modifier.weight(1f),
+                    )
+                } else {
+                    Button(
+                        text = stringResource(R.string.app_detail_action_share_summary),
+                        onClick = onShare,
+                        modifier = Modifier.weight(1f),
+                    )
+                }
             }
         }
     }
@@ -93,8 +103,10 @@ private fun AppSummaryBottomSheetPreview() {
                 "Version: 9.4.12 (90412)\n" +
                 "APK Size: 152 MB\n" +
                 "Permissions: 32 requested permissions · 6 dangerous permissions · 4 granted permissions",
+            canExportInventory = true,
             onCopy = {},
             onShare = {},
+            onExportInventory = {},
             onDismiss = {},
         )
     }

@@ -1,0 +1,341 @@
+package sk.styk.martin.apkanalyzer.core.appexport.column
+
+import sk.styk.martin.apkanalyzer.core.appexport.source.InventoryDataSource
+
+enum class InventoryColumnGroup {
+    Identification,
+    Versioning,
+    ApiTargets,
+    Installation,
+    Storage,
+    Security,
+    Signing,
+    Permissions,
+    Components,
+    Requirements,
+    Manifest,
+}
+
+enum class InventoryColumnShape {
+    Scalar,
+    Structured,
+}
+
+enum class InventoryColumn(
+    val key: String,
+    val group: InventoryColumnGroup,
+    internal val source: InventoryDataSource,
+    val shape: InventoryColumnShape = InventoryColumnShape.Scalar,
+) {
+    ApplicationName(
+        "application_name",
+        InventoryColumnGroup.Identification,
+        InventoryDataSource.AppList,
+    ),
+    PackageName(
+        "package_name",
+        InventoryColumnGroup.Identification,
+        InventoryDataSource.AppList,
+    ),
+    ProcessName(
+        "process_name",
+        InventoryColumnGroup.Identification,
+        InventoryDataSource.AppAnalysis,
+    ),
+    Uid(
+        "uid",
+        InventoryColumnGroup.Identification,
+        InventoryDataSource.AppAnalysis,
+    ),
+    SharedUserId(
+        "shared_user_id",
+        InventoryColumnGroup.Identification,
+        InventoryDataSource.AppList,
+    ),
+    Category(
+        "category",
+        InventoryColumnGroup.Identification,
+        InventoryDataSource.AppList,
+    ),
+    Description(
+        "description",
+        InventoryColumnGroup.Identification,
+        InventoryDataSource.AppAnalysis,
+    ),
+    VersionName(
+        "version_name",
+        InventoryColumnGroup.Versioning,
+        InventoryDataSource.AppList,
+    ),
+    VersionCode(
+        "version_code",
+        InventoryColumnGroup.Versioning,
+        InventoryDataSource.AppList,
+    ),
+    MinSdk(
+        "min_sdk",
+        InventoryColumnGroup.ApiTargets,
+        InventoryDataSource.AppList,
+    ),
+    TargetSdk(
+        "target_sdk",
+        InventoryColumnGroup.ApiTargets,
+        InventoryDataSource.AppList,
+    ),
+    AppType(
+        "app_type",
+        InventoryColumnGroup.Installation,
+        InventoryDataSource.AppList,
+    ),
+    InstallSource(
+        "install_source",
+        InventoryColumnGroup.Installation,
+        InventoryDataSource.AppList,
+    ),
+    InstallerPackage(
+        "installer_package",
+        InventoryColumnGroup.Installation,
+        InventoryDataSource.AppList,
+    ),
+    InstallInitiator(
+        "install_initiator",
+        InventoryColumnGroup.Installation,
+        InventoryDataSource.AppList,
+    ),
+    InstallOriginator(
+        "install_originator",
+        InventoryColumnGroup.Installation,
+        InventoryDataSource.AppList,
+    ),
+    FirstInstalled(
+        "first_installed",
+        InventoryColumnGroup.Installation,
+        InventoryDataSource.AppList,
+    ),
+    LastUpdated(
+        "last_updated",
+        InventoryColumnGroup.Installation,
+        InventoryDataSource.AppList,
+    ),
+    LastUsed(
+        "last_used",
+        InventoryColumnGroup.Installation,
+        InventoryDataSource.UsageStats,
+    ),
+    ApkSize(
+        "apk_size_bytes",
+        InventoryColumnGroup.Storage,
+        InventoryDataSource.AppList,
+    ),
+    TotalSize(
+        "total_size_bytes",
+        InventoryColumnGroup.Storage,
+        InventoryDataSource.UsageStats,
+    ),
+    SplitApks(
+        "split_apks",
+        InventoryColumnGroup.Storage,
+        InventoryDataSource.AppAnalysis,
+    ),
+    SplitApkDetails(
+        "split_apk_details",
+        InventoryColumnGroup.Storage,
+        InventoryDataSource.AppAnalysis,
+        shape = InventoryColumnShape.Structured,
+    ),
+    InstallLocation(
+        "install_location",
+        InventoryColumnGroup.Storage,
+        InventoryDataSource.AppAnalysis,
+    ),
+    ApkDirectory(
+        "apk_directory",
+        InventoryColumnGroup.Storage,
+        InventoryDataSource.AppAnalysis,
+    ),
+    DataDirectory(
+        "data_directory",
+        InventoryColumnGroup.Storage,
+        InventoryDataSource.AppAnalysis,
+    ),
+    NativeLibraryAbis(
+        "native_library_abis",
+        InventoryColumnGroup.Storage,
+        InventoryDataSource.NativeLibraries,
+    ),
+    NativeLibraryFiles(
+        "native_library_files",
+        InventoryColumnGroup.Storage,
+        InventoryDataSource.NativeLibraries,
+        shape = InventoryColumnShape.Structured,
+    ),
+    Debuggable(
+        "debuggable",
+        InventoryColumnGroup.Security,
+        InventoryDataSource.AppAnalysis,
+    ),
+    AllowsBackup(
+        "allows_backup",
+        InventoryColumnGroup.Security,
+        InventoryDataSource.AppAnalysis,
+    ),
+    CleartextTraffic(
+        "cleartext_traffic",
+        InventoryColumnGroup.Security,
+        InventoryDataSource.AppAnalysis,
+    ),
+    SigningCertificateSha256(
+        "signing_certificate_sha256",
+        InventoryColumnGroup.Signing,
+        InventoryDataSource.SigningIndex,
+    ),
+    SigningCertificateSha1(
+        "signing_certificate_sha1",
+        InventoryColumnGroup.Signing,
+        InventoryDataSource.SigningIndex,
+    ),
+    SigningCertificateMd5(
+        "signing_certificate_md5",
+        InventoryColumnGroup.Signing,
+        InventoryDataSource.SigningIndex,
+    ),
+    SigningPublicKeySha256(
+        "signing_public_key_sha256",
+        InventoryColumnGroup.Signing,
+        InventoryDataSource.SigningIndex,
+    ),
+    SigningPublicKeySha1(
+        "signing_public_key_sha1",
+        InventoryColumnGroup.Signing,
+        InventoryDataSource.SigningIndex,
+    ),
+    SigningPublicKeyMd5(
+        "signing_public_key_md5",
+        InventoryColumnGroup.Signing,
+        InventoryDataSource.SigningIndex,
+    ),
+    SigningCertificateSubject(
+        "signing_certificate_subject",
+        InventoryColumnGroup.Signing,
+        InventoryDataSource.SigningIndex,
+    ),
+    HasMultipleSigners(
+        "has_multiple_signers",
+        InventoryColumnGroup.Signing,
+        InventoryDataSource.SigningIndex,
+    ),
+    SigningSchemes(
+        "signing_schemes",
+        InventoryColumnGroup.Signing,
+        InventoryDataSource.SigningSchemes,
+    ),
+    SigningCertificates(
+        "signing_certificates",
+        InventoryColumnGroup.Signing,
+        InventoryDataSource.SigningIndex,
+        shape = InventoryColumnShape.Structured,
+    ),
+    SigningCertificateHistory(
+        "signing_certificate_history",
+        InventoryColumnGroup.Signing,
+        InventoryDataSource.SigningIndex,
+        shape = InventoryColumnShape.Structured,
+    ),
+    RequestedPermissions(
+        "requested_permissions",
+        InventoryColumnGroup.Permissions,
+        InventoryDataSource.AppList,
+    ),
+    GrantedPermissions(
+        "granted_permissions",
+        InventoryColumnGroup.Permissions,
+        InventoryDataSource.AppAnalysis,
+    ),
+    DefinedPermissions(
+        "defined_permissions",
+        InventoryColumnGroup.Permissions,
+        InventoryDataSource.AppAnalysis,
+        shape = InventoryColumnShape.Structured,
+    ),
+    PermissionDetails(
+        "permission_details",
+        InventoryColumnGroup.Permissions,
+        InventoryDataSource.AppAnalysis,
+        shape = InventoryColumnShape.Structured,
+    ),
+    ActivityCount(
+        "activity_count",
+        InventoryColumnGroup.Components,
+        InventoryDataSource.AppAnalysis,
+    ),
+    ServiceCount(
+        "service_count",
+        InventoryColumnGroup.Components,
+        InventoryDataSource.AppAnalysis,
+    ),
+    ReceiverCount(
+        "receiver_count",
+        InventoryColumnGroup.Components,
+        InventoryDataSource.AppAnalysis,
+    ),
+    ProviderCount(
+        "provider_count",
+        InventoryColumnGroup.Components,
+        InventoryDataSource.AppAnalysis,
+    ),
+    Activities(
+        "activities",
+        InventoryColumnGroup.Components,
+        InventoryDataSource.AppAnalysis,
+        shape = InventoryColumnShape.Structured,
+    ),
+    Services(
+        "services",
+        InventoryColumnGroup.Components,
+        InventoryDataSource.AppAnalysis,
+        shape = InventoryColumnShape.Structured,
+    ),
+    Receivers(
+        "receivers",
+        InventoryColumnGroup.Components,
+        InventoryDataSource.AppAnalysis,
+        shape = InventoryColumnShape.Structured,
+    ),
+    Providers(
+        "providers",
+        InventoryColumnGroup.Components,
+        InventoryDataSource.AppAnalysis,
+        shape = InventoryColumnShape.Structured,
+    ),
+    IntentFilters(
+        "intent_filters",
+        InventoryColumnGroup.Components,
+        InventoryDataSource.IntentFilters,
+        shape = InventoryColumnShape.Structured,
+    ),
+    Features(
+        "features",
+        InventoryColumnGroup.Requirements,
+        InventoryDataSource.AppAnalysis,
+        shape = InventoryColumnShape.Structured,
+    ),
+    Manifest(
+        "manifest",
+        InventoryColumnGroup.Manifest,
+        InventoryDataSource.Manifest,
+        shape = InventoryColumnShape.Structured,
+    ),
+    ;
+
+    val requiresAppAnalysis: Boolean
+        get() = source in setOf(
+            InventoryDataSource.AppAnalysis,
+            InventoryDataSource.NativeLibraries,
+            InventoryDataSource.SigningSchemes,
+            InventoryDataSource.IntentFilters,
+            InventoryDataSource.Manifest,
+        )
+
+    val requiresUsageAccess: Boolean
+        get() = source == InventoryDataSource.UsageStats
+}

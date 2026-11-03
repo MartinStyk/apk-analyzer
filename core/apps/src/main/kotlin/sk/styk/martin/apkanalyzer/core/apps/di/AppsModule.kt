@@ -24,6 +24,8 @@ import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.DeviceFeaturesReposit
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.DeviceFeaturesRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apps.export.AppExportManager
 import sk.styk.martin.apkanalyzer.core.apps.export.AppExportManagerImpl
+import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterRepositories
+import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterRepositoriesImpl
 import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterRepository
 import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceResolver
@@ -131,6 +133,10 @@ internal interface AppsModule {
     @Binds
     @Singleton
     fun bindAppFilterRepository(impl: AppFilterRepositoryImpl): AppFilterRepository
+
+    @Binds
+    @Singleton
+    fun bindAppFilterRepositories(impl: AppFilterRepositoriesImpl): AppFilterRepositories
 
     // usagestats
     @Binds

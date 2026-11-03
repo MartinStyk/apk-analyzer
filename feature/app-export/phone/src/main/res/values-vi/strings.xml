@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="inventory_export_title">Xuất thông tin ứng dụng</string>
+    <string name="inventory_export_apps_loading">Đang tải ứng dụng…</string>
+    <plurals name="inventory_export_app_count">
+        <item quantity="other">%1$d ứng dụng</item>
+    </plurals>
+    <string name="inventory_export_apps_all">Bao gồm tất cả ứng dụng đã cài đặt.</string>
+    <string name="inventory_export_apps_filtered">Chỉ bao gồm các ứng dụng khớp với bộ lọc.</string>
+    <string name="inventory_export_edit_filters">Bộ lọc</string>
+    <string name="inventory_export_no_apps">Không có ứng dụng nào khớp với các bộ lọc này</string>
+    <string name="inventory_export_no_apps_available">Không có ứng dụng nào để xuất</string>
+    <string name="inventory_export_columns_selected">Đã chọn %1$d trên %2$d mục thông tin</string>
+    <string name="inventory_export_select_all">Chọn tất cả</string>
+    <string name="inventory_export_clear">Bỏ chọn</string>
+    <string name="inventory_export_slower_tag">Chậm hơn</string>
+    <string name="inventory_export_slow_hint">Một số thông tin đã chọn cần phân tích kỹ hơn từng ứng dụng nên quá trình xuất sẽ lâu hơn.</string>
+    <string name="inventory_export_usage_access_hint">Thời gian sử dụng lần cuối và dung lượng lưu trữ sẽ để trống cho đến khi bạn cho phép truy cập dữ liệu sử dụng.</string>
+    <string name="inventory_export_grant_access">Cho phép truy cập</string>
+    <string name="inventory_export_attribute_category">Danh mục</string>
+    <string name="inventory_export_attribute_certificate_sha256">SHA-256 của chứng chỉ</string>
+    <string name="inventory_export_attribute_certificate_subject">Chủ thể chứng chỉ</string>
+    <string name="inventory_export_attribute_requested_permissions">Quyền được yêu cầu</string>
+    <string name="inventory_export_attribute_granted_permissions">Quyền đã cấp</string>
+    <plurals name="inventory_export_column_count">
+        <item quantity="other">%1$d mục thông tin</item>
+    </plurals>
+    <string name="inventory_export_format_title">Định dạng</string>
+    <string name="inventory_export_format_csv">Bảng tính CSV</string>
+    <string name="inventory_export_format_csv_description">Mở được bằng Excel, Google Trang tính và các ứng dụng bảng tính khác.</string>
+    <string name="inventory_export_format_json">JSON</string>
+    <string name="inventory_export_format_json_description">Dữ liệu có cấu trúc dành cho tập lệnh và các công cụ khác.</string>
+    <string name="inventory_export_format_reference">Tài liệu định dạng tệp</string>
+    <string name="inventory_export_preview_title">Xem trước</string>
+    <plurals name="inventory_export_preview_caption">
+        <item quantity="other">Chỉ hiển thị %1$d ứng dụng đầu tiên.</item>
+    </plurals>
+    <string name="inventory_export_preview_unavailable">Hiện không thể xem trước.</string>
+    <string name="inventory_export_save">Lưu</string>
+    <string name="inventory_export_share">Chia sẻ</string>
+    <string name="inventory_export_cancel">Hủy</string>
+    <plurals name="inventory_export_progress">
+        <item quantity="other">Đang xuất %1$d trên %2$d ứng dụng…</item>
+    </plurals>
+    <plurals name="inventory_export_saved">
+        <item quantity="other">Đã lưu %1$d ứng dụng vào %2$s</item>
+    </plurals>
+    <plurals name="inventory_export_incomplete">
+        <item quantity="other">Một số thông tin của %1$d ứng dụng bị thiếu.</item>
+    </plurals>
+    <string name="inventory_export_failed">Không thể xuất thông tin ứng dụng</string>
+    <string name="inventory_export_picker_unavailable">Không có ứng dụng nào để lưu tệp</string>
+    <string name="inventory_export_share_unavailable">Không có ứng dụng nào để chia sẻ tệp</string>
+    <string name="inventory_export_attribute_activity_count">Số hoạt động</string>
+    <string name="inventory_export_attribute_service_count">Số dịch vụ</string>
+    <string name="inventory_export_attribute_receiver_count">Số người nhận</string>
+    <string name="inventory_export_attribute_provider_count">Số nhà cung cấp</string>
+    <string name="inventory_export_attribute_split_details">Chi tiết APK phân tách</string>
+    <string name="inventory_export_attribute_permission_details">Chi tiết quyền được yêu cầu</string>
+    <string name="inventory_export_attribute_intent_filters">Bộ lọc Intent</string>
+    <string name="inventory_export_attribute_certificate_md5">MD5 của chứng chỉ</string>
+    <string name="inventory_export_attribute_certificate_sha1">SHA-1 của chứng chỉ</string>
+    <string name="inventory_export_attribute_public_key_md5">MD5 của khóa công khai</string>
+    <string name="inventory_export_attribute_public_key_sha1">SHA-1 của khóa công khai</string>
+    <string name="inventory_export_attribute_public_key_sha256">SHA-256 của khóa công khai</string>
+    <string name="inventory_export_json_only">Chỉ JSON</string>
+    <string name="inventory_export_stop_title">Dừng xuất?</string>
+    <string name="inventory_export_stop_message">Tệp chưa hoàn tất sẽ bị xóa. Các ứng dụng, thông tin và định dạng đã chọn sẽ được giữ lại.</string>
+    <string name="inventory_export_stop_and_back">Dừng và quay lại</string>
+    <string name="inventory_export_keep_exporting">Tiếp tục xuất</string>
+    <string name="inventory_export_apps_title">Ứng dụng</string>
+    <string name="inventory_export_apps_page_title">Chọn ứng dụng</string>
+    <string name="inventory_export_columns_title">Thông tin</string>
+    <string name="inventory_export_columns_page_title">Chọn thông tin</string>
+    <string name="inventory_export_apps_left_out">Ứng dụng bị loại: %1$d</string>
+    <string name="inventory_export_apps_selected">Đã chọn %1$d trên %2$d</string>
+    <string name="inventory_export_search_apps">Tìm ứng dụng</string>
+    <string name="inventory_export_no_search_results">Không có ứng dụng nào khớp với tìm kiếm</string>
+    <string name="inventory_export_preset_basics">Cơ bản</string>
+    <string name="inventory_export_preset_security_audit">Kiểm tra bảo mật</string>
+    <string name="inventory_export_preset_permissions">Quyền và thành phần</string>
+    <string name="inventory_export_preset_everything">Tất cả</string>
+    <string name="inventory_export_columns_more">%1$s và %2$d mục khác</string>
+    <string name="inventory_export_no_columns_hint">Chọn ít nhất một mục thông tin để xuất.</string>
+    <string name="inventory_export_step_export">Xuất</string>
+    <string name="inventory_export_next">Tiếp theo</string>
+    <string name="inventory_export_columns_omitted">Không có trong tệp CSV: %1$s. CSV không chứa được bản ghi đầy đủ.</string>
+    <string name="inventory_export_use_json">Dùng JSON</string>
+    <string name="inventory_export_structured_hint">Thông tin chỉ dành cho JSON gồm các bản ghi đầy đủ, không chỉ số lượng. Tệp CSV sẽ bỏ qua chúng.</string>
+    <string name="inventory_export_intro_got_it">Đã hiểu</string>
+    <string name="inventory_export_intro_about">Giới thiệu về tính năng xuất</string>
+    <string name="inventory_export_apps_guidance">Tất cả ứng dụng đều được đưa vào trừ khi bạn bỏ chọn. Dùng bộ lọc để thu hẹp danh sách.</string>
+    <string name="inventory_export_preset_basics_description">Tên, phiên bản, mức SDK, nguồn cài đặt và lần cập nhật gần nhất.</string>
+    <string name="inventory_export_preset_security_audit_description">Cài đặt gỡ lỗi và sao lưu, chứng chỉ và lược đồ chữ ký.</string>
+    <string name="inventory_export_preset_permissions_description">Quyền được yêu cầu và đã cấp, cùng số lượng thành phần.</string>
+    <string name="inventory_export_preset_everything_description">Mọi thông tin hiện có, gồm cả bản ghi đầy đủ.</string>
+    <string name="inventory_export_intro_title">Tạo danh mục ứng dụng</string>
+    <string name="inventory_export_intro_description">Xuất thông tin của nhiều ứng dụng vào một tệp CSV hoặc JSON.</string>
+    <string name="inventory_export_columns_guidance">Chọn thông tin cần đưa vào cho mỗi ứng dụng.</string>
+    <string name="inventory_export_format_guidance">Chọn CSV cho bảng tính hoặc JSON cho đầy đủ thông tin, rồi lưu hoặc chia sẻ.</string>
+</resources>

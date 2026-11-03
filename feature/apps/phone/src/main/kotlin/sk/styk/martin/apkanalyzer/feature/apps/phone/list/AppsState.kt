@@ -2,6 +2,7 @@ package sk.styk.martin.apkanalyzer.feature.apps.phone.list
 
 import androidx.compose.runtime.Immutable
 import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterState
+import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.apps.sorting.AppSortType
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
@@ -45,4 +46,16 @@ data class AppListItem(
     val installTime: Instant,
     val lastUpdateTime: Instant,
     val source: AppSource,
+)
+
+internal fun InstalledApp.toListItem() = AppListItem(
+    packageName = packageName,
+    applicationName = applicationName,
+    targetSdk = targetSdk,
+    apkSize = apkSize,
+    totalSize = totalSize,
+    installTime = installTime,
+    lastUpdateTime = lastUpdateTime,
+    lastUsedTime = lastUsedTime,
+    source = source,
 )

@@ -5,7 +5,7 @@
 The start destination for browsing installed apps, searching, filtering, sorting, opening APK files,
 and navigating to app details or settings.
 
-The API module exposes only the top-level navigation key. The phone implementation uses the package
+The API module exposes the top-level navigation key and the filter key (see below). The phone implementation uses the package
 `sk.styk.martin.apkanalyzer.feature.apps.phone`; the TV one is described under [TV Module](#tv-module).
 Opening APK files and navigating to settings are phone-only.
 
@@ -31,6 +31,11 @@ bridged in through its own `Singleton` coordinator (`PermissionFilterCoordinator
 `SourceFilterCoordinator`, `SdkVersionFilterCoordinator`) built on the shared `FilterDraftBridge`,
 because the nested screen is a separate Navigation 3 destination with its own `HiltViewModel` and
 cannot share `FilterViewModel`'s in-memory state directly.
+
+`AppFilterNavKey` lives in the API module because `feature:app-export` opens it too. It carries
+only a scope id string, so the API module never names a caller; `FilterViewModel` resolves it through
+`AppFilterRepositories`. The list uses `AppFilterScope.List`; another feature picks its own id and
+seeds that scope itself. The nested coordinators only touch the draft, so they serve every scope unchanged.
 
 ## TV Module
 
@@ -73,7 +78,8 @@ it hides the row while filters are active, so everything on screen matches the f
 ## Navigation Topology
 
 The apps destination opens search and filter internally. Filter opens permission selection. App
-details and settings are cross-feature destinations and must use their API modules.
+details, settings, and inventory export (the Export button beside Sort) are cross-feature
+destinations and must use their API modules.
 
 Register all internal destinations through this feature's entry provider, then register that provider
 once in its app host — `appEntries` in `ApkAnalyzerApp.kt`, `tvAppEntries` in `TvApkAnalyzerApp.kt`.

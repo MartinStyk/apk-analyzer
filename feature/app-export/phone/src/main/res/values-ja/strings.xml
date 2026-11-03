@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="inventory_export_title">アプリ情報をエクスポート</string>
+    <string name="inventory_export_apps_loading">アプリを読み込み中…</string>
+    <plurals name="inventory_export_app_count">
+        <item quantity="other">%1$d 個のアプリ</item>
+    </plurals>
+    <string name="inventory_export_apps_all">インストール済みのすべてのアプリを含みます。</string>
+    <string name="inventory_export_apps_filtered">フィルタに一致するアプリのみを含みます。</string>
+    <string name="inventory_export_edit_filters">フィルタ</string>
+    <string name="inventory_export_no_apps">このフィルタに一致するアプリはありません</string>
+    <string name="inventory_export_no_apps_available">エクスポートできるアプリはありません</string>
+    <string name="inventory_export_columns_selected">%2$d項目中%1$d項目を選択</string>
+    <string name="inventory_export_select_all">すべて選択</string>
+    <string name="inventory_export_clear">選択を解除</string>
+    <string name="inventory_export_slower_tag">時間がかかる</string>
+    <string name="inventory_export_slow_hint">選択した情報の一部は各アプリの詳しい分析が必要なため、エクスポートに時間がかかります。</string>
+    <string name="inventory_export_usage_access_hint">使用状況へのアクセスを許可するまで、最終使用日時とストレージサイズは空欄になります。</string>
+    <string name="inventory_export_grant_access">アクセスを許可</string>
+    <string name="inventory_export_attribute_category">カテゴリ</string>
+    <string name="inventory_export_attribute_certificate_sha256">証明書の SHA-256</string>
+    <string name="inventory_export_attribute_certificate_subject">証明書のサブジェクト</string>
+    <string name="inventory_export_attribute_requested_permissions">要求された権限</string>
+    <string name="inventory_export_attribute_granted_permissions">付与された権限</string>
+    <plurals name="inventory_export_column_count">
+        <item quantity="other">%1$d項目</item>
+    </plurals>
+    <string name="inventory_export_format_title">形式</string>
+    <string name="inventory_export_format_csv">CSV スプレッドシート</string>
+    <string name="inventory_export_format_csv_description">Excel、Google スプレッドシートなどの表計算アプリで開けます。</string>
+    <string name="inventory_export_format_json">JSON</string>
+    <string name="inventory_export_format_json_description">スクリプトやその他のツール向けの構造化データです。</string>
+    <string name="inventory_export_format_reference">ファイル形式リファレンス</string>
+    <string name="inventory_export_preview_title">プレビュー</string>
+    <plurals name="inventory_export_preview_caption">
+        <item quantity="other">最初の %1$d 個のアプリのみを表示します。</item>
+    </plurals>
+    <string name="inventory_export_preview_unavailable">現在、プレビューを表示できません。</string>
+    <string name="inventory_export_save">保存</string>
+    <string name="inventory_export_share">共有</string>
+    <string name="inventory_export_cancel">キャンセル</string>
+    <plurals name="inventory_export_progress">
+        <item quantity="other">%2$d 個中 %1$d 個のアプリをエクスポート中…</item>
+    </plurals>
+    <plurals name="inventory_export_saved">
+        <item quantity="other">%1$d 個のアプリを %2$s に保存しました</item>
+    </plurals>
+    <plurals name="inventory_export_incomplete">
+        <item quantity="other">%1$d 個のアプリで一部の情報が不足しています。</item>
+    </plurals>
+    <string name="inventory_export_failed">アプリ情報をエクスポートできませんでした</string>
+    <string name="inventory_export_picker_unavailable">ファイルを保存できるアプリはありません</string>
+    <string name="inventory_export_share_unavailable">ファイルを共有できるアプリはありません</string>
+    <string name="inventory_export_attribute_activity_count">アクティビティ数</string>
+    <string name="inventory_export_attribute_service_count">サービス数</string>
+    <string name="inventory_export_attribute_receiver_count">受信者数</string>
+    <string name="inventory_export_attribute_provider_count">プロバイダー数</string>
+    <string name="inventory_export_attribute_split_details">分割 APK の詳細</string>
+    <string name="inventory_export_attribute_permission_details">要求された権限の詳細</string>
+    <string name="inventory_export_attribute_intent_filters">Intent フィルタ</string>
+    <string name="inventory_export_attribute_certificate_md5">証明書の MD5</string>
+    <string name="inventory_export_attribute_certificate_sha1">証明書の SHA-1</string>
+    <string name="inventory_export_attribute_public_key_md5">公開鍵の MD5</string>
+    <string name="inventory_export_attribute_public_key_sha1">公開鍵の SHA-1</string>
+    <string name="inventory_export_attribute_public_key_sha256">公開鍵の SHA-256</string>
+    <string name="inventory_export_json_only">JSON 専用</string>
+    <string name="inventory_export_stop_title">エクスポートを停止しますか？</string>
+    <string name="inventory_export_stop_message">未完成のファイルは削除されます。選択したアプリ、情報、形式は保持されます。</string>
+    <string name="inventory_export_stop_and_back">停止して戻る</string>
+    <string name="inventory_export_keep_exporting">エクスポートを続ける</string>
+    <string name="inventory_export_apps_title">アプリ</string>
+    <string name="inventory_export_apps_page_title">アプリを選ぶ</string>
+    <string name="inventory_export_columns_title">情報</string>
+    <string name="inventory_export_columns_page_title">情報を選ぶ</string>
+    <string name="inventory_export_apps_left_out">除外したアプリ: %1$d</string>
+    <string name="inventory_export_apps_selected">%2$d件中%1$d件を選択</string>
+    <string name="inventory_export_search_apps">アプリを検索</string>
+    <string name="inventory_export_no_search_results">検索に一致するアプリはありません</string>
+    <string name="inventory_export_preset_basics">基本</string>
+    <string name="inventory_export_preset_security_audit">セキュリティ監査</string>
+    <string name="inventory_export_preset_permissions">権限とコンポーネント</string>
+    <string name="inventory_export_preset_everything">すべて</string>
+    <string name="inventory_export_columns_more">%1$s ほか%2$d件</string>
+    <string name="inventory_export_no_columns_hint">書き出す情報を1項目以上選んでください。</string>
+    <string name="inventory_export_step_export">エクスポート</string>
+    <string name="inventory_export_next">次へ</string>
+    <string name="inventory_export_columns_omitted">CSVファイルに含まれない情報: %1$s。CSVには完全なレコードを入れられません。</string>
+    <string name="inventory_export_use_json">JSONを使う</string>
+    <string name="inventory_export_structured_hint">JSON専用の情報には、件数だけでなく完全なレコードが含まれます。CSVファイルでは除外されます。</string>
+    <string name="inventory_export_intro_got_it">了解</string>
+    <string name="inventory_export_intro_about">このエクスポートについて</string>
+    <string name="inventory_export_apps_guidance">チェックを外さない限り、すべてのアプリが含まれます。フィルターで一覧を絞り込めます。</string>
+    <string name="inventory_export_preset_basics_description">名前、バージョン、SDKレベル、インストール元、最終更新日。</string>
+    <string name="inventory_export_preset_security_audit_description">デバッグとバックアップの設定、署名証明書、署名方式。</string>
+    <string name="inventory_export_preset_permissions_description">要求された権限と許可された権限、コンポーネントの数。</string>
+    <string name="inventory_export_preset_everything_description">完全なレコードを含む、利用できるすべての情報。</string>
+    <string name="inventory_export_intro_title">アプリの一覧を作成</string>
+    <string name="inventory_export_intro_description">複数のアプリの情報を1つのCSVまたはJSONファイルに書き出します。</string>
+    <string name="inventory_export_columns_guidance">アプリごとに含める情報を選んでください。</string>
+    <string name="inventory_export_format_guidance">スプレッドシートにはCSV、すべての情報にはJSONを選び、保存または共有します。</string>
+</resources>

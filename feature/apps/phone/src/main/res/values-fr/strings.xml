@@ -148,4 +148,10 @@
     <string name="filter_permissions_empty_title">Aucune permission trouvée</string>
     <string name="filter_permissions_empty_subtitle">Cet appareil n\'a aucune permission à afficher.</string>
     <string name="quick_filter_sensitive_permissions">Permissions sensibles</string>
+    <string name="export_apps">Exporter</string>
+    <plurals name="export_apps_count">
+        <item quantity="one">Exporter %1$d application</item>
+        <item quantity="many">Exporter %1$d applications</item>
+        <item quantity="other">Exporter %1$d applications</item>
+    </plurals>
 </resources>

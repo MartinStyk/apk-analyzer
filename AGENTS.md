@@ -101,6 +101,9 @@ Modules live under `app/`, `tv/`, `core/<name>/`, and `feature/<name>/{api,phone
   ID. TV code depends only on shared `core` modules, `core:design-system:tv`, and feature `api`
   modules — never on `app`, `core:design-system:phone`, Material3, or a feature `phone` module. Phone code never
   depends on TV modules. See [`tv/AGENTS.md`](tv/AGENTS.md).
+* `site/` — not a module: the public website the `Pages` workflow publishes to GitHub Pages from
+  `develop`. Its pages are a user-facing contract; see
+  [`core/app-export/AGENTS.md`](core/app-export/AGENTS.md#published-reference).
 * Declare dependencies with typesafe accessors (`projects.core.appPermissions`), never
   `project(":core:app-permissions")`. Apply plugins with `alias(libs.plugins.apkanalyzer.*)`.
 * A module's package matches its directory with hyphens removed: `core/user-preferences` →

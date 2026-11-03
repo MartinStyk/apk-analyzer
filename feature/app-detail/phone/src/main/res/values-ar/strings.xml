@@ -64,6 +64,7 @@
     <string name="app_detail_action_summary">ملخص</string>
     <string name="app_detail_action_copy_summary">نسخ</string>
     <string name="app_detail_action_share_summary">مشاركة</string>
+    <string name="app_detail_action_export_inventory">تصدير التفاصيل</string>
     <string name="app_detail_summary_sheet_title">ملخص التطبيق</string>
     <string name="app_detail_action_play_store">متجر بلاي</string>
     <string name="app_detail_action_app_info">معلومات التطبيق</string>

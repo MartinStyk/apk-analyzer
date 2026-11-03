@@ -2,6 +2,9 @@ package sk.styk.martin.apkanalyzer.feature.apps.phone.filter
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +15,8 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
-import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterRepository
+import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterRepositories
+import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterScope
 import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterState
 import sk.styk.martin.apkanalyzer.core.apps.filtering.AppSizeRange
 import sk.styk.martin.apkanalyzer.core.apps.filtering.PermissionPreset
@@ -27,11 +31,11 @@ import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.domain.SdkVersionFil
 import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.domain.SdkVersionFilterDraft
 import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.domain.SourceFilterCoordinator
 import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.domain.SourceFilterDraft
-import javax.inject.Inject
 
-@HiltViewModel
-class FilterViewModel @Inject constructor(
-    private val appFilterRepository: AppFilterRepository,
+@HiltViewModel(assistedFactory = FilterViewModel.Factory::class)
+class FilterViewModel @AssistedInject constructor(
+    @Assisted scopeId: String,
+    appFilterRepositories: AppFilterRepositories,
     private val permissionFilterCoordinator: PermissionFilterCoordinator,
     private val sourceFilterCoordinator: SourceFilterCoordinator,
     private val sdkVersionFilterCoordinator: SdkVersionFilterCoordinator,
@@ -40,6 +44,8 @@ class FilterViewModel @Inject constructor(
     usageStatsRepository: UsageStatsRepository,
     storageStatsRepository: StorageStatsRepository,
 ) : ViewModel() {
+
+    private val appFilterRepository = appFilterRepositories.forScope(AppFilterScope(scopeId))
 
     private val localFilter = MutableStateFlow(appFilterRepository.filter.value)
     private val showUnsavedChangesSheet = MutableStateFlow(false)
@@ -256,6 +262,11 @@ class FilterViewModel @Inject constructor(
         showUnsavedChangesSheet.value = false
         appFilterRepository.update(localFilter.value)
         eventChannel.trySend(FilterEvent.NavigateBack)
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(scopeId: String): FilterViewModel
     }
 
     private data class AppsMetadata(

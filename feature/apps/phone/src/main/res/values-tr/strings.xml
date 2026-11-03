@@ -142,4 +142,9 @@
     <string name="filter_permissions_empty_title">Hiçbir izin bulunamadı</string>
     <string name="filter_permissions_empty_subtitle">Bu cihazda görüntülenecek izin yok.</string>
     <string name="quick_filter_sensitive_permissions">Hassas izinler</string>
+    <string name="export_apps">Dışa aktar</string>
+    <plurals name="export_apps_count">
+        <item quantity="one">Dışa aktar %1$d uygulama</item>
+        <item quantity="other">Dışa aktar %1$d uygulama</item>
+    </plurals>
 </resources>

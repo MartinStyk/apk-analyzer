@@ -54,6 +54,7 @@
     <string name="app_detail_action_summary">Zhrnutie</string>
     <string name="app_detail_action_copy_summary">Kopírovať</string>
     <string name="app_detail_action_share_summary">Zdieľať</string>
+    <string name="app_detail_action_export_inventory">Exportovať údaje</string>
     <string name="app_detail_summary_sheet_title">Zhrnutie aplikácie</string>
     <string name="app_detail_action_play_store">Obchod Play</string>
     <string name="app_detail_action_app_info">Informácie o aplikácii</string>

@@ -23,6 +23,7 @@ import sk.styk.martin.apkanalyzer.core.navigation.Navigator
 import sk.styk.martin.apkanalyzer.core.navigation.rememberNavigationState
 import sk.styk.martin.apkanalyzer.core.navigation.toEntries
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.navigation.appDetailEntries
+import sk.styk.martin.apkanalyzer.feature.appexport.phone.navigation.inventoryExportEntries
 import sk.styk.martin.apkanalyzer.feature.apps.api.AppsNavKey
 import sk.styk.martin.apkanalyzer.feature.apps.phone.navigation.appEntries
 import sk.styk.martin.apkanalyzer.feature.browse.phone.navigation.browseEntries
@@ -56,6 +57,7 @@ internal fun ApkAnalyzerApp(onBackAtRoot: () -> Unit) {
                         appEntries(navigator)
                         appDetailEntries(navigator)
                         browseEntries(navigator)
+                        inventoryExportEntries(navigator)
                         settingsEntries(navigator)
                     }
                     NavDisplay(

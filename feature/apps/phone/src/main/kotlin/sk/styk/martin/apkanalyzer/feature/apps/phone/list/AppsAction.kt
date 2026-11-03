@@ -10,6 +10,7 @@ sealed interface AppsAction {
     data object SearchClicked : AppsAction
     data object OpenSettings : AppsAction
     data object FilterClicked : AppsAction
+    data object ExportClicked : AppsAction
     data object ClearAllFilters : AppsAction
     data object DismissSortPermissionRationale : AppsAction
     data class OpenSortPermissionSettings(val permission: AppDataPermission) : AppsAction

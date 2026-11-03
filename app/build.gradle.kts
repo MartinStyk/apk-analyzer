@@ -55,6 +55,7 @@ dependencies {
 
     implementation(projects.feature.apps.phone)
     implementation(projects.feature.browse.phone)
+    implementation(projects.feature.appExport.phone)
     implementation(projects.feature.settings.phone)
     implementation(projects.feature.appDetail.phone)
 

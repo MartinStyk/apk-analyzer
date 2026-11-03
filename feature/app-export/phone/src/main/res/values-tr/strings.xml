@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="inventory_export_title">Uygulama bilgilerini dışa aktar</string>
+    <string name="inventory_export_apps_loading">Uygulamalar yükleniyor…</string>
+    <plurals name="inventory_export_app_count">
+        <item quantity="one">%1$d uygulama</item>
+        <item quantity="other">%1$d uygulama</item>
+    </plurals>
+    <string name="inventory_export_apps_all">Yüklü tüm uygulamaları içerir.</string>
+    <string name="inventory_export_apps_filtered">Yalnızca filtrelerinizle eşleşen uygulamaları içerir.</string>
+    <string name="inventory_export_edit_filters">Filtreler</string>
+    <string name="inventory_export_no_apps">Bu filtrelerle eşleşen uygulama yok</string>
+    <string name="inventory_export_no_apps_available">Dışa aktarılabilecek uygulama yok</string>
+    <string name="inventory_export_columns_selected">%2$d ayrıntıdan %1$d tanesi seçildi</string>
+    <string name="inventory_export_select_all">Tümünü seç</string>
+    <string name="inventory_export_clear">Seçimi temizle</string>
+    <string name="inventory_export_slower_tag">Daha yavaş</string>
+    <string name="inventory_export_slow_hint">Seçilen bazı ayrıntılar her uygulamanın daha yakından incelenmesini gerektirdiği için dışa aktarma daha uzun sürer.</string>
+    <string name="inventory_export_usage_access_hint">Kullanım verilerine erişime izin verene kadar son kullanım zamanı ve depolama boyutu boş kalır.</string>
+    <string name="inventory_export_grant_access">Erişime izin ver</string>
+    <string name="inventory_export_attribute_category">Kategori</string>
+    <string name="inventory_export_attribute_certificate_sha256">Sertifika SHA-256</string>
+    <string name="inventory_export_attribute_certificate_subject">Sertifika öznesi</string>
+    <string name="inventory_export_attribute_requested_permissions">İstenen izinler</string>
+    <string name="inventory_export_attribute_granted_permissions">Verilen izinler</string>
+    <plurals name="inventory_export_column_count">
+        <item quantity="one">%1$d ayrıntı</item>
+        <item quantity="other">%1$d ayrıntı</item>
+    </plurals>
+    <string name="inventory_export_format_title">Biçim</string>
+    <string name="inventory_export_format_csv">CSV e-tablosu</string>
+    <string name="inventory_export_format_csv_description">Excel, Google E-Tablolar ve diğer e-tablo uygulamalarında açılır.</string>
+    <string name="inventory_export_format_json">JSON</string>
+    <string name="inventory_export_format_json_description">Betikler ve diğer araçlar için yapılandırılmış veriler.</string>
+    <string name="inventory_export_format_reference">Dosya biçimi başvurusu</string>
+    <string name="inventory_export_preview_title">Önizleme</string>
+    <plurals name="inventory_export_preview_caption">
+        <item quantity="one">Yalnızca ilk uygulamayı gösterir.</item>
+        <item quantity="other">Yalnızca ilk %1$d uygulamayı gösterir.</item>
+    </plurals>
+    <string name="inventory_export_preview_unavailable">Önizleme şu anda kullanılamıyor.</string>
+    <string name="inventory_export_save">Kaydet</string>
+    <string name="inventory_export_share">Paylaş</string>
+    <string name="inventory_export_cancel">İptal</string>
+    <plurals name="inventory_export_progress">
+        <item quantity="one">%2$d uygulamadan %1$d tanesi dışa aktarılıyor…</item>
+        <item quantity="other">%2$d uygulamadan %1$d tanesi dışa aktarılıyor…</item>
+    </plurals>
+    <plurals name="inventory_export_saved">
+        <item quantity="one">%1$d uygulama %2$s dosyasına kaydedildi</item>
+        <item quantity="other">%1$d uygulama %2$s dosyasına kaydedildi</item>
+    </plurals>
+    <plurals name="inventory_export_incomplete">
+        <item quantity="one">%1$d uygulamanın bazı bilgileri eksik.</item>
+        <item quantity="other">%1$d uygulamanın bazı bilgileri eksik.</item>
+    </plurals>
+    <string name="inventory_export_failed">Uygulama bilgileri dışa aktarılamadı</string>
+    <string name="inventory_export_picker_unavailable">Dosyayı kaydedebilecek uygulama yok</string>
+    <string name="inventory_export_share_unavailable">Dosyayı paylaşabilecek uygulama yok</string>
+    <string name="inventory_export_attribute_activity_count">Etkinlik sayısı</string>
+    <string name="inventory_export_attribute_service_count">Hizmet sayısı</string>
+    <string name="inventory_export_attribute_receiver_count">Alıcı sayısı</string>
+    <string name="inventory_export_attribute_provider_count">Sağlayıcı sayısı</string>
+    <string name="inventory_export_attribute_split_details">Bölünmüş APK ayrıntıları</string>
+    <string name="inventory_export_attribute_permission_details">İstenen izinlerin ayrıntıları</string>
+    <string name="inventory_export_attribute_intent_filters">Intent filtreleri</string>
+    <string name="inventory_export_attribute_certificate_md5">Sertifika MD5</string>
+    <string name="inventory_export_attribute_certificate_sha1">Sertifika SHA-1</string>
+    <string name="inventory_export_attribute_public_key_md5">Açık anahtar MD5</string>
+    <string name="inventory_export_attribute_public_key_sha1">Açık anahtar SHA-1</string>
+    <string name="inventory_export_attribute_public_key_sha256">Açık anahtar SHA-256</string>
+    <string name="inventory_export_json_only">Yalnızca JSON</string>
+    <string name="inventory_export_stop_title">Dışa aktarma durdurulsun mu?</string>
+    <string name="inventory_export_stop_message">Tamamlanmamış dosya silinecek. Seçtiğiniz uygulamalar, ayrıntılar ve biçim korunacak.</string>
+    <string name="inventory_export_stop_and_back">Durdur ve geri dön</string>
+    <string name="inventory_export_keep_exporting">Dışa aktarmaya devam et</string>
+    <string name="inventory_export_apps_title">Uygulamalar</string>
+    <string name="inventory_export_apps_page_title">Uygulama seç</string>
+    <string name="inventory_export_columns_title">Ayrıntılar</string>
+    <string name="inventory_export_columns_page_title">Ayrıntı seç</string>
+    <string name="inventory_export_apps_left_out">Hariç tutulan uygulamalar: %1$d</string>
+    <string name="inventory_export_apps_selected">%2$d öğeden %1$d tanesi seçildi</string>
+    <string name="inventory_export_search_apps">Uygulama ara</string>
+    <string name="inventory_export_no_search_results">Aramanızla eşleşen uygulama yok</string>
+    <string name="inventory_export_preset_basics">Temel</string>
+    <string name="inventory_export_preset_security_audit">Güvenlik denetimi</string>
+    <string name="inventory_export_preset_permissions">İzinler ve bileşenler</string>
+    <string name="inventory_export_preset_everything">Her şey</string>
+    <string name="inventory_export_columns_more">%1$s ve %2$d tane daha</string>
+    <string name="inventory_export_no_columns_hint">Dışa aktarmak için en az bir ayrıntı seçin.</string>
+    <string name="inventory_export_step_export">Dışa aktar</string>
+    <string name="inventory_export_next">İleri</string>
+    <string name="inventory_export_columns_omitted">CSV dosyasında yer almayacak: %1$s. CSV tam kayıtları tutamaz.</string>
+    <string name="inventory_export_use_json">JSON kullan</string>
+    <string name="inventory_export_structured_hint">Yalnızca JSON ayrıntıları, sadece sayıları değil tam kayıtları içerir. CSV dosyaları bunları dışarıda bırakır.</string>
+    <string name="inventory_export_intro_got_it">Anladım</string>
+    <string name="inventory_export_intro_about">Bu dışa aktarma hakkında</string>
+    <string name="inventory_export_apps_guidance">İşaretini kaldırmadığınız sürece tüm uygulamalar dahildir. Listeyi daraltmak için filtreleri kullanın.</string>
+    <string name="inventory_export_preset_basics_description">Ad, sürüm, SDK düzeyleri, yükleme kaynağı ve son güncelleme.</string>
+    <string name="inventory_export_preset_security_audit_description">Hata ayıklama ve yedekleme ayarları, imza sertifikaları ve şemaları.</string>
+    <string name="inventory_export_preset_permissions_description">İstenen ve verilen izinler ile bileşen sayıları.</string>
+    <string name="inventory_export_preset_everything_description">Tam kayıtlar dahil tüm ayrıntılar.</string>
+    <string name="inventory_export_intro_title">Uygulama envanteri oluşturun</string>
+    <string name="inventory_export_intro_description">Birden fazla uygulamanın bilgilerini tek bir CSV veya JSON dosyasına aktarın.</string>
+    <string name="inventory_export_columns_guidance">Her uygulama için hangi ayrıntıların ekleneceğini seçin.</string>
+    <string name="inventory_export_format_guidance">Elektronik tablolar için CSV, tüm ayrıntılar için JSON seçin, ardından kaydedin veya paylaşın.</string>
+</resources>

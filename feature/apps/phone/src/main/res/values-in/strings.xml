@@ -136,4 +136,8 @@
     <string name="filter_permissions_empty_title">Tidak ada izin yang ditemukan</string>
     <string name="filter_permissions_empty_subtitle">Perangkat ini tidak memiliki izin untuk ditampilkan.</string>
     <string name="quick_filter_sensitive_permissions">Izin sensitif</string>
+    <string name="export_apps">Ekspor</string>
+    <plurals name="export_apps_count">
+        <item quantity="other">Ekspor %1$d aplikasi</item>
+    </plurals>
 </resources>

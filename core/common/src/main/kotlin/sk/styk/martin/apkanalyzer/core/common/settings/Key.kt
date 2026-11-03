@@ -12,6 +12,12 @@ sealed interface Key<T : Any> {
     data object AppDetailQualifiedSessionCount : Key<Int>
 
     data object ReviewFlowRequested : Key<Boolean>
+
+    data object InventoryExportColumns : Key<Set<String>>
+
+    data object InventoryExportFormat : Key<String>
+
+    data object InventoryExportIntroDismissed : Key<Boolean>
 }
 
 enum class ColorAppScheme {
