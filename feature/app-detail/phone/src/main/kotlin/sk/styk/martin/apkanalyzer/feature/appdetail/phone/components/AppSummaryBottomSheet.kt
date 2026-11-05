@@ -111,3 +111,21 @@ private fun AppSummaryBottomSheetPreview() {
         )
     }
 }
+
+@Preview
+@Composable
+private fun AppSummaryBottomSheetExportDisabledPreview() {
+    ApkAnalyzerTheme {
+        AppSummaryBottomSheet(
+            summary = "Spotify (com.spotify.music)\n" +
+                "Version: 9.4.12 (90412)\n" +
+                "APK Size: 152 MB\n" +
+                "Permissions: 32 requested permissions · 6 dangerous permissions · 4 granted permissions",
+            canExportInventory = false,
+            onCopy = {},
+            onShare = {},
+            onExportInventory = {},
+            onDismiss = {},
+        )
+    }
+}

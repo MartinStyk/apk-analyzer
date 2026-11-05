@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -195,6 +196,7 @@ private fun AppsContent(
                 appsSectionItems(
                     apps = state.apps,
                     isFiltering = state.activeFilter.isActive,
+                    isInventoryExportEnabled = state.isInventoryExportEnabled,
                     sortType = state.sortType,
                     onAppClicked = { onAction(AppsAction.AppClicked(it)) },
                     onClearFilters = { onAction(AppsAction.ClearAllFilters) },
@@ -252,6 +254,7 @@ private fun LazyListScope.recentsSectionItems(
 private fun LazyListScope.appsSectionItems(
     apps: AppListState,
     isFiltering: Boolean,
+    isInventoryExportEnabled: Boolean,
     sortType: AppSortType,
     onAppClicked: (PackageName) -> Unit,
     onClearFilters: () -> Unit,
@@ -261,7 +264,10 @@ private fun LazyListScope.appsSectionItems(
     item(key = "installed_apps_header") {
         Column {
             Spacer(modifier = Modifier.height(2.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.heightIn(min = 48.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 Text(
                     text = stringResource(R.string.installed_apps),
                     style = AppTheme.typography.titleMedium,
@@ -270,18 +276,20 @@ private fun LazyListScope.appsSectionItems(
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f),
                 )
-                val exportCount = (apps as? AppListState.Content)?.apps?.size?.takeIf { isFiltering }
-                Chip(
-                    label = if (exportCount != null) {
-                        pluralStringResource(R.plurals.export_apps_count, exportCount, exportCount)
-                    } else {
-                        stringResource(R.string.export_apps)
-                    },
-                    variant = ChipVariant.Default,
-                    leadingIcon = ApkAnalyzerIcons.Export,
-                    onClick = onExport,
-                )
-                Spacer(modifier = Modifier.width(12.dp))
+                if (isInventoryExportEnabled) {
+                    val exportCount = (apps as? AppListState.Content)?.apps?.size?.takeIf { isFiltering }
+                    Chip(
+                        label = if (exportCount != null) {
+                            pluralStringResource(R.plurals.export_apps_count, exportCount, exportCount)
+                        } else {
+                            stringResource(R.string.export_apps)
+                        },
+                        variant = ChipVariant.Default,
+                        leadingIcon = ApkAnalyzerIcons.Export,
+                        onClick = onExport,
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                }
                 IconButton(
                     imageVector = ApkAnalyzerIcons.Sort,
                     style = if (sortType == AppSortType.Name) IconButtonStyle.Standard else IconButtonStyle.Highlighted,
@@ -555,6 +563,37 @@ private fun AppsContentReadyPreview() {
                     ),
                 ),
                 recents = RecentsState.NoRecents,
+                isInventoryExportEnabled = true,
+            ),
+            onAction = {},
+            onApkDetails = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun AppsContentExportDisabledPreview() {
+    ApkAnalyzerTheme {
+        AppsContent(
+            state = AppsState(
+                apps = AppListState.Content(
+                    apps = listOf(
+                        AppListItem(
+                            packageName = PackageName("com.instagram.android"),
+                            applicationName = "Instagram",
+                            targetSdk = 34,
+                            apkSize = 64.megabytes,
+                            totalSize = 510.megabytes,
+                            installTime = Instant.EPOCH,
+                            lastUpdateTime = Instant.EPOCH,
+                            lastUsedTime = Instant.EPOCH,
+                            source = AppSource.GooglePlay,
+                        ),
+                    ),
+                ),
+                recents = RecentsState.NoRecents,
+                isInventoryExportEnabled = false,
             ),
             onAction = {},
             onApkDetails = {},

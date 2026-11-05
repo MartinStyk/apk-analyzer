@@ -18,6 +18,7 @@ data class AppsState(
     val sortAscending: Boolean = true,
     val activeFilter: AppFilterState = AppFilterState(),
     val sortPermissionRationale: AppDataPermission? = null,
+    val isInventoryExportEnabled: Boolean = false,
 )
 
 sealed interface AppListState {

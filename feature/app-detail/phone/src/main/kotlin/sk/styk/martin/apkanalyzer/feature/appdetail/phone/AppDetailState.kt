@@ -74,7 +74,11 @@ internal sealed interface AppDetailState {
         val badges: List<AppDetailBadge> = listOf(),
         val insights: List<AppDetailInsight> = listOf(),
         val exportInProgress: AppDetailExport? = null,
+        val isInventoryExportEnabled: Boolean = false,
     ) : AppDetailState {
+        val canExportInventory: Boolean
+            get() = isInventoryExportEnabled && analysisMode == AppDetail.AnalysisMode.InstalledPackage
+
         val isTargetSdkOutdated: Boolean
             get() = insights.any { it is AppDetailInsight.OutdatedTargetSdk }
 

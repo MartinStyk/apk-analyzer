@@ -35,6 +35,8 @@ import sk.styk.martin.apkanalyzer.core.apps.insight.AppDetailInsightEvaluator
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
+import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationKey
+import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
@@ -61,6 +63,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
     private val summaryTextFormatter: AppSummaryTextFormatter,
     private val reviewEligibilityTracker: ReviewEligibilityTracker,
     private val analytics: AppDetailAnalytics,
+    configurationRepository: ConfigurationRepository,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -71,11 +74,20 @@ internal class AppDetailViewModel @AssistedInject constructor(
     private val source = MutableStateFlow<AppDetailSource>(AppDetailSource.Loading)
     private val exportInProgress = MutableStateFlow<AppDetailExport?>(null)
 
-    val state: StateFlow<AppDetailState> = combine(source, exportInProgress) { source, exportInProgress ->
+    val state: StateFlow<AppDetailState> = combine(
+        source,
+        exportInProgress,
+        configurationRepository.observe(ConfigurationKey.InventoryExportEnabled),
+    ) { source, exportInProgress, isInventoryExportEnabled ->
         when (source) {
             AppDetailSource.Loading -> AppDetailState.Loading
+
             is AppDetailSource.Error -> AppDetailState.Error(canRetry = source.canRetry)
-            is AppDetailSource.Ready -> source.state.copy(exportInProgress = exportInProgress)
+
+            is AppDetailSource.Ready -> source.state.copy(
+                exportInProgress = exportInProgress,
+                isInventoryExportEnabled = isInventoryExportEnabled,
+            )
         }
     }
         .flowOn(dispatcherProvider.default())

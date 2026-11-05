@@ -215,7 +215,7 @@ internal fun AppDetailScreen(
     summaryPreview?.let { summary ->
         AppSummaryBottomSheet(
             summary = summary,
-            canExportInventory = (state as? AppDetailState.Loaded)?.analysisMode == AppDetail.AnalysisMode.InstalledPackage,
+            canExportInventory = (state as? AppDetailState.Loaded)?.canExportInventory == true,
             onCopy = {
                 viewModel.onAction(AppDetailAction.CopySummary)
                 summaryPreview = null

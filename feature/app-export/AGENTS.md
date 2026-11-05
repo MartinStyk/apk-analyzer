@@ -29,6 +29,9 @@ app, opened from the app detail summary sheet). Implementation code uses the pac
 
 ## State and Navigation Rules
 
+* `ConfigurationKey.InventoryExportEnabled` is observed only at the two phone entry points, not
+  inside the export flow. Open or restored flows continue independently of configuration changes.
+  APK and icon export are separate capabilities.
 * The steps are composables inside one destination, chosen by `InventoryExportState.step`, not
   separate Navigation 3 entries. One ViewModel is scoped to that entry and every page reads its single
   `state` and sends its single `onAction`; step actions are the `AppSelectionAction` and

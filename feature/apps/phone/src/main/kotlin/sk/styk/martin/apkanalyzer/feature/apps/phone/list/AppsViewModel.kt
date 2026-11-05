@@ -19,7 +19,10 @@ import sk.styk.martin.apkanalyzer.core.apps.sorting.AppSortType
 import sk.styk.martin.apkanalyzer.core.apps.sorting.comparator
 import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepository
 import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
+import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationKey
+import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.common.coroutines.combine
 import sk.styk.martin.apkanalyzer.core.userpreferences.recentlyviewed.RecentlyViewedAppsRepository
 import sk.styk.martin.apkanalyzer.feature.apps.phone.components.AppDataPermission
 import javax.inject.Inject
@@ -28,6 +31,7 @@ import javax.inject.Inject
 class AppsViewModel @Inject constructor(
     installedAppsRepository: InstalledAppsRepository,
     recentlyViewedAppsRepository: RecentlyViewedAppsRepository,
+    configurationRepository: ConfigurationRepository,
     private val appFilterRepository: AppFilterRepository,
     private val usageStatsRepository: UsageStatsRepository,
     private val storageStatsRepository: StorageStatsRepository,
@@ -63,7 +67,8 @@ class AppsViewModel @Inject constructor(
         sortType,
         sortAscending,
         sortPermissionRationale,
-    ) { (filteredApps, filter), recents, sort, ascending, rationale ->
+        configurationRepository.observe(ConfigurationKey.InventoryExportEnabled),
+    ) { (filteredApps, filter), recents, sort, ascending, rationale, isInventoryExportEnabled ->
         val (effectiveSortType, effectiveAscending) = when {
             filter.isRecentInstallActive -> AppSortType.InstallDate to false
             filter.isRecentUpdateActive -> AppSortType.LastUpdated to false
@@ -84,6 +89,7 @@ class AppsViewModel @Inject constructor(
             sortAscending = effectiveAscending,
             activeFilter = filter,
             sortPermissionRationale = rationale,
+            isInventoryExportEnabled = isInventoryExportEnabled,
         )
     }
         .flowOn(dispatcherProvider.default())
