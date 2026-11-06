@@ -23,9 +23,9 @@ private fun bestScore(query: String, app: InstalledApp): Float {
 }
 
 private fun scoreField(query: String, field: String): Float = when {
-    field.contains(query) -> SCORE_EXACT_CONTAINS
-
     field.split('.', ' ', '-', '_').any { it.startsWith(query) } -> SCORE_WORD_PREFIX
+
+    field.contains(query) -> SCORE_CONTAINS
 
     else -> {
         val minWindowDistance = slidingWindowDistance(query, field)
@@ -78,8 +78,8 @@ private fun levenshtein(a: String, b: String): Int {
     return previousRow[n]
 }
 
-private const val SCORE_EXACT_CONTAINS = 0.0f
-private const val SCORE_WORD_PREFIX = 0.1f
+private const val SCORE_WORD_PREFIX = 0.0f
+private const val SCORE_CONTAINS = 0.1f
 private const val SCORE_FUZZY_BASE = 0.5f
 private const val MAX_SCORE_THRESHOLD = 0.85f
 private const val MAX_ALLOWED_EDITS = 3

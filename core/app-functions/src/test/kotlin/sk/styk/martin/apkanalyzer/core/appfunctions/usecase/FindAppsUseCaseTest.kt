@@ -6,14 +6,11 @@ import org.junit.Rule
 import org.junit.Test
 import sk.styk.martin.apkanalyzer.core.appfunctions.model.AppSummary
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepositoryFake
-import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceChain
-import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
+import sk.styk.martin.apkanalyzer.core.apps.model.anApp
 import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepositoryFake
 import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepositoryFake
 import sk.styk.martin.apkanalyzer.core.common.coroutines.TestDispatcherProvider
-import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
-import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -259,34 +256,6 @@ class FindAppsUseCaseTest {
 private val defaultLastUsedTime = Instant.parse("2026-03-01T00:00:00Z")
 
 private fun packageNameFor(name: String) = "com.example.${name.lowercase()}"
-
-private fun anApp(
-    name: String,
-    packageName: String = packageNameFor(name),
-    versionName: String = "1.0",
-    source: AppSource = AppSource.GooglePlay,
-    targetSdk: Int = 36,
-    requestedPermissions: List<String> = emptyList(),
-    totalSize: AppSize? = 10.megabytes,
-    apkSize: AppSize = 5.megabytes,
-    lastUsedTime: Instant? = defaultLastUsedTime,
-) = InstalledApp(
-    packageName = PackageName(packageName),
-    applicationName = name,
-    isSystemApp = false,
-    installSourceChain = InstallSourceChain(),
-    version = 1,
-    source = source,
-    targetSdk = targetSdk,
-    minSdk = 28,
-    apkSize = apkSize,
-    versionName = versionName,
-    installTime = Instant.parse("2026-01-01T00:00:00Z"),
-    lastUpdateTime = Instant.parse("2026-01-01T00:00:00Z"),
-    requestedPermissions = requestedPermissions,
-    totalSize = totalSize,
-    lastUsedTime = lastUsedTime,
-)
 
 private fun anAppSummary(
     name: String,
