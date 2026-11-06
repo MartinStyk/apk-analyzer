@@ -214,7 +214,8 @@ constructors of `AppsViewModel` and `FilterViewModel`.
   and versions.
 * **Unit tests cover `core` modules only, for now.** They follow the
   [`write-unit-tests`](../../.claude/skills/write-unit-tests/SKILL.md) skill, and test libraries
-  come only from the `apkanalyzer.tests.unit` plugin.
+  come from the `apkanalyzer.tests.unit` plugin. A library only one module's tests need goes in that
+  module's build file.
 
 ## Related
 

@@ -69,16 +69,19 @@ that has nothing worth testing, say so instead of writing filler.
 JVM tests don't prove Android behavior. The JVM has classes Android lacks (`javax.naming.ldap`
 crashed in production this way), and platform implementations can format values differently.
 
-Android static fields are null on the JVM, so anything that reads one during construction can't run
-here. `AppFunctionException` subclasses read `Bundle.EMPTY`, so `core:app-functions` error paths have
-no unit tests. Leave a path like that untested rather than working around it.
+Android classes are stubs in a plain JVM test, and their static fields are null. When the code under
+test really needs one, run that class with Robolectric, as
+[`JsonInventoryWriterTest`](../../../core/app-export/src/test/kotlin/sk/styk/martin/apkanalyzer/core/appexport/format/JsonInventoryWriterTest.kt)
+does with `@RunWith(RobolectricTestRunner::class)`. The plugin passes `TARGET_SDK` to Robolectric, so
+don't set an SDK with `@Config`. Everything else stays a plain JVM test, because Robolectric is slower
+and downloads an Android runtime. `core:app-functions` error paths have no unit tests yet.
 
 [`GetAppCertificatesUseCaseTest`](../../../core/app-functions/src/test/kotlin/sk/styk/martin/apkanalyzer/core/appfunctions/usecase/GetAppCertificatesUseCaseTest.kt)
 is the reference for a test that uses a fake and fixtures from another module's `testFixtures`.
 
 ## Setup
 
-Apply the plugin in the module's `build.gradle.kts`. Never declare test libraries in a module:
+Apply the plugin in the module's `build.gradle.kts`:
 
 ```kotlin
 plugins {
@@ -86,9 +89,11 @@ plugins {
 }
 ```
 
-`apkanalyzer.tests.unit` enables `testFixtures` and supplies JUnit 4, Kotest assertions, MockK, and
-`kotlinx-coroutines-test`. A test library the plugin doesn't supply yet goes into the plugin. Turbine
-is the approved addition, added when the first test needs it. A fixtures source set can't compile
+`apkanalyzer.tests.unit` enables `testFixtures` and supplies JUnit 4, Kotest assertions, MockK,
+Robolectric, and `kotlinx-coroutines-test`. It also gives Robolectric the target SDK and exports the
+JDK internal package Robolectric's Android runtime needs. A test library several modules need goes into the plugin. A library only
+one module's tests need goes in that module's build file, as `json-schema-validator` does in
+`core:app-export`. Turbine is the approved addition, added when the first test needs it. A fixtures source set can't compile
 without coroutines because of the repo-wide opt-in flags, so the plugin adds them.
 
 A module uses another module's fakes and fixtures with
@@ -106,7 +111,9 @@ Run one module's tests with `./gradlew :core:apps:testDebugUnitTest`.
 * No `if`, or shared helpers that hide the action under test. A loop is only fine for building test
   data.
 * Write expected values as literals. Never compute them with production code or read them from a
-  fixture.
+  fixture. The one exception is a test that checks code against a published contract file, as
+  `PublishedSchemaTest` does. Add that file as a test resource folder so Gradle re-runs the test when
+  only the file changes; build caching can otherwise restore a stale pass.
 * Assert with Kotest matchers (`shouldBe`). Compare whole objects when that states the outcome,
   because Kotest then reports a per-field diff.
 * One subject per `<Subject>Test`, in the subject's package. Build the subject directly, without

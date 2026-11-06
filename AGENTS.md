@@ -216,8 +216,9 @@ Modules live under `app/`, `tv/`, `core/<name>/`, and `feature/<name>/{api,phone
   already passed through intents/bundles.
 * Unit tests cover `core` modules only, for now. Read the `write-unit-tests` skill before writing
   one: it defines the one test style. Write a test only if you can name the realistic bug it would
-  catch; no coverage targets, no filler. Test libraries come only from the `apkanalyzer.tests.unit`
-  plugin, never from a module's build file. Don't add instrumentation or UI tests unless asked.
+  catch; no coverage targets, no filler. Test libraries come from the `apkanalyzer.tests.unit`
+  plugin; a library only one module's tests need goes in that module's build file. Don't add
+  instrumentation or UI tests unless asked.
 
 ## User-Facing Copy
 
