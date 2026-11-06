@@ -79,7 +79,7 @@ internal class ApkSigningBlockParserImpl @Inject constructor() : ApkSigningBlock
             } else {
                 val pairLength = payload.readLongLE(offset)
                 val idOffset = offset + 8
-                if (pairLength < 4 || idOffset.toLong() + pairLength > payload.size) {
+                if (pairLength < 4 || pairLength > payload.size - idOffset) {
                     isValidPayload = false
                 } else {
                     val id = payload.readUInt32LE(idOffset)
