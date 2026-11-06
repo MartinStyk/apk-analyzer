@@ -16,6 +16,7 @@ build scripts.
 | `apkanalyzer.feature.api` | Configures serialization and Navigation 3 for dependency-light feature APIs. |
 | `apkanalyzer.feature.phone` | Configures Compose, Hilt, Navigation 3, and shared UI/navigation modules. |
 | `apkanalyzer.hilt` | Applies Hilt and KSP compiler configuration. |
+| `apkanalyzer.tests.unit` | Enables `testFixtures` and supplies the shared test libraries. A module declares only a test library no other module needs. |
 | `apkanalyzer.compose` | Applies Compose, serialization, the BOM, and shared Compose/navigation bundles. |
 | `apkanalyzer.spotless` | Applies the repository ktlint and Compose formatting rules. |
 | `apkanalyzer.detekt` | Applies baseline-free, type-resolved static analysis. |

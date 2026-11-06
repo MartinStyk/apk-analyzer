@@ -12,9 +12,8 @@ an APK/zip/manifest as handling adversarial input.
 
 ## Scope
 
-- No test infrastructure exists in this repo by default. If the diff contains a `*Test.kt` file
-  anyway (an explicitly-requested exception), review it under the same rules as production code —
-  secrets/PII in test fixtures and hard-coded credentials in test code are still in scope.
+- Review test code and `testFixtures` under the same rules as production code — secrets/PII in test
+  fixtures and hard-coded credentials in test code are still in scope.
 - The orchestrator drops anything below **BLOCKER** or **MAJOR** at the validator stage, so don't
   waste cycles emitting MINOR severity — those findings will be filtered out before they reach the
   report.

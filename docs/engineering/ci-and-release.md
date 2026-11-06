@@ -8,7 +8,7 @@ secrets it needs. What the verification gates themselves check is in
 
 | Workflow | Trigger | Jobs | Produces |
 |---|---|---|---|
-| [`ci.yml`](../../.github/workflows/ci.yml) | Push and PR to `develop` | `verify`, `build-apk`, `distribute` | SARIF results, a debug APK artifact, an internal-tester build on push |
+| [`ci.yml`](../../.github/workflows/ci.yml) | Push and PR to `develop` | `verify`, `unit-tests`, `build-apk`, `distribute` | SARIF results, a debug APK artifact, an internal-tester build on push |
 | [`agent-context.yml`](../../.github/workflows/agent-context.yml) | Push and PR to `develop` touching a context file, a skill, or the module graph | `validate` | Pass/fail on `validateAgentContext` |
 | [`release.yml`](../../.github/workflows/release.yml) | Push of a `MAJOR.MINOR.PATCH` tag | `check-tag`, `verify`, `build-release`, `publish-github-release`, `publish-play-store`, `distribute-app-distribution` | Signed phone and TV AABs and APKs, a GitHub release, Play beta releases for both apps, an internal-tester build |
 | [`promote-release.yml`](../../.github/workflows/promote-release.yml) | Manual `workflow_dispatch` | `promote` | A Play production release of the phone app, the TV app, or both, at the chosen rollout percentage |
@@ -19,12 +19,13 @@ pushes that only touch Markdown, `.claude/`, `LICENSE`, `.editorconfig`, or `.gi
 
 ## Continuous integration
 
-`verify` and `build-apk` run in parallel; `distribute` needs both and runs only on `push`, never on
-a pull request.
+`verify`, `unit-tests`, and `build-apk` run in parallel; `distribute` needs all three and runs only
+on `push`, never on a pull request.
 
 | Job | What it does |
 |---|---|
-| `verify` | Runs `spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug --continue`, merges the SARIF reports, and uploads to code scanning |
+| `verify` | Runs the static checks, `spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug --continue`, merges the SARIF reports, and uploads to code scanning |
+| `unit-tests` | Runs `testDebugUnitTest --continue` |
 | `build-apk` | Assembles a debug APK, renames it to `apk-analyzer.apk`, and uploads it with 14-day retention and no recompression |
 | `distribute` | Downloads the APK and sends it to the `internal-testers` group on Firebase App Distribution |
 

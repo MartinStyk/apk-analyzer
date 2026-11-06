@@ -54,7 +54,7 @@ jobs:
 
       - name: Verify release
         run: |
-          ./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintRelease --continue
+          ./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintRelease testDebugUnitTest --continue
 
   build-release:
     needs: [ check-tag ]

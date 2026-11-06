@@ -11,8 +11,8 @@ orchestrator names.
 
 ## Scope
 
-- No test infrastructure exists in this repo by default. If the diff contains a `*Test.kt` file
-  anyway (an explicitly-requested exception), review it under the same rules as production code.
+- Review test code and `testFixtures` under the same rules as production code, plus the conventions
+  in `.claude/skills/write-unit-tests/SKILL.md`.
 - The orchestrator drops anything below **BLOCKER** or **MAJOR** at the validator stage, so don't
   waste cycles emitting MINOR / NIT findings — they will be filtered out before they reach the
   report.

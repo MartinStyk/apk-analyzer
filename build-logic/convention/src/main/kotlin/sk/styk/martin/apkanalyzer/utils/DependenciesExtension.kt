@@ -14,4 +14,8 @@ internal fun DependencyHandler.api(dependencyNotation: Any): Dependency? = add("
 
 internal fun DependencyHandler.api(dependencyNotation: Provider<*>, configuration: Action<*>) = addProvider("api", dependencyNotation, configuration)
 
+internal fun DependencyHandler.testImplementation(dependencyNotation: Any): Dependency? = add("testImplementation", dependencyNotation)
+
+internal fun DependencyHandler.testFixturesImplementation(dependencyNotation: Any): Dependency? = add("testFixturesImplementation", dependencyNotation)
+
 internal fun DependencyHandler.ksp(dependencyNotation: Any): Dependency? = add("ksp", dependencyNotation)

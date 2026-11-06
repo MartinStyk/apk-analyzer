@@ -53,6 +53,25 @@ jobs:
         with:
           sarif_file: build/reports/merged.sarif
 
+  unit-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up Gradle build environment
+        uses: ./.github/actions/setup-gradle-build
+
+      - name: Fetch Firebase google-services.json
+        uses: ./.github/actions/fetch-google-services
+        with:
+          firebase-token: ${{ secrets.FIREBASE_TOKEN }}
+          firebase-app-id: ${{ secrets.FIREBASE_APP_ID }}
+          firebase-project-id: ${{ secrets.FIREBASE_PROJECT_ID }}
+
+      - name: Run unit tests
+        run: ./gradlew testDebugUnitTest --continue
+
   build-apk:
     runs-on: ubuntu-latest
 
@@ -102,7 +121,7 @@ jobs:
           if-no-files-found: error
 
   distribute:
-    needs: [ verify, build-apk ]
+    needs: [ verify, unit-tests, build-apk ]
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
 

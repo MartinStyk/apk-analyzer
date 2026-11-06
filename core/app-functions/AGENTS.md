@@ -84,6 +84,10 @@ class itself.
 
 ## Testing
 
+Unit tests in `src/test` cover filtering, sorting, and mapping. They can't cover error paths or denied
+permissions, because every `AppFunctionException` subclass reads `Bundle.EMPTY` when created, which
+is null on the JVM. Those paths are only verified on a device.
+
 App Functions cannot be exercised through the normal UI — verify with `adb shell cmd app_function`
 (list, execute, set-enabled) against an API 36+ device or emulator. See the `appfunctions` skill for
 the exact commands, KDoc-optimization guidance, and candidate-discovery workflow used to build this

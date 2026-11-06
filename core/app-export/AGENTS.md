@@ -95,7 +95,18 @@ a readable reference and `v1/schema.json` (JSON Schema 2020-12). The `Pages` wor
 links to it from the Export step.
 
 * Any change to a column, key, token, record field, or nullability updates the schema and the
-  reference in the same change. Nothing checks this automatically.
+  reference in the same change. `PublishedSchemaTest` validates exported values against
+  `v1/schema.json`, and checks column order, enum tokens, and the schema version and address. Nothing
+  checks the reference page, so keep it in step by hand.
 * Additive changes (a new column, record field, or token) stay in the current version. A change
   that breaks existing scripts bumps `INVENTORY_SCHEMA_VERSION` and adds a new `vN/` schema;
   published versions are never changed incompatibly.
+
+## Testing
+
+`site/inventory-export/v1` is a test resource folder, so Gradle re-runs `PublishedSchemaTest` when only
+the schema changes. A new `vN/` schema moves that folder and the test to the new version.
+
+`JsonInventoryWriter` uses `android.util.JsonWriter`, so `JsonInventoryWriterTest` and
+`PublishedSchemaTest` run with Robolectric. `PublishedSchemaTest` validates the real writer's output.
+When a domain enum gains a value, its fixture picks it up through `entries`.

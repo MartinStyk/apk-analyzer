@@ -30,7 +30,7 @@ The user invoked: `/verify $ARGUMENTS`
 
 - `--base=<ref>` — git ref to diff against. Default: `develop` (this repo's main branch).
 - `--full` — also run the whole-app check (`spotlessCheck detektDebug
-  :build-logic:convention:detektMain lintDebug :app:assembleDebug :tv:assembleDebug`) in Stage 5, matching what CI
+  :build-logic:convention:detektMain lintDebug testDebugUnitTest :app:assembleDebug :tv:assembleDebug`) in Stage 5, matching what CI
   gates on. Without it, Stage 5 only runs `spotlessApply` plus a compile and Detekt pass of the touched modules —
   fast, matching the "iterate on a single-module compile" guidance in root `AGENTS.md`.
 
@@ -105,9 +105,8 @@ the same message:
 2. `convention-reviewer` × 1. Payload: same.
 3. `security-reviewer` × 1. Payload: same.
 
-If any `*Test.kt` file is in the diff (an explicitly-requested exception to the "no test
-infrastructure" rule), it's part of `diff` and is reviewed by all three under the same rules as
-production code.
+Test code and `testFixtures` are part of `diff` and are reviewed by all three under the same rules as
+production code, plus the `write-unit-tests` skill.
 
 **Hard rule:** parallel `Agent` calls in one assistant turn. Sequential dispatch is a bug.
 
@@ -128,7 +127,7 @@ Collect every JSON response. Build a single `findings` list of issues (each tagg
 4. **Conditional — `context_files_touched` is `true` OR `--full` was passed:**
    `./gradlew validateAgentContext`.
 5. **Conditional — `--full` was passed:** the whole-app check —
-   `./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug :app:assembleDebug :tv:assembleDebug`.
+   `./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug testDebugUnitTest :app:assembleDebug :tv:assembleDebug`.
 
 Capture PASS / FAIL and the full failing-task output verbatim for every task actually run.
 

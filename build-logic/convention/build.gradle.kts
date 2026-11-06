@@ -90,5 +90,9 @@ gradlePlugin {
             id = "apkanalyzer.work"
             implementationClass = "sk.styk.martin.apkanalyzer.WorkPlugin"
         }
+        register("apkanalyzer.tests.unit") {
+            id = "apkanalyzer.tests.unit"
+            implementationClass = "sk.styk.martin.apkanalyzer.UnitTestPlugin"
+        }
     }
 }

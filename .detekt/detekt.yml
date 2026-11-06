@@ -30,7 +30,7 @@ coroutines:
     active: true
   InjectDispatcher:
     excludes:
-      - '**/coroutines/DispatcherProvider.kt'
+      - '**/coroutines/DispatcherProviderImpl.kt'
   SuspendFunInFinallySection:
     active: true
   SuspendFunSwallowedCancellation:

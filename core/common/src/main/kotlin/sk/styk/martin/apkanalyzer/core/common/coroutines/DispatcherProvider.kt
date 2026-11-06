@@ -1,15 +1,13 @@
 package sk.styk.martin.apkanalyzer.core.common.coroutines
 
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import javax.inject.Inject
 
-class DispatcherProvider @Inject constructor() {
-    fun main(): CoroutineDispatcher = Dispatchers.Main
+interface DispatcherProvider {
+    fun main(): CoroutineDispatcher
 
-    fun default(): CoroutineDispatcher = Dispatchers.Default
+    fun default(): CoroutineDispatcher
 
-    fun io(): CoroutineDispatcher = Dispatchers.IO
+    fun io(): CoroutineDispatcher
 
-    fun unconfined(): CoroutineDispatcher = Dispatchers.Unconfined
+    fun unconfined(): CoroutineDispatcher
 }

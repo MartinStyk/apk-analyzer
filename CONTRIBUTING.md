@@ -54,8 +54,9 @@ These come from [`AGENTS.md`](AGENTS.md); they're the ones PRs most often trip o
   TV modules follow the same rule with `androidx.tv.material3` and `core:design-system:tv`.
 * **Never hardcode SDK levels or the JVM toolchain** in a module's `build.gradle.kts` — they come
   from `build-logic`.
-* **Don't add tests or test dependencies** unless the issue explicitly asks. There is no test
-  infrastructure here yet, by choice.
+* **Unit tests cover `core` modules only, for now.** Follow the
+  [`write-unit-tests`](.claude/skills/write-unit-tests/SKILL.md) skill, and never declare test
+  libraries in a module's build file.
 
 Recurring tasks have step-by-step procedures in [`.claude/skills/`](.claude/skills) — creating a
 feature module, creating a core module, adding a UI component, wiring navigation, fixing formatting,
@@ -70,7 +71,7 @@ running the app on a device. Use them instead of copying an existing file and ho
 Then, if you want to pre-empt CI:
 
 ```bash
-./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug :app:assembleDebug :tv:assembleDebug
+./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug testDebugUnitTest :app:assembleDebug :tv:assembleDebug
 ```
 
 While iterating, a single-module compile is much faster:
