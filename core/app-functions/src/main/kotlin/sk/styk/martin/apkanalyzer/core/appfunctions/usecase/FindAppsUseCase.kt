@@ -7,6 +7,8 @@ import sk.styk.martin.apkanalyzer.core.appfunctions.model.AppSummary
 import sk.styk.martin.apkanalyzer.core.appfunctions.toAppFunctionLabel
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
+import sk.styk.martin.apkanalyzer.core.apps.sorting.AppSortType
+import sk.styk.martin.apkanalyzer.core.apps.sorting.comparator
 import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepository
 import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
@@ -79,7 +81,7 @@ private fun InstalledApp.matches(filters: SearchFilters, now: Instant): Boolean 
 }
 
 private fun SortBy.toComparator(): Comparator<InstalledApp> = when (this) {
-    SortBy.Name -> compareBy { it.applicationName }
+    SortBy.Name -> AppSortType.Name.comparator(ascending = true)
 
     SortBy.SizeDescending -> compareByDescending { (it.totalSize ?: it.apkSize).bytes }
 

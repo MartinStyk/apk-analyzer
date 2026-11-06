@@ -50,6 +50,9 @@ Not worth testing:
 * The same behavior again with different data, unless the data takes a different path through the code.
 * Anything that restates the implementation, so it can only fail when the code is changed on purpose.
 
+A passing test proves nothing until it has failed. For logic that matters, temporarily plant the bug
+the test is meant to catch, confirm the test fails, then restore the code.
+
 When you finish, say which behaviors you tested and which you skipped and why. If asked to test a class
 that has nothing worth testing, say so instead of writing filler.
 
@@ -100,7 +103,8 @@ Run one module's tests with `./gradlew :core:apps:testDebugUnitTest`.
 * Write three blocks for given, when, and then, separated by one blank line. No comments, so no
   `// Given` markers.
 * Test one behavior. Several assertions are fine when they describe the same outcome.
-* No `if`, loops, or shared helpers that hide the action under test.
+* No `if`, or shared helpers that hide the action under test. A loop is only fine for building test
+  data.
 * Write expected values as literals. Never compute them with production code or read them from a
   fixture.
 * Assert with Kotest matchers (`shouldBe`). Compare whole objects when that states the outcome,
@@ -160,16 +164,35 @@ MockK's `verify` only when the call is the only visible result.
 
 ## Fixtures
 
-Standard domain classes are named presets in the owning module's `testFixtures`, so tests never build
-large classes by hand: `ApkAnalyzer`, `WhatsApp`, and `Gmail` in `AppDetails.kt`, with their
-certificates in `Certificates.kt`.
+Tests never build large classes by hand. Choose by what the test is about:
 
-* Presets are top-level `val`s, constructed in full with every field set, and composed from other
-  presets rather than built on factory defaults.
+* **A preset** when any realistic object will do: `Detail.ApkAnalyzer`, `Detail.WhatsApp`, and
+  `Detail.Gmail` for `AppDetail`, and their certificates in `Certificates.kt`.
+* **A factory** when the test is about differences between a few fields, such as filtering and
+  sorting, so the input and the expected result are both on screen. See `anApp` and `anAppSummary` in
+  [`FindAppsUseCaseTest`](../../../core/app-functions/src/test/kotlin/sk/styk/martin/apkanalyzer/core/appfunctions/usecase/FindAppsUseCaseTest.kt).
+
+Factories:
+
+* Are named `a<Class>` or `an<Class>`, and take only the fields tests vary, with fixed defaults for
+  the rest. A factory for the input and one for the expected result share the same defaults.
+* Stay as `private` functions in the test file until a second test class needs them, then move to
+  `testFixtures`.
+* Use names that explain the test, like `Large`, `Medium`, and `Small`.
+* Start the fake empty, so a test only has the items it adds.
+
+Presets:
+
+* Group presets of one type in an `object`, and import the member so tests read `WhatsApp`, as in
+  `import ...model.Detail.WhatsApp`.
+* Presets are constructed in full with every field set, and composed from other presets rather than
+  built on factory defaults.
 * Use real app names and package names, but made-up certificates and hashes, so nobody takes fixture
   data for real signing data.
-* Use a preset as it is when the test doesn't depend on a field's value.
-* When an assertion depends on a value, set it in the test with `.copy(...)` and assert a literal:
+* Use a preset as it is when the test doesn't depend on a field's value, or only depends on its name
+  or package name, because those identify the app.
+* When an assertion depends on any other value, set it in the test with `.copy(...)` and assert a
+  literal:
 
 ```kotlin
 val certificate = WhatsAppCertificate.copy(issuer = CertificatePrincipal(organization = "Acme"))
