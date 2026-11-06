@@ -13,9 +13,10 @@ document is for anyone who wants to know what those commands are checking and wh
 | Detekt | Static analysis of Kotlin, including `build-logic` itself | [`.detekt/detekt.yml`](../../.detekt/detekt.yml), [`DetektPlugin.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/DetektPlugin.kt) | Yes — at **warning** severity |
 | Android Lint | Android/API correctness, resources, manifest, accessibility | AGP defaults; `lint { }` in [`app/build.gradle.kts`](../../app/build.gradle.kts) | Yes — `lintDebug` |
 | `validateAgentContext` | Structure of the shared AI context files | [`ValidateAgentContextTask.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/ValidateAgentContextTask.kt) | Yes — in its own workflow |
+| Unit tests | Behavior of `core` classes, on the JVM | [`UnitTestPlugin.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/UnitTestPlugin.kt) | Yes — `testDebugUnitTest` |
 | LeakCanary | Activity/Fragment/ViewModel leaks at runtime | `debugImplementation` in [`app/build.gradle.kts`](../../app/build.gradle.kts) — phone app only | No — advisory, debug builds only |
 
-There is no unit or instrumentation test suite, by choice. See
+There is no instrumentation test suite. See
 [coding standards](coding-standards.md#dependencies-and-tests).
 
 ## Spotless
@@ -87,7 +88,7 @@ Two things a green build proves nothing about:
 ```bash
 ./gradlew spotlessApply                                   # required before every commit
 ./gradlew :feature:apps:phone:compileDebugKotlin           # fast single-module check while iterating
-./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug :app:assembleDebug :tv:assembleDebug
+./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug testDebugUnitTest :app:assembleDebug :tv:assembleDebug
 ./gradlew validateAgentContext                            # after touching AGENTS.md or a skill
 ```
 
@@ -98,7 +99,7 @@ compile and let CI catch the rest.
 
 Every push and PR to `develop` runs `spotlessCheck detektDebug
 :build-logic:convention:detektMain lintDebug --continue` and uploads the merged SARIF to code
-scanning. The jobs, artifacts, and the rest of the pipeline are in
+scanning, with `testDebugUnitTest` in its own parallel job. The jobs, artifacts, and the rest of the pipeline are in
 [CI and release](ci-and-release.md).
 
 The [`analyze-ci-failure`](../../.claude/skills/analyze-ci-failure/SKILL.md) skill is the procedure

@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.apkanalyzer.library)
     alias(libs.plugins.apkanalyzer.hilt)
     alias(libs.plugins.apkanalyzer.appfunctions)
+    alias(libs.plugins.apkanalyzer.tests.unit)
 }
 
 android {
@@ -15,4 +16,7 @@ android {
 dependencies {
     implementation(projects.core.common)
     implementation(projects.core.apps)
+
+    testImplementation(testFixtures(projects.core.apps))
+    testImplementation(testFixtures(projects.core.common))
 }

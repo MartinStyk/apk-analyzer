@@ -111,7 +111,8 @@ Two constraints worth restating, because they are the ones an agent most often v
 
 * **Commits are authored as the human contributor only.** No `Co-Authored-By` AI trailers, no
   session metadata.
-* **No new dependencies, no new tests, no new abstractions** without asking first.
+* **No new dependencies or new abstractions** without asking first. Unit tests follow the
+  [`write-unit-tests`](../../.claude/skills/write-unit-tests/SKILL.md) skill.
 
 ## Related
 

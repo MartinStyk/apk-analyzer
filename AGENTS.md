@@ -66,8 +66,9 @@ follow-up commit instead of gating local iteration on them.
 | When | Run |
 |---|---|
 | Iterating on one module | `./gradlew :feature:apps:phone:compileDebugKotlin` |
+| Writing or changing a class with unit tests | `./gradlew :core:apps:testDebugUnitTest` |
 | Before committing | `./gradlew spotlessApply` — the only gate required locally |
-| Whole-app check (what CI gates on — don't run this locally unless debugging a CI failure) | `./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug :app:assembleDebug :tv:assembleDebug` |
+| Whole-app check (what CI gates on — don't run this locally unless debugging a CI failure) | `./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug testDebugUnitTest :app:assembleDebug :tv:assembleDebug` |
 | After changing a context file, skill, adapter, or the module graph | `./gradlew validateAgentContext` — skip this too; CI covers it |
 
 A successful compile is not proof a Compose layout is correct. For visual or layout changes, render
@@ -213,8 +214,10 @@ Modules live under `app/`, `tv/`, `core/<name>/`, and `feature/<name>/{api,phone
   `Logger.e("Tag", throwable, "msg")`. Declare `private const val TAG` at file level.
 * `@Serializable` for nav keys and new models. Parcelize only for existing Android-specific data
   already passed through intents/bundles.
-* No test infrastructure or test dependencies exist here. Don't add tests, test dependencies, or
-  test source sets unless explicitly asked.
+* Unit tests cover `core` modules only, for now. Read the `write-unit-tests` skill before writing
+  one: it defines the one test style. Write a test only if you can name the realistic bug it would
+  catch; no coverage targets, no filler. Test libraries come only from the `apkanalyzer.tests.unit`
+  plugin, never from a module's build file. Don't add instrumentation or UI tests unless asked.
 
 ## User-Facing Copy
 
@@ -233,7 +236,7 @@ frontmatter states when it applies.
 `spotless-fix`, `git-commit-author`, `setup-local-tools`, `analyze-ci-failure`, `run-app`,
 `navigate-app-adb`, `sync-design-changes`, `translate-strings`, `release-app`,
 `capture-app-flow-media`, `triage-crashes`, `fix-crash`, `verify`, `appfunctions`,
-`store-listing-carousel`.
+`store-listing-carousel`, `write-unit-tests`.
 
 All are shared by Claude and Copilot except `sync-design-changes`, which needs Claude's `DesignSync`
 tool.

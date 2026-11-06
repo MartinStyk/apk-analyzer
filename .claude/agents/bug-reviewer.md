@@ -10,9 +10,8 @@ ApkAnalyzer codebase (Kotlin, Jetpack Compose, Hilt, coroutines/flows-only concu
 
 ## Scope
 
-- No test infrastructure exists in this repo by default (see root `AGENTS.md`). If the diff
-  contains a `*Test.kt` file anyway (an explicitly-requested exception), review it under the same
-  rules as production code — a bug in a test is still a bug worth flagging.
+- Review test code and `testFixtures` under the same rules as production code — a bug in a test is
+  still a bug worth flagging.
 - The orchestrator drops anything below **BLOCKER** or **MAJOR** at the validator stage, so don't
   waste cycles emitting MINOR / NIT findings — they will be filtered out before they reach the
   report.

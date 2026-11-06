@@ -212,8 +212,9 @@ constructors of `AppsViewModel` and `FilterViewModel`.
 * **No new dependencies without asking.**
   [`gradle/libs.versions.toml`](../../gradle/libs.versions.toml) is the only source of coordinates
   and versions.
-* **No test infrastructure exists here, by choice.** Don't add tests, test dependencies, or test
-  source sets unless the issue explicitly asks for them.
+* **Unit tests cover `core` modules only, for now.** They follow the
+  [`write-unit-tests`](../../.claude/skills/write-unit-tests/SKILL.md) skill, and test libraries
+  come only from the `apkanalyzer.tests.unit` plugin.
 
 ## Related
 
