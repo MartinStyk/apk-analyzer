@@ -1,5 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone.navigation
 
+import android.widget.Toast
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
@@ -20,6 +21,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.phone.permissions.Permission
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.requirements.RequirementsScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.splitapks.SplitApksScreen
 import sk.styk.martin.apkanalyzer.feature.appexport.api.AppInventoryExportNavKey
+import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 
 fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
     entry<AppDetailNavKey>(
@@ -30,7 +32,11 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
             appDetailInput = key.detailInput,
             onBack = navigator::goBack,
             onOpenPlayStore = { packageName -> context.openGooglePlay(packageName) },
-            onOpenAppInfo = { packageName -> context.openAppSystemPage(packageName) },
+            onOpenAppInfo = { packageName ->
+                context.openAppSystemPage(packageName).onFailure {
+                    Toast.makeText(context, AppsR.string.app_info_unavailable, Toast.LENGTH_LONG).show()
+                }
+            },
             onNavigateToManifest = { navigator.navigate(ManifestNavKey(key.detailInput)) },
             onNavigateToGeneralDetails = { navigator.navigate(GeneralInfoNavKey(key.detailInput)) },
             onNavigateToPermissions = { permissionName -> navigator.navigate(PermissionsNavKey(key.detailInput, permissionName)) },

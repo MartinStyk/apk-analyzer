@@ -12,18 +12,19 @@ import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 
 private const val TAG = "AppOperations"
 
-fun Context.openAppSystemPage(packageName: PackageName) {
-    try {
-        startActivity(
-            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                data = "package:$packageName".toUri()
-            },
-        )
-    } catch (e: ActivityNotFoundException) {
-        Logger.e(TAG, e, "Could not open system page for $packageName")
-    } catch (e: SecurityException) {
-        Logger.e(TAG, e, "Could not open system page for $packageName")
-    }
+fun Context.openAppSystemPage(packageName: PackageName): Result<Unit> = try {
+    startActivity(
+        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = "package:$packageName".toUri()
+        },
+    )
+    Result.success(Unit)
+} catch (e: ActivityNotFoundException) {
+    Logger.w(TAG, "This device has no system page for $packageName")
+    Result.failure(e)
+} catch (e: SecurityException) {
+    Logger.e(TAG, e, "Could not open system page for $packageName")
+    Result.failure(e)
 }
 
 fun Context.openAppLanguageSettings() {
@@ -45,8 +46,8 @@ fun Context.openAppLanguageSettings() {
 fun Context.openGooglePlay(packageName: PackageName) {
     try {
         startActivity(Intent(Intent.ACTION_VIEW, "market://details?id=$packageName".toUri()))
-    } catch (e: ActivityNotFoundException) {
-        Logger.w(TAG, e, "Play Store not installed, falling back to browser")
+    } catch (_: ActivityNotFoundException) {
+        Logger.w(TAG, "Play Store not installed, falling back to browser")
         openBrowser("https://play.google.com/store/apps/details?id=$packageName")
     }
 }
@@ -58,11 +59,11 @@ fun Context.startForeignActivity(packageName: PackageName, activityName: String)
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
         },
     )
-}.onFailure { Logger.e(TAG, it, "Could not start activity $activityName in $packageName") }
+}.onFailure { Logger.w(TAG, "Could not start activity $activityName in $packageName: $it") }
 
 fun Context.sendForeignBroadcast(packageName: PackageName, receiverName: String): Result<Unit> = runCatching {
     sendBroadcast(Intent().apply { component = ComponentName(packageName.value, receiverName) })
-}.onFailure { Logger.e(TAG, it, "Could not send broadcast to $receiverName in $packageName") }
+}.onFailure { Logger.w(TAG, "Could not send broadcast to $receiverName in $packageName: $it") }
 
 fun Context.openBrowser(url: String) {
     try {

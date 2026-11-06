@@ -217,8 +217,14 @@ reads as removed plus added.
 `AppHistoryCaptureRepositoryImpl` implements the schema doc's
 [Capture Gate](../../docs/app/technical/app-history-capture-schema.md#capture-gate) and
 [Capture Pipeline](../../docs/app/technical/app-history-capture-schema.md#capture-pipeline) sections
-exactly — read there for the gate/write steps. Two invariants live only in this implementation, not
+exactly — read there for the gate/write steps. Three invariants live only in this implementation, not
 in the design doc:
+
+**A sweep can target an app that is already gone.** `reconcileAll()` reads the replayed list from
+`InstalledAppsRepository.apps()`, which is stale whenever the sweep starts before the reload a
+removal triggers — on-device, the one-minute delay and a queued removal broadcast fire together when
+the process resumes. A failed detail load for a package that is no longer installed is a skipped
+capture, not a sweep failure. `AppDetailRepository` still records its own non-fatal for that load.
 
 **Observability.** `reconcileAll()` and each `capture()` call each run inside their own
 `PerformanceTracker` trace (`app_history_reconcile`, `app_history_capture`), matching the

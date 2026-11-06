@@ -545,4 +545,5 @@
     <string name="components_launch_started">تم إرسال طلب البدء - يقرر التطبيق ما يحدث بعد ذلك.</string>
     <string name="components_launch_broadcast_sent">تم إرسال البث - لا شيء هنا يُبلغ عما إذا تم التعامل معه.</string>
     <string name="components_launch_failed">رفض النظام بدء هذا.</string>
+    <string name="app_info_unavailable">لا يمكن لهذا الجهاز فتح معلومات التطبيق</string>
 </resources>

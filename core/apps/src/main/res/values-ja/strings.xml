@@ -492,4 +492,5 @@
     <string name="components_launch_started">開始リクエストが送信されました — アプリが次に何をするかを決定します。</string>
     <string name="components_launch_broadcast_sent">ブロードキャストが送信されました — ここには処理されたかどうかを報告するものはありません。</string>
     <string name="components_launch_failed">システムがこれを開始することを拒否しました。</string>
+    <string name="app_info_unavailable">このデバイスではアプリ情報を開けません</string>
 </resources>

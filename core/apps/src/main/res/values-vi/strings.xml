@@ -490,4 +490,5 @@
     <string name="components_launch_started">Yêu cầu bắt đầu đã được gửi — ứng dụng quyết định những gì xảy ra tiếp theo.</string>
     <string name="components_launch_broadcast_sent">Phát sóng đã được gửi — không có gì ở đây báo cáo liệu nó có được xử lý hay không.</string>
     <string name="components_launch_failed">Hệ thống từ chối khởi động cái này.</string>
+    <string name="app_info_unavailable">Thiết bị này không thể mở Thông tin ứng dụng</string>
 </resources>

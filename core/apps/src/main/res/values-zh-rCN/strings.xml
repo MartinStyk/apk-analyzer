@@ -490,4 +490,5 @@
     <string name="components_launch_started">启动请求已发送——应用决定接下来发生什么。</string>
     <string name="components_launch_broadcast_sent">广播已发送——这里没有报告它是否被处理。</string>
     <string name="components_launch_failed">系统拒绝启动此项。</string>
+    <string name="app_info_unavailable">此设备无法打开应用信息</string>
 </resources>
