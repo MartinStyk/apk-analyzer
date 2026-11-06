@@ -512,4 +512,5 @@
     <string name="components_launch_started">Demande de démarrage envoyée — l\'application décide de ce qui se passe ensuite.</string>
     <string name="components_launch_broadcast_sent">Diffusion envoyée — rien ici ne rapporte si elle a été traitée.</string>
     <string name="components_launch_failed">Le système a refusé de démarrer ceci.</string>
+    <string name="app_info_unavailable">Cet appareil ne peut pas ouvrir Informations sur l\'application</string>
 </resources>

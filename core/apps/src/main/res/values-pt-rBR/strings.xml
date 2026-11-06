@@ -512,4 +512,5 @@
     <string name="components_launch_started">Solicitação de início enviada — o aplicativo decide o que acontece a seguir.</string>
     <string name="components_launch_broadcast_sent">Transmissão enviada — nada aqui relata se foi tratada.</string>
     <string name="components_launch_failed">O sistema se recusou a iniciar isso.</string>
+    <string name="app_info_unavailable">Este dispositivo não consegue abrir Informações do aplicativo</string>
 </resources>

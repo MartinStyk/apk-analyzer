@@ -12,18 +12,19 @@ import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 
 private const val TAG = "AppOperations"
 
-fun Context.openAppSystemPage(packageName: PackageName) {
-    try {
-        startActivity(
-            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                data = "package:$packageName".toUri()
-            },
-        )
-    } catch (e: ActivityNotFoundException) {
-        Logger.e(TAG, e, "Could not open system page for $packageName")
-    } catch (e: SecurityException) {
-        Logger.e(TAG, e, "Could not open system page for $packageName")
-    }
+fun Context.openAppSystemPage(packageName: PackageName): Result<Unit> = try {
+    startActivity(
+        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = "package:$packageName".toUri()
+        },
+    )
+    Result.success(Unit)
+} catch (e: ActivityNotFoundException) {
+    Logger.w(TAG, "This device has no system page for $packageName")
+    Result.failure(e)
+} catch (e: SecurityException) {
+    Logger.e(TAG, e, "Could not open system page for $packageName")
+    Result.failure(e)
 }
 
 fun Context.openAppLanguageSettings() {

@@ -503,5 +503,6 @@
     <string name="components_launch_started">Start request sent — the app decides what happens next.</string>
     <string name="components_launch_broadcast_sent">Broadcast sent — nothing here reports whether it was handled.</string>
     <string name="components_launch_failed">The system refused to start this.</string>
+    <string name="app_info_unavailable">This device can\'t open App Info</string>
 </resources>
 

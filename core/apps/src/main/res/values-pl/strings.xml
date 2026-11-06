@@ -523,4 +523,5 @@
     <string name="components_launch_started">Wysłano żądanie uruchomienia — aplikacja decyduje, co się stanie dalej.</string>
     <string name="components_launch_broadcast_sent">Wysłano komunikat — nic tutaj nie informuje, czy został obsłużony.</string>
     <string name="components_launch_failed">System odmówił uruchomienia tego.</string>
+    <string name="app_info_unavailable">To urządzenie nie może otworzyć ekranu Informacje o aplikacji</string>
 </resources>
