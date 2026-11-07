@@ -212,4 +212,38 @@
     <string name="nativelibraries_empty_query">Không có thư viện gốc nào khớp với \"%1$s\".</string>
     <string name="nativelibraries_clear_search">Xóa tìm kiếm</string>
     <string name="general_info_copied">Đã sao chép vào clipboard</string>
+    <string name="app_detail_history_section">Lịch sử</string>
+    <string name="app_history_toolbar_subtitle">Lịch sử</string>
+    <string name="app_history_hub_no_entries">Sắp bắt đầu ghi nhận</string>
+    <string name="app_history_hub_first_only">Chưa có thay đổi · ghi nhận từ %1$s</string>
+    <string name="app_history_hub_certificate">Chứng chỉ ký đã đổi ngày %1$s</string>
+    <string name="app_history_hub_unavailable">Hiện không xem được lịch sử</string>
+    <string name="app_history_context_first_only">Ghi nhận từ %1$s</string>
+    <string name="app_history_footer">Apk Analyzer chỉ có thể hiển thị các thay đổi sau khi bắt đầu ghi nhận ứng dụng này.</string>
+    <string name="app_history_first_only_hint">Các hàng mới sẽ xuất hiện ở đây khi ứng dụng này thay đổi.</string>
+    <string name="app_history_empty_title">Chưa ghi nhận gì</string>
+    <string name="app_history_empty_body">Apk Analyzer ghi nhận ứng dụng này ở chế độ nền. Lịch sử của nó bắt đầu từ đây.</string>
+    <string name="app_history_error">Không thể tải lịch sử của ứng dụng này</string>
+    <string name="app_history_row_click_label">Xem thay đổi</string>
+    <string name="app_history_row_first_click_label">Xem toàn bộ chi tiết</string>
+    <string name="app_history_row_long_click_label">Sao chép</string>
+    <string name="app_history_full_detail">Xem toàn bộ chi tiết của phiên bản này</string>
+    <string name="app_history_show_all">Hiển thị tất cả %1$d</string>
+    <string name="app_history_group_header">%1$s · %2$d</string>
+    <string name="app_history_group_header_scoped">%1$s · %2$s · %3$d</string>
+    <string name="app_history_what_changed">Điều gì đã thay đổi</string>
+    <string name="app_history_as_seen_on">Như ghi nhận ngày %1$s</string>
+    <string name="app_history_as_seen_on_label">Như ghi nhận ngày</string>
+    <string name="app_history_as_seen_on_explanation">Đây là những gì Apk Analyzer ghi nhận vào ngày này. Có thể không còn khớp với ứng dụng.</string>
+    <string name="app_history_as_seen_click_label">Giải thích</string>
+    <string name="app_history_permissions_note">Trạng thái quyền không được ghi nhận trong lịch sử.</string>
+    <string name="app_history_intent_filters_note">Các mục này không được ghi nhận trong lịch sử.</string>
+    <string name="app_history_version_not_found">Phiên bản này không còn trong lịch sử của bạn.</string>
+    <string name="app_history_version_load_failed">Không thể tải phiên bản này</string>
+    <plurals name="app_history_hub_changes">
+        <item quantity="other">%1$d thay đổi · mới nhất %2$s</item>
+    </plurals>
+    <plurals name="app_history_context">
+        <item quantity="other">Ghi nhận từ %1$s · %2$d thay đổi</item>
+    </plurals>
 </resources>

@@ -523,4 +523,10 @@
     <string name="components_launch_started">Wysłano żądanie uruchomienia — aplikacja decyduje, co się stanie dalej.</string>
     <string name="components_launch_broadcast_sent">Wysłano komunikat — nic tutaj nie informuje, czy został obsłużony.</string>
     <string name="components_launch_failed">System odmówił uruchomienia tego.</string>
+    <string name="certificates_validity_on_date_valid">Ważny tego dnia</string>
+    <string name="certificates_validity_on_date_expired">Wygasły tego dnia</string>
+    <string name="certificates_validity_on_date_not_yet">Tego dnia jeszcze nieważny</string>
+    <string name="certificates_validity_on_date_valid_explanation">W dniu odnotowania przez Apk Analyzer ten certyfikat był w okresie ważności.</string>
+    <string name="certificates_validity_on_date_expired_explanation">W dniu odnotowania przez Apk Analyzer data końcowa tego certyfikatu już minęła.</string>
+    <string name="certificates_validity_on_date_not_yet_explanation">W dniu odnotowania przez Apk Analyzer data początkowa tego certyfikatu była jeszcze w przyszłości.</string>
 </resources>

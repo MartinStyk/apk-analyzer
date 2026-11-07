@@ -523,4 +523,10 @@
     <string name="components_launch_started">Žádost o spuštění odeslána — aplikace rozhoduje, co se stane dál.</string>
     <string name="components_launch_broadcast_sent">Zpráva odeslána — nic zde nehlásí, zda byla zpracována.</string>
     <string name="components_launch_failed">Systém odmítl spustit toto.</string>
+    <string name="certificates_validity_on_date_valid">V tento den platný</string>
+    <string name="certificates_validity_on_date_expired">V tento den vypršelý</string>
+    <string name="certificates_validity_on_date_not_yet">V tento den ještě neplatný</string>
+    <string name="certificates_validity_on_date_valid_explanation">V den, kdy jej Apk Analyzer zaznamenal, byl tento certifikát v rozsahu platnosti.</string>
+    <string name="certificates_validity_on_date_expired_explanation">V den, kdy jej Apk Analyzer zaznamenal, už datum konce platnosti tohoto certifikátu uplynulo.</string>
+    <string name="certificates_validity_on_date_not_yet_explanation">V den, kdy jej Apk Analyzer zaznamenal, bylo datum začátku platnosti tohoto certifikátu ještě v budoucnosti.</string>
 </resources>

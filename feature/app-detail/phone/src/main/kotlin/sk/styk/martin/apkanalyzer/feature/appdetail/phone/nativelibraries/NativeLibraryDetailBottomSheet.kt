@@ -24,6 +24,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.BottomSheet
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.DetailField
 import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 
@@ -33,6 +34,8 @@ internal fun NativeLibraryDetailBottomSheet(
     onCopy: (label: String, value: String) -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
+    showDeviceSupport: Boolean = true,
+    changeLines: List<String> = emptyList(),
 ) {
     BottomSheet(onDismiss = onDismiss, modifier = modifier) {
         Column(
@@ -56,18 +59,36 @@ internal fun NativeLibraryDetailBottomSheet(
                 )
             }
             Spacer(modifier = Modifier.height(12.dp))
-            DetailField(
-                label = stringResource(AppsR.string.nativelibraries_detail_device_support),
-                value = stringResource(
-                    if (item.isDeviceCompatible) AppsR.string.nativelibraries_supported else AppsR.string.nativelibraries_not_supported,
-                ),
-                explanation = if (item.isDeviceCompatible) {
-                    null
-                } else {
-                    stringResource(AppsR.string.nativelibraries_not_supported_explanation)
-                },
-                onCopy = onCopy,
-            )
+            if (changeLines.isNotEmpty()) {
+                Text(
+                    text = stringResource(R.string.app_history_what_changed),
+                    style = AppTheme.typography.titleSmall,
+                    color = AppTheme.colors.primary,
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                changeLines.forEach { line ->
+                    Text(
+                        text = line,
+                        style = AppTheme.typography.bodyMedium,
+                        color = AppTheme.colors.onSurface,
+                    )
+                }
+                return@Column
+            }
+            if (showDeviceSupport) {
+                DetailField(
+                    label = stringResource(AppsR.string.nativelibraries_detail_device_support),
+                    value = stringResource(
+                        if (item.isDeviceCompatible) AppsR.string.nativelibraries_supported else AppsR.string.nativelibraries_not_supported,
+                    ),
+                    explanation = if (item.isDeviceCompatible) {
+                        null
+                    } else {
+                        stringResource(AppsR.string.nativelibraries_not_supported_explanation)
+                    },
+                    onCopy = onCopy,
+                )
+            }
             DetailField(
                 label = stringResource(AppsR.string.nativelibraries_detail_abis),
                 value = item.abis.joinToString(),

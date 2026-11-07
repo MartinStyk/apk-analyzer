@@ -50,13 +50,12 @@ import sk.styk.martin.apkanalyzer.core.apppermissions.detail.labelRes
 import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionFlag
 import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
-import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.LoadingSpinner
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.MultiSelectorChip
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.SearchBarActive
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.SelectorChip
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Tag
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.TextButton
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
@@ -68,6 +67,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ListSectionHeader
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RecordedVersionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
 import sk.styk.martin.apkanalyzer.core.apppermissions.R as PermissionsR
@@ -124,6 +124,11 @@ private fun PermissionsContent(
         when (state) {
             is PermissionsState.Loading -> SectionLoading()
 
+            is PermissionsState.RecordedVersionError -> RecordedVersionError(
+                failure = state.failure,
+                onRetry = { onAction(PermissionsAction.Retry) },
+            )
+
             is PermissionsState.Error -> SectionError(
                 message = stringResource(PermissionsR.string.permissions_error),
                 onRetry = { onAction(PermissionsAction.Retry) },
@@ -170,6 +175,14 @@ private fun LoadedContent(
                 .background(AppTheme.colors.background)
                 .collapsingHeader(collapsingState),
         ) {
+            if (state.isHistorical) {
+                Text(
+                    text = stringResource(R.string.app_history_permissions_note),
+                    style = AppTheme.typography.bodySmall,
+                    color = AppTheme.colors.onSurfaceVariant,
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp),
+                )
+            }
             SearchBarActive(
                 query = state.query,
                 placeholder = pluralStringResource(R.plurals.permissions_filter_hint, state.scopeTotal, state.scopeTotal),
@@ -299,11 +312,13 @@ private fun NarrowingRow(
 }
 
 @Composable
-private fun PermissionRow(
+internal fun PermissionRow(
     item: PermissionItem,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
+    tag: String? = null,
+    changeLines: List<String> = emptyList(),
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -338,6 +353,18 @@ private fun PermissionRow(
                 maxLines = 1,
                 overflow = TextOverflow.StartEllipsis,
             )
+            changeLines.forEach { line ->
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = line,
+                    style = AppTheme.typography.bodySmall,
+                    color = AppTheme.colors.onSurface,
+                )
+            }
+            tag?.let {
+                Spacer(modifier = Modifier.height(6.dp))
+                Tag(text = it)
+            }
         }
         item.grantState?.let { grantState ->
             Spacer(modifier = Modifier.width(8.dp))
@@ -433,6 +460,18 @@ private fun PermissionsLoadedPreview() {
     ApkAnalyzerTheme {
         PermissionsContent(
             state = sampleLoadedState(),
+            onAction = {},
+            onBack = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PermissionsHistoricalPreview() {
+    ApkAnalyzerTheme {
+        PermissionsContent(
+            state = sampleLoadedState().copy(isHistorical = true, grantStateOptions = emptyList()),
             onAction = {},
             onBack = {},
         )

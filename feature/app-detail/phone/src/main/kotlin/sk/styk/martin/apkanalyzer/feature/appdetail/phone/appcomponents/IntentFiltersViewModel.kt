@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilterKey
 import sk.styk.martin.apkanalyzer.core.apps.components.ComponentKind
 import sk.styk.martin.apkanalyzer.core.apps.intentfilters.IntentFiltersRepository
@@ -26,7 +25,7 @@ import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.toAppReference
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.toLiveReference
 
 @HiltViewModel(assistedFactory = IntentFiltersViewModel.Factory::class)
 internal class IntentFiltersViewModel @AssistedInject constructor(
@@ -90,7 +89,12 @@ internal class IntentFiltersViewModel @AssistedInject constructor(
     private fun loadFilters() {
         source.value = IntentFiltersSource.Loading
         viewModelScope.launch(dispatcherProvider.default()) {
-            source.value = intentFiltersRepository.componentIntentFilters(appDetailInput.toAppReference()).fold(
+            val reference = appDetailInput.toLiveReference()
+            if (reference == null) {
+                source.value = IntentFiltersSource.Unavailable
+                return@launch
+            }
+            source.value = intentFiltersRepository.componentIntentFilters(reference).fold(
                 onSuccess = { filtersByComponent ->
                     val key = ComponentIntentFilterKey(componentName, componentType.toComponentKind())
                     IntentFiltersSource.Ready(componentName, componentType, filtersByComponent[key].orEmpty().toItems())

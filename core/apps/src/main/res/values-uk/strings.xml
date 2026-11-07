@@ -523,4 +523,10 @@
     <string name="components_launch_started">Запит на запуск надіслано — додаток вирішує, що робити далі.</string>
     <string name="components_launch_broadcast_sent">Відправлено широкомовлення — нічого не повідомляє, чи було це оброблено.</string>
     <string name="components_launch_failed">Система відмовилася запустити це.</string>
+    <string name="certificates_validity_on_date_valid">Дійсний на цю дату</string>
+    <string name="certificates_validity_on_date_expired">Минув на цю дату</string>
+    <string name="certificates_validity_on_date_not_yet">Ще не дійсний на цю дату</string>
+    <string name="certificates_validity_on_date_valid_explanation">У день фіксації в Apk Analyzer цей сертифікат був у межах терміну дії.</string>
+    <string name="certificates_validity_on_date_expired_explanation">У день фіксації в Apk Analyzer дата закінчення цього сертифіката вже минула.</string>
+    <string name="certificates_validity_on_date_not_yet_explanation">У день фіксації в Apk Analyzer дата початку цього сертифіката ще не настала.</string>
 </resources>

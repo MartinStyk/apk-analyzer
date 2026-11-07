@@ -20,6 +20,7 @@ internal sealed interface AppDetailEvent {
     data object NavigateToProviders : AppDetailEvent
     data object NavigateToCertificates : AppDetailEvent
     data object NavigateToFeatures : AppDetailEvent
+    data class NavigateToHistory(val packageName: PackageName, val appName: String) : AppDetailEvent
 }
 
 internal sealed interface AppDetailFeedback {

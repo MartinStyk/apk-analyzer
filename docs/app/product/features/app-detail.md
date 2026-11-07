@@ -48,11 +48,16 @@ The design has to satisfy both halves: never hide data, never dump it.
 rationale bottom sheet. Every new screen uses it. This is the single mechanism that keeps the
 surface calm while keeping context one tap away.
 
-### Two cross-cutting rules
+### Three cross-cutting rules
 
 **APK-file mode degrades explicitly, never silently.** No grant state, no total size, no last-used.
 Don't render an empty row — drop the column and, where it matters, say why ("Grant state is only
 available for installed apps").
+
+**Historical mode shows the past or nothing.** Opened from app history, the same screens render a
+recorded state under a pinned "As seen on <date>" bar. Anything that needs today's device or clock
+is dropped, and anything not recorded says so. See
+[`feature/app-detail/AGENTS.md`](../../../../feature/app-detail/AGENTS.md#historical-mode).
 
 **Plain name first, raw identifier always present.** Never one or the other. The friendly label is
 what you scan; the raw string is what you paste into a bug report.

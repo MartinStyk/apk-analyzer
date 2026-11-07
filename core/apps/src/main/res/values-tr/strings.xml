@@ -501,4 +501,10 @@
     <string name="components_launch_started">Başlatma isteği gönderildi — uygulama sonraki adımın ne olacağına karar verir.</string>
     <string name="components_launch_broadcast_sent">Yayın gönderildi — burada, işlenip işlenmediğine dair bir rapor yok.</string>
     <string name="components_launch_failed">Sistem bunu başlatmayı reddetti.</string>
+    <string name="certificates_validity_on_date_valid">Bu tarihte geçerli</string>
+    <string name="certificates_validity_on_date_expired">Bu tarihte süresi dolmuş</string>
+    <string name="certificates_validity_on_date_not_yet">Bu tarihte henüz geçerli değil</string>
+    <string name="certificates_validity_on_date_valid_explanation">Apk Analyzer\'ın kaydettiği gün bu sertifika geçerlilik tarihleri içindeydi.</string>
+    <string name="certificates_validity_on_date_expired_explanation">Apk Analyzer\'ın kaydettiği gün bu sertifikanın bitiş tarihi geçmişti.</string>
+    <string name="certificates_validity_on_date_not_yet_explanation">Apk Analyzer\'ın kaydettiği gün bu sertifikanın başlangıç tarihi henüz gelmemişti.</string>
 </resources>

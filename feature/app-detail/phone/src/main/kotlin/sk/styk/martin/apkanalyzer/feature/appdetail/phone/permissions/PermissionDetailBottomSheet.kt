@@ -32,6 +32,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.DetailField
 import sk.styk.martin.apkanalyzer.core.apppermissions.R as PermissionsR
 
@@ -41,6 +42,7 @@ internal fun PermissionDetailBottomSheet(
     onCopy: (label: String, value: String) -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
+    changeLines: List<String> = emptyList(),
 ) {
     BottomSheet(onDismiss = onDismiss, modifier = modifier) {
         Column(
@@ -68,6 +70,17 @@ internal fun PermissionDetailBottomSheet(
                     style = AppTheme.typography.bodyMedium,
                     color = AppTheme.colors.onSurfaceVariant,
                 )
+            }
+            if (changeLines.isNotEmpty()) {
+                SheetSection(title = stringResource(R.string.app_history_what_changed)) {
+                    changeLines.forEach { line ->
+                        Text(
+                            text = line,
+                            style = AppTheme.typography.bodyMedium,
+                            color = AppTheme.colors.onSurface,
+                        )
+                    }
+                }
             }
             Spacer(modifier = Modifier.height(12.dp))
             DetailField(

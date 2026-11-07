@@ -24,7 +24,7 @@ fun List<NativeLibraryFile>.groupedByLibrary(deviceAbis: Set<String>): List<Nati
             name = name,
             abis = abis,
             totalSize = files.fold(0.bytes) { acc, file -> acc + file.size },
-            isDeviceCompatible = abis.any { it in deviceAbis },
+            isDeviceCompatible = deviceAbis.isEmpty() || abis.any { it in deviceAbis },
             variants = files.sortedBy { it.abi }
                 .map { NativeLibraryVariant(abi = it.abi, size = it.size, containingApkFileName = it.containingApkFileName) },
         )

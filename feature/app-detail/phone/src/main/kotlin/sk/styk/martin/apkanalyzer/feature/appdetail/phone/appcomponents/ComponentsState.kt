@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 import sk.styk.martin.apkanalyzer.core.apps.components.ComponentFlag
 import sk.styk.martin.apkanalyzer.core.apps.components.IntentFilterDataRuleType
 import sk.styk.martin.apkanalyzer.core.apps.components.ProviderPathMatchType
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.RecordedVersionFailure
 
 @Serializable
 internal enum class ComponentScope {
@@ -113,6 +114,9 @@ internal sealed interface ComponentsState {
     data object Error : ComponentsState
 
     @Immutable
+    data class RecordedVersionError(val failure: RecordedVersionFailure) : ComponentsState
+
+    @Immutable
     data class Loaded(
         val scope: ComponentScope,
         val scopeOptions: List<ComponentScope>,
@@ -120,6 +124,7 @@ internal sealed interface ComponentsState {
         val query: String,
         val scopeTotal: Int,
         val sections: List<ComponentSection>,
+        val isHistorical: Boolean = false,
     ) : ComponentsState {
         val hasResults: Boolean
             get() = sections.isNotEmpty()

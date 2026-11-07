@@ -20,6 +20,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.TextButton
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.RecordedVersionFailure
 
 @Composable
 internal fun SectionLoading(modifier: Modifier = Modifier) {
@@ -57,6 +58,42 @@ internal fun SectionError(
                 onClick = onRetry,
             )
         }
+    }
+}
+
+@Composable
+internal fun RecordedVersionError(
+    failure: RecordedVersionFailure,
+    onRetry: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    when (failure) {
+        RecordedVersionFailure.NotFound -> SectionError(
+            message = stringResource(R.string.app_history_version_not_found),
+            modifier = modifier,
+        )
+
+        RecordedVersionFailure.ReadFailed -> SectionError(
+            message = stringResource(R.string.app_history_version_load_failed),
+            modifier = modifier,
+            onRetry = onRetry,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun RecordedVersionNotFoundPreview() {
+    ApkAnalyzerTheme {
+        RecordedVersionError(failure = RecordedVersionFailure.NotFound, onRetry = {})
+    }
+}
+
+@Preview
+@Composable
+private fun RecordedVersionReadFailedPreview() {
+    ApkAnalyzerTheme {
+        RecordedVersionError(failure = RecordedVersionFailure.ReadFailed, onRetry = {})
     }
 }
 

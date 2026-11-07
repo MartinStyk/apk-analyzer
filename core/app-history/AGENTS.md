@@ -10,10 +10,11 @@ enough to reconstruct the existing app-detail screens against a past point in ti
 broadcast, on-launch reconciliation, and periodic `WorkManager` reconciliation). Restore merging
 (`HI-17`'s "merge, don't overwrite" for Android's free Auto Backup path) is also implemented — see
 [Restore Merge](#restore-merge). The diff engine (`HI-03`) is implemented as the per-app timeline
-read API — see [Timeline and Diff](#timeline-and-diff) — but nothing consumes it yet. Not yet
-built: any UI (`HI-06`/`HI-08`/`HI-14`), the significance rules (`HI-18`), retention/pruning
-(`HI-04`), the Pro-gated Drive backup half of `HI-16`, and the `HI-10` runtime-state
-(enabled/install-source) tier. See
+read API — see [Timeline and Diff](#timeline-and-diff). `feature:app-detail:phone` reads it for the
+per-app timeline, change detail, and historical detail (`HI-08`, `HI-15`), behind the debug-only
+`ConfigurationKey.AppHistoryEnabled`; capture runs in every build. Not yet built: the What Changed tab
+and other UI (`HI-06`/`HI-14`), the significance rules (`HI-18`), retention/pruning (`HI-04`), the
+Pro-gated Drive backup half of `HI-16`, and the `HI-10` runtime-state (enabled/install-source) tier. See
 [`docs/app/technical/app-history-capture-schema.md`](../../docs/app/technical/app-history-capture-schema.md)
 for the full design, including the entity/DAO schema — read it before touching this module; it is the
 source of truth for schema and capture semantics, not this file.
@@ -28,8 +29,8 @@ data in `storage/database/` — the Room database, DAOs, `entity/`, the serializ
 Hilt bindings in `capture/di/`), `restore/` (the `BackupAgent` and the restore-merge routine — see
 [Restore Merge](#restore-merge)), and `timeline/` (the public `AppHistoryRepository`, its
 implementation, and the internal differ, with its public read models — `AppHistoryTimeline`,
-`AppHistoryEntry`, `AppHistoryDiff` and their parts — in `timeline/model/`; see
-[Timeline and Diff](#timeline-and-diff)). See
+`AppHistoryEntry`, `AppHistoryDiff` and their parts — in `timeline/model/`, next to the shared rules and
+text a timeline screen reads; see [Timeline and Diff](#timeline-and-diff)). See
 [Reading a Snapshot](#reading-a-snapshot) for `storage/`'s read path and
 [Capture Pipeline](#capture-pipeline) / [Triggers](#triggers) for `capture/`'s. Everything stays
 `internal` except `timeline/`'s repository interface and `timeline/model/`, and `AppHistoryBackupAgent`, which
@@ -150,7 +151,11 @@ Hashing with any other `Json` configuration would give identical content a diffe
 
 ## Timeline and Diff
 
-`AppHistoryRepository.timeline(packageName)` is the module's only public read API: newest first, one
+`AppHistoryRepository` has two public reads. `snapshot(packageName, id)` returns one past state as
+`AppHistorySnapshotRead`: `Found`, `NotFound` (no such row, nothing a retry would change), or
+`Unavailable` (the read failed, including a row whose required sections no longer decode). Its two
+separately fetched sections are `AppHistorySection` — `Recorded` or `NotRecorded` — so a failed capture
+can never read as "no native code". `timeline(packageName)` returns newest first, one
 `AppHistoryEntry` per snapshot — `FirstSeen` for the oldest, then one `Change` per later snapshot,
 carrying the previous snapshot, an `AppHistoryDiff` against it, and a `Change.Kind`: `NewDevice`
 (adjacent snapshots with different `deviceId`, i.e. history continued after a restore onto another
@@ -193,6 +198,22 @@ changes this app's permissions hash with no added/removed name. `AppHistoryDiff.
 same `SetChange`/`ValueChange` values a detail screen renders, so a row label can never name a
 category whose detail is empty. Localized text (permission descriptions, activity labels) is not
 stored at all, so a device language change can never read as an app change.
+
+`modified` means a user-visible field differs, using the same `fieldChangesFrom` functions a detail
+screen renders from, so a modified item always has something to say. `Activity.isLauncher` is compared
+only when both sides know it. A change of nothing else is therefore not a change at all.
+
+Screens read shared rules from `timeline/model/`, so a future TV screen or What Changed tab agrees with
+the phone: `hasCertificateChange` (the one predicate; it reads `certificates`, never the `Signing`
+category, which also fires on a scheme change), `summaryParts`, `isQuiet`, `changeCount`,
+`recordingSince`, `overview`, and the matching text in `AppHistoryText.kt` with its strings in this
+module. Date a `FirstSeen` row with `snapshot.capturedAt`, never `timestamp`, which can be a factory date.
+
+Install source is compared as `AppHistoryInstallSource`: the resolved `AppSource` plus the installing
+package. A move between two unrecognized stores resolves to Unknown on both sides, and must still read as
+a change, so the package counts. A re-delivery that only changes the initiating or originating package does
+not, and its category, drop rule, count, row and detail all agree it never happened. Text shows the source
+labels when they differ and the installer package names when they match.
 
 Diffed: version, min/target SDK, APK size, install source, the three manifest flags, requested and
 defined permissions, the four component types, current signing certificates, signing schemes, and
@@ -419,7 +440,6 @@ propagated days earlier — not from anything forced in the same session.
 ## Module Wiring
 
 `app/build.gradle.kts` depends on this module directly (`implementation(projects.core.appHistory)`)
-purely to pull its Hilt bindings into the graph — no other module (feature or core) depends on
-`core:app-history` today, so without that direct dependency Hilt would never see this module's
-`@InstallIn(SingletonComponent::class)` modules and capture would silently never run. Keep that
-dependency even if it looks unused from `app`'s own Kotlin code.
+to pull its Hilt bindings into the graph. `feature:app-detail:phone` depends on it too, for reading
+history, but TV does not, and the bindings must not hinge on a feature: without `app`'s direct dependency
+capture could silently stop running. Keep it even though it looks unused from `app`'s own Kotlin code.

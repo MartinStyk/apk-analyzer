@@ -212,4 +212,38 @@
     <string name="nativelibraries_empty_query">\"%1$s\" に一致するネイティブライブラリはありません。</string>
     <string name="nativelibraries_clear_search">検索をクリア</string>
     <string name="general_info_copied">クリップボードにコピーしました</string>
+    <string name="app_detail_history_section">履歴</string>
+    <string name="app_history_toolbar_subtitle">履歴</string>
+    <string name="app_history_hub_no_entries">まもなく記録を開始します</string>
+    <string name="app_history_hub_first_only">変更なし · %1$s から記録中</string>
+    <string name="app_history_hub_certificate">%1$s に署名証明書が変更</string>
+    <string name="app_history_hub_unavailable">現在、履歴は利用できません</string>
+    <string name="app_history_context_first_only">%1$s から記録中</string>
+    <string name="app_history_footer">Apk Analyzer が表示できるのは、このアプリの記録を開始した後の変更のみです。</string>
+    <string name="app_history_first_only_hint">このアプリが変更されると、ここに新しい行が表示されます。</string>
+    <string name="app_history_empty_title">まだ記録がありません</string>
+    <string name="app_history_empty_body">Apk Analyzer はこのアプリをバックグラウンドで記録します。履歴はここから始まります。</string>
+    <string name="app_history_error">このアプリの履歴を読み込めませんでした</string>
+    <string name="app_history_row_click_label">変更内容を見る</string>
+    <string name="app_history_row_first_click_label">詳細をすべて見る</string>
+    <string name="app_history_row_long_click_label">コピー</string>
+    <string name="app_history_full_detail">このバージョンの詳細をすべて見る</string>
+    <string name="app_history_show_all">%1$d 件すべて表示</string>
+    <string name="app_history_group_header">%1$s · %2$d</string>
+    <string name="app_history_group_header_scoped">%1$s · %2$s · %3$d</string>
+    <string name="app_history_what_changed">変更内容</string>
+    <string name="app_history_as_seen_on">%1$s 時点</string>
+    <string name="app_history_as_seen_on_label">記録日</string>
+    <string name="app_history_as_seen_on_explanation">これは Apk Analyzer がこの日に記録した内容です。現在のアプリとは異なる場合があります。</string>
+    <string name="app_history_as_seen_click_label">説明</string>
+    <string name="app_history_permissions_note">権限の状態は履歴に記録されません。</string>
+    <string name="app_history_intent_filters_note">これらは履歴に記録されません。</string>
+    <string name="app_history_version_not_found">このバージョンは履歴にありません。</string>
+    <string name="app_history_version_load_failed">このバージョンを読み込めませんでした</string>
+    <plurals name="app_history_hub_changes">
+        <item quantity="other">%1$d 件の変更 · 最新 %2$s</item>
+    </plurals>
+    <plurals name="app_history_context">
+        <item quantity="other">%1$s から記録中 · %2$d 件の変更</item>
+    </plurals>
 </resources>

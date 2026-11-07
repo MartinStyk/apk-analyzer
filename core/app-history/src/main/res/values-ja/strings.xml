@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_history_first_recorded">最初の記録</string>
+    <string name="app_history_certificate_changed">署名証明書が変更されました</string>
+    <string name="app_history_signing_method_changed">署名方式が変更されました</string>
+    <string name="app_history_reinstalled">削除後に再インストール</string>
+    <string name="app_history_new_device">新しいデバイスで継続</string>
+    <string name="app_history_same_version">同じバージョン、新しいビルド</string>
+    <string name="app_history_older_version">古いバージョン</string>
+    <string name="app_history_uncomparable_only">一部の情報を比較できませんでした</string>
+    <string name="app_history_version">バージョン %1$s</string>
+    <string name="app_history_version_with_code">%1$s (%2$d)</string>
+    <string name="app_history_value_change">%1$s → %2$s</string>
+    <string name="app_history_summary_join">%1$s · %2$s</string>
+    <string name="app_history_summary_permission_added_single">権限を追加: %1$s</string>
+    <string name="app_history_summary_source">インストール元が %1$s に変更</string>
+    <string name="app_history_summary_debug_on">デバッグがオン</string>
+    <string name="app_history_summary_debug_off">デバッグがオフ</string>
+    <string name="app_history_summary_backup_on">アプリデータのバックアップがオン</string>
+    <string name="app_history_summary_backup_off">アプリデータのバックアップがオフ</string>
+    <string name="app_history_summary_cleartext_on">暗号化されていない通信を許可</string>
+    <string name="app_history_summary_cleartext_off">暗号化されていない通信をブロック</string>
+    <string name="app_history_summary_target_sdk">Target SDK %1$s → %2$s</string>
+    <string name="app_history_summary_min_sdk">Min SDK %1$s → %2$s</string>
+    <string name="app_history_summary_size_up">サイズ +%1$s</string>
+    <string name="app_history_summary_size_down">サイズ −%1$s</string>
+    <string name="app_history_when_updated">%1$s に更新</string>
+    <string name="app_history_when_reinstalled">%1$s に再インストール</string>
+    <string name="app_history_when_recorded">%1$s に記録</string>
+    <string name="app_history_when_with_recorded">%1$s · %2$s に記録</string>
+    <string name="app_history_changes_heading">これらのバージョン間の変更</string>
+    <string name="app_history_device_note">一部の違いはアプリではなくデバイスによるものかもしれません。</string>
+    <string name="app_history_empty_diff">Apk Analyzer が比較する項目に違いはありません</string>
+    <string name="app_history_uncomparable_label">比較できませんでした</string>
+    <string name="app_history_uncomparable_explanation">いずれかのバージョンでこの情報が完全には記録されていないため、変更の有無は判断できません。</string>
+    <string name="app_history_field_change">%1$s: %2$s → %3$s</string>
+    <string name="app_history_field_added">%1$s: 追加</string>
+    <string name="app_history_field_removed">%1$s: 削除</string>
+    <string name="app_history_field_changed">%1$s: 変更</string>
+    <string name="app_history_before">変更前</string>
+    <string name="app_history_after">変更後</string>
+    <string name="app_history_category_signing">署名</string>
+    <string name="app_history_category_permissions">権限</string>
+    <string name="app_history_category_install_source">インストール元</string>
+    <string name="app_history_category_settings">アプリの設定</string>
+    <string name="app_history_category_android_versions">Android バージョン</string>
+    <string name="app_history_category_components">コンポーネント</string>
+    <string name="app_history_category_native">ネイティブライブラリ</string>
+    <string name="app_history_category_size">サイズ</string>
+    <string name="app_history_category_signing_method">署名方式</string>
+    <string name="app_history_group_added">追加</string>
+    <string name="app_history_group_removed">削除</string>
+    <string name="app_history_group_changed">変更</string>
+    <string name="app_history_certificate_updated_explanation">Android は、古い鍵が承認した場合にのみ別の証明書での更新を受け入れます。そのため通常は開発者による計画的な鍵の変更です。</string>
+    <string name="app_history_certificate_new_copy_explanation">このコピーは、以前記録された証明書とは異なる証明書で署名されています。信頼できる入手元か確認してください。</string>
+    <string name="app_history_signer_explanation">この署名証明書に記載された組織または個人です。ここには誰でも任意の名前を書けるため、鍵を識別するのは下のフィンガープリントです。</string>
+    <string name="app_history_not_recorded">このバージョンでは記録なし</string>
+    <string name="app_history_not_recorded_explanation">Apk Analyzer はこのバージョンでこれを記録できなかったため、内容は分かりません。</string>
+    <plurals name="app_history_summary_more">
+        <item quantity="other">他 %1$d 件</item>
+    </plurals>
+    <plurals name="app_history_summary_permission_added_named">
+        <item quantity="other">%1$s など他 %2$d 件の権限を追加</item>
+    </plurals>
+    <plurals name="app_history_summary_permissions_removed">
+        <item quantity="other">%1$d 件の権限を削除</item>
+    </plurals>
+    <plurals name="app_history_summary_defined_permissions">
+        <item quantity="other">このアプリが定義する権限 %1$d 件が変更</item>
+    </plurals>
+    <plurals name="app_history_summary_components_added">
+        <item quantity="other">%1$d 件のコンポーネントを追加</item>
+    </plurals>
+    <plurals name="app_history_summary_components_removed">
+        <item quantity="other">%1$d 件のコンポーネントを削除</item>
+    </plurals>
+    <plurals name="app_history_summary_components_changed">
+        <item quantity="other">%1$d 件のコンポーネントを変更</item>
+    </plurals>
+    <plurals name="app_history_summary_native_added">
+        <item quantity="other">%1$d 件のネイティブライブラリを追加</item>
+    </plurals>
+    <plurals name="app_history_summary_native_removed">
+        <item quantity="other">%1$d 件のネイティブライブラリを削除</item>
+    </plurals>
+    <plurals name="app_history_summary_native_changed">
+        <item quantity="other">%1$d 件のネイティブライブラリを変更</item>
+    </plurals>
+    <string name="app_history_size_change_up">%1$s → %2$s (+%3$s)</string>
+    <string name="app_history_size_change_down">%1$s → %2$s (−%3$s)</string>
+    <string name="app_history_field_value">%1$s: %2$s</string>
+</resources>

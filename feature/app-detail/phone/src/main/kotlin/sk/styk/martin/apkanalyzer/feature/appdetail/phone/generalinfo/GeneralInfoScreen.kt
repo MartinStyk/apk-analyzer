@@ -3,7 +3,6 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.phone.generalinfo
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
@@ -33,7 +31,6 @@ import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.LoadingSpinner
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
@@ -42,6 +39,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.InfoRow
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.InfoRowItem
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.NavigableInfoRowItem
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RationaleBottomSheet
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RecordedVersionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionCard
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
@@ -49,6 +47,7 @@ import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.Date
 import java.util.Locale
+import sk.styk.martin.apkanalyzer.core.apphistory.R as HistoryR
 import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 
 @Composable
@@ -103,6 +102,11 @@ private fun GeneralInfoContent(
         )
         when (state) {
             is GeneralInfoState.Loading -> SectionLoading()
+
+            is GeneralInfoState.RecordedVersionError -> RecordedVersionError(
+                failure = state.failure,
+                onRetry = { onAction(GeneralInfoAction.Retry) },
+            )
 
             is GeneralInfoState.Error -> SectionError(message = stringResource(AppsR.string.general_info_error))
 
@@ -475,6 +479,16 @@ private fun NativeLibrariesSection(
         title = stringResource(AppsR.string.general_info_section_native_libraries),
         modifier = modifier,
     ) {
+        if (!state.isNativeLibrariesRecorded) {
+            InfoRowItem(
+                label = stringResource(AppsR.string.general_info_native_library_abis),
+                value = stringResource(HistoryR.string.app_history_not_recorded),
+                rationale = stringResource(HistoryR.string.app_history_not_recorded_explanation),
+                onShowRationale = onShowRationale,
+                onCopy = onCopy,
+            )
+            return@SectionCard
+        }
         val abisValue = if (state.nativeLibraryAbis.isNotEmpty()) {
             state.nativeLibraryAbis.joinToString()
         } else {
@@ -482,13 +496,15 @@ private fun NativeLibrariesSection(
         }
         val abisRationale = buildString {
             append(stringResource(AppsR.string.general_info_rationale_native_library_abis))
-            append(' ')
-            append(
-                stringResource(
-                    AppsR.string.general_info_native_library_device_support,
-                    state.deviceSupportedAbis.joinToString(),
-                ),
-            )
+            if (state.deviceSupportedAbis.isNotEmpty()) {
+                append(' ')
+                append(
+                    stringResource(
+                        AppsR.string.general_info_native_library_device_support,
+                        state.deviceSupportedAbis.joinToString(),
+                    ),
+                )
+            }
             if (state.isNativeLibraryDeviceIncompatible) {
                 append(' ')
                 append(stringResource(AppsR.string.general_info_native_library_incompatible))
@@ -542,6 +558,29 @@ private fun GeneralInfoErrorPreview() {
     ApkAnalyzerTheme {
         GeneralInfoContent(
             state = GeneralInfoState.Error,
+            onAction = {},
+            onBack = {},
+            onNavigateToSplitApks = {},
+            onNavigateToNativeLibraries = {},
+        )
+    }
+}
+
+@Preview(heightDp = 2400)
+@Composable
+private fun GeneralInfoNotRecordedPreview() {
+    ApkAnalyzerTheme {
+        GeneralInfoContent(
+            state = sampleGeneralInfoState().copy(
+                isNativeLibrariesRecorded = false,
+                nativeLibraryAbis = emptyList(),
+                nativeLibraryNames = emptyList(),
+                deviceSupportedAbis = emptyList(),
+                totalSize = null,
+                lastUsedTime = null,
+                apkDirectory = null,
+                dataDirectory = null,
+            ),
             onAction = {},
             onBack = {},
             onNavigateToSplitApks = {},

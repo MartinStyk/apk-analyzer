@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.components.Activity
 import sk.styk.martin.apkanalyzer.core.apps.components.BroadcastReceiver
 import sk.styk.martin.apkanalyzer.core.apps.components.ComponentFlag
@@ -36,14 +35,17 @@ import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.toAppReference
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.AppDetailDataSource
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.RecordedVersionFailure
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.toLiveReference
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.toRecordedVersionFailure
 
 @HiltViewModel(assistedFactory = ComponentsViewModel.Factory::class)
 internal class ComponentsViewModel @AssistedInject constructor(
     @Assisted private val appDetailInput: AppDetailInput,
     @Assisted initialScope: ComponentScope,
     @Assisted initialFilters: Set<ComponentFilter>,
-    private val appDetailRepository: AppDetailRepository,
+    private val dataSource: AppDetailDataSource,
     private val intentFiltersRepository: IntentFiltersRepository,
     private val dispatcherProvider: DispatcherProvider,
     private val clipboardManager: ClipboardManager,
@@ -65,7 +67,8 @@ internal class ComponentsViewModel @AssistedInject constructor(
         when (source) {
             is ComponentsSource.Loading -> ComponentsState.Loading
             is ComponentsSource.Error -> ComponentsState.Error
-            is ComponentsSource.Ready -> source.narrowedBy(narrowing)
+            is ComponentsSource.RecordedVersionError -> ComponentsState.RecordedVersionError(source.failure)
+            is ComponentsSource.Ready -> source.narrowedBy(narrowing, isHistorical = appDetailInput is AppDetailInput.Historical)
         }
     }
         .flowOn(dispatcherProvider.default())
@@ -110,16 +113,18 @@ internal class ComponentsViewModel @AssistedInject constructor(
     private fun loadComponents() {
         source.value = ComponentsSource.Loading
         viewModelScope.launch(dispatcherProvider.default()) {
-            val reference = appDetailInput.toAppReference()
+            val liveReference = appDetailInput.toLiveReference()
             val canLaunch = appDetailInput is AppDetailInput.InstalledPackage
-            appDetailRepository.details(reference)
+            dataSource.detail(appDetailInput)
                 .onSuccess { detail ->
                     source.value = detail.toSource(canLaunch = canLaunch, intentFiltersByComponent = null)
-                    val intentFilters = intentFiltersRepository.componentIntentFilters(reference).getOrNull()
-                    source.value = detail.toSource(canLaunch = canLaunch, intentFiltersByComponent = intentFilters)
+                    if (liveReference != null) {
+                        val intentFilters = intentFiltersRepository.componentIntentFilters(liveReference).getOrNull()
+                        source.value = detail.toSource(canLaunch = canLaunch, intentFiltersByComponent = intentFilters)
+                    }
                 }
-                .onFailure {
-                    source.value = ComponentsSource.Error
+                .onFailure { failure ->
+                    source.value = failure.toRecordedVersionFailure()?.let { ComponentsSource.RecordedVersionError(it) } ?: ComponentsSource.Error
                 }
         }
     }
@@ -128,6 +133,7 @@ internal class ComponentsViewModel @AssistedInject constructor(
 private sealed interface ComponentsSource {
     data object Loading : ComponentsSource
     data object Error : ComponentsSource
+    data class RecordedVersionError(val failure: RecordedVersionFailure) : ComponentsSource
     data class Ready(val componentsByType: Map<ComponentType, List<ComponentItem>>) : ComponentsSource
 }
 
@@ -155,7 +161,7 @@ private fun AppDetail.toSource(canLaunch: Boolean, intentFiltersByComponent: Map
         ),
     )
 
-private fun List<ComponentItem>.mergeDuplicatesByStableKey(): List<ComponentItem> =
+internal fun List<ComponentItem>.mergeDuplicatesByStableKey(): List<ComponentItem> =
     groupBy { it.stableKey }.values.map { duplicates -> duplicates.reduce(::moreExposed) }
 
 private fun moreExposed(a: ComponentItem, b: ComponentItem): ComponentItem = when {
@@ -167,13 +173,13 @@ private fun moreExposed(a: ComponentItem, b: ComponentItem): ComponentItem = whe
 private fun Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>?.filtersFor(key: ComponentIntentFilterKey): List<ComponentIntentFilter>? =
     this?.let { it[key].orEmpty() }
 
-private fun List<ComponentItem>.sortedForDisplay() = sortedWith(
+internal fun List<ComponentItem>.sortedForDisplay() = sortedWith(
     compareByDescending<ComponentItem> { it.isLauncher }
         .thenByDescending { it.isExported }
         .thenBy { it.simpleName.lowercase() },
 )
 
-private fun Activity.toItem(canLaunch: Boolean, intentFilters: List<ComponentIntentFilter>?) = ComponentItem(
+internal fun Activity.toItem(canLaunch: Boolean, intentFilters: List<ComponentIntentFilter>?) = ComponentItem(
     name = name,
     simpleName = name.substringAfterLast('.'),
     packagePath = name.substringBeforeLast('.', ""),
@@ -193,7 +199,7 @@ private fun Activity.toItem(canLaunch: Boolean, intentFilters: List<ComponentInt
     ),
 )
 
-private fun Service.toItem(intentFilters: List<ComponentIntentFilter>?) = ComponentItem(
+internal fun Service.toItem(intentFilters: List<ComponentIntentFilter>?) = ComponentItem(
     name = name,
     simpleName = name.substringAfterLast('.'),
     packagePath = name.substringBeforeLast('.', ""),
@@ -207,7 +213,7 @@ private fun Service.toItem(intentFilters: List<ComponentIntentFilter>?) = Compon
     details = ComponentDetails.ServiceDetails(permission = permission),
 )
 
-private fun BroadcastReceiver.toItem(canLaunch: Boolean, intentFilters: List<ComponentIntentFilter>?) = ComponentItem(
+internal fun BroadcastReceiver.toItem(canLaunch: Boolean, intentFilters: List<ComponentIntentFilter>?) = ComponentItem(
     name = name,
     simpleName = name.substringAfterLast('.'),
     packagePath = name.substringBeforeLast('.', ""),
@@ -221,7 +227,7 @@ private fun BroadcastReceiver.toItem(canLaunch: Boolean, intentFilters: List<Com
     details = ComponentDetails.ReceiverDetails(permission = permission),
 )
 
-private fun ContentProvider.toItem(intentFilters: List<ComponentIntentFilter>?) = ComponentItem(
+internal fun ContentProvider.toItem(intentFilters: List<ComponentIntentFilter>?) = ComponentItem(
     name = name,
     simpleName = name.substringAfterLast('.'),
     packagePath = name.substringBeforeLast('.', ""),
@@ -256,7 +262,7 @@ private val scopeTypes = mapOf(
     ComponentScope.Providers to ComponentType.Provider,
 )
 
-private fun ComponentsSource.Ready.narrowedBy(narrowing: Narrowing): ComponentsState.Loaded {
+private fun ComponentsSource.Ready.narrowedBy(narrowing: Narrowing, isHistorical: Boolean): ComponentsState.Loaded {
     val scopeOptions = buildList {
         add(ComponentScope.All)
         scopeTypes.forEach { (scope, type) ->
@@ -284,6 +290,7 @@ private fun ComponentsSource.Ready.narrowedBy(narrowing: Narrowing): ComponentsS
         query = narrowing.query,
         scopeTotal = scopeTotal,
         sections = sections,
+        isHistorical = isHistorical,
     )
 }
 

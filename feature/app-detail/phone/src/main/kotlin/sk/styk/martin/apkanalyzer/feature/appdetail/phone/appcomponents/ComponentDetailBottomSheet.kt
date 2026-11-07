@@ -1,7 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -34,6 +33,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.DetailField
 import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 
@@ -45,6 +45,8 @@ internal fun ComponentDetailBottomSheet(
     onOpenIntentFilters: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
+    changeLines: List<String> = emptyList(),
+    intentFiltersMissingText: String? = null,
 ) {
     BottomSheet(onDismiss = onDismiss, modifier = modifier) {
         Column(
@@ -73,6 +75,18 @@ internal fun ComponentDetailBottomSheet(
                 value = item.name,
                 onCopy = onCopy,
             )
+
+            if (changeLines.isNotEmpty()) {
+                SheetSection(title = stringResource(R.string.app_history_what_changed)) {
+                    changeLines.forEach { line ->
+                        Text(
+                            text = line,
+                            style = AppTheme.typography.bodyMedium,
+                            color = AppTheme.colors.onSurface,
+                        )
+                    }
+                }
+            }
 
             SheetSection(title = stringResource(AppsR.string.components_detail_section_reachability)) {
                 DetailField(
@@ -180,7 +194,7 @@ internal fun ComponentDetailBottomSheet(
             } else if (intentFilters == null) {
                 SheetSection(title = stringResource(AppsR.string.components_detail_section_intent_filters)) {
                     Text(
-                        text = stringResource(AppsR.string.components_detail_intent_filters_unavailable),
+                        text = intentFiltersMissingText ?: stringResource(AppsR.string.components_detail_intent_filters_unavailable),
                         style = AppTheme.typography.bodyMedium,
                         color = AppTheme.colors.onSurfaceVariant,
                     )

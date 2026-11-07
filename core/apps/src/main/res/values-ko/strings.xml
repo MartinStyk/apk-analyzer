@@ -490,4 +490,10 @@
     <string name="components_launch_started">시작 요청이 전송되었습니다 — 앱이 다음에 무엇을 할지 결정합니다.</string>
     <string name="components_launch_broadcast_sent">브로드캐스트가 전송되었습니다 — 여기서는 처리되었는지 여부를 보고하지 않습니다.</string>
     <string name="components_launch_failed">시스템이 이를 시작하는 것을 거부했습니다.</string>
+    <string name="certificates_validity_on_date_valid">이 날짜에 유효함</string>
+    <string name="certificates_validity_on_date_expired">이 날짜에 만료됨</string>
+    <string name="certificates_validity_on_date_not_yet">이 날짜에 아직 유효하지 않음</string>
+    <string name="certificates_validity_on_date_valid_explanation">Apk Analyzer가 기록한 날에 이 인증서는 유효 기간 내에 있었습니다.</string>
+    <string name="certificates_validity_on_date_expired_explanation">Apk Analyzer가 기록한 날에 이 인증서의 종료일은 이미 지났습니다.</string>
+    <string name="certificates_validity_on_date_not_yet_explanation">Apk Analyzer가 기록한 날에 이 인증서의 시작일은 아직 미래였습니다.</string>
 </resources>

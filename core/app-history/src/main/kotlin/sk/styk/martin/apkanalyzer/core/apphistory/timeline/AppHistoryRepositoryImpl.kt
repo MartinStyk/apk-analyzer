@@ -5,9 +5,13 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import sk.styk.martin.apkanalyzer.core.apphistory.capture.APP_HISTORY
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryPersistenceRepository
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.CapturedSection
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.StoredAppHistoryRecord
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryEntry
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistorySection
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistorySnapshot
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistorySnapshotId
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistorySnapshotRead
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistorySnapshotSummary
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryTimeline
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
@@ -35,6 +39,15 @@ internal class AppHistoryRepositoryImpl @Inject constructor(
         }
         .flowOn(dispatcherProvider.default())
 
+    override suspend fun snapshot(packageName: PackageName, id: AppHistorySnapshotId): AppHistorySnapshotRead =
+        persistenceRepository.read(packageName, id.value).fold(
+            onSuccess = { stored -> stored?.let { AppHistorySnapshotRead.Found(it.toSnapshot()) } ?: AppHistorySnapshotRead.NotFound },
+            onFailure = { throwable ->
+                Logger.e(APP_HISTORY, throwable, "Snapshot ${id.value} of ${packageName.value} could not be read")
+                AppHistorySnapshotRead.Unavailable
+            },
+        )
+
     private fun buildTimeline(records: List<StoredAppHistoryRecord>): List<AppHistoryEntry> {
         val first = records.firstOrNull() ?: return emptyList()
         val changes = records.zipWithNext { previous, current ->
@@ -61,8 +74,22 @@ private infix fun StoredAppHistoryRecord.isReinstallOf(previous: StoredAppHistor
 
 private fun StoredAppHistoryRecord.toSummary() = AppHistorySnapshotSummary(
     id = AppHistorySnapshotId(id),
+    applicationName = record.detail.info.applicationName,
     version = record.detail.info.version,
     firstInstallTime = record.captureKey.firstInstallTime,
     lastUpdateTime = record.captureKey.lastUpdateTime,
     capturedAt = record.capturedAt,
 )
+
+private fun StoredAppHistoryRecord.toSnapshot() = AppHistorySnapshot(
+    id = AppHistorySnapshotId(id),
+    capturedAt = record.capturedAt,
+    detail = record.detail,
+    nativeLibraries = record.nativeLibraries.toSection(),
+    signingSchemes = record.signingScheme.toSection(),
+)
+
+private fun <T> CapturedSection<T>.toSection(): AppHistorySection<T> = when (this) {
+    is CapturedSection.Captured -> AppHistorySection.Recorded(value)
+    CapturedSection.Unavailable -> AppHistorySection.NotRecorded
+}

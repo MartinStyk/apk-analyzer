@@ -6,6 +6,7 @@ import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateValidity
 import sk.styk.martin.apkanalyzer.core.apps.signing.SignatureAlgorithmAssessment
 import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeVersion
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.RecordedVersionFailure
 import java.time.Instant
 
 @Immutable
@@ -35,10 +36,14 @@ internal sealed interface CertificatesState {
     data object Error : CertificatesState
 
     @Immutable
+    data class RecordedVersionError(val failure: RecordedVersionFailure) : CertificatesState
+
+    @Immutable
     data class Loaded(
         val currentCertificates: List<CertificateItem>,
         val pastCertificates: List<CertificateItem>,
         val hasMultipleSigners: Boolean,
         val signingSchemeVersions: List<SigningSchemeVersion>?,
+        val isHistorical: Boolean = false,
     ) : CertificatesState
 }

@@ -1,9 +1,10 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone
 
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryEntry
 import sk.styk.martin.apkanalyzer.core.common.analytics.AnalyticsEvent
 import sk.styk.martin.apkanalyzer.core.common.analytics.AnalyticsParameterName
 import sk.styk.martin.apkanalyzer.core.common.analytics.AnalyticsTracker
-import sk.styk.martin.apkanalyzer.core.common.model.AppReference
+import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import javax.inject.Inject
 
 internal class AppDetailAnalytics @Inject constructor(private val analyticsTracker: AnalyticsTracker) {
@@ -13,7 +14,7 @@ internal class AppDetailAnalytics @Inject constructor(private val analyticsTrack
             when (event) {
                 is AppDetailAnalyticsEvent.Opened -> AnalyticsEvent(
                     "app_detail_opened",
-                    mapOf(AnalyticsParameterName.AnalysisMode to event.appReference.analyticsAnalysisMode),
+                    mapOf(AnalyticsParameterName.AnalysisMode to event.input.analyticsAnalysisMode),
                 )
 
                 is AppDetailAnalyticsEvent.SectionOpened -> AnalyticsEvent(
@@ -25,17 +26,49 @@ internal class AppDetailAnalytics @Inject constructor(private val analyticsTrack
                     "app_detail_action_performed",
                     mapOf(AnalyticsParameterName.Action to event.action.analyticsValue),
                 )
+
+                is AppDetailAnalyticsEvent.HistoricalSectionOpened -> AnalyticsEvent(
+                    "app_history_section_opened",
+                    mapOf(AnalyticsParameterName.Section to event.section.analyticsValue),
+                )
+
+                is AppDetailAnalyticsEvent.HistoryTimelineOpened -> AnalyticsEvent(
+                    "app_history_timeline_opened",
+                    mapOf(AnalyticsParameterName.HistoryBucket to event.bucket.analyticsValue),
+                )
+
+                is AppDetailAnalyticsEvent.HistoryChangeOpened -> AnalyticsEvent(
+                    "app_history_change_opened",
+                    mapOf(AnalyticsParameterName.ChangeKind to event.kind.analyticsValue),
+                )
+
+                AppDetailAnalyticsEvent.HistoryFullDetailOpened -> AnalyticsEvent("app_history_full_detail_opened")
             },
         )
     }
 }
 
 internal sealed interface AppDetailAnalyticsEvent {
-    data class Opened(val appReference: AppReference) : AppDetailAnalyticsEvent
+    data class Opened(val input: AppDetailInput) : AppDetailAnalyticsEvent
 
     data class SectionOpened(val section: Section) : AppDetailAnalyticsEvent
 
     data class ActionPerformed(val action: Action) : AppDetailAnalyticsEvent
+
+    data class HistoricalSectionOpened(val section: Section) : AppDetailAnalyticsEvent
+
+    data class HistoryTimelineOpened(val bucket: HistoryBucket) : AppDetailAnalyticsEvent
+
+    data class HistoryChangeOpened(val kind: AppHistoryEntry.Change.Kind) : AppDetailAnalyticsEvent
+
+    data object HistoryFullDetailOpened : AppDetailAnalyticsEvent
+
+    enum class HistoryBucket {
+        Empty,
+        FirstOnly,
+        OneToFive,
+        SixOrMore,
+    }
 
     enum class Section {
         Manifest,
@@ -62,10 +95,26 @@ internal sealed interface AppDetailAnalyticsEvent {
     }
 }
 
-private val AppReference.analyticsAnalysisMode: String
+private val AppDetailInput.analyticsAnalysisMode: String
     get() = when (this) {
-        is AppReference.ApkFile -> "apk_file"
-        is AppReference.InstalledPackage -> "installed_package"
+        is AppDetailInput.ApkFile -> "apk_file"
+        is AppDetailInput.InstalledPackage -> "installed_package"
+        is AppDetailInput.Historical -> "historical"
+    }
+
+private val AppDetailAnalyticsEvent.HistoryBucket.analyticsValue: String
+    get() = when (this) {
+        AppDetailAnalyticsEvent.HistoryBucket.Empty -> "empty"
+        AppDetailAnalyticsEvent.HistoryBucket.FirstOnly -> "first_only"
+        AppDetailAnalyticsEvent.HistoryBucket.OneToFive -> "1_5"
+        AppDetailAnalyticsEvent.HistoryBucket.SixOrMore -> "6_plus"
+    }
+
+private val AppHistoryEntry.Change.Kind.analyticsValue: String
+    get() = when (this) {
+        AppHistoryEntry.Change.Kind.Updated -> "updated"
+        AppHistoryEntry.Change.Kind.Reinstalled -> "reinstalled"
+        AppHistoryEntry.Change.Kind.NewDevice -> "new_device"
     }
 
 private val AppDetailAnalyticsEvent.Section.analyticsValue: String

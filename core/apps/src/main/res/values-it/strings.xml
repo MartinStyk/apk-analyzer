@@ -512,4 +512,10 @@
     <string name="components_launch_started">Richiesta di avvio inviata — l\'app decide cosa succede dopo.</string>
     <string name="components_launch_broadcast_sent">Broadcast inviato — nulla qui riporta se è stato gestito.</string>
     <string name="components_launch_failed">Il sistema ha rifiutato di avviare questo.</string>
+    <string name="certificates_validity_on_date_valid">Valido in questa data</string>
+    <string name="certificates_validity_on_date_expired">Scaduto in questa data</string>
+    <string name="certificates_validity_on_date_not_yet">Non ancora valido in questa data</string>
+    <string name="certificates_validity_on_date_valid_explanation">Questo certificato rientrava nelle date di validità il giorno in cui Apk Analyzer lo ha rilevato.</string>
+    <string name="certificates_validity_on_date_expired_explanation">La data di fine di questo certificato era già passata il giorno in cui Apk Analyzer lo ha rilevato.</string>
+    <string name="certificates_validity_on_date_not_yet_explanation">La data di inizio di questo certificato era ancora futura il giorno in cui Apk Analyzer lo ha rilevato.</string>
 </resources>

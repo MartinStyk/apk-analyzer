@@ -490,4 +490,10 @@
     <string name="components_launch_started">Permintaan mulai dikirim — aplikasi memutuskan apa yang terjadi selanjutnya.</string>
     <string name="components_launch_broadcast_sent">Siaran dikirim — tidak ada yang melaporkan apakah itu ditangani.</string>
     <string name="components_launch_failed">Sistem menolak untuk memulai ini.</string>
+    <string name="certificates_validity_on_date_valid">Berlaku pada tanggal ini</string>
+    <string name="certificates_validity_on_date_expired">Kedaluwarsa pada tanggal ini</string>
+    <string name="certificates_validity_on_date_not_yet">Belum berlaku pada tanggal ini</string>
+    <string name="certificates_validity_on_date_valid_explanation">Sertifikat ini masih dalam masa berlaku pada hari Apk Analyzer mencatatnya.</string>
+    <string name="certificates_validity_on_date_expired_explanation">Tanggal akhir sertifikat ini sudah lewat pada hari Apk Analyzer mencatatnya.</string>
+    <string name="certificates_validity_on_date_not_yet_explanation">Tanggal mulai sertifikat ini masih di masa depan pada hari Apk Analyzer mencatatnya.</string>
 </resources>

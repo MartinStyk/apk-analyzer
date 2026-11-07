@@ -24,6 +24,7 @@ internal sealed interface AppDetailAction {
     data object NavigateProviders : AppDetailAction
     data object NavigateCertificates : AppDetailAction
     data object NavigateFeatures : AppDetailAction
+    data object NavigateHistory : AppDetailAction
     data class NavigateInsight(val insight: AppDetailInsight) : AppDetailAction
     data class ExportApkTo(val destination: Uri) : AppDetailAction
     data class SaveIconTo(val destination: Uri) : AppDetailAction
