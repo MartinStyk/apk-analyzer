@@ -529,4 +529,5 @@
     <string name="certificates_validity_on_date_valid_explanation">V deň, keď ho Apk Analyzer zaznamenal, bol tento certifikát v rozsahu platnosti.</string>
     <string name="certificates_validity_on_date_expired_explanation">V deň, keď ho Apk Analyzer zaznamenal, už dátum konca platnosti tohto certifikátu uplynul.</string>
     <string name="certificates_validity_on_date_not_yet_explanation">V deň, keď ho Apk Analyzer zaznamenal, bol dátum začiatku platnosti tohto certifikátu ešte v budúcnosti.</string>
+    <string name="app_info_unavailable">Toto zariadenie nevie otvoriť Informácie o aplikácii</string>
 </resources>

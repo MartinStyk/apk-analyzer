@@ -496,4 +496,5 @@
     <string name="certificates_validity_on_date_valid_explanation">Sertifikat ini masih dalam masa berlaku pada hari Apk Analyzer mencatatnya.</string>
     <string name="certificates_validity_on_date_expired_explanation">Tanggal akhir sertifikat ini sudah lewat pada hari Apk Analyzer mencatatnya.</string>
     <string name="certificates_validity_on_date_not_yet_explanation">Tanggal mulai sertifikat ini masih di masa depan pada hari Apk Analyzer mencatatnya.</string>
+    <string name="app_info_unavailable">Perangkat ini tidak dapat membuka Info aplikasi</string>
 </resources>

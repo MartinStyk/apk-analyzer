@@ -518,4 +518,5 @@
     <string name="certificates_validity_on_date_valid_explanation">Ce certificat était dans ses dates de validité le jour où Apk Analyzer l\'a observé.</string>
     <string name="certificates_validity_on_date_expired_explanation">La date de fin de ce certificat était déjà passée le jour où Apk Analyzer l\'a observé.</string>
     <string name="certificates_validity_on_date_not_yet_explanation">La date de début de ce certificat était encore à venir le jour où Apk Analyzer l\'a observé.</string>
+    <string name="app_info_unavailable">Cet appareil ne peut pas ouvrir Informations sur l\'application</string>
 </resources>

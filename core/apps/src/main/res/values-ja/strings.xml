@@ -498,4 +498,5 @@
     <string name="certificates_validity_on_date_valid_explanation">Apk Analyzer が記録した日、この証明書は有効期間内でした。</string>
     <string name="certificates_validity_on_date_expired_explanation">Apk Analyzer が記録した日には、この証明書の終了日はすでに過ぎていました。</string>
     <string name="certificates_validity_on_date_not_yet_explanation">Apk Analyzer が記録した日には、この証明書の開始日はまだ先でした。</string>
+    <string name="app_info_unavailable">このデバイスではアプリ情報を開けません</string>
 </resources>

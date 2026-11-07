@@ -496,4 +496,5 @@
     <string name="certificates_validity_on_date_valid_explanation">Vào ngày Apk Analyzer ghi nhận, chứng chỉ này còn trong thời hạn hiệu lực.</string>
     <string name="certificates_validity_on_date_expired_explanation">Vào ngày Apk Analyzer ghi nhận, ngày kết thúc của chứng chỉ này đã qua.</string>
     <string name="certificates_validity_on_date_not_yet_explanation">Vào ngày Apk Analyzer ghi nhận, ngày bắt đầu của chứng chỉ này vẫn còn ở tương lai.</string>
+    <string name="app_info_unavailable">Thiết bị này không thể mở Thông tin ứng dụng</string>
 </resources>

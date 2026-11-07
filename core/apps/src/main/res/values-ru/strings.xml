@@ -529,4 +529,5 @@
     <string name="certificates_validity_on_date_valid_explanation">В день фиксации в Apk Analyzer этот сертификат был в пределах срока действия.</string>
     <string name="certificates_validity_on_date_expired_explanation">В день фиксации в Apk Analyzer дата окончания этого сертификата уже прошла.</string>
     <string name="certificates_validity_on_date_not_yet_explanation">В день фиксации в Apk Analyzer дата начала этого сертификата ещё не наступила.</string>
+    <string name="app_info_unavailable">Это устройство не может открыть «Информация о приложении»</string>
 </resources>

@@ -1,11 +1,11 @@
 [versions]
 # Kotlin
 kotlin = "2.4.21"
-ksp = "2.3.11"
+ksp = "2.3.13"
 kotlinx-serialization = "1.12.0"
 
 # Android
-agp = "9.5.0"
+agp = "9.5.1"
 core-ktx = "1.19.1"
 palette = "1.1.0"
 core-splashscreen = "1.2.0"

@@ -104,6 +104,8 @@ internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
             when (captureOutcome) {
                 is CaptureOutcome.Aborted -> outcome = TraceOutcome.Error
 
+                CaptureOutcome.PackageGone -> outcome = TraceOutcome.Success
+
                 is CaptureOutcome.Completed -> {
                     this["degraded_sections"] = captureOutcome.degradedSectionCount
                     outcome = if (captureOutcome.degradedSectionCount == 0) TraceOutcome.Success else TraceOutcome.Degraded
@@ -112,7 +114,7 @@ internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
             captureOutcome
         }
         if (result is CaptureOutcome.Aborted) throw result.cause
-        true
+        result is CaptureOutcome.Completed
     }
 
     private suspend fun capture(app: InstalledApp): CaptureOutcome = coroutineScope {
@@ -122,6 +124,10 @@ internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
         val signingSchemeDeferred = async(dispatcherProvider.io()) { signingSchemeRepository.signingSchemeVersions(reference) }
 
         val detail = detailDeferred.await().getOrElse {
+            if (installedAppsRepository.app(app.packageName) == null) {
+                Logger.i(APP_HISTORY, "Package ${app.packageName.value} is no longer installed, skipping capture")
+                return@coroutineScope CaptureOutcome.PackageGone
+            }
             Logger.w(APP_HISTORY, it, "App detail load failed for ${app.packageName.value}, skipping capture")
             return@coroutineScope CaptureOutcome.Aborted(it)
         }
@@ -159,6 +165,7 @@ internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
 
     private sealed interface CaptureOutcome {
         data class Aborted(val cause: Throwable) : CaptureOutcome
+        data object PackageGone : CaptureOutcome
         data class Completed(val degradedSectionCount: Int) : CaptureOutcome
     }
 }

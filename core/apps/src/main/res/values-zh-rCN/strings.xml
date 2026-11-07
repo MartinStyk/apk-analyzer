@@ -496,4 +496,5 @@
     <string name="certificates_validity_on_date_valid_explanation">Apk Analyzer 记录当天，此证书处于有效期内。</string>
     <string name="certificates_validity_on_date_expired_explanation">Apk Analyzer 记录当天，此证书的结束日期已过。</string>
     <string name="certificates_validity_on_date_not_yet_explanation">Apk Analyzer 记录当天，此证书的开始日期尚未到来。</string>
+    <string name="app_info_unavailable">此设备无法打开应用信息</string>
 </resources>

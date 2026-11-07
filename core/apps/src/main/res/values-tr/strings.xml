@@ -507,4 +507,5 @@
     <string name="certificates_validity_on_date_valid_explanation">Apk Analyzer\'ın kaydettiği gün bu sertifika geçerlilik tarihleri içindeydi.</string>
     <string name="certificates_validity_on_date_expired_explanation">Apk Analyzer\'ın kaydettiği gün bu sertifikanın bitiş tarihi geçmişti.</string>
     <string name="certificates_validity_on_date_not_yet_explanation">Apk Analyzer\'ın kaydettiği gün bu sertifikanın başlangıç tarihi henüz gelmemişti.</string>
+    <string name="app_info_unavailable">Bu cihaz Uygulama Bilgisi ekranını açamıyor</string>
 </resources>

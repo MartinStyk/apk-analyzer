@@ -507,4 +507,5 @@
     <string name="certificates_validity_on_date_valid_explanation">जिस दिन Apk Analyzer ने इसे दर्ज किया, यह प्रमाणपत्र अपनी वैधता अवधि में था।</string>
     <string name="certificates_validity_on_date_expired_explanation">जिस दिन Apk Analyzer ने इसे दर्ज किया, इस प्रमाणपत्र की समाप्ति तिथि बीत चुकी थी।</string>
     <string name="certificates_validity_on_date_not_yet_explanation">जिस दिन Apk Analyzer ने इसे दर्ज किया, इस प्रमाणपत्र की शुरुआती तिथि अभी आने वाली थी।</string>
+    <string name="app_info_unavailable">यह डिवाइस ऐप जानकारी नहीं खोल सकता</string>
 </resources>

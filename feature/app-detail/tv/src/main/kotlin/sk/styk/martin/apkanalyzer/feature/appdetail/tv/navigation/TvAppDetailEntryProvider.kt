@@ -1,5 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.tv.navigation
 
+import android.widget.Toast
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
@@ -17,13 +18,18 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.tv.nativelibraries.TvNativeL
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.permissions.TvPermissionsScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.requirements.TvRequirementsScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.splitapks.TvSplitApksScreen
+import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 
 fun EntryProviderScope<NavKey>.tvAppDetailEntries(navigator: Navigator) {
     entry<AppDetailNavKey>(metadata = slideFromEndEntryMetadata()) { key ->
         val context = LocalContext.current
         TvAppDetailScreen(
             appDetailInput = key.detailInput,
-            onOpenAppInfo = { packageName -> context.openAppSystemPage(packageName) },
+            onOpenAppInfo = { packageName ->
+                context.openAppSystemPage(packageName).onFailure {
+                    Toast.makeText(context, AppsR.string.app_info_unavailable, Toast.LENGTH_LONG).show()
+                }
+            },
             onOpenPlayStore = { packageName -> context.openGooglePlay(packageName) },
             onNavigateToGeneralInfo = { navigator.navigate(TvGeneralInfoNavKey(key.detailInput)) },
             onNavigateToPermissions = { permissionName -> navigator.navigate(TvPermissionsNavKey(key.detailInput, permissionName)) },
