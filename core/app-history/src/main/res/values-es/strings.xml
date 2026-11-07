@@ -58,42 +58,52 @@
     <string name="app_history_not_recorded_explanation">Apk Analyzer no pudo registrar esto en esta versión, así que no podemos decir qué contenía.</string>
     <plurals name="app_history_summary_more">
         <item quantity="one">y %1$d más</item>
+        <item quantity="many">y %1$d más</item>
         <item quantity="other">y %1$d más</item>
     </plurals>
     <plurals name="app_history_summary_permission_added_named">
         <item quantity="one">%1$s y %2$d permiso más añadidos</item>
+        <item quantity="many">%1$s y %2$d permisos más añadidos</item>
         <item quantity="other">%1$s y %2$d permisos más añadidos</item>
     </plurals>
     <plurals name="app_history_summary_permissions_removed">
         <item quantity="one">%1$d permiso eliminado</item>
+        <item quantity="many">%1$d permisos eliminados</item>
         <item quantity="other">%1$d permisos eliminados</item>
     </plurals>
     <plurals name="app_history_summary_defined_permissions">
         <item quantity="one">Cambió %1$d permiso definido por esta app</item>
+        <item quantity="many">Cambiaron %1$d permisos definidos por esta app</item>
         <item quantity="other">Cambiaron %1$d permisos definidos por esta app</item>
     </plurals>
     <plurals name="app_history_summary_components_added">
         <item quantity="one">%1$d componente añadido</item>
+        <item quantity="many">%1$d componentes añadidos</item>
         <item quantity="other">%1$d componentes añadidos</item>
     </plurals>
     <plurals name="app_history_summary_components_removed">
         <item quantity="one">%1$d componente eliminado</item>
+        <item quantity="many">%1$d componentes eliminados</item>
         <item quantity="other">%1$d componentes eliminados</item>
     </plurals>
     <plurals name="app_history_summary_components_changed">
         <item quantity="one">%1$d componente cambiado</item>
+        <item quantity="many">%1$d componentes cambiados</item>
         <item quantity="other">%1$d componentes cambiados</item>
     </plurals>
     <plurals name="app_history_summary_native_added">
         <item quantity="one">%1$d biblioteca nativa añadida</item>
+        <item quantity="many">%1$d bibliotecas nativas añadidas</item>
         <item quantity="other">%1$d bibliotecas nativas añadidas</item>
     </plurals>
     <plurals name="app_history_summary_native_removed">
         <item quantity="one">%1$d biblioteca nativa eliminada</item>
+        <item quantity="many">%1$d bibliotecas nativas eliminadas</item>
         <item quantity="other">%1$d bibliotecas nativas eliminadas</item>
     </plurals>
     <plurals name="app_history_summary_native_changed">
         <item quantity="one">%1$d biblioteca nativa cambiada</item>
+        <item quantity="many">%1$d bibliotecas nativas cambiadas</item>
         <item quantity="other">%1$d bibliotecas nativas cambiadas</item>
     </plurals>
     <string name="app_history_size_change_up">%1$s → %2$s (+%3$s)</string>

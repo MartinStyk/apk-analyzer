@@ -58,42 +58,52 @@
     <string name="app_history_not_recorded_explanation">Apk Analyzer n\'a pas pu relever cette information pour cette version : impossible de dire ce qu\'elle contenait.</string>
     <plurals name="app_history_summary_more">
         <item quantity="one">et %1$d autre</item>
+        <item quantity="many">et %1$d autres</item>
         <item quantity="other">et %1$d autres</item>
     </plurals>
     <plurals name="app_history_summary_permission_added_named">
         <item quantity="one">%1$s et %2$d autre autorisation ajoutées</item>
+        <item quantity="many">%1$s et %2$d autres autorisations ajoutées</item>
         <item quantity="other">%1$s et %2$d autres autorisations ajoutées</item>
     </plurals>
     <plurals name="app_history_summary_permissions_removed">
         <item quantity="one">%1$d autorisation supprimée</item>
+        <item quantity="many">%1$d autorisations supprimées</item>
         <item quantity="other">%1$d autorisations supprimées</item>
     </plurals>
     <plurals name="app_history_summary_defined_permissions">
         <item quantity="one">%1$d autorisation définie par cette application a changé</item>
+        <item quantity="many">%1$d autorisations définies par cette application ont changé</item>
         <item quantity="other">%1$d autorisations définies par cette application ont changé</item>
     </plurals>
     <plurals name="app_history_summary_components_added">
         <item quantity="one">%1$d composant ajouté</item>
+        <item quantity="many">%1$d composants ajoutés</item>
         <item quantity="other">%1$d composants ajoutés</item>
     </plurals>
     <plurals name="app_history_summary_components_removed">
         <item quantity="one">%1$d composant supprimé</item>
+        <item quantity="many">%1$d composants supprimés</item>
         <item quantity="other">%1$d composants supprimés</item>
     </plurals>
     <plurals name="app_history_summary_components_changed">
         <item quantity="one">%1$d composant modifié</item>
+        <item quantity="many">%1$d composants modifiés</item>
         <item quantity="other">%1$d composants modifiés</item>
     </plurals>
     <plurals name="app_history_summary_native_added">
         <item quantity="one">%1$d bibliothèque native ajoutée</item>
+        <item quantity="many">%1$d bibliothèques natives ajoutées</item>
         <item quantity="other">%1$d bibliothèques natives ajoutées</item>
     </plurals>
     <plurals name="app_history_summary_native_removed">
         <item quantity="one">%1$d bibliothèque native supprimée</item>
+        <item quantity="many">%1$d bibliothèques natives supprimées</item>
         <item quantity="other">%1$d bibliothèques natives supprimées</item>
     </plurals>
     <plurals name="app_history_summary_native_changed">
         <item quantity="one">%1$d bibliothèque native modifiée</item>
+        <item quantity="many">%1$d bibliothèques natives modifiées</item>
         <item quantity="other">%1$d bibliothèques natives modifiées</item>
     </plurals>
     <string name="app_history_size_change_up">%1$s → %2$s (+%3$s)</string>

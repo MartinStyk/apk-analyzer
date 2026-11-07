@@ -294,10 +294,12 @@
     <string name="app_history_version_load_failed">Impossibile caricare questa versione</string>
     <plurals name="app_history_hub_changes">
         <item quantity="one">%1$d modifica · ultima %2$s</item>
+        <item quantity="many">%1$d modifiche · ultima %2$s</item>
         <item quantity="other">%1$d modifiche · ultima %2$s</item>
     </plurals>
     <plurals name="app_history_context">
         <item quantity="one">Rilevazione dal %1$s · %2$d modifica</item>
+        <item quantity="many">Rilevazione dal %1$s · %2$d modifiche</item>
         <item quantity="other">Rilevazione dal %1$s · %2$d modifiche</item>
     </plurals>
 </resources>
