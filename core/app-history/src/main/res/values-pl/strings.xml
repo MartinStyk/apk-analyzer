@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_history_first_recorded">Pierwszy zapis</string>
+    <string name="app_history_certificate_changed">Certyfikat podpisu się zmienił</string>
+    <string name="app_history_signing_method_changed">Metoda podpisu się zmieniła</string>
+    <string name="app_history_reinstalled">Usunięto i zainstalowano ponownie</string>
+    <string name="app_history_new_device">Kontynuacja na nowym urządzeniu</string>
+    <string name="app_history_same_version">Ta sama wersja, nowa kompilacja</string>
+    <string name="app_history_older_version">Starsza wersja</string>
+    <string name="app_history_uncomparable_only">Nie udało się porównać niektórych danych</string>
+    <string name="app_history_version">Wersja %1$s</string>
+    <string name="app_history_version_with_code">%1$s (%2$d)</string>
+    <string name="app_history_value_change">%1$s → %2$s</string>
+    <string name="app_history_summary_join">%1$s · %2$s</string>
+    <string name="app_history_summary_permission_added_single">Dodano uprawnienie: %1$s</string>
+    <string name="app_history_summary_source">Źródło instalacji zmieniono na %1$s</string>
+    <string name="app_history_summary_debug_on">Debugowanie włączone</string>
+    <string name="app_history_summary_debug_off">Debugowanie wyłączone</string>
+    <string name="app_history_summary_backup_on">Kopia danych aplikacji włączona</string>
+    <string name="app_history_summary_backup_off">Kopia danych aplikacji wyłączona</string>
+    <string name="app_history_summary_cleartext_on">Ruch nieszyfrowany dozwolony</string>
+    <string name="app_history_summary_cleartext_off">Ruch nieszyfrowany zablokowany</string>
+    <string name="app_history_summary_target_sdk">Target SDK %1$s → %2$s</string>
+    <string name="app_history_summary_min_sdk">Min SDK %1$s → %2$s</string>
+    <string name="app_history_summary_size_up">Rozmiar +%1$s</string>
+    <string name="app_history_summary_size_down">Rozmiar −%1$s</string>
+    <string name="app_history_when_updated">Zaktualizowano %1$s</string>
+    <string name="app_history_when_reinstalled">Zainstalowano ponownie %1$s</string>
+    <string name="app_history_when_recorded">Odnotowano %1$s</string>
+    <string name="app_history_when_with_recorded">%1$s · odnotowano %2$s</string>
+    <string name="app_history_changes_heading">Zmiany między tymi wersjami</string>
+    <string name="app_history_device_note">Niektóre różnice mogą wynikać z urządzenia, a nie z aplikacji.</string>
+    <string name="app_history_empty_diff">Brak różnic w tym, co porównuje Apk Analyzer</string>
+    <string name="app_history_uncomparable_label">Nie udało się porównać</string>
+    <string name="app_history_uncomparable_explanation">Te informacje nie zostały w pełni odnotowane dla jednej z tych wersji, więc nie wiadomo, czy się zmieniły.</string>
+    <string name="app_history_field_change">%1$s: %2$s → %3$s</string>
+    <string name="app_history_field_added">%1$s: dodano</string>
+    <string name="app_history_field_removed">%1$s: usunięto</string>
+    <string name="app_history_field_changed">%1$s: zmieniono</string>
+    <string name="app_history_before">Przed</string>
+    <string name="app_history_after">Po</string>
+    <string name="app_history_category_signing">Podpis</string>
+    <string name="app_history_category_permissions">Uprawnienia</string>
+    <string name="app_history_category_install_source">Źródło instalacji</string>
+    <string name="app_history_category_settings">Ustawienia aplikacji</string>
+    <string name="app_history_category_android_versions">Wersje Androida</string>
+    <string name="app_history_category_components">Komponenty</string>
+    <string name="app_history_category_native">Biblioteki natywne</string>
+    <string name="app_history_category_size">Rozmiar</string>
+    <string name="app_history_category_signing_method">Metoda podpisu</string>
+    <string name="app_history_group_added">Dodane</string>
+    <string name="app_history_group_removed">Usunięte</string>
+    <string name="app_history_group_changed">Zmienione</string>
+    <string name="app_history_certificate_updated_explanation">Android akceptuje aktualizację z innym certyfikatem tylko wtedy, gdy zatwierdził ją stary klucz, więc zwykle jest to planowana zmiana klucza przez dewelopera.</string>
+    <string name="app_history_certificate_new_copy_explanation">Ta kopia jest podpisana innym certyfikatem niż odnotowany wcześniej. Sprawdź, czy pochodzi z zaufanego źródła.</string>
+    <string name="app_history_signer_explanation">Organizacja lub osoba wskazana w tym certyfikacie podpisu. Każdy może tu wpisać dowolną nazwę, dlatego klucz identyfikuje odcisk poniżej.</string>
+    <string name="app_history_not_recorded">Nie odnotowano dla tej wersji</string>
+    <string name="app_history_not_recorded_explanation">Apk Analyzer nie mógł tego odnotować dla tej wersji, więc nie wiadomo, co zawierała.</string>
+    <plurals name="app_history_summary_more">
+        <item quantity="one">i %1$d więcej</item>
+        <item quantity="few">i %1$d więcej</item>
+        <item quantity="many">i %1$d więcej</item>
+        <item quantity="other">i %1$d więcej</item>
+    </plurals>
+    <plurals name="app_history_summary_permission_added_named">
+        <item quantity="one">Dodano: %1$s i %2$d inne uprawnienie</item>
+        <item quantity="few">Dodano: %1$s i %2$d inne uprawnienia</item>
+        <item quantity="many">Dodano: %1$s i %2$d innych uprawnień</item>
+        <item quantity="other">Dodano: %1$s i %2$d innego uprawnienia</item>
+    </plurals>
+    <plurals name="app_history_summary_permissions_removed">
+        <item quantity="one">Usunięto %1$d uprawnienie</item>
+        <item quantity="few">Usunięto %1$d uprawnienia</item>
+        <item quantity="many">Usunięto %1$d uprawnień</item>
+        <item quantity="other">Usunięto %1$d uprawnienia</item>
+    </plurals>
+    <plurals name="app_history_summary_defined_permissions">
+        <item quantity="one">Zmieniono %1$d uprawnienie zdefiniowane przez tę aplikację</item>
+        <item quantity="few">Zmieniono %1$d uprawnienia zdefiniowane przez tę aplikację</item>
+        <item quantity="many">Zmieniono %1$d uprawnień zdefiniowanych przez tę aplikację</item>
+        <item quantity="other">Zmieniono %1$d uprawnienia zdefiniowanego przez tę aplikację</item>
+    </plurals>
+    <plurals name="app_history_summary_components_added">
+        <item quantity="one">Dodano %1$d komponent</item>
+        <item quantity="few">Dodano %1$d komponenty</item>
+        <item quantity="many">Dodano %1$d komponentów</item>
+        <item quantity="other">Dodano %1$d komponentu</item>
+    </plurals>
+    <plurals name="app_history_summary_components_removed">
+        <item quantity="one">Usunięto %1$d komponent</item>
+        <item quantity="few">Usunięto %1$d komponenty</item>
+        <item quantity="many">Usunięto %1$d komponentów</item>
+        <item quantity="other">Usunięto %1$d komponentu</item>
+    </plurals>
+    <plurals name="app_history_summary_components_changed">
+        <item quantity="one">Zmieniono %1$d komponent</item>
+        <item quantity="few">Zmieniono %1$d komponenty</item>
+        <item quantity="many">Zmieniono %1$d komponentów</item>
+        <item quantity="other">Zmieniono %1$d komponentu</item>
+    </plurals>
+    <plurals name="app_history_summary_native_added">
+        <item quantity="one">Dodano %1$d bibliotekę natywną</item>
+        <item quantity="few">Dodano %1$d biblioteki natywne</item>
+        <item quantity="many">Dodano %1$d bibliotek natywnych</item>
+        <item quantity="other">Dodano %1$d biblioteki natywnej</item>
+    </plurals>
+    <plurals name="app_history_summary_native_removed">
+        <item quantity="one">Usunięto %1$d bibliotekę natywną</item>
+        <item quantity="few">Usunięto %1$d biblioteki natywne</item>
+        <item quantity="many">Usunięto %1$d bibliotek natywnych</item>
+        <item quantity="other">Usunięto %1$d biblioteki natywnej</item>
+    </plurals>
+    <plurals name="app_history_summary_native_changed">
+        <item quantity="one">Zmieniono %1$d bibliotekę natywną</item>
+        <item quantity="few">Zmieniono %1$d biblioteki natywne</item>
+        <item quantity="many">Zmieniono %1$d bibliotek natywnych</item>
+        <item quantity="other">Zmieniono %1$d biblioteki natywnej</item>
+    </plurals>
+    <string name="app_history_size_change_up">%1$s → %2$s (+%3$s)</string>
+    <string name="app_history_size_change_down">%1$s → %2$s (−%3$s)</string>
+    <string name="app_history_field_value">%1$s: %2$s</string>
+</resources>

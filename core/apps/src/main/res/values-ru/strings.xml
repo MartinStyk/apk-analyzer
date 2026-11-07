@@ -523,5 +523,11 @@
     <string name="components_launch_started">Запрос на запуск отправлен — приложение решает, что делать дальше.</string>
     <string name="components_launch_broadcast_sent">Широковещательное сообщение отправлено — здесь ничего не сообщает, было ли оно обработано.</string>
     <string name="components_launch_failed">Система отказалась запустить это.</string>
+    <string name="certificates_validity_on_date_valid">Действителен на эту дату</string>
+    <string name="certificates_validity_on_date_expired">Истёк на эту дату</string>
+    <string name="certificates_validity_on_date_not_yet">Ещё не действителен на эту дату</string>
+    <string name="certificates_validity_on_date_valid_explanation">В день фиксации в Apk Analyzer этот сертификат был в пределах срока действия.</string>
+    <string name="certificates_validity_on_date_expired_explanation">В день фиксации в Apk Analyzer дата окончания этого сертификата уже прошла.</string>
+    <string name="certificates_validity_on_date_not_yet_explanation">В день фиксации в Apk Analyzer дата начала этого сертификата ещё не наступила.</string>
     <string name="app_info_unavailable">Это устройство не может открыть «Информация о приложении»</string>
 </resources>

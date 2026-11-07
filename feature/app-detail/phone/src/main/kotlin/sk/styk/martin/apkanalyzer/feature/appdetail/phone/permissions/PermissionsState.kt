@@ -5,6 +5,7 @@ import sk.styk.martin.apkanalyzer.core.apppermissions.detail.GrantState
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionItem
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionScope
 import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.RecordedVersionFailure
 
 @Immutable
 internal data class PermissionSection(val protectionLevel: ProtectionLevel?, val permissions: List<PermissionItem>)
@@ -14,6 +15,9 @@ internal sealed interface PermissionsState {
     data object Loading : PermissionsState
 
     data object Error : PermissionsState
+
+    @Immutable
+    data class RecordedVersionError(val failure: RecordedVersionFailure) : PermissionsState
 
     @Immutable
     data class Loaded(
@@ -26,6 +30,7 @@ internal sealed interface PermissionsState {
         val query: String,
         val scopeTotal: Int,
         val sections: List<PermissionSection>,
+        val isHistorical: Boolean = false,
     ) : PermissionsState {
         val hasScopeChoice: Boolean
             get() = scopeOptions.size > 1

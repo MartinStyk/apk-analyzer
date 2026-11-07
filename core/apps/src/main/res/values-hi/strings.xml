@@ -501,5 +501,11 @@
     <string name="components_launch_started">प्रारंभ अनुरोध भेजा गया - ऐप तय करता है कि आगे क्या होगा।</string>
     <string name="components_launch_broadcast_sent">ब्रॉडकास्ट भेजा गया - यहाँ कुछ भी रिपोर्ट नहीं करता कि इसे संभाला गया या नहीं।</string>
     <string name="components_launch_failed">सिस्टम ने इसे प्रारंभ करने से इनकार कर दिया।</string>
+    <string name="certificates_validity_on_date_valid">इस तारीख को मान्य</string>
+    <string name="certificates_validity_on_date_expired">इस तारीख को समाप्त</string>
+    <string name="certificates_validity_on_date_not_yet">इस तारीख को अभी मान्य नहीं</string>
+    <string name="certificates_validity_on_date_valid_explanation">जिस दिन Apk Analyzer ने इसे दर्ज किया, यह प्रमाणपत्र अपनी वैधता अवधि में था।</string>
+    <string name="certificates_validity_on_date_expired_explanation">जिस दिन Apk Analyzer ने इसे दर्ज किया, इस प्रमाणपत्र की समाप्ति तिथि बीत चुकी थी।</string>
+    <string name="certificates_validity_on_date_not_yet_explanation">जिस दिन Apk Analyzer ने इसे दर्ज किया, इस प्रमाणपत्र की शुरुआती तिथि अभी आने वाली थी।</string>
     <string name="app_info_unavailable">यह डिवाइस ऐप जानकारी नहीं खोल सकता</string>
 </resources>

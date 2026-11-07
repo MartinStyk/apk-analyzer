@@ -3,6 +3,7 @@ package sk.styk.martin.apkanalyzer.core.apppermissions.detail
 import sk.styk.martin.apkanalyzer.core.apppermissions.PermissionLabelProvider
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.permissions.Permission
+import sk.styk.martin.apkanalyzer.core.apps.permissions.UsedPermission
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -34,6 +35,14 @@ class PermissionItemMapper @Inject constructor(
         .map { it.toItem(analysedPackage = detail.info.packageName, grantState = null) }
         .mergeDuplicatesByName()
         .sortedBy { it.label.lowercase() }
+
+    fun recordedRequested(permissions: List<UsedPermission>, analysedPackage: PackageName): List<PermissionItem> = permissions
+        .map { it.permissionData.toItem(analysedPackage = analysedPackage, grantState = null) }
+        .mergeDuplicatesByName()
+
+    fun recordedDefined(permissions: List<Permission>, analysedPackage: PackageName): List<PermissionItem> = permissions
+        .map { it.toItem(analysedPackage = analysedPackage, grantState = null) }
+        .mergeDuplicatesByName()
 
     private fun Permission.toItem(analysedPackage: PackageName, grantState: GrantState?) = PermissionItem(
         name = name,

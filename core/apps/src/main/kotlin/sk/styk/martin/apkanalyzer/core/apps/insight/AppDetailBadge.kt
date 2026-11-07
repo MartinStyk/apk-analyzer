@@ -18,10 +18,19 @@ sealed interface AppDetailBadge {
 
 object AppDetailBadgeEvaluator {
 
-    fun evaluate(info: AppInfo, now: Instant): List<AppDetailBadge> = buildList {
+    fun evaluateRecorded(info: AppInfo): List<AppDetailBadge> = badges(info, now = null)
+
+    fun evaluate(info: AppInfo, now: Instant): List<AppDetailBadge> = badges(info, now)
+
+    private fun badges(info: AppInfo, now: Instant?): List<AppDetailBadge> = buildList {
         val effectiveSize = info.totalSize ?: info.apkSize
         if (effectiveSize >= AppClassificationThresholds.LARGE_SIZE) add(AppDetailBadge.Large)
         if (info.isSystemApp) add(AppDetailBadge.System)
+        if (now != null) addRecencyBadges(info, now)
+        if (info.source == AppSource.GooglePlay) add(AppDetailBadge.GooglePlay)
+    }
+
+    private fun MutableList<AppDetailBadge>.addRecencyBadges(info: AppInfo, now: Instant) {
         info.firstInstallTime?.let { installTime ->
             if (installTime.isAfter(now.minus(AppClassificationThresholds.RECENT_PERIOD))) add(AppDetailBadge.RecentlyInstalled)
         }
@@ -31,6 +40,5 @@ object AppDetailBadgeEvaluator {
         info.lastUsedTime?.let { lastUsed ->
             if (lastUsed.isAfter(now.minus(AppClassificationThresholds.RECENTLY_USED_DAYS.days.toJavaDuration()))) add(AppDetailBadge.RecentlyUsed)
         }
-        if (info.source == AppSource.GooglePlay) add(AppDetailBadge.GooglePlay)
     }
 }

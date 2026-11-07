@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_history_first_recorded">Pertama kali tercatat</string>
+    <string name="app_history_certificate_changed">Sertifikat penandatangan berubah</string>
+    <string name="app_history_signing_method_changed">Metode penandatanganan berubah</string>
+    <string name="app_history_reinstalled">Dihapus dan dipasang lagi</string>
+    <string name="app_history_new_device">Berlanjut di perangkat baru</string>
+    <string name="app_history_same_version">Versi sama, build baru</string>
+    <string name="app_history_older_version">Versi lebih lama</string>
+    <string name="app_history_uncomparable_only">Beberapa detail tidak dapat dibandingkan</string>
+    <string name="app_history_version">Versi %1$s</string>
+    <string name="app_history_version_with_code">%1$s (%2$d)</string>
+    <string name="app_history_value_change">%1$s → %2$s</string>
+    <string name="app_history_summary_join">%1$s · %2$s</string>
+    <string name="app_history_summary_permission_added_single">Izin ditambahkan: %1$s</string>
+    <string name="app_history_summary_source">Sumber instalasi berubah menjadi %1$s</string>
+    <string name="app_history_summary_debug_on">Debugging diaktifkan</string>
+    <string name="app_history_summary_debug_off">Debugging dinonaktifkan</string>
+    <string name="app_history_summary_backup_on">Pencadangan data aplikasi diaktifkan</string>
+    <string name="app_history_summary_backup_off">Pencadangan data aplikasi dinonaktifkan</string>
+    <string name="app_history_summary_cleartext_on">Lalu lintas tanpa enkripsi diizinkan</string>
+    <string name="app_history_summary_cleartext_off">Lalu lintas tanpa enkripsi diblokir</string>
+    <string name="app_history_summary_target_sdk">Target SDK %1$s → %2$s</string>
+    <string name="app_history_summary_min_sdk">Min SDK %1$s → %2$s</string>
+    <string name="app_history_summary_size_up">Ukuran +%1$s</string>
+    <string name="app_history_summary_size_down">Ukuran −%1$s</string>
+    <string name="app_history_when_updated">Diperbarui %1$s</string>
+    <string name="app_history_when_reinstalled">Dipasang lagi %1$s</string>
+    <string name="app_history_when_recorded">Tercatat %1$s</string>
+    <string name="app_history_when_with_recorded">%1$s · tercatat %2$s</string>
+    <string name="app_history_changes_heading">Perubahan antara versi ini</string>
+    <string name="app_history_device_note">Beberapa perbedaan bisa berasal dari perangkat, bukan aplikasi.</string>
+    <string name="app_history_empty_diff">Tidak ada perbedaan pada hal yang dibandingkan Apk Analyzer</string>
+    <string name="app_history_uncomparable_label">Tidak dapat dibandingkan</string>
+    <string name="app_history_uncomparable_explanation">Informasi ini tidak tercatat sepenuhnya pada salah satu versi, jadi kami tidak bisa memastikan apakah berubah.</string>
+    <string name="app_history_field_change">%1$s: %2$s → %3$s</string>
+    <string name="app_history_field_added">%1$s: ditambahkan</string>
+    <string name="app_history_field_removed">%1$s: dihapus</string>
+    <string name="app_history_field_changed">%1$s: berubah</string>
+    <string name="app_history_before">Sebelum</string>
+    <string name="app_history_after">Sesudah</string>
+    <string name="app_history_category_signing">Penandatanganan</string>
+    <string name="app_history_category_permissions">Izin</string>
+    <string name="app_history_category_install_source">Sumber instalasi</string>
+    <string name="app_history_category_settings">Setelan aplikasi</string>
+    <string name="app_history_category_android_versions">Versi Android</string>
+    <string name="app_history_category_components">Komponen</string>
+    <string name="app_history_category_native">Perpustakaan asli</string>
+    <string name="app_history_category_size">Ukuran</string>
+    <string name="app_history_category_signing_method">Metode penandatanganan</string>
+    <string name="app_history_group_added">Ditambahkan</string>
+    <string name="app_history_group_removed">Dihapus</string>
+    <string name="app_history_group_changed">Berubah</string>
+    <string name="app_history_certificate_updated_explanation">Android hanya menerima update dengan sertifikat berbeda jika kunci lama menyetujuinya, jadi ini biasanya pergantian kunci yang direncanakan developer.</string>
+    <string name="app_history_certificate_new_copy_explanation">Salinan ini ditandatangani dengan sertifikat yang berbeda dari yang tercatat sebelumnya. Pastikan berasal dari sumber yang Anda percaya.</string>
+    <string name="app_history_signer_explanation">Organisasi atau orang yang tercantum di sertifikat penandatangan ini. Siapa pun bisa menulis nama apa saja di sini, jadi sidik jari di bawah yang mengidentifikasi kunci.</string>
+    <string name="app_history_not_recorded">Tidak tercatat untuk versi ini</string>
+    <string name="app_history_not_recorded_explanation">Apk Analyzer tidak dapat mencatat ini untuk versi ini, jadi kami tidak bisa memastikan isinya.</string>
+    <plurals name="app_history_summary_more">
+        <item quantity="other">dan %1$d lainnya</item>
+    </plurals>
+    <plurals name="app_history_summary_permission_added_named">
+        <item quantity="other">%1$s dan %2$d izin lain ditambahkan</item>
+    </plurals>
+    <plurals name="app_history_summary_permissions_removed">
+        <item quantity="other">%1$d izin dihapus</item>
+    </plurals>
+    <plurals name="app_history_summary_defined_permissions">
+        <item quantity="other">%1$d izin yang ditentukan aplikasi ini berubah</item>
+    </plurals>
+    <plurals name="app_history_summary_components_added">
+        <item quantity="other">%1$d komponen ditambahkan</item>
+    </plurals>
+    <plurals name="app_history_summary_components_removed">
+        <item quantity="other">%1$d komponen dihapus</item>
+    </plurals>
+    <plurals name="app_history_summary_components_changed">
+        <item quantity="other">%1$d komponen berubah</item>
+    </plurals>
+    <plurals name="app_history_summary_native_added">
+        <item quantity="other">%1$d perpustakaan asli ditambahkan</item>
+    </plurals>
+    <plurals name="app_history_summary_native_removed">
+        <item quantity="other">%1$d perpustakaan asli dihapus</item>
+    </plurals>
+    <plurals name="app_history_summary_native_changed">
+        <item quantity="other">%1$d perpustakaan asli berubah</item>
+    </plurals>
+    <string name="app_history_size_change_up">%1$s → %2$s (+%3$s)</string>
+    <string name="app_history_size_change_down">%1$s → %2$s (−%3$s)</string>
+    <string name="app_history_field_value">%1$s: %2$s</string>
+</resources>

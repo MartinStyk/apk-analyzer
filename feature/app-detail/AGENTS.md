@@ -5,8 +5,8 @@
 Displays detailed analysis for an installed package or APK file: general information, permissions,
 components, certificates, device requirements, manifest, split APKs, and native libraries.
 
-The API module owns the cross-feature navigation input and distinguishes installed packages from APK
-files. The phone implementation uses the package
+The API module owns the cross-feature navigation input and distinguishes three modes: installed
+packages, APK files, and a historical state recorded by `core:app-history`. The phone implementation uses the package
 `sk.styk.martin.apkanalyzer.feature.appdetail.phone`; the TV one, which opens installed packages
 only, is described under [TV Module](#tv-module).
 
@@ -17,10 +17,42 @@ only, is described under [TV Module](#tv-module).
 * The "Worth knowing" insight policy and the badges live in `core:apps` `insight/`, shared with TV.
 * `generalinfo/`, `permissions/`, `appcomponents/`, `certificates/`, `requirements/`, `manifest/`,
   `splitapks/`, and `nativelibraries/` each own one detail destination.
+* `history/` owns the per-app timeline and change detail screens. They live here rather than in their
+  own feature because they reuse this module's internal rows and sheets.
 * `navigation/` owns the feature entry provider and internal destination keys.
 
 Each destination keeps its own State/Action/Event/ViewModel set. Runtime navigation inputs use
 assisted injection and seed ViewModel state exactly once.
+
+## Historical Mode
+
+`AppDetailInput.Historical` renders a past state on the same hub and section screens. It is phone only
+and debug only, through `ConfigurationKey.AppHistoryEnabled`, observed at the hub's History card alone.
+Do not add a variant to `AppReference`: icon, export, manifest, AI, and signing code all consume it, and
+a past state means nothing to them.
+
+* **One data seam.** Screens read through `AppDetailDataSource`, which reads the store for a historical
+  input and the live repositories otherwise. `toLiveReference()` returns null for a historical input, so
+  code that needs the real APK cannot reach it by accident. Never fall back to live data: today's facts
+  under an "as seen on" label are the worst failure this mode can produce.
+* **One label.** `appDetailEntries` wraps every entry in `AppDetailModeFrame`, which pins `AsSeenOnBar`
+  above the screen in every state. A new app-detail destination must be wrapped too.
+* **Judge as of the recorded date, or not at all.** Validity and "not yet valid" use `capturedAt`.
+  Outdated target SDK, recency badges, requirement availability, and native-library device support need
+  today's device or clock, so they are dropped. `DeviceFeatures.Unknown` and an empty ABI set mean "no
+  marks", and the sheets omit their availability and device-support fields.
+* **No side effects and no actions.** No recents entry, no review session, analytics tagged as historical.
+  The hub has no Actions section, AI card, or History card. Manifest and intent filters are not recorded,
+  so nothing links to them.
+* **Not recorded is not empty.** A native-library section that failed capture says so; it never becomes
+  `NativeLibraries.Empty`.
+* **A missing version is not a failed read.** `toRecordedVersionFailure()` maps both, and every section
+  renders them through `RecordedVersionError`: not found offers back only, a read failure offers Retry.
+  Live inputs keep each screen's own error.
+
+The timeline and change detail read `timeline()` again on retry, because `catch` completes the flow.
+`RetryableFlow` emits `Loading` only when a new attempt starts, never when `WhileSubscribed` restarts the
+same attempt, so returning from a detail screen keeps the list and its scroll.
 
 ## TV Module
 

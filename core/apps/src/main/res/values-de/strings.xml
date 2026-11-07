@@ -501,5 +501,11 @@
     <string name="components_launch_started">Startanforderung gesendet — die App entscheidet, was als Nächstes passiert.</string>
     <string name="components_launch_broadcast_sent">Broadcast gesendet — hier wird nicht berichtet, ob er verarbeitet wurde.</string>
     <string name="components_launch_failed">Das System hat sich geweigert, dies zu starten.</string>
+    <string name="certificates_validity_on_date_valid">An diesem Tag gültig</string>
+    <string name="certificates_validity_on_date_expired">An diesem Tag abgelaufen</string>
+    <string name="certificates_validity_on_date_not_yet">An diesem Tag noch nicht gültig</string>
+    <string name="certificates_validity_on_date_valid_explanation">Dieses Zertifikat lag an dem Tag, an dem Apk Analyzer es erfasst hat, innerhalb seiner Gültigkeitsdauer.</string>
+    <string name="certificates_validity_on_date_expired_explanation">Das Enddatum dieses Zertifikats war an dem Tag, an dem Apk Analyzer es erfasst hat, bereits überschritten.</string>
+    <string name="certificates_validity_on_date_not_yet_explanation">Das Startdatum dieses Zertifikats lag an dem Tag, an dem Apk Analyzer es erfasst hat, noch in der Zukunft.</string>
     <string name="app_info_unavailable">Dieses Gerät kann App-Info nicht öffnen</string>
 </resources>

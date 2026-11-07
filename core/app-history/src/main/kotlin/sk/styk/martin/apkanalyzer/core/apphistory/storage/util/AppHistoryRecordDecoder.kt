@@ -41,6 +41,9 @@ internal class AppHistoryRecordDecoder @Inject constructor(private val sdkVersio
         return rows.mapNotNull { row -> row.toStoredRecordOrNull(sections) }
     }
 
+    fun decodeOne(row: AppHistorySnapshotEntity, blobs: List<AppHistoryBlobEntity>): StoredAppHistoryRecord =
+        row.toStoredRecord(SectionCache(blobs.associate { it.hash to it.content }))
+
     private fun AppHistorySnapshotEntity.toStoredRecordOrNull(sections: SectionCache): StoredAppHistoryRecord? = try {
         toStoredRecord(sections)
     } catch (exception: IllegalStateException) {

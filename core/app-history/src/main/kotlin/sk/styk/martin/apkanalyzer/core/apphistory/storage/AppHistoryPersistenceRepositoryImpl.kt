@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryGateDao
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryGateState
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryReadDao
@@ -47,6 +48,12 @@ internal class AppHistoryPersistenceRepositoryImpl @Inject constructor(
         .mapLatest { rows -> runCatchingCancellable { decoder.decode(rows, appHistoryReadDao.blobs(packageName.value)) } }
         .catch { emit(Result.failure(it)) }
         .flowOn(dispatcherProvider.default())
+
+    override suspend fun read(packageName: PackageName, id: Long): Result<StoredAppHistoryRecord?> = withContext(dispatcherProvider.default()) {
+        runCatchingCancellable {
+            appHistoryReadDao.snapshot(packageName.value, id)?.let { row -> decoder.decodeOne(row, appHistoryReadDao.blobs(packageName.value)) }
+        }
+    }
 }
 
 private fun AppHistoryGateState.toCaptureKey() = AppHistoryCaptureKey(

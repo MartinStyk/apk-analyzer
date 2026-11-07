@@ -212,4 +212,38 @@
     <string name="nativelibraries_empty_query">네이티브 라이브러리 \"%1$s\"와 일치하는 것이 없습니다.</string>
     <string name="nativelibraries_clear_search">검색 지우기</string>
     <string name="general_info_copied">클립보드에 복사됨</string>
+    <string name="app_detail_history_section">기록</string>
+    <string name="app_history_toolbar_subtitle">기록</string>
+    <string name="app_history_hub_no_entries">곧 기록이 시작됩니다</string>
+    <string name="app_history_hub_first_only">아직 변경 없음 · %1$s부터 기록 중</string>
+    <string name="app_history_hub_certificate">%1$s 서명 인증서 변경됨</string>
+    <string name="app_history_hub_unavailable">지금은 기록을 사용할 수 없음</string>
+    <string name="app_history_context_first_only">%1$s부터 기록 중</string>
+    <string name="app_history_footer">Apk Analyzer는 이 앱의 기록을 시작한 이후의 변경 사항만 표시할 수 있습니다.</string>
+    <string name="app_history_first_only_hint">이 앱이 변경되면 여기에 새 항목이 표시됩니다.</string>
+    <string name="app_history_empty_title">아직 기록 없음</string>
+    <string name="app_history_empty_body">Apk Analyzer는 이 앱을 백그라운드에서 기록합니다. 기록은 여기서 시작됩니다.</string>
+    <string name="app_history_error">이 앱의 기록을 불러올 수 없음</string>
+    <string name="app_history_row_click_label">변경 사항 보기</string>
+    <string name="app_history_row_first_click_label">전체 정보 보기</string>
+    <string name="app_history_row_long_click_label">복사</string>
+    <string name="app_history_full_detail">이 버전의 전체 정보 보기</string>
+    <string name="app_history_show_all">%1$d개 모두 표시</string>
+    <string name="app_history_group_header">%1$s · %2$d</string>
+    <string name="app_history_group_header_scoped">%1$s · %2$s · %3$d</string>
+    <string name="app_history_what_changed">변경 사항</string>
+    <string name="app_history_as_seen_on">%1$s 기준</string>
+    <string name="app_history_as_seen_on_label">기준일</string>
+    <string name="app_history_as_seen_on_explanation">Apk Analyzer가 이 날짜에 기록한 내용입니다. 현재 앱과 다를 수 있습니다.</string>
+    <string name="app_history_as_seen_click_label">설명</string>
+    <string name="app_history_permissions_note">권한 상태는 기록에 저장되지 않습니다.</string>
+    <string name="app_history_intent_filters_note">이 정보는 기록에 저장되지 않습니다.</string>
+    <string name="app_history_version_not_found">이 버전은 더 이상 기록에 없습니다.</string>
+    <string name="app_history_version_load_failed">이 버전을 불러올 수 없음</string>
+    <plurals name="app_history_hub_changes">
+        <item quantity="other">변경 %1$d건 · 최근 %2$s</item>
+    </plurals>
+    <plurals name="app_history_context">
+        <item quantity="other">%1$s부터 기록 중 · 변경 %2$d건</item>
+    </plurals>
 </resources>

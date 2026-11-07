@@ -512,5 +512,11 @@
     <string name="components_launch_started">Solicitud de inicio enviada — la aplicación decide qué sucede a continuación.</string>
     <string name="components_launch_broadcast_sent">Difusión enviada — nada aquí informa si fue manejada.</string>
     <string name="components_launch_failed">El sistema se negó a iniciar esto.</string>
+    <string name="certificates_validity_on_date_valid">Válido en esta fecha</string>
+    <string name="certificates_validity_on_date_expired">Caducado en esta fecha</string>
+    <string name="certificates_validity_on_date_not_yet">Aún no válido en esta fecha</string>
+    <string name="certificates_validity_on_date_valid_explanation">Este certificado estaba dentro de sus fechas de validez el día que Apk Analyzer lo registró.</string>
+    <string name="certificates_validity_on_date_expired_explanation">La fecha de fin de este certificado ya había pasado el día que Apk Analyzer lo registró.</string>
+    <string name="certificates_validity_on_date_not_yet_explanation">La fecha de inicio de este certificado aún era futura el día que Apk Analyzer lo registró.</string>
     <string name="app_info_unavailable">Este dispositivo no puede abrir Información de la aplicación</string>
 </resources>

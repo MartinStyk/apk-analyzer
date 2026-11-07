@@ -3,9 +3,11 @@ package sk.styk.martin.apkanalyzer.core.apphistory.timeline
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryRecord
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.CapturedSection
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryDiff
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryInstallSource
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryVersion
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.SetChange
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.ValueChange
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.fieldChangesFrom
 import sk.styk.martin.apkanalyzer.core.apps.model.AppInfo
 import javax.inject.Inject
 
@@ -21,7 +23,7 @@ internal class AppHistoryDiffer @Inject constructor() {
             minSdkVersion = valueChange(beforeInfo.minSdkVersion, afterInfo.minSdkVersion),
             targetSdkVersion = valueChange(beforeInfo.targetSdkVersion, afterInfo.targetSdkVersion),
             apkSize = valueChange(beforeInfo.apkSize, afterInfo.apkSize),
-            installSource = valueChange(beforeInfo.installSourceChain, afterInfo.installSourceChain),
+            installSource = valueChange(beforeInfo.installSource, afterInfo.installSource),
             isDebuggable = valueChange(beforeInfo.isDebuggable, afterInfo.isDebuggable),
             allowsBackup = valueChange(beforeInfo.allowsBackup, afterInfo.allowsBackup),
             usesCleartextTraffic = valueChange(beforeInfo.usesCleartextTraffic, afterInfo.usesCleartextTraffic),
@@ -29,25 +31,28 @@ internal class AppHistoryDiffer @Inject constructor() {
                 before = beforeDetail.permissions.used,
                 after = afterDetail.permissions.used,
                 key = { it.permissionData.name },
-                comparable = { },
+                isModified = { _, _ -> false },
             ),
             definedPermissions = setChange(
                 before = beforeDetail.permissions.defined,
                 after = afterDetail.permissions.defined,
                 key = { it.name },
-                comparable = { it.details },
+                isModified = { old, new -> new.fieldChangesFrom(old).isNotEmpty() },
             ),
-            activities = setChange(beforeDetail.activities, afterDetail.activities, key = { it.name }),
-            services = setChange(beforeDetail.services, afterDetail.services, key = { it.name }),
-            receivers = setChange(beforeDetail.receivers, afterDetail.receivers, key = { it.name }),
-            providers = setChange(beforeDetail.contentProviders, afterDetail.contentProviders, key = { it.name }),
+            activities = setChange(beforeDetail.activities, afterDetail.activities, key = { it.name }) { old, new -> new.fieldChangesFrom(old).isNotEmpty() },
+            services = setChange(beforeDetail.services, afterDetail.services, key = { it.name }) { old, new -> new.fieldChangesFrom(old).isNotEmpty() },
+            receivers = setChange(beforeDetail.receivers, afterDetail.receivers, key = { it.name }) { old, new -> new.fieldChangesFrom(old).isNotEmpty() },
+            providers = setChange(beforeDetail.contentProviders, afterDetail.contentProviders, key = {
+                it.name
+            }) { old, new -> new.fieldChangesFrom(old).isNotEmpty() },
             certificates = setChange(
                 before = beforeDetail.signing.currentCertificates,
                 after = afterDetail.signing.currentCertificates,
                 key = { it.certificateHashSha256 },
-                comparable = { },
+                isModified = { _, _ -> false },
             ),
             signingSchemes = capturedSetChange(before.signingScheme, after.signingScheme, items = { it }, key = { it }),
+            signingSchemeVersions = capturedValueChange(before.signingScheme, after.signingScheme),
             nativeLibraries = capturedSetChange(
                 before = before.nativeLibraries,
                 after = after.nativeLibraries,
@@ -69,18 +74,24 @@ private inline fun <S, T, K> capturedSetChange(
     return setChange(beforeItems, afterItems, key)
 }
 
+private fun <T> capturedValueChange(before: CapturedSection<List<T>?>, after: CapturedSection<List<T>?>): ValueChange<List<T>>? {
+    val beforeValue = (before as? CapturedSection.Captured)?.value ?: return null
+    val afterValue = (after as? CapturedSection.Captured)?.value ?: return null
+    return valueChange(beforeValue, afterValue)
+}
+
 private fun <T, K> setChange(
     before: List<T>,
     after: List<T>,
     key: (T) -> K,
-    comparable: (T) -> Any? = { it },
+    isModified: (before: T, after: T) -> Boolean = { old, new -> old != new },
 ): SetChange<T> {
     val beforeByKey = before.associateBy(key)
     val afterByKey = after.associateBy(key)
     val added = after.filterNot { key(it) in beforeByKey }
     val removed = before.filterNot { key(it) in afterByKey }
     val modified = after.mapNotNull { item ->
-        beforeByKey[key(item)]?.takeIf { comparable(it) != comparable(item) }?.let { ValueChange(before = it, after = item) }
+        beforeByKey[key(item)]?.takeIf { isModified(it, item) }?.let { ValueChange(before = it, after = item) }
     }
     return if (added.isEmpty() && removed.isEmpty() && modified.isEmpty()) {
         SetChange.Unchanged
@@ -90,6 +101,9 @@ private fun <T, K> setChange(
 }
 
 private fun <T> valueChange(before: T, after: T): ValueChange<T>? = if (before == after) null else ValueChange(before, after)
+
+private val AppInfo.installSource: AppHistoryInstallSource
+    get() = AppHistoryInstallSource(source = source, installingPackage = installSourceChain.installingPackage)
 
 internal val AppInfo.version: AppHistoryVersion
     get() = AppHistoryVersion(versionCode = versionCode, versionName = versionName)

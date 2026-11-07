@@ -11,10 +11,18 @@ import java.time.Instant
 
 object AppDetailInsightEvaluator {
 
+    fun evaluateRecorded(appDetail: AppDetail, recordedAt: Instant): List<AppDetailInsight> = insights(appDetail, now = recordedAt, deviceSdk = null)
+
     fun evaluate(
         appDetail: AppDetail,
         now: Instant,
         deviceSdk: Int,
+    ): List<AppDetailInsight> = insights(appDetail, now, deviceSdk)
+
+    private fun insights(
+        appDetail: AppDetail,
+        now: Instant,
+        deviceSdk: Int?,
     ): List<AppDetailInsight> = with(appDetail) {
         buildList {
             if (info.isDebuggable) {
@@ -30,15 +38,7 @@ object AppDetailInsightEvaluator {
             if (analysisMode == AppDetail.AnalysisMode.InstalledPackage && info.source.isSideloaded) {
                 add(AppDetailInsight.Sideloaded)
             }
-            val targetSdk = info.targetSdkVersion
-            if (!info.isSystemApp && targetSdk != null && deviceSdk - targetSdk >= AppClassificationThresholds.OUTDATED_TARGET_SDK_RELEASE_GAP) {
-                add(
-                    AppDetailInsight.OutdatedTargetSdk(
-                        targetSdk = targetSdk,
-                        deviceSdk = deviceSdk,
-                    ),
-                )
-            }
+            outdatedTargetSdk(deviceSdk)?.let { add(it) }
             if (analysisMode == AppDetail.AnalysisMode.InstalledPackage) {
                 info.lastUsedTime?.let { lastUsed ->
                     if (lastUsed.isBefore(now.minus(AppClassificationThresholds.UNUSED_PERIOD))) {
@@ -57,6 +57,13 @@ object AppDetailInsightEvaluator {
             }
         }
     }
+}
+
+private fun AppDetail.outdatedTargetSdk(deviceSdk: Int?): AppDetailInsight.OutdatedTargetSdk? {
+    val targetSdk = info.targetSdkVersion
+    if (deviceSdk == null || targetSdk == null || info.isSystemApp) return null
+    return AppDetailInsight.OutdatedTargetSdk(targetSdk = targetSdk, deviceSdk = deviceSdk)
+        .takeIf { it.apiLevelGap >= AppClassificationThresholds.OUTDATED_TARGET_SDK_RELEASE_GAP }
 }
 
 private const val DAYS_PER_MONTH = 30

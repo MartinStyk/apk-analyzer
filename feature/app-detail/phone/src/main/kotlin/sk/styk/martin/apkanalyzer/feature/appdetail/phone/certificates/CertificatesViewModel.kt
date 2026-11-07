@@ -11,10 +11,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.signing.Certificate
-import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeRepository
 import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeVersion
 import sk.styk.martin.apkanalyzer.core.apps.signing.toFingerprint
 import sk.styk.martin.apkanalyzer.core.apps.signing.validityAt
@@ -22,14 +20,15 @@ import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.toAppReference
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.AppDetailDataSource
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.recordedAt
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.toRecordedVersionFailure
 import java.time.Instant
 
 @HiltViewModel(assistedFactory = CertificatesViewModel.Factory::class)
 internal class CertificatesViewModel @AssistedInject constructor(
     @Assisted private val appDetailInput: AppDetailInput,
-    private val appDetailRepository: AppDetailRepository,
-    private val signingSchemeRepository: SigningSchemeRepository,
+    private val dataSource: AppDetailDataSource,
     private val dispatcherProvider: DispatcherProvider,
     private val clipboardManager: ClipboardManager,
 ) : ViewModel() {
@@ -64,27 +63,28 @@ internal class CertificatesViewModel @AssistedInject constructor(
     private fun loadCertificates() {
         state.value = CertificatesState.Loading
         viewModelScope.launch(dispatcherProvider.default()) {
-            val reference = appDetailInput.toAppReference()
-            appDetailRepository.details(reference)
+            val recordedAt = appDetailInput.recordedAt
+            dataSource.detail(appDetailInput)
                 .onSuccess { detail ->
-                    state.value = detail.toCertificatesState(signingSchemeVersions = null)
-                    val signingSchemeVersions = signingSchemeRepository.signingSchemeVersions(reference).getOrNull()
-                    state.value = detail.toCertificatesState(signingSchemeVersions = signingSchemeVersions)
+                    state.value = detail.toCertificatesState(signingSchemeVersions = null, recordedAt = recordedAt)
+                    val signingSchemeVersions = dataSource.signingSchemes(appDetailInput).getOrNull()
+                    state.value = detail.toCertificatesState(signingSchemeVersions = signingSchemeVersions, recordedAt = recordedAt)
                 }
-                .onFailure {
-                    state.value = CertificatesState.Error
+                .onFailure { failure ->
+                    state.value = failure.toRecordedVersionFailure()?.let { CertificatesState.RecordedVersionError(it) } ?: CertificatesState.Error
                 }
         }
     }
 }
 
-private fun AppDetail.toCertificatesState(signingSchemeVersions: List<SigningSchemeVersion>?): CertificatesState.Loaded {
-    val now = Instant.now()
+private fun AppDetail.toCertificatesState(signingSchemeVersions: List<SigningSchemeVersion>?, recordedAt: Instant?): CertificatesState.Loaded {
+    val now = recordedAt ?: Instant.now()
     return CertificatesState.Loaded(
         currentCertificates = signing.currentCertificates.map { it.toCertificateItem(now) },
         pastCertificates = signing.pastCertificates.reversed().map { it.toCertificateItem(now) },
         hasMultipleSigners = signing.hasMultipleSigners,
         signingSchemeVersions = signingSchemeVersions,
+        isHistorical = recordedAt != null,
     )
 }
 

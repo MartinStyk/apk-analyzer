@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
@@ -17,8 +18,9 @@ internal fun ListSectionHeader(
     title: String,
     modifier: Modifier = Modifier,
     explanation: String? = null,
+    topPadding: Dp = 20.dp,
 ) {
-    Column(modifier = modifier.padding(top = 20.dp, bottom = 8.dp, start = 4.dp, end = 4.dp)) {
+    Column(modifier = modifier.padding(top = topPadding, bottom = 8.dp, start = 4.dp, end = 4.dp)) {
         Text(
             text = title,
             style = AppTheme.typography.labelMedium,

@@ -290,4 +290,44 @@
     <string name="nativelibraries_empty_query">Жодна рідна бібліотека не відповідає \"%1$s\".</string>
     <string name="nativelibraries_clear_search">Очистити пошук</string>
     <string name="general_info_copied">Скопійовано в буфер обміну</string>
+    <string name="app_detail_history_section">Історія</string>
+    <string name="app_history_toolbar_subtitle">Історія</string>
+    <string name="app_history_hub_no_entries">Фіксація скоро почнеться</string>
+    <string name="app_history_hub_first_only">Змін поки немає · фіксується з %1$s</string>
+    <string name="app_history_hub_certificate">Сертифікат підпису змінився %1$s</string>
+    <string name="app_history_hub_unavailable">Історія зараз недоступна</string>
+    <string name="app_history_context_first_only">Фіксується з %1$s</string>
+    <string name="app_history_footer">Apk Analyzer показує лише зміни, зроблені після початку фіксації цього застосунку.</string>
+    <string name="app_history_first_only_hint">Нові рядки з\'являться тут, коли застосунок зміниться.</string>
+    <string name="app_history_empty_title">Поки нічого не зафіксовано</string>
+    <string name="app_history_empty_body">Apk Analyzer фіксує цей застосунок у фоновому режимі. Його історія починається тут.</string>
+    <string name="app_history_error">Не вдалося завантажити історію застосунку</string>
+    <string name="app_history_row_click_label">Переглянути зміни</string>
+    <string name="app_history_row_first_click_label">Переглянути всі відомості</string>
+    <string name="app_history_row_long_click_label">Копіювати</string>
+    <string name="app_history_full_detail">Усі відомості про цю версію</string>
+    <string name="app_history_show_all">Показати всі (%1$d)</string>
+    <string name="app_history_group_header">%1$s · %2$d</string>
+    <string name="app_history_group_header_scoped">%1$s · %2$s · %3$d</string>
+    <string name="app_history_what_changed">Що змінилося</string>
+    <string name="app_history_as_seen_on">Станом на %1$s</string>
+    <string name="app_history_as_seen_on_label">Станом на</string>
+    <string name="app_history_as_seen_on_explanation">Ось що Apk Analyzer зафіксував цього дня. Зараз застосунок може відрізнятися.</string>
+    <string name="app_history_as_seen_click_label">Пояснити</string>
+    <string name="app_history_permissions_note">Статус дозволів не фіксується в історії.</string>
+    <string name="app_history_intent_filters_note">Ці дані не фіксуються в історії.</string>
+    <string name="app_history_version_not_found">Цієї версії більше немає в історії.</string>
+    <string name="app_history_version_load_failed">Не вдалося завантажити цю версію</string>
+    <plurals name="app_history_hub_changes">
+        <item quantity="one">%1$d зміна · остання %2$s</item>
+        <item quantity="few">%1$d зміни · остання %2$s</item>
+        <item quantity="many">%1$d змін · остання %2$s</item>
+        <item quantity="other">%1$d зміни · остання %2$s</item>
+    </plurals>
+    <plurals name="app_history_context">
+        <item quantity="one">Фіксується з %1$s · %2$d зміна</item>
+        <item quantity="few">Фіксується з %1$s · %2$d зміни</item>
+        <item quantity="many">Фіксується з %1$s · %2$d змін</item>
+        <item quantity="other">Фіксується з %1$s · %2$d зміни</item>
+    </plurals>
 </resources>

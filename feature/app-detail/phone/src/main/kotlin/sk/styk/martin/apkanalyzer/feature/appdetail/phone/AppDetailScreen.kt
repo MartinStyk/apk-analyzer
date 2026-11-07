@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -48,6 +49,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryOverview
 import sk.styk.martin.apkanalyzer.core.apps.insight.AppDetailInsight
 import sk.styk.martin.apkanalyzer.core.apps.insight.SensitiveAccess
 import sk.styk.martin.apkanalyzer.core.apps.insight.label
@@ -74,10 +76,12 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.rememberColla
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailToolbar
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppSummaryBottomSheet
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SplitApkExportBottomSheet
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.aisummary.AiSummaryCard
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.historyDate
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.Date
@@ -105,6 +109,7 @@ internal fun AppDetailScreen(
     onNavigateToCertificates: () -> Unit,
     onNavigateToFeatures: () -> Unit,
     onNavigateToInventoryExport: (PackageName) -> Unit,
+    onNavigateToHistory: (PackageName, appName: String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AppDetailViewModel = hiltViewModel { factory: AppDetailViewModel.Factory ->
         factory.create(appDetailInput)
@@ -112,7 +117,7 @@ internal fun AppDetailScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val appReference = appDetailInput.toAppReference()
+    val appReference = appDetailInput.toIconReference()
     var splitApkExportName by rememberSaveable { mutableStateOf<String?>(null) }
     var summaryPreview by rememberSaveable { mutableStateOf<String?>(null) }
     val apkDocumentLauncher = rememberLauncherForActivityResult(
@@ -195,6 +200,8 @@ internal fun AppDetailScreen(
                 is AppDetailEvent.NavigateToFeatures -> onNavigateToFeatures()
 
                 is AppDetailEvent.NavigateToInventoryExport -> onNavigateToInventoryExport(event.packageName)
+
+                is AppDetailEvent.NavigateToHistory -> onNavigateToHistory(event.packageName, event.appName)
             }
         }
     }
@@ -202,6 +209,7 @@ internal fun AppDetailScreen(
     AppDetailContent(
         state = state,
         appReference = appReference,
+        showToolbarWhileLoading = appDetailInput is AppDetailInput.Historical,
         onAction = viewModel::onAction,
         onBack = onBack,
         modifier = modifier,
@@ -240,6 +248,7 @@ private fun AppDetailContent(
     onAction: (AppDetailAction) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
+    showToolbarWhileLoading: Boolean = false,
 ) {
     Column(
         modifier = modifier
@@ -247,14 +256,22 @@ private fun AppDetailContent(
             .background(AppTheme.colors.background),
     ) {
         when (state) {
-            is AppDetailState.Loading -> LoadingContent()
+            is AppDetailState.Loading -> {
+                if (showToolbarWhileLoading) {
+                    Toolbar(
+                        title = stringResource(R.string.app_detail_title),
+                        onBack = onBack,
+                    )
+                }
+                LoadingContent()
+            }
 
             is AppDetailState.Error -> {
                 Toolbar(
                     title = stringResource(R.string.app_detail_title),
                     onBack = onBack,
                 )
-                ErrorContent(canRetry = state.canRetry, onAction = onAction)
+                ErrorContent(reason = state.reason, onAction = onAction)
             }
 
             is AppDetailState.Loaded -> {
@@ -294,20 +311,28 @@ private fun LoadedContent(
                 .verticalScroll(rememberScrollState()),
         ) {
             Spacer(modifier = Modifier.height(8.dp))
-            AiSummaryCard(
-                reference = appReference,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .padding(bottom = 12.dp),
-            )
+            if (!state.isHistorical) {
+                AiSummaryCard(
+                    reference = appReference,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .padding(bottom = 12.dp),
+                )
+            }
             OverviewSection(state = state, onAction = onAction)
             if (state.insights.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(12.dp))
                 WorthKnowingSection(state = state, onAction = onAction)
             }
-            Spacer(modifier = Modifier.height(12.dp))
-            ActionsSection(state = state, onAction = onAction)
+            if (state.history != AppDetailHistoryStatus.Hidden) {
+                Spacer(modifier = Modifier.height(12.dp))
+                HistorySection(status = state.history, onClick = { onAction(AppDetailAction.NavigateHistory) })
+            }
+            if (!state.isHistorical) {
+                Spacer(modifier = Modifier.height(12.dp))
+                ActionsSection(state = state, onAction = onAction)
+            }
             Spacer(modifier = Modifier.height(12.dp))
             CertificateSignatureSection(state = state, onAction = onAction)
             Spacer(modifier = Modifier.height(12.dp))
@@ -319,6 +344,72 @@ private fun LoadedContent(
             Spacer(modifier = Modifier.height(24.dp))
         }
     }
+}
+
+@Composable
+private fun HistorySection(
+    status: AppDetailHistoryStatus,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val overview = (status as? AppDetailHistoryStatus.Available)?.overview
+    val isCertificateChange = overview is AppHistoryOverview.CertificateChanged
+    val line = when (status) {
+        AppDetailHistoryStatus.Hidden, AppDetailHistoryStatus.Reading -> null
+        AppDetailHistoryStatus.Unavailable -> stringResource(R.string.app_history_hub_unavailable)
+        is AppDetailHistoryStatus.Available -> status.overview.hubLine()
+    }
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .clip(Shapes.CardShape)
+            .background(AppTheme.colors.surface)
+            .clickable(onClick = onClick)
+            .padding(16.dp),
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            SectionHeader(title = stringResource(R.string.app_detail_history_section))
+            Icon(
+                imageVector = ApkAnalyzerIcons.ChevronRight,
+                tint = AppTheme.colors.onSurfaceVariant,
+                modifier = Modifier.size(20.dp),
+            )
+        }
+        Spacer(modifier = Modifier.height(4.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.heightIn(min = 16.dp),
+        ) {
+            if (line != null) {
+                Icon(
+                    imageVector = if (isCertificateChange) ApkAnalyzerIcons.Warning else ApkAnalyzerIcons.History,
+                    tint = if (isCertificateChange) AppTheme.colors.warning else AppTheme.colors.onSurfaceVariant,
+                    modifier = Modifier.size(16.dp),
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = line,
+                    style = AppTheme.typography.bodySmall,
+                    color = if (isCertificateChange) AppTheme.colors.onSurface else AppTheme.colors.onSurfaceVariant,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun AppHistoryOverview.hubLine(): String = when (this) {
+    AppHistoryOverview.NoEntries -> stringResource(R.string.app_history_hub_no_entries)
+    is AppHistoryOverview.FirstRecordedOnly -> stringResource(R.string.app_history_hub_first_only, recordingSince.historyDate())
+    is AppHistoryOverview.Changes -> pluralStringResource(R.plurals.app_history_hub_changes, count, count, latestAt.historyDate())
+    is AppHistoryOverview.CertificateChanged -> stringResource(R.string.app_history_hub_certificate, changedAt.historyDate())
 }
 
 @Composable
@@ -971,30 +1062,32 @@ private fun RequirementsSection(
             )
             return@Column
         }
-        Spacer(modifier = Modifier.height(6.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = 16.dp),
-        ) {
-            Icon(
-                imageVector = if (state.unmetRequirementsCount > 0) ApkAnalyzerIcons.Warning else ApkAnalyzerIcons.Check,
-                tint = if (state.unmetRequirementsCount > 0) AppTheme.colors.warning else AppTheme.colors.primary,
-                modifier = Modifier.size(16.dp),
-            )
-            Spacer(modifier = Modifier.width(6.dp))
-            Text(
-                text = if (state.unmetRequirementsCount > 0) {
-                    pluralStringResource(
-                        R.plurals.app_detail_features_unmet,
-                        state.unmetRequirementsCount,
-                        state.unmetRequirementsCount,
-                    )
-                } else {
-                    stringResource(R.string.app_detail_features_all_met)
-                },
-                style = AppTheme.typography.bodySmall,
-                color = AppTheme.colors.onSurfaceVariant,
-            )
+        if (!state.isHistorical) {
+            Spacer(modifier = Modifier.height(6.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            ) {
+                Icon(
+                    imageVector = if (state.unmetRequirementsCount > 0) ApkAnalyzerIcons.Warning else ApkAnalyzerIcons.Check,
+                    tint = if (state.unmetRequirementsCount > 0) AppTheme.colors.warning else AppTheme.colors.primary,
+                    modifier = Modifier.size(16.dp),
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = if (state.unmetRequirementsCount > 0) {
+                        pluralStringResource(
+                            R.plurals.app_detail_features_unmet,
+                            state.unmetRequirementsCount,
+                            state.unmetRequirementsCount,
+                        )
+                    } else {
+                        stringResource(R.string.app_detail_features_all_met)
+                    },
+                    style = AppTheme.typography.bodySmall,
+                    color = AppTheme.colors.onSurfaceVariant,
+                )
+            }
         }
         if (state.requirementPreviews.isNotEmpty()) {
             Spacer(modifier = Modifier.height(10.dp))
@@ -1043,7 +1136,7 @@ private fun LoadingContent(modifier: Modifier = Modifier) {
 
 @Composable
 private fun ErrorContent(
-    canRetry: Boolean,
+    reason: AppDetailErrorReason,
     onAction: (AppDetailAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -1053,11 +1146,20 @@ private fun ErrorContent(
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = stringResource(if (canRetry) R.string.app_detail_error else R.string.app_detail_error_unsupported_apk),
+            text = stringResource(
+                when (reason) {
+                    AppDetailErrorReason.LoadFailed -> R.string.app_detail_error
+                    AppDetailErrorReason.UnsupportedApk -> R.string.app_detail_error_unsupported_apk
+                    AppDetailErrorReason.RecordedVersionFailed -> R.string.app_history_version_load_failed
+                    AppDetailErrorReason.RecordedVersionNotFound -> R.string.app_history_version_not_found
+                },
+            ),
             style = AppTheme.typography.bodyLarge,
             color = AppTheme.colors.onBackground,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(horizontal = 32.dp),
         )
-        if (canRetry) {
+        if (reason.canRetry) {
             Spacer(modifier = Modifier.height(16.dp))
             TextButton(
                 text = stringResource(R.string.app_detail_retry),
@@ -1100,7 +1202,7 @@ private fun AppDetailLoadingPreview() {
 private fun AppDetailErrorPreview() {
     ApkAnalyzerTheme {
         AppDetailContent(
-            state = AppDetailState.Error(canRetry = true),
+            state = AppDetailState.Error(AppDetailErrorReason.LoadFailed),
             appReference = AppReference.InstalledPackage(PackageName("com.spotify.music")),
             onAction = {},
             onBack = {},
@@ -1113,7 +1215,7 @@ private fun AppDetailErrorPreview() {
 private fun AppDetailErrorUnsupportedApkPreview() {
     ApkAnalyzerTheme {
         AppDetailContent(
-            state = AppDetailState.Error(canRetry = false),
+            state = AppDetailState.Error(AppDetailErrorReason.UnsupportedApk),
             appReference = AppReference.ApkFile(path = "/data/local/tmp/sample.apk"),
             onAction = {},
             onBack = {},
@@ -1123,104 +1225,235 @@ private fun AppDetailErrorUnsupportedApkPreview() {
 
 @Preview
 @Composable
+private fun AppDetailHistoricalLoadingPreview() {
+    ApkAnalyzerTheme {
+        AppDetailModeFrame(input = sampleHistoricalInput) {
+            AppDetailContent(
+                state = AppDetailState.Loading,
+                appReference = sampleHistoricalInput.toIconReference(),
+                showToolbarWhileLoading = true,
+                onAction = {},
+                onBack = {},
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun AppDetailRecordedVersionFailedPreview() {
+    ApkAnalyzerTheme {
+        AppDetailModeFrame(input = sampleHistoricalInput) {
+            AppDetailContent(
+                state = AppDetailState.Error(AppDetailErrorReason.RecordedVersionFailed),
+                appReference = sampleHistoricalInput.toIconReference(),
+                onAction = {},
+                onBack = {},
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun AppDetailRecordedVersionNotFoundPreview() {
+    ApkAnalyzerTheme {
+        AppDetailModeFrame(input = sampleHistoricalInput) {
+            AppDetailContent(
+                state = AppDetailState.Error(AppDetailErrorReason.RecordedVersionNotFound),
+                appReference = sampleHistoricalInput.toIconReference(),
+                onAction = {},
+                onBack = {},
+            )
+        }
+    }
+}
+
+@Preview(heightDp = 1400)
+@Composable
+private fun AppDetailHistoricalLoadedPreview() {
+    ApkAnalyzerTheme {
+        AppDetailModeFrame(input = sampleHistoricalInput) {
+            AppDetailContent(
+                state = sampleLoadedState().copy(
+                    analysisMode = AppDetail.AnalysisMode.Historical,
+                    grantedDangerousPermissionsCount = null,
+                    totalSize = null,
+                    unmetRequirementsCount = 0,
+                    insights = listOf(AppDetailInsight.Debuggable),
+                ),
+                appReference = sampleHistoricalInput.toIconReference(),
+                onAction = {},
+                onBack = {},
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun HistorySectionReadingPreview() {
+    ApkAnalyzerTheme {
+        HistorySection(status = AppDetailHistoryStatus.Reading, onClick = {})
+    }
+}
+
+@Preview
+@Composable
+private fun HistorySectionNoEntriesPreview() {
+    ApkAnalyzerTheme {
+        HistorySection(status = AppDetailHistoryStatus.Available(AppHistoryOverview.NoEntries), onClick = {})
+    }
+}
+
+@Preview
+@Composable
+private fun HistorySectionFirstOnlyPreview() {
+    ApkAnalyzerTheme {
+        HistorySection(
+            status = AppDetailHistoryStatus.Available(AppHistoryOverview.FirstRecordedOnly(Instant.ofEpochMilli(1_760_227_200_000))),
+            onClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun HistorySectionChangesPreview() {
+    ApkAnalyzerTheme {
+        HistorySection(
+            status = AppDetailHistoryStatus.Available(AppHistoryOverview.Changes(count = 3, latestAt = Instant.ofEpochMilli(1_772_409_600_000))),
+            onClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun HistorySectionCertificatePreview() {
+    ApkAnalyzerTheme {
+        HistorySection(
+            status = AppDetailHistoryStatus.Available(AppHistoryOverview.CertificateChanged(Instant.ofEpochMilli(1_771_027_200_000))),
+            onClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun HistorySectionUnavailablePreview() {
+    ApkAnalyzerTheme {
+        HistorySection(status = AppDetailHistoryStatus.Unavailable, onClick = {})
+    }
+}
+
+@Preview
+@Composable
 private fun AppDetailLoadedPreview() {
-    val state = AppDetailState.Loaded(
-        analysisMode = AppDetail.AnalysisMode.InstalledPackage,
-        appName = "Spotify",
-        packageName = PackageName("com.spotify.music"),
-        processName = "com.spotify.music",
-        versionName = "9.4.12",
-        versionCode = 90412,
-        uid = 10234,
-        description = null,
-        isSystemApp = false,
-        source = AppSource.GooglePlay,
-        apkDirectory = "/example/app/com.spotify.music/base.apk",
-        dataDirectory = "/example/user/0/com.spotify.music",
-        apkSize = 152.megabytes,
-        totalSize = 510.megabytes,
-        targetSdkVersion = 35,
-        targetSdkLabel = "Android 15",
-        minSdkVersion = 24,
-        minSdkLabel = "Android 7.0",
-        installLocation = "InternalOnly",
-        appInstaller = PackageName("com.android.vending"),
-        firstInstallTime = Instant.ofEpochMilli(1_736_640_000_000),
-        lastUpdateTime = Instant.ofEpochMilli(1_748_736_000_000),
-        totalPermissionsCount = 32,
-        dangerousPermissionsCount = 6,
-        grantedDangerousPermissionsCount = 4,
-        dangerousPermissionPreviews = listOf(
-            AppDetailState.Loaded.PermissionPreview(
-                name = "android.permission.CAMERA",
-                groupName = "android.permission-group.CAMERA",
-                label = "Camera",
-            ),
-            AppDetailState.Loaded.PermissionPreview(
-                name = "android.permission.RECORD_AUDIO",
-                groupName = "android.permission-group.MICROPHONE",
-                label = "Microphone",
-            ),
-            AppDetailState.Loaded.PermissionPreview(
-                name = "android.permission.ACCESS_FINE_LOCATION",
-                groupName = "android.permission-group.LOCATION",
-                label = "Location",
-            ),
-            AppDetailState.Loaded.PermissionPreview(
-                name = "android.permission.READ_CONTACTS",
-                groupName = "android.permission-group.CONTACTS",
-                label = "Contacts",
-            ),
-            AppDetailState.Loaded.PermissionPreview(
-                name = "android.permission.READ_MEDIA_AUDIO",
-                groupName = "android.permission-group.READ_MEDIA_AURAL",
-                label = "Music and audio",
-            ),
-            AppDetailState.Loaded.PermissionPreview(
-                name = "android.permission.POST_NOTIFICATIONS",
-                groupName = "android.permission-group.NOTIFICATIONS",
-                label = "Notifications",
-            ),
-        ),
-        definedPermissionsCount = 1,
-        activitiesCount = 428,
-        servicesCount = 57,
-        contentProvidersCount = 4,
-        broadcastReceiversCount = 89,
-        certificatesCount = 2,
-        requirementsCount = 12,
-        requiredFeaturesCount = 9,
-        optionalFeaturesCount = 3,
-        unmetRequirementsCount = 1,
-        requirementPreviews = listOf(
-            AppDetailState.Loaded.RequirementPreview(name = "android.hardware.nfc", isUnmetRequirement = true),
-            AppDetailState.Loaded.RequirementPreview(name = "android.hardware.camera", isUnmetRequirement = false),
-            AppDetailState.Loaded.RequirementPreview(name = "android.hardware.wifi", isUnmetRequirement = false),
-            AppDetailState.Loaded.RequirementPreview(name = "android.hardware.bluetooth_le", isUnmetRequirement = false),
-            AppDetailState.Loaded.RequirementPreview(name = null, isUnmetRequirement = false),
-        ),
-        certificate = AppDetailState.Loaded.CertificateState(
-            signAlgorithm = "SHA256withRSA",
-            sha256Fingerprint = "A1:B2:C3:D4:E5:F6:A7:B8:C9:D0:E1:F2:A3:B4:C5:D6:E7:F8:A9:B0:C1:D2:E3:F4:A5:B6:C7:D8:E9:F0:A1:B2",
-            issuer = CertificatePrincipal(name = "Android", organization = "Google Inc."),
-            trustLevel = CertificateTrustLevel.Valid,
-        ),
-        insights = listOf(
-            AppDetailInsight.Debuggable,
-            AppDetailInsight.Sideloaded,
-            AppDetailInsight.Unused(monthsSinceLastUsed = 8),
-            AppDetailInsight.SensitivePermission(
-                access = SensitiveAccess.BackgroundLocation,
-                permissionName = "android.permission.ACCESS_BACKGROUND_LOCATION",
-            ),
-        ),
-    )
     ApkAnalyzerTheme {
         AppDetailContent(
-            state = state,
+            state = sampleLoadedState(),
             appReference = AppReference.InstalledPackage(PackageName("com.spotify.music")),
             onAction = {},
             onBack = {},
         )
     }
 }
+
+private val sampleHistoricalInput = AppDetailInput.Historical(
+    packageName = "com.spotify.music",
+    snapshotId = 12,
+    capturedAtEpochMillis = 1_773_014_400_000,
+)
+
+private fun sampleLoadedState() = AppDetailState.Loaded(
+    analysisMode = AppDetail.AnalysisMode.InstalledPackage,
+    appName = "Spotify",
+    packageName = PackageName("com.spotify.music"),
+    processName = "com.spotify.music",
+    versionName = "9.4.12",
+    versionCode = 90412,
+    uid = 10234,
+    description = null,
+    isSystemApp = false,
+    source = AppSource.GooglePlay,
+    apkDirectory = "/example/app/com.spotify.music/base.apk",
+    dataDirectory = "/example/user/0/com.spotify.music",
+    apkSize = 152.megabytes,
+    totalSize = 510.megabytes,
+    targetSdkVersion = 35,
+    targetSdkLabel = "Android 15",
+    minSdkVersion = 24,
+    minSdkLabel = "Android 7.0",
+    installLocation = "InternalOnly",
+    appInstaller = PackageName("com.android.vending"),
+    firstInstallTime = Instant.ofEpochMilli(1_736_640_000_000),
+    lastUpdateTime = Instant.ofEpochMilli(1_748_736_000_000),
+    totalPermissionsCount = 32,
+    dangerousPermissionsCount = 6,
+    grantedDangerousPermissionsCount = 4,
+    dangerousPermissionPreviews = listOf(
+        AppDetailState.Loaded.PermissionPreview(
+            name = "android.permission.CAMERA",
+            groupName = "android.permission-group.CAMERA",
+            label = "Camera",
+        ),
+        AppDetailState.Loaded.PermissionPreview(
+            name = "android.permission.RECORD_AUDIO",
+            groupName = "android.permission-group.MICROPHONE",
+            label = "Microphone",
+        ),
+        AppDetailState.Loaded.PermissionPreview(
+            name = "android.permission.ACCESS_FINE_LOCATION",
+            groupName = "android.permission-group.LOCATION",
+            label = "Location",
+        ),
+        AppDetailState.Loaded.PermissionPreview(
+            name = "android.permission.READ_CONTACTS",
+            groupName = "android.permission-group.CONTACTS",
+            label = "Contacts",
+        ),
+        AppDetailState.Loaded.PermissionPreview(
+            name = "android.permission.READ_MEDIA_AUDIO",
+            groupName = "android.permission-group.READ_MEDIA_AURAL",
+            label = "Music and audio",
+        ),
+        AppDetailState.Loaded.PermissionPreview(
+            name = "android.permission.POST_NOTIFICATIONS",
+            groupName = "android.permission-group.NOTIFICATIONS",
+            label = "Notifications",
+        ),
+    ),
+    definedPermissionsCount = 1,
+    activitiesCount = 428,
+    servicesCount = 57,
+    contentProvidersCount = 4,
+    broadcastReceiversCount = 89,
+    certificatesCount = 2,
+    requirementsCount = 12,
+    requiredFeaturesCount = 9,
+    optionalFeaturesCount = 3,
+    unmetRequirementsCount = 1,
+    requirementPreviews = listOf(
+        AppDetailState.Loaded.RequirementPreview(name = "android.hardware.nfc", isUnmetRequirement = true),
+        AppDetailState.Loaded.RequirementPreview(name = "android.hardware.camera", isUnmetRequirement = false),
+        AppDetailState.Loaded.RequirementPreview(name = "android.hardware.wifi", isUnmetRequirement = false),
+        AppDetailState.Loaded.RequirementPreview(name = "android.hardware.bluetooth_le", isUnmetRequirement = false),
+        AppDetailState.Loaded.RequirementPreview(name = null, isUnmetRequirement = false),
+    ),
+    certificate = AppDetailState.Loaded.CertificateState(
+        signAlgorithm = "SHA256withRSA",
+        sha256Fingerprint = "A1:B2:C3:D4:E5:F6:A7:B8:C9:D0:E1:F2:A3:B4:C5:D6:E7:F8:A9:B0:C1:D2:E3:F4:A5:B6:C7:D8:E9:F0:A1:B2",
+        issuer = CertificatePrincipal(name = "Android", organization = "Google Inc."),
+        trustLevel = CertificateTrustLevel.Valid,
+    ),
+    insights = listOf(
+        AppDetailInsight.Debuggable,
+        AppDetailInsight.Sideloaded,
+        AppDetailInsight.Unused(monthsSinceLastUsed = 8),
+        AppDetailInsight.SensitivePermission(
+            access = SensitiveAccess.BackgroundLocation,
+            permissionName = "android.permission.ACCESS_BACKGROUND_LOCATION",
+        ),
+    ),
+)

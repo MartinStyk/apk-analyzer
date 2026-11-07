@@ -492,5 +492,11 @@
     <string name="components_launch_started">開始リクエストが送信されました — アプリが次に何をするかを決定します。</string>
     <string name="components_launch_broadcast_sent">ブロードキャストが送信されました — ここには処理されたかどうかを報告するものはありません。</string>
     <string name="components_launch_failed">システムがこれを開始することを拒否しました。</string>
+    <string name="certificates_validity_on_date_valid">この日は有効</string>
+    <string name="certificates_validity_on_date_expired">この日は期限切れ</string>
+    <string name="certificates_validity_on_date_not_yet">この日はまだ有効ではない</string>
+    <string name="certificates_validity_on_date_valid_explanation">Apk Analyzer が記録した日、この証明書は有効期間内でした。</string>
+    <string name="certificates_validity_on_date_expired_explanation">Apk Analyzer が記録した日には、この証明書の終了日はすでに過ぎていました。</string>
+    <string name="certificates_validity_on_date_not_yet_explanation">Apk Analyzer が記録した日には、この証明書の開始日はまだ先でした。</string>
     <string name="app_info_unavailable">このデバイスではアプリ情報を開けません</string>
 </resources>

@@ -290,4 +290,44 @@
     <string name="nativelibraries_empty_query">Žiadna natívna knižnica nezodpovedá \"%1$s\".</string>
     <string name="nativelibraries_clear_search">Vymazať vyhľadávanie</string>
     <string name="general_info_copied">Skopírované do schránky</string>
+    <string name="app_detail_history_section">História</string>
+    <string name="app_history_toolbar_subtitle">História</string>
+    <string name="app_history_hub_no_entries">Zaznamenávanie sa čoskoro začne</string>
+    <string name="app_history_hub_first_only">Zatiaľ bez zmien · zaznamenáva sa od %1$s</string>
+    <string name="app_history_hub_certificate">Podpisový certifikát sa zmenil %1$s</string>
+    <string name="app_history_hub_unavailable">História momentálne nie je dostupná</string>
+    <string name="app_history_context_first_only">Zaznamenáva sa od %1$s</string>
+    <string name="app_history_footer">Apk Analyzer zobrazí len zmeny, ktoré nastali po začiatku zaznamenávania tejto aplikácie.</string>
+    <string name="app_history_first_only_hint">Keď sa táto aplikácia zmení, pribudnú tu nové riadky.</string>
+    <string name="app_history_empty_title">Zatiaľ nič nezaznamenané</string>
+    <string name="app_history_empty_body">Apk Analyzer zaznamenáva túto aplikáciu na pozadí. Jej história sa začína tu.</string>
+    <string name="app_history_error">Históriu tejto aplikácie sa nepodarilo načítať</string>
+    <string name="app_history_row_click_label">Zobraziť, čo sa zmenilo</string>
+    <string name="app_history_row_first_click_label">Zobraziť všetky podrobnosti</string>
+    <string name="app_history_row_long_click_label">Kopírovať</string>
+    <string name="app_history_full_detail">Zobraziť všetky podrobnosti tejto verzie</string>
+    <string name="app_history_show_all">Zobraziť všetky (%1$d)</string>
+    <string name="app_history_group_header">%1$s · %2$d</string>
+    <string name="app_history_group_header_scoped">%1$s · %2$s · %3$d</string>
+    <string name="app_history_what_changed">Čo sa zmenilo</string>
+    <string name="app_history_as_seen_on">Stav k %1$s</string>
+    <string name="app_history_as_seen_on_label">Stav k</string>
+    <string name="app_history_as_seen_on_explanation">Toto Apk Analyzer zaznamenal v tento deň. Aplikácii to už nemusí zodpovedať.</string>
+    <string name="app_history_as_seen_click_label">Vysvetliť</string>
+    <string name="app_history_permissions_note">Stav povolení sa v histórii nezaznamenáva.</string>
+    <string name="app_history_intent_filters_note">Tieto údaje sa v histórii nezaznamenávajú.</string>
+    <string name="app_history_version_not_found">Táto verzia už nie je vo vašej histórii.</string>
+    <string name="app_history_version_load_failed">Túto verziu sa nepodarilo načítať</string>
+    <plurals name="app_history_hub_changes">
+        <item quantity="one">%1$d zmena · posledná %2$s</item>
+        <item quantity="few">%1$d zmeny · posledná %2$s</item>
+        <item quantity="many">%1$d zmien · posledná %2$s</item>
+        <item quantity="other">%1$d zmien · posledná %2$s</item>
+    </plurals>
+    <plurals name="app_history_context">
+        <item quantity="one">Zaznamenáva sa od %1$s · %2$d zmena</item>
+        <item quantity="few">Zaznamenáva sa od %1$s · %2$d zmeny</item>
+        <item quantity="many">Zaznamenáva sa od %1$s · %2$d zmien</item>
+        <item quantity="other">Zaznamenáva sa od %1$s · %2$d zmien</item>
+    </plurals>
 </resources>

@@ -148,6 +148,7 @@ internal fun AppDetailToolbar(
             AppIcon(
                 source = appReference,
                 size = ICON_SIZE_EXPANDED,
+                missingIcon = ApkAnalyzerIcons.Android.takeIf { state.isHistorical },
             )
         }
 

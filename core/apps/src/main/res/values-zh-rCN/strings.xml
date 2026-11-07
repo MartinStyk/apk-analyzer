@@ -490,5 +490,11 @@
     <string name="components_launch_started">启动请求已发送——应用决定接下来发生什么。</string>
     <string name="components_launch_broadcast_sent">广播已发送——这里没有报告它是否被处理。</string>
     <string name="components_launch_failed">系统拒绝启动此项。</string>
+    <string name="certificates_validity_on_date_valid">此日期有效</string>
+    <string name="certificates_validity_on_date_expired">此日期已过期</string>
+    <string name="certificates_validity_on_date_not_yet">此日期尚未生效</string>
+    <string name="certificates_validity_on_date_valid_explanation">Apk Analyzer 记录当天，此证书处于有效期内。</string>
+    <string name="certificates_validity_on_date_expired_explanation">Apk Analyzer 记录当天，此证书的结束日期已过。</string>
+    <string name="certificates_validity_on_date_not_yet_explanation">Apk Analyzer 记录当天，此证书的开始日期尚未到来。</string>
     <string name="app_info_unavailable">此设备无法打开应用信息</string>
 </resources>

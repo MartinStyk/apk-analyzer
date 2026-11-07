@@ -58,6 +58,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RecordedVersionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
 import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
@@ -107,6 +108,11 @@ private fun SplitApksContent(
         )
         when (state) {
             SplitApksState.Loading -> SectionLoading()
+
+            is SplitApksState.RecordedVersionError -> RecordedVersionError(
+                failure = state.failure,
+                onRetry = { onAction(SplitApksAction.Retry) },
+            )
 
             SplitApksState.Error -> SectionError(
                 message = stringResource(AppsR.string.splitapks_error),

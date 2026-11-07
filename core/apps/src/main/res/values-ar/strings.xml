@@ -545,5 +545,11 @@
     <string name="components_launch_started">تم إرسال طلب البدء - يقرر التطبيق ما يحدث بعد ذلك.</string>
     <string name="components_launch_broadcast_sent">تم إرسال البث - لا شيء هنا يُبلغ عما إذا تم التعامل معه.</string>
     <string name="components_launch_failed">رفض النظام بدء هذا.</string>
+    <string name="certificates_validity_on_date_valid">صالحة في هذا التاريخ</string>
+    <string name="certificates_validity_on_date_expired">منتهية في هذا التاريخ</string>
+    <string name="certificates_validity_on_date_not_yet">لم تكن صالحة بعد في هذا التاريخ</string>
+    <string name="certificates_validity_on_date_valid_explanation">كانت هذه الشهادة ضمن تواريخ صلاحيتها في اليوم الذي رصدها فيه Apk Analyzer.</string>
+    <string name="certificates_validity_on_date_expired_explanation">كان تاريخ انتهاء هذه الشهادة قد مرّ في اليوم الذي رصدها فيه Apk Analyzer.</string>
+    <string name="certificates_validity_on_date_not_yet_explanation">كان تاريخ بدء هذه الشهادة لا يزال في المستقبل في اليوم الذي رصدها فيه Apk Analyzer.</string>
     <string name="app_info_unavailable">لا يمكن لهذا الجهاز فتح معلومات التطبيق</string>
 </resources>

@@ -12,21 +12,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistorySection
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraries
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibrariesRepository
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.toAppReference
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.AppDetailDataSource
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.toRecordedVersionFailure
 
 @HiltViewModel(assistedFactory = GeneralInfoViewModel.Factory::class)
 internal class GeneralInfoViewModel @AssistedInject constructor(
     @Assisted private val appDetailInput: AppDetailInput,
-    private val appDetailRepository: AppDetailRepository,
-    private val nativeLibrariesRepository: NativeLibrariesRepository,
+    private val dataSource: AppDetailDataSource,
     private val dispatcherProvider: DispatcherProvider,
     private val clipboardManager: ClipboardManager,
 ) : ViewModel() {
@@ -48,6 +47,8 @@ internal class GeneralInfoViewModel @AssistedInject constructor(
 
     fun onAction(action: GeneralInfoAction) {
         when (action) {
+            GeneralInfoAction.Retry -> loadDetail()
+
             is GeneralInfoAction.CopyValue -> {
                 if (clipboardManager.copy(action.label, action.value) == CopyResult.FeedbackNotShown) {
                     viewModelScope.launch { _events.send(GeneralInfoEvent.ShowCopiedFeedback) }
@@ -59,21 +60,41 @@ internal class GeneralInfoViewModel @AssistedInject constructor(
     private fun loadDetail() {
         state.value = GeneralInfoState.Loading
         viewModelScope.launch(dispatcherProvider.default()) {
-            val reference = appDetailInput.toAppReference()
-            appDetailRepository.details(reference)
+            val isHistorical = appDetailInput is AppDetailInput.Historical
+            dataSource.detail(appDetailInput)
                 .onSuccess {
-                    state.value = it.toGeneralInfoState(NativeLibraries.Empty)
-                    val nativeLibraries = nativeLibrariesRepository.nativeLibraries(reference).getOrDefault(NativeLibraries.Empty)
-                    state.value = it.toGeneralInfoState(nativeLibraries)
+                    if (!isHistorical) state.value = it.toGeneralInfoState(AppHistorySection.Recorded(NativeLibraries.Empty), isHistorical = false)
+                    val nativeLibraries = dataSource.nativeLibraries(appDetailInput)
+                    state.value = it.toGeneralInfoState(
+                        libraries = if (isHistorical) {
+                            nativeLibraries.getOrDefault(AppHistorySection.NotRecorded)
+                        } else {
+                            nativeLibraries.getOrDefault(AppHistorySection.Recorded(NativeLibraries.Empty))
+                        },
+                        isHistorical = isHistorical,
+                    )
                 }
-                .onFailure {
-                    state.value = GeneralInfoState.Error
+                .onFailure { failure ->
+                    state.value = failure.toRecordedVersionFailure()?.let { GeneralInfoState.RecordedVersionError(it) } ?: GeneralInfoState.Error
                 }
         }
     }
 }
 
-private fun AppDetail.toGeneralInfoState(libraries: NativeLibraries) = GeneralInfoState.Loaded(
+private fun AppDetail.toGeneralInfoState(libraries: AppHistorySection<NativeLibraries>, isHistorical: Boolean): GeneralInfoState.Loaded {
+    val recordedLibraries = (libraries as? AppHistorySection.Recorded)?.value ?: NativeLibraries.Empty
+    return toGeneralInfoState(
+        libraries = recordedLibraries,
+        isNativeLibrariesRecorded = libraries is AppHistorySection.Recorded,
+        deviceAbis = if (isHistorical) emptyList() else Build.SUPPORTED_ABIS.toList(),
+    )
+}
+
+private fun AppDetail.toGeneralInfoState(
+    libraries: NativeLibraries,
+    isNativeLibrariesRecorded: Boolean,
+    deviceAbis: List<String>,
+) = GeneralInfoState.Loaded(
     applicationName = info.applicationName,
     packageName = info.packageName,
     processName = info.processName,
@@ -102,8 +123,8 @@ private fun AppDetail.toGeneralInfoState(libraries: NativeLibraries) = GeneralIn
     totalSize = info.totalSize,
     nativeLibraryAbis = libraries.abis,
     nativeLibraryNames = libraries.libraryNames,
-    deviceSupportedAbis = Build.SUPPORTED_ABIS.toList(),
-    isNativeLibraryDeviceIncompatible = libraries.hasNativeCode &&
-        libraries.abis.none { it in Build.SUPPORTED_ABIS },
+    deviceSupportedAbis = deviceAbis,
+    isNativeLibraryDeviceIncompatible = deviceAbis.isNotEmpty() && libraries.hasNativeCode && libraries.abis.none { it in deviceAbis },
+    isNativeLibrariesRecorded = isNativeLibrariesRecorded,
     installedSplitsCount = info.installedSplits.size,
 )

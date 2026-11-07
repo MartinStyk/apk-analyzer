@@ -57,8 +57,10 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RecordedVersionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
+import sk.styk.martin.apkanalyzer.core.apphistory.R as HistoryR
 import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 
 @Composable
@@ -107,10 +109,17 @@ private fun NativeLibrariesContent(
         when (state) {
             NativeLibrariesState.Loading -> SectionLoading()
 
+            is NativeLibrariesState.RecordedVersionError -> RecordedVersionError(
+                failure = state.failure,
+                onRetry = { onAction(NativeLibrariesAction.Retry) },
+            )
+
             NativeLibrariesState.Error -> SectionError(
                 message = stringResource(AppsR.string.nativelibraries_error),
                 onRetry = { onAction(NativeLibrariesAction.Retry) },
             )
+
+            NativeLibrariesState.NotRecorded -> SectionError(message = stringResource(HistoryR.string.app_history_not_recorded))
 
             is NativeLibrariesState.Loaded -> NativeLibrariesLoadedContent(state = state, onAction = onAction)
         }
@@ -197,6 +206,7 @@ private fun NativeLibrariesLoadedContent(
     detailItem?.let { item ->
         NativeLibraryDetailBottomSheet(
             item = item,
+            showDeviceSupport = !state.isHistorical,
             onCopy = { label, value -> onAction(NativeLibrariesAction.CopyValue(label, value)) },
             onDismiss = { detailName = null },
         )
@@ -204,13 +214,15 @@ private fun NativeLibrariesLoadedContent(
 }
 
 @Composable
-private fun NativeLibraryRow(
+internal fun NativeLibraryRow(
     item: NativeLibraryItem,
     onClick: () -> Unit,
     onCopy: (label: String, value: String) -> Unit,
     modifier: Modifier = Modifier,
+    changeLines: List<String> = emptyList(),
 ) {
     val copyLabel = stringResource(AppsR.string.nativelibraries_title)
+    val copyValue = (listOf(item.name) + changeLines).joinToString("\n")
     Column(
         verticalArrangement = Arrangement.spacedBy(6.dp),
         modifier = modifier
@@ -219,7 +231,7 @@ private fun NativeLibraryRow(
             .background(AppTheme.colors.surface)
             .combinedClickable(
                 onClick = onClick,
-                onLongClick = { onCopy(copyLabel, item.name) },
+                onLongClick = { onCopy(copyLabel, copyValue) },
             )
             .padding(horizontal = 14.dp, vertical = 12.dp),
     ) {
@@ -239,20 +251,31 @@ private fun NativeLibraryRow(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
-                Spacer(modifier = Modifier.height(2.dp))
+                if (changeLines.isEmpty()) {
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Text(
+                        text = item.abis.joinToString(),
+                        style = AppTheme.typography.bodySmall,
+                        color = AppTheme.colors.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+            }
+            if (changeLines.isEmpty()) {
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = item.abis.joinToString(),
-                    style = AppTheme.typography.bodySmall,
+                    text = item.totalSize.formatted(),
+                    style = AppTheme.typography.bodyMedium,
                     color = AppTheme.colors.onSurfaceVariant,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
                 )
             }
-            Spacer(modifier = Modifier.width(8.dp))
+        }
+        changeLines.forEach { line ->
             Text(
-                text = item.totalSize.formatted(),
-                style = AppTheme.typography.bodyMedium,
-                color = AppTheme.colors.onSurfaceVariant,
+                text = line,
+                style = AppTheme.typography.bodySmall,
+                color = AppTheme.colors.onSurface,
             )
         }
         if (!item.isDeviceCompatible) {
@@ -305,6 +328,14 @@ private fun NativeLibrariesLoadingPreview() {
             state = NativeLibrariesState.Loading,
             onAction = {},
         )
+    }
+}
+
+@Preview
+@Composable
+private fun NativeLibrariesNotRecordedPreview() {
+    ApkAnalyzerTheme {
+        NativeLibrariesContent(state = NativeLibrariesState.NotRecorded, onAction = {})
     }
 }
 
