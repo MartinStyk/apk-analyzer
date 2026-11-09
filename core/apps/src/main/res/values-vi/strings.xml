@@ -42,27 +42,6 @@
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_unknown">Không xác định</string>
-    <string name="app_detail_insight_debuggable">Truy cập gỡ lỗi đã được kích hoạt</string>
-    <string name="app_detail_insight_debug_certificate">Đã ký bằng khóa gỡ lỗi chia sẻ của Android</string>
-    <string name="app_detail_insight_certificate_not_yet_valid">Chứng chỉ ký chưa hợp lệ</string>
-    <plurals name="app_detail_insight_outdated_target">
-        <item quantity="other">Nhắm đến API %1$d, %2$d cấp độ API phía sau thiết bị này</item>
-    </plurals>
-    <string name="app_detail_insight_sideloaded">Được cài đặt từ bên ngoài cửa hàng ứng dụng</string>
-    <plurals name="app_detail_insight_unused">
-        <item quantity="other">Chưa mở trong %1$d tháng qua</item>
-    </plurals>
-    <string name="app_detail_insight_background_location">Có thể truy cập vị trí khi chạy trong nền</string>
-    <string name="app_detail_insight_messages">Có thể đọc, nhận hoặc gửi tin nhắn văn bản</string>
-    <string name="app_detail_insight_call_history">Có thể truy cập hoặc thay đổi lịch sử cuộc gọi</string>
-    <string name="app_detail_insight_contacts">Có thể truy cập hoặc thay đổi danh bạ</string>
-    <string name="app_detail_insight_calendar">Có thể truy cập hoặc thay đổi sự kiện lịch</string>
-    <string name="app_detail_badge_large">Ứng dụng lớn</string>
-    <string name="app_detail_badge_system">Hệ thống</string>
-    <string name="app_detail_badge_google_play">Google Play</string>
-    <string name="app_detail_badge_recently_installed">Mới</string>
-    <string name="app_detail_badge_recently_updated">Đã cập nhật</string>
-    <string name="app_detail_badge_recently_used">Đã sử dụng gần đây</string>
     <string name="general_info_title">Thông tin chung</string>
     <string name="general_info_error">Không thể tải thông tin chung</string>
     <string name="general_info_section_identification">Nhận diện</string>

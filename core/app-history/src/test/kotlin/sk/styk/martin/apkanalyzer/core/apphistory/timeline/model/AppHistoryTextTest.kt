@@ -20,9 +20,10 @@ class AppHistoryTextTest {
 
     @Test
     fun `Given a library file that grew When labelling it Then it names the ABI and no total`() {
-        val modified = listOf(ValueChange(aLibraryFile(10.megabytes), aLibraryFile(11.megabytes)))
+        val before = NativeLibrary("libfoo.so", listOf(aLibraryFile(10.megabytes)))
+        val after = NativeLibrary("libfoo.so", listOf(aLibraryFile(11.megabytes)))
 
-        val label = modified.fieldChangesByLibraryName().getValue("libfoo.so").single().label(resources)
+        val label = after.fieldChangesFrom(before).single().label(resources)
 
         label shouldBe "arm64-v8a: 10.0 MB → 11.0 MB (+1.0 MB)"
     }

@@ -45,6 +45,7 @@ include(
     ":feature:apps:phone",
     ":feature:apps:tv",
     ":feature:app-detail:api",
+    ":feature:app-detail:domain",
     ":feature:app-detail:phone",
     ":feature:app-detail:tv",
     ":feature:browse:api",

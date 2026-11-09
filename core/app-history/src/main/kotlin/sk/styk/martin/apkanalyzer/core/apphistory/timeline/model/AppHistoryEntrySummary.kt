@@ -54,6 +54,8 @@ sealed interface AppHistorySummaryPart {
 
     data class NativeLibrariesChanged(val count: Int) : AppHistorySummaryPart
 
+    data object RequirementsChanged : AppHistorySummaryPart
+
     data class SizeChanged(val before: AppSize, val after: AppSize) : AppHistorySummaryPart
 }
 
@@ -68,6 +70,7 @@ fun AppHistoryEntry.Change.summaryParts(permissionLabel: (String) -> String): Li
     diff.minSdkVersion?.let { add(AppHistorySummaryPart.MinSdkChanged(it.before, it.after)) }
     addComponentParts(diff)
     addNativeLibraryParts(diff)
+    if (diff.requirements is SetChange.Changed) add(AppHistorySummaryPart.RequirementsChanged)
     diff.apkSize?.let { add(AppHistorySummaryPart.SizeChanged(it.before, it.after)) }
 }
 
@@ -97,9 +100,9 @@ private fun MutableList<AppHistorySummaryPart>.addComponentParts(diff: AppHistor
 
 private fun MutableList<AppHistorySummaryPart>.addNativeLibraryParts(diff: AppHistoryDiff) {
     val libraries = diff.nativeLibraries as? SetChange.Changed ?: return
-    val added = libraries.added.distinctBy { it.name }.size
-    val removed = libraries.removed.distinctBy { it.name }.size
-    val modified = libraries.modified.distinctBy { it.after.name }.size
+    val added = libraries.added.size
+    val removed = libraries.removed.size
+    val modified = libraries.modified.size
     if (added > 0) add(AppHistorySummaryPart.NativeLibrariesAdded(added))
     if (removed > 0) add(AppHistorySummaryPart.NativeLibrariesRemoved(removed))
     if (modified > 0) add(AppHistorySummaryPart.NativeLibrariesChanged(modified))

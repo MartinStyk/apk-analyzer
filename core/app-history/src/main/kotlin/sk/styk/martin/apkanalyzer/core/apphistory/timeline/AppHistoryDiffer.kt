@@ -3,12 +3,21 @@ package sk.styk.martin.apkanalyzer.core.apphistory.timeline
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryRecord
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.CapturedSection
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryDiff
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryFieldChange
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryInstallSource
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryVersion
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.NativeLibrary
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.SetChange
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.ValueChange
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.fieldChangesFrom
+import sk.styk.martin.apkanalyzer.core.apps.components.Activity
+import sk.styk.martin.apkanalyzer.core.apps.components.BroadcastReceiver
+import sk.styk.martin.apkanalyzer.core.apps.components.ContentProvider
+import sk.styk.martin.apkanalyzer.core.apps.components.Service
+import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Feature
 import sk.styk.martin.apkanalyzer.core.apps.model.AppInfo
+import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryFile
+import sk.styk.martin.apkanalyzer.core.apps.permissions.Permission
 import javax.inject.Inject
 
 internal class AppHistoryDiffer @Inject constructor() {
@@ -37,14 +46,14 @@ internal class AppHistoryDiffer @Inject constructor() {
                 before = beforeDetail.permissions.defined,
                 after = afterDetail.permissions.defined,
                 key = { it.name },
-                isModified = { old, new -> new.fieldChangesFrom(old).isNotEmpty() },
+                isModified = hasVisibleChange(Permission::fieldChangesFrom),
             ),
-            activities = setChange(beforeDetail.activities, afterDetail.activities, key = { it.name }) { old, new -> new.fieldChangesFrom(old).isNotEmpty() },
-            services = setChange(beforeDetail.services, afterDetail.services, key = { it.name }) { old, new -> new.fieldChangesFrom(old).isNotEmpty() },
-            receivers = setChange(beforeDetail.receivers, afterDetail.receivers, key = { it.name }) { old, new -> new.fieldChangesFrom(old).isNotEmpty() },
+            activities = setChange(beforeDetail.activities, afterDetail.activities, key = { it.name }, hasVisibleChange(Activity::fieldChangesFrom)),
+            services = setChange(beforeDetail.services, afterDetail.services, key = { it.name }, hasVisibleChange(Service::fieldChangesFrom)),
+            receivers = setChange(beforeDetail.receivers, afterDetail.receivers, key = { it.name }, hasVisibleChange(BroadcastReceiver::fieldChangesFrom)),
             providers = setChange(beforeDetail.contentProviders, afterDetail.contentProviders, key = {
                 it.name
-            }) { old, new -> new.fieldChangesFrom(old).isNotEmpty() },
+            }, hasVisibleChange(ContentProvider::fieldChangesFrom)),
             certificates = setChange(
                 before = beforeDetail.signing.currentCertificates,
                 after = afterDetail.signing.currentCertificates,
@@ -52,12 +61,18 @@ internal class AppHistoryDiffer @Inject constructor() {
                 isModified = { _, _ -> false },
             ),
             signingSchemes = capturedSetChange(before.signingScheme, after.signingScheme, items = { it }, key = { it }),
-            signingSchemeVersions = capturedValueChange(before.signingScheme, after.signingScheme),
             nativeLibraries = capturedSetChange(
                 before = before.nativeLibraries,
                 after = after.nativeLibraries,
-                items = { it.files },
-                key = { Triple(it.name, it.abi, it.containingApkFileName) },
+                items = { it.files.groupedIntoLibraries() },
+                key = { it.name },
+                isModified = hasVisibleChange(NativeLibrary::fieldChangesFrom),
+            ),
+            requirements = setChange(
+                before = beforeDetail.features,
+                after = afterDetail.features,
+                key = { it.requirementKey },
+                isModified = hasVisibleChange(Feature::fieldChangesFrom),
             ),
         )
     }
@@ -68,17 +83,21 @@ private inline fun <S, T, K> capturedSetChange(
     after: CapturedSection<S>,
     items: (S) -> List<T>?,
     noinline key: (T) -> K,
+    noinline isModified: (before: T, after: T) -> Boolean = { old, new -> old != new },
 ): SetChange<T> {
     val beforeItems = (before as? CapturedSection.Captured)?.value?.let(items) ?: return SetChange.Uncomparable
     val afterItems = (after as? CapturedSection.Captured)?.value?.let(items) ?: return SetChange.Uncomparable
-    return setChange(beforeItems, afterItems, key)
+    return setChange(beforeItems, afterItems, key, isModified)
 }
 
-private fun <T> capturedValueChange(before: CapturedSection<List<T>?>, after: CapturedSection<List<T>?>): ValueChange<List<T>>? {
-    val beforeValue = (before as? CapturedSection.Captured)?.value ?: return null
-    val afterValue = (after as? CapturedSection.Captured)?.value ?: return null
-    return valueChange(beforeValue, afterValue)
-}
+private val Feature.requirementKey: String
+    get() = when (this) {
+        is Feature.Hardware -> name
+        is Feature.OpenGlEs -> "opengles:$reqGlEsVersion"
+    }
+
+private fun List<NativeLibraryFile>.groupedIntoLibraries(): List<NativeLibrary> = groupBy { it.name }
+    .map { (name, files) -> NativeLibrary(name, files.sortedWith(compareBy({ it.abi }, { it.containingApkFileName }))) }
 
 private fun <T, K> setChange(
     before: List<T>,
@@ -86,6 +105,7 @@ private fun <T, K> setChange(
     key: (T) -> K,
     isModified: (before: T, after: T) -> Boolean = { old, new -> old != new },
 ): SetChange<T> {
+    if (before === after) return SetChange.Unchanged
     val beforeByKey = before.associateBy(key)
     val afterByKey = after.associateBy(key)
     val added = after.filterNot { key(it) in beforeByKey }
@@ -99,6 +119,9 @@ private fun <T, K> setChange(
         SetChange.Changed(added = added, removed = removed, modified = modified)
     }
 }
+
+private fun <T> hasVisibleChange(fieldChanges: T.(before: T) -> List<AppHistoryFieldChange>): (T, T) -> Boolean =
+    { old, new -> old != new && new.fieldChanges(old).isNotEmpty() }
 
 private fun <T> valueChange(before: T, after: T): ValueChange<T>? = if (before == after) null else ValueChange(before, after)
 

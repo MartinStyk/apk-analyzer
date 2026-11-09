@@ -17,21 +17,23 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistorySection
 import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryItem
 import sk.styk.martin.apkanalyzer.core.apps.packaging.groupedByLibrary
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.AppDetailDataSource
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.RecordedVersionFailure
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.toRecordedVersionFailure
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSection
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSectionRepository
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.isHistorical
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.isOnDevice
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.toSectionErrorReason
 
 @HiltViewModel(assistedFactory = NativeLibrariesViewModel.Factory::class)
 internal class NativeLibrariesViewModel @AssistedInject constructor(
     @Assisted private val appDetailInput: AppDetailInput,
-    private val dataSource: AppDetailDataSource,
+    private val sectionRepository: AppDetailSectionRepository,
     private val dispatcherProvider: DispatcherProvider,
     private val clipboardManager: ClipboardManager,
 ) : ViewModel() {
@@ -47,8 +49,7 @@ internal class NativeLibrariesViewModel @AssistedInject constructor(
     val state: StateFlow<NativeLibrariesState> = combine(source, query) { source, query ->
         when (source) {
             NativeLibrariesSource.Loading -> NativeLibrariesState.Loading
-            NativeLibrariesSource.Error -> NativeLibrariesState.Error
-            is NativeLibrariesSource.RecordedVersionError -> NativeLibrariesState.RecordedVersionError(source.failure)
+            is NativeLibrariesSource.Error -> NativeLibrariesState.Error(source.reason)
             NativeLibrariesSource.NotRecorded -> NativeLibrariesState.NotRecorded
             is NativeLibrariesSource.Ready -> source.filteredBy(query)
         }
@@ -85,22 +86,19 @@ internal class NativeLibrariesViewModel @AssistedInject constructor(
         source.value = NativeLibrariesSource.Loading
         viewModelScope.launch {
             source.value = withContext(dispatcherProvider.default()) {
-                dataSource.nativeLibraries(appDetailInput).fold(
+                val deviceAbis = if (appDetailInput.isOnDevice) Build.SUPPORTED_ABIS.toList() else emptyList()
+                sectionRepository.nativeLibraries(appDetailInput).fold(
                     onSuccess = { section ->
                         when (section) {
-                            AppHistorySection.NotRecorded -> NativeLibrariesSource.NotRecorded
+                            AppDetailSection.NotRecorded -> NativeLibrariesSource.NotRecorded
 
-                            is AppHistorySection.Recorded -> {
-                                val isHistorical = appDetailInput is AppDetailInput.Historical
-                                val deviceAbis = if (isHistorical) emptySet() else Build.SUPPORTED_ABIS.toSet()
-                                NativeLibrariesSource.Ready(section.value.files.groupedByLibrary(deviceAbis), isHistorical)
-                            }
+                            is AppDetailSection.Available -> NativeLibrariesSource.Ready(
+                                items = section.value.files.groupedByLibrary(deviceAbis.toSet()),
+                                isHistorical = appDetailInput.isHistorical,
+                            )
                         }
                     },
-                    onFailure = { failure ->
-                        failure.toRecordedVersionFailure()?.let { NativeLibrariesSource.RecordedVersionError(it) }
-                            ?: NativeLibrariesSource.Error
-                    },
+                    onFailure = { failure -> NativeLibrariesSource.Error(failure.toSectionErrorReason()) },
                 )
             }
         }
@@ -109,8 +107,7 @@ internal class NativeLibrariesViewModel @AssistedInject constructor(
 
 private sealed interface NativeLibrariesSource {
     data object Loading : NativeLibrariesSource
-    data object Error : NativeLibrariesSource
-    data class RecordedVersionError(val failure: RecordedVersionFailure) : NativeLibrariesSource
+    data class Error(val reason: SectionErrorReason) : NativeLibrariesSource
     data object NotRecorded : NativeLibrariesSource
     data class Ready(val items: List<NativeLibraryItem>, val isHistorical: Boolean) : NativeLibrariesSource
 }

@@ -44,29 +44,6 @@
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_unknown">Unknown</string>
-    <string name="app_detail_insight_debuggable">Debug access is enabled</string>
-    <string name="app_detail_insight_debug_certificate">Signed with Android\'s shared debug key</string>
-    <string name="app_detail_insight_certificate_not_yet_valid">Signing certificate is not valid yet</string>
-    <plurals name="app_detail_insight_outdated_target">
-        <item quantity="one">Targets API %1$d, one API level behind this device</item>
-        <item quantity="other">Targets API %1$d, %2$d API levels behind this device</item>
-    </plurals>
-    <string name="app_detail_insight_sideloaded">Installed from outside an app store</string>
-    <plurals name="app_detail_insight_unused">
-        <item quantity="one">Not opened in the last month</item>
-        <item quantity="other">Not opened in the last %1$d months</item>
-    </plurals>
-    <string name="app_detail_insight_background_location">Can access location while running in the background</string>
-    <string name="app_detail_insight_messages">Can read, receive, or send text messages</string>
-    <string name="app_detail_insight_call_history">Can access or change call history</string>
-    <string name="app_detail_insight_contacts">Can access or change contacts</string>
-    <string name="app_detail_insight_calendar">Can access or change calendar events</string>
-    <string name="app_detail_badge_large">Large App</string>
-    <string name="app_detail_badge_system">System</string>
-    <string name="app_detail_badge_google_play">Google Play</string>
-    <string name="app_detail_badge_recently_installed">New</string>
-    <string name="app_detail_badge_recently_updated">Updated</string>
-    <string name="app_detail_badge_recently_used">Recently Used</string>
     <string name="general_info_title">General Information</string>
     <string name="general_info_error">Failed to load general information</string>
     <string name="general_info_section_identification">Identification</string>

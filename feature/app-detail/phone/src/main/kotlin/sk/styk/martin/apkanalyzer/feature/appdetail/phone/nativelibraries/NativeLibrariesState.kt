@@ -2,16 +2,13 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.phone.nativelibraries
 
 import androidx.compose.runtime.Immutable
 import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryItem
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.RecordedVersionFailure
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
 
 @Immutable
 internal sealed interface NativeLibrariesState {
     data object Loading : NativeLibrariesState
 
-    data object Error : NativeLibrariesState
-
-    @Immutable
-    data class RecordedVersionError(val failure: RecordedVersionFailure) : NativeLibrariesState
+    data class Error(val reason: SectionErrorReason) : NativeLibrariesState
 
     data object NotRecorded : NativeLibrariesState
 

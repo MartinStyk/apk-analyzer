@@ -42,33 +42,6 @@
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_unknown">Neznáme</string>
-    <string name="app_detail_insight_debuggable">Prístup na ladenie je povolený</string>
-    <string name="app_detail_insight_debug_certificate">Podpísané zdieľaným Androidu kľúčom na ladenie</string>
-    <string name="app_detail_insight_certificate_not_yet_valid">Podpisový certifikát ešte nie je platný</string>
-    <plurals name="app_detail_insight_outdated_target">
-        <item quantity="one">Cieli na API %1$d, jednu úroveň API za týmto zariadením</item>
-        <item quantity="few">Cieli na API %1$d, %2$d úrovne API za týmto zariadením</item>
-        <item quantity="many">Cieli na API %1$d, %2$d úrovní API za týmto zariadením</item>
-        <item quantity="other">Cieli na API %1$d, %2$d úrovní API za týmto zariadením</item>
-    </plurals>
-    <string name="app_detail_insight_sideloaded">Nainštalované z neznámeho zdroja</string>
-    <plurals name="app_detail_insight_unused">
-        <item quantity="one">Nepoužité v poslednom mesiaci</item>
-        <item quantity="few">Nepoužité v posledných %1$d mesiacoch</item>
-        <item quantity="many">Nepoužité v posledných %1$d mesiacoch</item>
-        <item quantity="other">Nepoužité v posledných %1$d mesiacoch</item>
-    </plurals>
-    <string name="app_detail_insight_background_location">Môže pristupovať k polohe počas behu na pozadí</string>
-    <string name="app_detail_insight_messages">Môže čítať, prijímať alebo posielať textové správy</string>
-    <string name="app_detail_insight_call_history">Môže pristupovať alebo meniť históriu hovorov</string>
-    <string name="app_detail_insight_contacts">Môže pristupovať alebo meniť kontakty</string>
-    <string name="app_detail_insight_calendar">Môže pristupovať alebo meniť udalosti v kalendári</string>
-    <string name="app_detail_badge_large">Veľká aplikácia</string>
-    <string name="app_detail_badge_system">Systém</string>
-    <string name="app_detail_badge_google_play">Google Play</string>
-    <string name="app_detail_badge_recently_installed">Nové</string>
-    <string name="app_detail_badge_recently_updated">Aktualizované</string>
-    <string name="app_detail_badge_recently_used">Nedávno použité</string>
     <string name="general_info_title">Všeobecné informácie</string>
     <string name="general_info_error">Nepodarilo sa načítať všeobecné informácie</string>
     <string name="general_info_section_identification">Identifikácia</string>

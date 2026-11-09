@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.apps.manifest.ManifestParser
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
-import sk.styk.martin.apkanalyzer.feature.appdetail.tv.toAppReference
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.liveReference
 
 @HiltViewModel(assistedFactory = TvManifestViewModel.Factory::class)
 internal class TvManifestViewModel @AssistedInject constructor(
@@ -43,7 +43,7 @@ internal class TvManifestViewModel @AssistedInject constructor(
     private fun loadManifest() {
         mutableState.value = TvManifestState.Loading
         viewModelScope.launch(dispatcherProvider.default()) {
-            mutableState.value = manifestParser.manifest(appDetailInput.toAppReference()).fold(
+            mutableState.value = manifestParser.manifest(checkNotNull(appDetailInput.liveReference)).fold(
                 onSuccess = { manifest ->
                     TvManifestState.Loaded(
                         lines = manifest.xml.lines(),

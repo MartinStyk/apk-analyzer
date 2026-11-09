@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_detail_insight_debuggable">Akses debug diaktifkan</string>
+    <string name="app_detail_insight_debug_certificate">Ditandatangani dengan kunci debug bersama Android</string>
+    <string name="app_detail_insight_certificate_not_yet_valid">Sertifikat penandatanganan belum valid</string>
+    <plurals name="app_detail_insight_outdated_target">
+        <item quantity="other">Menargetkan API %1$d, %2$d level API di belakang perangkat ini</item>
+    </plurals>
+    <string name="app_detail_insight_sideloaded">Diinstal dari luar toko aplikasi</string>
+    <plurals name="app_detail_insight_unused">
+        <item quantity="other">Tidak dibuka dalam %1$d bulan terakhir</item>
+    </plurals>
+    <string name="app_detail_insight_background_location">Dapat mengakses lokasi saat berjalan di latar belakang</string>
+    <string name="app_detail_insight_messages">Dapat membaca, menerima, atau mengirim pesan teks</string>
+    <string name="app_detail_insight_call_history">Dapat mengakses atau mengubah riwayat panggilan</string>
+    <string name="app_detail_insight_contacts">Dapat mengakses atau mengubah kontak</string>
+    <string name="app_detail_insight_calendar">Dapat mengakses atau mengubah acara kalender</string>
+    <string name="app_detail_badge_large">Aplikasi besar</string>
+    <string name="app_detail_badge_system">Sistem</string>
+    <string name="app_detail_badge_google_play">Google Play</string>
+    <string name="app_detail_badge_recently_installed">Baru</string>
+    <string name="app_detail_badge_recently_updated">Diperbarui</string>
+    <string name="app_detail_badge_recently_used">Baru saja digunakan</string>
+</resources>

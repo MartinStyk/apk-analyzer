@@ -21,14 +21,14 @@ import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.AppDetailDataSource
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.RecordedVersionFailure
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.toRecordedVersionFailure
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSectionRepository
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.toSectionErrorReason
 
 @HiltViewModel(assistedFactory = SplitApksViewModel.Factory::class)
 internal class SplitApksViewModel @AssistedInject constructor(
     @Assisted private val appDetailInput: AppDetailInput,
-    private val dataSource: AppDetailDataSource,
+    private val sectionRepository: AppDetailSectionRepository,
     private val dispatcherProvider: DispatcherProvider,
     private val clipboardManager: ClipboardManager,
 ) : ViewModel() {
@@ -44,8 +44,7 @@ internal class SplitApksViewModel @AssistedInject constructor(
     val state: StateFlow<SplitApksState> = combine(source, query) { source, query ->
         when (source) {
             SplitApksSource.Loading -> SplitApksState.Loading
-            SplitApksSource.Error -> SplitApksState.Error
-            is SplitApksSource.RecordedVersionError -> SplitApksState.RecordedVersionError(source.failure)
+            is SplitApksSource.Error -> SplitApksState.Error(source.reason)
             is SplitApksSource.Ready -> source.filteredBy(query)
         }
     }
@@ -81,9 +80,9 @@ internal class SplitApksViewModel @AssistedInject constructor(
         source.value = SplitApksSource.Loading
         viewModelScope.launch {
             source.value = withContext(dispatcherProvider.default()) {
-                dataSource.detail(appDetailInput).fold(
+                sectionRepository.detail(appDetailInput).fold(
                     onSuccess = { detail -> SplitApksSource.Ready(detail.info.installedSplits.sortedForDisplay()) },
-                    onFailure = { failure -> failure.toRecordedVersionFailure()?.let { SplitApksSource.RecordedVersionError(it) } ?: SplitApksSource.Error },
+                    onFailure = { failure -> SplitApksSource.Error(failure.toSectionErrorReason()) },
                 )
             }
         }
@@ -92,8 +91,7 @@ internal class SplitApksViewModel @AssistedInject constructor(
 
 private sealed interface SplitApksSource {
     data object Loading : SplitApksSource
-    data object Error : SplitApksSource
-    data class RecordedVersionError(val failure: RecordedVersionFailure) : SplitApksSource
+    data class Error(val reason: SectionErrorReason) : SplitApksSource
     data class Ready(val splits: List<InstalledSplitApk>) : SplitApksSource
 }
 

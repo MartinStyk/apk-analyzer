@@ -65,11 +65,15 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.rememberColla
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ListSectionHeader
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RecordedVersionError
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RowChangeLines
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
+import java.time.Instant
 import sk.styk.martin.apkanalyzer.core.apppermissions.R as PermissionsR
 
 private const val UNRESOLVED_SECTION_KEY = "unresolved"
@@ -101,6 +105,7 @@ internal fun PermissionsScreen(
         onBack = onBack,
         focusedPermission = focusedPermission,
         modifier = modifier,
+        recordedAt = appDetailInput.recordedAt,
     )
 }
 
@@ -110,31 +115,30 @@ private fun PermissionsContent(
     onAction: (PermissionsAction) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
+    recordedAt: Instant? = null,
     focusedPermission: String? = null,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(AppTheme.colors.background),
-    ) {
-        Toolbar(
-            title = stringResource(PermissionsR.string.permissions_title),
-            onBack = onBack,
-        )
-        when (state) {
-            is PermissionsState.Loading -> SectionLoading()
-
-            is PermissionsState.RecordedVersionError -> RecordedVersionError(
-                failure = state.failure,
-                onRetry = { onAction(PermissionsAction.Retry) },
+    AppDetailModeFrame(recordedAt = recordedAt, modifier = modifier) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(AppTheme.colors.background),
+        ) {
+            Toolbar(
+                title = stringResource(PermissionsR.string.permissions_title),
+                onBack = onBack,
             )
+            when (state) {
+                is PermissionsState.Loading -> SectionLoading()
 
-            is PermissionsState.Error -> SectionError(
-                message = stringResource(PermissionsR.string.permissions_error),
-                onRetry = { onAction(PermissionsAction.Retry) },
-            )
+                is PermissionsState.Error -> SectionError(
+                    reason = state.reason,
+                    loadFailedMessage = stringResource(PermissionsR.string.permissions_error),
+                    onRetry = { onAction(PermissionsAction.Retry) },
+                )
 
-            is PermissionsState.Loaded -> LoadedContent(state = state, onAction = onAction, focusedPermission = focusedPermission)
+                is PermissionsState.Loaded -> LoadedContent(state = state, onAction = onAction, focusedPermission = focusedPermission)
+            }
         }
     }
 }
@@ -353,14 +357,7 @@ internal fun PermissionRow(
                 maxLines = 1,
                 overflow = TextOverflow.StartEllipsis,
             )
-            changeLines.forEach { line ->
-                Spacer(modifier = Modifier.height(2.dp))
-                Text(
-                    text = line,
-                    style = AppTheme.typography.bodySmall,
-                    color = AppTheme.colors.onSurface,
-                )
-            }
+            RowChangeLines(lines = changeLines)
             tag?.let {
                 Spacer(modifier = Modifier.height(6.dp))
                 Tag(text = it)
@@ -447,7 +444,7 @@ private fun PermissionsLoadingPreview() {
 private fun PermissionsErrorPreview() {
     ApkAnalyzerTheme {
         PermissionsContent(
-            state = PermissionsState.Error,
+            state = PermissionsState.Error(SectionErrorReason.LoadFailed),
             onAction = {},
             onBack = {},
         )
@@ -474,6 +471,7 @@ private fun PermissionsHistoricalPreview() {
             state = sampleLoadedState().copy(isHistorical = true, grantStateOptions = emptyList()),
             onAction = {},
             onBack = {},
+            recordedAt = Instant.ofEpochMilli(1_773_014_400_000),
         )
     }
 }

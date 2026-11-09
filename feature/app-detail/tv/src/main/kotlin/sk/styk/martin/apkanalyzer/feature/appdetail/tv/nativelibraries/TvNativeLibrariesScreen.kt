@@ -18,6 +18,7 @@ import sk.styk.martin.apkanalyzer.core.common.model.kilobytes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.theme.ApkAnalyzerTvTheme
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.iconReference
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.InfoRow
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.InfoSection
@@ -25,7 +26,6 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.InfoSectionLis
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionEmpty
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionLoading
-import sk.styk.martin.apkanalyzer.feature.appdetail.tv.toAppReference
 import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 
 @Composable
@@ -36,7 +36,7 @@ internal fun TvNativeLibrariesScreen(
     },
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    TvNativeLibrariesContent(state = state, appReference = appDetailInput.toAppReference(), onAction = viewModel::onAction)
+    TvNativeLibrariesContent(state = state, appReference = appDetailInput.iconReference, onAction = viewModel::onAction)
 }
 
 @Composable

@@ -36,7 +36,6 @@
     <string name="app_history_field_change">%1$s: %2$s → %3$s</string>
     <string name="app_history_field_added">%1$s: hinzugefügt</string>
     <string name="app_history_field_removed">%1$s: entfernt</string>
-    <string name="app_history_field_changed">%1$s: geändert</string>
     <string name="app_history_before">Vorher</string>
     <string name="app_history_after">Nachher</string>
     <string name="app_history_category_signing">Signatur</string>
@@ -99,4 +98,8 @@
     <string name="app_history_size_change_up">%1$s → %2$s (+%3$s)</string>
     <string name="app_history_size_change_down">%1$s → %2$s (−%3$s)</string>
     <string name="app_history_field_value">%1$s: %2$s</string>
+    <string name="app_history_rule_added">%1$s · hinzugefügt: %2$s</string>
+    <string name="app_history_rule_removed">%1$s · entfernt: %2$s</string>
+    <string name="app_history_path_rule">%1$s (Lesen: %2$s, Schreiben: %3$s)</string>
+    <string name="app_history_summary_requirements">Geräteanforderungen geändert</string>
 </resources>

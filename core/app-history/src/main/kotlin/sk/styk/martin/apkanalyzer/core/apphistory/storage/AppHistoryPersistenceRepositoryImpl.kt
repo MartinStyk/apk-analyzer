@@ -11,6 +11,7 @@ import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryGat
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryReadDao
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryWriteDao
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity.AppHistoryDeviceEntity
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity.AppHistorySnapshotEntity
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.util.AppHistoryRecordDecoder
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.util.AppHistoryRecordEncoder
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
@@ -49,12 +50,28 @@ internal class AppHistoryPersistenceRepositoryImpl @Inject constructor(
         .catch { emit(Result.failure(it)) }
         .flowOn(dispatcherProvider.default())
 
-    override suspend fun read(packageName: PackageName, id: Long): Result<StoredAppHistoryRecord?> = withContext(dispatcherProvider.default()) {
+    override suspend fun read(id: Long): Result<StoredAppHistoryRecord?> = withContext(dispatcherProvider.default()) {
         runCatchingCancellable {
-            appHistoryReadDao.snapshot(packageName.value, id)?.let { row -> decoder.decodeOne(row, appHistoryReadDao.blobs(packageName.value)) }
+            appHistoryReadDao.snapshot(id)?.let { row ->
+                decoder.decodeOne(row, appHistoryReadDao.blobs(row.packageName, row.blobHashes))
+            }
         }
     }
 }
+
+private val AppHistorySnapshotEntity.blobHashes: List<Long>
+    get() = listOfNotNull(
+        permissionsHash,
+        activitiesHash,
+        servicesHash,
+        receiversHash,
+        providersHash,
+        featuresHash,
+        signingHash,
+        nativeLibrariesHash,
+        signingSchemeHash,
+        installedSplitsHash,
+    )
 
 private fun AppHistoryGateState.toCaptureKey() = AppHistoryCaptureKey(
     deviceId = deviceId,

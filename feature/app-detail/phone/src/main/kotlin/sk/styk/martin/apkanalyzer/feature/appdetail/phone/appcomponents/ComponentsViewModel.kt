@@ -28,25 +28,25 @@ import sk.styk.martin.apkanalyzer.core.apps.components.flags
 import sk.styk.martin.apkanalyzer.core.apps.components.hasUnguardedPathPermission
 import sk.styk.martin.apkanalyzer.core.apps.components.isExternallyReachableWithoutPermission
 import sk.styk.martin.apkanalyzer.core.apps.components.isLaunchable
-import sk.styk.martin.apkanalyzer.core.apps.intentfilters.IntentFiltersRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.AppDetailDataSource
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.RecordedVersionFailure
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.toLiveReference
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.toRecordedVersionFailure
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSection
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSectionRepository
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.installedPackage
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.isHistorical
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.toSectionErrorReason
 
 @HiltViewModel(assistedFactory = ComponentsViewModel.Factory::class)
 internal class ComponentsViewModel @AssistedInject constructor(
     @Assisted private val appDetailInput: AppDetailInput,
     @Assisted initialScope: ComponentScope,
     @Assisted initialFilters: Set<ComponentFilter>,
-    private val dataSource: AppDetailDataSource,
-    private val intentFiltersRepository: IntentFiltersRepository,
+    private val sectionRepository: AppDetailSectionRepository,
     private val dispatcherProvider: DispatcherProvider,
     private val clipboardManager: ClipboardManager,
 ) : ViewModel() {
@@ -66,9 +66,8 @@ internal class ComponentsViewModel @AssistedInject constructor(
     val state: StateFlow<ComponentsState> = combine(source, narrowing) { source, narrowing ->
         when (source) {
             is ComponentsSource.Loading -> ComponentsState.Loading
-            is ComponentsSource.Error -> ComponentsState.Error
-            is ComponentsSource.RecordedVersionError -> ComponentsState.RecordedVersionError(source.failure)
-            is ComponentsSource.Ready -> source.narrowedBy(narrowing, isHistorical = appDetailInput is AppDetailInput.Historical)
+            is ComponentsSource.Error -> ComponentsState.Error(source.reason)
+            is ComponentsSource.Ready -> source.narrowedBy(narrowing, isHistorical = appDetailInput.isHistorical)
         }
     }
         .flowOn(dispatcherProvider.default())
@@ -113,18 +112,14 @@ internal class ComponentsViewModel @AssistedInject constructor(
     private fun loadComponents() {
         source.value = ComponentsSource.Loading
         viewModelScope.launch(dispatcherProvider.default()) {
-            val liveReference = appDetailInput.toLiveReference()
-            val canLaunch = appDetailInput is AppDetailInput.InstalledPackage
-            dataSource.detail(appDetailInput)
+            val canLaunch = appDetailInput.installedPackage != null
+            sectionRepository.detail(appDetailInput)
                 .onSuccess { detail ->
-                    source.value = detail.toSource(canLaunch = canLaunch, intentFiltersByComponent = null)
-                    if (liveReference != null) {
-                        val intentFilters = intentFiltersRepository.componentIntentFilters(liveReference).getOrNull()
-                        source.value = detail.toSource(canLaunch = canLaunch, intentFiltersByComponent = intentFilters)
-                    }
+                    source.value = detail.toSource(canLaunch = canLaunch, intentFilters = null)
+                    source.value = detail.toSource(canLaunch = canLaunch, intentFilters = sectionRepository.intentFilters(appDetailInput).getOrNull())
                 }
                 .onFailure { failure ->
-                    source.value = failure.toRecordedVersionFailure()?.let { ComponentsSource.RecordedVersionError(it) } ?: ComponentsSource.Error
+                    source.value = ComponentsSource.Error(failure.toSectionErrorReason())
                 }
         }
     }
@@ -132,8 +127,7 @@ internal class ComponentsViewModel @AssistedInject constructor(
 
 private sealed interface ComponentsSource {
     data object Loading : ComponentsSource
-    data object Error : ComponentsSource
-    data class RecordedVersionError(val failure: RecordedVersionFailure) : ComponentsSource
+    data class Error(val reason: SectionErrorReason) : ComponentsSource
     data class Ready(val componentsByType: Map<ComponentType, List<ComponentItem>>) : ComponentsSource
 }
 
@@ -143,8 +137,12 @@ private data class Narrowing(
     val filters: Set<ComponentFilter> = emptySet(),
 )
 
-private fun AppDetail.toSource(canLaunch: Boolean, intentFiltersByComponent: Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>?) =
-    ComponentsSource.Ready(
+private fun AppDetail.toSource(
+    canLaunch: Boolean,
+    intentFilters: AppDetailSection<Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>>?,
+): ComponentsSource.Ready {
+    val intentFiltersByComponent = (intentFilters as? AppDetailSection.Available)?.value
+    return ComponentsSource.Ready(
         componentsByType = mapOf(
             ComponentType.Activity to activities.map {
                 it.toItem(canLaunch, intentFiltersByComponent.filtersFor(ComponentIntentFilterKey(it.name, ComponentKind.Activity)))
@@ -160,6 +158,7 @@ private fun AppDetail.toSource(canLaunch: Boolean, intentFiltersByComponent: Map
             }.mergeDuplicatesByStableKey().sortedForDisplay(),
         ),
     )
+}
 
 internal fun List<ComponentItem>.mergeDuplicatesByStableKey(): List<ComponentItem> =
     groupBy { it.stableKey }.values.map { duplicates -> duplicates.reduce(::moreExposed) }

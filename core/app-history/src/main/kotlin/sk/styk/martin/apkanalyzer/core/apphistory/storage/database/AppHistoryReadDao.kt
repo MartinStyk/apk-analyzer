@@ -13,11 +13,14 @@ internal interface AppHistoryReadDao {
     @Query("SELECT * FROM app_history_snapshot WHERE packageName = :packageName ORDER BY capturedAt ASC, id ASC")
     fun observeSnapshots(packageName: String): Flow<List<AppHistorySnapshotEntity>>
 
-    @Query("SELECT * FROM app_history_snapshot WHERE id = :id AND packageName = :packageName")
-    suspend fun snapshot(packageName: String, id: Long): AppHistorySnapshotEntity?
+    @Query("SELECT * FROM app_history_snapshot WHERE id = :id")
+    suspend fun snapshot(id: Long): AppHistorySnapshotEntity?
 
     @Query("SELECT * FROM app_history_blob WHERE packageName = :packageName")
     suspend fun blobs(packageName: String): List<AppHistoryBlobEntity>
+
+    @Query("SELECT * FROM app_history_blob WHERE packageName = :packageName AND hash IN (:hashes)")
+    suspend fun blobs(packageName: String, hashes: List<Long>): List<AppHistoryBlobEntity>
 
     @Query("SELECT * FROM app_history_snapshot")
     suspend fun allSnapshots(): List<AppHistorySnapshotEntity>

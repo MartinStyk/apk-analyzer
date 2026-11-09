@@ -216,22 +216,25 @@ not, and its category, drop rule, count, row and detail all agree it never happe
 labels when they differ and the installer package names when they match.
 
 Diffed: version, min/target SDK, APK size, install source, the three manifest flags, requested and
-defined permissions, the four component types, current signing certificates, signing schemes, and
-native libraries. Captured but deliberately not diffed, per `HI-03`: features, installed splits.
+defined permissions, the four component types, current signing certificates, signing schemes,
+native libraries, and device requirements. Captured but deliberately not diffed, per `HI-03`: installed splits.
 Intent filters are not captured at all: they were the second-largest section, the differ never read
 them, and starting to capture them later only covers history recorded from then on.
 
 `SetChange.Changed` carries the `core:apps` items themselves — `UsedPermission`, `Permission`,
-`Activity`, `Service`, `BroadcastReceiver`, `ContentProvider`, `Certificate`, `NativeLibraryFile`,
+`Activity`, `Service`, `BroadcastReceiver`, `ContentProvider`, `Certificate`, `NativeLibrary`,
 `SigningSchemeVersion` — not just their keys, and `modified` holds a `ValueChange` with both versions,
 so a detail screen can explain an item ("dangerous permission", "signed by …") and show what changed
 in it ("exported: no → yes") without going back to the store. Each set is matched by a key (component
-or permission name, certificate SHA-256, native library name + ABI + containing APK) and judged
+or permission name, certificate SHA-256, native library name) and judged
 "modified" by a comparison value: the whole item, except never for requested permissions and
 certificates — a requested permission's details
 belong to its declaring package, and a certificate with the same SHA-256 is the same certificate.
-Native libraries are keyed by containing APK too, so a library moving between base and split APKs
-reads as removed plus added.
+Native libraries are diffed per library name, matching how app detail lists and counts them: a
+`NativeLibrary` holds every ABI copy of one name. It is added or removed only when the name appears or
+disappears; gaining or losing ABI copies, or one copy changing size, is a modification whose field
+changes say so ("Built for · added: x86_64"). A copy that only moved between base and split APKs at
+the same size is not a visible change.
 
 ## Capture Pipeline
 
@@ -445,7 +448,10 @@ propagated days earlier — not from anything forced in the same session.
 
 ## Module Wiring
 
-`app/build.gradle.kts` depends on this module directly (`implementation(projects.core.appHistory)`)
-to pull its Hilt bindings into the graph. `feature:app-detail:phone` depends on it too, for reading
-history, but TV does not, and the bindings must not hinge on a feature: without `app`'s direct dependency
-capture could silently stop running. Keep it even though it looks unused from `app`'s own Kotlin code.
+Both apps record history. `app/build.gradle.kts` and `tv/build.gradle.kts` depend on this module
+directly (`implementation(projects.core.appHistory)`) to pull its Hilt bindings into the graph, and each
+app wires the same pieces: `apkanalyzer.work`, a `Configuration.Provider` application with
+`HiltWorkerFactory`, the manifest removing `WorkManagerInitializer`, and `AppHistoryBackupAgent` with
+`fullBackupOnly`. `feature:app-detail:domain` depends on it too, for reading history, but the bindings
+must not hinge on a feature: without each app's direct dependency capture could silently stop running.
+Keep it even though it looks unused from the apps' own Kotlin code.

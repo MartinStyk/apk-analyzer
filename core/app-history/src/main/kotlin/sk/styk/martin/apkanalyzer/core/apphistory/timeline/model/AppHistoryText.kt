@@ -3,6 +3,8 @@ package sk.styk.martin.apkanalyzer.core.apphistory.timeline.model
 import android.content.res.Resources
 import androidx.annotation.StringRes
 import sk.styk.martin.apkanalyzer.core.apphistory.R
+import sk.styk.martin.apkanalyzer.core.apppermissions.detail.explanationRes
+import sk.styk.martin.apkanalyzer.core.apps.components.ProviderPathPermission
 import sk.styk.martin.apkanalyzer.core.apps.installsource.labelRes
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
@@ -111,6 +113,8 @@ fun AppHistorySummaryPart.label(resources: Resources): String = when (this) {
 
     is AppHistorySummaryPart.NativeLibrariesChanged -> resources.getQuantityString(R.plurals.app_history_summary_native_changed, count, count)
 
+    AppHistorySummaryPart.RequirementsChanged -> resources.getString(R.string.app_history_summary_requirements)
+
     is AppHistorySummaryPart.SizeChanged -> {
         val delta = after.bytes - before.bytes
         resources.getString(
@@ -137,7 +141,31 @@ fun AppHistoryFieldChange.label(resources: Resources): String = when (this) {
 
     is AppHistoryFieldChange.SizeValue -> resources.getString(R.string.app_history_field_value, abi, change.sizeLabel(resources))
 
-    is AppHistoryFieldChange.Content -> resources.getString(R.string.app_history_field_changed, resources.getString(field.labelRes))
+    is AppHistoryFieldChange.Abis -> direction.ruleLabel(resources, AppsR.string.nativelibraries_detail_abis, abis.joinToString())
+
+    is AppHistoryFieldChange.PathRule ->
+        direction.ruleLabel(resources, AppsR.string.components_detail_section_path_permissions, rule.label(resources))
+
+    is AppHistoryFieldChange.ExtraRule ->
+        direction.ruleLabel(resources, PermissionsR.string.permissions_detail_extra_rules, resources.getString(flag.explanationRes))
+}
+
+private fun RuleDirection.ruleLabel(
+    resources: Resources,
+    @StringRes fieldRes: Int,
+    rule: String,
+): String = resources.getString(
+    when (this) {
+        RuleDirection.Added -> R.string.app_history_rule_added
+        RuleDirection.Removed -> R.string.app_history_rule_removed
+    },
+    resources.getString(fieldRes),
+    rule,
+)
+
+private fun ProviderPathPermission.label(resources: Resources): String {
+    val open = resources.getString(AppsR.string.components_detail_path_permission_open)
+    return resources.getString(R.string.app_history_path_rule, path, readPermission ?: open, writePermission ?: open)
 }
 
 private fun Boolean.yesNo(resources: Resources): String =
@@ -151,7 +179,6 @@ private val AppHistoryItemField.labelRes: Int
         AppHistoryItemField.ReadPermission -> AppsR.string.components_detail_read_permission
         AppHistoryItemField.WritePermission -> AppsR.string.components_detail_write_permission
         AppHistoryItemField.Authority -> AppsR.string.components_detail_authority
-        AppHistoryItemField.PathPermissions -> AppsR.string.components_detail_section_path_permissions
         AppHistoryItemField.TargetActivity -> AppsR.string.components_detail_target_activity
         AppHistoryItemField.ParentActivity -> AppsR.string.components_detail_parent
         AppHistoryItemField.Launcher -> AppsR.string.components_detail_launcher
@@ -162,5 +189,5 @@ private val AppHistoryItemField.labelRes: Int
         AppHistoryItemField.ProtectionLevel -> PermissionsR.string.permissions_detail_protection_level
         AppHistoryItemField.PermissionGroup -> PermissionsR.string.permissions_detail_group
         AppHistoryItemField.DeclaringPackage -> PermissionsR.string.permissions_detail_declared_by
-        AppHistoryItemField.ExtraRules -> PermissionsR.string.permissions_detail_extra_rules
+        AppHistoryItemField.Required -> AppsR.string.requirements_section_required
     }

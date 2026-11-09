@@ -9,5 +9,5 @@ import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 interface AppHistoryRepository {
     fun timeline(packageName: PackageName): Flow<AppHistoryTimeline>
 
-    suspend fun snapshot(packageName: PackageName, id: AppHistorySnapshotId): AppHistorySnapshotRead
+    suspend fun snapshot(id: AppHistorySnapshotId): AppHistorySnapshotRead
 }

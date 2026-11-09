@@ -36,7 +36,6 @@
     <string name="app_history_field_change">%1$s: %2$s → %3$s</string>
     <string name="app_history_field_added">%1$s: добавлено</string>
     <string name="app_history_field_removed">%1$s: удалено</string>
-    <string name="app_history_field_changed">%1$s: изменено</string>
     <string name="app_history_before">До</string>
     <string name="app_history_after">После</string>
     <string name="app_history_category_signing">Подпись</string>
@@ -119,4 +118,8 @@
     <string name="app_history_size_change_up">%1$s → %2$s (+%3$s)</string>
     <string name="app_history_size_change_down">%1$s → %2$s (−%3$s)</string>
     <string name="app_history_field_value">%1$s: %2$s</string>
+    <string name="app_history_rule_added">%1$s · добавлено: %2$s</string>
+    <string name="app_history_rule_removed">%1$s · удалено: %2$s</string>
+    <string name="app_history_path_rule">%1$s (чтение: %2$s, запись: %3$s)</string>
+    <string name="app_history_summary_requirements">Изменились требования к устройству</string>
 </resources>

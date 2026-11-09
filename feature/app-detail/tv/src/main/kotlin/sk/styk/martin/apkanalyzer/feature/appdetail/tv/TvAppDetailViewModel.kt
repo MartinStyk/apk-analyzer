@@ -1,6 +1,5 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.tv
 
-import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.assisted.Assisted
@@ -13,29 +12,31 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.UnparsableApkFileException
 import sk.styk.martin.apkanalyzer.core.apps.components.ComponentKind
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.DeviceFeatures
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.DeviceFeaturesRepository
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.requirements
-import sk.styk.martin.apkanalyzer.core.apps.insight.AppDetailBadgeEvaluator
-import sk.styk.martin.apkanalyzer.core.apps.insight.AppDetailInsight
-import sk.styk.martin.apkanalyzer.core.apps.insight.AppDetailInsightEvaluator
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.userpreferences.recentlyviewed.RecentlyViewedAppsRepository
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
-import java.time.Instant
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSectionRepository
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailBadgeEvaluator
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailInsight
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailInsightEvaluator
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.installedPackage
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.liveReference
 
 @HiltViewModel(assistedFactory = TvAppDetailViewModel.Factory::class)
 internal class TvAppDetailViewModel @AssistedInject constructor(
-    @Assisted appDetailInput: AppDetailInput,
-    private val appDetailRepository: AppDetailRepository,
-    private val recentlyViewedAppsRepository: RecentlyViewedAppsRepository,
+    @Assisted private val appDetailInput: AppDetailInput,
+    private val sectionRepository: AppDetailSectionRepository,
     private val deviceFeaturesRepository: DeviceFeaturesRepository,
+    private val insightEvaluator: AppDetailInsightEvaluator,
+    private val badgeEvaluator: AppDetailBadgeEvaluator,
+    private val recentlyViewedAppsRepository: RecentlyViewedAppsRepository,
     private val dispatcherProvider: DispatcherProvider,
 ) : ViewModel() {
 
@@ -44,7 +45,7 @@ internal class TvAppDetailViewModel @AssistedInject constructor(
         fun create(appDetailInput: AppDetailInput): TvAppDetailViewModel
     }
 
-    private val appReference = appDetailInput.toAppReference()
+    private val appReference = checkNotNull(appDetailInput.liveReference)
 
     private val mutableState = MutableStateFlow<TvAppDetailState>(TvAppDetailState.Loading)
     val state: StateFlow<TvAppDetailState> = mutableState.asStateFlow()
@@ -79,19 +80,19 @@ internal class TvAppDetailViewModel @AssistedInject constructor(
         mutableState.value = TvAppDetailState.Loading
         viewModelScope.launch(dispatcherProvider.default()) {
             val deviceFeatures = deviceFeaturesRepository.deviceFeatures()
-            val detailResult = appDetailRepository.details(appReference)
+            val detailResult = sectionRepository.detail(appDetailInput)
             mutableState.value = detailResult.fold(
                 onSuccess = { it.toLoadedState(deviceFeatures) },
                 onFailure = { TvAppDetailState.Error(canRetry = it !is UnparsableApkFileException) },
             )
-            if (detailResult.isSuccess && appReference is AppReference.InstalledPackage) {
-                recentlyViewedAppsRepository.addRecent(appReference.packageName)
+            val installedPackage = appDetailInput.installedPackage
+            if (detailResult.isSuccess && installedPackage != null) {
+                recentlyViewedAppsRepository.addRecent(installedPackage)
             }
         }
     }
 
     private fun AppDetail.toLoadedState(deviceFeatures: DeviceFeatures): TvAppDetailState.Loaded {
-        val now = Instant.now()
         val sensitivePermissions = permissions.used.filter { it.isDangerous }
         val requirements = requirements(deviceFeatures)
         return TvAppDetailState.Loaded(
@@ -106,8 +107,8 @@ internal class TvAppDetailViewModel @AssistedInject constructor(
             apkSize = info.apkSize,
             totalSize = info.totalSize,
             lastUpdateTime = info.lastUpdateTime,
-            badges = AppDetailBadgeEvaluator.evaluate(info, now),
-            insights = AppDetailInsightEvaluator.evaluate(appDetail = this, now = now, deviceSdk = Build.VERSION.SDK_INT),
+            badges = badgeEvaluator.evaluate(info, input = appDetailInput),
+            insights = insightEvaluator.evaluate(appDetail = this, input = appDetailInput),
             totalPermissionsCount = permissions.used.size,
             sensitivePermissionsCount = sensitivePermissions.size,
             grantedSensitivePermissionsCount = sensitivePermissions

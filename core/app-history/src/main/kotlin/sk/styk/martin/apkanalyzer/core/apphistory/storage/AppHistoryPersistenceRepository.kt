@@ -12,7 +12,7 @@ internal interface AppHistoryPersistenceRepository {
     suspend fun latestCaptureKeys(): Result<Map<PackageName, AppHistoryCaptureKey>>
     suspend fun save(record: AppHistoryRecord, device: AppHistoryDevice): Result<Unit>
     fun observe(packageName: PackageName): Flow<Result<List<StoredAppHistoryRecord>>>
-    suspend fun read(packageName: PackageName, id: Long): Result<StoredAppHistoryRecord?>
+    suspend fun read(id: Long): Result<StoredAppHistoryRecord?>
 }
 
 internal data class AppHistoryCaptureKey(

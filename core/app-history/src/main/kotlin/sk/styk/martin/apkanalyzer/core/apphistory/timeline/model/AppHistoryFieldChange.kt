@@ -3,10 +3,14 @@ package sk.styk.martin.apkanalyzer.core.apphistory.timeline.model
 import sk.styk.martin.apkanalyzer.core.apps.components.Activity
 import sk.styk.martin.apkanalyzer.core.apps.components.BroadcastReceiver
 import sk.styk.martin.apkanalyzer.core.apps.components.ContentProvider
+import sk.styk.martin.apkanalyzer.core.apps.components.ProviderPathPermission
 import sk.styk.martin.apkanalyzer.core.apps.components.Service
+import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Feature
 import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryFile
 import sk.styk.martin.apkanalyzer.core.apps.permissions.Permission
+import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionFlag
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
+import sk.styk.martin.apkanalyzer.core.common.model.bytes
 
 enum class AppHistoryItemField {
     Exported,
@@ -14,7 +18,6 @@ enum class AppHistoryItemField {
     ReadPermission,
     WritePermission,
     Authority,
-    PathPermissions,
     TargetActivity,
     ParentActivity,
     Launcher,
@@ -25,7 +28,7 @@ enum class AppHistoryItemField {
     ProtectionLevel,
     PermissionGroup,
     DeclaringPackage,
-    ExtraRules,
+    Required,
 }
 
 sealed interface AppHistoryFieldChange {
@@ -43,7 +46,16 @@ sealed interface AppHistoryFieldChange {
 
     data class SizeValue(val abi: String, val change: ValueChange<AppSize>) : AppHistoryFieldChange
 
-    data class Content(val field: AppHistoryItemField) : AppHistoryFieldChange
+    data class Abis(val direction: RuleDirection, val abis: List<String>) : AppHistoryFieldChange
+
+    data class PathRule(val direction: RuleDirection, val rule: ProviderPathPermission) : AppHistoryFieldChange
+
+    data class ExtraRule(val direction: RuleDirection, val flag: ProtectionFlag) : AppHistoryFieldChange
+}
+
+enum class RuleDirection {
+    Added,
+    Removed,
 }
 
 fun Activity.fieldChangesFrom(before: Activity): List<AppHistoryFieldChange> = listOfNotNull(
@@ -73,20 +85,34 @@ fun ContentProvider.fieldChangesFrom(before: ContentProvider): List<AppHistoryFi
     valueChange(AppHistoryItemField.Authority, before.authority, authority),
     valueChange(AppHistoryItemField.ReadPermission, before.readPermission, readPermission),
     valueChange(AppHistoryItemField.WritePermission, before.writePermission, writePermission),
-    AppHistoryFieldChange.Content(AppHistoryItemField.PathPermissions).takeIf { before.pathPermissions != pathPermissions },
-)
+) + ruleChanges(before.pathPermissions, pathPermissions, AppHistoryFieldChange::PathRule)
 
 fun Permission.fieldChangesFrom(before: Permission): List<AppHistoryFieldChange> = listOfNotNull(
     valueChange(AppHistoryItemField.ProtectionLevel, before.details?.protectionLevel?.name, details?.protectionLevel?.name),
     valueChange(AppHistoryItemField.PermissionGroup, before.details?.groupName, details?.groupName),
     valueChange(AppHistoryItemField.DeclaringPackage, before.details?.declaringPackage?.value, details?.declaringPackage?.value),
-    AppHistoryFieldChange.Content(AppHistoryItemField.ExtraRules).takeIf { before.details?.protectionFlags != details?.protectionFlags },
-)
+) + ruleChanges(before.details?.protectionFlags.orEmpty(), details?.protectionFlags.orEmpty(), AppHistoryFieldChange::ExtraRule)
 
-fun List<ValueChange<NativeLibraryFile>>.fieldChangesByLibraryName(): Map<String, List<AppHistoryFieldChange>> = groupBy { it.after.name }
-    .mapValues { (_, files) ->
-        files.sortedBy { it.after.abi }.map { AppHistoryFieldChange.SizeValue(it.after.abi, ValueChange(it.before.size, it.after.size)) }
+fun Feature.fieldChangesFrom(before: Feature): List<AppHistoryFieldChange> =
+    listOfNotNull(flagChange(AppHistoryItemField.Required, before.isRequired, isRequired))
+
+fun NativeLibrary.fieldChangesFrom(before: NativeLibrary): List<AppHistoryFieldChange> {
+    val sizesBefore = before.files.sizeByAbi()
+    val sizesAfter = files.sizeByAbi()
+    val addedAbis = (sizesAfter.keys - sizesBefore.keys).sorted()
+    val removedAbis = (sizesBefore.keys - sizesAfter.keys).sorted()
+    val resized = sizesAfter.keys.intersect(sizesBefore.keys).sorted().mapNotNull { abi ->
+        val change = ValueChange(sizesBefore.getValue(abi), sizesAfter.getValue(abi))
+        AppHistoryFieldChange.SizeValue(abi, change).takeIf { change.before != change.after }
     }
+    return listOfNotNull(
+        AppHistoryFieldChange.Abis(RuleDirection.Added, addedAbis).takeIf { addedAbis.isNotEmpty() },
+        AppHistoryFieldChange.Abis(RuleDirection.Removed, removedAbis).takeIf { removedAbis.isNotEmpty() },
+    ) + resized
+}
+
+private fun List<NativeLibraryFile>.sizeByAbi(): Map<String, AppSize> = groupBy { it.abi }
+    .mapValues { (_, files) -> files.fold(0.bytes) { total, file -> total + file.size } }
 
 private fun flagChange(
     field: AppHistoryItemField,
@@ -99,6 +125,13 @@ private fun valueChange(
     before: String?,
     after: String?,
 ): AppHistoryFieldChange? = AppHistoryFieldChange.Value(field, before, after).takeIf { before != after }
+
+private fun <T> ruleChanges(
+    before: Collection<T>,
+    after: Collection<T>,
+    toChange: (RuleDirection, T) -> AppHistoryFieldChange,
+): List<AppHistoryFieldChange> = (before - after.toSet()).map { toChange(RuleDirection.Removed, it) } +
+    (after - before.toSet()).map { toChange(RuleDirection.Added, it) }
 
 private fun launcherChange(before: Boolean?, after: Boolean?): AppHistoryFieldChange? {
     if (before == null || after == null) return null

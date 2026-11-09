@@ -36,7 +36,6 @@
     <string name="app_history_field_change">%1$s: \u2068%2$s\u2069 ← \u2068%3$s\u2069</string>
     <string name="app_history_field_added">%1$s: أُضيف</string>
     <string name="app_history_field_removed">%1$s: أُزيل</string>
-    <string name="app_history_field_changed">%1$s: تغيّر</string>
     <string name="app_history_before">قبل</string>
     <string name="app_history_after">بعد</string>
     <string name="app_history_category_signing">التوقيع</string>
@@ -139,4 +138,8 @@
     <string name="app_history_size_change_up">\u2068%1$s\u2069 ← \u2068%2$s\u2069 (\u2068+%3$s\u2069)</string>
     <string name="app_history_size_change_down">\u2068%1$s\u2069 ← \u2068%2$s\u2069 (\u2068−%3$s\u2069)</string>
     <string name="app_history_field_value">%1$s: %2$s</string>
+    <string name="app_history_rule_added">%1$s · أُضيف: %2$s</string>
+    <string name="app_history_rule_removed">%1$s · أُزيل: %2$s</string>
+    <string name="app_history_path_rule">%1$s (قراءة: %2$s، كتابة: %3$s)</string>
+    <string name="app_history_summary_requirements">تغيّرت متطلبات الجهاز</string>
 </resources>

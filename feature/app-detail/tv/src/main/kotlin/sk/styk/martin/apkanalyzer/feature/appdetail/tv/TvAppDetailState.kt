@@ -2,13 +2,13 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.tv
 
 import androidx.compose.runtime.Immutable
 import sk.styk.martin.apkanalyzer.core.apps.components.ComponentKind
-import sk.styk.martin.apkanalyzer.core.apps.insight.AppDetailBadge
-import sk.styk.martin.apkanalyzer.core.apps.insight.AppDetailInsight
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailBadge
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailInsight
 import java.time.Instant
 
 @Immutable

@@ -28,6 +28,6 @@ internal class AppHistoryPersistenceRepositoryFake(vararg records: StoredAppHist
     override fun observe(packageName: PackageName): Flow<Result<List<StoredAppHistoryRecord>>> =
         flowOf(Result.success(records.filter { it.record.packageName == packageName }))
 
-    override suspend fun read(packageName: PackageName, id: Long): Result<StoredAppHistoryRecord?> =
-        readFailure?.let { Result.failure(it) } ?: Result.success(records.firstOrNull { it.id == id && it.record.packageName == packageName })
+    override suspend fun read(id: Long): Result<StoredAppHistoryRecord?> =
+        readFailure?.let { Result.failure(it) } ?: Result.success(records.firstOrNull { it.id == id })
 }

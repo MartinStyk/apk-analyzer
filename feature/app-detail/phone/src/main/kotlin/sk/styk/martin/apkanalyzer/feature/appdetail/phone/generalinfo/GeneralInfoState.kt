@@ -5,7 +5,7 @@ import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceChain
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.RecordedVersionFailure
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
 import java.time.Instant
 
 @Immutable
@@ -48,8 +48,5 @@ internal sealed interface GeneralInfoState {
         val installedSplitsCount: Int,
     ) : GeneralInfoState
 
-    data object Error : GeneralInfoState
-
-    @Immutable
-    data class RecordedVersionError(val failure: RecordedVersionFailure) : GeneralInfoState
+    data class Error(val reason: SectionErrorReason) : GeneralInfoState
 }

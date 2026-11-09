@@ -50,16 +50,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryOverview
-import sk.styk.martin.apkanalyzer.core.apps.insight.AppDetailInsight
-import sk.styk.martin.apkanalyzer.core.apps.insight.SensitiveAccess
-import sk.styk.martin.apkanalyzer.core.apps.insight.label
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
-import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
+import sk.styk.martin.apkanalyzer.core.common.util.openAppSystemPage
+import sk.styk.martin.apkanalyzer.core.common.util.openGooglePlay
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.permissionIcon
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.requirementIcon
@@ -68,7 +66,6 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.LabeledHashBox
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.LoadingSpinner
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.TextButton
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.launcher.launchSafely
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.collapsingToolbarScroll
@@ -76,9 +73,17 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.rememberColla
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailInsight
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.SensitiveAccess
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.label
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.isHistorical
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.liveReference
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailToolbar
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppSummaryBottomSheet
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SplitApkExportBottomSheet
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.aisummary.AiSummaryCard
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.historyDate
@@ -96,8 +101,6 @@ private const val ICON_MIME_TYPE = "image/png"
 internal fun AppDetailScreen(
     appDetailInput: AppDetailInput,
     onBack: () -> Unit,
-    onOpenPlayStore: (packageName: PackageName) -> Unit,
-    onOpenAppInfo: (packageName: PackageName) -> Unit,
     onNavigateToManifest: () -> Unit,
     onNavigateToGeneralDetails: () -> Unit,
     onNavigateToPermissions: (permissionName: String?) -> Unit,
@@ -117,7 +120,6 @@ internal fun AppDetailScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val appReference = appDetailInput.toIconReference()
     var splitApkExportName by rememberSaveable { mutableStateOf<String?>(null) }
     var summaryPreview by rememberSaveable { mutableStateOf<String?>(null) }
     val apkDocumentLauncher = rememberLauncherForActivityResult(
@@ -142,9 +144,11 @@ internal fun AppDetailScreen(
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
-                is AppDetailEvent.OpenPlayStore -> onOpenPlayStore(event.packageName)
+                is AppDetailEvent.OpenPlayStore -> context.openGooglePlay(event.packageName)
 
-                is AppDetailEvent.OpenAppInfo -> onOpenAppInfo(event.packageName)
+                is AppDetailEvent.OpenAppInfo -> context.openAppSystemPage(event.packageName).onFailure {
+                    Toast.makeText(context, AppsR.string.app_info_unavailable, Toast.LENGTH_LONG).show()
+                }
 
                 is AppDetailEvent.CreateDocument -> {
                     val launcher = when (event.export) {
@@ -208,8 +212,8 @@ internal fun AppDetailScreen(
 
     AppDetailContent(
         state = state,
-        appReference = appReference,
-        showToolbarWhileLoading = appDetailInput is AppDetailInput.Historical,
+        appDetailInput = appDetailInput,
+        showToolbarWhileLoading = appDetailInput.isHistorical,
         onAction = viewModel::onAction,
         onBack = onBack,
         modifier = modifier,
@@ -244,43 +248,45 @@ internal fun AppDetailScreen(
 @Composable
 private fun AppDetailContent(
     state: AppDetailState,
-    appReference: AppReference,
+    appDetailInput: AppDetailInput,
     onAction: (AppDetailAction) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     showToolbarWhileLoading: Boolean = false,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(AppTheme.colors.background),
-    ) {
-        when (state) {
-            is AppDetailState.Loading -> {
-                if (showToolbarWhileLoading) {
+    AppDetailModeFrame(recordedAt = appDetailInput.recordedAt, modifier = modifier) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(AppTheme.colors.background),
+        ) {
+            when (state) {
+                is AppDetailState.Loading -> {
+                    if (showToolbarWhileLoading) {
+                        Toolbar(
+                            title = stringResource(R.string.app_detail_title),
+                            onBack = onBack,
+                        )
+                    }
+                    LoadingContent()
+                }
+
+                is AppDetailState.Error -> {
                     Toolbar(
                         title = stringResource(R.string.app_detail_title),
                         onBack = onBack,
                     )
+                    ErrorContent(reason = state.reason, onAction = onAction)
                 }
-                LoadingContent()
-            }
 
-            is AppDetailState.Error -> {
-                Toolbar(
-                    title = stringResource(R.string.app_detail_title),
-                    onBack = onBack,
-                )
-                ErrorContent(reason = state.reason, onAction = onAction)
-            }
-
-            is AppDetailState.Loaded -> {
-                LoadedContent(
-                    state = state,
-                    appReference = appReference,
-                    onAction = onAction,
-                    onBack = onBack,
-                )
+                is AppDetailState.Loaded -> {
+                    LoadedContent(
+                        state = state,
+                        appDetailInput = appDetailInput,
+                        onAction = onAction,
+                        onBack = onBack,
+                    )
+                }
             }
         }
     }
@@ -289,7 +295,7 @@ private fun AppDetailContent(
 @Composable
 private fun LoadedContent(
     state: AppDetailState.Loaded,
-    appReference: AppReference,
+    appDetailInput: AppDetailInput,
     onAction: (AppDetailAction) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
@@ -299,7 +305,7 @@ private fun LoadedContent(
     Column(modifier = modifier.fillMaxSize()) {
         AppDetailToolbar(
             state = state,
-            appReference = appReference,
+            appDetailInput = appDetailInput,
             collapsingState = collapsingState,
             onBack = onBack,
         )
@@ -311,9 +317,9 @@ private fun LoadedContent(
                 .verticalScroll(rememberScrollState()),
         ) {
             Spacer(modifier = Modifier.height(8.dp))
-            if (!state.isHistorical) {
+            appDetailInput.liveReference?.let { reference ->
                 AiSummaryCard(
-                    reference = appReference,
+                    reference = reference,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
@@ -1140,32 +1146,16 @@ private fun ErrorContent(
     onAction: (AppDetailAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Text(
-            text = stringResource(
-                when (reason) {
-                    AppDetailErrorReason.LoadFailed -> R.string.app_detail_error
-                    AppDetailErrorReason.UnsupportedApk -> R.string.app_detail_error_unsupported_apk
-                    AppDetailErrorReason.RecordedVersionFailed -> R.string.app_history_version_load_failed
-                    AppDetailErrorReason.RecordedVersionNotFound -> R.string.app_history_version_not_found
-                },
-            ),
-            style = AppTheme.typography.bodyLarge,
-            color = AppTheme.colors.onBackground,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = 32.dp),
+    val onRetry = { onAction(AppDetailAction.Retry) }
+    when (reason) {
+        AppDetailErrorReason.UnsupportedApk -> SectionError(message = stringResource(R.string.app_detail_error_unsupported_apk), modifier = modifier)
+
+        is AppDetailErrorReason.Failed -> SectionError(
+            reason = reason.reason,
+            loadFailedMessage = stringResource(R.string.app_detail_error),
+            onRetry = onRetry,
+            modifier = modifier,
         )
-        if (reason.canRetry) {
-            Spacer(modifier = Modifier.height(16.dp))
-            TextButton(
-                text = stringResource(R.string.app_detail_retry),
-                onClick = { onAction(AppDetailAction.Retry) },
-            )
-        }
     }
 }
 
@@ -1190,7 +1180,7 @@ private fun AppDetailLoadingPreview() {
     ApkAnalyzerTheme {
         AppDetailContent(
             state = AppDetailState.Loading,
-            appReference = AppReference.InstalledPackage(PackageName("com.spotify.music")),
+            appDetailInput = AppDetailInput.InstalledPackage("com.spotify.music"),
             onAction = {},
             onBack = {},
         )
@@ -1202,8 +1192,8 @@ private fun AppDetailLoadingPreview() {
 private fun AppDetailErrorPreview() {
     ApkAnalyzerTheme {
         AppDetailContent(
-            state = AppDetailState.Error(AppDetailErrorReason.LoadFailed),
-            appReference = AppReference.InstalledPackage(PackageName("com.spotify.music")),
+            state = AppDetailState.Error(AppDetailErrorReason.Failed(SectionErrorReason.LoadFailed)),
+            appDetailInput = AppDetailInput.InstalledPackage("com.spotify.music"),
             onAction = {},
             onBack = {},
         )
@@ -1216,7 +1206,7 @@ private fun AppDetailErrorUnsupportedApkPreview() {
     ApkAnalyzerTheme {
         AppDetailContent(
             state = AppDetailState.Error(AppDetailErrorReason.UnsupportedApk),
-            appReference = AppReference.ApkFile(path = "/data/local/tmp/sample.apk"),
+            appDetailInput = AppDetailInput.ApkFile(apkFilePath = "/data/local/tmp/sample.apk"),
             onAction = {},
             onBack = {},
         )
@@ -1227,15 +1217,13 @@ private fun AppDetailErrorUnsupportedApkPreview() {
 @Composable
 private fun AppDetailHistoricalLoadingPreview() {
     ApkAnalyzerTheme {
-        AppDetailModeFrame(input = sampleHistoricalInput) {
-            AppDetailContent(
-                state = AppDetailState.Loading,
-                appReference = sampleHistoricalInput.toIconReference(),
-                showToolbarWhileLoading = true,
-                onAction = {},
-                onBack = {},
-            )
-        }
+        AppDetailContent(
+            state = AppDetailState.Loading,
+            appDetailInput = sampleHistoricalInput,
+            showToolbarWhileLoading = true,
+            onAction = {},
+            onBack = {},
+        )
     }
 }
 
@@ -1243,14 +1231,12 @@ private fun AppDetailHistoricalLoadingPreview() {
 @Composable
 private fun AppDetailRecordedVersionFailedPreview() {
     ApkAnalyzerTheme {
-        AppDetailModeFrame(input = sampleHistoricalInput) {
-            AppDetailContent(
-                state = AppDetailState.Error(AppDetailErrorReason.RecordedVersionFailed),
-                appReference = sampleHistoricalInput.toIconReference(),
-                onAction = {},
-                onBack = {},
-            )
-        }
+        AppDetailContent(
+            state = AppDetailState.Error(AppDetailErrorReason.Failed(SectionErrorReason.VersionReadFailed)),
+            appDetailInput = sampleHistoricalInput,
+            onAction = {},
+            onBack = {},
+        )
     }
 }
 
@@ -1258,14 +1244,12 @@ private fun AppDetailRecordedVersionFailedPreview() {
 @Composable
 private fun AppDetailRecordedVersionNotFoundPreview() {
     ApkAnalyzerTheme {
-        AppDetailModeFrame(input = sampleHistoricalInput) {
-            AppDetailContent(
-                state = AppDetailState.Error(AppDetailErrorReason.RecordedVersionNotFound),
-                appReference = sampleHistoricalInput.toIconReference(),
-                onAction = {},
-                onBack = {},
-            )
-        }
+        AppDetailContent(
+            state = AppDetailState.Error(AppDetailErrorReason.Failed(SectionErrorReason.VersionNotFound)),
+            appDetailInput = sampleHistoricalInput,
+            onAction = {},
+            onBack = {},
+        )
     }
 }
 
@@ -1273,20 +1257,18 @@ private fun AppDetailRecordedVersionNotFoundPreview() {
 @Composable
 private fun AppDetailHistoricalLoadedPreview() {
     ApkAnalyzerTheme {
-        AppDetailModeFrame(input = sampleHistoricalInput) {
-            AppDetailContent(
-                state = sampleLoadedState().copy(
-                    analysisMode = AppDetail.AnalysisMode.Historical,
-                    grantedDangerousPermissionsCount = null,
-                    totalSize = null,
-                    unmetRequirementsCount = 0,
-                    insights = listOf(AppDetailInsight.Debuggable),
-                ),
-                appReference = sampleHistoricalInput.toIconReference(),
-                onAction = {},
-                onBack = {},
-            )
-        }
+        AppDetailContent(
+            state = sampleLoadedState().copy(
+                analysisMode = AppDetail.AnalysisMode.Historical,
+                grantedDangerousPermissionsCount = null,
+                totalSize = null,
+                unmetRequirementsCount = 0,
+                insights = listOf(AppDetailInsight.Debuggable),
+            ),
+            appDetailInput = sampleHistoricalInput,
+            onAction = {},
+            onBack = {},
+        )
     }
 }
 
@@ -1353,7 +1335,7 @@ private fun AppDetailLoadedPreview() {
     ApkAnalyzerTheme {
         AppDetailContent(
             state = sampleLoadedState(),
-            appReference = AppReference.InstalledPackage(PackageName("com.spotify.music")),
+            appDetailInput = AppDetailInput.InstalledPackage("com.spotify.music"),
             onAction = {},
             onBack = {},
         )
@@ -1363,7 +1345,7 @@ private fun AppDetailLoadedPreview() {
 private val sampleHistoricalInput = AppDetailInput.Historical(
     packageName = "com.spotify.music",
     snapshotId = 12,
-    capturedAtEpochMillis = 1_773_014_400_000,
+    capturedAt = Instant.ofEpochMilli(1_773_014_400_000),
 )
 
 private fun sampleLoadedState() = AppDetailState.Loaded(

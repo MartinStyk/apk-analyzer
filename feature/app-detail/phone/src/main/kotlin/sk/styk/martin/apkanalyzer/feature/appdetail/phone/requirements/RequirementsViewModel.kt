@@ -19,13 +19,15 @@ import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.AppDetailDataSource
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.toRecordedVersionFailure
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSectionRepository
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.isHistorical
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.isOnDevice
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.toSectionErrorReason
 
 @HiltViewModel(assistedFactory = RequirementsViewModel.Factory::class)
 internal class RequirementsViewModel @AssistedInject constructor(
     @Assisted private val appDetailInput: AppDetailInput,
-    private val dataSource: AppDetailDataSource,
+    private val sectionRepository: AppDetailSectionRepository,
     private val deviceFeaturesRepository: DeviceFeaturesRepository,
     private val dispatcherProvider: DispatcherProvider,
     private val clipboardManager: ClipboardManager,
@@ -61,15 +63,16 @@ internal class RequirementsViewModel @AssistedInject constructor(
     private fun loadRequirements() {
         state.value = RequirementsState.Loading
         viewModelScope.launch {
-            val isHistorical = appDetailInput is AppDetailInput.Historical
-            val deviceFeatures = if (isHistorical) DeviceFeatures.Unknown else deviceFeaturesRepository.deviceFeatures()
+            val deviceFeatures = if (appDetailInput.isOnDevice) deviceFeaturesRepository.deviceFeatures() else DeviceFeatures.Unknown
             state.value = withContext(dispatcherProvider.default()) {
-                dataSource.detail(appDetailInput)
+                sectionRepository.detail(appDetailInput)
             }.fold(
                 onSuccess = { detail ->
-                    detail.requirements(deviceFeatures).let { RequirementsState.Loaded(it.sections, it.missingRequiredCount, isHistorical) }
+                    detail.requirements(deviceFeatures).let {
+                        RequirementsState.Loaded(it.sections, it.missingRequiredCount, isHistorical = appDetailInput.isHistorical)
+                    }
                 },
-                onFailure = { failure -> failure.toRecordedVersionFailure()?.let { RequirementsState.RecordedVersionError(it) } ?: RequirementsState.Error },
+                onFailure = { failure -> RequirementsState.Error(failure.toSectionErrorReason()) },
             )
         }
     }

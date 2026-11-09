@@ -58,10 +58,12 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.InfoRow
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RationaleBottomSheet
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RecordedVersionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionCard
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
@@ -98,6 +100,7 @@ internal fun CertificatesScreen(
         onAction = viewModel::onAction,
         onBack = onBack,
         modifier = modifier,
+        recordedAt = appDetailInput.recordedAt,
     )
 }
 
@@ -107,30 +110,29 @@ private fun CertificatesContent(
     onAction: (CertificatesAction) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
+    recordedAt: Instant? = null,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(AppTheme.colors.background),
-    ) {
-        Toolbar(
-            title = stringResource(AppsR.string.certificates_title),
-            onBack = onBack,
-        )
-        when (state) {
-            CertificatesState.Loading -> SectionLoading()
-
-            is CertificatesState.RecordedVersionError -> RecordedVersionError(
-                failure = state.failure,
-                onRetry = { onAction(CertificatesAction.Retry) },
+    AppDetailModeFrame(recordedAt = recordedAt, modifier = modifier) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(AppTheme.colors.background),
+        ) {
+            Toolbar(
+                title = stringResource(AppsR.string.certificates_title),
+                onBack = onBack,
             )
+            when (state) {
+                CertificatesState.Loading -> SectionLoading()
 
-            CertificatesState.Error -> SectionError(
-                message = stringResource(AppsR.string.certificates_error),
-                onRetry = { onAction(CertificatesAction.Retry) },
-            )
+                is CertificatesState.Error -> SectionError(
+                    reason = state.reason,
+                    loadFailedMessage = stringResource(AppsR.string.certificates_error),
+                    onRetry = { onAction(CertificatesAction.Retry) },
+                )
 
-            is CertificatesState.Loaded -> LoadedContent(state = state, onAction = onAction)
+                is CertificatesState.Loaded -> LoadedContent(state = state, onAction = onAction)
+            }
         }
     }
 }
@@ -805,6 +807,7 @@ private fun CertificatesHistoricalPreview() {
             state = sampleLoadedState().copy(isHistorical = true),
             onAction = {},
             onBack = {},
+            recordedAt = Instant.ofEpochMilli(1_773_014_400_000),
         )
     }
 }
@@ -847,7 +850,7 @@ private fun CertificatesLoadingPreview() {
 private fun CertificatesErrorPreview() {
     ApkAnalyzerTheme {
         CertificatesContent(
-            state = CertificatesState.Error,
+            state = CertificatesState.Error(SectionErrorReason.LoadFailed),
             onAction = {},
             onBack = {},
         )

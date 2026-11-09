@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_detail_insight_debuggable">El acceso de depuración está habilitado</string>
+    <string name="app_detail_insight_debug_certificate">Firmado con la clave de depuración compartida de Android</string>
+    <string name="app_detail_insight_certificate_not_yet_valid">El certificado de firma aún no es válido</string>
+    <plurals name="app_detail_insight_outdated_target">
+        <item quantity="one">Apunta a la API %1$d, un nivel de API detrás de este dispositivo</item>
+        <item quantity="many">Objetivos de API %1$d, %2$d niveles de API detrás de este dispositivo</item>
+        <item quantity="other">Objetivos de API %1$d, %2$d niveles de API detrás de este dispositivo</item>
+    </plurals>
+    <string name="app_detail_insight_sideloaded">Instalado desde fuera de una tienda de aplicaciones</string>
+    <plurals name="app_detail_insight_unused">
+        <item quantity="one">No abierto en el último mes</item>
+        <item quantity="many">No abierto en los últimos %1$d meses</item>
+        <item quantity="other">No abierto en los últimos %1$d meses</item>
+    </plurals>
+    <string name="app_detail_insight_background_location">Puede acceder a la ubicación mientras se ejecuta en segundo plano</string>
+    <string name="app_detail_insight_messages">Puede leer, recibir o enviar mensajes de texto</string>
+    <string name="app_detail_insight_call_history">Puede acceder o cambiar el historial de llamadas</string>
+    <string name="app_detail_insight_contacts">Puede acceder o cambiar contactos</string>
+    <string name="app_detail_insight_calendar">Puede acceder o cambiar eventos del calendario</string>
+    <string name="app_detail_badge_large">Aplicación grande</string>
+    <string name="app_detail_badge_system">Sistema</string>
+    <string name="app_detail_badge_google_play">Google Play</string>
+    <string name="app_detail_badge_recently_installed">Nuevo</string>
+    <string name="app_detail_badge_recently_updated">Actualizado</string>
+    <string name="app_detail_badge_recently_used">Usado recientemente</string>
+</resources>

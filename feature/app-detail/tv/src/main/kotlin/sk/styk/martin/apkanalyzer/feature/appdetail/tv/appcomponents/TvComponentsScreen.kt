@@ -50,6 +50,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.tv.focus.restorableFocus
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.modifier.bleedHorizontally
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.theme.ApkAnalyzerTvTheme
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.iconReference
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.DetailPane
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.ListDetailScaffold
@@ -58,7 +59,6 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.PaneField
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.PaneSection
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionLoading
-import sk.styk.martin.apkanalyzer.feature.appdetail.tv.toAppReference
 import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 
 @Composable
@@ -88,7 +88,7 @@ internal fun TvComponentsScreen(
             }
         }
     }
-    TvComponentsContent(state = state, appReference = appDetailInput.toAppReference(), onAction = viewModel::onAction)
+    TvComponentsContent(state = state, appReference = appDetailInput.iconReference, onAction = viewModel::onAction)
 }
 
 @Composable

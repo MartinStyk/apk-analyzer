@@ -2,7 +2,7 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.phone.requirements
 
 import androidx.compose.runtime.Immutable
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.RequirementSection
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.RecordedVersionFailure
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
 
 @Immutable
 internal sealed interface RequirementsState {
@@ -18,8 +18,5 @@ internal sealed interface RequirementsState {
             get() = sections.isNotEmpty()
     }
 
-    data object Error : RequirementsState
-
-    @Immutable
-    data class RecordedVersionError(val failure: RecordedVersionFailure) : RequirementsState
+    data class Error(val reason: SectionErrorReason) : RequirementsState
 }

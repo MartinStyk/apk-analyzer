@@ -6,7 +6,7 @@ import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateValidity
 import sk.styk.martin.apkanalyzer.core.apps.signing.SignatureAlgorithmAssessment
 import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeVersion
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.RecordedVersionFailure
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
 import java.time.Instant
 
 @Immutable
@@ -33,10 +33,7 @@ internal data class CertificateItem(
 internal sealed interface CertificatesState {
     data object Loading : CertificatesState
 
-    data object Error : CertificatesState
-
-    @Immutable
-    data class RecordedVersionError(val failure: RecordedVersionFailure) : CertificatesState
+    data class Error(val reason: SectionErrorReason) : CertificatesState
 
     @Immutable
     data class Loaded(

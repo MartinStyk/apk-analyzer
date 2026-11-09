@@ -39,14 +39,13 @@ internal class AppHistoryRepositoryImpl @Inject constructor(
         }
         .flowOn(dispatcherProvider.default())
 
-    override suspend fun snapshot(packageName: PackageName, id: AppHistorySnapshotId): AppHistorySnapshotRead =
-        persistenceRepository.read(packageName, id.value).fold(
-            onSuccess = { stored -> stored?.let { AppHistorySnapshotRead.Found(it.toSnapshot()) } ?: AppHistorySnapshotRead.NotFound },
-            onFailure = { throwable ->
-                Logger.e(APP_HISTORY, throwable, "Snapshot ${id.value} of ${packageName.value} could not be read")
-                AppHistorySnapshotRead.Unavailable
-            },
-        )
+    override suspend fun snapshot(id: AppHistorySnapshotId): AppHistorySnapshotRead = persistenceRepository.read(id.value).fold(
+        onSuccess = { stored -> stored?.let { AppHistorySnapshotRead.Found(it.toSnapshot()) } ?: AppHistorySnapshotRead.NotFound },
+        onFailure = { throwable ->
+            Logger.e(APP_HISTORY, throwable, "Snapshot ${id.value} could not be read")
+            AppHistorySnapshotRead.Unavailable
+        },
+    )
 
     private fun buildTimeline(records: List<StoredAppHistoryRecord>): List<AppHistoryEntry> {
         val first = records.firstOrNull() ?: return emptyList()

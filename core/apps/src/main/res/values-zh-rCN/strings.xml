@@ -42,27 +42,6 @@
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_unknown">未知</string>
-    <string name="app_detail_insight_debuggable">调试访问已启用</string>
-    <string name="app_detail_insight_debug_certificate">使用 Android 的共享调试密钥签名</string>
-    <string name="app_detail_insight_certificate_not_yet_valid">签名证书尚未有效</string>
-    <plurals name="app_detail_insight_outdated_target">
-        <item quantity="other">目标 API %1$d，%2$d API 级别低于此设备</item>
-    </plurals>
-    <string name="app_detail_insight_sideloaded">从应用商店外安装</string>
-    <plurals name="app_detail_insight_unused">
-        <item quantity="other">在过去的 %1$d 个月内未打开</item>
-    </plurals>
-    <string name="app_detail_insight_background_location">在后台运行时可以访问位置</string>
-    <string name="app_detail_insight_messages">可以读取、接收或发送短信</string>
-    <string name="app_detail_insight_call_history">可以访问或更改通话记录</string>
-    <string name="app_detail_insight_contacts">可以访问或更改联系人</string>
-    <string name="app_detail_insight_calendar">可以访问或更改日历事件</string>
-    <string name="app_detail_badge_large">大型应用</string>
-    <string name="app_detail_badge_system">系统</string>
-    <string name="app_detail_badge_google_play">Google Play</string>
-    <string name="app_detail_badge_recently_installed">新</string>
-    <string name="app_detail_badge_recently_updated">已更新</string>
-    <string name="app_detail_badge_recently_used">最近使用</string>
     <string name="general_info_title">常规信息</string>
     <string name="general_info_error">加载常规信息失败</string>
     <string name="general_info_section_identification">身份识别</string>

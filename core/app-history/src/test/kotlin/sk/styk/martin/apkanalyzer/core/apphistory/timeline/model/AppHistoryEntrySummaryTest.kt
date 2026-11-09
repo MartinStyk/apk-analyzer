@@ -2,7 +2,7 @@ package sk.styk.martin.apkanalyzer.core.apphistory.timeline.model
 
 import io.kotest.matchers.shouldBe
 import org.junit.Test
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryFile
+import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Feature
 import sk.styk.martin.apkanalyzer.core.apps.permissions.Permission
 import sk.styk.martin.apkanalyzer.core.apps.permissions.PermissionDetails
 import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
@@ -186,7 +186,8 @@ private fun aDiff(
     requestedPermissions: SetChange<UsedPermission> = SetChange.Unchanged,
     certificates: SetChange<Certificate> = SetChange.Unchanged,
     signingSchemes: SetChange<SigningSchemeVersion> = SetChange.Unchanged,
-    nativeLibraries: SetChange<NativeLibraryFile> = SetChange.Unchanged,
+    nativeLibraries: SetChange<NativeLibrary> = SetChange.Unchanged,
+    requirements: SetChange<Feature> = SetChange.Unchanged,
 ) = AppHistoryDiff(
     version = version,
     minSdkVersion = null,
@@ -204,6 +205,6 @@ private fun aDiff(
     providers = SetChange.Unchanged,
     certificates = certificates,
     signingSchemes = signingSchemes,
-    signingSchemeVersions = null,
     nativeLibraries = nativeLibraries,
+    requirements = requirements,
 )

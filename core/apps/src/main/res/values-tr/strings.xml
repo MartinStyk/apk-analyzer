@@ -42,29 +42,6 @@
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_unknown">Bilinmiyor</string>
-    <string name="app_detail_insight_debuggable">Hata ayıklama erişimi etkin</string>
-    <string name="app_detail_insight_debug_certificate">Android\'in paylaşılan hata ayıklama anahtarı ile imzalandı</string>
-    <string name="app_detail_insight_certificate_not_yet_valid">İmzalama sertifikası henüz geçerli değil</string>
-    <plurals name="app_detail_insight_outdated_target">
-        <item quantity="one">Hedef API %1$d, bu cihazdan bir API seviyesi geride</item>
-        <item quantity="other">Hedef API %1$d, bu cihazdan %2$d API seviyesi geride</item>
-    </plurals>
-    <string name="app_detail_insight_sideloaded">Bir uygulama mağazası dışından yüklendi</string>
-    <plurals name="app_detail_insight_unused">
-        <item quantity="one">Son bir ayda açılmadı</item>
-        <item quantity="other">Son %1$d ayda açılmadı</item>
-    </plurals>
-    <string name="app_detail_insight_background_location">Arka planda çalışırken konuma erişebilir</string>
-    <string name="app_detail_insight_messages">Metin mesajlarını okuyabilir, alabilir veya gönderebilir</string>
-    <string name="app_detail_insight_call_history">Arama geçmişine erişebilir veya değiştirebilir</string>
-    <string name="app_detail_insight_contacts">Kişilere erişebilir veya değiştirebilir</string>
-    <string name="app_detail_insight_calendar">Takvim etkinliklerine erişebilir veya değiştirebilir</string>
-    <string name="app_detail_badge_large">Büyük Uygulama</string>
-    <string name="app_detail_badge_system">Sistem</string>
-    <string name="app_detail_badge_google_play">Google Play</string>
-    <string name="app_detail_badge_recently_installed">Yeni</string>
-    <string name="app_detail_badge_recently_updated">Güncellendi</string>
-    <string name="app_detail_badge_recently_used">Son Kullanılanlar</string>
     <string name="general_info_title">Genel Bilgiler</string>
     <string name="general_info_error">Genel bilgileri yükleme başarısız</string>
     <string name="general_info_section_identification">Kimlik</string>

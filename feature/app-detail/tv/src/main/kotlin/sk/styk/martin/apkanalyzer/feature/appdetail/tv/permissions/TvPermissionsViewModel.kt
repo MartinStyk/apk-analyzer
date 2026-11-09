@@ -16,17 +16,16 @@ import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionItem
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionItemMapper
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionScope
-import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
-import sk.styk.martin.apkanalyzer.feature.appdetail.tv.toAppReference
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSectionRepository
 
 @HiltViewModel(assistedFactory = TvPermissionsViewModel.Factory::class)
 internal class TvPermissionsViewModel @AssistedInject constructor(
     @Assisted private val appDetailInput: AppDetailInput,
     @Assisted private val initialPermissionName: String?,
-    private val appDetailRepository: AppDetailRepository,
+    private val sectionRepository: AppDetailSectionRepository,
     private val permissionItemMapper: PermissionItemMapper,
     private val dispatcherProvider: DispatcherProvider,
 ) : ViewModel() {
@@ -62,7 +61,7 @@ internal class TvPermissionsViewModel @AssistedInject constructor(
         source.value = PermissionsSource.Loading
         viewModelScope.launch {
             source.value = withContext(dispatcherProvider.default()) {
-                appDetailRepository.details(appDetailInput.toAppReference()).fold(
+                sectionRepository.detail(appDetailInput).fold(
                     onSuccess = { detail ->
                         PermissionsSource.Ready(
                             appName = detail.info.applicationName,

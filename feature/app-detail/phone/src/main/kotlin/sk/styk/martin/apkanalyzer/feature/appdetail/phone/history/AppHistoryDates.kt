@@ -8,6 +8,7 @@ import java.time.format.FormatStyle
 import java.util.Locale
 
 private const val SHORT_DATE_SKELETON = "dMMM"
+private const val SHORT_DATE_TIME_SKELETON = "dMMMjmm"
 
 internal fun Instant.historyDate(): String {
     val zone = ZoneId.systemDefault()
@@ -16,6 +17,14 @@ internal fun Instant.historyDate(): String {
     return DateTimeFormatter
         .ofPattern(DateFormat.getBestDateTimePattern(locale, SHORT_DATE_SKELETON), locale)
         .withZone(zone)
+        .format(this)
+}
+
+internal fun Instant.historyDateTime(): String {
+    val locale = Locale.getDefault()
+    return DateTimeFormatter
+        .ofPattern(DateFormat.getBestDateTimePattern(locale, SHORT_DATE_TIME_SKELETON), locale)
+        .withZone(ZoneId.systemDefault())
         .format(this)
 }
 

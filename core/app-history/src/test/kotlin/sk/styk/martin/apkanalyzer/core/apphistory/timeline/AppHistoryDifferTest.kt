@@ -5,9 +5,15 @@ import org.junit.Test
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryCaptureKey
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryRecord
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.CapturedSection
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryFieldChange
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryItemField
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.NativeLibrary
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.RuleDirection
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.SetChange
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.ValueChange
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.fieldChangesFrom
 import sk.styk.martin.apkanalyzer.core.apps.components.Activity
+import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Feature
 import sk.styk.martin.apkanalyzer.core.apps.model.Detail.WhatsApp
 import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraries
 import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryFile
@@ -44,7 +50,7 @@ class AppHistoryDifferTest {
     }
 
     @Test
-    fun `Given a library with one changed and one unchanged ABI When diffing Then only the changed file is modified`() {
+    fun `Given a library with one changed and one unchanged ABI When diffing Then the library is modified once`() {
         val unchanged = aLibraryFile("x86_64", 5.megabytes)
         val old = aLibraryFile("arm64-v8a", 10.megabytes)
         val new = aLibraryFile("arm64-v8a", 11.megabytes)
@@ -53,7 +59,35 @@ class AppHistoryDifferTest {
 
         val diff = differ(before, after)
 
-        diff.nativeLibraries shouldBe SetChange.Changed(added = emptyList(), removed = emptyList(), modified = listOf(ValueChange(old, new)))
+        diff.nativeLibraries shouldBe SetChange.Changed(
+            added = emptyList(),
+            removed = emptyList(),
+            modified = listOf(ValueChange(NativeLibrary("libfoo.so", listOf(old, unchanged)), NativeLibrary("libfoo.so", listOf(new, unchanged)))),
+        )
+    }
+
+    @Test
+    fun `Given an optional feature that became required When diffing Then it is modified with the necessity change`() {
+        val before = aRecord(activities = emptyList(), features = listOf(Feature.Hardware(name = "android.hardware.camera", isRequired = false)))
+        val after = aRecord(activities = emptyList(), features = listOf(Feature.Hardware(name = "android.hardware.camera", isRequired = true)))
+
+        val changed = differ(before, after).requirements as SetChange.Changed
+
+        changed.modified.single().after.fieldChangesFrom(changed.modified.single().before) shouldBe
+            listOf(AppHistoryFieldChange.Flag(AppHistoryItemField.Required, before = false, after = true))
+    }
+
+    @Test
+    fun `Given a library that gains copies for more ABIs When diffing Then it is modified rather than added`() {
+        val arm = aLibraryFile("arm64-v8a", 10.megabytes)
+        val x86 = aLibraryFile("x86_64", 12.megabytes)
+
+        val diff = differ(aRecord(activities = emptyList(), libraries = listOf(arm)), aRecord(activities = emptyList(), libraries = listOf(arm, x86)))
+
+        val changed = diff.nativeLibraries as SetChange.Changed
+        changed.added shouldBe emptyList()
+        changed.modified.single().after.fieldChangesFrom(changed.modified.single().before) shouldBe
+            listOf(AppHistoryFieldChange.Abis(RuleDirection.Added, listOf("x86_64")))
     }
 }
 
@@ -66,7 +100,11 @@ private fun anActivity(isExported: Boolean = false, isLauncher: Boolean? = false
 
 private fun aLibraryFile(abi: String, size: AppSize) = NativeLibraryFile(name = "libfoo.so", abi = abi, size = size, containingApkFileName = "base.apk")
 
-private fun aRecord(activities: List<Activity>, libraries: List<NativeLibraryFile> = emptyList()) = AppHistoryRecord(
+private fun aRecord(
+    activities: List<Activity>,
+    libraries: List<NativeLibraryFile> = emptyList(),
+    features: List<Feature> = emptyList(),
+) = AppHistoryRecord(
     packageName = WhatsApp.info.packageName,
     capturedAt = Instant.ofEpochMilli(1_000),
     captureKey = AppHistoryCaptureKey(
@@ -75,7 +113,7 @@ private fun aRecord(activities: List<Activity>, libraries: List<NativeLibraryFil
         lastUpdateTime = Instant.ofEpochMilli(1_000),
         versionCode = 1,
     ),
-    detail = WhatsApp.copy(activities = activities),
+    detail = WhatsApp.copy(activities = activities, features = features),
     nativeLibraries = CapturedSection.Captured(NativeLibraries(libraries)),
     signingScheme = CapturedSection.Captured(emptyList()),
 )

@@ -2,6 +2,8 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.api
 
 import androidx.compose.runtime.Immutable
 import kotlinx.serialization.Serializable
+import sk.styk.martin.apkanalyzer.feature.appdetail.api.serialization.EpochMillisInstantSerializer
+import java.time.Instant
 
 @Serializable
 @Immutable
@@ -17,7 +19,8 @@ sealed interface AppDetailInput {
     data class Historical(
         val packageName: String,
         val snapshotId: Long,
-        val capturedAtEpochMillis: Long,
+        @Serializable(with = EpochMillisInstantSerializer::class)
+        val capturedAt: Instant,
     ) : AppDetailInput
 }
 

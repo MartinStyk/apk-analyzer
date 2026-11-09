@@ -27,14 +27,15 @@ import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.AppDetailDataSource
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.RecordedVersionFailure
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.toRecordedVersionFailure
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSectionRepository
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.isHistorical
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.toSectionErrorReason
 
 @HiltViewModel(assistedFactory = PermissionsViewModel.Factory::class)
 internal class PermissionsViewModel @AssistedInject constructor(
     @Assisted private val appDetailInput: AppDetailInput,
-    private val dataSource: AppDetailDataSource,
+    private val sectionRepository: AppDetailSectionRepository,
     private val dispatcherProvider: DispatcherProvider,
     private val clipboardManager: ClipboardManager,
     private val permissionItemMapper: PermissionItemMapper,
@@ -51,9 +52,8 @@ internal class PermissionsViewModel @AssistedInject constructor(
     val state: StateFlow<PermissionsState> = combine(source, narrowing) { source, narrowing ->
         when (source) {
             is PermissionsSource.Loading -> PermissionsState.Loading
-            is PermissionsSource.Error -> PermissionsState.Error
-            is PermissionsSource.RecordedVersionError -> PermissionsState.RecordedVersionError(source.failure)
-            is PermissionsSource.Ready -> source.narrowedBy(narrowing, isHistorical = appDetailInput is AppDetailInput.Historical)
+            is PermissionsSource.Error -> PermissionsState.Error(source.reason)
+            is PermissionsSource.Ready -> source.narrowedBy(narrowing, isHistorical = appDetailInput.isHistorical)
         }
     }
         .flowOn(dispatcherProvider.default())
@@ -98,10 +98,10 @@ internal class PermissionsViewModel @AssistedInject constructor(
         source.value = PermissionsSource.Loading
         viewModelScope.launch {
             source.value = withContext(dispatcherProvider.default()) {
-                dataSource.detail(appDetailInput).fold(
+                sectionRepository.detail(appDetailInput).fold(
                     onSuccess = { it.toSource() },
                     onFailure = { failure ->
-                        failure.toRecordedVersionFailure()?.let { PermissionsSource.RecordedVersionError(it) } ?: PermissionsSource.Error
+                        PermissionsSource.Error(failure.toSectionErrorReason())
                     },
                 )
             }
@@ -116,8 +116,7 @@ internal class PermissionsViewModel @AssistedInject constructor(
 
 private sealed interface PermissionsSource {
     data object Loading : PermissionsSource
-    data object Error : PermissionsSource
-    data class RecordedVersionError(val failure: RecordedVersionFailure) : PermissionsSource
+    data class Error(val reason: SectionErrorReason) : PermissionsSource
     data class Ready(val requested: List<PermissionItem>, val defined: List<PermissionItem>) : PermissionsSource
 }
 

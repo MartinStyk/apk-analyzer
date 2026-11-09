@@ -56,10 +56,13 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.rememberColla
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RecordedVersionError
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
+import java.time.Instant
 import sk.styk.martin.apkanalyzer.core.apphistory.R as HistoryR
 import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 
@@ -88,6 +91,7 @@ internal fun NativeLibrariesScreen(
         state = state,
         onAction = viewModel::onAction,
         modifier = modifier,
+        recordedAt = appDetailInput.recordedAt,
     )
 }
 
@@ -96,32 +100,31 @@ private fun NativeLibrariesContent(
     state: NativeLibrariesState,
     onAction: (NativeLibrariesAction) -> Unit,
     modifier: Modifier = Modifier,
+    recordedAt: Instant? = null,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(AppTheme.colors.background),
-    ) {
-        Toolbar(
-            title = stringResource(AppsR.string.nativelibraries_title),
-            onBack = { onAction(NativeLibrariesAction.Back) },
-        )
-        when (state) {
-            NativeLibrariesState.Loading -> SectionLoading()
-
-            is NativeLibrariesState.RecordedVersionError -> RecordedVersionError(
-                failure = state.failure,
-                onRetry = { onAction(NativeLibrariesAction.Retry) },
+    AppDetailModeFrame(recordedAt = recordedAt, modifier = modifier) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(AppTheme.colors.background),
+        ) {
+            Toolbar(
+                title = stringResource(AppsR.string.nativelibraries_title),
+                onBack = { onAction(NativeLibrariesAction.Back) },
             )
+            when (state) {
+                NativeLibrariesState.Loading -> SectionLoading()
 
-            NativeLibrariesState.Error -> SectionError(
-                message = stringResource(AppsR.string.nativelibraries_error),
-                onRetry = { onAction(NativeLibrariesAction.Retry) },
-            )
+                is NativeLibrariesState.Error -> SectionError(
+                    reason = state.reason,
+                    loadFailedMessage = stringResource(AppsR.string.nativelibraries_error),
+                    onRetry = { onAction(NativeLibrariesAction.Retry) },
+                )
 
-            NativeLibrariesState.NotRecorded -> SectionError(message = stringResource(HistoryR.string.app_history_not_recorded))
+                NativeLibrariesState.NotRecorded -> SectionError(message = stringResource(HistoryR.string.app_history_not_recorded))
 
-            is NativeLibrariesState.Loaded -> NativeLibrariesLoadedContent(state = state, onAction = onAction)
+                is NativeLibrariesState.Loaded -> NativeLibrariesLoadedContent(state = state, onAction = onAction)
+            }
         }
     }
 }
@@ -335,7 +338,11 @@ private fun NativeLibrariesLoadingPreview() {
 @Composable
 private fun NativeLibrariesNotRecordedPreview() {
     ApkAnalyzerTheme {
-        NativeLibrariesContent(state = NativeLibrariesState.NotRecorded, onAction = {})
+        NativeLibrariesContent(
+            state = NativeLibrariesState.NotRecorded,
+            onAction = {},
+            recordedAt = Instant.ofEpochMilli(1_773_014_400_000),
+        )
     }
 }
 
@@ -344,7 +351,7 @@ private fun NativeLibrariesNotRecordedPreview() {
 private fun NativeLibrariesErrorPreview() {
     ApkAnalyzerTheme {
         NativeLibrariesContent(
-            state = NativeLibrariesState.Error,
+            state = NativeLibrariesState.Error(SectionErrorReason.LoadFailed),
             onAction = {},
         )
     }

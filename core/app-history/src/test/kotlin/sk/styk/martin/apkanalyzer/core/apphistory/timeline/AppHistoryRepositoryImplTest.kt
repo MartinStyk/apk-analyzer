@@ -39,7 +39,7 @@ class AppHistoryRepositoryImplTest {
 
     @Test
     fun `Given no such snapshot When reading it Then the outcome is not found rather than a read failure`() = runTest {
-        val read = repository.snapshot(WhatsApp.info.packageName, AppHistorySnapshotId(7))
+        val read = repository.snapshot(AppHistorySnapshotId(7))
 
         read shouldBe AppHistorySnapshotRead.NotFound
     }
@@ -48,7 +48,7 @@ class AppHistoryRepositoryImplTest {
     fun `Given a failing store When reading a snapshot Then the outcome is unavailable`() = runTest {
         persistence.readFailure = IOException("disk")
 
-        val read = repository.snapshot(WhatsApp.info.packageName, AppHistorySnapshotId(7))
+        val read = repository.snapshot(AppHistorySnapshotId(7))
 
         read shouldBe AppHistorySnapshotRead.Unavailable
     }
@@ -57,7 +57,7 @@ class AppHistoryRepositoryImplTest {
     fun `Given a native library section that failed capture When reading the snapshot Then it stays not recorded`() = runTest {
         persistence += aStoredRecord(id = 7, nativeLibraries = CapturedSection.Unavailable)
 
-        val read = repository.snapshot(WhatsApp.info.packageName, AppHistorySnapshotId(7)) as AppHistorySnapshotRead.Found
+        val read = repository.snapshot(AppHistorySnapshotId(7)) as AppHistorySnapshotRead.Found
 
         read.snapshot.nativeLibraries shouldBe AppHistorySection.NotRecorded
     }
@@ -66,7 +66,7 @@ class AppHistoryRepositoryImplTest {
     fun `Given a captured unknown signing scheme When reading the snapshot Then it is recorded as unknown`() = runTest {
         persistence += aStoredRecord(id = 7, signingScheme = CapturedSection.Captured(null))
 
-        val read = repository.snapshot(WhatsApp.info.packageName, AppHistorySnapshotId(7)) as AppHistorySnapshotRead.Found
+        val read = repository.snapshot(AppHistorySnapshotId(7)) as AppHistorySnapshotRead.Found
 
         read.snapshot.signingSchemes shouldBe AppHistorySection.Recorded(null)
     }

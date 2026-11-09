@@ -36,7 +36,6 @@
     <string name="app_history_field_change">%1$s: %2$s → %3$s</string>
     <string name="app_history_field_added">%1$s: đã thêm</string>
     <string name="app_history_field_removed">%1$s: đã xóa</string>
-    <string name="app_history_field_changed">%1$s: đã thay đổi</string>
     <string name="app_history_before">Trước</string>
     <string name="app_history_after">Sau</string>
     <string name="app_history_category_signing">Ký</string>
@@ -89,4 +88,8 @@
     <string name="app_history_size_change_up">%1$s → %2$s (+%3$s)</string>
     <string name="app_history_size_change_down">%1$s → %2$s (−%3$s)</string>
     <string name="app_history_field_value">%1$s: %2$s</string>
+    <string name="app_history_rule_added">%1$s · đã thêm: %2$s</string>
+    <string name="app_history_rule_removed">%1$s · đã xóa: %2$s</string>
+    <string name="app_history_path_rule">%1$s (đọc: %2$s, ghi: %3$s)</string>
+    <string name="app_history_summary_requirements">Yêu cầu thiết bị đã thay đổi</string>
 </resources>

@@ -60,7 +60,7 @@ private val requirementOrder = compareBy<RequirementItem>(
     { it.identifier },
 )
 
-private fun Feature.toRequirementItem(deviceFeatures: DeviceFeatures): RequirementItem {
+fun Feature.toRequirementItem(deviceFeatures: DeviceFeatures): RequirementItem {
     val availability = deviceFeatures.availabilityOf(this)
     return when (this) {
         is Feature.Hardware -> RequirementItem.Hardware(

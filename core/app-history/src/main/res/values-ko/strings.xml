@@ -36,7 +36,6 @@
     <string name="app_history_field_change">%1$s: %2$s → %3$s</string>
     <string name="app_history_field_added">%1$s: 추가됨</string>
     <string name="app_history_field_removed">%1$s: 삭제됨</string>
-    <string name="app_history_field_changed">%1$s: 변경됨</string>
     <string name="app_history_before">이전</string>
     <string name="app_history_after">이후</string>
     <string name="app_history_category_signing">서명</string>
@@ -89,4 +88,8 @@
     <string name="app_history_size_change_up">%1$s → %2$s (+%3$s)</string>
     <string name="app_history_size_change_down">%1$s → %2$s (−%3$s)</string>
     <string name="app_history_field_value">%1$s: %2$s</string>
+    <string name="app_history_rule_added">%1$s · 추가됨: %2$s</string>
+    <string name="app_history_rule_removed">%1$s · 삭제됨: %2$s</string>
+    <string name="app_history_path_rule">%1$s (읽기: %2$s, 쓰기: %3$s)</string>
+    <string name="app_history_summary_requirements">기기 요구사항이 변경됨</string>
 </resources>

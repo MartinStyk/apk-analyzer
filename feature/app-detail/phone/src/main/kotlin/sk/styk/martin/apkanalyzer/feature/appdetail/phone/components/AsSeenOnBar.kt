@@ -30,20 +30,18 @@ import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
-import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.historyFullDate
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.recordedAt
 import java.time.Instant
 
 @Composable
 internal fun AppDetailModeFrame(
-    input: AppDetailInput,
+    recordedAt: Instant?,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
     Column(modifier = modifier.fillMaxSize()) {
-        input.recordedAt?.let { AsSeenOnBar(recordedAt = it) }
+        recordedAt?.let { AsSeenOnBar(recordedAt = it) }
         Box(modifier = Modifier.weight(1f)) {
             content()
         }

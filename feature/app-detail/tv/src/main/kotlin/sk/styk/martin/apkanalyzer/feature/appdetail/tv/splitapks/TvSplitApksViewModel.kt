@@ -10,15 +10,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
-import sk.styk.martin.apkanalyzer.feature.appdetail.tv.toAppReference
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSectionRepository
 
 @HiltViewModel(assistedFactory = TvSplitApksViewModel.Factory::class)
 internal class TvSplitApksViewModel @AssistedInject constructor(
     @Assisted private val appDetailInput: AppDetailInput,
-    private val appDetailRepository: AppDetailRepository,
+    private val sectionRepository: AppDetailSectionRepository,
     private val dispatcherProvider: DispatcherProvider,
 ) : ViewModel() {
 
@@ -43,7 +42,7 @@ internal class TvSplitApksViewModel @AssistedInject constructor(
     private fun loadSplits() {
         mutableState.value = TvSplitApksState.Loading
         viewModelScope.launch(dispatcherProvider.default()) {
-            mutableState.value = appDetailRepository.details(appDetailInput.toAppReference()).fold(
+            mutableState.value = sectionRepository.detail(appDetailInput).fold(
                 onSuccess = { detail ->
                     TvSplitApksState.Loaded(
                         appName = detail.info.applicationName,

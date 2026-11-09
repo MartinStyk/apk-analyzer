@@ -42,29 +42,6 @@
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_unknown">Unbekannt</string>
-    <string name="app_detail_insight_debuggable">Debug-Zugriff ist aktiviert</string>
-    <string name="app_detail_insight_debug_certificate">Mit Android\'s gemeinsamem Debug-Schlüssel signiert</string>
-    <string name="app_detail_insight_certificate_not_yet_valid">Das Signierungszertifikat ist noch nicht gültig</string>
-    <plurals name="app_detail_insight_outdated_target">
-        <item quantity="one">Zielt auf API %1$d, ein API-Level hinter diesem Gerät</item>
-        <item quantity="other">Ziele API %1$d, %2$d API Ebenen hinter diesem Gerät</item>
-    </plurals>
-    <string name="app_detail_insight_sideloaded">Von außerhalb eines App-Stores installiert</string>
-    <plurals name="app_detail_insight_unused">
-        <item quantity="one">In den letzten Monat nicht geöffnet</item>
-        <item quantity="other">In den letzten %1$d Monaten nicht geöffnet</item>
-    </plurals>
-    <string name="app_detail_insight_background_location">Kann auf den Standort zugreifen, während es im Hintergrund läuft</string>
-    <string name="app_detail_insight_messages">Kann Textnachrichten lesen, empfangen oder senden</string>
-    <string name="app_detail_insight_call_history">Kann auf den Anrufverlauf zugreifen oder ihn ändern</string>
-    <string name="app_detail_insight_contacts">Kann auf Kontakte zugreifen oder sie ändern</string>
-    <string name="app_detail_insight_calendar">Kann auf Kalenderereignisse zugreifen oder sie ändern</string>
-    <string name="app_detail_badge_large">Große App</string>
-    <string name="app_detail_badge_system">System</string>
-    <string name="app_detail_badge_google_play">Google Play</string>
-    <string name="app_detail_badge_recently_installed">Neu</string>
-    <string name="app_detail_badge_recently_updated">Aktualisiert</string>
-    <string name="app_detail_badge_recently_used">Kürzlich verwendet</string>
     <string name="general_info_title">Allgemeine Informationen</string>
     <string name="general_info_error">Fehler beim Laden der allgemeinen Informationen</string>
     <string name="general_info_section_identification">Identifikation</string>

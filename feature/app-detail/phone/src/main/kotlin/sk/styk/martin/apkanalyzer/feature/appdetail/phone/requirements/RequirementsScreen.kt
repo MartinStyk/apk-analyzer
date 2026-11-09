@@ -51,12 +51,16 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ListSectionHeader
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RecordedVersionError
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RowChangeLines
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.WarningBanner
+import java.time.Instant
 import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 
 @Composable
@@ -84,6 +88,7 @@ internal fun RequirementsScreen(
         onAction = viewModel::onAction,
         onBack = onBack,
         modifier = modifier,
+        recordedAt = appDetailInput.recordedAt,
     )
 }
 
@@ -93,30 +98,29 @@ private fun RequirementsContent(
     onAction: (RequirementsAction) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
+    recordedAt: Instant? = null,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(AppTheme.colors.background),
-    ) {
-        Toolbar(
-            title = stringResource(AppsR.string.requirements_title),
-            onBack = onBack,
-        )
-        when (state) {
-            is RequirementsState.Loading -> SectionLoading()
-
-            is RequirementsState.RecordedVersionError -> RecordedVersionError(
-                failure = state.failure,
-                onRetry = { onAction(RequirementsAction.Retry) },
+    AppDetailModeFrame(recordedAt = recordedAt, modifier = modifier) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(AppTheme.colors.background),
+        ) {
+            Toolbar(
+                title = stringResource(AppsR.string.requirements_title),
+                onBack = onBack,
             )
+            when (state) {
+                is RequirementsState.Loading -> SectionLoading()
 
-            is RequirementsState.Error -> SectionError(
-                message = stringResource(AppsR.string.requirements_error),
-                onRetry = { onAction(RequirementsAction.Retry) },
-            )
+                is RequirementsState.Error -> SectionError(
+                    reason = state.reason,
+                    loadFailedMessage = stringResource(AppsR.string.requirements_error),
+                    onRetry = { onAction(RequirementsAction.Retry) },
+                )
 
-            is RequirementsState.Loaded -> LoadedContent(state = state, onAction = onAction)
+                is RequirementsState.Loaded -> LoadedContent(state = state, onAction = onAction)
+            }
         }
     }
 }
@@ -185,11 +189,12 @@ private fun LoadedContent(
 }
 
 @Composable
-private fun RequirementRow(
+internal fun RequirementRow(
     item: RequirementItem,
     onClick: () -> Unit,
     onLongClick: (label: String) -> Unit,
     modifier: Modifier = Modifier,
+    changeLines: List<String> = emptyList(),
 ) {
     val label = item.label(LocalResources.current)
     val showIdentifier = label != item.identifier
@@ -229,6 +234,7 @@ private fun RequirementRow(
                     overflow = TextOverflow.StartEllipsis,
                 )
             }
+            RowChangeLines(lines = changeLines)
         }
         if (item.availability == FeatureAvailability.Missing) {
             Spacer(modifier = Modifier.width(8.dp))
@@ -285,7 +291,7 @@ private fun RequirementsLoadingPreview() {
 private fun RequirementsErrorPreview() {
     ApkAnalyzerTheme {
         RequirementsContent(
-            state = RequirementsState.Error,
+            state = RequirementsState.Error(SectionErrorReason.LoadFailed),
             onAction = {},
             onBack = {},
         )

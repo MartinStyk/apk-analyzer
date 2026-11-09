@@ -2,14 +2,15 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.phone
 
 import androidx.compose.runtime.Immutable
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryOverview
-import sk.styk.martin.apkanalyzer.core.apps.insight.AppDetailBadge
-import sk.styk.martin.apkanalyzer.core.apps.insight.AppDetailInsight
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailBadge
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailInsight
 import java.time.Instant
 
 internal enum class AppDetailExport {
@@ -17,15 +18,10 @@ internal enum class AppDetailExport {
     Icon,
 }
 
-internal enum class AppDetailErrorReason {
-    LoadFailed,
-    UnsupportedApk,
-    RecordedVersionFailed,
-    RecordedVersionNotFound,
-    ;
-
-    val canRetry: Boolean
-        get() = this == LoadFailed || this == RecordedVersionFailed
+@Immutable
+internal sealed interface AppDetailErrorReason {
+    data object UnsupportedApk : AppDetailErrorReason
+    data class Failed(val reason: SectionErrorReason) : AppDetailErrorReason
 }
 
 @Immutable

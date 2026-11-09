@@ -2,7 +2,6 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,8 +32,9 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ChangeLinesSection
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.DetailField
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SheetSection
 import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 
 @Suppress("CyclomaticComplexMethod")
@@ -76,17 +76,7 @@ internal fun ComponentDetailBottomSheet(
                 onCopy = onCopy,
             )
 
-            if (changeLines.isNotEmpty()) {
-                SheetSection(title = stringResource(R.string.app_history_what_changed)) {
-                    changeLines.forEach { line ->
-                        Text(
-                            text = line,
-                            style = AppTheme.typography.bodyMedium,
-                            color = AppTheme.colors.onSurface,
-                        )
-                    }
-                }
-            }
+            ChangeLinesSection(lines = changeLines)
 
             SheetSection(title = stringResource(AppsR.string.components_detail_section_reachability)) {
                 DetailField(
@@ -248,23 +238,6 @@ internal fun ComponentDetailBottomSheet(
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun SheetSection(
-    title: String,
-    modifier: Modifier = Modifier,
-    content: @Composable ColumnScope.() -> Unit,
-) {
-    Column(modifier = modifier.padding(top = 24.dp)) {
-        Text(
-            text = title,
-            style = AppTheme.typography.titleSmall,
-            color = AppTheme.colors.primary,
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        content()
     }
 }
 

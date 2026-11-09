@@ -24,6 +24,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.BottomSheet
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ChangeLinesSection
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.DetailField
 import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 
@@ -35,6 +36,7 @@ internal fun RequirementDetailBottomSheet(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     showAvailability: Boolean = true,
+    changeLines: List<String> = emptyList(),
 ) {
     BottomSheet(onDismiss = onDismiss, modifier = modifier) {
         Column(
@@ -56,6 +58,7 @@ internal fun RequirementDetailBottomSheet(
                 )
             }
             Spacer(modifier = Modifier.height(12.dp))
+            ChangeLinesSection(lines = changeLines)
             DetailField(
                 label = stringResource(AppsR.string.requirements_detail_identifier),
                 value = item.identifier,

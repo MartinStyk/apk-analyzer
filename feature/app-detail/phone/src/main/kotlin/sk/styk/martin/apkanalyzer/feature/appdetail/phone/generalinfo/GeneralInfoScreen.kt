@@ -34,12 +34,14 @@ import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.InfoRow
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.InfoRowItem
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.NavigableInfoRowItem
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RationaleBottomSheet
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RecordedVersionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionCard
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
@@ -79,6 +81,7 @@ internal fun GeneralInfoScreen(
         onNavigateToSplitApks = onNavigateToSplitApks,
         onNavigateToNativeLibraries = onNavigateToNativeLibraries,
         modifier = modifier,
+        recordedAt = appDetailInput.recordedAt,
     )
 }
 
@@ -90,32 +93,34 @@ private fun GeneralInfoContent(
     onNavigateToSplitApks: () -> Unit,
     onNavigateToNativeLibraries: () -> Unit,
     modifier: Modifier = Modifier,
+    recordedAt: Instant? = null,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(AppTheme.colors.background),
-    ) {
-        Toolbar(
-            title = stringResource(AppsR.string.general_info_title),
-            onBack = onBack,
-        )
-        when (state) {
-            is GeneralInfoState.Loading -> SectionLoading()
-
-            is GeneralInfoState.RecordedVersionError -> RecordedVersionError(
-                failure = state.failure,
-                onRetry = { onAction(GeneralInfoAction.Retry) },
+    AppDetailModeFrame(recordedAt = recordedAt, modifier = modifier) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(AppTheme.colors.background),
+        ) {
+            Toolbar(
+                title = stringResource(AppsR.string.general_info_title),
+                onBack = onBack,
             )
+            when (state) {
+                is GeneralInfoState.Loading -> SectionLoading()
 
-            is GeneralInfoState.Error -> SectionError(message = stringResource(AppsR.string.general_info_error))
+                is GeneralInfoState.Error -> SectionError(
+                    reason = state.reason,
+                    loadFailedMessage = stringResource(AppsR.string.general_info_error),
+                    onRetry = { onAction(GeneralInfoAction.Retry) },
+                )
 
-            is GeneralInfoState.Loaded -> LoadedContent(
-                state = state,
-                onAction = onAction,
-                onNavigateToSplitApks = onNavigateToSplitApks,
-                onNavigateToNativeLibraries = onNavigateToNativeLibraries,
-            )
+                is GeneralInfoState.Loaded -> LoadedContent(
+                    state = state,
+                    onAction = onAction,
+                    onNavigateToSplitApks = onNavigateToSplitApks,
+                    onNavigateToNativeLibraries = onNavigateToNativeLibraries,
+                )
+            }
         }
     }
 }
@@ -557,7 +562,7 @@ private fun GeneralInfoLoadingPreview() {
 private fun GeneralInfoErrorPreview() {
     ApkAnalyzerTheme {
         GeneralInfoContent(
-            state = GeneralInfoState.Error,
+            state = GeneralInfoState.Error(SectionErrorReason.LoadFailed),
             onAction = {},
             onBack = {},
             onNavigateToSplitApks = {},
@@ -585,6 +590,7 @@ private fun GeneralInfoNotRecordedPreview() {
             onBack = {},
             onNavigateToSplitApks = {},
             onNavigateToNativeLibraries = {},
+            recordedAt = Instant.ofEpochMilli(1_773_014_400_000),
         )
     }
 }

@@ -42,33 +42,6 @@
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_unknown">Nieznany</string>
-    <string name="app_detail_insight_debuggable">Dostęp do debugowania jest włączony</string>
-    <string name="app_detail_insight_debug_certificate">Podpisano wspólnym kluczem debugowania Androida</string>
-    <string name="app_detail_insight_certificate_not_yet_valid">Certyfikat podpisu nie jest jeszcze ważny</string>
-    <plurals name="app_detail_insight_outdated_target">
-        <item quantity="one">Celuje w API %1$d, jeden poziom API za tym urządzeniem</item>
-        <item quantity="few">Celuje w API %1$d, %2$d poziomy API za tym urządzeniem</item>
-        <item quantity="many">Celuje w API %1$d, %2$d poziomów API za tym urządzeniem</item>
-        <item quantity="other">Celuje w API %1$d, %2$d poziomów API za tym urządzeniem</item>
-    </plurals>
-    <string name="app_detail_insight_sideloaded">Zainstalowane z zewnątrz sklepu z aplikacjami</string>
-    <plurals name="app_detail_insight_unused">
-        <item quantity="one">Nie otwierano w ciągu ostatniego miesiąca</item>
-        <item quantity="few">Nie otwierano w ciągu ostatnich %1$d miesięcy</item>
-        <item quantity="many">Nie otwierano w ciągu ostatnich %1$d miesięcy</item>
-        <item quantity="other">Nie otwierano w ciągu ostatnich %1$d miesięcy</item>
-    </plurals>
-    <string name="app_detail_insight_background_location">Może uzyskać dostęp do lokalizacji podczas działania w tle</string>
-    <string name="app_detail_insight_messages">Może czytać, odbierać lub wysyłać wiadomości tekstowe</string>
-    <string name="app_detail_insight_call_history">Może uzyskać dostęp do lub zmieniać historię połączeń</string>
-    <string name="app_detail_insight_contacts">Może uzyskać dostęp do lub zmieniać kontakty</string>
-    <string name="app_detail_insight_calendar">Może uzyskać dostęp do lub zmieniać wydarzenia w kalendarzu</string>
-    <string name="app_detail_badge_large">Duża aplikacja</string>
-    <string name="app_detail_badge_system">System</string>
-    <string name="app_detail_badge_google_play">Google Play</string>
-    <string name="app_detail_badge_recently_installed">Nowy</string>
-    <string name="app_detail_badge_recently_updated">Zaktualizowane</string>
-    <string name="app_detail_badge_recently_used">Ostatnio używane</string>
     <string name="general_info_title">Informacje ogólne</string>
     <string name="general_info_error">Nie udało się załadować informacji ogólnych</string>
     <string name="general_info_section_identification">Identyfikacja</string>
