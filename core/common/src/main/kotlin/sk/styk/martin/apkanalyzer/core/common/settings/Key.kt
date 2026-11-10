@@ -3,6 +3,8 @@ package sk.styk.martin.apkanalyzer.core.common.settings
 sealed interface Key<T : Any> {
     data object ColorScheme : Key<ColorAppScheme>
 
+    data object HexFingerprintFormat : Key<FingerprintFormat>
+
     data object OnboardingRequired : Key<Boolean>
 
     data object AppStartNumber : Key<Int>
@@ -24,4 +26,9 @@ enum class ColorAppScheme {
     Day,
     Night,
     FollowSystem,
+}
+
+enum class FingerprintFormat {
+    ColonSeparated,
+    Continuous,
 }

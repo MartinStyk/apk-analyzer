@@ -123,7 +123,7 @@ internal class TvAppDetailViewModel @AssistedInject constructor(
             ),
             signerName = signing.currentCertificates.firstOrNull()?.issuer?.displayName,
             isDebugSigned = signing.currentCertificates.any { it.trustLevel == CertificateTrustLevel.Debug },
-            sha256Fingerprint = signing.currentCertificates.firstOrNull()?.formattedSha256Fingerprint,
+            sha256Fingerprint = signing.currentCertificates.firstOrNull()?.certificateHashSha256,
             requiredFeaturesCount = requirements.sections.firstOrNull { it.isRequired }?.requirements?.size ?: 0,
             optionalFeaturesCount = requirements.sections.firstOrNull { !it.isRequired }?.requirements?.size ?: 0,
             missingRequiredFeaturesCount = requirements.missingRequiredCount,

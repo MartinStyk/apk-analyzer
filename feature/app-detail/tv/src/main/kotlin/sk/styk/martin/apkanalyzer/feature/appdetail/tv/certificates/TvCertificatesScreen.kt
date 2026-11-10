@@ -16,10 +16,11 @@ import sk.styk.martin.apkanalyzer.core.apps.signing.displayLine
 import sk.styk.martin.apkanalyzer.core.apps.signing.explanationRes
 import sk.styk.martin.apkanalyzer.core.apps.signing.isWeak
 import sk.styk.martin.apkanalyzer.core.apps.signing.labelRes
-import sk.styk.martin.apkanalyzer.core.apps.signing.toFingerprint
+import sk.styk.martin.apkanalyzer.core.common.digest.toFingerprint
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
+import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.LocalFingerprintFormat
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.theme.ApkAnalyzerTvTheme
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.iconReference
@@ -113,7 +114,11 @@ private fun certificateSections(state: TvCertificatesState.Loaded): List<InfoSec
                 } else {
                     stringResource(AppsR.string.certificates_card_position, role, index + 1, state.pastCertificates.size)
                 },
-                rows = certificateRows(keyPrefix = "past-$index", item = item, signingFacts = listOf()),
+                rows = certificateRows(
+                    keyPrefix = "past-$index",
+                    item = item,
+                    signingFacts = listOf(),
+                ),
             ),
         )
     }
@@ -224,7 +229,9 @@ private fun certificateRows(
                 explanation = stringResource(AppsR.string.certificates_serial_explanation),
             ),
         )
-        addAll(fingerprintRows("$keyPrefix:certificate", AppsR.string.certificates_certificate_fingerprints, certificate.certificateHashes()))
+        addAll(
+            fingerprintRows("$keyPrefix:certificate", AppsR.string.certificates_certificate_fingerprints, certificate.certificateHashes()),
+        )
         addAll(fingerprintRows("$keyPrefix:public-key", AppsR.string.certificates_public_key_fingerprints, certificate.publicKeyHashes()))
     }
 }
@@ -236,11 +243,12 @@ private fun fingerprintRows(
     hashes: List<Pair<Int, String>>,
 ): List<InfoRow> {
     val groupLabel = stringResource(group)
+    val fingerprintFormat = LocalFingerprintFormat.current
     return hashes.map { (label, value) ->
         InfoRow(
             key = "$keyPrefix:$label",
             label = stringResource(R.string.tv_value_pair, groupLabel, stringResource(label)),
-            value = value.toFingerprint(),
+            value = value.toFingerprint(fingerprintFormat),
             icon = ApkAnalyzerIcons.Fingerprint,
             isCode = true,
             explanation = null,

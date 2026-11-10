@@ -11,4 +11,7 @@
     <string name="settings_language_section">Ngôn ngữ</string>
     <string name="settings_language_app_language">Ngôn ngữ ứng dụng</string>
     <string name="settings_language_system_default">Mặc định hệ thống</string>
+    <string name="settings_fingerprint_format">Định dạng dấu vân tay</string>
+    <string name="settings_fingerprint_format_colon_separated">Phân tách bằng dấu hai chấm</string>
+    <string name="settings_fingerprint_format_continuous">Liền mạch</string>
 </resources>

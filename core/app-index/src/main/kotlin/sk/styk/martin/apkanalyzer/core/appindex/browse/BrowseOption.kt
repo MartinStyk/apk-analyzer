@@ -52,7 +52,13 @@ fun AppAttributeIndex.browseOptions(
 fun BrowseOption.matches(query: String): Boolean = query.isBlank() ||
     key.contains(query, ignoreCase = true) ||
     label.contains(query, ignoreCase = true) ||
-    (this as? BrowseOption.CertificateHash)?.publisher?.contains(query, ignoreCase = true) == true ||
+    (this as? BrowseOption.CertificateHash)?.matchesHash(query) == true ||
     (this as? BrowseOption.Labeled)?.rawIdentifier?.contains(query, ignoreCase = true) == true
+
+private fun BrowseOption.CertificateHash.matchesHash(query: String): Boolean {
+    val hexQuery = query.replace(":", "")
+    return publisher?.contains(query, ignoreCase = true) == true ||
+        (hexQuery.isNotEmpty() && key.replace(":", "").contains(hexQuery, ignoreCase = true))
+}
 
 fun BrowseDimension.subAttributesOrDefault(): List<BrowseSubAttribute?> = subAttributes().takeIf { it.isNotEmpty() } ?: listOf(null)

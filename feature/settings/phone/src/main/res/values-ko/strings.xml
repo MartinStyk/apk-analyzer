@@ -11,4 +11,7 @@
     <string name="settings_language_section">언어</string>
     <string name="settings_language_app_language">앱 언어</string>
     <string name="settings_language_system_default">시스템 기본값</string>
+    <string name="settings_fingerprint_format">지문 형식</string>
+    <string name="settings_fingerprint_format_colon_separated">콜론으로 구분</string>
+    <string name="settings_fingerprint_format_continuous">연속</string>
 </resources>

@@ -2,9 +2,6 @@ package sk.styk.martin.apkanalyzer.core.apps.signing
 
 import androidx.annotation.StringRes
 import sk.styk.martin.apkanalyzer.core.apps.R
-import java.util.Locale
-
-fun String.toFingerprint(): String = uppercase(Locale.ROOT).chunked(2).joinToString(":")
 
 val CertificatePrincipal.displayLine: String?
     get() = listOfNotNull(

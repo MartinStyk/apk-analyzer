@@ -4,12 +4,15 @@ import androidx.activity.compose.LocalActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
 import sk.styk.martin.apkanalyzer.core.common.settings.ColorAppScheme
+import sk.styk.martin.apkanalyzer.core.common.settings.FingerprintFormat
+import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.LocalFingerprintFormat
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 
 @Composable
@@ -36,7 +39,13 @@ internal fun ApkAnalyzerThemeHost(state: ApkAnalyzerState, content: @Composable 
     LaunchedEffect(nightMode) {
         AppCompatDelegate.setDefaultNightMode(nightMode)
     }
-    ApkAnalyzerTheme(isDarkTheme = isDarkTheme, content = content)
+    val fingerprintFormat = when (state) {
+        ApkAnalyzerState.Loading -> FingerprintFormat.ColonSeparated
+        is ApkAnalyzerState.Data -> state.fingerprintFormat
+    }
+    CompositionLocalProvider(LocalFingerprintFormat provides fingerprintFormat) {
+        ApkAnalyzerTheme(isDarkTheme = isDarkTheme, content = content)
+    }
 }
 
 @Composable

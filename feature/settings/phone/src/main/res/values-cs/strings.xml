@@ -11,4 +11,7 @@
     <string name="settings_language_section">Jazyk</string>
     <string name="settings_language_app_language">Jazyk aplikace</string>
     <string name="settings_language_system_default">Výchozí systémové nastavení</string>
+    <string name="settings_fingerprint_format">Formát otisku</string>
+    <string name="settings_fingerprint_format_colon_separated">S dvojtečkami</string>
+    <string name="settings_fingerprint_format_continuous">Bez oddělovačů</string>
 </resources>

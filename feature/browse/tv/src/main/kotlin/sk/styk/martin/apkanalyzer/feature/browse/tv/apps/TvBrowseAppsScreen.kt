@@ -34,7 +34,7 @@ import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.AppCard
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.AppCardWidth
-import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.CodeBox
+import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.FingerprintBox
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.ScrollablePanel
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.focus.rememberRestorableFocus
@@ -142,7 +142,7 @@ private fun LoadedContent(
             if (state.bucketDetail != null || isHashBucket) {
                 BucketInfo(
                     detail = state.bucketDetail,
-                    fingerprint = bucketLabel.takeIf { isHashBucket },
+                    fingerprint = bucketKey.takeIf { isHashBucket },
                     fingerprintLabel = subAttribute?.let { stringResource(it.cardLabelRes) },
                     modifier = Modifier.padding(vertical = FocusRoom).width(InfoWidth),
                 )
@@ -194,7 +194,7 @@ private fun BucketInfo(
             ),
             style = AppTheme.typography.titleMedium,
         )
-        fingerprint?.let { CodeBox(text = it, label = fingerprintLabel, modifier = Modifier.fillMaxWidth()) }
+        fingerprint?.let { FingerprintBox(value = it, label = fingerprintLabel, modifier = Modifier.fillMaxWidth()) }
         detail?.let { BucketDetailInfo(detail = it) }
     }
 }

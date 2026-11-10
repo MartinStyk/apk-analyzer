@@ -25,10 +25,12 @@ class SettingsViewModel @Inject constructor(
 
     val state = combine(
         persistenceRepository.observe(Key.ColorScheme),
+        persistenceRepository.observe(Key.HexFingerprintFormat),
         persistenceRepository.observe(Key.RecentlyViewedAppsEnabled),
-    ) { colorScheme, recentlyViewedEnabled ->
+    ) { colorScheme, fingerprintFormat, recentlyViewedEnabled ->
         SettingsState(
             colorScheme = colorScheme,
+            fingerprintFormat = fingerprintFormat,
             recentlyViewedAppsEnabled = recentlyViewedEnabled,
             appLanguageSetting = this.appLanguageRepository.getAppLanguageSetting(),
         )
@@ -38,6 +40,10 @@ class SettingsViewModel @Inject constructor(
         when (action) {
             is SettingsAction.ColorSchemeSelected -> {
                 viewModelScope.launch { persistenceRepository.save(Key.ColorScheme, action.colorScheme) }
+            }
+
+            is SettingsAction.FingerprintFormatSelected -> {
+                viewModelScope.launch { persistenceRepository.save(Key.HexFingerprintFormat, action.fingerprintFormat) }
             }
 
             is SettingsAction.RecentlyViewedAppsToggled -> {

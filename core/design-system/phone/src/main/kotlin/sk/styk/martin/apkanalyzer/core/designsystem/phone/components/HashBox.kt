@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -14,24 +15,27 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import sk.styk.martin.apkanalyzer.core.common.digest.toFingerprint
+import sk.styk.martin.apkanalyzer.core.common.settings.FingerprintFormat
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
+import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.LocalFingerprintFormat
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
-import java.util.Locale
 
 @Composable
 fun HashBox(
     value: String,
     modifier: Modifier = Modifier,
     copyContentDescription: String? = null,
-    onCopy: (() -> Unit)? = null,
+    onCopy: ((String) -> Unit)? = null,
 ) {
+    val fingerprint = value.toFingerprint(LocalFingerprintFormat.current)
     val copyModifier = if (onCopy == null) {
         Modifier
     } else {
         Modifier
-            .combinedClickable(onClick = onCopy, onLongClick = onCopy)
+            .combinedClickable(onClick = { onCopy(fingerprint) }, onLongClick = { onCopy(fingerprint) })
             .semantics {
                 copyContentDescription?.let { contentDescription = it }
             }
@@ -45,7 +49,7 @@ fun HashBox(
             .then(copyModifier),
     ) {
         Text(
-            text = value.toDisplayFingerprint(),
+            text = fingerprint.replace(":", ":\u200B"),
             style = AppTheme.typography.monospace,
             color = AppTheme.colors.onBackground,
             modifier = Modifier
@@ -71,11 +75,6 @@ fun HashBox(
     }
 }
 
-private fun String.toDisplayFingerprint(): String = replace(":", "")
-    .uppercase(Locale.ROOT)
-    .chunked(2)
-    .joinToString(":\u200B")
-
 @Preview
 @Composable
 private fun HashBoxDefaultPreview() {
@@ -94,5 +93,31 @@ private fun HashBoxDarkPreview() {
         HashBox(
             value = "38:91:8A:45:3D:07:19:93:54:F8:B1:9A:7A:6D:2B:EC:96:5A:21:22",
         )
+    }
+}
+
+@Preview
+@Composable
+private fun HashBoxContinuousPreview() {
+    ApkAnalyzerTheme {
+        CompositionLocalProvider(LocalFingerprintFormat provides FingerprintFormat.Continuous) {
+            HashBox(
+                value = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+                onCopy = {},
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun HashBoxContinuousDarkPreview() {
+    ApkAnalyzerTheme(isDarkTheme = true) {
+        CompositionLocalProvider(LocalFingerprintFormat provides FingerprintFormat.Continuous) {
+            HashBox(
+                value = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+                onCopy = {},
+            )
+        }
     }
 }

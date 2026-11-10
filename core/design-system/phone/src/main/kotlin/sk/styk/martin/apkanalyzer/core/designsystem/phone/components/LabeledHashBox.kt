@@ -17,7 +17,7 @@ fun LabeledHashBox(
     value: String,
     modifier: Modifier = Modifier,
     copyContentDescription: String? = null,
-    onCopy: (() -> Unit)? = null,
+    onCopy: ((String) -> Unit)? = null,
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         Text(

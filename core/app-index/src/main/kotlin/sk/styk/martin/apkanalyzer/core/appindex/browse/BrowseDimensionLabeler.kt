@@ -6,7 +6,9 @@ import sk.styk.martin.apkanalyzer.core.appindex.R
 import sk.styk.martin.apkanalyzer.core.apppermissions.PermissionLabelProvider
 import sk.styk.martin.apkanalyzer.core.apps.model.AppCategory
 import sk.styk.martin.apkanalyzer.core.apps.sdkversion.SdkVersionResolver
+import sk.styk.martin.apkanalyzer.core.common.digest.toFingerprint
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
+import sk.styk.martin.apkanalyzer.core.common.settings.FingerprintFormat
 import java.util.Locale
 import javax.inject.Inject
 
@@ -43,7 +45,7 @@ class BrowseDimensionLabeler @Inject constructor(
             BrowseSubAttribute.CertificateSha1,
             BrowseSubAttribute.CertificateMd5,
             null,
-            -> formatFingerprint(key)
+            -> key.toFingerprint(FingerprintFormat.ColonSeparated)
         }
     }
 
@@ -106,5 +108,3 @@ class BrowseDimensionLabeler @Inject constructor(
         AppCategory.Accessibility -> context.getString(R.string.browse_category_accessibility)
     }
 }
-
-private fun formatFingerprint(hex: String): String = hex.uppercase().chunked(2).joinToString(":")

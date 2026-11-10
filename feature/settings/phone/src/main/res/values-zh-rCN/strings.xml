@@ -11,4 +11,7 @@
     <string name="settings_language_section">语言</string>
     <string name="settings_language_app_language">应用语言</string>
     <string name="settings_language_system_default">系统默认值</string>
+    <string name="settings_fingerprint_format">指纹格式</string>
+    <string name="settings_fingerprint_format_colon_separated">冒号分隔</string>
+    <string name="settings_fingerprint_format_continuous">连续</string>
 </resources>

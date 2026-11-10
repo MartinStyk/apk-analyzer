@@ -28,11 +28,13 @@ import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseDimension
 import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseOption
 import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseSubAttribute
 import sk.styk.martin.apkanalyzer.core.appindex.browse.titleRes
+import sk.styk.martin.apkanalyzer.core.common.digest.toFingerprint
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.AppIcon
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
+import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.LocalFingerprintFormat
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.InfoCard
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.SectionHeader
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.Text
@@ -169,7 +171,10 @@ private fun OptionTile(
 ) {
     InfoCard(
         onClick = onClick,
-        title = rowOption.option.label,
+        title = when (val option = rowOption.option) {
+            is BrowseOption.CertificateHash -> option.key.toFingerprint(LocalFingerprintFormat.current)
+            is BrowseOption.Labeled -> option.label
+        },
         icon = icon,
         stackedHeader = true,
         modifier = modifier.size(width = TileWidth, height = TileHeight),

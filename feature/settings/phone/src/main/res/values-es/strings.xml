@@ -11,4 +11,7 @@
     <string name="settings_language_section">Idioma</string>
     <string name="settings_language_app_language">Idioma de la aplicación</string>
     <string name="settings_language_system_default">Sistema predeterminado</string>
+    <string name="settings_fingerprint_format">Formato de huella digital</string>
+    <string name="settings_fingerprint_format_colon_separated">Separado por dos puntos</string>
+    <string name="settings_fingerprint_format_continuous">Continuo</string>
 </resources>

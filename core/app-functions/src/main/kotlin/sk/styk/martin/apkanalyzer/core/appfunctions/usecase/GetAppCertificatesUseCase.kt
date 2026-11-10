@@ -5,8 +5,10 @@ import sk.styk.martin.apkanalyzer.core.appfunctions.model.CertificateSummary
 import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.signing.Certificate
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.common.digest.toFingerprint
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
+import sk.styk.martin.apkanalyzer.core.common.settings.FingerprintFormat
 import javax.inject.Inject
 
 internal class GetAppCertificatesUseCase @Inject constructor(
@@ -23,7 +25,7 @@ internal class GetAppCertificatesUseCase @Inject constructor(
 private fun Certificate.toCertificateSummary() = CertificateSummary(
     signatureAlgorithm = signAlgorithm,
     isSelfSigned = isSelfSigned,
-    sha256Fingerprint = formattedSha256Fingerprint,
+    sha256Fingerprint = certificateHashSha256.toFingerprint(FingerprintFormat.ColonSeparated),
     validFrom = validFrom,
     validUntil = validUntil,
     issuerOrganization = issuer.organization,

@@ -64,7 +64,6 @@ import sk.styk.martin.apkanalyzer.core.apps.signing.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeVersion
 import sk.styk.martin.apkanalyzer.core.apps.signing.labelRes
-import sk.styk.martin.apkanalyzer.core.apps.signing.toFingerprint
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
@@ -791,11 +790,10 @@ private fun CertificatesCard(
                 )
             }
             val hashLabel = stringResource(AppsR.string.certificates_sha256)
-            val fingerprint = certificate.certificateHashSha256.toFingerprint()
             LabeledHashBox(
                 label = hashLabel,
-                value = fingerprint,
-                onCopy = { onCopy(hashLabel, fingerprint) },
+                value = certificate.certificateHashSha256,
+                onCopy = { fingerprint -> onCopy(hashLabel, fingerprint) },
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
         }

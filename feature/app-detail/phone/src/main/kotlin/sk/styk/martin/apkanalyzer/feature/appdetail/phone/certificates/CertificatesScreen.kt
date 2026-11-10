@@ -729,19 +729,19 @@ private fun FingerprintBoxes(
             label = sha256Label,
             value = sha256,
             copyContentDescription = copyDescription,
-            onCopy = { onCopy(sha256Label, sha256) },
+            onCopy = { onCopy(sha256Label, it) },
         )
         LabeledHashBox(
             label = sha1Label,
             value = sha1,
             copyContentDescription = copyDescription,
-            onCopy = { onCopy(sha1Label, sha1) },
+            onCopy = { onCopy(sha1Label, it) },
         )
         LabeledHashBox(
             label = md5Label,
             value = md5,
             copyContentDescription = copyDescription,
-            onCopy = { onCopy(md5Label, md5) },
+            onCopy = { onCopy(md5Label, it) },
         )
     }
 }
