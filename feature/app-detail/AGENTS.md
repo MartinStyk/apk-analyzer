@@ -42,7 +42,7 @@ assisted injection and seed ViewModel state exactly once.
 ## Historical Mode
 
 `AppDetailInput.Historical` renders a past state on the same hub and section screens. It is phone only
-and debug only, through `ConfigurationKey.AppHistoryEnabled`, observed at the hub's History card alone.
+and debug only, through `ConfigurationKey.AppHistoryDisplayEnabled`, observed at the hub's History card alone.
 Do not add a variant to `AppReference`: icon, export, manifest, AI, and signing code all consume it, and
 a past state means nothing to them.
 

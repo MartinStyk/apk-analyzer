@@ -12,9 +12,11 @@ broadcast, on-launch reconciliation, and periodic `WorkManager` reconciliation).
 [Restore Merge](#restore-merge). The diff engine (`HI-03`) is implemented as the per-app timeline
 read API — see [Timeline and Diff](#timeline-and-diff). `feature:app-detail:phone` reads it for the
 per-app timeline, change detail, and historical detail (`HI-08`, `HI-15`), behind the debug-only
-`ConfigurationKey.AppHistoryEnabled`; capture runs in every build. Not yet built: the What Changed tab
-and other UI (`HI-06`/`HI-14`), the significance rules (`HI-18`), retention/pruning (`HI-04`), the
-Pro-gated Drive backup half of `HI-16`, and the `HI-10` runtime-state (enabled/install-source) tier. See
+`ConfigurationKey.AppHistoryDisplayEnabled`; capture is gated separately by the debug-only
+`ConfigurationKey.AppHistoryRecordingEnabled`. Not yet built:
+the What Changed tab and other UI (`HI-06`/`HI-14`), the significance rules (`HI-18`),
+retention/pruning (`HI-04`), the Pro-gated Drive backup half of `HI-16`, and the `HI-10` runtime-state
+(enabled/install-source) tier. See
 [`docs/app/technical/app-history-capture-schema.md`](../../docs/app/technical/app-history-capture-schema.md)
 for the full design, including the entity/DAO schema — read it before touching this module; it is the
 source of truth for schema and capture semantics, not this file.
@@ -241,8 +243,10 @@ the same size is not a visible change.
 `AppHistoryCaptureRepositoryImpl` implements the schema doc's
 [Capture Gate](../../docs/app/technical/app-history-capture-schema.md#capture-gate) and
 [Capture Pipeline](../../docs/app/technical/app-history-capture-schema.md#capture-pipeline) sections
-exactly — read there for the gate/write steps. Three invariants live only in this implementation, not
-in the design doc:
+exactly — read there for the gate/write steps. Both capture entry points check the debug-only
+`ConfigurationKey.AppHistoryRecordingEnabled` before reading installed apps or history storage, so every
+capture call from a trigger becomes a no-op when capture is disabled. Three invariants live only in
+this implementation, not in the design doc:
 
 **A sweep can target an app that is already gone.** `reconcileAll()` reads the replayed list from
 `InstalledAppsRepository.apps()`, which is stale whenever the sweep starts before the reload a

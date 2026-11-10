@@ -15,6 +15,8 @@ import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibrariesRepository
 import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeRepository
+import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationKey
+import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.device.DeviceInfoProvider
@@ -43,6 +45,7 @@ internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
     private val deviceInfoProvider: DeviceInfoProvider,
     private val dispatcherProvider: DispatcherProvider,
     private val performanceTracker: PerformanceTracker,
+    private val configurationRepository: ConfigurationRepository,
 ) : AppHistoryCaptureRepository {
 
     private val perPackageMutexes = ConcurrentHashMap<PackageName, Mutex>()
@@ -59,40 +62,48 @@ internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
         )
 
     override suspend fun reconcile(packageName: PackageName): Result<Unit> = runCatchingCancellable {
-        Logger.i(APP_HISTORY, "Package reconcile loading started for ${packageName.value}")
-        val app = installedAppsRepository.app(packageName)
-        if (app == null) {
-            Logger.i(APP_HISTORY, "Package reconcile loading finished for ${packageName.value}: package not found, skipped")
-            return@runCatchingCancellable
+        ifRecordingEnabled {
+            Logger.i(APP_HISTORY, "Package reconcile loading started for ${packageName.value}")
+            val app = installedAppsRepository.app(packageName)
+            if (app == null) {
+                Logger.i(APP_HISTORY, "Package reconcile loading finished for ${packageName.value}: package not found, skipped")
+                return@ifRecordingEnabled
+            }
+            val captured = captureIfGateOpen(app)
+            val status = if (captured) "captured" else "skipped, no change detected"
+            Logger.i(APP_HISTORY, "Package reconcile loading finished for ${packageName.value}: $status")
         }
-        val captured = captureIfGateOpen(app)
-        val status = if (captured) "captured" else "skipped, no change detected"
-        Logger.i(APP_HISTORY, "Package reconcile loading finished for ${packageName.value}: $status")
     }
 
     override suspend fun reconcileAll(): Result<Unit> = runCatchingCancellable {
-        performanceTracker.startCancellableTrace("app_history_reconcile") {
-            Logger.i(APP_HISTORY, "Reconciliation sweep loading started")
-            val apps = installedAppsRepository.apps().first()
-            appCount = apps.size
-            val latestByPackage = persistenceRepository.latestCaptureKeys().getOrThrow()
-            var capturedCount = 0
-            var failedCount = 0
-            apps.forEach { app ->
-                if (app.hasChangedSince(latestByPackage[app.packageName])) {
-                    runCatchingCancellable { captureIfGateOpen(app) }
-                        .onSuccess { captured -> if (captured) capturedCount++ }
-                        .onFailure {
-                            failedCount++
-                            Logger.w(APP_HISTORY, it, "Reconciliation capture failed for ${app.packageName.value}, continuing sweep")
-                        }
+        ifRecordingEnabled {
+            performanceTracker.startCancellableTrace("app_history_reconcile") {
+                Logger.i(APP_HISTORY, "Reconciliation sweep loading started")
+                val apps = installedAppsRepository.apps().first()
+                appCount = apps.size
+                val latestByPackage = persistenceRepository.latestCaptureKeys().getOrThrow()
+                var capturedCount = 0
+                var failedCount = 0
+                apps.forEach { app ->
+                    if (app.hasChangedSince(latestByPackage[app.packageName])) {
+                        runCatchingCancellable { captureIfGateOpen(app) }
+                            .onSuccess { captured -> if (captured) capturedCount++ }
+                            .onFailure {
+                                failedCount++
+                                Logger.w(APP_HISTORY, it, "Reconciliation capture failed for ${app.packageName.value}, continuing sweep")
+                            }
+                    }
                 }
+                this["captured_count"] = capturedCount
+                this["failed_count"] = failedCount
+                outcome = if (failedCount == 0) TraceOutcome.Success else TraceOutcome.Degraded
+                Logger.i(APP_HISTORY, "Reconciliation sweep loading finished: ${apps.size} apps scanned, $capturedCount captured")
             }
-            this["captured_count"] = capturedCount
-            this["failed_count"] = failedCount
-            outcome = if (failedCount == 0) TraceOutcome.Success else TraceOutcome.Degraded
-            Logger.i(APP_HISTORY, "Reconciliation sweep loading finished: ${apps.size} apps scanned, $capturedCount captured")
         }
+    }
+
+    private suspend fun ifRecordingEnabled(action: suspend () -> Unit) {
+        if (configurationRepository.get(ConfigurationKey.AppHistoryRecordingEnabled)) action()
     }
 
     private suspend fun captureIfGateOpen(app: InstalledApp): Boolean = perPackageMutexes.computeIfAbsent(app.packageName) { Mutex() }.withLock {

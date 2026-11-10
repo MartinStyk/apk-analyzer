@@ -15,6 +15,7 @@ internal class BuildConfigurationRepository @Inject constructor() : Configuratio
     @Suppress("UNCHECKED_CAST")
     private fun <T : Any> resolve(key: ConfigurationKey<T>): T = when (key) {
         ConfigurationKey.InventoryExportEnabled -> BuildConfig.DEBUG
-        ConfigurationKey.AppHistoryEnabled -> BuildConfig.DEBUG
+        ConfigurationKey.AppHistoryDisplayEnabled -> BuildConfig.DEBUG
+        ConfigurationKey.AppHistoryRecordingEnabled -> BuildConfig.DEBUG
     } as T
 }
