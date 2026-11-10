@@ -9,6 +9,8 @@ import androidx.work.Configuration
 import coil3.ImageLoader
 import coil3.SingletonImageLoader
 import dagger.hilt.android.HiltAndroidApp
+import sk.styk.martin.apkanalyzer.core.common.analytics.AnalyticsFormFactor
+import sk.styk.martin.apkanalyzer.core.common.analytics.AnalyticsTracker
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import javax.inject.Inject
 
@@ -27,9 +29,13 @@ class ApkAnalyzer :
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
 
+    @Inject
+    lateinit var analyticsTracker: AnalyticsTracker
+
     override fun onCreate() {
         super.onCreate()
         Logger.init(logToConsole = BuildConfig.DEBUG)
+        analyticsTracker.setFormFactor(AnalyticsFormFactor.Phone)
         lifecycleObservers.forEach { ProcessLifecycleOwner.get().lifecycle.addObserver(it) }
     }
 
