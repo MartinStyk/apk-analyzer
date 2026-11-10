@@ -17,23 +17,22 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilterKey
 import sk.styk.martin.apkanalyzer.core.apps.components.ComponentKind
-import sk.styk.martin.apkanalyzer.core.apps.intentfilters.IntentFiltersRepository
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSection
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSectionRepository
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.toAppReference
 
 @HiltViewModel(assistedFactory = IntentFiltersViewModel.Factory::class)
 internal class IntentFiltersViewModel @AssistedInject constructor(
     @Assisted private val appDetailInput: AppDetailInput,
     @Assisted private val componentName: String,
     @Assisted private val componentType: ComponentType,
-    private val intentFiltersRepository: IntentFiltersRepository,
+    private val sectionRepository: AppDetailSectionRepository,
     private val dispatcherProvider: DispatcherProvider,
     private val clipboardManager: ClipboardManager,
     @ApplicationContext private val context: Context,
@@ -90,10 +89,16 @@ internal class IntentFiltersViewModel @AssistedInject constructor(
     private fun loadFilters() {
         source.value = IntentFiltersSource.Loading
         viewModelScope.launch(dispatcherProvider.default()) {
-            source.value = intentFiltersRepository.componentIntentFilters(appDetailInput.toAppReference()).fold(
-                onSuccess = { filtersByComponent ->
-                    val key = ComponentIntentFilterKey(componentName, componentType.toComponentKind())
-                    IntentFiltersSource.Ready(componentName, componentType, filtersByComponent[key].orEmpty().toItems())
+            source.value = sectionRepository.intentFilters(appDetailInput).fold(
+                onSuccess = { section ->
+                    when (section) {
+                        is AppDetailSection.Available -> {
+                            val key = ComponentIntentFilterKey(componentName, componentType.toComponentKind())
+                            IntentFiltersSource.Ready(componentName, componentType, section.value[key].orEmpty().toItems())
+                        }
+
+                        AppDetailSection.NotRecorded -> IntentFiltersSource.Unavailable
+                    }
                 },
                 onFailure = { IntentFiltersSource.Unavailable },
             )

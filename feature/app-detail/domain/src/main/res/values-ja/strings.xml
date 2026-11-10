@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_detail_insight_debuggable">デバッグアクセスが有効です</string>
+    <string name="app_detail_insight_debug_certificate">Androidの共有デバッグキーで署名されています</string>
+    <string name="app_detail_insight_certificate_not_yet_valid">署名証明書はまだ有効ではありません</string>
+    <plurals name="app_detail_insight_outdated_target">
+        <item quantity="other">%1$d APIをターゲットにしており、%2$d APIレベルはこのデバイスよりも古いです</item>
+    </plurals>
+    <string name="app_detail_insight_sideloaded">アプリストアの外からインストールされました</string>
+    <plurals name="app_detail_insight_unused">
+        <item quantity="other">過去%1$dヶ月間開かれていません</item>
+    </plurals>
+    <string name="app_detail_insight_background_location">バックグラウンドで実行中に位置情報にアクセスできます</string>
+    <string name="app_detail_insight_messages">テキストメッセージを読み取り、受信または送信できます</string>
+    <string name="app_detail_insight_call_history">通話履歴にアクセスまたは変更できます</string>
+    <string name="app_detail_insight_contacts">連絡先にアクセスまたは変更できます</string>
+    <string name="app_detail_insight_calendar">カレンダーイベントにアクセスまたは変更できます</string>
+    <string name="app_detail_badge_large">大きなアプリ</string>
+    <string name="app_detail_badge_system">システム</string>
+    <string name="app_detail_badge_google_play">Google Play</string>
+    <string name="app_detail_badge_recently_installed">新しい</string>
+    <string name="app_detail_badge_recently_updated">更新済み</string>
+    <string name="app_detail_badge_recently_used">最近使用した</string>
+</resources>

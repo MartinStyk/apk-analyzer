@@ -11,19 +11,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraries
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibrariesRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
-import sk.styk.martin.apkanalyzer.feature.appdetail.tv.toAppReference
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSection
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSectionRepository
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.nativeLibrariesOrFallback
 
 @HiltViewModel(assistedFactory = TvGeneralInfoViewModel.Factory::class)
 internal class TvGeneralInfoViewModel @AssistedInject constructor(
     @Assisted appDetailInput: AppDetailInput,
-    appDetailRepository: AppDetailRepository,
-    nativeLibrariesRepository: NativeLibrariesRepository,
+    sectionRepository: AppDetailSectionRepository,
     dispatcherProvider: DispatcherProvider,
 ) : ViewModel() {
 
@@ -36,20 +35,21 @@ internal class TvGeneralInfoViewModel @AssistedInject constructor(
     val state: StateFlow<TvGeneralInfoState> = mutableState.asStateFlow()
 
     init {
-        val reference = appDetailInput.toAppReference()
         viewModelScope.launch(dispatcherProvider.default()) {
-            appDetailRepository.details(reference)
+            val deviceAbis = Build.SUPPORTED_ABIS.toList()
+            sectionRepository.detail(appDetailInput)
                 .onSuccess { detail ->
-                    mutableState.value = detail.toGeneralInfoState(NativeLibraries.Empty)
-                    val nativeLibraries = nativeLibrariesRepository.nativeLibraries(reference).getOrDefault(NativeLibraries.Empty)
-                    mutableState.value = detail.toGeneralInfoState(nativeLibraries)
+                    mutableState.value = detail.toGeneralInfoState(NativeLibraries.Empty, deviceAbis)
+                    val section = sectionRepository.nativeLibrariesOrFallback(appDetailInput)
+                    val nativeLibraries = (section as? AppDetailSection.Available)?.value ?: NativeLibraries.Empty
+                    mutableState.value = detail.toGeneralInfoState(nativeLibraries, deviceAbis)
                 }
                 .onFailure { mutableState.value = TvGeneralInfoState.Error }
         }
     }
 }
 
-private fun AppDetail.toGeneralInfoState(libraries: NativeLibraries) = TvGeneralInfoState.Loaded(
+private fun AppDetail.toGeneralInfoState(libraries: NativeLibraries, deviceAbis: List<String>) = TvGeneralInfoState.Loaded(
     applicationName = info.applicationName,
     packageName = info.packageName,
     processName = info.processName,
@@ -78,7 +78,7 @@ private fun AppDetail.toGeneralInfoState(libraries: NativeLibraries) = TvGeneral
     totalSize = info.totalSize,
     nativeLibraryAbis = libraries.abis,
     nativeLibraryCount = libraries.libraryNames.size,
-    deviceSupportedAbis = Build.SUPPORTED_ABIS.toList(),
-    isNativeLibraryDeviceIncompatible = libraries.hasNativeCode && libraries.abis.none { it in Build.SUPPORTED_ABIS },
+    deviceSupportedAbis = deviceAbis,
+    isNativeLibraryDeviceIncompatible = deviceAbis.isNotEmpty() && libraries.hasNativeCode && libraries.abis.none { it in deviceAbis },
     installedSplitsCount = info.installedSplits.size,
 )

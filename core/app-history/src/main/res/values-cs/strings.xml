@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_history_first_recorded">Poprvé zaznamenáno</string>
+    <string name="app_history_certificate_changed">Certifikát pro podepisování se změnil</string>
+    <string name="app_history_signing_method_changed">Způsob podepisování se změnil</string>
+    <string name="app_history_reinstalled">Odstraněno a znovu nainstalováno</string>
+    <string name="app_history_new_device">Pokračuje na novém zařízení</string>
+    <string name="app_history_same_version">Stejná verze, nové sestavení</string>
+    <string name="app_history_older_version">Starší verze</string>
+    <string name="app_history_uncomparable_only">Některé údaje nešlo porovnat</string>
+    <string name="app_history_version">Verze %1$s</string>
+    <string name="app_history_version_with_code">%1$s (%2$d)</string>
+    <string name="app_history_value_change">%1$s → %2$s</string>
+    <string name="app_history_summary_join">%1$s · %2$s</string>
+    <string name="app_history_summary_permission_added_single">Přidáno oprávnění: %1$s</string>
+    <string name="app_history_summary_source">Zdroj instalace se změnil na %1$s</string>
+    <string name="app_history_summary_debug_on">Ladění zapnuto</string>
+    <string name="app_history_summary_debug_off">Ladění vypnuto</string>
+    <string name="app_history_summary_backup_on">Záloha dat aplikace zapnuta</string>
+    <string name="app_history_summary_backup_off">Záloha dat aplikace vypnuta</string>
+    <string name="app_history_summary_cleartext_on">Nešifrovaný provoz povolen</string>
+    <string name="app_history_summary_cleartext_off">Nešifrovaný provoz zablokován</string>
+    <string name="app_history_summary_target_sdk">Target SDK %1$s → %2$s</string>
+    <string name="app_history_summary_min_sdk">Min SDK %1$s → %2$s</string>
+    <string name="app_history_summary_size_up">Velikost +%1$s</string>
+    <string name="app_history_summary_size_down">Velikost −%1$s</string>
+    <string name="app_history_when_updated">Aktualizováno %1$s</string>
+    <string name="app_history_when_reinstalled">Znovu nainstalováno %1$s</string>
+    <string name="app_history_when_recorded">Zaznamenáno %1$s</string>
+    <string name="app_history_when_with_recorded">%1$s · zaznamenáno %2$s</string>
+    <string name="app_history_changes_heading">Změny mezi těmito verzemi</string>
+    <string name="app_history_device_note">Některé rozdíly mohou pocházet ze zařízení, ne z aplikace.</string>
+    <string name="app_history_empty_diff">Žádné rozdíly v tom, co Apk Analyzer porovnává</string>
+    <string name="app_history_uncomparable_label">Nepodařilo se porovnat</string>
+    <string name="app_history_uncomparable_explanation">Tyto informace se u jedné z těchto verzí nezaznamenaly úplně, takže nelze říct, zda se změnily.</string>
+    <string name="app_history_field_change">%1$s: %2$s → %3$s</string>
+    <string name="app_history_field_added">%1$s: přidáno</string>
+    <string name="app_history_field_removed">%1$s: odstraněno</string>
+    <string name="app_history_before">Předtím</string>
+    <string name="app_history_after">Potom</string>
+    <string name="app_history_category_signing">Podepisování</string>
+    <string name="app_history_category_permissions">Oprávnění</string>
+    <string name="app_history_category_install_source">Zdroj instalace</string>
+    <string name="app_history_category_settings">Nastavení aplikace</string>
+    <string name="app_history_category_android_versions">Verze Androidu</string>
+    <string name="app_history_category_components">Komponenty</string>
+    <string name="app_history_category_native">Nativní knihovny</string>
+    <string name="app_history_category_size">Velikost</string>
+    <string name="app_history_category_signing_method">Způsob podepisování</string>
+    <string name="app_history_group_added">Přidáno</string>
+    <string name="app_history_group_removed">Odstraněno</string>
+    <string name="app_history_group_changed">Změněno</string>
+    <string name="app_history_certificate_updated_explanation">Android přijme aktualizaci s jiným certifikátem, jen když ji schválil starý klíč, takže jde obvykle o plánovanou změnu klíče vývojářem.</string>
+    <string name="app_history_certificate_new_copy_explanation">Tato kopie je podepsána jiným certifikátem, než jaký byl dříve zaznamenán. Ověřte, že pochází z důvěryhodného zdroje.</string>
+    <string name="app_history_signer_explanation">Organizace nebo osoba uvedená v tomto certifikátu. Uvést tu může kdokoli jakékoli jméno, proto klíč identifikuje až otisk níže.</string>
+    <string name="app_history_not_recorded">U této verze se nezaznamenalo</string>
+    <string name="app_history_not_recorded_explanation">Apk Analyzer to u této verze nedokázal zaznamenat, takže nelze říct, co obsahovala.</string>
+    <plurals name="app_history_summary_more">
+        <item quantity="one">a %1$d další</item>
+        <item quantity="few">a %1$d další</item>
+        <item quantity="many">a %1$d dalších</item>
+        <item quantity="other">a %1$d dalších</item>
+    </plurals>
+    <plurals name="app_history_summary_permission_added_named">
+        <item quantity="one">%1$s a %2$d další oprávnění přidáno</item>
+        <item quantity="few">%1$s a %2$d další oprávnění přidána</item>
+        <item quantity="many">%1$s a %2$d dalších oprávnění přidáno</item>
+        <item quantity="other">%1$s a %2$d dalších oprávnění přidáno</item>
+    </plurals>
+    <plurals name="app_history_summary_permissions_removed">
+        <item quantity="one">%1$d oprávnění odstraněno</item>
+        <item quantity="few">%1$d oprávnění odstraněna</item>
+        <item quantity="many">%1$d oprávnění odstraněno</item>
+        <item quantity="other">%1$d oprávnění odstraněno</item>
+    </plurals>
+    <plurals name="app_history_summary_defined_permissions">
+        <item quantity="one">%1$d oprávnění definované touto aplikací se změnilo</item>
+        <item quantity="few">%1$d oprávnění definovaná touto aplikací se změnila</item>
+        <item quantity="many">%1$d oprávnění definovaných touto aplikací se změnilo</item>
+        <item quantity="other">%1$d oprávnění definovaných touto aplikací se změnilo</item>
+    </plurals>
+    <plurals name="app_history_summary_components_added">
+        <item quantity="one">%1$d komponenta přidána</item>
+        <item quantity="few">%1$d komponenty přidány</item>
+        <item quantity="many">%1$d komponent přidáno</item>
+        <item quantity="other">%1$d komponent přidáno</item>
+    </plurals>
+    <plurals name="app_history_summary_components_removed">
+        <item quantity="one">%1$d komponenta odstraněna</item>
+        <item quantity="few">%1$d komponenty odstraněny</item>
+        <item quantity="many">%1$d komponent odstraněno</item>
+        <item quantity="other">%1$d komponent odstraněno</item>
+    </plurals>
+    <plurals name="app_history_summary_components_changed">
+        <item quantity="one">%1$d komponenta změněna</item>
+        <item quantity="few">%1$d komponenty změněny</item>
+        <item quantity="many">%1$d komponent změněno</item>
+        <item quantity="other">%1$d komponent změněno</item>
+    </plurals>
+    <plurals name="app_history_summary_native_added">
+        <item quantity="one">%1$d nativní knihovna přidána</item>
+        <item quantity="few">%1$d nativní knihovny přidány</item>
+        <item quantity="many">%1$d nativních knihoven přidáno</item>
+        <item quantity="other">%1$d nativních knihoven přidáno</item>
+    </plurals>
+    <plurals name="app_history_summary_native_removed">
+        <item quantity="one">%1$d nativní knihovna odstraněna</item>
+        <item quantity="few">%1$d nativní knihovny odstraněny</item>
+        <item quantity="many">%1$d nativních knihoven odstraněno</item>
+        <item quantity="other">%1$d nativních knihoven odstraněno</item>
+    </plurals>
+    <plurals name="app_history_summary_native_changed">
+        <item quantity="one">%1$d nativní knihovna změněna</item>
+        <item quantity="few">%1$d nativní knihovny změněny</item>
+        <item quantity="many">%1$d nativních knihoven změněno</item>
+        <item quantity="other">%1$d nativních knihoven změněno</item>
+    </plurals>
+    <string name="app_history_size_change_up">%1$s → %2$s (+%3$s)</string>
+    <string name="app_history_size_change_down">%1$s → %2$s (−%3$s)</string>
+    <string name="app_history_field_value">%1$s: %2$s</string>
+    <string name="app_history_rule_added">%1$s · přidáno: %2$s</string>
+    <string name="app_history_rule_removed">%1$s · odstraněno: %2$s</string>
+    <string name="app_history_path_rule">%1$s (čtení: %2$s, zápis: %3$s)</string>
+    <string name="app_history_summary_requirements">Změnily se požadavky na zařízení</string>
+</resources>

@@ -19,6 +19,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.LoadingSpin
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.TextButton
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
 
 @Composable
@@ -57,6 +58,42 @@ internal fun SectionError(
                 onClick = onRetry,
             )
         }
+    }
+}
+
+@Composable
+internal fun SectionError(
+    reason: SectionErrorReason,
+    loadFailedMessage: String,
+    onRetry: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    when (reason) {
+        SectionErrorReason.LoadFailed -> SectionError(message = loadFailedMessage, modifier = modifier, onRetry = onRetry)
+
+        SectionErrorReason.VersionNotFound -> SectionError(message = stringResource(R.string.app_history_version_not_found), modifier = modifier)
+
+        SectionErrorReason.VersionReadFailed -> SectionError(
+            message = stringResource(R.string.app_history_version_load_failed),
+            modifier = modifier,
+            onRetry = onRetry,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun RecordedVersionNotFoundPreview() {
+    ApkAnalyzerTheme {
+        SectionError(reason = SectionErrorReason.VersionNotFound, loadFailedMessage = "Failed to load permissions", onRetry = {})
+    }
+}
+
+@Preview
+@Composable
+private fun RecordedVersionReadFailedPreview() {
+    ApkAnalyzerTheme {
+        SectionError(reason = SectionErrorReason.VersionReadFailed, loadFailedMessage = "Failed to load permissions", onRetry = {})
     }
 }
 

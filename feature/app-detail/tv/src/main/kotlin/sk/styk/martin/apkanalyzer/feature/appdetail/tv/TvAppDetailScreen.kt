@@ -1,5 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.tv
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -25,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -38,16 +40,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.labelRes
 import sk.styk.martin.apkanalyzer.core.apps.components.ComponentKind
 import sk.styk.martin.apkanalyzer.core.apps.components.sectionLabelRes
-import sk.styk.martin.apkanalyzer.core.apps.insight.AppDetailBadge
-import sk.styk.martin.apkanalyzer.core.apps.insight.AppDetailInsight
-import sk.styk.martin.apkanalyzer.core.apps.insight.SensitiveAccess
-import sk.styk.martin.apkanalyzer.core.apps.insight.label
-import sk.styk.martin.apkanalyzer.core.apps.insight.labelRes
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
+import sk.styk.martin.apkanalyzer.core.common.util.openAppSystemPage
+import sk.styk.martin.apkanalyzer.core.common.util.openGooglePlay
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.AppIcon
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.rememberAppAccentColor
@@ -69,6 +68,11 @@ import sk.styk.martin.apkanalyzer.core.designsystem.tv.focus.rememberRestorableF
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.focus.restorableFocus
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.theme.ApkAnalyzerTvTheme
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailBadge
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailInsight
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.SensitiveAccess
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.label
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.labelRes
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.appcomponents.icon
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionLoading
@@ -80,8 +84,6 @@ import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 @Composable
 internal fun TvAppDetailScreen(
     appDetailInput: AppDetailInput,
-    onOpenAppInfo: (PackageName) -> Unit,
-    onOpenPlayStore: (PackageName) -> Unit,
     onNavigateToGeneralInfo: () -> Unit,
     onNavigateToPermissions: (permissionName: String?) -> Unit,
     onNavigateToComponents: () -> Unit,
@@ -93,17 +95,27 @@ internal fun TvAppDetailScreen(
     },
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     LaunchedEffect(viewModel) {
         viewModel.events.collect { event ->
             when (event) {
-                is TvAppDetailEvent.OpenAppInfo -> onOpenAppInfo(event.packageName)
-                is TvAppDetailEvent.OpenPlayStore -> onOpenPlayStore(event.packageName)
+                is TvAppDetailEvent.OpenAppInfo -> context.openAppSystemPage(event.packageName).onFailure {
+                    Toast.makeText(context, AppsR.string.app_info_unavailable, Toast.LENGTH_LONG).show()
+                }
+
+                is TvAppDetailEvent.OpenPlayStore -> context.openGooglePlay(event.packageName)
+
                 TvAppDetailEvent.NavigateToGeneralInfo -> onNavigateToGeneralInfo()
+
                 is TvAppDetailEvent.NavigateToPermissions -> onNavigateToPermissions(event.permissionName)
+
                 TvAppDetailEvent.NavigateToComponents -> onNavigateToComponents()
+
                 TvAppDetailEvent.NavigateToCertificates -> onNavigateToCertificates()
+
                 TvAppDetailEvent.NavigateToRequirements -> onNavigateToRequirements()
+
                 TvAppDetailEvent.NavigateToManifest -> onNavigateToManifest()
             }
         }

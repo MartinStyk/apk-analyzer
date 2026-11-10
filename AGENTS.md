@@ -85,14 +85,19 @@ import, and no gate will tell you — check by hand.
 
 ## Module Rules
 
-Modules live under `app/`, `tv/`, `core/<name>/`, and `feature/<name>/{api,phone,tv}/`;
+Modules live under `app/`, `tv/`, `core/<name>/`, and `feature/<name>/{api,domain,phone,tv}/`;
 `settings.gradle.kts` is the authoritative list.
 
 * `feature/*/api` — depends on nothing, holds only `@Serializable` NavKeys and the tab-label string.
-* `feature/*/phone` — `api(projects.feature.<name>.api)` plus whichever `core` modules it needs.
+* `feature/*/domain` — optional, no UI: logic the feature's `phone` and `tv` share that belongs to
+  this feature rather than to a domain, such as choosing between data sources for the feature's own
+  navigation input. It depends on its sibling `api` and on `core` modules, never on `phone`, `tv`, or
+  another feature. Create it when that logic gets its second consumer; until then it stays in `phone`.
+* `feature/*/phone` — `api(projects.feature.<name>.api)`, its sibling `domain` if it has one, plus
+  whichever `core` modules it needs.
 * `feature/*/tv` — the TV screens for that feature, applied with `apkanalyzer.feature.tv`. Same rules
-  as `phone`, but it never depends on its sibling `phone`; logic both need moves to `core` when the
-  second consumer appears.
+  as `phone`, but it never depends on its sibling `phone`. Logic both need moves to the feature's
+  `domain` when it is about this feature, or to `core` when it is a domain rule other features use.
 * `core/*` — may depend on other `core` modules. **Never** depends on a `feature` module.
 * A feature never depends on another feature's `phone` or `tv`. Cross-feature navigation goes through the
   target's `api` module.
@@ -153,9 +158,21 @@ Modules live under `app/`, `tv/`, `core/<name>/`, and `feature/<name>/{api,phone
   `app/src/main/kotlin/sk/styk/martin/apkanalyzer/ui/ApkAnalyzerApp.kt`. A screen that isn't wired
   there is unreachable. TV screens register via `tv<Feature>Entries(navigator)` in
   `feature/*/tv/navigation/`, wired into `tv/src/main/kotlin/sk/styk/martin/apkanalyzer/tv/TvApkAnalyzerApp.kt`.
+* **An `entry { }` block only delegates to one screen.** It calls a single `*Screen` with values from
+  the key and lambdas that call `navigator`. Never compose anything else there: no wrapping
+  composable, layout, `remember`, `LocalContext`, or platform call. Side effects such as opening
+  system settings belong in the screen's event handling. Chrome shared by several screens (a banner,
+  a frame) goes one level lower, inside the stateless content composable, so its `@Preview` shows
+  what the user sees.
 * Transitions: `bottomEntryMetadata()` / `slideFromEndEntryMetadata()` from
   `sk.styk.martin.apkanalyzer.core.designsystem.foundation.animation`.
 * Multi-stack state lives in `:core:navigation` — see [`core/navigation/AGENTS.md`](core/navigation/AGENTS.md).
+
+### Analytics
+
+* A feature keeps its analytics in an `analytics/` package: `<Feature>AnalyticsEvent.kt` (what is
+  tracked) and `<Feature>Analytics.kt` (the injected tracker plus the mapping to event and parameter
+  names). An event that describes an app carries `analysis_mode`.
 
 ## Compose
 
@@ -191,10 +208,17 @@ Modules live under `app/`, `tv/`, `core/<name>/`, and `feature/<name>/{api,phone
 ## Conventions
 
 * `data object`, not plain `object`, for sealed interface members.
+* **Logic lives in classes, not `object`s.** An evaluator, mapper, or policy is a class with an
+  `@Inject constructor()`, injected where it is used, so it can take dependencies later and be
+  replaced in tests. Keep `object` for constants and stateless holders with no logic.
 * **A nullable primitive that encodes a variant or a third state is a type in disguise.** `Boolean?`
   meaning yes/no/unknown, or a `String?` whose null marks "a different kind of thing", belongs in an
   enum or a sealed interface. `Feature` (`Hardware` vs `OpenGlEs`) and `FeatureAvailability` in
   `core:apps` are the worked examples — both replaced exactly that shape.
+* **Don't restate a variant in a second type.** When a fact already has a type
+  (`AppDetailInput.Historical`), pass that type instead of mirroring it in another layer as a "target",
+  "context", or capability set; each copy needs a mapping and drifts. Name what a caller needs with a
+  value helper (`liveReference`) or one predicate per real fact (`isOnDevice`), not a flag per feature.
 * **Extract a shared helper when the second consumer appears — and grep for a third before writing
   your own.** Duplicated composables here have reached three identical copies before anyone noticed.
 * **A core module packages by domain once it holds more than one repository/manager family, not by
@@ -214,7 +238,7 @@ Modules live under `app/`, `tv/`, `core/<name>/`, and `feature/<name>/{api,phone
   `Logger.e("Tag", throwable, "msg")`. Declare `private const val TAG` at file level.
 * `@Serializable` for nav keys and new models. Parcelize only for existing Android-specific data
   already passed through intents/bundles.
-* Unit tests cover `core` modules only, for now. Read the `write-unit-tests` skill before writing
+* Unit tests cover `core` and `feature/*/domain` modules only, for now. Read the `write-unit-tests` skill before writing
   one: it defines the one test style. Write a test only if you can name the realistic bug it would
   catch; no coverage targets, no filler. Test libraries come from the `apkanalyzer.tests.unit`
   plugin; a library only one module's tests need goes in that module's build file. Don't add

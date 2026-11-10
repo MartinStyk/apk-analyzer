@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
@@ -46,6 +45,8 @@ import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeVersion
 import sk.styk.martin.apkanalyzer.core.apps.signing.displayLine
 import sk.styk.martin.apkanalyzer.core.apps.signing.explanationRes
 import sk.styk.martin.apkanalyzer.core.apps.signing.labelRes
+import sk.styk.martin.apkanalyzer.core.apps.signing.onRecordedDateExplanationRes
+import sk.styk.martin.apkanalyzer.core.apps.signing.onRecordedDateLabelRes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Chip
@@ -57,12 +58,16 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.InfoRow
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RationaleBottomSheet
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionCard
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.WarningBanner
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -95,6 +100,7 @@ internal fun CertificatesScreen(
         onAction = viewModel::onAction,
         onBack = onBack,
         modifier = modifier,
+        recordedAt = appDetailInput.recordedAt,
     )
 }
 
@@ -104,25 +110,29 @@ private fun CertificatesContent(
     onAction: (CertificatesAction) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
+    recordedAt: Instant? = null,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(AppTheme.colors.background),
-    ) {
-        Toolbar(
-            title = stringResource(AppsR.string.certificates_title),
-            onBack = onBack,
-        )
-        when (state) {
-            CertificatesState.Loading -> SectionLoading()
-
-            CertificatesState.Error -> SectionError(
-                message = stringResource(AppsR.string.certificates_error),
-                onRetry = { onAction(CertificatesAction.Retry) },
+    AppDetailModeFrame(recordedAt = recordedAt, modifier = modifier) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(AppTheme.colors.background),
+        ) {
+            Toolbar(
+                title = stringResource(AppsR.string.certificates_title),
+                onBack = onBack,
             )
+            when (state) {
+                CertificatesState.Loading -> SectionLoading()
 
-            is CertificatesState.Loaded -> LoadedContent(state = state, onAction = onAction)
+                is CertificatesState.Error -> SectionError(
+                    reason = state.reason,
+                    loadFailedMessage = stringResource(AppsR.string.certificates_error),
+                    onRetry = { onAction(CertificatesAction.Retry) },
+                )
+
+                is CertificatesState.Loaded -> LoadedContent(state = state, onAction = onAction)
+            }
         }
     }
 }
@@ -163,6 +173,7 @@ private fun LoadedContent(
                     showSigningFacts = index == 0,
                     hasMultipleSigners = state.hasMultipleSigners,
                     signingSchemeVersions = state.signingSchemeVersions,
+                    isHistorical = state.isHistorical,
                     label = if (state.currentCertificates.size > 1) {
                         stringResource(AppsR.string.certificates_signer_position, index + 1, state.currentCertificates.size)
                     } else {
@@ -227,6 +238,7 @@ private fun CertificateCard(
     modifier: Modifier = Modifier,
     hasMultipleSigners: Boolean = false,
     signingSchemeVersions: List<SigningSchemeVersion>? = null,
+    isHistorical: Boolean = false,
 ) {
     val serialLabel = stringResource(AppsR.string.certificates_serial)
     val selfSignedLabel = stringResource(AppsR.string.certificates_self_signed)
@@ -249,7 +261,10 @@ private fun CertificateCard(
             )
         }
         if (certificate.trustLevel == CertificateTrustLevel.Debug) {
-            DebugBanner()
+            WarningBanner(
+                title = stringResource(AppsR.string.certificates_debug_title),
+                message = stringResource(AppsR.string.certificates_debug_description),
+            )
         }
         SectionCard(
             title = stringResource(AppsR.string.certificates_signer),
@@ -265,6 +280,7 @@ private fun CertificateCard(
         SectionCard(title = stringResource(AppsR.string.certificates_details)) {
             ValiditySection(
                 certificate = certificate,
+                isHistorical = isHistorical,
                 onShowRationale = onShowRationale,
                 onCopy = onCopy,
             )
@@ -331,39 +347,6 @@ private fun CertificateGroupHeader(
 }
 
 @Composable
-private fun DebugBanner(modifier: Modifier = Modifier) {
-    Row(
-        verticalAlignment = Alignment.Top,
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(Shapes.CardShape)
-            .background(AppTheme.colors.warningContainer)
-            .padding(14.dp),
-    ) {
-        Icon(
-            imageVector = ApkAnalyzerIcons.Warning,
-            contentDescription = null,
-            tint = AppTheme.colors.warning,
-            modifier = Modifier.size(22.dp),
-        )
-        Spacer(modifier = Modifier.width(12.dp))
-        Column {
-            Text(
-                text = stringResource(AppsR.string.certificates_debug_title),
-                style = AppTheme.typography.titleSmall,
-                color = AppTheme.colors.onSurface,
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = stringResource(AppsR.string.certificates_debug_description),
-                style = AppTheme.typography.bodySmall,
-                color = AppTheme.colors.onSurface,
-            )
-        }
-    }
-}
-
-@Composable
 private fun SignerSection(
     certificate: CertificateItem,
     onCopy: (label: String, value: String) -> Unit,
@@ -409,10 +392,11 @@ private fun ValiditySection(
     onShowRationale: (InfoRow) -> Unit,
     onCopy: (label: String, value: String) -> Unit,
     modifier: Modifier = Modifier,
+    isHistorical: Boolean = false,
 ) {
-    val status = stringResource(certificate.validity.labelRes)
+    val status = stringResource(if (isHistorical) certificate.validity.onRecordedDateLabelRes else certificate.validity.labelRes)
     val validityLabel = stringResource(AppsR.string.certificates_validity)
-    val validityRationale = stringResource(certificate.validity.explanationRes)
+    val validityRationale = stringResource(if (isHistorical) certificate.validity.onRecordedDateExplanationRes else certificate.validity.explanationRes)
     val dateFormatter = remember {
         DateTimeFormatter
             .ofLocalizedDate(FormatStyle.MEDIUM)
@@ -425,6 +409,40 @@ private fun ValiditySection(
         dateFormatter.format(certificate.validUntil),
     )
     val validityInfo = InfoRow(validityLabel, status, validityRationale)
+
+    if (isHistorical) {
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(horizontal = 2.dp)
+                .clip(Shapes.CardShape)
+                .combinedClickable(
+                    onClick = { onShowRationale(validityInfo) },
+                    onLongClick = { onCopy(validityLabel, dateRange) },
+                )
+                .padding(horizontal = 14.dp, vertical = 10.dp),
+        ) {
+            Text(
+                text = validityLabel.uppercase(),
+                style = AppTheme.typography.labelMedium,
+                color = AppTheme.colors.onSurfaceVariant,
+            )
+            Spacer(modifier = Modifier.height(3.dp))
+            Text(
+                text = dateRange,
+                style = AppTheme.typography.titleSmall,
+                color = AppTheme.colors.onSurface,
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+            Chip(
+                label = status,
+                variant = certificate.validity.chipVariant(),
+                onClick = { onShowRationale(validityInfo) },
+                onLongClick = { onCopy(validityLabel, status) },
+            )
+        }
+        return
+    }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -781,6 +799,19 @@ private fun CertificatesDebugPreview() {
     }
 }
 
+@Preview(heightDp = 1400)
+@Composable
+private fun CertificatesHistoricalPreview() {
+    ApkAnalyzerTheme {
+        CertificatesContent(
+            state = sampleLoadedState().copy(isHistorical = true),
+            onAction = {},
+            onBack = {},
+            recordedAt = Instant.ofEpochMilli(1_773_014_400_000),
+        )
+    }
+}
+
 @Preview
 @Composable
 private fun CertificatesRotationHistoryPreview() {
@@ -819,7 +850,7 @@ private fun CertificatesLoadingPreview() {
 private fun CertificatesErrorPreview() {
     ApkAnalyzerTheme {
         CertificatesContent(
-            state = CertificatesState.Error,
+            state = CertificatesState.Error(SectionErrorReason.LoadFailed),
             onAction = {},
             onBack = {},
         )

@@ -54,9 +54,12 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.rememberColla
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
+import java.time.Instant
 import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 
 @Composable
@@ -86,6 +89,7 @@ internal fun IntentFiltersScreen(
         state = state,
         onAction = viewModel::onAction,
         modifier = modifier,
+        recordedAt = appDetailInput.recordedAt,
     )
 }
 
@@ -94,29 +98,32 @@ private fun IntentFiltersContent(
     state: IntentFiltersState,
     onAction: (IntentFiltersAction) -> Unit,
     modifier: Modifier = Modifier,
+    recordedAt: Instant? = null,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(AppTheme.colors.background),
-    ) {
-        Toolbar(
-            title = stringResource(R.string.intent_filters_title),
-            onBack = { onAction(IntentFiltersAction.Back) },
-        )
-        when (state) {
-            IntentFiltersState.Loading -> SectionLoading()
-
-            IntentFiltersState.Error -> SectionError(
-                message = stringResource(R.string.intent_filters_error),
-                onRetry = { onAction(IntentFiltersAction.Retry) },
+    AppDetailModeFrame(recordedAt = recordedAt, modifier = modifier) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(AppTheme.colors.background),
+        ) {
+            Toolbar(
+                title = stringResource(R.string.intent_filters_title),
+                onBack = { onAction(IntentFiltersAction.Back) },
             )
+            when (state) {
+                IntentFiltersState.Loading -> SectionLoading()
 
-            IntentFiltersState.Unavailable -> SectionError(
-                message = stringResource(AppsR.string.components_detail_intent_filters_unavailable),
-            )
+                IntentFiltersState.Error -> SectionError(
+                    message = stringResource(R.string.intent_filters_error),
+                    onRetry = { onAction(IntentFiltersAction.Retry) },
+                )
 
-            is IntentFiltersState.Loaded -> IntentFiltersLoadedContent(state = state, onAction = onAction)
+                IntentFiltersState.Unavailable -> SectionError(
+                    message = stringResource(AppsR.string.components_detail_intent_filters_unavailable),
+                )
+
+                is IntentFiltersState.Loaded -> IntentFiltersLoadedContent(state = state, onAction = onAction)
+            }
         }
     }
 }

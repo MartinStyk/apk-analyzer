@@ -2,16 +2,21 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.phone.requirements
 
 import androidx.compose.runtime.Immutable
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.RequirementSection
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
 
 @Immutable
-sealed interface RequirementsState {
+internal sealed interface RequirementsState {
     data object Loading : RequirementsState
 
     @Immutable
-    data class Loaded(val sections: List<RequirementSection>, val missingRequiredCount: Int) : RequirementsState {
+    data class Loaded(
+        val sections: List<RequirementSection>,
+        val missingRequiredCount: Int,
+        val isHistorical: Boolean = false,
+    ) : RequirementsState {
         val hasRequirements: Boolean
             get() = sections.isNotEmpty()
     }
 
-    data object Error : RequirementsState
+    data class Error(val reason: SectionErrorReason) : RequirementsState
 }

@@ -1,6 +1,5 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone.permissions
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,8 +29,9 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.BottomSheet
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ChangeLinesSection
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.DetailField
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SheetSection
 import sk.styk.martin.apkanalyzer.core.apppermissions.R as PermissionsR
 
 @Composable
@@ -41,6 +40,7 @@ internal fun PermissionDetailBottomSheet(
     onCopy: (label: String, value: String) -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
+    changeLines: List<String> = emptyList(),
 ) {
     BottomSheet(onDismiss = onDismiss, modifier = modifier) {
         Column(
@@ -69,6 +69,7 @@ internal fun PermissionDetailBottomSheet(
                     color = AppTheme.colors.onSurfaceVariant,
                 )
             }
+            ChangeLinesSection(lines = changeLines)
             Spacer(modifier = Modifier.height(12.dp))
             DetailField(
                 label = stringResource(PermissionsR.string.permissions_detail_full_name),
@@ -118,23 +119,6 @@ internal fun PermissionDetailBottomSheet(
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun SheetSection(
-    title: String,
-    modifier: Modifier = Modifier,
-    content: @Composable ColumnScope.() -> Unit,
-) {
-    Column(modifier = modifier.padding(top = 24.dp)) {
-        Text(
-            text = title,
-            style = AppTheme.typography.titleSmall,
-            color = AppTheme.colors.primary,
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        content()
     }
 }
 

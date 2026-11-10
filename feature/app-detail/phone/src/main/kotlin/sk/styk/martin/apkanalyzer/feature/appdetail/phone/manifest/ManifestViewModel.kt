@@ -18,7 +18,7 @@ import sk.styk.martin.apkanalyzer.core.apps.manifest.ManifestParser
 import sk.styk.martin.apkanalyzer.core.apps.manifest.ParsedManifest
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.toAppReference
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.liveReference
 
 @HiltViewModel(assistedFactory = ManifestViewModel.Factory::class)
 internal class ManifestViewModel @AssistedInject constructor(
@@ -60,7 +60,12 @@ internal class ManifestViewModel @AssistedInject constructor(
         source.value = ManifestSource.Loading
         query.value = ""
         viewModelScope.launch {
-            val result = manifestParser.manifest(appDetailInput.toAppReference())
+            val reference = appDetailInput.liveReference
+            if (reference == null) {
+                source.value = ManifestSource.Error
+                return@launch
+            }
+            val result = manifestParser.manifest(reference)
             source.value = withContext(dispatcherProvider.default()) {
                 result.fold(
                     onSuccess = { it.toSource() },

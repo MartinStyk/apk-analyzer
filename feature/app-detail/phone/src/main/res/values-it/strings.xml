@@ -264,4 +264,42 @@
     <string name="nativelibraries_empty_query">Nessuna libreria nativa corrisponde a \"%1$s\".</string>
     <string name="nativelibraries_clear_search">Cancella ricerca</string>
     <string name="general_info_copied">Copiato negli appunti</string>
+    <string name="app_detail_history_section">Cronologia</string>
+    <string name="app_history_toolbar_subtitle">Cronologia</string>
+    <string name="app_history_hub_no_entries">La rilevazione inizierà a breve</string>
+    <string name="app_history_hub_first_only">Ancora nessuna modifica · rilevazione dal %1$s</string>
+    <string name="app_history_hub_certificate">Certificato di firma cambiato il %1$s</string>
+    <string name="app_history_hub_unavailable">La cronologia non è disponibile al momento</string>
+    <string name="app_history_context_first_only">Rilevazione dal %1$s</string>
+    <string name="app_history_footer">Apk Analyzer può mostrare solo le modifiche avvenute dopo l\'inizio della rilevazione di questa app.</string>
+    <string name="app_history_first_only_hint">Qui compaiono nuove righe quando questa app cambia.</string>
+    <string name="app_history_empty_title">Ancora nulla di rilevato</string>
+    <string name="app_history_empty_body">Apk Analyzer rileva questa app in background. La sua cronologia inizia qui.</string>
+    <string name="app_history_error">Impossibile caricare la cronologia di questa app</string>
+    <string name="app_history_row_click_label">Vedi cosa è cambiato</string>
+    <string name="app_history_row_first_click_label">Vedi tutti i dettagli</string>
+    <string name="app_history_row_long_click_label">Copia</string>
+    <string name="app_history_full_detail">Vedi tutti i dettagli di questa versione</string>
+    <string name="app_history_show_all">Mostra tutti (%1$d)</string>
+    <string name="app_history_group_header">%1$s · %2$d</string>
+    <string name="app_history_group_header_scoped">%1$s · %2$s · %3$d</string>
+    <string name="app_history_what_changed">Cosa è cambiato</string>
+    <string name="app_history_as_seen_on">Come rilevato il %1$s</string>
+    <string name="app_history_as_seen_on_label">Come rilevato il</string>
+    <string name="app_history_as_seen_on_explanation">Questo è ciò che Apk Analyzer ha rilevato in questa data. Potrebbe non corrispondere più all\'app.</string>
+    <string name="app_history_as_seen_click_label">Spiega</string>
+    <string name="app_history_permissions_note">Lo stato delle autorizzazioni non viene rilevato nella cronologia.</string>
+    <string name="app_history_intent_filters_note">Questi dati non vengono rilevati nella cronologia.</string>
+    <string name="app_history_version_not_found">Questa versione non è più nella cronologia.</string>
+    <string name="app_history_version_load_failed">Impossibile caricare questa versione</string>
+    <plurals name="app_history_hub_changes">
+        <item quantity="one">%1$d modifica · ultima %2$s</item>
+        <item quantity="many">%1$d modifiche · ultima %2$s</item>
+        <item quantity="other">%1$d modifiche · ultima %2$s</item>
+    </plurals>
+    <plurals name="app_history_context">
+        <item quantity="one">Rilevazione dal %1$s · %2$d modifica</item>
+        <item quantity="many">Rilevazione dal %1$s · %2$d modifiche</item>
+        <item quantity="other">Rilevazione dal %1$s · %2$d modifiche</item>
+    </plurals>
 </resources>

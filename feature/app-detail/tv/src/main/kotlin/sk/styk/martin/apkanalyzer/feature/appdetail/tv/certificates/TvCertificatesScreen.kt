@@ -23,6 +23,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzer
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.LocalFingerprintFormat
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.theme.ApkAnalyzerTvTheme
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.iconReference
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.InfoRow
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.InfoSection
@@ -31,7 +32,6 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionEmpty
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionLoading
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.formatDate
-import sk.styk.martin.apkanalyzer.feature.appdetail.tv.toAppReference
 import java.time.Instant
 import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 
@@ -43,7 +43,7 @@ internal fun TvCertificatesScreen(
     },
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    TvCertificatesContent(state = state, appReference = appDetailInput.toAppReference(), onAction = viewModel::onAction)
+    TvCertificatesContent(state = state, appReference = appDetailInput.iconReference, onAction = viewModel::onAction)
 }
 
 @Composable

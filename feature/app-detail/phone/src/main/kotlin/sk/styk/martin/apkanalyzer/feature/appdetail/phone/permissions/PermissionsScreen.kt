@@ -50,13 +50,12 @@ import sk.styk.martin.apkanalyzer.core.apppermissions.detail.labelRes
 import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionFlag
 import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
-import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.LoadingSpinner
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.MultiSelectorChip
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.SearchBarActive
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.SelectorChip
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Tag
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.TextButton
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
@@ -66,10 +65,15 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.rememberColla
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ListSectionHeader
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RowChangeLines
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
+import java.time.Instant
 import sk.styk.martin.apkanalyzer.core.apppermissions.R as PermissionsR
 
 private const val UNRESOLVED_SECTION_KEY = "unresolved"
@@ -101,6 +105,7 @@ internal fun PermissionsScreen(
         onBack = onBack,
         focusedPermission = focusedPermission,
         modifier = modifier,
+        recordedAt = appDetailInput.recordedAt,
     )
 }
 
@@ -110,26 +115,30 @@ private fun PermissionsContent(
     onAction: (PermissionsAction) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
+    recordedAt: Instant? = null,
     focusedPermission: String? = null,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(AppTheme.colors.background),
-    ) {
-        Toolbar(
-            title = stringResource(PermissionsR.string.permissions_title),
-            onBack = onBack,
-        )
-        when (state) {
-            is PermissionsState.Loading -> SectionLoading()
-
-            is PermissionsState.Error -> SectionError(
-                message = stringResource(PermissionsR.string.permissions_error),
-                onRetry = { onAction(PermissionsAction.Retry) },
+    AppDetailModeFrame(recordedAt = recordedAt, modifier = modifier) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(AppTheme.colors.background),
+        ) {
+            Toolbar(
+                title = stringResource(PermissionsR.string.permissions_title),
+                onBack = onBack,
             )
+            when (state) {
+                is PermissionsState.Loading -> SectionLoading()
 
-            is PermissionsState.Loaded -> LoadedContent(state = state, onAction = onAction, focusedPermission = focusedPermission)
+                is PermissionsState.Error -> SectionError(
+                    reason = state.reason,
+                    loadFailedMessage = stringResource(PermissionsR.string.permissions_error),
+                    onRetry = { onAction(PermissionsAction.Retry) },
+                )
+
+                is PermissionsState.Loaded -> LoadedContent(state = state, onAction = onAction, focusedPermission = focusedPermission)
+            }
         }
     }
 }
@@ -170,6 +179,14 @@ private fun LoadedContent(
                 .background(AppTheme.colors.background)
                 .collapsingHeader(collapsingState),
         ) {
+            if (state.isHistorical) {
+                Text(
+                    text = stringResource(R.string.app_history_permissions_note),
+                    style = AppTheme.typography.bodySmall,
+                    color = AppTheme.colors.onSurfaceVariant,
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp),
+                )
+            }
             SearchBarActive(
                 query = state.query,
                 placeholder = pluralStringResource(R.plurals.permissions_filter_hint, state.scopeTotal, state.scopeTotal),
@@ -299,11 +316,13 @@ private fun NarrowingRow(
 }
 
 @Composable
-private fun PermissionRow(
+internal fun PermissionRow(
     item: PermissionItem,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
+    tag: String? = null,
+    changeLines: List<String> = emptyList(),
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -338,6 +357,11 @@ private fun PermissionRow(
                 maxLines = 1,
                 overflow = TextOverflow.StartEllipsis,
             )
+            RowChangeLines(lines = changeLines)
+            tag?.let {
+                Spacer(modifier = Modifier.height(6.dp))
+                Tag(text = it)
+            }
         }
         item.grantState?.let { grantState ->
             Spacer(modifier = Modifier.width(8.dp))
@@ -420,7 +444,7 @@ private fun PermissionsLoadingPreview() {
 private fun PermissionsErrorPreview() {
     ApkAnalyzerTheme {
         PermissionsContent(
-            state = PermissionsState.Error,
+            state = PermissionsState.Error(SectionErrorReason.LoadFailed),
             onAction = {},
             onBack = {},
         )
@@ -435,6 +459,19 @@ private fun PermissionsLoadedPreview() {
             state = sampleLoadedState(),
             onAction = {},
             onBack = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PermissionsHistoricalPreview() {
+    ApkAnalyzerTheme {
+        PermissionsContent(
+            state = sampleLoadedState().copy(isHistorical = true, grantStateOptions = emptyList()),
+            onAction = {},
+            onBack = {},
+            recordedAt = Instant.ofEpochMilli(1_773_014_400_000),
         )
     }
 }

@@ -2,8 +2,10 @@ package sk.styk.martin.apkanalyzer.tv
 
 import android.app.Application
 import android.content.Context
+import androidx.hilt.work.HiltWorkerFactory
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.work.Configuration
 import coil3.ImageLoader
 import coil3.SingletonImageLoader
 import dagger.hilt.android.HiltAndroidApp
@@ -15,13 +17,17 @@ import javax.inject.Inject
 @HiltAndroidApp
 class TvApkAnalyzer :
     Application(),
-    SingletonImageLoader.Factory {
+    SingletonImageLoader.Factory,
+    Configuration.Provider {
 
     @Inject
     lateinit var imageLoader: ImageLoader
 
     @Inject
     lateinit var lifecycleObservers: Set<@JvmSuppressWildcards DefaultLifecycleObserver>
+
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
 
     @Inject
     lateinit var analyticsTracker: AnalyticsTracker
@@ -34,4 +40,9 @@ class TvApkAnalyzer :
     }
 
     override fun newImageLoader(context: Context): ImageLoader = imageLoader
+
+    override val workManagerConfiguration: Configuration
+        get() = Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
 }

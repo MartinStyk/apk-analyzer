@@ -16,6 +16,8 @@ public data class AnalyticsEvent(val name: String, val parameters: Map<Analytics
 public enum class AnalyticsParameterName(val value: String) {
     Action("action"),
     AnalysisMode("analysis_mode"),
+    ChangeCategories("change_categories"),
+    HistoryBucket("history_bucket"),
     Dimension("dimension"),
     Section("section"),
 }

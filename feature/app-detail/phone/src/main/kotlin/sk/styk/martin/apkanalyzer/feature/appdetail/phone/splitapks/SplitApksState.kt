@@ -2,12 +2,13 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.phone.splitapks
 
 import androidx.compose.runtime.Immutable
 import sk.styk.martin.apkanalyzer.core.apps.packaging.InstalledSplitApk
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
 
 @Immutable
 internal sealed interface SplitApksState {
     data object Loading : SplitApksState
 
-    data object Error : SplitApksState
+    data class Error(val reason: SectionErrorReason) : SplitApksState
 
     @Immutable
     data class Loaded(

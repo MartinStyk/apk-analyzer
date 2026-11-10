@@ -7,9 +7,10 @@
 triggers (reconciliation on process start, fast-path broadcast, periodic `WorkManager`
 reconciliation) are built and running — see
 [`core/app-history/AGENTS.md`](../../../core/app-history/AGENTS.md) for the as-built module reference.
-The diff engine (`HI-03`) is built as `core:app-history`'s timeline read API, not yet consumed by UI.
-Still not built: UI (`HI-08`/`HI-14`), retention (`HI-04`), backup
-(`HI-16`/`HI-17`), and the `HI-10` runtime-state tier.
+The diff engine (`HI-03`) is built as `core:app-history`'s timeline read API. The per-app timeline
+and app-detail entry (`HI-08`, `HI-15`) read it, in debug builds only for now. Still not built: the
+What Changed tab (`HI-14`), retention (`HI-04`), backup (`HI-16`/`HI-17`), and the `HI-10`
+runtime-state tier.
 **Scope:** The on-device Room schema for full-state app history snapshots, what is and isn't
 captured, the change-detection gate, and the three capture triggers. Does not cover the diff engine
 (`HI-03`), UI (`HI-08`/`HI-14`), retention (`HI-04`), or backup (`HI-16`/`HI-17`).

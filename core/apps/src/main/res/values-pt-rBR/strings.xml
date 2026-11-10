@@ -42,31 +42,6 @@
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_unknown">Desconhecido</string>
-    <string name="app_detail_insight_debuggable">Acesso de depuração está habilitado</string>
-    <string name="app_detail_insight_debug_certificate">Assinado com a chave de depuração compartilhada do Android</string>
-    <string name="app_detail_insight_certificate_not_yet_valid">O certificado de assinatura ainda não é válido</string>
-    <plurals name="app_detail_insight_outdated_target">
-        <item quantity="one">Alvo da API %1$d, um nível de API atrás deste dispositivo</item>
-        <item quantity="many">Alvo da API %1$d, %2$d níveis de API atrás deste dispositivo</item>
-        <item quantity="other">Alvo da API %1$d, %2$d níveis de API atrás deste dispositivo</item>
-    </plurals>
-    <string name="app_detail_insight_sideloaded">Instalado de fora de uma loja de aplicativos</string>
-    <plurals name="app_detail_insight_unused">
-        <item quantity="one">Não aberto há %1$d mês</item>
-        <item quantity="many">Não aberto nos últimos %1$d meses</item>
-        <item quantity="other">Não aberto nos últimos %1$d meses</item>
-    </plurals>
-    <string name="app_detail_insight_background_location">Pode acessar a localização enquanto está em segundo plano</string>
-    <string name="app_detail_insight_messages">Pode ler, receber ou enviar mensagens de texto</string>
-    <string name="app_detail_insight_call_history">Pode acessar ou alterar o histórico de chamadas</string>
-    <string name="app_detail_insight_contacts">Pode acessar ou alterar contatos</string>
-    <string name="app_detail_insight_calendar">Pode acessar ou alterar eventos do calendário</string>
-    <string name="app_detail_badge_large">Aplicativo Grande</string>
-    <string name="app_detail_badge_system">Sistema</string>
-    <string name="app_detail_badge_google_play">Google Play</string>
-    <string name="app_detail_badge_recently_installed">Novo</string>
-    <string name="app_detail_badge_recently_updated">Atualizado</string>
-    <string name="app_detail_badge_recently_used">Usado Recentemente</string>
     <string name="general_info_title">Informações Gerais</string>
     <string name="general_info_error">Falha ao carregar informações gerais</string>
     <string name="general_info_section_identification">Identificação</string>
@@ -512,5 +487,11 @@
     <string name="components_launch_started">Solicitação de início enviada — o aplicativo decide o que acontece a seguir.</string>
     <string name="components_launch_broadcast_sent">Transmissão enviada — nada aqui relata se foi tratada.</string>
     <string name="components_launch_failed">O sistema se recusou a iniciar isso.</string>
+    <string name="certificates_validity_on_date_valid">Válido nesta data</string>
+    <string name="certificates_validity_on_date_expired">Expirado nesta data</string>
+    <string name="certificates_validity_on_date_not_yet">Ainda não válido nesta data</string>
+    <string name="certificates_validity_on_date_valid_explanation">Este certificado estava dentro das datas de validade no dia em que o Apk Analyzer o registrou.</string>
+    <string name="certificates_validity_on_date_expired_explanation">A data final deste certificado já havia passado no dia em que o Apk Analyzer o registrou.</string>
+    <string name="certificates_validity_on_date_not_yet_explanation">A data inicial deste certificado ainda estava no futuro no dia em que o Apk Analyzer o registrou.</string>
     <string name="app_info_unavailable">Este dispositivo não consegue abrir Informações do aplicativo</string>
 </resources>

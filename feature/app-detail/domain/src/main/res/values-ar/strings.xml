@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_detail_insight_debuggable">تم تمكين الوصول إلى التصحيح</string>
+    <string name="app_detail_insight_debug_certificate">موقع بتوقيع مفتاح التصحيح المشترك لنظام Android</string>
+    <string name="app_detail_insight_certificate_not_yet_valid">شهادة التوقيع غير صالحة بعد</string>
+    <plurals name="app_detail_insight_outdated_target">
+        <item quantity="zero">يستهدف API %1$d، %2$d مستويات API خلف هذا الجهاز</item>
+        <item quantity="one">يستهدف API %1$d، مستوى API واحد خلف هذا الجهاز</item>
+        <item quantity="two">يستهدف API %1$d، مستويا API خلف هذا الجهاز</item>
+        <item quantity="few">يستهدف API %1$d، %2$d مستويات API خلف هذا الجهاز</item>
+        <item quantity="many">يستهدف API %1$d، %2$d مستوى API خلف هذا الجهاز</item>
+        <item quantity="other">يستهدف API %1$d، %2$d مستوى API خلف هذا الجهاز</item>
+    </plurals>
+    <string name="app_detail_insight_sideloaded">تم التثبيت من خارج متجر التطبيقات</string>
+    <plurals name="app_detail_insight_unused">
+        <item quantity="zero">لم يتم فتحه في آخر %1$d أشهر</item>
+        <item quantity="one">لم يتم فتحه في الشهر الماضي</item>
+        <item quantity="two">لم يتم فتحه منذ شهرين</item>
+        <item quantity="few">لم يتم فتحه في آخر %1$d أشهر</item>
+        <item quantity="many">لم يتم فتحه في آخر %1$d شهرا</item>
+        <item quantity="other">لم يتم فتحه في آخر %1$d شهر</item>
+    </plurals>
+    <string name="app_detail_insight_background_location">يمكنه الوصول إلى الموقع أثناء التشغيل في الخلفية</string>
+    <string name="app_detail_insight_messages">يمكنه قراءة أو استقبال أو إرسال الرسائل النصية</string>
+    <string name="app_detail_insight_call_history">يمكنه الوصول إلى أو تغيير سجل المكالمات</string>
+    <string name="app_detail_insight_contacts">يمكنه الوصول إلى أو تغيير جهات الاتصال</string>
+    <string name="app_detail_insight_calendar">يمكنه الوصول إلى أو تغيير أحداث التقويم</string>
+    <string name="app_detail_badge_large">تطبيق كبير</string>
+    <string name="app_detail_badge_system">نظام</string>
+    <string name="app_detail_badge_google_play">جوجل بلاي</string>
+    <string name="app_detail_badge_recently_installed">جديد</string>
+    <string name="app_detail_badge_recently_updated">تم التحديث</string>
+    <string name="app_detail_badge_recently_used">مستخدم مؤخرًا</string>
+</resources>

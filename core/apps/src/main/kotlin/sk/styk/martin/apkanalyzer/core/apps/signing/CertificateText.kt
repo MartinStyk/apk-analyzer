@@ -27,6 +27,22 @@ val CertificateValidity.explanationRes: Int
     }
 
 @get:StringRes
+val CertificateValidity.onRecordedDateLabelRes: Int
+    get() = when (this) {
+        CertificateValidity.Valid -> R.string.certificates_validity_on_date_valid
+        CertificateValidity.Expired -> R.string.certificates_validity_on_date_expired
+        CertificateValidity.NotYetValid -> R.string.certificates_validity_on_date_not_yet
+    }
+
+@get:StringRes
+val CertificateValidity.onRecordedDateExplanationRes: Int
+    get() = when (this) {
+        CertificateValidity.Valid -> R.string.certificates_validity_on_date_valid_explanation
+        CertificateValidity.Expired -> R.string.certificates_validity_on_date_expired_explanation
+        CertificateValidity.NotYetValid -> R.string.certificates_validity_on_date_not_yet_explanation
+    }
+
+@get:StringRes
 val SignatureAlgorithmAssessment.labelRes: Int
     get() = when (this) {
         SignatureAlgorithmAssessment.ModernDigest -> R.string.certificates_algorithm_strong

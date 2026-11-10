@@ -63,10 +63,15 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.rememberColla
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ListSectionHeader
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RowChangeLines
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
+import java.time.Instant
 import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 
 @Composable
@@ -111,6 +116,7 @@ internal fun ComponentsScreen(
         onBack = onBack,
         onNavigateToIntentFilters = onNavigateToIntentFilters,
         modifier = modifier,
+        recordedAt = appDetailInput.recordedAt,
     )
 }
 
@@ -121,29 +127,33 @@ private fun ComponentsContent(
     onBack: () -> Unit,
     onNavigateToIntentFilters: (componentName: String, componentType: ComponentType) -> Unit,
     modifier: Modifier = Modifier,
+    recordedAt: Instant? = null,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(AppTheme.colors.background),
-    ) {
-        Toolbar(
-            title = stringResource(AppsR.string.components_title),
-            onBack = onBack,
-        )
-        when (state) {
-            is ComponentsState.Loading -> SectionLoading()
-
-            is ComponentsState.Error -> SectionError(
-                message = stringResource(AppsR.string.components_error),
-                onRetry = { onAction(ComponentsAction.Retry) },
+    AppDetailModeFrame(recordedAt = recordedAt, modifier = modifier) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(AppTheme.colors.background),
+        ) {
+            Toolbar(
+                title = stringResource(AppsR.string.components_title),
+                onBack = onBack,
             )
+            when (state) {
+                is ComponentsState.Loading -> SectionLoading()
 
-            is ComponentsState.Loaded -> LoadedContent(
-                state = state,
-                onAction = onAction,
-                onNavigateToIntentFilters = onNavigateToIntentFilters,
-            )
+                is ComponentsState.Error -> SectionError(
+                    reason = state.reason,
+                    loadFailedMessage = stringResource(AppsR.string.components_error),
+                    onRetry = { onAction(ComponentsAction.Retry) },
+                )
+
+                is ComponentsState.Loaded -> LoadedContent(
+                    state = state,
+                    onAction = onAction,
+                    onNavigateToIntentFilters = onNavigateToIntentFilters,
+                )
+            }
         }
     }
 }
@@ -235,6 +245,7 @@ private fun LoadedContent(
     detailItem?.let { item ->
         ComponentDetailBottomSheet(
             item = item,
+            intentFiltersMissingText = stringResource(R.string.app_history_intent_filters_note).takeIf { state.isHistorical },
             onCopy = { label, value -> onAction(ComponentsAction.CopyValue(label, value)) },
             onOpenIntentFilters = {
                 detailComponentKey = null
@@ -277,12 +288,13 @@ private fun NarrowingRow(
 }
 
 @Composable
-private fun ComponentRow(
+internal fun ComponentRow(
     item: ComponentItem,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
-    onLaunch: () -> Unit,
     modifier: Modifier = Modifier,
+    onLaunch: (() -> Unit)? = null,
+    changeLines: List<String> = emptyList(),
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -319,6 +331,7 @@ private fun ComponentRow(
                     overflow = TextOverflow.StartEllipsis,
                 )
             }
+            RowChangeLines(lines = changeLines)
             val hasStatusTag = item.isUnprotected || item.isLauncher || item.isExported
             if (hasStatusTag || item.flags.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(6.dp))
@@ -349,7 +362,7 @@ private fun ComponentRow(
                 }
             }
         }
-        if (item.isLaunchable) {
+        if (item.isLaunchable && onLaunch != null) {
             Spacer(modifier = Modifier.width(4.dp))
             IconButton(
                 imageVector = ApkAnalyzerIcons.PlayArrow,
@@ -413,7 +426,7 @@ private fun ComponentsLoadingPreview() {
 private fun ComponentsErrorPreview() {
     ApkAnalyzerTheme {
         ComponentsContent(
-            state = ComponentsState.Error,
+            state = ComponentsState.Error(SectionErrorReason.LoadFailed),
             onAction = {},
             onBack = {},
             onNavigateToIntentFilters = { _, _ -> },

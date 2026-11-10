@@ -238,4 +238,40 @@
     <string name="nativelibraries_empty_query">कोई मूल पुस्तकालय \"%1$s\" से मेल नहीं खाता।</string>
     <string name="nativelibraries_clear_search">खोज साफ़ करें</string>
     <string name="general_info_copied">क्लिपबोर्ड में कॉपी किया गया</string>
+    <string name="app_detail_history_section">इतिहास</string>
+    <string name="app_history_toolbar_subtitle">इतिहास</string>
+    <string name="app_history_hub_no_entries">दर्ज करना जल्द शुरू होगा</string>
+    <string name="app_history_hub_first_only">अभी कोई बदलाव नहीं · %1$s से दर्ज हो रहा है</string>
+    <string name="app_history_hub_certificate">%1$s को साइनिंग प्रमाणपत्र बदला</string>
+    <string name="app_history_hub_unavailable">इतिहास अभी उपलब्ध नहीं है</string>
+    <string name="app_history_context_first_only">%1$s से दर्ज हो रहा है</string>
+    <string name="app_history_footer">Apk Analyzer सिर्फ़ वही बदलाव दिखा सकता है जो इस ऐप को दर्ज करना शुरू करने के बाद हुए।</string>
+    <string name="app_history_first_only_hint">इस ऐप के बदलने पर यहां नई पंक्तियां दिखेंगी।</string>
+    <string name="app_history_empty_title">अभी कुछ दर्ज नहीं हुआ</string>
+    <string name="app_history_empty_body">Apk Analyzer इस ऐप को बैकग्राउंड में दर्ज करता है। इसका इतिहास यहीं से शुरू होता है।</string>
+    <string name="app_history_error">इस ऐप का इतिहास लोड नहीं हो सका</string>
+    <string name="app_history_row_click_label">देखें क्या बदला</string>
+    <string name="app_history_row_first_click_label">पूरी जानकारी देखें</string>
+    <string name="app_history_row_long_click_label">कॉपी करें</string>
+    <string name="app_history_full_detail">इस वर्शन की पूरी जानकारी देखें</string>
+    <string name="app_history_show_all">सभी %1$d दिखाएं</string>
+    <string name="app_history_group_header">%1$s · %2$d</string>
+    <string name="app_history_group_header_scoped">%1$s · %2$s · %3$d</string>
+    <string name="app_history_what_changed">क्या बदला</string>
+    <string name="app_history_as_seen_on">%1$s की स्थिति</string>
+    <string name="app_history_as_seen_on_label">इस तारीख की स्थिति</string>
+    <string name="app_history_as_seen_on_explanation">Apk Analyzer ने इस तारीख को यही दर्ज किया था। हो सकता है अब यह ऐप से मेल न खाए।</string>
+    <string name="app_history_as_seen_click_label">समझाएं</string>
+    <string name="app_history_permissions_note">अनुमति की स्थिति इतिहास में दर्ज नहीं होती।</string>
+    <string name="app_history_intent_filters_note">ये इतिहास में दर्ज नहीं होते।</string>
+    <string name="app_history_version_not_found">यह वर्शन अब आपके इतिहास में नहीं है।</string>
+    <string name="app_history_version_load_failed">यह वर्शन लोड नहीं हो सका</string>
+    <plurals name="app_history_hub_changes">
+        <item quantity="one">%1$d बदलाव · ताज़ा %2$s</item>
+        <item quantity="other">%1$d बदलाव · ताज़ा %2$s</item>
+    </plurals>
+    <plurals name="app_history_context">
+        <item quantity="one">%1$s से दर्ज · %2$d बदलाव</item>
+        <item quantity="other">%1$s से दर्ज · %2$d बदलाव</item>
+    </plurals>
 </resources>

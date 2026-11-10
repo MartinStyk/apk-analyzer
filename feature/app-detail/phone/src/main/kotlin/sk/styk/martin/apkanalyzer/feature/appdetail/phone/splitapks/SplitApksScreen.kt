@@ -57,9 +57,13 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.rememberColla
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
+import java.time.Instant
 import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 
 @Composable
@@ -87,6 +91,7 @@ internal fun SplitApksScreen(
         state = state,
         onAction = viewModel::onAction,
         modifier = modifier,
+        recordedAt = appDetailInput.recordedAt,
     )
 }
 
@@ -95,25 +100,29 @@ private fun SplitApksContent(
     state: SplitApksState,
     onAction: (SplitApksAction) -> Unit,
     modifier: Modifier = Modifier,
+    recordedAt: Instant? = null,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(AppTheme.colors.background),
-    ) {
-        Toolbar(
-            title = stringResource(AppsR.string.splitapks_title),
-            onBack = { onAction(SplitApksAction.Back) },
-        )
-        when (state) {
-            SplitApksState.Loading -> SectionLoading()
-
-            SplitApksState.Error -> SectionError(
-                message = stringResource(AppsR.string.splitapks_error),
-                onRetry = { onAction(SplitApksAction.Retry) },
+    AppDetailModeFrame(recordedAt = recordedAt, modifier = modifier) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(AppTheme.colors.background),
+        ) {
+            Toolbar(
+                title = stringResource(AppsR.string.splitapks_title),
+                onBack = { onAction(SplitApksAction.Back) },
             )
+            when (state) {
+                SplitApksState.Loading -> SectionLoading()
 
-            is SplitApksState.Loaded -> SplitApksLoadedContent(state = state, onAction = onAction)
+                is SplitApksState.Error -> SectionError(
+                    reason = state.reason,
+                    loadFailedMessage = stringResource(AppsR.string.splitapks_error),
+                    onRetry = { onAction(SplitApksAction.Retry) },
+                )
+
+                is SplitApksState.Loaded -> SplitApksLoadedContent(state = state, onAction = onAction)
+            }
         }
     }
 }
@@ -304,7 +313,7 @@ private fun SplitApksLoadingPreview() {
 private fun SplitApksErrorPreview() {
     ApkAnalyzerTheme {
         SplitApksContent(
-            state = SplitApksState.Error,
+            state = SplitApksState.Error(SectionErrorReason.LoadFailed),
             onAction = {},
         )
     }

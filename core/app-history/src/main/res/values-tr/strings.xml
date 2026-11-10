@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_history_first_recorded">İlk kayıt</string>
+    <string name="app_history_certificate_changed">İmza sertifikası değişti</string>
+    <string name="app_history_signing_method_changed">İmza yöntemi değişti</string>
+    <string name="app_history_reinstalled">Kaldırıldı ve yeniden yüklendi</string>
+    <string name="app_history_new_device">Yeni cihazda devam etti</string>
+    <string name="app_history_same_version">Aynı sürüm, yeni derleme</string>
+    <string name="app_history_older_version">Eski sürüm</string>
+    <string name="app_history_uncomparable_only">Bazı ayrıntılar karşılaştırılamadı</string>
+    <string name="app_history_version">Sürüm %1$s</string>
+    <string name="app_history_version_with_code">%1$s (%2$d)</string>
+    <string name="app_history_value_change">%1$s → %2$s</string>
+    <string name="app_history_summary_join">%1$s · %2$s</string>
+    <string name="app_history_summary_permission_added_single">İzin eklendi: %1$s</string>
+    <string name="app_history_summary_source">Kurulum kaynağı değişti: %1$s</string>
+    <string name="app_history_summary_debug_on">Hata ayıklama açıldı</string>
+    <string name="app_history_summary_debug_off">Hata ayıklama kapatıldı</string>
+    <string name="app_history_summary_backup_on">Uygulama verisi yedekleme açıldı</string>
+    <string name="app_history_summary_backup_off">Uygulama verisi yedekleme kapatıldı</string>
+    <string name="app_history_summary_cleartext_on">Şifrelenmemiş trafiğe izin verildi</string>
+    <string name="app_history_summary_cleartext_off">Şifrelenmemiş trafik engellendi</string>
+    <string name="app_history_summary_target_sdk">Target SDK %1$s → %2$s</string>
+    <string name="app_history_summary_min_sdk">Min SDK %1$s → %2$s</string>
+    <string name="app_history_summary_size_up">Boyut +%1$s</string>
+    <string name="app_history_summary_size_down">Boyut −%1$s</string>
+    <string name="app_history_when_updated">Güncellendi: %1$s</string>
+    <string name="app_history_when_reinstalled">Yeniden yüklendi: %1$s</string>
+    <string name="app_history_when_recorded">Kaydedildi: %1$s</string>
+    <string name="app_history_when_with_recorded">%1$s · kaydedildi: %2$s</string>
+    <string name="app_history_changes_heading">Bu sürümler arasındaki değişiklikler</string>
+    <string name="app_history_device_note">Bazı farklar uygulamadan değil cihazdan kaynaklanabilir.</string>
+    <string name="app_history_empty_diff">Apk Analyzer\'ın karşılaştırdıklarında fark yok</string>
+    <string name="app_history_uncomparable_label">Karşılaştırılamadı</string>
+    <string name="app_history_uncomparable_explanation">Bu bilgiler bu sürümlerden biri için tam kaydedilmedi, bu yüzden değişip değişmediğini söyleyemiyoruz.</string>
+    <string name="app_history_field_change">%1$s: %2$s → %3$s</string>
+    <string name="app_history_field_added">%1$s: eklendi</string>
+    <string name="app_history_field_removed">%1$s: kaldırıldı</string>
+    <string name="app_history_before">Önce</string>
+    <string name="app_history_after">Sonra</string>
+    <string name="app_history_category_signing">İmza</string>
+    <string name="app_history_category_permissions">İzinler</string>
+    <string name="app_history_category_install_source">Kurulum kaynağı</string>
+    <string name="app_history_category_settings">Uygulama ayarları</string>
+    <string name="app_history_category_android_versions">Android sürümleri</string>
+    <string name="app_history_category_components">Bileşenler</string>
+    <string name="app_history_category_native">Yerel kütüphaneler</string>
+    <string name="app_history_category_size">Boyut</string>
+    <string name="app_history_category_signing_method">İmza yöntemi</string>
+    <string name="app_history_group_added">Eklendi</string>
+    <string name="app_history_group_removed">Kaldırıldı</string>
+    <string name="app_history_group_changed">Değişti</string>
+    <string name="app_history_certificate_updated_explanation">Android, farklı sertifikalı bir güncellemeyi yalnızca eski anahtar onayladıysa kabul eder; bu nedenle bu genellikle geliştiricinin planlı anahtar değişikliğidir.</string>
+    <string name="app_history_certificate_new_copy_explanation">Bu kopya, daha önce kaydedilenden farklı bir sertifikayla imzalanmış. Güvendiğiniz bir kaynaktan geldiğini kontrol edin.</string>
+    <string name="app_history_signer_explanation">Bu imza sertifikasında adı geçen kuruluş veya kişi. Buraya herkes istediği adı yazabilir; bu yüzden anahtarı aşağıdaki parmak izi tanımlar.</string>
+    <string name="app_history_not_recorded">Bu sürüm için kaydedilmedi</string>
+    <string name="app_history_not_recorded_explanation">Apk Analyzer bunu bu sürüm için kaydedemedi, bu yüzden ne içerdiğini söyleyemiyoruz.</string>
+    <plurals name="app_history_summary_more">
+        <item quantity="one">ve %1$d tane daha</item>
+        <item quantity="other">ve %1$d tane daha</item>
+    </plurals>
+    <plurals name="app_history_summary_permission_added_named">
+        <item quantity="one">%1$s ve %2$d izin daha eklendi</item>
+        <item quantity="other">%1$s ve %2$d izin daha eklendi</item>
+    </plurals>
+    <plurals name="app_history_summary_permissions_removed">
+        <item quantity="one">%1$d izin kaldırıldı</item>
+        <item quantity="other">%1$d izin kaldırıldı</item>
+    </plurals>
+    <plurals name="app_history_summary_defined_permissions">
+        <item quantity="one">Bu uygulamanın tanımladığı %1$d izin değişti</item>
+        <item quantity="other">Bu uygulamanın tanımladığı %1$d izin değişti</item>
+    </plurals>
+    <plurals name="app_history_summary_components_added">
+        <item quantity="one">%1$d bileşen eklendi</item>
+        <item quantity="other">%1$d bileşen eklendi</item>
+    </plurals>
+    <plurals name="app_history_summary_components_removed">
+        <item quantity="one">%1$d bileşen kaldırıldı</item>
+        <item quantity="other">%1$d bileşen kaldırıldı</item>
+    </plurals>
+    <plurals name="app_history_summary_components_changed">
+        <item quantity="one">%1$d bileşen değişti</item>
+        <item quantity="other">%1$d bileşen değişti</item>
+    </plurals>
+    <plurals name="app_history_summary_native_added">
+        <item quantity="one">%1$d yerel kütüphane eklendi</item>
+        <item quantity="other">%1$d yerel kütüphane eklendi</item>
+    </plurals>
+    <plurals name="app_history_summary_native_removed">
+        <item quantity="one">%1$d yerel kütüphane kaldırıldı</item>
+        <item quantity="other">%1$d yerel kütüphane kaldırıldı</item>
+    </plurals>
+    <plurals name="app_history_summary_native_changed">
+        <item quantity="one">%1$d yerel kütüphane değişti</item>
+        <item quantity="other">%1$d yerel kütüphane değişti</item>
+    </plurals>
+    <string name="app_history_size_change_up">%1$s → %2$s (+%3$s)</string>
+    <string name="app_history_size_change_down">%1$s → %2$s (−%3$s)</string>
+    <string name="app_history_field_value">%1$s: %2$s</string>
+    <string name="app_history_rule_added">%1$s · eklendi: %2$s</string>
+    <string name="app_history_rule_removed">%1$s · kaldırıldı: %2$s</string>
+    <string name="app_history_path_rule">%1$s (okuma: %2$s, yazma: %3$s)</string>
+    <string name="app_history_summary_requirements">Cihaz gereksinimleri değişti</string>
+</resources>

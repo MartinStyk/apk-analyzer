@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_detail_insight_debuggable">L\'accès au débogage est activé</string>
+    <string name="app_detail_insight_debug_certificate">Signé avec la clé de débogage partagée d\'Android</string>
+    <string name="app_detail_insight_certificate_not_yet_valid">Le certificat de signature n\'est pas encore valide</string>
+    <plurals name="app_detail_insight_outdated_target">
+        <item quantity="one">Cible API %1$d, un niveau API derrière cet appareil</item>
+        <item quantity="many">Cibles API %1$d, %2$d API niveaux derrière cet appareil</item>
+        <item quantity="other">Cibles API %1$d, %2$d API niveaux derrière cet appareil</item>
+    </plurals>
+    <string name="app_detail_insight_sideloaded">Installé depuis l\'extérieur d\'un magasin d\'applications</string>
+    <plurals name="app_detail_insight_unused">
+        <item quantity="one">Pas ouvert au cours des %1$d derniers mois</item>
+        <item quantity="many">Pas ouvert au cours des %1$d derniers mois</item>
+        <item quantity="other">Pas ouvert au cours des %1$d derniers mois</item>
+    </plurals>
+    <string name="app_detail_insight_background_location">Peut accéder à la localisation tout en s\'exécutant en arrière-plan</string>
+    <string name="app_detail_insight_messages">Peut lire, recevoir ou envoyer des messages texte</string>
+    <string name="app_detail_insight_call_history">Peut accéder ou modifier l\'historique des appels</string>
+    <string name="app_detail_insight_contacts">Peut accéder ou modifier les contacts</string>
+    <string name="app_detail_insight_calendar">Peut accéder ou modifier les événements du calendrier</string>
+    <string name="app_detail_badge_large">Grande application</string>
+    <string name="app_detail_badge_system">Système</string>
+    <string name="app_detail_badge_google_play">Google Play</string>
+    <string name="app_detail_badge_recently_installed">Nouveau</string>
+    <string name="app_detail_badge_recently_updated">Mis à jour</string>
+    <string name="app_detail_badge_recently_used">Récemment utilisé</string>
+</resources>

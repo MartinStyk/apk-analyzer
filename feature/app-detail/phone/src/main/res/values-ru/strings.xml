@@ -290,4 +290,44 @@
     <string name="nativelibraries_empty_query">Нет нативной библиотеки, соответствующей \"%1$s\".</string>
     <string name="nativelibraries_clear_search">Очистить поиск</string>
     <string name="general_info_copied">Скопировано в буфер обмена</string>
+    <string name="app_detail_history_section">История</string>
+    <string name="app_history_toolbar_subtitle">История</string>
+    <string name="app_history_hub_no_entries">Фиксация скоро начнётся</string>
+    <string name="app_history_hub_first_only">Изменений пока нет · фиксируется с %1$s</string>
+    <string name="app_history_hub_certificate">Сертификат подписи изменился %1$s</string>
+    <string name="app_history_hub_unavailable">История сейчас недоступна</string>
+    <string name="app_history_context_first_only">Фиксируется с %1$s</string>
+    <string name="app_history_footer">Apk Analyzer показывает только изменения, сделанные после начала фиксации этого приложения.</string>
+    <string name="app_history_first_only_hint">Новые строки появятся здесь, когда приложение изменится.</string>
+    <string name="app_history_empty_title">Пока ничего не зафиксировано</string>
+    <string name="app_history_empty_body">Apk Analyzer фиксирует это приложение в фоновом режиме. Его история начинается здесь.</string>
+    <string name="app_history_error">Не удалось загрузить историю приложения</string>
+    <string name="app_history_row_click_label">Посмотреть изменения</string>
+    <string name="app_history_row_first_click_label">Посмотреть все сведения</string>
+    <string name="app_history_row_long_click_label">Копировать</string>
+    <string name="app_history_full_detail">Все сведения об этой версии</string>
+    <string name="app_history_show_all">Показать все (%1$d)</string>
+    <string name="app_history_group_header">%1$s · %2$d</string>
+    <string name="app_history_group_header_scoped">%1$s · %2$s · %3$d</string>
+    <string name="app_history_what_changed">Что изменилось</string>
+    <string name="app_history_as_seen_on">По состоянию на %1$s</string>
+    <string name="app_history_as_seen_on_label">По состоянию на</string>
+    <string name="app_history_as_seen_on_explanation">Вот что Apk Analyzer зафиксировал в этот день. Сейчас приложение может отличаться.</string>
+    <string name="app_history_as_seen_click_label">Пояснить</string>
+    <string name="app_history_permissions_note">Статус разрешений не фиксируется в истории.</string>
+    <string name="app_history_intent_filters_note">Эти данные не фиксируются в истории.</string>
+    <string name="app_history_version_not_found">Этой версии больше нет в истории.</string>
+    <string name="app_history_version_load_failed">Не удалось загрузить эту версию</string>
+    <plurals name="app_history_hub_changes">
+        <item quantity="one">%1$d изменение · последнее %2$s</item>
+        <item quantity="few">%1$d изменения · последнее %2$s</item>
+        <item quantity="many">%1$d изменений · последнее %2$s</item>
+        <item quantity="other">%1$d изменения · последнее %2$s</item>
+    </plurals>
+    <plurals name="app_history_context">
+        <item quantity="one">Фиксируется с %1$s · %2$d изменение</item>
+        <item quantity="few">Фиксируется с %1$s · %2$d изменения</item>
+        <item quantity="many">Фиксируется с %1$s · %2$d изменений</item>
+        <item quantity="other">Фиксируется с %1$s · %2$d изменения</item>
+    </plurals>
 </resources>

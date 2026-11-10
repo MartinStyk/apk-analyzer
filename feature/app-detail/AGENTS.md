@@ -5,22 +5,74 @@
 Displays detailed analysis for an installed package or APK file: general information, permissions,
 components, certificates, device requirements, manifest, split APKs, and native libraries.
 
-The API module owns the cross-feature navigation input and distinguishes installed packages from APK
-files. The phone implementation uses the package
+The API module owns the cross-feature navigation input and distinguishes three modes: installed
+packages, APK files, and a historical state recorded by `core:app-history`. The phone implementation uses the package
 `sk.styk.martin.apkanalyzer.feature.appdetail.phone`; the TV one, which opens installed packages
 only, is described under [TV Module](#tv-module).
+
+## Modules
+
+* `api` owns `AppDetailInput`, the one description of what app detail shows: an installed package, an
+  APK file, or a recorded version.
+* `domain` (`sk.styk.martin.apkanalyzer.feature.appdetail.domain`) is shared by `phone` and `tv`:
+  `AppDetailSectionRepository`, which loads each section for an `AppDetailInput` from the live
+  repositories or from `core:app-history`; `SectionErrorReason` with `toSectionErrorReason()`; and the input helpers
+  `isHistorical`, `isOnDevice`, `liveReference`, `installedPackage`, `iconReference`, and `recordedAt`.
 
 ## Package Map
 
 * The root implementation package owns the hub State/Action/Event/ViewModel and input adapters.
 * `components/` owns interaction and loading/error UI shared across detail sections.
-* The "Worth knowing" insight policy and the badges live in `core:apps` `insight/`, shared with TV.
+* The "Worth knowing" insight policy and the badges live in `domain`'s `insight/`, shared with TV. Their
+  evaluators take the `AppDetailInput`, so they judge a historical input at its capture date, without
+  this device's SDK, and without recency badges.
 * `generalinfo/`, `permissions/`, `appcomponents/`, `certificates/`, `requirements/`, `manifest/`,
   `splitapks/`, and `nativelibraries/` each own one detail destination.
+* `history/` owns the per-app history screens: `timeline/` for the timeline, `change/` for change
+  detail, and the date and version-tag helpers both share at its root. They live here rather than in
+  their own feature because they reuse this module's internal rows and sheets.
 * `navigation/` owns the feature entry provider and internal destination keys.
+* `analytics/` owns the feature's analytics events and their mapping to tracked names and parameters.
+  Every event that describes an app carries `analysis_mode`, so live, APK-file, and historical use
+  stay separable.
 
 Each destination keeps its own State/Action/Event/ViewModel set. Runtime navigation inputs use
 assisted injection and seed ViewModel state exactly once.
+
+## Historical Mode
+
+`AppDetailInput.Historical` renders a past state on the same hub and section screens. It is phone only
+and debug only, through `ConfigurationKey.AppHistoryEnabled`, observed at the hub's History card alone.
+Do not add a variant to `AppReference`: icon, export, manifest, AI, and signing code all consume it, and
+a past state means nothing to them.
+
+* **One data seam.** Phone and TV screens read every section through `domain`'s
+  `AppDetailSectionRepository` with their `AppDetailInput`, intent filters included; it reads the store for a historical input and
+  the live repositories otherwise. Never fall back to live data: today's facts
+  under an "as seen on" label are the worst failure this mode can produce.
+* **Check what an action needs, not the mode.** An action that needs the real app asks the input for it:
+  `liveReference` (export, AI, Play Store, App info, review session) or `installedPackage` (History card,
+  recents, launching components). A historical input has neither, so it cannot reach them by accident.
+  A mode check reads `isHistorical` or `isOnDevice`, never a null `liveReference` or `recordedAt`.
+* **One label.** Every app-detail stateless content composable wraps its root in `AppDetailModeFrame`
+  with the input's `recordedAt`, which pins `AsSeenOnBar` above the screen in every state and shows it
+  in previews. A new app-detail destination must do the same.
+* **Judge as of the recorded date, against no device.** Dates are judged at `recordedAt ?: now`: the
+  capture date for a historical input, now otherwise. That covers certificate validity, "not yet valid", unused
+  time, and recency badges. Device facts (features, ABIs, SDK) need a live app, so a screen reads them
+  only when the input `isOnDevice` and passes `DeviceFeatures.Unknown`, no ABIs, or no SDK otherwise,
+  meaning "no marks"; the sheets omit their availability and device-support fields.
+* **No side effects and no actions.** No recents entry, no review session, analytics tagged as historical.
+  The hub has no Actions section, AI card, or History card. Manifest and intent filters are not recorded,
+  so nothing links to them.
+* **Not recorded is not empty.** A native-library section that failed capture says so; it never becomes
+  `NativeLibraries.Empty`.
+* **A missing version is not a failed read.** Every section has one `Error(reason)` state, mapped with the
+  domain's `toSectionErrorReason()`, and renders it through `SectionError(reason, loadFailedMessage, onRetry)`:
+  `LoadFailed` shows the screen's own message with Retry, `VersionNotFound` offers back only, and
+  `VersionReadFailed` offers Retry.
+
+The timeline and change detail collect `timeline()` again on retry, because `catch` completes the flow.
 
 ## TV Module
 
@@ -29,7 +81,8 @@ data as the phone: a hub (header, App info and Play Store, "Worth knowing", and 
 plus General info, Permissions, Components, Certificates, Device requirements, Native libraries,
 Split APKs, and the manifest. It never depends on `phone`.
 
-* Every rule and explanation both apps show lives in core: `core:apps` (`insight/`, `signing/`,
+* Every rule and explanation both apps show lives in this feature's `domain` (`insight/`) or in core:
+  `core:apps` (`signing/`,
   `components/`, `devicefeatures/`, `packaging/`, `installsource/` text files and their strings) and
   `core:app-permissions` `detail/`. Each app keeps only its own screen text. Add a new explanation
   there, not in either feature module, so both apps stay translated and agree with each other.

@@ -212,4 +212,38 @@
     <string name="nativelibraries_empty_query">Tidak ada pustaka native yang cocok dengan \"%1$s\".</string>
     <string name="nativelibraries_clear_search">Bersihkan pencarian</string>
     <string name="general_info_copied">Disalin ke papan klip</string>
+    <string name="app_detail_history_section">Riwayat</string>
+    <string name="app_history_toolbar_subtitle">Riwayat</string>
+    <string name="app_history_hub_no_entries">Pencatatan segera dimulai</string>
+    <string name="app_history_hub_first_only">Belum ada perubahan · tercatat sejak %1$s</string>
+    <string name="app_history_hub_certificate">Sertifikat penandatangan berubah %1$s</string>
+    <string name="app_history_hub_unavailable">Riwayat tidak tersedia saat ini</string>
+    <string name="app_history_context_first_only">Tercatat sejak %1$s</string>
+    <string name="app_history_footer">Apk Analyzer hanya dapat menampilkan perubahan setelah mulai mencatat aplikasi ini.</string>
+    <string name="app_history_first_only_hint">Baris baru muncul di sini saat aplikasi ini berubah.</string>
+    <string name="app_history_empty_title">Belum ada yang tercatat</string>
+    <string name="app_history_empty_body">Apk Analyzer mencatat aplikasi ini di latar belakang. Riwayatnya dimulai di sini.</string>
+    <string name="app_history_error">Tidak dapat memuat riwayat aplikasi ini</string>
+    <string name="app_history_row_click_label">Lihat yang berubah</string>
+    <string name="app_history_row_first_click_label">Lihat detail lengkap</string>
+    <string name="app_history_row_long_click_label">Salin</string>
+    <string name="app_history_full_detail">Lihat detail lengkap versi ini</string>
+    <string name="app_history_show_all">Tampilkan semua %1$d</string>
+    <string name="app_history_group_header">%1$s · %2$d</string>
+    <string name="app_history_group_header_scoped">%1$s · %2$s · %3$d</string>
+    <string name="app_history_what_changed">Yang berubah</string>
+    <string name="app_history_as_seen_on">Seperti pada %1$s</string>
+    <string name="app_history_as_seen_on_label">Seperti pada</string>
+    <string name="app_history_as_seen_on_explanation">Inilah yang dicatat Apk Analyzer pada tanggal ini. Mungkin sudah tidak sesuai dengan aplikasi.</string>
+    <string name="app_history_as_seen_click_label">Jelaskan</string>
+    <string name="app_history_permissions_note">Status izin tidak dicatat dalam riwayat.</string>
+    <string name="app_history_intent_filters_note">Ini tidak dicatat dalam riwayat.</string>
+    <string name="app_history_version_not_found">Versi ini sudah tidak ada di riwayat Anda.</string>
+    <string name="app_history_version_load_failed">Tidak dapat memuat versi ini</string>
+    <plurals name="app_history_hub_changes">
+        <item quantity="other">%1$d perubahan · terbaru %2$s</item>
+    </plurals>
+    <plurals name="app_history_context">
+        <item quantity="other">Tercatat sejak %1$s · %2$d perubahan</item>
+    </plurals>
 </resources>

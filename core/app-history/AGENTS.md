@@ -10,10 +10,11 @@ enough to reconstruct the existing app-detail screens against a past point in ti
 broadcast, on-launch reconciliation, and periodic `WorkManager` reconciliation). Restore merging
 (`HI-17`'s "merge, don't overwrite" for Android's free Auto Backup path) is also implemented — see
 [Restore Merge](#restore-merge). The diff engine (`HI-03`) is implemented as the per-app timeline
-read API — see [Timeline and Diff](#timeline-and-diff) — but nothing consumes it yet. Not yet
-built: any UI (`HI-06`/`HI-08`/`HI-14`), the significance rules (`HI-18`), retention/pruning
-(`HI-04`), the Pro-gated Drive backup half of `HI-16`, and the `HI-10` runtime-state
-(enabled/install-source) tier. See
+read API — see [Timeline and Diff](#timeline-and-diff). `feature:app-detail:phone` reads it for the
+per-app timeline, change detail, and historical detail (`HI-08`, `HI-15`), behind the debug-only
+`ConfigurationKey.AppHistoryEnabled`; capture runs in every build. Not yet built: the What Changed tab
+and other UI (`HI-06`/`HI-14`), the significance rules (`HI-18`), retention/pruning (`HI-04`), the
+Pro-gated Drive backup half of `HI-16`, and the `HI-10` runtime-state (enabled/install-source) tier. See
 [`docs/app/technical/app-history-capture-schema.md`](../../docs/app/technical/app-history-capture-schema.md)
 for the full design, including the entity/DAO schema — read it before touching this module; it is the
 source of truth for schema and capture semantics, not this file.
@@ -28,8 +29,8 @@ data in `storage/database/` — the Room database, DAOs, `entity/`, the serializ
 Hilt bindings in `capture/di/`), `restore/` (the `BackupAgent` and the restore-merge routine — see
 [Restore Merge](#restore-merge)), and `timeline/` (the public `AppHistoryRepository`, its
 implementation, and the internal differ, with its public read models — `AppHistoryTimeline`,
-`AppHistoryEntry`, `AppHistoryDiff` and their parts — in `timeline/model/`; see
-[Timeline and Diff](#timeline-and-diff)). See
+`AppHistoryEntry`, `AppHistoryDiff` and their parts — in `timeline/model/`, next to the shared rules and
+text a timeline screen reads; see [Timeline and Diff](#timeline-and-diff)). See
 [Reading a Snapshot](#reading-a-snapshot) for `storage/`'s read path and
 [Capture Pipeline](#capture-pipeline) / [Triggers](#triggers) for `capture/`'s. Everything stays
 `internal` except `timeline/`'s repository interface and `timeline/model/`, and `AppHistoryBackupAgent`, which
@@ -150,7 +151,11 @@ Hashing with any other `Json` configuration would give identical content a diffe
 
 ## Timeline and Diff
 
-`AppHistoryRepository.timeline(packageName)` is the module's only public read API: newest first, one
+`AppHistoryRepository` has two public reads. `snapshot(packageName, id)` returns one past state as
+`AppHistorySnapshotRead`: `Found`, `NotFound` (no such row, nothing a retry would change), or
+`Unavailable` (the read failed, including a row whose required sections no longer decode). Its two
+separately fetched sections are `AppHistorySection` — `Recorded` or `NotRecorded` — so a failed capture
+can never read as "no native code". `timeline(packageName)` returns newest first, one
 `AppHistoryEntry` per snapshot — `FirstSeen` for the oldest, then one `Change` per later snapshot,
 carrying the previous snapshot, an `AppHistoryDiff` against it, and a `Change.Kind`: `NewDevice`
 (adjacent snapshots with different `deviceId`, i.e. history continued after a restore onto another
@@ -194,23 +199,42 @@ same `SetChange`/`ValueChange` values a detail screen renders, so a row label ca
 category whose detail is empty. Localized text (permission descriptions, activity labels) is not
 stored at all, so a device language change can never read as an app change.
 
+`modified` means a user-visible field differs, using the same `fieldChangesFrom` functions a detail
+screen renders from, so a modified item always has something to say. `Activity.isLauncher` is compared
+only when both sides know it. A change of nothing else is therefore not a change at all.
+
+Screens read shared rules from `timeline/model/`, so a future TV screen or What Changed tab agrees with
+the phone: `hasCertificateChange` (the one predicate; it reads `certificates`, never the `Signing`
+category, which also fires on a scheme change), `summaryParts`, `isQuiet`, `changeCount`,
+`recordingSince`, `overview`, and the matching text in `AppHistoryText.kt` with its strings in this
+module. Date a `FirstSeen` row with `snapshot.capturedAt`, never `timestamp`, which can be a factory date.
+
+Install source is compared as `AppHistoryInstallSource`: the resolved `AppSource` plus the installing
+package. A move between two unrecognized stores resolves to Unknown on both sides, and must still read as
+a change, so the package counts. A re-delivery that only changes the initiating or originating package does
+not, and its category, drop rule, count, row and detail all agree it never happened. Text shows the source
+labels when they differ and the installer package names when they match.
+
 Diffed: version, min/target SDK, APK size, install source, the three manifest flags, requested and
-defined permissions, the four component types, current signing certificates, signing schemes, and
-native libraries. Captured but deliberately not diffed, per `HI-03`: features, installed splits.
+defined permissions, the four component types, current signing certificates, signing schemes,
+native libraries, and device requirements. Captured but deliberately not diffed, per `HI-03`: installed splits.
 Intent filters are not captured at all: they were the second-largest section, the differ never read
 them, and starting to capture them later only covers history recorded from then on.
 
 `SetChange.Changed` carries the `core:apps` items themselves — `UsedPermission`, `Permission`,
-`Activity`, `Service`, `BroadcastReceiver`, `ContentProvider`, `Certificate`, `NativeLibraryFile`,
+`Activity`, `Service`, `BroadcastReceiver`, `ContentProvider`, `Certificate`, `NativeLibrary`,
 `SigningSchemeVersion` — not just their keys, and `modified` holds a `ValueChange` with both versions,
 so a detail screen can explain an item ("dangerous permission", "signed by …") and show what changed
 in it ("exported: no → yes") without going back to the store. Each set is matched by a key (component
-or permission name, certificate SHA-256, native library name + ABI + containing APK) and judged
+or permission name, certificate SHA-256, native library name) and judged
 "modified" by a comparison value: the whole item, except never for requested permissions and
 certificates — a requested permission's details
 belong to its declaring package, and a certificate with the same SHA-256 is the same certificate.
-Native libraries are keyed by containing APK too, so a library moving between base and split APKs
-reads as removed plus added.
+Native libraries are diffed per library name, matching how app detail lists and counts them: a
+`NativeLibrary` holds every ABI copy of one name. It is added or removed only when the name appears or
+disappears; gaining or losing ABI copies, or one copy changing size, is a modification whose field
+changes say so ("Built for · added: x86_64"). A copy that only moved between base and split APKs at
+the same size is not a visible change.
 
 ## Capture Pipeline
 
@@ -424,8 +448,10 @@ propagated days earlier — not from anything forced in the same session.
 
 ## Module Wiring
 
-`app/build.gradle.kts` depends on this module directly (`implementation(projects.core.appHistory)`)
-purely to pull its Hilt bindings into the graph — no other module (feature or core) depends on
-`core:app-history` today, so without that direct dependency Hilt would never see this module's
-`@InstallIn(SingletonComponent::class)` modules and capture would silently never run. Keep that
-dependency even if it looks unused from `app`'s own Kotlin code.
+Both apps record history. `app/build.gradle.kts` and `tv/build.gradle.kts` depend on this module
+directly (`implementation(projects.core.appHistory)`) to pull its Hilt bindings into the graph, and each
+app wires the same pieces: `apkanalyzer.work`, a `Configuration.Provider` application with
+`HiltWorkerFactory`, the manifest removing `WorkManagerInitializer`, and `AppHistoryBackupAgent` with
+`fullBackupOnly`. `feature:app-detail:domain` depends on it too, for reading history, but the bindings
+must not hinge on a feature: without each app's direct dependency capture could silently stop running.
+Keep it even though it looks unused from the apps' own Kotlin code.

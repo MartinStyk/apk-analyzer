@@ -1,6 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.tv
 
-import sk.styk.martin.apkanalyzer.core.apps.insight.AppDetailInsight
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailInsight
 
 internal sealed interface TvAppDetailAction {
     data object Retry : TvAppDetailAction

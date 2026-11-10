@@ -46,11 +46,11 @@ reaches phone or TV users is decided later, at promotion.
 
 | Job | What it does |
 |---|---|
-| `check-tag` | Fails with a remediation message if the tag annotation is empty — a lightweight tag can't provide release notes. The annotation body becomes the GitHub release body |
+| `check-tag` | Fails if the tag annotation is empty or exceeds Google Play's 500-character release-note limit. The annotation body becomes the GitHub release body |
 | `verify` | Repeats the CI gates against the release variant (`lintRelease` rather than `lintDebug`) |
 | `build-release` | One matrix leg per app (`app`, `tv`): derives `versionCode` from the tag, decodes the signing keystore, runs `bundleRelease assembleRelease`, and uploads the AAB, APK, and ProGuard `mapping.txt` as separate artifacts |
 | `publish-github-release` | Attaches both APKs to a GitHub release named after the tag |
-| `publish-play-store` | One matrix leg per app: the phone bundle goes to `beta`, the TV bundle to `tv:Beta TV`. New releases never land on production |
+| `publish-play-store` | One matrix leg per app: writes the tag annotation to a track-specific English release-notes file, then sends the phone bundle to `beta` and the TV bundle to `tv:Beta TV`. New releases never land on production |
 | `distribute-app-distribution` | Sends the phone release APK to `internal-testers`, tagged with the release notes |
 
 Non-obvious details:

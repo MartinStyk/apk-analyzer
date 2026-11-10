@@ -51,9 +51,12 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
+import java.time.Instant
 import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 
 @Composable
@@ -71,6 +74,7 @@ internal fun ManifestScreen(
         onAction = viewModel::onAction,
         onBack = onBack,
         modifier = modifier,
+        recordedAt = appDetailInput.recordedAt,
     )
 }
 
@@ -80,6 +84,7 @@ private fun ManifestContent(
     onAction: (ManifestAction) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
+    recordedAt: Instant? = null,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     val listState = rememberLazyListState()
@@ -98,56 +103,58 @@ private fun ManifestContent(
         }
     }
 
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(AppTheme.colors.background),
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
+    AppDetailModeFrame(recordedAt = recordedAt, modifier = modifier) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(AppTheme.colors.background),
         ) {
-            Toolbar(
-                title = stringResource(AppsR.string.manifest_title),
-                onBack = onBack,
-            )
-            when (state) {
-                ManifestState.Loading -> SectionLoading()
-
-                ManifestState.Error -> SectionError(
-                    message = stringResource(AppsR.string.manifest_error),
-                    onRetry = { onAction(ManifestAction.Retry) },
-                )
-
-                is ManifestState.Loaded -> ManifestLoadedContent(
-                    state = state,
-                    listState = listState,
-                    onAction = onAction,
-                    onExpand = expand,
-                )
-            }
-        }
-        if (loadedState != null) {
-            AnimatedVisibility(
-                visible = isExpanded,
-                enter = fadeIn(animationSpec = tween(180)) +
-                    scaleIn(
-                        initialScale = 0.94f,
-                        animationSpec = tween(220, easing = FastOutSlowInEasing),
-                    ),
-                exit = fadeOut(animationSpec = tween(140)) +
-                    scaleOut(
-                        targetScale = 0.97f,
-                        animationSpec = tween(160, easing = FastOutSlowInEasing),
-                    ),
+            Column(
+                modifier = Modifier.fillMaxSize(),
             ) {
-                ManifestDocumentCard(
-                    state = loadedState,
-                    listState = expandedListState,
-                    isExpanded = true,
-                    onExpand = {},
-                    onCollapse = collapse,
-                    modifier = Modifier.fillMaxSize(),
+                Toolbar(
+                    title = stringResource(AppsR.string.manifest_title),
+                    onBack = onBack,
                 )
+                when (state) {
+                    ManifestState.Loading -> SectionLoading()
+
+                    ManifestState.Error -> SectionError(
+                        message = stringResource(AppsR.string.manifest_error),
+                        onRetry = { onAction(ManifestAction.Retry) },
+                    )
+
+                    is ManifestState.Loaded -> ManifestLoadedContent(
+                        state = state,
+                        listState = listState,
+                        onAction = onAction,
+                        onExpand = expand,
+                    )
+                }
+            }
+            if (loadedState != null) {
+                AnimatedVisibility(
+                    visible = isExpanded,
+                    enter = fadeIn(animationSpec = tween(180)) +
+                        scaleIn(
+                            initialScale = 0.94f,
+                            animationSpec = tween(220, easing = FastOutSlowInEasing),
+                        ),
+                    exit = fadeOut(animationSpec = tween(140)) +
+                        scaleOut(
+                            targetScale = 0.97f,
+                            animationSpec = tween(160, easing = FastOutSlowInEasing),
+                        ),
+                ) {
+                    ManifestDocumentCard(
+                        state = loadedState,
+                        listState = expandedListState,
+                        isExpanded = true,
+                        onExpand = {},
+                        onCollapse = collapse,
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                }
             }
         }
     }

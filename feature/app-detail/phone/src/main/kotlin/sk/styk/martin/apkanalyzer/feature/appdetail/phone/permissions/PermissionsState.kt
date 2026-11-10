@@ -5,6 +5,7 @@ import sk.styk.martin.apkanalyzer.core.apppermissions.detail.GrantState
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionItem
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionScope
 import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
 
 @Immutable
 internal data class PermissionSection(val protectionLevel: ProtectionLevel?, val permissions: List<PermissionItem>)
@@ -13,7 +14,7 @@ internal data class PermissionSection(val protectionLevel: ProtectionLevel?, val
 internal sealed interface PermissionsState {
     data object Loading : PermissionsState
 
-    data object Error : PermissionsState
+    data class Error(val reason: SectionErrorReason) : PermissionsState
 
     @Immutable
     data class Loaded(
@@ -26,6 +27,7 @@ internal sealed interface PermissionsState {
         val query: String,
         val scopeTotal: Int,
         val sections: List<PermissionSection>,
+        val isHistorical: Boolean = false,
     ) : PermissionsState {
         val hasScopeChoice: Boolean
             get() = scopeOptions.size > 1
