@@ -15,4 +15,5 @@ dependencies {
     implementation(projects.core.common)
 
     testImplementation(testFixtures(projects.core.apps))
+    testImplementation(testFixtures(projects.core.common))
 }

@@ -8,6 +8,7 @@ android {
 
 dependencies {
     api(projects.feature.browse.api)
+    implementation(projects.feature.browse.domain)
     implementation(projects.feature.appDetail.api)
     implementation(projects.core.appIndex)
     implementation(projects.core.apps)

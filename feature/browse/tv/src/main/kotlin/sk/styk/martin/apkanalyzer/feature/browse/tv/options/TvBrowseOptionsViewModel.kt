@@ -31,6 +31,8 @@ import sk.styk.martin.apkanalyzer.core.appindex.model.AppIndexStatus
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
+import sk.styk.martin.apkanalyzer.feature.browse.domain.analytics.BrowseAnalytics
+import sk.styk.martin.apkanalyzer.feature.browse.domain.analytics.BrowseAnalyticsEvent
 import sk.styk.martin.apkanalyzer.feature.browse.tv.apps.TvBrowseAppItem
 
 @HiltViewModel(assistedFactory = TvBrowseOptionsViewModel.Factory::class)
@@ -41,6 +43,7 @@ internal class TvBrowseOptionsViewModel @AssistedInject constructor(
     private val labeler: BrowseDimensionLabeler,
     private val bucketDetailResolver: BrowseBucketDetailResolver,
     dispatcherProvider: DispatcherProvider,
+    private val analytics: BrowseAnalytics,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -83,13 +86,16 @@ internal class TvBrowseOptionsViewModel @AssistedInject constructor(
 
             is TvBrowseOptionsAction.FocusOption -> narrowing.update { it.copy(focusedKey = action.option.key) }
 
-            is TvBrowseOptionsAction.SelectOption -> eventChannel.trySend(
-                TvBrowseOptionsEvent.NavigateToApps(
-                    bucketKey = action.option.key,
-                    bucketLabel = action.option.label,
-                    subAttribute = (state.value as? TvBrowseOptionsState.Loaded)?.subAttribute,
-                ),
-            )
+            is TvBrowseOptionsAction.SelectOption -> {
+                analytics.track(BrowseAnalyticsEvent.CategoryOpened(dimension))
+                eventChannel.trySend(
+                    TvBrowseOptionsEvent.NavigateToApps(
+                        bucketKey = action.option.key,
+                        bucketLabel = action.option.label,
+                        subAttribute = (state.value as? TvBrowseOptionsState.Loaded)?.subAttribute,
+                    ),
+                )
+            }
         }
     }
 

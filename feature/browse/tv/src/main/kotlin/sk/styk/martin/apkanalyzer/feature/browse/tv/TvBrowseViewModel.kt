@@ -22,6 +22,8 @@ import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
+import sk.styk.martin.apkanalyzer.feature.browse.domain.analytics.BrowseAnalytics
+import sk.styk.martin.apkanalyzer.feature.browse.domain.analytics.BrowseAnalyticsEvent
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,6 +32,7 @@ internal class TvBrowseViewModel @Inject constructor(
     installedAppsRepository: InstalledAppsRepository,
     private val labeler: BrowseDimensionLabeler,
     dispatcherProvider: DispatcherProvider,
+    private val analytics: BrowseAnalytics,
 ) : ViewModel() {
 
     val state: StateFlow<TvBrowseState> = combine(appIndexRepository.index(), installedAppsRepository.apps()) { status, apps ->
@@ -48,18 +51,28 @@ internal class TvBrowseViewModel @Inject constructor(
     private val eventChannel = Channel<TvBrowseEvent>(Channel.BUFFERED)
     val events = eventChannel.receiveAsFlow()
 
+    init {
+        analytics.track(BrowseAnalyticsEvent.TabOpened)
+    }
+
     fun onAction(action: TvBrowseAction) {
         when (action) {
-            is TvBrowseAction.SelectDimension -> eventChannel.trySend(TvBrowseEvent.NavigateToDimension(action.dimension))
+            is TvBrowseAction.SelectDimension -> {
+                analytics.track(BrowseAnalyticsEvent.DimensionOpened(action.dimension))
+                eventChannel.trySend(TvBrowseEvent.NavigateToDimension(action.dimension))
+            }
 
-            is TvBrowseAction.SelectOption -> eventChannel.trySend(
-                TvBrowseEvent.NavigateToApps(
-                    dimension = action.dimension,
-                    bucketKey = action.option.key,
-                    bucketLabel = action.option.label,
-                    subAttribute = action.subAttribute,
-                ),
-            )
+            is TvBrowseAction.SelectOption -> {
+                analytics.track(BrowseAnalyticsEvent.CategoryOpened(action.dimension))
+                eventChannel.trySend(
+                    TvBrowseEvent.NavigateToApps(
+                        dimension = action.dimension,
+                        bucketKey = action.option.key,
+                        bucketLabel = action.option.label,
+                        subAttribute = action.subAttribute,
+                    ),
+                )
+            }
         }
     }
 

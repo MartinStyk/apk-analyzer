@@ -40,8 +40,8 @@ import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.analytics.AppDetailAnalytics
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.analytics.AppDetailAnalyticsEvent
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.analytics.AppDetailAnalytics
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.analytics.AppDetailAnalyticsEvent
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents.ComponentItem
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents.mergeDuplicatesByStableKey
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents.sortedForDisplay

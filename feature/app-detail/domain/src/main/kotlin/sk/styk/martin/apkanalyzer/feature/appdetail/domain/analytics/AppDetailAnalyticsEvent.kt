@@ -1,9 +1,9 @@
-package sk.styk.martin.apkanalyzer.feature.appdetail.phone.analytics
+package sk.styk.martin.apkanalyzer.feature.appdetail.domain.analytics
 
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryChangeCategory
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 
-internal sealed interface AppDetailAnalyticsEvent {
+sealed interface AppDetailAnalyticsEvent {
     data class Opened(val input: AppDetailInput) : AppDetailAnalyticsEvent
 
     data class SectionOpened(val section: Section, val input: AppDetailInput) : AppDetailAnalyticsEvent
@@ -44,5 +44,6 @@ internal sealed interface AppDetailAnalyticsEvent {
         OpenPlayStore,
         OpenAppInfo,
         OpenHistory,
+        LaunchComponent,
     }
 }

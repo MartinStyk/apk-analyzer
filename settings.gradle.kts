@@ -49,6 +49,7 @@ include(
     ":feature:app-detail:phone",
     ":feature:app-detail:tv",
     ":feature:browse:api",
+    ":feature:browse:domain",
     ":feature:browse:phone",
     ":feature:browse:tv",
     ":feature:app-export:api",

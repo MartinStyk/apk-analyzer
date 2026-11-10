@@ -37,6 +37,8 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSection
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSectionRepository
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.analytics.AppDetailAnalytics
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.analytics.AppDetailAnalyticsEvent
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.installedPackage
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.isHistorical
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.toSectionErrorReason
@@ -49,6 +51,7 @@ internal class ComponentsViewModel @AssistedInject constructor(
     private val sectionRepository: AppDetailSectionRepository,
     private val dispatcherProvider: DispatcherProvider,
     private val clipboardManager: ClipboardManager,
+    private val analytics: AppDetailAnalytics,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -102,6 +105,7 @@ internal class ComponentsViewModel @AssistedInject constructor(
 
             is ComponentsAction.LaunchComponent -> {
                 val packageName = (appDetailInput as? AppDetailInput.InstalledPackage)?.packageName?.let(::PackageName) ?: return
+                analytics.track(AppDetailAnalyticsEvent.ActionPerformed(AppDetailAnalyticsEvent.Action.LaunchComponent, appDetailInput))
                 viewModelScope.launch {
                     eventChannel.send(ComponentsEvent.LaunchComponent(packageName, action.className, action.type))
                 }

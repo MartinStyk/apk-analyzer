@@ -1,8 +1,8 @@
-package sk.styk.martin.apkanalyzer.feature.browse.phone.analytics
+package sk.styk.martin.apkanalyzer.feature.browse.domain.analytics
 
 import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseDimension
 
-internal sealed interface BrowseAnalyticsEvent {
+sealed interface BrowseAnalyticsEvent {
     data object TabOpened : BrowseAnalyticsEvent
 
     data class DimensionOpened(val dimension: BrowseDimension) : BrowseAnalyticsEvent

@@ -23,6 +23,8 @@ import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.userpreferences.recentlyviewed.RecentlyViewedAppsRepository
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSectionRepository
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.analytics.AppDetailAnalytics
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.analytics.AppDetailAnalyticsEvent
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailBadgeEvaluator
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailInsight
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailInsightEvaluator
@@ -38,6 +40,7 @@ internal class TvAppDetailViewModel @AssistedInject constructor(
     private val badgeEvaluator: AppDetailBadgeEvaluator,
     private val recentlyViewedAppsRepository: RecentlyViewedAppsRepository,
     private val dispatcherProvider: DispatcherProvider,
+    private val analytics: AppDetailAnalytics,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -60,16 +63,36 @@ internal class TvAppDetailViewModel @AssistedInject constructor(
     fun onAction(action: TvAppDetailAction) {
         when (action) {
             TvAppDetailAction.Retry -> loadDetail()
-            TvAppDetailAction.OpenAppInfo -> withLoadedState { eventChannel.trySend(TvAppDetailEvent.OpenAppInfo(it.packageName)) }
-            TvAppDetailAction.OpenPlayStore -> withLoadedState { eventChannel.trySend(TvAppDetailEvent.OpenPlayStore(it.packageName)) }
-            TvAppDetailAction.OpenGeneralInfo -> eventChannel.trySend(TvAppDetailEvent.NavigateToGeneralInfo)
-            TvAppDetailAction.OpenPermissions -> eventChannel.trySend(TvAppDetailEvent.NavigateToPermissions(permissionName = null))
-            TvAppDetailAction.OpenComponents -> eventChannel.trySend(TvAppDetailEvent.NavigateToComponents)
-            TvAppDetailAction.OpenCertificates -> eventChannel.trySend(TvAppDetailEvent.NavigateToCertificates)
-            TvAppDetailAction.OpenRequirements -> eventChannel.trySend(TvAppDetailEvent.NavigateToRequirements)
-            TvAppDetailAction.OpenManifest -> eventChannel.trySend(TvAppDetailEvent.NavigateToManifest)
-            is TvAppDetailAction.OpenInsight -> eventChannel.trySend(action.insight.destination())
+
+            TvAppDetailAction.OpenAppInfo -> withLoadedState {
+                analytics.track(AppDetailAnalyticsEvent.ActionPerformed(AppDetailAnalyticsEvent.Action.OpenAppInfo, appDetailInput))
+                eventChannel.trySend(TvAppDetailEvent.OpenAppInfo(it.packageName))
+            }
+
+            TvAppDetailAction.OpenPlayStore -> withLoadedState {
+                analytics.track(AppDetailAnalyticsEvent.ActionPerformed(AppDetailAnalyticsEvent.Action.OpenPlayStore, appDetailInput))
+                eventChannel.trySend(TvAppDetailEvent.OpenPlayStore(it.packageName))
+            }
+
+            TvAppDetailAction.OpenGeneralInfo -> sendSectionEvent(TvAppDetailEvent.NavigateToGeneralInfo)
+
+            TvAppDetailAction.OpenPermissions -> sendSectionEvent(TvAppDetailEvent.NavigateToPermissions(permissionName = null))
+
+            TvAppDetailAction.OpenComponents -> sendSectionEvent(TvAppDetailEvent.NavigateToComponents)
+
+            TvAppDetailAction.OpenCertificates -> sendSectionEvent(TvAppDetailEvent.NavigateToCertificates)
+
+            TvAppDetailAction.OpenRequirements -> sendSectionEvent(TvAppDetailEvent.NavigateToRequirements)
+
+            TvAppDetailAction.OpenManifest -> sendSectionEvent(TvAppDetailEvent.NavigateToManifest)
+
+            is TvAppDetailAction.OpenInsight -> sendSectionEvent(action.insight.destination())
         }
+    }
+
+    private fun sendSectionEvent(event: TvAppDetailEvent) {
+        analytics.track(AppDetailAnalyticsEvent.SectionOpened(event.toSection(), appDetailInput))
+        eventChannel.trySend(event)
     }
 
     private fun withLoadedState(block: (TvAppDetailState.Loaded) -> Unit) {
@@ -82,7 +105,10 @@ internal class TvAppDetailViewModel @AssistedInject constructor(
             val deviceFeatures = deviceFeaturesRepository.deviceFeatures()
             val detailResult = sectionRepository.detail(appDetailInput)
             mutableState.value = detailResult.fold(
-                onSuccess = { it.toLoadedState(deviceFeatures) },
+                onSuccess = {
+                    analytics.track(AppDetailAnalyticsEvent.Opened(appDetailInput))
+                    it.toLoadedState(deviceFeatures)
+                },
                 onFailure = { TvAppDetailState.Error(canRetry = it !is UnparsableApkFileException) },
             )
             val installedPackage = appDetailInput.installedPackage
@@ -90,6 +116,24 @@ internal class TvAppDetailViewModel @AssistedInject constructor(
                 recentlyViewedAppsRepository.addRecent(installedPackage)
             }
         }
+    }
+
+    private fun TvAppDetailEvent.toSection(): AppDetailAnalyticsEvent.Section = when (this) {
+        TvAppDetailEvent.NavigateToGeneralInfo -> AppDetailAnalyticsEvent.Section.General
+
+        is TvAppDetailEvent.NavigateToPermissions -> AppDetailAnalyticsEvent.Section.Permissions
+
+        TvAppDetailEvent.NavigateToComponents -> AppDetailAnalyticsEvent.Section.Components
+
+        TvAppDetailEvent.NavigateToCertificates -> AppDetailAnalyticsEvent.Section.Certificates
+
+        TvAppDetailEvent.NavigateToRequirements -> AppDetailAnalyticsEvent.Section.Features
+
+        TvAppDetailEvent.NavigateToManifest -> AppDetailAnalyticsEvent.Section.Manifest
+
+        is TvAppDetailEvent.OpenAppInfo,
+        is TvAppDetailEvent.OpenPlayStore,
+        -> error("Not a section navigation event")
     }
 
     private fun AppDetail.toLoadedState(deviceFeatures: DeviceFeatures): TvAppDetailState.Loaded {

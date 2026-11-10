@@ -15,6 +15,9 @@ logic do not belong here.
 * `coroutines/` - injectable dispatchers, flow helpers, and cancellation-safe result capture.
 * `logger/` - the repository logging facade.
 * `performance/` - performance instrumentation contracts and the internal Firebase adapter.
+* `analytics/` - shared event transport and the internal Firebase adapter. Feature-specific events
+  and mappings stay in their feature's domain module. Both applications set the `form_factor`
+  user property (`phone` or `tv`) at startup so their events can be separated in Firebase reports.
 * `review/` - in-app review eligibility tracking and the internal Play Core adapter.
 * `settings/` - generic typed DataStore persistence and preference keys.
 * `configuration/` - read-only typed configuration behind `ConfigurationRepository`, separate from

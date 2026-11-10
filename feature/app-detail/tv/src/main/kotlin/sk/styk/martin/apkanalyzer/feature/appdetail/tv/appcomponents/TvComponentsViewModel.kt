@@ -32,6 +32,8 @@ import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSection
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSectionRepository
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.analytics.AppDetailAnalytics
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.analytics.AppDetailAnalyticsEvent
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.installedPackage
 
 @HiltViewModel(assistedFactory = TvComponentsViewModel.Factory::class)
@@ -39,6 +41,7 @@ internal class TvComponentsViewModel @AssistedInject constructor(
     @Assisted private val appDetailInput: AppDetailInput,
     private val sectionRepository: AppDetailSectionRepository,
     private val dispatcherProvider: DispatcherProvider,
+    private val analytics: AppDetailAnalytics,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -73,6 +76,7 @@ internal class TvComponentsViewModel @AssistedInject constructor(
 
             is TvComponentsAction.LaunchComponent -> {
                 val packageName = (appDetailInput as? AppDetailInput.InstalledPackage)?.packageName?.let(::PackageName) ?: return
+                analytics.track(AppDetailAnalyticsEvent.ActionPerformed(AppDetailAnalyticsEvent.Action.LaunchComponent, appDetailInput))
                 eventChannel.trySend(TvComponentsEvent.LaunchComponent(packageName, action.className, action.kind))
             }
         }
