@@ -29,6 +29,11 @@ jobs:
             echo "::error::Tag $GITHUB_REF_NAME has no annotation message, so it can't provide release notes. Push an annotated tag instead: git tag -a $GITHUB_REF_NAME -m \"release notes\" && git push origin $GITHUB_REF_NAME"
             exit 1
           fi
+          BODY_LENGTH=$(printf '%s' "$BODY" | python3 -c 'import sys; print(len(sys.stdin.read()))')
+          if [ "$BODY_LENGTH" -gt 500 ]; then
+            echo "::error::Tag $GITHUB_REF_NAME has $BODY_LENGTH release-note characters; Google Play allows at most 500. Shorten the tag annotation and push a new version."
+            exit 1
+          fi
           {
             echo "body<<NOTES_EOF"
             echo "$BODY"
@@ -156,8 +161,8 @@ jobs:
             artifacts/apk-analyzer-tv-${{ github.ref_name }}.apk
 
   publish-play-store:
-    needs: [ verify, build-release ]
-    if: ${{ !cancelled() && needs.verify.result == 'success' }}
+    needs: [ check-tag, verify, build-release ]
+    if: ${{ !cancelled() && needs.check-tag.result == 'success' && needs.verify.result == 'success' }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -182,6 +187,14 @@ jobs:
         with:
           name: ${{ matrix.artifact }}-aab
           path: artifacts
+
+      - name: Prepare Play Store release notes
+        env:
+          RELEASE_NOTES: ${{ needs.check-tag.outputs.notes }}
+          TRACK: ${{ matrix.track }}
+        run: |
+          mkdir -p "${{ matrix.module }}/src/main/play/release-notes/en-US"
+          printf '%s' "$RELEASE_NOTES" > "${{ matrix.module }}/src/main/play/release-notes/en-US/$TRACK.txt"
 
       - name: Publish to Play Store ${{ matrix.track }} track
         env:
