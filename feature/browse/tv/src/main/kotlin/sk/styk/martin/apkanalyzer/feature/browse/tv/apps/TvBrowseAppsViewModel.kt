@@ -24,7 +24,6 @@ import sk.styk.martin.apkanalyzer.core.appindex.browse.bucketsFor
 import sk.styk.martin.apkanalyzer.core.appindex.model.AppIndexStatus
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.core.common.settings.FingerprintFormat
 import sk.styk.martin.apkanalyzer.core.common.settings.Key
 import sk.styk.martin.apkanalyzer.core.common.settings.PersistenceRepository
 
@@ -36,7 +35,7 @@ internal class TvBrowseAppsViewModel @AssistedInject constructor(
     appIndexRepository: AppIndexRepository,
     installedAppsRepository: InstalledAppsRepository,
     bucketDetailResolver: BrowseBucketDetailResolver,
-    private val labeler: BrowseDimensionLabeler,
+    labeler: BrowseDimensionLabeler,
     dispatcherProvider: DispatcherProvider,
     persistenceRepository: PersistenceRepository,
 ) : ViewModel() {
