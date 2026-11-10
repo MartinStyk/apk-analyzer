@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.feature.appdetail.phone.analytics
+package sk.styk.martin.apkanalyzer.feature.appdetail.domain.analytics
 
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryChangeCategory
 import sk.styk.martin.apkanalyzer.core.common.analytics.AnalyticsEvent
@@ -7,7 +7,7 @@ import sk.styk.martin.apkanalyzer.core.common.analytics.AnalyticsTracker
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import javax.inject.Inject
 
-internal class AppDetailAnalytics @Inject constructor(private val analyticsTracker: AnalyticsTracker) {
+class AppDetailAnalytics @Inject constructor(private val analyticsTracker: AnalyticsTracker) {
 
     fun track(event: AppDetailAnalyticsEvent) {
         analyticsTracker.track(
@@ -107,4 +107,5 @@ private val AppDetailAnalyticsEvent.Action.analyticsValue: String
         AppDetailAnalyticsEvent.Action.OpenPlayStore -> "open_play_store"
         AppDetailAnalyticsEvent.Action.OpenAppInfo -> "open_app_info"
         AppDetailAnalyticsEvent.Action.OpenHistory -> "open_history"
+        AppDetailAnalyticsEvent.Action.LaunchComponent -> "launch_component"
     }

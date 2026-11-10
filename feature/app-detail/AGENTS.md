@@ -32,9 +32,12 @@ only, is described under [TV Module](#tv-module).
   detail, and the date and version-tag helpers both share at its root. They live here rather than in
   their own feature because they reuse this module's internal rows and sheets.
 * `navigation/` owns the feature entry provider and internal destination keys.
-* `analytics/` owns the feature's analytics events and their mapping to tracked names and parameters.
+* `domain/analytics/` owns the feature's shared analytics events and their mapping to tracked names and parameters.
   Every event that describes an app carries `analysis_mode`, so live, APK-file, and historical use
   stay separable.
+  Phone and TV use the same tracker for hub loads, hub section navigation (including insight shortcuts),
+  App info, Play Store, and component launch requests. Requirements maps to the existing `features`
+  section value. TV does not send phone-only export, copy/share, AI, or history events.
 
 Each destination keeps its own State/Action/Event/ViewModel set. Runtime navigation inputs use
 assisted injection and seed ViewModel state exactly once.

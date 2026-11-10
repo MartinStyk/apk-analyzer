@@ -45,6 +45,8 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.api.ApkFileLifetime
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSection
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSectionRepository
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.analytics.AppDetailAnalytics
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.analytics.AppDetailAnalyticsEvent
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailBadgeEvaluator
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailInsight
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailInsightEvaluator
@@ -54,8 +56,6 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.domain.isOnDevice
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.liveReference
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.nativeLibrariesOrFallback
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.toSectionErrorReason
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.analytics.AppDetailAnalytics
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.analytics.AppDetailAnalyticsEvent
 import java.time.Instant
 
 private const val TAG = "AppDetailViewModel"

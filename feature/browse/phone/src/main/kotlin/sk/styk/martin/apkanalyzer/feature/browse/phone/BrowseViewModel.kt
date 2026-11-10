@@ -17,8 +17,8 @@ import sk.styk.martin.apkanalyzer.core.appindex.model.AppIndexStatus
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.feature.browse.phone.analytics.BrowseAnalytics
-import sk.styk.martin.apkanalyzer.feature.browse.phone.analytics.BrowseAnalyticsEvent
+import sk.styk.martin.apkanalyzer.feature.browse.domain.analytics.BrowseAnalytics
+import sk.styk.martin.apkanalyzer.feature.browse.domain.analytics.BrowseAnalyticsEvent
 import javax.inject.Inject
 
 private const val TOP_LABELS_COUNT = 6
