@@ -11,4 +11,7 @@
     <string name="settings_language_section">Język</string>
     <string name="settings_language_app_language">Język aplikacji</string>
     <string name="settings_language_system_default">Domyślne ustawienie systemowe</string>
+    <string name="settings_fingerprint_format">Format odcisku palca</string>
+    <string name="settings_fingerprint_format_colon_separated">Oddzielone dwukropkami</string>
+    <string name="settings_fingerprint_format_continuous">Ciągły</string>
 </resources>

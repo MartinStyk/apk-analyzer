@@ -11,4 +11,7 @@
     <string name="settings_language_section">Lingua</string>
     <string name="settings_language_app_language">Lingua dell\'app</string>
     <string name="settings_language_system_default">Predefinito di sistema</string>
+    <string name="settings_fingerprint_format">Formato dell’impronta</string>
+    <string name="settings_fingerprint_format_colon_separated">Con i due punti</string>
+    <string name="settings_fingerprint_format_continuous">Senza separatori</string>
 </resources>

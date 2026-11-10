@@ -20,7 +20,4 @@ data class Certificate(
 ) {
     val signatureAlgorithmAssessment: SignatureAlgorithmAssessment
         get() = SignatureAlgorithmAssessment.from(signAlgorithm)
-
-    val formattedSha256Fingerprint: String
-        get() = certificateHashSha256.uppercase().chunked(2).joinToString(":")
 }

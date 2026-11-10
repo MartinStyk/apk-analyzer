@@ -100,7 +100,7 @@ internal class InventoryExportManagerImpl @Inject constructor(
         writer.begin()
         appDataLoader.load(request.apps, request.columns.map { it.source }.toSet()).collectIndexed { index, data ->
             if (!data.isComplete) incompleteAppCount++
-            writer.writeApp(request.columns.map { it.valueOf(data) })
+            writer.writeApp(request.columns.map { it.valueOf(data, request.fingerprintFormat) })
             onAppWritten(index + 1)
         }
         incompleteAppCount

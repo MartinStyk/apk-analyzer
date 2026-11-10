@@ -22,6 +22,7 @@ a spreadsheet or process it with a script.
 * Column keys and the values listed on this page don't change within a format version. New
   columns and new values can be added; read unknown keys and values as "not recognized" rather
   than failing.
+* Fingerprints use the format selected in Settings.
 
 ## JSON
 
@@ -66,7 +67,7 @@ The file is one object:
 | Value | Format |
 |---|---|
 | timestamp | ISO-8601 instant in UTC, for example `2026-11-03T14:49:12.345Z` |
-| fingerprint | Lowercase hexadecimal digest with no separators, for example `3b8f…e01a`. The same format as `apksigner verify --print-certs`. |
+| fingerprint | Uppercase hexadecimal digest with or without colon separators, depending on the fingerprint format setting. |
 | number | Whole number. Sizes are in bytes. |
 
 ## Columns

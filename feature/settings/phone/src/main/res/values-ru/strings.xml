@@ -11,4 +11,7 @@
     <string name="settings_language_section">Язык</string>
     <string name="settings_language_app_language">Язык приложения</string>
     <string name="settings_language_system_default">Системное значение по умолчанию</string>
+    <string name="settings_fingerprint_format">Формат отпечатка</string>
+    <string name="settings_fingerprint_format_colon_separated">С двоеточиями</string>
+    <string name="settings_fingerprint_format_continuous">Без разделителей</string>
 </resources>

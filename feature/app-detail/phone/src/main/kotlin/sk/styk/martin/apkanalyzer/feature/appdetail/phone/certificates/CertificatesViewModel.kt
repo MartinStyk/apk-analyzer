@@ -16,7 +16,6 @@ import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.signing.Certificate
 import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeRepository
 import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeVersion
-import sk.styk.martin.apkanalyzer.core.apps.signing.toFingerprint
 import sk.styk.martin.apkanalyzer.core.apps.signing.validityAt
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
@@ -91,12 +90,12 @@ private fun AppDetail.toCertificatesState(signingSchemeVersions: List<SigningSch
 private fun Certificate.toCertificateItem(now: Instant) = CertificateItem(
     signAlgorithm = signAlgorithm,
     signatureAlgorithmAssessment = signatureAlgorithmAssessment,
-    certificateHashMd5 = certificateHashMd5.toFingerprint(),
-    certificateHashSha1 = certificateHashSha1.toFingerprint(),
-    certificateHashSha256 = certificateHashSha256.toFingerprint(),
-    publicKeyMd5 = publicKeyMd5.toFingerprint(),
-    publicKeySha1 = publicKeySha1.toFingerprint(),
-    publicKeySha256 = publicKeySha256.toFingerprint(),
+    certificateHashMd5 = certificateHashMd5,
+    certificateHashSha1 = certificateHashSha1,
+    certificateHashSha256 = certificateHashSha256,
+    publicKeyMd5 = publicKeyMd5,
+    publicKeySha1 = publicKeySha1,
+    publicKeySha256 = publicKeySha256,
     validFrom = validFrom,
     validUntil = validUntil,
     serialNumber = serialNumber,

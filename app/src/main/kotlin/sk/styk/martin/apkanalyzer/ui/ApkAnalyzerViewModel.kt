@@ -6,7 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -19,17 +19,19 @@ import javax.inject.Inject
 class ApkAnalyzerViewModel @Inject constructor(persistenceRepository: PersistenceRepository, private val reviewEligibilityTracker: ReviewEligibilityTracker) :
     ViewModel() {
     val state: StateFlow<ApkAnalyzerState> =
-        persistenceRepository
-            .observe(Key.ColorScheme)
-            .map { scheme ->
-                ApkAnalyzerState.Data(
-                    colorAppScheme = scheme,
-                )
-            }.stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5000),
-                initialValue = ApkAnalyzerState.Loading,
+        combine(
+            persistenceRepository.observe(Key.ColorScheme),
+            persistenceRepository.observe(Key.HexFingerprintFormat),
+        ) { scheme, fingerprintFormat ->
+            ApkAnalyzerState.Data(
+                colorAppScheme = scheme,
+                fingerprintFormat = fingerprintFormat,
             )
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = ApkAnalyzerState.Loading,
+        )
 
     private val eventChannel = Channel<ApkAnalyzerEvent>(Channel.BUFFERED)
     internal val events = eventChannel.receiveAsFlow()

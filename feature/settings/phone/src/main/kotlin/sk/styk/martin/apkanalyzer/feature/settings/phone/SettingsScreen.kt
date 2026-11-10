@@ -28,6 +28,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import sk.styk.martin.apkanalyzer.core.common.applanguage.AppLanguageSetting
 import sk.styk.martin.apkanalyzer.core.common.settings.ColorAppScheme
+import sk.styk.martin.apkanalyzer.core.common.settings.FingerprintFormat
 import sk.styk.martin.apkanalyzer.core.common.util.openAppLanguageSettings
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
@@ -92,7 +93,9 @@ private fun SettingsContent(
         ) {
             AppearanceSection(
                 colorScheme = state.colorScheme,
+                fingerprintFormat = state.fingerprintFormat,
                 onColorSchemeSelect = { onAction(SettingsAction.ColorSchemeSelected(it)) },
+                onFingerprintFormatSelect = { onAction(SettingsAction.FingerprintFormatSelected(it)) },
             )
 
             AppsSection(
@@ -113,7 +116,9 @@ private fun SettingsContent(
 @Composable
 private fun AppearanceSection(
     colorScheme: ColorAppScheme,
+    fingerprintFormat: FingerprintFormat,
     onColorSchemeSelect: (ColorAppScheme) -> Unit,
+    onFingerprintFormatSelect: (FingerprintFormat) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -144,6 +149,22 @@ private fun AppearanceSection(
                         label = scheme.displayName(),
                         selected = colorScheme == scheme,
                         onClick = { onColorSchemeSelect(scheme) },
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = stringResource(R.string.settings_fingerprint_format),
+                style = AppTheme.typography.bodyMedium,
+                color = AppTheme.colors.onSurface,
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                FingerprintFormat.entries.forEach { format ->
+                    Chip(
+                        label = format.displayName(),
+                        selected = fingerprintFormat == format,
+                        onClick = { onFingerprintFormatSelect(format) },
                     )
                 }
             }
@@ -247,6 +268,12 @@ private fun ColorAppScheme.displayName(): String = when (this) {
     ColorAppScheme.Day -> stringResource(R.string.settings_color_scheme_day)
     ColorAppScheme.Night -> stringResource(R.string.settings_color_scheme_night)
     ColorAppScheme.FollowSystem -> stringResource(R.string.settings_color_scheme_follow_system)
+}
+
+@Composable
+private fun FingerprintFormat.displayName(): String = when (this) {
+    FingerprintFormat.ColonSeparated -> stringResource(R.string.settings_fingerprint_format_colon_separated)
+    FingerprintFormat.Continuous -> stringResource(R.string.settings_fingerprint_format_continuous)
 }
 
 @Preview

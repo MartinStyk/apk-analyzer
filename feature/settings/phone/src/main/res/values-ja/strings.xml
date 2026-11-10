@@ -11,4 +11,7 @@
     <string name="settings_language_section">言語</string>
     <string name="settings_language_app_language">アプリの言語</string>
     <string name="settings_language_system_default">システムのデフォルト</string>
+    <string name="settings_fingerprint_format">フィンガープリント形式</string>
+    <string name="settings_fingerprint_format_colon_separated">コロン区切り</string>
+    <string name="settings_fingerprint_format_continuous">区切りなし</string>
 </resources>

@@ -27,6 +27,10 @@ top-level destinations reuse the feature `api` NavKeys and tab labels, so a dest
 key and name on phone and TV. Each feature registers its TV screens through a `tv<Feature>Entries`
 function in its `feature/*/tv/navigation/` package and wires it into the `entryProvider` there.
 
+The Activity observes app-level fingerprint preferences through its root ViewModel and provides
+`LocalFingerprintFormat` once around the navigation host. Fingerprint components read that value;
+generic code and identifier components do not.
+
 ## Manifest Contracts
 
 * `android.software.leanback` is required, so Play offers this bundle only to TVs.

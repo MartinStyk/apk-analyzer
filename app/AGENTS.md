@@ -23,7 +23,9 @@ destination changes. Keep navigation keys readable as data classes or data objec
 screen-name mapping layer.
 
 Both activities use the shared theme host so the persisted color scheme is applied before feature
-content renders. Material3 is allowed directly here only for app-shell plumbing such as `Scaffold`
+content renders. The same host provides the persisted fingerprint format through the design system's
+`LocalFingerprintFormat`; feature ViewModels do not carry it just for rendering fingerprints.
+Material3 is allowed directly here only for app-shell plumbing such as `Scaffold`
 and theme hosting.
 
 Firebase collection policy belongs in the application manifest, not a library manifest. Crashlytics

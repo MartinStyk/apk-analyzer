@@ -11,4 +11,7 @@
     <string name="settings_language_section">Bahasa</string>
     <string name="settings_language_app_language">Bahasa aplikasi</string>
     <string name="settings_language_system_default">Default sistem</string>
+    <string name="settings_fingerprint_format">Format sidik jari</string>
+    <string name="settings_fingerprint_format_colon_separated">Dipisahkan titik dua</string>
+    <string name="settings_fingerprint_format_continuous">Tanpa pemisah</string>
 </resources>

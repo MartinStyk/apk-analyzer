@@ -19,6 +19,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 private val KEY_COLOR_SCHEME = stringPreferencesKey("dayNightPref")
+private val KEY_FINGERPRINT_FORMAT = stringPreferencesKey("fingerprint_format")
 private val KEY_ONBOARDING = booleanPreferencesKey("first_app_start")
 private val KEY_APP_START_NUMBER = intPreferencesKey("app_start_number")
 private val KEY_RECENTLY_VIEWED_ENABLED = booleanPreferencesKey("recently_viewed_apps_enabled")
@@ -68,6 +69,13 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
             }
         }
 
+        Key.HexFingerprintFormat -> {
+            when (prefs[KEY_FINGERPRINT_FORMAT]) {
+                "continuous" -> FingerprintFormat.Continuous
+                else -> FingerprintFormat.ColonSeparated
+            }
+        }
+
         Key.OnboardingRequired -> {
             prefs[KEY_ONBOARDING] ?: true
         }
@@ -108,6 +116,14 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
                     ColorAppScheme.Day -> "light"
                     ColorAppScheme.Night -> "dark"
                     ColorAppScheme.FollowSystem -> "system"
+                }
+        }
+
+        Key.HexFingerprintFormat -> {
+            prefs[KEY_FINGERPRINT_FORMAT] =
+                when (value as FingerprintFormat) {
+                    FingerprintFormat.ColonSeparated -> "colon_separated"
+                    FingerprintFormat.Continuous -> "continuous"
                 }
         }
 

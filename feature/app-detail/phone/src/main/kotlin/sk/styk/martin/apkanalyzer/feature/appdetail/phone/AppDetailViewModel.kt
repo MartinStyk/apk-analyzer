@@ -391,7 +391,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
             certificate = currentCertificate?.let { cert ->
                 AppDetailState.Loaded.CertificateState(
                     signAlgorithm = cert.signAlgorithm,
-                    sha256Fingerprint = cert.formattedSha256Fingerprint,
+                    sha256Fingerprint = cert.certificateHashSha256,
                     issuer = cert.issuer,
                     trustLevel = cert.trustLevel,
                 )

@@ -104,6 +104,7 @@ private fun BrowseAppsContent(
     modifier: Modifier = Modifier,
 ) {
     var showDetailSheet by rememberSaveable { mutableStateOf(false) }
+    val displayedBucketLabel = (state as? BrowseAppsState.Loaded)?.bucketLabel?.ifEmpty { bucketLabel } ?: bucketLabel
     val bucketDetail = (state as? BrowseAppsState.Loaded)?.bucketDetail
 
     Column(
@@ -112,14 +113,14 @@ private fun BrowseAppsContent(
             .background(AppTheme.colors.background),
     ) {
         Toolbar(
-            title = bucketLabel,
+            title = displayedBucketLabel,
             onBack = onBack,
             actions = {
                 if (bucketDetail != null) {
                     IconButton(
                         imageVector = ApkAnalyzerIcons.Info,
                         onClick = { showDetailSheet = true },
-                        contentDescription = stringResource(R.string.browse_bucket_info_content_description, bucketLabel),
+                        contentDescription = stringResource(R.string.browse_bucket_info_content_description, displayedBucketLabel),
                     )
                 }
             },
@@ -136,7 +137,7 @@ private fun BrowseAppsContent(
 
     if (showDetailSheet && bucketDetail != null) {
         BrowseBucketDetailSheet(
-            bucketLabel = bucketLabel,
+            bucketLabel = displayedBucketLabel,
             detail = bucketDetail,
             onDismiss = { showDetailSheet = false },
         )

@@ -24,6 +24,9 @@ only exception, for shell-level `Scaffold` and theme plumbing.
   shape. `foundation` defines the shape only; each device theme provides the values through
   `LocalApkAnalyzerColors` and `LocalApkAnalyzerTypography`, because phone and TV read at different
   distances and size text differently. Reading `AppTheme` outside a device theme throws.
+* `theme/LocalFingerprintFormat` supplies the display preference once per app UI tree. The phone
+  theme host (including external APKs) and TV Activity provide the persisted value; previews default
+  to colon-separated. Components never observe persistence or create their own ViewModels.
 * `icons/` - `ApkAnalyzerIcons`; `icons/app/` registers the Coil `ImageLoader` that renders an
   `AppReference` as its package icon. `rememberAppAccentColor` samples that icon with AndroidX
   Palette for screens tinted by the app. `permissionIcon` and `requirementIcon` map Android
@@ -53,6 +56,8 @@ exception is `InactiveSearchBar`, which lives in `SearchBarInactive.kt`.
   in `lazylist/`. Build app lists on it instead of a feature-local row.
 * `ConfirmDialog` wraps the phone Material alert dialog with a title, message, and explicit confirm
   and dismiss actions. Outside taps and system Back dismiss without confirming.
+* `HashBox` and `LabeledHashBox` accept raw fingerprints and read `LocalFingerprintFormat`.
+  Their `onCopy` callbacks receive the formatted value without display-only wrapping characters.
 
 ## tv
 
@@ -77,6 +82,8 @@ exception is `InactiveSearchBar`, which lives in `SearchBarInactive.kt`.
   optional value pill such as the sort value, name and package; `AppCardWidth` is its grid minimum), `ScrollablePanel` (a surface for explanations that becomes focusable
   only when its content overflows, then scrolls on Up/Down), `IconBadge` (an icon in a tinted circle, the phone's icon
   treatment; use it instead of a bare icon on cards, rows, and headers), `Icon`, `Text`.
+* `FingerprintBox` formats raw hashes using `LocalFingerprintFormat` before rendering a `CodeBox`.
+  Keep `CodeBox` unchanged for generic code and identifiers.
 * `SearchField` is built on `BasicTextField` because TV Material has no text field. A text field
   swallows D-pad Up/Down for cursor movement, which traps remote users; it hands those keys back to
   focus navigation and keeps Left/Right for the cursor.

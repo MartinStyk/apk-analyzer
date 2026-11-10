@@ -2,20 +2,23 @@ package sk.styk.martin.apkanalyzer.core.appexport.column
 
 import sk.styk.martin.apkanalyzer.core.appexport.source.InventoryAppData
 import sk.styk.martin.apkanalyzer.core.appexport.source.valueOrNull
+import sk.styk.martin.apkanalyzer.core.common.digest.toFingerprint
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
+import sk.styk.martin.apkanalyzer.core.common.settings.FingerprintFormat
 import java.time.Instant
 
-internal fun InventoryColumn.valueOf(data: InventoryAppData): InventoryValue = extract(data).also {
-    check(shape == InventoryColumnShape.Structured || !it.isStructured) {
-        "Column $key is declared scalar but produced a structured value"
+internal fun InventoryColumn.valueOf(data: InventoryAppData, fingerprintFormat: FingerprintFormat = FingerprintFormat.ColonSeparated): InventoryValue =
+    extract(data, fingerprintFormat).also {
+        check(shape == InventoryColumnShape.Structured || !it.isStructured) {
+            "Column $key is declared scalar but produced a structured value"
+        }
     }
-}
 
 private val InventoryValue.isStructured: Boolean
     get() = this is InventoryValue.Record || this is InventoryValue.Items
 
 @Suppress("CyclomaticComplexMethod")
-private fun InventoryColumn.extract(data: InventoryAppData): InventoryValue {
+private fun InventoryColumn.extract(data: InventoryAppData, fingerprintFormat: FingerprintFormat): InventoryValue {
     val app = data.app
     val info = data.detail.valueOrNull()?.info
     return when (this) {
@@ -73,19 +76,25 @@ private fun InventoryColumn.extract(data: InventoryAppData): InventoryValue {
 
         InventoryColumn.CleartextTraffic -> flag(info?.usesCleartextTraffic)
 
-        InventoryColumn.SigningCertificateSha256 -> list(data.signing.valueOrNull()?.currentCertificates?.map { it.certificateHashSha256 })
+        InventoryColumn.SigningCertificateSha256 ->
+            list(data.signing.valueOrNull()?.currentCertificates?.map { it.certificateHashSha256.toFingerprint(fingerprintFormat) })
 
         InventoryColumn.SigningCertificateSubject -> list(data.signing.valueOrNull()?.currentCertificates?.mapNotNull { it.subject.displayName })
 
-        InventoryColumn.SigningCertificateMd5 -> list(data.signing.valueOrNull()?.currentCertificates?.map { it.certificateHashMd5 })
+        InventoryColumn.SigningCertificateMd5 ->
+            list(data.signing.valueOrNull()?.currentCertificates?.map { it.certificateHashMd5.toFingerprint(fingerprintFormat) })
 
-        InventoryColumn.SigningCertificateSha1 -> list(data.signing.valueOrNull()?.currentCertificates?.map { it.certificateHashSha1 })
+        InventoryColumn.SigningCertificateSha1 ->
+            list(data.signing.valueOrNull()?.currentCertificates?.map { it.certificateHashSha1.toFingerprint(fingerprintFormat) })
 
-        InventoryColumn.SigningPublicKeyMd5 -> list(data.signing.valueOrNull()?.currentCertificates?.map { it.publicKeyMd5 })
+        InventoryColumn.SigningPublicKeyMd5 ->
+            list(data.signing.valueOrNull()?.currentCertificates?.map { it.publicKeyMd5.toFingerprint(fingerprintFormat) })
 
-        InventoryColumn.SigningPublicKeySha1 -> list(data.signing.valueOrNull()?.currentCertificates?.map { it.publicKeySha1 })
+        InventoryColumn.SigningPublicKeySha1 ->
+            list(data.signing.valueOrNull()?.currentCertificates?.map { it.publicKeySha1.toFingerprint(fingerprintFormat) })
 
-        InventoryColumn.SigningPublicKeySha256 -> list(data.signing.valueOrNull()?.currentCertificates?.map { it.publicKeySha256 })
+        InventoryColumn.SigningPublicKeySha256 ->
+            list(data.signing.valueOrNull()?.currentCertificates?.map { it.publicKeySha256.toFingerprint(fingerprintFormat) })
 
         InventoryColumn.RequestedPermissions -> InventoryValue.TextList(app.requestedPermissions)
 
@@ -107,9 +116,11 @@ private fun InventoryColumn.extract(data: InventoryAppData): InventoryValue {
 
         InventoryColumn.NativeLibraryFiles -> records(data.nativeLibraries.valueOrNull()?.files) { toInventoryValue() }
 
-        InventoryColumn.SigningCertificates -> records(data.signing.valueOrNull()?.currentCertificates) { toInventoryValue() }
+        InventoryColumn.SigningCertificates ->
+            records(data.signing.valueOrNull()?.currentCertificates) { toInventoryValue(fingerprintFormat) }
 
-        InventoryColumn.SigningCertificateHistory -> records(data.signing.valueOrNull()?.pastCertificates) { toInventoryValue() }
+        InventoryColumn.SigningCertificateHistory ->
+            records(data.signing.valueOrNull()?.pastCertificates) { toInventoryValue(fingerprintFormat) }
 
         InventoryColumn.HasMultipleSigners -> flag(data.signing.valueOrNull()?.hasMultipleSigners)
 

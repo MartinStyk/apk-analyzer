@@ -1,6 +1,7 @@
 package sk.styk.martin.apkanalyzer.core.appindex.browse
 
 import sk.styk.martin.apkanalyzer.core.appindex.model.AppAttributeIndex
+import sk.styk.martin.apkanalyzer.core.common.settings.FingerprintFormat
 
 sealed interface BrowseOption {
     val key: String
@@ -27,9 +28,10 @@ fun AppAttributeIndex.browseOptions(
     dimension: BrowseDimension,
     subAttribute: BrowseSubAttribute?,
     labeler: BrowseDimensionLabeler,
+    fingerprintFormat: FingerprintFormat = FingerprintFormat.ColonSeparated,
 ): List<BrowseOption> = bucketsFor(dimension, subAttribute)
     .map { (key, packages) ->
-        val label = labeler.label(dimension, key, subAttribute)
+        val label = labeler.label(dimension, key, subAttribute, fingerprintFormat)
         if (subAttribute != null && subAttribute.isCertificateHash) {
             BrowseOption.CertificateHash(
                 key = key,

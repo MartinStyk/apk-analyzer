@@ -49,8 +49,8 @@ import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.AppIcon
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
-import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.CodeBox
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.FilterChip
+import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.FingerprintBox
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.IconBadge
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.InfoListItem
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.ScrollablePanel
@@ -253,8 +253,8 @@ private fun OptionPreview(
             }
         }
         when (val option = preview.option) {
-            is BrowseOption.CertificateHash -> CodeBox(
-                text = option.label,
+            is BrowseOption.CertificateHash -> FingerprintBox(
+                value = option.key,
                 label = stringResource(option.algorithm.cardLabelRes),
                 compact = true,
                 modifier = Modifier.fillMaxWidth(),

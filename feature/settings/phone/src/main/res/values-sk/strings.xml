@@ -6,6 +6,9 @@
     <string name="settings_color_scheme_day">Deň</string>
     <string name="settings_color_scheme_night">Noc</string>
     <string name="settings_color_scheme_follow_system">Nasledovať systém</string>
+    <string name="settings_fingerprint_format">Formát odtlačkov</string>
+    <string name="settings_fingerprint_format_colon_separated">S dvojbodkami</string>
+    <string name="settings_fingerprint_format_continuous">Bez oddeľovačov</string>
     <string name="settings_apps_section">Aplikácie</string>
     <string name="settings_recently_viewed_toggle">Nedávno zobrazené aplikácie</string>
     <string name="settings_language_section">Jazyk</string>

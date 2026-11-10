@@ -55,7 +55,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.AccentBackdrop
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.BarSegment
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.Button
-import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.CodeBox
+import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.FingerprintBox
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.InfoCard
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.InfoCardTone
@@ -425,7 +425,7 @@ private fun CertificatesCard(
                 overflow = TextOverflow.Ellipsis,
             )
         }
-        state.sha256Fingerprint?.let { CodeBox(text = it, maxLines = 3, compact = true) }
+        state.sha256Fingerprint?.let { FingerprintBox(value = it, maxLines = 3, compact = true) }
     }
 }
 

@@ -54,6 +54,7 @@ import sk.styk.martin.apkanalyzer.core.apps.signing.WhatsAppCertificate
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
+import sk.styk.martin.apkanalyzer.core.common.settings.FingerprintFormat
 import java.time.Instant
 
 class InventoryColumnValuesTest {
@@ -94,12 +95,12 @@ class InventoryColumnValuesTest {
             "debuggable" to Flag(true),
             "allows_backup" to Flag(false),
             "cleartext_traffic" to Flag(true),
-            "signing_certificate_sha256" to TextList(listOf("c256")),
-            "signing_certificate_sha1" to TextList(listOf("c1")),
-            "signing_certificate_md5" to TextList(listOf("c5")),
-            "signing_public_key_sha256" to TextList(listOf("k256")),
-            "signing_public_key_sha1" to TextList(listOf("k1")),
-            "signing_public_key_md5" to TextList(listOf("k5")),
+            "signing_certificate_sha256" to TextList(listOf("C2:56")),
+            "signing_certificate_sha1" to TextList(listOf("C1")),
+            "signing_certificate_md5" to TextList(listOf("C5")),
+            "signing_public_key_sha256" to TextList(listOf("K2:56")),
+            "signing_public_key_sha1" to TextList(listOf("K1")),
+            "signing_public_key_md5" to TextList(listOf("K5")),
             "signing_certificate_subject" to TextList(listOf("Maps Inc")),
             "has_multiple_signers" to Flag(false),
             "signing_schemes" to TextList(listOf("v2", "v3.1")),
@@ -208,12 +209,12 @@ class InventoryColumnValuesTest {
                 Record(
                     mapOf(
                         "signature_algorithm" to Text("SHA256withRSA"),
-                        "certificate_md5" to Text("c5"),
-                        "certificate_sha1" to Text("c1"),
-                        "certificate_sha256" to Text("c256"),
-                        "public_key_md5" to Text("k5"),
-                        "public_key_sha1" to Text("k1"),
-                        "public_key_sha256" to Text("k256"),
+                        "certificate_md5" to Text("C5"),
+                        "certificate_sha1" to Text("C1"),
+                        "certificate_sha256" to Text("C2:56"),
+                        "public_key_md5" to Text("K5"),
+                        "public_key_sha1" to Text("K1"),
+                        "public_key_sha256" to Text("K2:56"),
                         "valid_from" to Text("2020-01-01T00:00:00Z"),
                         "valid_until" to Text("2030-01-01T00:00:00Z"),
                         "serial_number" to Text("0A:0B"),
@@ -238,11 +239,11 @@ class InventoryColumnValuesTest {
             ),
         )
 
-        val current = InventoryColumn.SigningCertificates.valueOf(data).records.map { it["certificate_sha256"] }
-        val past = InventoryColumn.SigningCertificateHistory.valueOf(data).records.map { it["certificate_sha256"] }
+        val current = InventoryColumn.SigningCertificates.valueOf(data, FingerprintFormat.Continuous).records.map { it["certificate_sha256"] }
+        val past = InventoryColumn.SigningCertificateHistory.valueOf(data, FingerprintFormat.Continuous).records.map { it["certificate_sha256"] }
 
-        current shouldBe listOf(Text("current"))
-        past shouldBe listOf(Text("past"))
+        current shouldBe listOf(Text("CURRENT"))
+        past shouldBe listOf(Text("PAST"))
     }
 
     @Test

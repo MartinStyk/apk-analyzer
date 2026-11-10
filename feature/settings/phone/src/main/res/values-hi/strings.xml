@@ -11,4 +11,7 @@
     <string name="settings_language_section">भाषा</string>
     <string name="settings_language_app_language">ऐप भाषा</string>
     <string name="settings_language_system_default">सिस्टम डिफ़ॉल्ट</string>
+    <string name="settings_fingerprint_format">फ़िंगरप्रिंट फ़ॉर्मैट</string>
+    <string name="settings_fingerprint_format_colon_separated">कोलन से अलग</string>
+    <string name="settings_fingerprint_format_continuous">बिना विभाजक के</string>
 </resources>
