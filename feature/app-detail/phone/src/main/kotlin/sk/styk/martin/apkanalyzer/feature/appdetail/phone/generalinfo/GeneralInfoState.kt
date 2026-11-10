@@ -5,10 +5,11 @@ import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceChain
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
 import java.time.Instant
 
 @Immutable
-sealed interface GeneralInfoState {
+internal sealed interface GeneralInfoState {
     data object Loading : GeneralInfoState
 
     @Immutable
@@ -43,8 +44,9 @@ sealed interface GeneralInfoState {
         val nativeLibraryNames: List<String>,
         val deviceSupportedAbis: List<String>,
         val isNativeLibraryDeviceIncompatible: Boolean,
+        val isNativeLibrariesRecorded: Boolean = true,
         val installedSplitsCount: Int,
     ) : GeneralInfoState
 
-    data object Error : GeneralInfoState
+    data class Error(val reason: SectionErrorReason) : GeneralInfoState
 }

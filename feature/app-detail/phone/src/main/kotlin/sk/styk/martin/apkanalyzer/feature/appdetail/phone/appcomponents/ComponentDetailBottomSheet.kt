@@ -1,9 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,7 +32,9 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ChangeLinesSection
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.DetailField
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SheetSection
 import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 
 @Suppress("CyclomaticComplexMethod")
@@ -45,6 +45,8 @@ internal fun ComponentDetailBottomSheet(
     onOpenIntentFilters: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
+    changeLines: List<String> = emptyList(),
+    intentFiltersMissingText: String? = null,
 ) {
     BottomSheet(onDismiss = onDismiss, modifier = modifier) {
         Column(
@@ -73,6 +75,8 @@ internal fun ComponentDetailBottomSheet(
                 value = item.name,
                 onCopy = onCopy,
             )
+
+            ChangeLinesSection(lines = changeLines)
 
             SheetSection(title = stringResource(AppsR.string.components_detail_section_reachability)) {
                 DetailField(
@@ -180,7 +184,7 @@ internal fun ComponentDetailBottomSheet(
             } else if (intentFilters == null) {
                 SheetSection(title = stringResource(AppsR.string.components_detail_section_intent_filters)) {
                     Text(
-                        text = stringResource(AppsR.string.components_detail_intent_filters_unavailable),
+                        text = intentFiltersMissingText ?: stringResource(AppsR.string.components_detail_intent_filters_unavailable),
                         style = AppTheme.typography.bodyMedium,
                         color = AppTheme.colors.onSurfaceVariant,
                     )
@@ -234,23 +238,6 @@ internal fun ComponentDetailBottomSheet(
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun SheetSection(
-    title: String,
-    modifier: Modifier = Modifier,
-    content: @Composable ColumnScope.() -> Unit,
-) {
-    Column(modifier = modifier.padding(top = 24.dp)) {
-        Text(
-            text = title,
-            style = AppTheme.typography.titleSmall,
-            color = AppTheme.colors.primary,
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        content()
     }
 }
 

@@ -42,33 +42,6 @@
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_unknown">Невідомо</string>
-    <string name="app_detail_insight_debuggable">Доступ до налагодження увімкнено</string>
-    <string name="app_detail_insight_debug_certificate">Підписано спільним ключем налагодження Android</string>
-    <string name="app_detail_insight_certificate_not_yet_valid">Сертифікат підпису ще не дійсний</string>
-    <plurals name="app_detail_insight_outdated_target">
-        <item quantity="one">Цільовий API %1$d, на один рівень API позаду цього пристрою</item>
-        <item quantity="few">Цільовий API %1$d, на %2$d рівня API позаду цього пристрою</item>
-        <item quantity="many">Цільовий API %1$d, на %2$d рівнів API позаду цього пристрою</item>
-        <item quantity="other">Цільовий API %1$d, на %2$d рівнів API позаду цього пристрою</item>
-    </plurals>
-    <string name="app_detail_insight_sideloaded">Встановлено ззовні магазину додатків</string>
-    <plurals name="app_detail_insight_unused">
-        <item quantity="one">Не відкривалося в останній %1$d місяць</item>
-        <item quantity="few">Не відкривалося в останні %1$d місяці</item>
-        <item quantity="many">Не відкривалося в останні %1$d місяців</item>
-        <item quantity="other">Не відкривалося в останні %1$d місяців</item>
-    </plurals>
-    <string name="app_detail_insight_background_location">Може отримувати доступ до місцезнаходження під час роботи у фоновому режимі</string>
-    <string name="app_detail_insight_messages">Може читати, отримувати або надсилати текстові повідомлення</string>
-    <string name="app_detail_insight_call_history">Може отримувати доступ або змінювати історію дзвінків</string>
-    <string name="app_detail_insight_contacts">Може отримувати доступ або змінювати контакти</string>
-    <string name="app_detail_insight_calendar">Може отримувати доступ або змінювати події календаря</string>
-    <string name="app_detail_badge_large">Великий додаток</string>
-    <string name="app_detail_badge_system">Система</string>
-    <string name="app_detail_badge_google_play">Google Play</string>
-    <string name="app_detail_badge_recently_installed">Новий</string>
-    <string name="app_detail_badge_recently_updated">Оновлено</string>
-    <string name="app_detail_badge_recently_used">Недавно використані</string>
     <string name="general_info_title">Загальна інформація</string>
     <string name="general_info_error">Не вдалося завантажити загальну інформацію</string>
     <string name="general_info_section_identification">Ідентифікація</string>
@@ -523,5 +496,11 @@
     <string name="components_launch_started">Запит на запуск надіслано — додаток вирішує, що робити далі.</string>
     <string name="components_launch_broadcast_sent">Відправлено широкомовлення — нічого не повідомляє, чи було це оброблено.</string>
     <string name="components_launch_failed">Система відмовилася запустити це.</string>
+    <string name="certificates_validity_on_date_valid">Дійсний на цю дату</string>
+    <string name="certificates_validity_on_date_expired">Минув на цю дату</string>
+    <string name="certificates_validity_on_date_not_yet">Ще не дійсний на цю дату</string>
+    <string name="certificates_validity_on_date_valid_explanation">У день фіксації в Apk Analyzer цей сертифікат був у межах терміну дії.</string>
+    <string name="certificates_validity_on_date_expired_explanation">У день фіксації в Apk Analyzer дата закінчення цього сертифіката вже минула.</string>
+    <string name="certificates_validity_on_date_not_yet_explanation">У день фіксації в Apk Analyzer дата початку цього сертифіката ще не настала.</string>
     <string name="app_info_unavailable">Цей пристрій не може відкрити «Інформація про програму»</string>
 </resources>

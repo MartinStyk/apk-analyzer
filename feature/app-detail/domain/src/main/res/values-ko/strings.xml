@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_detail_insight_debuggable">디버그 액세스가 활성화되었습니다</string>
+    <string name="app_detail_insight_debug_certificate">안드로이드의 공유 디버그 키로 서명됨</string>
+    <string name="app_detail_insight_certificate_not_yet_valid">서명 인증서가 아직 유효하지 않습니다</string>
+    <plurals name="app_detail_insight_outdated_target">
+        <item quantity="other">%1$d API를 대상으로 하며, 이 기기보다 %2$d API 레벨이 낮습니다</item>
+    </plurals>
+    <string name="app_detail_insight_sideloaded">앱 스토어 외부에서 설치됨</string>
+    <plurals name="app_detail_insight_unused">
+        <item quantity="other">지난 %1$d개월 동안 열리지 않음</item>
+    </plurals>
+    <string name="app_detail_insight_background_location">백그라운드에서 실행 중일 때 위치에 접근할 수 있음</string>
+    <string name="app_detail_insight_messages">문자 메시지를 읽거나, 수신하거나, 보낼 수 있음</string>
+    <string name="app_detail_insight_call_history">통화 기록에 접근하거나 변경할 수 있음</string>
+    <string name="app_detail_insight_contacts">연락처에 접근하거나 변경할 수 있습니다</string>
+    <string name="app_detail_insight_calendar">일정 이벤트에 접근하거나 변경할 수 있습니다</string>
+    <string name="app_detail_badge_large">대형 앱</string>
+    <string name="app_detail_badge_system">시스템</string>
+    <string name="app_detail_badge_google_play">Google Play</string>
+    <string name="app_detail_badge_recently_installed">새로 만들기</string>
+    <string name="app_detail_badge_recently_updated">업데이트됨</string>
+    <string name="app_detail_badge_recently_used">최근 사용됨</string>
+</resources>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_history_first_recorded">أول رصد</string>
+    <string name="app_history_certificate_changed">تغيّرت شهادة التوقيع</string>
+    <string name="app_history_signing_method_changed">تغيّرت طريقة التوقيع</string>
+    <string name="app_history_reinstalled">أُزيل ثم ثُبّت من جديد</string>
+    <string name="app_history_new_device">استمر على جهاز جديد</string>
+    <string name="app_history_same_version">الإصدار نفسه، بنية جديدة</string>
+    <string name="app_history_older_version">إصدار أقدم</string>
+    <string name="app_history_uncomparable_only">تعذّرت مقارنة بعض التفاصيل</string>
+    <string name="app_history_version">الإصدار %1$s</string>
+    <string name="app_history_version_with_code">%1$s (%2$d)</string>
+    <string name="app_history_value_change">\u2068%1$s\u2069 ← \u2068%2$s\u2069</string>
+    <string name="app_history_summary_join">%1$s · %2$s</string>
+    <string name="app_history_summary_permission_added_single">أُضيف إذن: %1$s</string>
+    <string name="app_history_summary_source">تغيّر مصدر التثبيت إلى %1$s</string>
+    <string name="app_history_summary_debug_on">تم تشغيل تصحيح الأخطاء</string>
+    <string name="app_history_summary_debug_off">تم إيقاف تصحيح الأخطاء</string>
+    <string name="app_history_summary_backup_on">تم تشغيل نسخ بيانات التطبيق احتياطيًا</string>
+    <string name="app_history_summary_backup_off">تم إيقاف نسخ بيانات التطبيق احتياطيًا</string>
+    <string name="app_history_summary_cleartext_on">تم السماح بالنقل غير المشفّر</string>
+    <string name="app_history_summary_cleartext_off">تم حظر النقل غير المشفّر</string>
+    <string name="app_history_summary_target_sdk">Target SDK \u2068%1$s\u2069 ← \u2068%2$s\u2069</string>
+    <string name="app_history_summary_min_sdk">Min SDK \u2068%1$s\u2069 ← \u2068%2$s\u2069</string>
+    <string name="app_history_summary_size_up">الحجم \u2068+%1$s\u2069</string>
+    <string name="app_history_summary_size_down">الحجم \u2068−%1$s\u2069</string>
+    <string name="app_history_when_updated">تم التحديث في %1$s</string>
+    <string name="app_history_when_reinstalled">أُعيد التثبيت في %1$s</string>
+    <string name="app_history_when_recorded">رُصد في %1$s</string>
+    <string name="app_history_when_with_recorded">%1$s · رُصد في %2$s</string>
+    <string name="app_history_changes_heading">التغييرات بين هذين الإصدارين</string>
+    <string name="app_history_device_note">قد تعود بعض الاختلافات إلى الجهاز لا إلى التطبيق.</string>
+    <string name="app_history_empty_diff">لا اختلافات فيما يقارنه Apk Analyzer</string>
+    <string name="app_history_uncomparable_label">تعذّرت المقارنة</string>
+    <string name="app_history_uncomparable_explanation">لم تُرصد هذه المعلومات بالكامل لأحد هذين الإصدارين، لذا لا يمكن معرفة ما إذا كانت قد تغيّرت.</string>
+    <string name="app_history_field_change">%1$s: \u2068%2$s\u2069 ← \u2068%3$s\u2069</string>
+    <string name="app_history_field_added">%1$s: أُضيف</string>
+    <string name="app_history_field_removed">%1$s: أُزيل</string>
+    <string name="app_history_before">قبل</string>
+    <string name="app_history_after">بعد</string>
+    <string name="app_history_category_signing">التوقيع</string>
+    <string name="app_history_category_permissions">الأذونات</string>
+    <string name="app_history_category_install_source">مصدر التثبيت</string>
+    <string name="app_history_category_settings">إعدادات التطبيق</string>
+    <string name="app_history_category_android_versions">إصدارات Android</string>
+    <string name="app_history_category_components">المكونات</string>
+    <string name="app_history_category_native">المكتبات الأصلية</string>
+    <string name="app_history_category_size">الحجم</string>
+    <string name="app_history_category_signing_method">طريقة التوقيع</string>
+    <string name="app_history_group_added">مضافة</string>
+    <string name="app_history_group_removed">مزالة</string>
+    <string name="app_history_group_changed">متغيّرة</string>
+    <string name="app_history_certificate_updated_explanation">لا يقبل Android تحديثًا بشهادة مختلفة إلا إذا وافق عليه المفتاح القديم، لذا يكون هذا عادةً تغييرًا مخططًا للمفتاح من المطوّر.</string>
+    <string name="app_history_certificate_new_copy_explanation">هذه النسخة موقّعة بشهادة تختلف عن التي رُصدت سابقًا. تحقّق من أنها جاءت من مصدر تثق به.</string>
+    <string name="app_history_signer_explanation">المؤسسة أو الشخص المذكور في شهادة التوقيع هذه. يمكن لأي شخص كتابة أي اسم هنا، لذا فإن البصمة أدناه هي ما يحدد المفتاح.</string>
+    <string name="app_history_not_recorded">لم يُرصد لهذا الإصدار</string>
+    <string name="app_history_not_recorded_explanation">تعذّر على Apk Analyzer رصد هذا لهذا الإصدار، لذا لا يمكن معرفة ما كان يحتويه.</string>
+    <plurals name="app_history_summary_more">
+        <item quantity="zero">و%1$d أخرى</item>
+        <item quantity="one">و%1$d أخرى</item>
+        <item quantity="two">و%1$d أخرى</item>
+        <item quantity="few">و%1$d أخرى</item>
+        <item quantity="many">و%1$d أخرى</item>
+        <item quantity="other">و%1$d أخرى</item>
+    </plurals>
+    <plurals name="app_history_summary_permission_added_named">
+        <item quantity="zero">أُضيف: %1$s و%2$d إذن آخر</item>
+        <item quantity="one">أُضيف: %1$s و%2$d إذن آخر</item>
+        <item quantity="two">أُضيف: %1$s و%2$d إذنان آخران</item>
+        <item quantity="few">أُضيف: %1$s و%2$d أذونات أخرى</item>
+        <item quantity="many">أُضيف: %1$s و%2$d إذنًا آخر</item>
+        <item quantity="other">أُضيف: %1$s و%2$d إذن آخر</item>
+    </plurals>
+    <plurals name="app_history_summary_permissions_removed">
+        <item quantity="zero">أُزيل %1$d إذن</item>
+        <item quantity="one">أُزيل %1$d إذن</item>
+        <item quantity="two">أُزيل %1$d إذنان</item>
+        <item quantity="few">أُزيلت %1$d أذونات</item>
+        <item quantity="many">أُزيل %1$d إذنًا</item>
+        <item quantity="other">أُزيل %1$d إذن</item>
+    </plurals>
+    <plurals name="app_history_summary_defined_permissions">
+        <item quantity="zero">تغيّر %1$d إذن يعرّفه هذا التطبيق</item>
+        <item quantity="one">تغيّر %1$d إذن يعرّفه هذا التطبيق</item>
+        <item quantity="two">تغيّر %1$d إذنان يعرّفهما هذا التطبيق</item>
+        <item quantity="few">تغيّرت %1$d أذونات يعرّفها هذا التطبيق</item>
+        <item quantity="many">تغيّر %1$d إذنًا يعرّفه هذا التطبيق</item>
+        <item quantity="other">تغيّر %1$d إذن يعرّفه هذا التطبيق</item>
+    </plurals>
+    <plurals name="app_history_summary_components_added">
+        <item quantity="zero">أُضيف %1$d مكوّن</item>
+        <item quantity="one">أُضيف %1$d مكوّن</item>
+        <item quantity="two">أُضيف %1$d مكوّنان</item>
+        <item quantity="few">أُضيفت %1$d مكوّنات</item>
+        <item quantity="many">أُضيف %1$d مكوّنًا</item>
+        <item quantity="other">أُضيف %1$d مكوّن</item>
+    </plurals>
+    <plurals name="app_history_summary_components_removed">
+        <item quantity="zero">أُزيل %1$d مكوّن</item>
+        <item quantity="one">أُزيل %1$d مكوّن</item>
+        <item quantity="two">أُزيل %1$d مكوّنان</item>
+        <item quantity="few">أُزيلت %1$d مكوّنات</item>
+        <item quantity="many">أُزيل %1$d مكوّنًا</item>
+        <item quantity="other">أُزيل %1$d مكوّن</item>
+    </plurals>
+    <plurals name="app_history_summary_components_changed">
+        <item quantity="zero">تغيّر %1$d مكوّن</item>
+        <item quantity="one">تغيّر %1$d مكوّن</item>
+        <item quantity="two">تغيّر %1$d مكوّنان</item>
+        <item quantity="few">تغيّرت %1$d مكوّنات</item>
+        <item quantity="many">تغيّر %1$d مكوّنًا</item>
+        <item quantity="other">تغيّر %1$d مكوّن</item>
+    </plurals>
+    <plurals name="app_history_summary_native_added">
+        <item quantity="zero">أُضيفت %1$d مكتبة أصلية</item>
+        <item quantity="one">أُضيفت %1$d مكتبة أصلية</item>
+        <item quantity="two">أُضيفت %1$d مكتبتان أصليتان</item>
+        <item quantity="few">أُضيفت %1$d مكتبات أصلية</item>
+        <item quantity="many">أُضيفت %1$d مكتبة أصلية</item>
+        <item quantity="other">أُضيفت %1$d مكتبة أصلية</item>
+    </plurals>
+    <plurals name="app_history_summary_native_removed">
+        <item quantity="zero">أُزيلت %1$d مكتبة أصلية</item>
+        <item quantity="one">أُزيلت %1$d مكتبة أصلية</item>
+        <item quantity="two">أُزيلت %1$d مكتبتان أصليتان</item>
+        <item quantity="few">أُزيلت %1$d مكتبات أصلية</item>
+        <item quantity="many">أُزيلت %1$d مكتبة أصلية</item>
+        <item quantity="other">أُزيلت %1$d مكتبة أصلية</item>
+    </plurals>
+    <plurals name="app_history_summary_native_changed">
+        <item quantity="zero">تغيّرت %1$d مكتبة أصلية</item>
+        <item quantity="one">تغيّرت %1$d مكتبة أصلية</item>
+        <item quantity="two">تغيّرت %1$d مكتبتان أصليتان</item>
+        <item quantity="few">تغيّرت %1$d مكتبات أصلية</item>
+        <item quantity="many">تغيّرت %1$d مكتبة أصلية</item>
+        <item quantity="other">تغيّرت %1$d مكتبة أصلية</item>
+    </plurals>
+    <string name="app_history_size_change_up">\u2068%1$s\u2069 ← \u2068%2$s\u2069 (\u2068+%3$s\u2069)</string>
+    <string name="app_history_size_change_down">\u2068%1$s\u2069 ← \u2068%2$s\u2069 (\u2068−%3$s\u2069)</string>
+    <string name="app_history_field_value">%1$s: %2$s</string>
+    <string name="app_history_rule_added">%1$s · أُضيف: %2$s</string>
+    <string name="app_history_rule_removed">%1$s · أُزيل: %2$s</string>
+    <string name="app_history_path_rule">%1$s (قراءة: %2$s، كتابة: %3$s)</string>
+    <string name="app_history_summary_requirements">تغيّرت متطلبات الجهاز</string>
+</resources>

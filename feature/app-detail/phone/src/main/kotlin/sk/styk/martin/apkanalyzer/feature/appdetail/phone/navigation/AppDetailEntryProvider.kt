@@ -1,11 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone.navigation
 
-import android.widget.Toast
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
-import sk.styk.martin.apkanalyzer.core.common.util.openAppSystemPage
-import sk.styk.martin.apkanalyzer.core.common.util.openGooglePlay
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.animation.slideFromEndEntryMetadata
 import sk.styk.martin.apkanalyzer.core.navigation.Navigator
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailNavKey
@@ -15,28 +11,22 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents.Componen
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents.IntentFiltersScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.certificates.CertificatesScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.generalinfo.GeneralInfoScreen
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.change.AppHistoryChangeScreen
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.timeline.AppHistoryTimelineScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.manifest.ManifestScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.nativelibraries.NativeLibrariesScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.permissions.PermissionsScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.requirements.RequirementsScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.splitapks.SplitApksScreen
 import sk.styk.martin.apkanalyzer.feature.appexport.api.AppInventoryExportNavKey
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 
 fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
     entry<AppDetailNavKey>(
         metadata = slideFromEndEntryMetadata(),
     ) { key ->
-        val context = LocalContext.current
         AppDetailScreen(
             appDetailInput = key.detailInput,
             onBack = navigator::goBack,
-            onOpenPlayStore = { packageName -> context.openGooglePlay(packageName) },
-            onOpenAppInfo = { packageName ->
-                context.openAppSystemPage(packageName).onFailure {
-                    Toast.makeText(context, AppsR.string.app_info_unavailable, Toast.LENGTH_LONG).show()
-                }
-            },
             onNavigateToManifest = { navigator.navigate(ManifestNavKey(key.detailInput)) },
             onNavigateToGeneralDetails = { navigator.navigate(GeneralInfoNavKey(key.detailInput)) },
             onNavigateToPermissions = { permissionName -> navigator.navigate(PermissionsNavKey(key.detailInput, permissionName)) },
@@ -48,6 +38,7 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
             onNavigateToCertificates = { navigator.navigate(CertificatesNavKey(key.detailInput)) },
             onNavigateToFeatures = { navigator.navigate(RequirementsNavKey(key.detailInput)) },
             onNavigateToInventoryExport = { packageName -> navigator.navigate(AppInventoryExportNavKey(packageName.value)) },
+            onNavigateToHistory = { packageName, appName -> navigator.navigate(AppHistoryTimelineNavKey(packageName.value, appName)) },
         )
     }
 
@@ -139,6 +130,30 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
         ManifestScreen(
             appDetailInput = key.detailInput,
             onBack = { navigator.goBack() },
+        )
+    }
+
+    entry<AppHistoryTimelineNavKey>(
+        metadata = slideFromEndEntryMetadata(),
+    ) { key ->
+        AppHistoryTimelineScreen(
+            packageName = key.packageName,
+            appName = key.appName,
+            onBack = { navigator.goBack() },
+            onNavigateToChange = { snapshotId, appName -> navigator.navigate(AppHistoryChangeNavKey(key.packageName, snapshotId, appName)) },
+            onNavigateToFullDetail = { input -> navigator.navigate(AppDetailNavKey(input)) },
+        )
+    }
+
+    entry<AppHistoryChangeNavKey>(
+        metadata = slideFromEndEntryMetadata(),
+    ) { key ->
+        AppHistoryChangeScreen(
+            packageName = key.packageName,
+            snapshotId = key.snapshotId,
+            appName = key.appName,
+            onBack = { navigator.goBack() },
+            onNavigateToFullDetail = { input -> navigator.navigate(AppDetailNavKey(input)) },
         )
     }
 }

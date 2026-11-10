@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_history_first_recorded">पहली बार दर्ज</string>
+    <string name="app_history_certificate_changed">साइनिंग प्रमाणपत्र बदल गया</string>
+    <string name="app_history_signing_method_changed">साइनिंग का तरीका बदल गया</string>
+    <string name="app_history_reinstalled">हटाकर फिर से इंस्टॉल किया गया</string>
+    <string name="app_history_new_device">नए डिवाइस पर जारी</string>
+    <string name="app_history_same_version">वही वर्शन, नया बिल्ड</string>
+    <string name="app_history_older_version">पुराना वर्शन</string>
+    <string name="app_history_uncomparable_only">कुछ जानकारी की तुलना नहीं हो सकी</string>
+    <string name="app_history_version">वर्शन %1$s</string>
+    <string name="app_history_version_with_code">%1$s (%2$d)</string>
+    <string name="app_history_value_change">%1$s → %2$s</string>
+    <string name="app_history_summary_join">%1$s · %2$s</string>
+    <string name="app_history_summary_permission_added_single">अनुमति जोड़ी गई: %1$s</string>
+    <string name="app_history_summary_source">इंस्टॉल स्रोत बदलकर %1$s हुआ</string>
+    <string name="app_history_summary_debug_on">डीबगिंग चालू की गई</string>
+    <string name="app_history_summary_debug_off">डीबगिंग बंद की गई</string>
+    <string name="app_history_summary_backup_on">ऐप डेटा बैकअप चालू किया गया</string>
+    <string name="app_history_summary_backup_off">ऐप डेटा बैकअप बंद किया गया</string>
+    <string name="app_history_summary_cleartext_on">बिना एन्क्रिप्शन वाला ट्रैफ़िक अनुमत</string>
+    <string name="app_history_summary_cleartext_off">बिना एन्क्रिप्शन वाला ट्रैफ़िक अवरुद्ध</string>
+    <string name="app_history_summary_target_sdk">Target SDK %1$s → %2$s</string>
+    <string name="app_history_summary_min_sdk">Min SDK %1$s → %2$s</string>
+    <string name="app_history_summary_size_up">आकार +%1$s</string>
+    <string name="app_history_summary_size_down">आकार −%1$s</string>
+    <string name="app_history_when_updated">%1$s को अपडेट हुआ</string>
+    <string name="app_history_when_reinstalled">%1$s को फिर से इंस्टॉल हुआ</string>
+    <string name="app_history_when_recorded">%1$s को दर्ज हुआ</string>
+    <string name="app_history_when_with_recorded">%1$s · %2$s को दर्ज</string>
+    <string name="app_history_changes_heading">इन वर्शन के बीच बदलाव</string>
+    <string name="app_history_device_note">कुछ अंतर ऐप से नहीं, डिवाइस से हो सकते हैं।</string>
+    <string name="app_history_empty_diff">Apk Analyzer जिनकी तुलना करता है, उनमें कोई अंतर नहीं</string>
+    <string name="app_history_uncomparable_label">तुलना नहीं हो सकी</string>
+    <string name="app_history_uncomparable_explanation">इनमें से एक वर्शन के लिए यह जानकारी पूरी तरह दर्ज नहीं हुई, इसलिए कहा नहीं जा सकता कि यह बदली या नहीं।</string>
+    <string name="app_history_field_change">%1$s: %2$s → %3$s</string>
+    <string name="app_history_field_added">%1$s: जोड़ा गया</string>
+    <string name="app_history_field_removed">%1$s: हटाया गया</string>
+    <string name="app_history_before">पहले</string>
+    <string name="app_history_after">बाद में</string>
+    <string name="app_history_category_signing">साइनिंग</string>
+    <string name="app_history_category_permissions">अनुमतियां</string>
+    <string name="app_history_category_install_source">इंस्टॉल स्रोत</string>
+    <string name="app_history_category_settings">ऐप सेटिंग</string>
+    <string name="app_history_category_android_versions">Android वर्शन</string>
+    <string name="app_history_category_components">कंपोनेंट</string>
+    <string name="app_history_category_native">नेटिव लाइब्रेरी</string>
+    <string name="app_history_category_size">आकार</string>
+    <string name="app_history_category_signing_method">साइनिंग का तरीका</string>
+    <string name="app_history_group_added">जोड़े गए</string>
+    <string name="app_history_group_removed">हटाए गए</string>
+    <string name="app_history_group_changed">बदले गए</string>
+    <string name="app_history_certificate_updated_explanation">Android अलग प्रमाणपत्र वाला अपडेट तभी स्वीकार करता है जब पुरानी कुंजी ने उसे मंज़ूरी दी हो, इसलिए यह आमतौर पर डेवलपर का योजनाबद्ध कुंजी बदलाव होता है।</string>
+    <string name="app_history_certificate_new_copy_explanation">यह कॉपी पहले दर्ज प्रमाणपत्र से अलग प्रमाणपत्र से साइन की गई है। जांच लें कि यह किसी भरोसेमंद स्रोत से आई है।</string>
+    <string name="app_history_signer_explanation">इस साइनिंग प्रमाणपत्र में दर्ज संगठन या व्यक्ति। यहां कोई भी कोई भी नाम लिख सकता है, इसलिए कुंजी की पहचान नीचे दिए फ़िंगरप्रिंट से होती है।</string>
+    <string name="app_history_not_recorded">इस वर्शन के लिए दर्ज नहीं</string>
+    <string name="app_history_not_recorded_explanation">Apk Analyzer इस वर्शन के लिए इसे दर्ज नहीं कर सका, इसलिए कहा नहीं जा सकता कि इसमें क्या था।</string>
+    <plurals name="app_history_summary_more">
+        <item quantity="one">और %1$d</item>
+        <item quantity="other">और %1$d</item>
+    </plurals>
+    <plurals name="app_history_summary_permission_added_named">
+        <item quantity="one">%1$s और %2$d अन्य अनुमति जोड़ी गई</item>
+        <item quantity="other">%1$s और %2$d अन्य अनुमतियां जोड़ी गईं</item>
+    </plurals>
+    <plurals name="app_history_summary_permissions_removed">
+        <item quantity="one">%1$d अनुमति हटाई गई</item>
+        <item quantity="other">%1$d अनुमतियां हटाई गईं</item>
+    </plurals>
+    <plurals name="app_history_summary_defined_permissions">
+        <item quantity="one">इस ऐप की तय की गई %1$d अनुमति बदली</item>
+        <item quantity="other">इस ऐप की तय की गई %1$d अनुमतियां बदलीं</item>
+    </plurals>
+    <plurals name="app_history_summary_components_added">
+        <item quantity="one">%1$d कंपोनेंट जोड़ा गया</item>
+        <item quantity="other">%1$d कंपोनेंट जोड़े गए</item>
+    </plurals>
+    <plurals name="app_history_summary_components_removed">
+        <item quantity="one">%1$d कंपोनेंट हटाया गया</item>
+        <item quantity="other">%1$d कंपोनेंट हटाए गए</item>
+    </plurals>
+    <plurals name="app_history_summary_components_changed">
+        <item quantity="one">%1$d कंपोनेंट बदला गया</item>
+        <item quantity="other">%1$d कंपोनेंट बदले गए</item>
+    </plurals>
+    <plurals name="app_history_summary_native_added">
+        <item quantity="one">%1$d नेटिव लाइब्रेरी जोड़ी गई</item>
+        <item quantity="other">%1$d नेटिव लाइब्रेरी जोड़ी गईं</item>
+    </plurals>
+    <plurals name="app_history_summary_native_removed">
+        <item quantity="one">%1$d नेटिव लाइब्रेरी हटाई गई</item>
+        <item quantity="other">%1$d नेटिव लाइब्रेरी हटाई गईं</item>
+    </plurals>
+    <plurals name="app_history_summary_native_changed">
+        <item quantity="one">%1$d नेटिव लाइब्रेरी बदली गई</item>
+        <item quantity="other">%1$d नेटिव लाइब्रेरी बदली गईं</item>
+    </plurals>
+    <string name="app_history_size_change_up">%1$s → %2$s (+%3$s)</string>
+    <string name="app_history_size_change_down">%1$s → %2$s (−%3$s)</string>
+    <string name="app_history_field_value">%1$s: %2$s</string>
+    <string name="app_history_rule_added">%1$s · जोड़ा गया: %2$s</string>
+    <string name="app_history_rule_removed">%1$s · हटाया गया: %2$s</string>
+    <string name="app_history_path_rule">%1$s (पढ़ना: %2$s, लिखना: %3$s)</string>
+    <string name="app_history_summary_requirements">डिवाइस की ज़रूरतें बदलीं</string>
+</resources>

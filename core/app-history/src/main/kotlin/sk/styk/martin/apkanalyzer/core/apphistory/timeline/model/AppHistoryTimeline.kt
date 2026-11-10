@@ -15,6 +15,7 @@ data class AppHistoryVersion(val versionCode: Long, val versionName: String?)
 
 data class AppHistorySnapshotSummary(
     val id: AppHistorySnapshotId,
+    val applicationName: String,
     val version: AppHistoryVersion,
     val firstInstallTime: Instant,
     val lastUpdateTime: Instant,

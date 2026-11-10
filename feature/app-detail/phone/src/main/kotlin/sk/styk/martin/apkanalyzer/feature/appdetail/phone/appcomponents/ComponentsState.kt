@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 import sk.styk.martin.apkanalyzer.core.apps.components.ComponentFlag
 import sk.styk.martin.apkanalyzer.core.apps.components.IntentFilterDataRuleType
 import sk.styk.martin.apkanalyzer.core.apps.components.ProviderPathMatchType
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
 
 @Serializable
 internal enum class ComponentScope {
@@ -110,7 +111,7 @@ internal data class ComponentSection(val type: ComponentType, val components: Li
 internal sealed interface ComponentsState {
     data object Loading : ComponentsState
 
-    data object Error : ComponentsState
+    data class Error(val reason: SectionErrorReason) : ComponentsState
 
     @Immutable
     data class Loaded(
@@ -120,6 +121,7 @@ internal sealed interface ComponentsState {
         val query: String,
         val scopeTotal: Int,
         val sections: List<ComponentSection>,
+        val isHistorical: Boolean = false,
     ) : ComponentsState {
         val hasResults: Boolean
             get() = sections.isNotEmpty()

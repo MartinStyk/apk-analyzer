@@ -18,13 +18,13 @@ import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.theme.ApkAnalyzerTvTheme
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.iconReference
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.InfoRow
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.InfoSection
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.InfoSectionList
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionLoading
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.formatTimestamp
-import sk.styk.martin.apkanalyzer.feature.appdetail.tv.toAppReference
 import java.time.Instant
 import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 
@@ -40,7 +40,7 @@ internal fun TvGeneralInfoScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     TvGeneralInfoContent(
         state = state,
-        appReference = appDetailInput.toAppReference(),
+        appReference = appDetailInput.iconReference,
         onNavigateToSplitApks = onNavigateToSplitApks,
         onNavigateToNativeLibraries = onNavigateToNativeLibraries,
     )

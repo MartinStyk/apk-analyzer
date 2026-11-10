@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.components.Activity
 import sk.styk.martin.apkanalyzer.core.apps.components.BroadcastReceiver
 import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
@@ -27,18 +26,18 @@ import sk.styk.martin.apkanalyzer.core.apps.components.Service
 import sk.styk.martin.apkanalyzer.core.apps.components.flags
 import sk.styk.martin.apkanalyzer.core.apps.components.isExternallyReachableWithoutPermission
 import sk.styk.martin.apkanalyzer.core.apps.components.isLaunchable
-import sk.styk.martin.apkanalyzer.core.apps.intentfilters.IntentFiltersRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
-import sk.styk.martin.apkanalyzer.feature.appdetail.tv.toAppReference
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSection
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSectionRepository
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.installedPackage
 
 @HiltViewModel(assistedFactory = TvComponentsViewModel.Factory::class)
 internal class TvComponentsViewModel @AssistedInject constructor(
     @Assisted private val appDetailInput: AppDetailInput,
-    private val appDetailRepository: AppDetailRepository,
-    private val intentFiltersRepository: IntentFiltersRepository,
+    private val sectionRepository: AppDetailSectionRepository,
     private val dispatcherProvider: DispatcherProvider,
 ) : ViewModel() {
 
@@ -82,12 +81,11 @@ internal class TvComponentsViewModel @AssistedInject constructor(
     private fun loadComponents() {
         source.value = ComponentsSource.Loading
         viewModelScope.launch(dispatcherProvider.default()) {
-            val reference = appDetailInput.toAppReference()
-            val canLaunch = appDetailInput is AppDetailInput.InstalledPackage
-            appDetailRepository.details(reference)
+            val canLaunch = appDetailInput.installedPackage != null
+            sectionRepository.detail(appDetailInput)
                 .onSuccess { detail ->
                     source.value = detail.toSource(canLaunch, intentFiltersByComponent = null)
-                    val intentFilters = intentFiltersRepository.componentIntentFilters(reference).getOrNull()
+                    val intentFilters = (sectionRepository.intentFilters(appDetailInput).getOrNull() as? AppDetailSection.Available)?.value
                     source.value = detail.toSource(canLaunch, intentFiltersByComponent = intentFilters)
                 }
                 .onFailure { source.value = ComponentsSource.Error }

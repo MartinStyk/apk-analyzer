@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_history_first_recorded">처음 기록됨</string>
+    <string name="app_history_certificate_changed">서명 인증서가 변경됨</string>
+    <string name="app_history_signing_method_changed">서명 방식이 변경됨</string>
+    <string name="app_history_reinstalled">삭제 후 다시 설치됨</string>
+    <string name="app_history_new_device">새 기기에서 이어짐</string>
+    <string name="app_history_same_version">같은 버전, 새 빌드</string>
+    <string name="app_history_older_version">이전 버전</string>
+    <string name="app_history_uncomparable_only">일부 정보를 비교할 수 없음</string>
+    <string name="app_history_version">버전 %1$s</string>
+    <string name="app_history_version_with_code">%1$s (%2$d)</string>
+    <string name="app_history_value_change">%1$s → %2$s</string>
+    <string name="app_history_summary_join">%1$s · %2$s</string>
+    <string name="app_history_summary_permission_added_single">권한 추가됨: %1$s</string>
+    <string name="app_history_summary_source">설치 출처가 %1$s(으)로 변경됨</string>
+    <string name="app_history_summary_debug_on">디버깅 켜짐</string>
+    <string name="app_history_summary_debug_off">디버깅 꺼짐</string>
+    <string name="app_history_summary_backup_on">앱 데이터 백업 켜짐</string>
+    <string name="app_history_summary_backup_off">앱 데이터 백업 꺼짐</string>
+    <string name="app_history_summary_cleartext_on">암호화되지 않은 트래픽 허용됨</string>
+    <string name="app_history_summary_cleartext_off">암호화되지 않은 트래픽 차단됨</string>
+    <string name="app_history_summary_target_sdk">Target SDK %1$s → %2$s</string>
+    <string name="app_history_summary_min_sdk">Min SDK %1$s → %2$s</string>
+    <string name="app_history_summary_size_up">크기 +%1$s</string>
+    <string name="app_history_summary_size_down">크기 −%1$s</string>
+    <string name="app_history_when_updated">%1$s 업데이트됨</string>
+    <string name="app_history_when_reinstalled">%1$s 다시 설치됨</string>
+    <string name="app_history_when_recorded">%1$s 기록됨</string>
+    <string name="app_history_when_with_recorded">%1$s · %2$s 기록됨</string>
+    <string name="app_history_changes_heading">이 버전 간의 변경 사항</string>
+    <string name="app_history_device_note">일부 차이는 앱이 아니라 기기 때문일 수 있습니다.</string>
+    <string name="app_history_empty_diff">Apk Analyzer가 비교하는 항목에 차이가 없음</string>
+    <string name="app_history_uncomparable_label">비교할 수 없음</string>
+    <string name="app_history_uncomparable_explanation">이 버전 중 하나에서 이 정보가 완전히 기록되지 않아 변경 여부를 알 수 없습니다.</string>
+    <string name="app_history_field_change">%1$s: %2$s → %3$s</string>
+    <string name="app_history_field_added">%1$s: 추가됨</string>
+    <string name="app_history_field_removed">%1$s: 삭제됨</string>
+    <string name="app_history_before">이전</string>
+    <string name="app_history_after">이후</string>
+    <string name="app_history_category_signing">서명</string>
+    <string name="app_history_category_permissions">권한</string>
+    <string name="app_history_category_install_source">설치 출처</string>
+    <string name="app_history_category_settings">앱 설정</string>
+    <string name="app_history_category_android_versions">Android 버전</string>
+    <string name="app_history_category_components">구성요소</string>
+    <string name="app_history_category_native">네이티브 라이브러리</string>
+    <string name="app_history_category_size">크기</string>
+    <string name="app_history_category_signing_method">서명 방식</string>
+    <string name="app_history_group_added">추가됨</string>
+    <string name="app_history_group_removed">삭제됨</string>
+    <string name="app_history_group_changed">변경됨</string>
+    <string name="app_history_certificate_updated_explanation">Android는 이전 키가 승인한 경우에만 다른 인증서의 업데이트를 허용하므로, 이는 대개 개발자가 계획한 키 변경입니다.</string>
+    <string name="app_history_certificate_new_copy_explanation">이 사본은 이전에 기록된 것과 다른 인증서로 서명되었습니다. 신뢰할 수 있는 출처인지 확인하세요.</string>
+    <string name="app_history_signer_explanation">이 서명 인증서에 표시된 조직 또는 개인입니다. 여기에는 누구나 어떤 이름이든 쓸 수 있으므로, 키를 식별하는 것은 아래 지문입니다.</string>
+    <string name="app_history_not_recorded">이 버전에는 기록되지 않음</string>
+    <string name="app_history_not_recorded_explanation">Apk Analyzer가 이 버전에서 이를 기록하지 못해 무엇이 있었는지 알 수 없습니다.</string>
+    <plurals name="app_history_summary_more">
+        <item quantity="other">외 %1$d개</item>
+    </plurals>
+    <plurals name="app_history_summary_permission_added_named">
+        <item quantity="other">%1$s 외 권한 %2$d개 추가됨</item>
+    </plurals>
+    <plurals name="app_history_summary_permissions_removed">
+        <item quantity="other">권한 %1$d개 삭제됨</item>
+    </plurals>
+    <plurals name="app_history_summary_defined_permissions">
+        <item quantity="other">이 앱이 정의한 권한 %1$d개 변경됨</item>
+    </plurals>
+    <plurals name="app_history_summary_components_added">
+        <item quantity="other">구성요소 %1$d개 추가됨</item>
+    </plurals>
+    <plurals name="app_history_summary_components_removed">
+        <item quantity="other">구성요소 %1$d개 삭제됨</item>
+    </plurals>
+    <plurals name="app_history_summary_components_changed">
+        <item quantity="other">구성요소 %1$d개 변경됨</item>
+    </plurals>
+    <plurals name="app_history_summary_native_added">
+        <item quantity="other">네이티브 라이브러리 %1$d개 추가됨</item>
+    </plurals>
+    <plurals name="app_history_summary_native_removed">
+        <item quantity="other">네이티브 라이브러리 %1$d개 삭제됨</item>
+    </plurals>
+    <plurals name="app_history_summary_native_changed">
+        <item quantity="other">네이티브 라이브러리 %1$d개 변경됨</item>
+    </plurals>
+    <string name="app_history_size_change_up">%1$s → %2$s (+%3$s)</string>
+    <string name="app_history_size_change_down">%1$s → %2$s (−%3$s)</string>
+    <string name="app_history_field_value">%1$s: %2$s</string>
+    <string name="app_history_rule_added">%1$s · 추가됨: %2$s</string>
+    <string name="app_history_rule_removed">%1$s · 삭제됨: %2$s</string>
+    <string name="app_history_path_rule">%1$s (읽기: %2$s, 쓰기: %3$s)</string>
+    <string name="app_history_summary_requirements">기기 요구사항이 변경됨</string>
+</resources>

@@ -19,7 +19,8 @@ logic do not belong here.
 * `settings/` - generic typed DataStore persistence and preference keys.
 * `configuration/` - read-only typed configuration behind `ConfigurationRepository`, separate from
   user preferences. The internal build-backed implementation owns debug/release policy; public
-  keys expose neither defaults nor backend identifiers. Inventory export is enabled only in debug.
+  keys expose neither defaults nor backend identifiers. Inventory export and browsing app history are
+  enabled only in debug.
 * `model/` - genuinely cross-module value types such as app references, source classification, and
   file sizes.
 * `resources/`, `clipboard/`, `digest/`, `device/`, `file/`, and `io/` - shared platform adapters and

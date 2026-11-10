@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.apkanalyzer.hilt)
     alias(libs.plugins.apkanalyzer.compose)
     alias(libs.plugins.apkanalyzer.spotless)
+    alias(libs.plugins.apkanalyzer.work)
 }
 
 android {
@@ -22,6 +23,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.appHistory)
     implementation(projects.core.apps)
     implementation(projects.core.common)
     implementation(projects.core.designSystem.tv)

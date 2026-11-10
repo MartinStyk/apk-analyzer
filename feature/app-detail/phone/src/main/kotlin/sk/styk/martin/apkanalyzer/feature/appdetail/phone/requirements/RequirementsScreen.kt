@@ -44,7 +44,6 @@ import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.explanationRes
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.label
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.labelRes
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.missingText
-import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
@@ -52,10 +51,16 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ListSectionHeader
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RowChangeLines
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.WarningBanner
+import java.time.Instant
 import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 
 @Composable
@@ -83,6 +88,7 @@ internal fun RequirementsScreen(
         onAction = viewModel::onAction,
         onBack = onBack,
         modifier = modifier,
+        recordedAt = appDetailInput.recordedAt,
     )
 }
 
@@ -92,25 +98,29 @@ private fun RequirementsContent(
     onAction: (RequirementsAction) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
+    recordedAt: Instant? = null,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(AppTheme.colors.background),
-    ) {
-        Toolbar(
-            title = stringResource(AppsR.string.requirements_title),
-            onBack = onBack,
-        )
-        when (state) {
-            is RequirementsState.Loading -> SectionLoading()
-
-            is RequirementsState.Error -> SectionError(
-                message = stringResource(AppsR.string.requirements_error),
-                onRetry = { onAction(RequirementsAction.Retry) },
+    AppDetailModeFrame(recordedAt = recordedAt, modifier = modifier) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(AppTheme.colors.background),
+        ) {
+            Toolbar(
+                title = stringResource(AppsR.string.requirements_title),
+                onBack = onBack,
             )
+            when (state) {
+                is RequirementsState.Loading -> SectionLoading()
 
-            is RequirementsState.Loaded -> LoadedContent(state = state, onAction = onAction)
+                is RequirementsState.Error -> SectionError(
+                    reason = state.reason,
+                    loadFailedMessage = stringResource(AppsR.string.requirements_error),
+                    onRetry = { onAction(RequirementsAction.Retry) },
+                )
+
+                is RequirementsState.Loaded -> LoadedContent(state = state, onAction = onAction)
+            }
         }
     }
 }
@@ -138,7 +148,11 @@ private fun LoadedContent(
     ) {
         if (state.missingRequiredCount > 0) {
             item(key = MISSING_SUMMARY_KEY) {
-                MissingSummary(missingRequiredCount = state.missingRequiredCount)
+                WarningBanner(
+                    title = null,
+                    message = pluralStringResource(AppsR.plurals.requirements_missing_summary, state.missingRequiredCount, state.missingRequiredCount),
+                    modifier = Modifier.padding(top = 16.dp),
+                )
             }
         }
         state.sections.forEach { section ->
@@ -166,7 +180,7 @@ private fun LoadedContent(
     if (detailItem != null) {
         RequirementDetailBottomSheet(
             item = detailItem,
-
+            showAvailability = !state.isHistorical,
             label = detailItem.label(LocalResources.current),
             onCopy = { label, value -> onAction(RequirementsAction.CopyValue(label, value)) },
             onDismiss = { detailIdentifier = null },
@@ -175,37 +189,12 @@ private fun LoadedContent(
 }
 
 @Composable
-private fun MissingSummary(missingRequiredCount: Int, modifier: Modifier = Modifier) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(top = 16.dp)
-            .clip(Shapes.CardShape)
-            .background(AppTheme.colors.warningContainer)
-            .padding(horizontal = 14.dp, vertical = 12.dp),
-    ) {
-        Icon(
-            imageVector = ApkAnalyzerIcons.Warning,
-            contentDescription = null,
-            tint = AppTheme.colors.warning,
-            modifier = Modifier.size(20.dp),
-        )
-        Spacer(modifier = Modifier.width(12.dp))
-        Text(
-            text = pluralStringResource(AppsR.plurals.requirements_missing_summary, missingRequiredCount, missingRequiredCount),
-            style = AppTheme.typography.bodyMedium,
-            color = AppTheme.colors.onSurface,
-        )
-    }
-}
-
-@Composable
-private fun RequirementRow(
+internal fun RequirementRow(
     item: RequirementItem,
     onClick: () -> Unit,
     onLongClick: (label: String) -> Unit,
     modifier: Modifier = Modifier,
+    changeLines: List<String> = emptyList(),
 ) {
     val label = item.label(LocalResources.current)
     val showIdentifier = label != item.identifier
@@ -245,6 +234,7 @@ private fun RequirementRow(
                     overflow = TextOverflow.StartEllipsis,
                 )
             }
+            RowChangeLines(lines = changeLines)
         }
         if (item.availability == FeatureAvailability.Missing) {
             Spacer(modifier = Modifier.width(8.dp))
@@ -301,7 +291,7 @@ private fun RequirementsLoadingPreview() {
 private fun RequirementsErrorPreview() {
     ApkAnalyzerTheme {
         RequirementsContent(
-            state = RequirementsState.Error,
+            state = RequirementsState.Error(SectionErrorReason.LoadFailed),
             onAction = {},
             onBack = {},
         )

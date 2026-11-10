@@ -238,4 +238,40 @@
     <string name="nativelibraries_empty_query">\"%1$s\" ile eşleşen yerel kütüphane yok.</string>
     <string name="nativelibraries_clear_search">Aramayı temizle</string>
     <string name="general_info_copied">Pano\'ya kopyalandı</string>
+    <string name="app_detail_history_section">Geçmiş</string>
+    <string name="app_history_toolbar_subtitle">Geçmiş</string>
+    <string name="app_history_hub_no_entries">Kayıt yakında başlıyor</string>
+    <string name="app_history_hub_first_only">Henüz değişiklik yok · kayıt başlangıcı: %1$s</string>
+    <string name="app_history_hub_certificate">İmza sertifikası değişti: %1$s</string>
+    <string name="app_history_hub_unavailable">Geçmiş şu anda kullanılamıyor</string>
+    <string name="app_history_context_first_only">Kayıt başlangıcı: %1$s</string>
+    <string name="app_history_footer">Apk Analyzer yalnızca bu uygulamayı kaydetmeye başladıktan sonraki değişiklikleri gösterebilir.</string>
+    <string name="app_history_first_only_hint">Bu uygulama değiştiğinde burada yeni satırlar görünür.</string>
+    <string name="app_history_empty_title">Henüz kayıt yok</string>
+    <string name="app_history_empty_body">Apk Analyzer bu uygulamayı arka planda kaydeder. Geçmişi burada başlar.</string>
+    <string name="app_history_error">Bu uygulamanın geçmişi yüklenemedi</string>
+    <string name="app_history_row_click_label">Neyin değiştiğini gör</string>
+    <string name="app_history_row_first_click_label">Tüm ayrıntıları gör</string>
+    <string name="app_history_row_long_click_label">Kopyala</string>
+    <string name="app_history_full_detail">Bu sürümün tüm ayrıntılarını gör</string>
+    <string name="app_history_show_all">Tümünü göster (%1$d)</string>
+    <string name="app_history_group_header">%1$s · %2$d</string>
+    <string name="app_history_group_header_scoped">%1$s · %2$s · %3$d</string>
+    <string name="app_history_what_changed">Ne değişti</string>
+    <string name="app_history_as_seen_on">%1$s tarihindeki hâli</string>
+    <string name="app_history_as_seen_on_label">Şu tarihteki hâli</string>
+    <string name="app_history_as_seen_on_explanation">Apk Analyzer\'ın bu tarihte kaydettiği budur. Uygulamayla artık eşleşmeyebilir.</string>
+    <string name="app_history_as_seen_click_label">Açıkla</string>
+    <string name="app_history_permissions_note">İzin durumu geçmişe kaydedilmez.</string>
+    <string name="app_history_intent_filters_note">Bunlar geçmişe kaydedilmez.</string>
+    <string name="app_history_version_not_found">Bu sürüm artık geçmişinizde yok.</string>
+    <string name="app_history_version_load_failed">Bu sürüm yüklenemedi</string>
+    <plurals name="app_history_hub_changes">
+        <item quantity="one">%1$d değişiklik · son %2$s</item>
+        <item quantity="other">%1$d değişiklik · son %2$s</item>
+    </plurals>
+    <plurals name="app_history_context">
+        <item quantity="one">Kayıt başlangıcı: %1$s · %2$d değişiklik</item>
+        <item quantity="other">Kayıt başlangıcı: %1$s · %2$d değişiklik</item>
+    </plurals>
 </resources>

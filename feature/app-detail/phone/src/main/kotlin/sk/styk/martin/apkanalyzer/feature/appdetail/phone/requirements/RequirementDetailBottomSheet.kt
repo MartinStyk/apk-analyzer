@@ -1,11 +1,8 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone.requirements
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -13,7 +10,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,7 +24,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.BottomSheet
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ChangeLinesSection
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.DetailField
 import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 
@@ -39,6 +35,8 @@ internal fun RequirementDetailBottomSheet(
     onCopy: (label: String, value: String) -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
+    showAvailability: Boolean = true,
+    changeLines: List<String> = emptyList(),
 ) {
     BottomSheet(onDismiss = onDismiss, modifier = modifier) {
         Column(
@@ -60,6 +58,7 @@ internal fun RequirementDetailBottomSheet(
                 )
             }
             Spacer(modifier = Modifier.height(12.dp))
+            ChangeLinesSection(lines = changeLines)
             DetailField(
                 label = stringResource(AppsR.string.requirements_detail_identifier),
                 value = item.identifier,
@@ -73,12 +72,14 @@ internal fun RequirementDetailBottomSheet(
                 ),
                 onCopy = onCopy,
             )
-            DetailField(
-                label = stringResource(AppsR.string.requirements_detail_availability),
-                value = stringResource(item.availability.labelRes),
-                explanation = stringResource(item.availabilityExplanationRes()),
-                onCopy = onCopy,
-            )
+            if (showAvailability) {
+                DetailField(
+                    label = stringResource(AppsR.string.requirements_detail_availability),
+                    value = stringResource(item.availability.labelRes),
+                    explanation = stringResource(item.availabilityExplanationRes()),
+                    onCopy = onCopy,
+                )
+            }
             item.versionDetail()?.let { versionDetail ->
                 DetailField(
                     label = stringResource(AppsR.string.requirements_detail_version),

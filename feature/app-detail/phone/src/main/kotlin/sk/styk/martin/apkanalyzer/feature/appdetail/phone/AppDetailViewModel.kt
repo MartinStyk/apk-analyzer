@@ -1,7 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone
 
 import android.net.Uri
-import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.assisted.Assisted
@@ -15,23 +14,24 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.apkfiles.TemporaryApkManager
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.AppHistoryRepository
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryTimeline
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.overview
 import sk.styk.martin.apkanalyzer.core.apppermissions.PermissionLabelProvider
-import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.UnparsableApkFileException
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.DeviceFeatures
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.DeviceFeaturesRepository
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Feature
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.FeatureAvailability
 import sk.styk.martin.apkanalyzer.core.apps.export.AppExportManager
-import sk.styk.martin.apkanalyzer.core.apps.insight.AppDetailBadgeEvaluator
-import sk.styk.martin.apkanalyzer.core.apps.insight.AppDetailInsight
-import sk.styk.martin.apkanalyzer.core.apps.insight.AppDetailInsightEvaluator
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
@@ -39,11 +39,23 @@ import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationKey
 import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
-import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.review.ReviewEligibilityTracker
 import sk.styk.martin.apkanalyzer.core.userpreferences.recentlyviewed.RecentlyViewedAppsRepository
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.ApkFileLifetime
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSection
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSectionRepository
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailBadgeEvaluator
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailInsight
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailInsightEvaluator
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.installedPackage
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.isHistorical
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.isOnDevice
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.liveReference
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.nativeLibrariesOrFallback
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.toSectionErrorReason
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.analytics.AppDetailAnalytics
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.analytics.AppDetailAnalyticsEvent
 import java.time.Instant
 
 private const val TAG = "AppDetailViewModel"
@@ -52,9 +64,12 @@ private const val TAG = "AppDetailViewModel"
 @HiltViewModel(assistedFactory = AppDetailViewModel.Factory::class)
 internal class AppDetailViewModel @AssistedInject constructor(
     @Assisted private val appDetailInput: AppDetailInput,
-    private val appDetailRepository: AppDetailRepository,
-    private val appExportManager: AppExportManager,
+    private val sectionRepository: AppDetailSectionRepository,
     private val deviceFeaturesRepository: DeviceFeaturesRepository,
+    private val insightEvaluator: AppDetailInsightEvaluator,
+    private val badgeEvaluator: AppDetailBadgeEvaluator,
+    appHistoryRepository: AppHistoryRepository,
+    private val appExportManager: AppExportManager,
     private val permissionLabelProvider: PermissionLabelProvider,
     private val dispatcherProvider: DispatcherProvider,
     private val temporaryApkManager: TemporaryApkManager,
@@ -73,20 +88,36 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
     private val source = MutableStateFlow<AppDetailSource>(AppDetailSource.Loading)
     private val exportInProgress = MutableStateFlow<AppDetailExport?>(null)
+    private val liveReference = appDetailInput.liveReference
+
+    private val historyStatus: StateFlow<AppDetailHistoryStatus> = appDetailInput.installedPackage
+        ?.let { installedPackage ->
+            configurationRepository.observe(ConfigurationKey.AppHistoryEnabled).flatMapLatest { isEnabled ->
+                if (isEnabled) {
+                    appHistoryRepository.timeline(installedPackage).map { it.toHistoryStatus() }
+                } else {
+                    flowOf(AppDetailHistoryStatus.Hidden)
+                }
+            }
+        }
+        .let { it ?: flowOf(AppDetailHistoryStatus.Hidden) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AppDetailHistoryStatus.Reading)
 
     val state: StateFlow<AppDetailState> = combine(
         source,
         exportInProgress,
         configurationRepository.observe(ConfigurationKey.InventoryExportEnabled),
-    ) { source, exportInProgress, isInventoryExportEnabled ->
+        historyStatus,
+    ) { source, exportInProgress, isInventoryExportEnabled, history ->
         when (source) {
             AppDetailSource.Loading -> AppDetailState.Loading
 
-            is AppDetailSource.Error -> AppDetailState.Error(canRetry = source.canRetry)
+            is AppDetailSource.Error -> AppDetailState.Error(source.reason)
 
             is AppDetailSource.Ready -> source.state.copy(
                 exportInProgress = exportInProgress,
                 isInventoryExportEnabled = isInventoryExportEnabled,
+                history = history,
             )
         }
     }
@@ -97,8 +128,6 @@ internal class AppDetailViewModel @AssistedInject constructor(
     val events = eventChannel.receiveAsFlow()
 
     private var activeExport: AppDetailExport? = null
-    private val appReference = appDetailInput.toAppReference()
-
     private val sessionStartedAt = Instant.now()
     private var engaged = false
 
@@ -128,12 +157,12 @@ internal class AppDetailViewModel @AssistedInject constructor(
             is AppDetailAction.ShareSummaryUnavailable -> sendEvent(AppDetailEvent.ShowFeedback(AppDetailFeedback.ShareUnavailable))
 
             is AppDetailAction.OpenPlayStore -> withLoadedState {
-                analytics.track(AppDetailAnalyticsEvent.ActionPerformed(AppDetailAnalyticsEvent.Action.OpenPlayStore))
+                trackAction(AppDetailAnalyticsEvent.Action.OpenPlayStore)
                 sendEvent(AppDetailEvent.OpenPlayStore(it.packageName))
             }
 
             is AppDetailAction.OpenAppInfo -> withLoadedState {
-                analytics.track(AppDetailAnalyticsEvent.ActionPerformed(AppDetailAnalyticsEvent.Action.OpenAppInfo))
+                trackAction(AppDetailAnalyticsEvent.Action.OpenAppInfo)
                 sendEvent(AppDetailEvent.OpenAppInfo(it.packageName))
             }
 
@@ -154,6 +183,12 @@ internal class AppDetailViewModel @AssistedInject constructor(
             is AppDetailAction.NavigateCertificates -> sendSectionEvent(AppDetailEvent.NavigateToCertificates)
 
             is AppDetailAction.NavigateFeatures -> sendSectionEvent(AppDetailEvent.NavigateToFeatures)
+
+            is AppDetailAction.NavigateHistory -> withLoadedState {
+                engaged = true
+                trackAction(AppDetailAnalyticsEvent.Action.OpenHistory)
+                sendEvent(AppDetailEvent.NavigateToHistory(it.packageName, it.appName))
+            }
 
             is AppDetailAction.NavigateInsight -> navigateToInsight(action.insight)
 
@@ -181,38 +216,38 @@ internal class AppDetailViewModel @AssistedInject constructor(
                 Logger.e(TAG, error, "Unable to release temporary APK")
             }
         }
-        reviewEligibilityTracker.recordAppDetailSessionCompleted(
-            startTime = sessionStartedAt,
-            endTime = Instant.now(),
-            engaged = engaged,
-        )
+        if (appDetailInput.isOnDevice) {
+            reviewEligibilityTracker.recordAppDetailSessionCompleted(
+                startTime = sessionStartedAt,
+                endTime = Instant.now(),
+                engaged = engaged,
+            )
+        }
     }
 
     private fun requestDocument(export: AppDetailExport) = withLoadedState { state ->
-        if (exportInProgress.value != null) return@withLoadedState
+        if (exportInProgress.value != null || appDetailInput.isHistorical) return@withLoadedState
         if (export == AppDetailExport.Apk && appDetailInput !is AppDetailInput.InstalledPackage) return@withLoadedState
         val extension = if (export == AppDetailExport.Apk) "apk" else "png"
         exportInProgress.value = export
-        analytics.track(
-            AppDetailAnalyticsEvent.ActionPerformed(
-                when (export) {
-                    AppDetailExport.Apk -> AppDetailAnalyticsEvent.Action.ExportApk
-                    AppDetailExport.Icon -> AppDetailAnalyticsEvent.Action.ExportIcon
-                },
-            ),
+        trackAction(
+            when (export) {
+                AppDetailExport.Apk -> AppDetailAnalyticsEvent.Action.ExportApk
+                AppDetailExport.Icon -> AppDetailAnalyticsEvent.Action.ExportIcon
+            },
         )
         val fileNameBase = state.versionName?.let { "${state.packageName}_$it" } ?: state.packageName.toString()
         sendEvent(AppDetailEvent.CreateDocument(export, "$fileNameBase.$extension"))
     }
 
     private fun viewSummary() = withLoadedState { state ->
-        analytics.track(AppDetailAnalyticsEvent.ActionPerformed(AppDetailAnalyticsEvent.Action.ViewSummary))
+        trackAction(AppDetailAnalyticsEvent.Action.ViewSummary)
         sendEvent(AppDetailEvent.ShowSummaryPreview(summaryTextFormatter.summary(state)))
     }
 
     private fun copySummary() = withLoadedState { state ->
         engaged = true
-        analytics.track(AppDetailAnalyticsEvent.ActionPerformed(AppDetailAnalyticsEvent.Action.CopySummary))
+        trackAction(AppDetailAnalyticsEvent.Action.CopySummary)
         val summary = summaryTextFormatter.summary(state)
         val label = summaryTextFormatter.clipLabel(state.appName)
         if (clipboardManager.copy(label, summary) == CopyResult.FeedbackNotShown) {
@@ -222,13 +257,13 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
     private fun shareSummary() = withLoadedState { state ->
         engaged = true
-        analytics.track(AppDetailAnalyticsEvent.ActionPerformed(AppDetailAnalyticsEvent.Action.ShareSummary))
+        trackAction(AppDetailAnalyticsEvent.Action.ShareSummary)
         sendEvent(AppDetailEvent.ShareSummary(summaryTextFormatter.summary(state)))
     }
 
     private fun exportInventory() = withLoadedState { state ->
         engaged = true
-        analytics.track(AppDetailAnalyticsEvent.ActionPerformed(AppDetailAnalyticsEvent.Action.ExportInventory))
+        trackAction(AppDetailAnalyticsEvent.Action.ExportInventory)
         sendEvent(AppDetailEvent.NavigateToInventoryExport(state.packageName))
     }
 
@@ -251,11 +286,12 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
     private fun exportApk(destination: Uri) {
         if (appDetailInput !is AppDetailInput.InstalledPackage) return
+        val reference = liveReference ?: return
         if (activeExport != null) return
         activeExport = AppDetailExport.Apk
         exportInProgress.value = AppDetailExport.Apk
         viewModelScope.launch {
-            val feedback = appExportManager.exportApk(appReference, destination).fold(
+            val feedback = appExportManager.exportApk(reference, destination).fold(
                 onSuccess = {
                     engaged = true
                     AppDetailFeedback.ApkSaved(it.displayName, it.baseApkOnly)
@@ -269,11 +305,12 @@ internal class AppDetailViewModel @AssistedInject constructor(
     }
 
     private fun exportIcon(destination: Uri) {
+        val reference = liveReference ?: return
         if (activeExport != null) return
         activeExport = AppDetailExport.Icon
         exportInProgress.value = AppDetailExport.Icon
         viewModelScope.launch {
-            val feedback = appExportManager.exportIcon(appReference, destination).fold(
+            val feedback = appExportManager.exportIcon(reference, destination).fold(
                 onSuccess = {
                     engaged = true
                     AppDetailFeedback.IconSaved(it.displayName)
@@ -290,9 +327,13 @@ internal class AppDetailViewModel @AssistedInject constructor(
         viewModelScope.launch { eventChannel.send(event) }
     }
 
+    private fun trackAction(action: AppDetailAnalyticsEvent.Action) {
+        analytics.track(AppDetailAnalyticsEvent.ActionPerformed(action, appDetailInput))
+    }
+
     private fun sendSectionEvent(event: AppDetailEvent) {
         engaged = true
-        analytics.track(AppDetailAnalyticsEvent.SectionOpened(event.toSection()))
+        analytics.track(AppDetailAnalyticsEvent.SectionOpened(event.toSection(), appDetailInput))
         sendEvent(event)
     }
 
@@ -304,36 +345,35 @@ internal class AppDetailViewModel @AssistedInject constructor(
         source.value = AppDetailSource.Loading
         viewModelScope.launch(dispatcherProvider.default()) {
             val (deviceFeatures, detailResult) = coroutineScope {
-                val featuresDeferred = async { deviceFeaturesRepository.deviceFeatures() }
-                val detailDeferred = async { appDetailRepository.details(appReference) }
+                val featuresDeferred = async { if (appDetailInput.isOnDevice) deviceFeaturesRepository.deviceFeatures() else DeviceFeatures.Unknown }
+                val detailDeferred = async { sectionRepository.detail(appDetailInput) }
                 featuresDeferred.await() to detailDeferred.await()
             }
+            val isNativeLibrariesRecorded = appDetailInput.isOnDevice ||
+                sectionRepository.nativeLibrariesOrFallback(appDetailInput) is AppDetailSection.Available
             source.value = detailResult.fold(
                 onSuccess = { detail ->
-                    analytics.track(AppDetailAnalyticsEvent.Opened(appReference))
-                    AppDetailSource.Ready(detail.toLoadedState(deviceFeatures))
+                    analytics.track(AppDetailAnalyticsEvent.Opened(appDetailInput))
+                    AppDetailSource.Ready(detail.toLoadedState(deviceFeatures, isNativeLibrariesRecorded))
                 },
-                onFailure = { AppDetailSource.Error(canRetry = it !is UnparsableApkFileException) },
+                onFailure = { AppDetailSource.Error(it.toErrorReason()) },
             )
-            if (detailResult.isSuccess && appReference is AppReference.InstalledPackage) {
-                recentlyViewedAppsRepository.addRecent(appReference.packageName)
+            val installedPackage = appDetailInput.installedPackage
+            if (detailResult.isSuccess && installedPackage != null) {
+                recentlyViewedAppsRepository.addRecent(installedPackage)
             }
         }
     }
 
-    private fun AppDetail.toLoadedState(deviceFeatures: DeviceFeatures): AppDetailState.Loaded {
+    private fun AppDetail.toLoadedState(deviceFeatures: DeviceFeatures, isNativeLibrariesRecorded: Boolean): AppDetailState.Loaded {
         val dangerousPermissions = permissions.used.filter { it.isDangerous }
         val relevantDangerousPermissions = when (analysisMode) {
             AppDetail.AnalysisMode.InstalledPackage -> dangerousPermissions.filter { it.isGranted }
             AppDetail.AnalysisMode.ApkFile, AppDetail.AnalysisMode.Historical -> dangerousPermissions
         }
         val currentCertificate = signing.currentCertificates.firstOrNull()
-        val now = Instant.now()
-        val insights = AppDetailInsightEvaluator.evaluate(
-            appDetail = this,
-            now = now,
-            deviceSdk = Build.VERSION.SDK_INT,
-        )
+        val insights = insightEvaluator.evaluate(appDetail = this, input = appDetailInput)
+        val badges = badgeEvaluator.evaluate(info, input = appDetailInput)
         return AppDetailState.Loaded(
             analysisMode = analysisMode,
             appName = info.applicationName,
@@ -400,16 +440,27 @@ internal class AppDetailViewModel @AssistedInject constructor(
             lastUsedTime = info.lastUsedTime,
             installedSplitsCount = info.installedSplits.size,
             usesCleartextTraffic = info.usesCleartextTraffic,
-            badges = AppDetailBadgeEvaluator.evaluate(info, now).take(MAX_BADGES),
+            badges = badges.take(MAX_BADGES),
             insights = insights,
+            isNativeLibrariesRecorded = isNativeLibrariesRecorded,
         )
     }
 }
 
 private sealed interface AppDetailSource {
     data object Loading : AppDetailSource
-    data class Error(val canRetry: Boolean) : AppDetailSource
+    data class Error(val reason: AppDetailErrorReason) : AppDetailSource
     data class Ready(val state: AppDetailState.Loaded) : AppDetailSource
+}
+
+private fun AppHistoryTimeline.toHistoryStatus(): AppDetailHistoryStatus = when (this) {
+    is AppHistoryTimeline.Available -> AppDetailHistoryStatus.Available(entries.overview)
+    AppHistoryTimeline.Unavailable -> AppDetailHistoryStatus.Unavailable
+}
+
+private fun Throwable.toErrorReason(): AppDetailErrorReason = when (this) {
+    is UnparsableApkFileException -> AppDetailErrorReason.UnsupportedApk
+    else -> AppDetailErrorReason.Failed(toSectionErrorReason())
 }
 
 private const val MAX_BADGES = 3

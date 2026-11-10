@@ -3,7 +3,6 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.phone.generalinfo
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
@@ -33,11 +31,13 @@ import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.LoadingSpinner
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.InfoRow
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.InfoRowItem
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.NavigableInfoRowItem
@@ -49,6 +49,7 @@ import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.Date
 import java.util.Locale
+import sk.styk.martin.apkanalyzer.core.apphistory.R as HistoryR
 import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 
 @Composable
@@ -80,6 +81,7 @@ internal fun GeneralInfoScreen(
         onNavigateToSplitApks = onNavigateToSplitApks,
         onNavigateToNativeLibraries = onNavigateToNativeLibraries,
         modifier = modifier,
+        recordedAt = appDetailInput.recordedAt,
     )
 }
 
@@ -91,27 +93,34 @@ private fun GeneralInfoContent(
     onNavigateToSplitApks: () -> Unit,
     onNavigateToNativeLibraries: () -> Unit,
     modifier: Modifier = Modifier,
+    recordedAt: Instant? = null,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(AppTheme.colors.background),
-    ) {
-        Toolbar(
-            title = stringResource(AppsR.string.general_info_title),
-            onBack = onBack,
-        )
-        when (state) {
-            is GeneralInfoState.Loading -> SectionLoading()
-
-            is GeneralInfoState.Error -> SectionError(message = stringResource(AppsR.string.general_info_error))
-
-            is GeneralInfoState.Loaded -> LoadedContent(
-                state = state,
-                onAction = onAction,
-                onNavigateToSplitApks = onNavigateToSplitApks,
-                onNavigateToNativeLibraries = onNavigateToNativeLibraries,
+    AppDetailModeFrame(recordedAt = recordedAt, modifier = modifier) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(AppTheme.colors.background),
+        ) {
+            Toolbar(
+                title = stringResource(AppsR.string.general_info_title),
+                onBack = onBack,
             )
+            when (state) {
+                is GeneralInfoState.Loading -> SectionLoading()
+
+                is GeneralInfoState.Error -> SectionError(
+                    reason = state.reason,
+                    loadFailedMessage = stringResource(AppsR.string.general_info_error),
+                    onRetry = { onAction(GeneralInfoAction.Retry) },
+                )
+
+                is GeneralInfoState.Loaded -> LoadedContent(
+                    state = state,
+                    onAction = onAction,
+                    onNavigateToSplitApks = onNavigateToSplitApks,
+                    onNavigateToNativeLibraries = onNavigateToNativeLibraries,
+                )
+            }
         }
     }
 }
@@ -475,6 +484,16 @@ private fun NativeLibrariesSection(
         title = stringResource(AppsR.string.general_info_section_native_libraries),
         modifier = modifier,
     ) {
+        if (!state.isNativeLibrariesRecorded) {
+            InfoRowItem(
+                label = stringResource(AppsR.string.general_info_native_library_abis),
+                value = stringResource(HistoryR.string.app_history_not_recorded),
+                rationale = stringResource(HistoryR.string.app_history_not_recorded_explanation),
+                onShowRationale = onShowRationale,
+                onCopy = onCopy,
+            )
+            return@SectionCard
+        }
         val abisValue = if (state.nativeLibraryAbis.isNotEmpty()) {
             state.nativeLibraryAbis.joinToString()
         } else {
@@ -482,13 +501,15 @@ private fun NativeLibrariesSection(
         }
         val abisRationale = buildString {
             append(stringResource(AppsR.string.general_info_rationale_native_library_abis))
-            append(' ')
-            append(
-                stringResource(
-                    AppsR.string.general_info_native_library_device_support,
-                    state.deviceSupportedAbis.joinToString(),
-                ),
-            )
+            if (state.deviceSupportedAbis.isNotEmpty()) {
+                append(' ')
+                append(
+                    stringResource(
+                        AppsR.string.general_info_native_library_device_support,
+                        state.deviceSupportedAbis.joinToString(),
+                    ),
+                )
+            }
             if (state.isNativeLibraryDeviceIncompatible) {
                 append(' ')
                 append(stringResource(AppsR.string.general_info_native_library_incompatible))
@@ -541,11 +562,35 @@ private fun GeneralInfoLoadingPreview() {
 private fun GeneralInfoErrorPreview() {
     ApkAnalyzerTheme {
         GeneralInfoContent(
-            state = GeneralInfoState.Error,
+            state = GeneralInfoState.Error(SectionErrorReason.LoadFailed),
             onAction = {},
             onBack = {},
             onNavigateToSplitApks = {},
             onNavigateToNativeLibraries = {},
+        )
+    }
+}
+
+@Preview(heightDp = 2400)
+@Composable
+private fun GeneralInfoNotRecordedPreview() {
+    ApkAnalyzerTheme {
+        GeneralInfoContent(
+            state = sampleGeneralInfoState().copy(
+                isNativeLibrariesRecorded = false,
+                nativeLibraryAbis = emptyList(),
+                nativeLibraryNames = emptyList(),
+                deviceSupportedAbis = emptyList(),
+                totalSize = null,
+                lastUsedTime = null,
+                apkDirectory = null,
+                dataDirectory = null,
+            ),
+            onAction = {},
+            onBack = {},
+            onNavigateToSplitApks = {},
+            onNavigateToNativeLibraries = {},
+            recordedAt = Instant.ofEpochMilli(1_773_014_400_000),
         )
     }
 }

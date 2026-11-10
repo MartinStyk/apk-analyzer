@@ -4,20 +4,22 @@ import sk.styk.martin.apkanalyzer.core.apps.components.Activity
 import sk.styk.martin.apkanalyzer.core.apps.components.BroadcastReceiver
 import sk.styk.martin.apkanalyzer.core.apps.components.ContentProvider
 import sk.styk.martin.apkanalyzer.core.apps.components.Service
-import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceChain
+import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Feature
 import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryFile
 import sk.styk.martin.apkanalyzer.core.apps.permissions.Permission
 import sk.styk.martin.apkanalyzer.core.apps.permissions.UsedPermission
 import sk.styk.martin.apkanalyzer.core.apps.signing.Certificate
 import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeVersion
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
+import sk.styk.martin.apkanalyzer.core.common.model.AppSource
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 
 data class AppHistoryDiff(
     val version: ValueChange<AppHistoryVersion>?,
     val minSdkVersion: ValueChange<Int?>?,
     val targetSdkVersion: ValueChange<Int?>?,
     val apkSize: ValueChange<AppSize>?,
-    val installSource: ValueChange<InstallSourceChain>?,
+    val installSource: ValueChange<AppHistoryInstallSource>?,
     val isDebuggable: ValueChange<Boolean>?,
     val allowsBackup: ValueChange<Boolean>?,
     val usesCleartextTraffic: ValueChange<Boolean>?,
@@ -29,7 +31,8 @@ data class AppHistoryDiff(
     val providers: SetChange<ContentProvider>,
     val certificates: SetChange<Certificate>,
     val signingSchemes: SetChange<SigningSchemeVersion>,
-    val nativeLibraries: SetChange<NativeLibraryFile>,
+    val nativeLibraries: SetChange<NativeLibrary>,
+    val requirements: SetChange<Feature>,
 ) {
     private val categoryStates: Map<AppHistoryChangeCategory, CategoryState>
         get() = mapOf(
@@ -42,6 +45,7 @@ data class AppHistoryDiff(
             AppHistoryChangeCategory.Components to stateOf(sets = listOf(activities, services, receivers, providers)),
             AppHistoryChangeCategory.Signing to stateOf(sets = listOf(certificates, signingSchemes)),
             AppHistoryChangeCategory.NativeLibraries to stateOf(sets = listOf(nativeLibraries)),
+            AppHistoryChangeCategory.Requirements to stateOf(sets = listOf(requirements)),
         ).filterValues { it != CategoryState.Unchanged }
 
     val changedCategories: Set<AppHistoryChangeCategory>
@@ -59,6 +63,10 @@ data class AppHistoryDiff(
     private enum class CategoryState { Unchanged, Changed, Uncomparable }
 }
 
+data class NativeLibrary(val name: String, val files: List<NativeLibraryFile>)
+
+data class AppHistoryInstallSource(val source: AppSource, val installingPackage: PackageName?)
+
 enum class AppHistoryChangeCategory {
     Version,
     SdkLevels,
@@ -69,6 +77,7 @@ enum class AppHistoryChangeCategory {
     Components,
     Signing,
     NativeLibraries,
+    Requirements,
 }
 
 data class ValueChange<out T>(val before: T, val after: T)

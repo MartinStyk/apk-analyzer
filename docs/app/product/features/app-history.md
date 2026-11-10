@@ -1,8 +1,10 @@
 # App History — What Changed
 
 **Roadmap:** [FR-31](../roadmap.md#17-invisible-infrastructure), [HI-01 … HI-21](../roadmap.md#hi--snapshot--history-pillar-1--what-changed) · R1
-**Status:** Design in progress. The capture model, the tab structure and the change-first timeline
-are agreed; screen detail below is a first pass and the Open questions are unresolved.
+**Status:** Design in progress. Capture and the diff engine ship. The per-app timeline, change detail
+and "as seen on" full detail are built, in debug builds only; see
+[As built](#per-app-timeline-as-built), which replaces the first-pass mock below where they differ. The
+tab structure is agreed; the Open questions are unresolved.
 **Scope:** silent full-state capture of every installed app, a diff engine over it, a third
 top-level What Changed tab, a per-app timeline reachable from app detail, background detection with
 notifications for the changes that stand out, and backup of the store to the user's Google Drive.
@@ -54,6 +56,11 @@ of change. Detection therefore has two tiers:
 | **Install instance** | `firstInstallTime` or `lastUpdateTime` moved         | Full analysis of that package | A new snapshot                          |
 | **Observation**      | Enabled state or install source differ, same instance | Cheap field read | A change recorded against the existing instance |
 
+The observation tier (`HI-10`) is not built: no such entries exist, and a source flip with no update is
+never recorded. A timeline row can only show install source inside a change that a new snapshot happened
+to carry. It counts as changed when the source label or the installing package differs, so a move between
+two unrecognized stores shows the two package names. A different initiating app alone is not a change.
+
 An observation never creates a version. "Torch Pro's install source changed" belongs on v4.2's row,
 not on a fictional v4.3.
 
@@ -64,7 +71,7 @@ availability out of live `AppDetail`. See
 
 **Data and cache size are not captured at all.** They're device/runtime state — how much this install
 has accumulated on this device, not a fact about the app — the same reason usage stats and last-used
-time are excluded. Only APK/total size is captured, and it's the one size fact that's diffed; user
+time are excluded. Only APK size is captured, and it's the one size fact that's diffed; user
 data size would also drift on every open and turn change detection into noise even if it were kept.
 
 ### Snapshots are the only thing stored
@@ -357,6 +364,19 @@ The unlocked rows here are not exceptions carved for this screen; they fall out 
 an enabled-state or install-source observation is a cheap system fact rather than analysis, and a
 first-seen marker has no diff to withhold.
 
+#### Per-app timeline as built
+
+The screens live in `feature:app-detail:phone`, not a separate feature, because they reuse its rows and
+sheets. There is no Pro gate and no lock UI yet, and no "Since you installed it" block: it needs a compare
+API, and the first snapshot is the first *recording*, often long after install. Rows name values, such as
+"Camera and 1 other permission added", rather than category labels. The first row reads "First recorded"
+and is dated when it was recorded, since an install date can be a factory date. A change can be
+`Updated`, `Reinstalled`, or `NewDevice`. The break is drawn below the row that caused it: the list runs
+newest first, so the row belongs with the install it began. Certificate changes carry a kind-specific
+explanation, because on an update Android required the old key's approval. Full detail is labelled "As
+seen on <date>", using the recording date, and reads only the store; see
+[`feature/app-detail/AGENTS.md`](../../../../feature/app-detail/AGENTS.md#historical-mode).
+
 An uninstall followed by a reinstall is a **break in the chain**, drawn as one — same package, new
 `firstInstallTime`, and the timeline says so rather than pretending it is a continuous line.
 
@@ -406,8 +426,9 @@ Steps 1–3 are shippable in the free build before any of the Pro surface exists
 
 ## Deferred
 
-- **Intent-filter diffing.** Captured, not compared. The volume is enormous and a change log full of
-  filter churn buries everything else. Revisit if a concrete signal needs it.
+- **Intent-filter history.** Not captured, so not compared and not shown in historical detail. The
+  volume is enormous and a change log full of filter churn buries everything else. Capturing later only
+  covers history from then on. Revisit if a concrete signal needs it.
 - **Data and cache size diffing.** Drifts on every open; APK size carries the real signal.
 - **APK-file-to-APK-file comparison** — `OP-01`. Same diff engine, different entry point, no
   history involved. Worth doing only once `RI` can call a change risky.

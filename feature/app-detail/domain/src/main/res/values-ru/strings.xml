@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_detail_insight_debuggable">Доступ отладки включен</string>
+    <string name="app_detail_insight_debug_certificate">Подписано с помощью общего ключа отладки Android</string>
+    <string name="app_detail_insight_certificate_not_yet_valid">Сертификат подписи еще недействителен</string>
+    <plurals name="app_detail_insight_outdated_target">
+        <item quantity="one">Целевой API %1$d, на один уровень API ниже этого устройства</item>
+        <item quantity="few">Целевые API %1$d, на %2$d уровня API ниже этого устройства</item>
+        <item quantity="many">Целевые API %1$d, на %2$d уровней API ниже этого устройства</item>
+        <item quantity="other">Целевые API %1$d, на %2$d уровней API ниже этого устройства</item>
+    </plurals>
+    <string name="app_detail_insight_sideloaded">Установлено из внешнего магазина приложений</string>
+    <plurals name="app_detail_insight_unused">
+        <item quantity="one">Не открывалось в последний %1$d месяц</item>
+        <item quantity="few">Не открывалось в последние %1$d месяца</item>
+        <item quantity="many">Не открывалось в последние %1$d месяцев</item>
+        <item quantity="other">Не открывалось в последние %1$d месяцев</item>
+    </plurals>
+    <string name="app_detail_insight_background_location">Может получать доступ к местоположению во время работы в фоновом режиме</string>
+    <string name="app_detail_insight_messages">Может читать, получать или отправлять текстовые сообщения</string>
+    <string name="app_detail_insight_call_history">Может получать доступ или изменять историю вызовов</string>
+    <string name="app_detail_insight_contacts">Может получать доступ или изменять контакты</string>
+    <string name="app_detail_insight_calendar">Может получать доступ или изменять события календаря</string>
+    <string name="app_detail_badge_large">Большое приложение</string>
+    <string name="app_detail_badge_system">Система</string>
+    <string name="app_detail_badge_google_play">Google Play</string>
+    <string name="app_detail_badge_recently_installed">Новое</string>
+    <string name="app_detail_badge_recently_updated">Обновлено</string>
+    <string name="app_detail_badge_recently_used">Недавно использованное</string>
+</resources>

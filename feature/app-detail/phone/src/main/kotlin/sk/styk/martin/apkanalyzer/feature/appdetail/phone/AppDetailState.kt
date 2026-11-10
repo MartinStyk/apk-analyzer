@@ -1,19 +1,39 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone
 
 import androidx.compose.runtime.Immutable
-import sk.styk.martin.apkanalyzer.core.apps.insight.AppDetailBadge
-import sk.styk.martin.apkanalyzer.core.apps.insight.AppDetailInsight
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryOverview
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailBadge
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailInsight
 import java.time.Instant
 
 internal enum class AppDetailExport {
     Apk,
     Icon,
+}
+
+@Immutable
+internal sealed interface AppDetailErrorReason {
+    data object UnsupportedApk : AppDetailErrorReason
+    data class Failed(val reason: SectionErrorReason) : AppDetailErrorReason
+}
+
+@Immutable
+internal sealed interface AppDetailHistoryStatus {
+    data object Hidden : AppDetailHistoryStatus
+
+    data object Reading : AppDetailHistoryStatus
+
+    data object Unavailable : AppDetailHistoryStatus
+
+    @Immutable
+    data class Available(val overview: AppHistoryOverview) : AppDetailHistoryStatus
 }
 
 internal enum class OverviewHighlight {
@@ -75,7 +95,12 @@ internal sealed interface AppDetailState {
         val insights: List<AppDetailInsight> = listOf(),
         val exportInProgress: AppDetailExport? = null,
         val isInventoryExportEnabled: Boolean = false,
+        val history: AppDetailHistoryStatus = AppDetailHistoryStatus.Hidden,
+        val isNativeLibrariesRecorded: Boolean = true,
     ) : AppDetailState {
+        val isHistorical: Boolean
+            get() = analysisMode == AppDetail.AnalysisMode.Historical
+
         val canExportInventory: Boolean
             get() = isInventoryExportEnabled && analysisMode == AppDetail.AnalysisMode.InstalledPackage
 
@@ -97,7 +122,7 @@ internal sealed interface AppDetailState {
                 ).size
                 val installLocationRow = 1
                 val securitySectionRows = 2
-                val nativeLibrarySectionRows = 2
+                val nativeLibrarySectionRows = if (isNativeLibrariesRecorded) 2 else 1
                 val splitApksRow = if (installedSplitsCount > 0) 1 else 0
                 return optionalDetailsCount + installLocationRow + securitySectionRows + nativeLibrarySectionRows + splitApksRow
             }
@@ -134,5 +159,5 @@ internal sealed interface AppDetailState {
     }
 
     @Immutable
-    data class Error(val canRetry: Boolean) : AppDetailState
+    data class Error(val reason: AppDetailErrorReason) : AppDetailState
 }

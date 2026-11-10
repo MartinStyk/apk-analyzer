@@ -1,7 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone
 
 import android.net.Uri
-import sk.styk.martin.apkanalyzer.core.apps.insight.AppDetailInsight
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailInsight
 
 internal sealed interface AppDetailAction {
     data object Retry : AppDetailAction
@@ -24,6 +24,7 @@ internal sealed interface AppDetailAction {
     data object NavigateProviders : AppDetailAction
     data object NavigateCertificates : AppDetailAction
     data object NavigateFeatures : AppDetailAction
+    data object NavigateHistory : AppDetailAction
     data class NavigateInsight(val insight: AppDetailInsight) : AppDetailAction
     data class ExportApkTo(val destination: Uri) : AppDetailAction
     data class SaveIconTo(val destination: Uri) : AppDetailAction

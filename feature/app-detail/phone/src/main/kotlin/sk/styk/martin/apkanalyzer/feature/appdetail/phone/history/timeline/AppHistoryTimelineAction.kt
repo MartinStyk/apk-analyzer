@@ -1,0 +1,11 @@
+package sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.timeline
+
+internal sealed interface AppHistoryTimelineAction {
+    data object Back : AppHistoryTimelineAction
+
+    data object Retry : AppHistoryTimelineAction
+
+    data class OpenRow(val row: AppHistoryRow) : AppHistoryTimelineAction
+
+    data class CopyRow(val label: String, val value: String) : AppHistoryTimelineAction
+}

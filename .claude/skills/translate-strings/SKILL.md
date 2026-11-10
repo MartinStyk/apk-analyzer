@@ -15,11 +15,11 @@ sentence structure.
 
 | Language | Folder qualifier | Plural categories needed | Notes |
 |---|---|---|---|
-| Spanish | `values-es` | one, other | |
+| Spanish | `values-es` | one, many, other | `many` = round millions (1,000,000); lint's `MissingQuantity` flags it when absent. Use the `other` text |
 | German | `values-de` | one, other | |
-| French | `values-fr` | one, other | `many` exists in CLDR (decimal/compact numbers) but never triggers for the integer counts this app uses — skip it |
-| Portuguese (Brazil) | `values-pt-rBR` | one, other | Do not use plain `values-pt` — Portugal Portuguese differs |
-| Italian | `values-it` | one, other | `many` same as French — skip |
+| French | `values-fr` | one, many, other | `many` same as Spanish |
+| Portuguese (Brazil) | `values-pt-rBR` | one, many, other | `many` same as Spanish. Do not use plain `values-pt` — Portugal Portuguese differs |
+| Italian | `values-it` | one, many, other | `many` same as Spanish |
 | Japanese | `values-ja` | other | No grammatical plural; only `quantity="other"` is ever selected |
 | Chinese (Simplified) | `values-zh-rCN` | other | |
 | Korean | `values-ko` | other | |

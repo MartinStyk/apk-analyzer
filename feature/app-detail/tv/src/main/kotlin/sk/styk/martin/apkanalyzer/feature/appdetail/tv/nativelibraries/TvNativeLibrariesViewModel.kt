@@ -11,18 +11,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibrariesRepository
 import sk.styk.martin.apkanalyzer.core.apps.packaging.groupedByLibrary
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
-import sk.styk.martin.apkanalyzer.feature.appdetail.tv.toAppReference
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSection
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSectionRepository
 
 @HiltViewModel(assistedFactory = TvNativeLibrariesViewModel.Factory::class)
 internal class TvNativeLibrariesViewModel @AssistedInject constructor(
     @Assisted private val appDetailInput: AppDetailInput,
-    private val appDetailRepository: AppDetailRepository,
-    private val nativeLibrariesRepository: NativeLibrariesRepository,
+    private val sectionRepository: AppDetailSectionRepository,
     private val dispatcherProvider: DispatcherProvider,
 ) : ViewModel() {
 
@@ -47,15 +45,19 @@ internal class TvNativeLibrariesViewModel @AssistedInject constructor(
     private fun loadLibraries() {
         mutableState.value = TvNativeLibrariesState.Loading
         viewModelScope.launch(dispatcherProvider.default()) {
-            val reference = appDetailInput.toAppReference()
-            val appName = appDetailRepository.details(reference).getOrNull()?.info?.applicationName.orEmpty()
-            mutableState.value = nativeLibrariesRepository.nativeLibraries(reference).fold(
-                onSuccess = { libraries ->
-                    TvNativeLibrariesState.Loaded(
-                        appName = appName,
-                        items = libraries.files.groupedByLibrary(Build.SUPPORTED_ABIS.toSet()),
-                        deviceAbis = Build.SUPPORTED_ABIS.toList(),
-                    )
+            val appName = sectionRepository.detail(appDetailInput).getOrNull()?.info?.applicationName.orEmpty()
+            val deviceAbis = Build.SUPPORTED_ABIS.toList()
+            mutableState.value = sectionRepository.nativeLibraries(appDetailInput).fold(
+                onSuccess = { section ->
+                    when (section) {
+                        is AppDetailSection.Available -> TvNativeLibrariesState.Loaded(
+                            appName = appName,
+                            items = section.value.files.groupedByLibrary(deviceAbis.toSet()),
+                            deviceAbis = deviceAbis,
+                        )
+
+                        AppDetailSection.NotRecorded -> TvNativeLibrariesState.Error
+                    }
                 },
                 onFailure = { TvNativeLibrariesState.Error },
             )

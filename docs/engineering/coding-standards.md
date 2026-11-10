@@ -27,7 +27,7 @@ if (lastUsed.isBefore(now.minus(Duration.ofDays(180)))) {
 **After** — what the repository actually contains, in
 [`AppDetailViewModel`](../../feature/app-detail/phone/src/main/kotlin/sk/styk/martin/apkanalyzer/feature/appdetail/phone/AppDetailViewModel.kt)
 and
-[`AppDetailInsightEvaluator`](../../core/apps/src/main/kotlin/sk/styk/martin/apkanalyzer/core/apps/insight/AppDetailInsightEvaluator.kt):
+[`AppDetailInsightEvaluator`](../../feature/app-detail/domain/src/main/kotlin/sk/styk/martin/apkanalyzer/feature/appdetail/domain/insight/AppDetailInsightEvaluator.kt):
 
 ```kotlin
 if (effectiveSize >= AppClassificationThresholds.LARGE_SIZE) add(AppDetailBadge.Large)

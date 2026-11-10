@@ -212,4 +212,38 @@
     <string name="nativelibraries_empty_query">没有本地库与 \"%1$s\" 匹配。</string>
     <string name="nativelibraries_clear_search">清除搜索</string>
     <string name="general_info_copied">已复制到剪贴板</string>
+    <string name="app_detail_history_section">历史记录</string>
+    <string name="app_history_toolbar_subtitle">历史记录</string>
+    <string name="app_history_hub_no_entries">即将开始记录</string>
+    <string name="app_history_hub_first_only">暂无变化 · 自 %1$s 起记录</string>
+    <string name="app_history_hub_certificate">签名证书于 %1$s 更改</string>
+    <string name="app_history_hub_unavailable">历史记录暂时不可用</string>
+    <string name="app_history_context_first_only">自 %1$s 起记录</string>
+    <string name="app_history_footer">Apk Analyzer 只能显示开始记录此应用之后的变化。</string>
+    <string name="app_history_first_only_hint">此应用发生变化时，这里会显示新行。</string>
+    <string name="app_history_empty_title">尚无记录</string>
+    <string name="app_history_empty_body">Apk Analyzer 会在后台记录此应用。其历史记录从这里开始。</string>
+    <string name="app_history_error">无法加载此应用的历史记录</string>
+    <string name="app_history_row_click_label">查看变化</string>
+    <string name="app_history_row_first_click_label">查看完整详情</string>
+    <string name="app_history_row_long_click_label">复制</string>
+    <string name="app_history_full_detail">查看此版本的完整详情</string>
+    <string name="app_history_show_all">显示全部 %1$d 项</string>
+    <string name="app_history_group_header">%1$s · %2$d</string>
+    <string name="app_history_group_header_scoped">%1$s · %2$s · %3$d</string>
+    <string name="app_history_what_changed">变化内容</string>
+    <string name="app_history_as_seen_on">%1$s 时的状态</string>
+    <string name="app_history_as_seen_on_label">状态日期</string>
+    <string name="app_history_as_seen_on_explanation">这是 Apk Analyzer 在此日期记录的内容，可能已与应用不符。</string>
+    <string name="app_history_as_seen_click_label">说明</string>
+    <string name="app_history_permissions_note">历史记录不包含权限状态。</string>
+    <string name="app_history_intent_filters_note">历史记录不包含这些内容。</string>
+    <string name="app_history_version_not_found">此版本已不在历史记录中。</string>
+    <string name="app_history_version_load_failed">无法加载此版本</string>
+    <plurals name="app_history_hub_changes">
+        <item quantity="other">%1$d 项变化 · 最新 %2$s</item>
+    </plurals>
+    <plurals name="app_history_context">
+        <item quantity="other">自 %1$s 起记录 · %2$d 项变化</item>
+    </plurals>
 </resources>

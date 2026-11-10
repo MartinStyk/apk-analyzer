@@ -20,7 +20,8 @@ Both `phone` and `tv` share the same layout:
 * `apps/` owns the searchable app list for one bucket and its bucket detail.
 * `navigation/` owns internal option and bucket destinations.
 
-Phone-only: `BrowseAnalytics`, which TV does not track. On TV the options screen is a list beside a
+Phone-only: `analytics/`, the browse events and their mapping to tracked names and parameters, which
+TV does not track. On TV the options screen is a list beside a
 preview pane that follows focus (the option's apps and bucket detail), so users browse by moving focus
 and click only to open the full app grid. Search sits behind a header button rather than an
 always-visible field. The bucket detail also sits in a side panel next to the app grid instead of

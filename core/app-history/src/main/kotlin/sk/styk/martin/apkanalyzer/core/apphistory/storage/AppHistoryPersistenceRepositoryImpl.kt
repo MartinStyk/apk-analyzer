@@ -5,11 +5,13 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryGateDao
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryGateState
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryReadDao
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.AppHistoryWriteDao
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity.AppHistoryDeviceEntity
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.entity.AppHistorySnapshotEntity
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.util.AppHistoryRecordDecoder
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.util.AppHistoryRecordEncoder
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
@@ -47,7 +49,29 @@ internal class AppHistoryPersistenceRepositoryImpl @Inject constructor(
         .mapLatest { rows -> runCatchingCancellable { decoder.decode(rows, appHistoryReadDao.blobs(packageName.value)) } }
         .catch { emit(Result.failure(it)) }
         .flowOn(dispatcherProvider.default())
+
+    override suspend fun read(id: Long): Result<StoredAppHistoryRecord?> = withContext(dispatcherProvider.default()) {
+        runCatchingCancellable {
+            appHistoryReadDao.snapshot(id)?.let { row ->
+                decoder.decodeOne(row, appHistoryReadDao.blobs(row.packageName, row.blobHashes))
+            }
+        }
+    }
 }
+
+private val AppHistorySnapshotEntity.blobHashes: List<Long>
+    get() = listOfNotNull(
+        permissionsHash,
+        activitiesHash,
+        servicesHash,
+        receiversHash,
+        providersHash,
+        featuresHash,
+        signingHash,
+        nativeLibrariesHash,
+        signingSchemeHash,
+        installedSplitsHash,
+    )
 
 private fun AppHistoryGateState.toCaptureKey() = AppHistoryCaptureKey(
     deviceId = deviceId,

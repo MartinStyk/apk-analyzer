@@ -10,21 +10,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
-import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeRepository
 import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeVersion
 import sk.styk.martin.apkanalyzer.core.apps.signing.validityAt
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
-import sk.styk.martin.apkanalyzer.feature.appdetail.tv.toAppReference
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSectionRepository
 import java.time.Instant
 
 @HiltViewModel(assistedFactory = TvCertificatesViewModel.Factory::class)
 internal class TvCertificatesViewModel @AssistedInject constructor(
     @Assisted private val appDetailInput: AppDetailInput,
-    private val appDetailRepository: AppDetailRepository,
-    private val signingSchemeRepository: SigningSchemeRepository,
+    private val sectionRepository: AppDetailSectionRepository,
     private val dispatcherProvider: DispatcherProvider,
 ) : ViewModel() {
 
@@ -49,25 +46,22 @@ internal class TvCertificatesViewModel @AssistedInject constructor(
     private fun loadCertificates() {
         mutableState.value = TvCertificatesState.Loading
         viewModelScope.launch(dispatcherProvider.default()) {
-            val reference = appDetailInput.toAppReference()
-            appDetailRepository.details(reference)
+            val asOf = Instant.now()
+            sectionRepository.detail(appDetailInput)
                 .onSuccess { detail ->
-                    mutableState.value = detail.toState(signingSchemeVersions = null)
-                    val signingSchemeVersions = signingSchemeRepository.signingSchemeVersions(reference).getOrNull()
-                    mutableState.value = detail.toState(signingSchemeVersions = signingSchemeVersions)
+                    mutableState.value = detail.toState(signingSchemeVersions = null, asOf = asOf)
+                    val signingSchemeVersions = sectionRepository.signingSchemes(appDetailInput).getOrNull()
+                    mutableState.value = detail.toState(signingSchemeVersions = signingSchemeVersions, asOf = asOf)
                 }
                 .onFailure { mutableState.value = TvCertificatesState.Error }
         }
     }
 }
 
-private fun AppDetail.toState(signingSchemeVersions: List<SigningSchemeVersion>?): TvCertificatesState.Loaded {
-    val now = Instant.now()
-    return TvCertificatesState.Loaded(
-        appName = info.applicationName,
-        currentCertificates = signing.currentCertificates.map { TvCertificate(it, it.validityAt(now)) },
-        pastCertificates = signing.pastCertificates.reversed().map { TvCertificate(it, it.validityAt(now)) },
-        hasMultipleSigners = signing.hasMultipleSigners,
-        signingSchemeVersions = signingSchemeVersions,
-    )
-}
+private fun AppDetail.toState(signingSchemeVersions: List<SigningSchemeVersion>?, asOf: Instant): TvCertificatesState.Loaded = TvCertificatesState.Loaded(
+    appName = info.applicationName,
+    currentCertificates = signing.currentCertificates.map { TvCertificate(it, it.validityAt(asOf)) },
+    pastCertificates = signing.pastCertificates.reversed().map { TvCertificate(it, it.validityAt(asOf)) },
+    hasMultipleSigners = signing.hasMultipleSigners,
+    signingSchemeVersions = signingSchemeVersions,
+)

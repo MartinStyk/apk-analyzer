@@ -26,8 +26,8 @@ import sk.styk.martin.apkanalyzer.core.appindex.browse.matches
 import sk.styk.martin.apkanalyzer.core.appindex.browse.subAttributesOrDefault
 import sk.styk.martin.apkanalyzer.core.appindex.model.AppIndexStatus
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.feature.browse.phone.BrowseAnalytics
-import sk.styk.martin.apkanalyzer.feature.browse.phone.BrowseAnalyticsEvent
+import sk.styk.martin.apkanalyzer.feature.browse.phone.analytics.BrowseAnalytics
+import sk.styk.martin.apkanalyzer.feature.browse.phone.analytics.BrowseAnalyticsEvent
 
 @HiltViewModel(assistedFactory = BrowseOptionsViewModel.Factory::class)
 internal class BrowseOptionsViewModel @AssistedInject constructor(

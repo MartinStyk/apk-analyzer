@@ -42,29 +42,6 @@
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_unknown">अज्ञात</string>
-    <string name="app_detail_insight_debuggable">डीबग एक्सेस सक्षम है</string>
-    <string name="app_detail_insight_debug_certificate">Android\'s साझा डिबग कुंजी के साथ हस्ताक्षरित</string>
-    <string name="app_detail_insight_certificate_not_yet_valid">हस्ताक्षर प्रमाणपत्र अभी मान्य नहीं है</string>
-    <plurals name="app_detail_insight_outdated_target">
-        <item quantity="one">लक्ष्य API %1$d, इस डिवाइस से एक API स्तर पीछे</item>
-        <item quantity="other">लक्ष्य API %1$d, %2$d API स्तर इस डिवाइस के पीछे</item>
-    </plurals>
-    <string name="app_detail_insight_sideloaded">एक ऐप स्टोर से बाहर स्थापित किया गया</string>
-    <plurals name="app_detail_insight_unused">
-        <item quantity="one">पिछले %1$d महीने में नहीं खोला गया</item>
-        <item quantity="other">पिछले %1$d महीनों में नहीं खोला गया</item>
-    </plurals>
-    <string name="app_detail_insight_background_location">पृष्ठभूमि में चलते समय स्थान तक पहुंच सकता है</string>
-    <string name="app_detail_insight_messages">पाठ संदेश पढ़, प्राप्त या भेज सकता है</string>
-    <string name="app_detail_insight_call_history">कॉल इतिहास तक पहुंच या परिवर्तन कर सकता है</string>
-    <string name="app_detail_insight_contacts">संपर्कों तक पहुंच या परिवर्तन कर सकता है</string>
-    <string name="app_detail_insight_calendar">कैलेंडर घटनाओं तक पहुंच या परिवर्तन कर सकता है</string>
-    <string name="app_detail_badge_large">बड़ा ऐप</string>
-    <string name="app_detail_badge_system">सिस्टम</string>
-    <string name="app_detail_badge_google_play">गूगल प्ले</string>
-    <string name="app_detail_badge_recently_installed">नया</string>
-    <string name="app_detail_badge_recently_updated">अपडेट किया गया</string>
-    <string name="app_detail_badge_recently_used">हाल ही में उपयोग किया गया</string>
     <string name="general_info_title">सामान्य जानकारी</string>
     <string name="general_info_error">सामान्य जानकारी लोड करने में विफल</string>
     <string name="general_info_section_identification">पहचान</string>
@@ -501,5 +478,11 @@
     <string name="components_launch_started">प्रारंभ अनुरोध भेजा गया - ऐप तय करता है कि आगे क्या होगा।</string>
     <string name="components_launch_broadcast_sent">ब्रॉडकास्ट भेजा गया - यहाँ कुछ भी रिपोर्ट नहीं करता कि इसे संभाला गया या नहीं।</string>
     <string name="components_launch_failed">सिस्टम ने इसे प्रारंभ करने से इनकार कर दिया।</string>
+    <string name="certificates_validity_on_date_valid">इस तारीख को मान्य</string>
+    <string name="certificates_validity_on_date_expired">इस तारीख को समाप्त</string>
+    <string name="certificates_validity_on_date_not_yet">इस तारीख को अभी मान्य नहीं</string>
+    <string name="certificates_validity_on_date_valid_explanation">जिस दिन Apk Analyzer ने इसे दर्ज किया, यह प्रमाणपत्र अपनी वैधता अवधि में था।</string>
+    <string name="certificates_validity_on_date_expired_explanation">जिस दिन Apk Analyzer ने इसे दर्ज किया, इस प्रमाणपत्र की समाप्ति तिथि बीत चुकी थी।</string>
+    <string name="certificates_validity_on_date_not_yet_explanation">जिस दिन Apk Analyzer ने इसे दर्ज किया, इस प्रमाणपत्र की शुरुआती तिथि अभी आने वाली थी।</string>
     <string name="app_info_unavailable">यह डिवाइस ऐप जानकारी नहीं खोल सकता</string>
 </resources>

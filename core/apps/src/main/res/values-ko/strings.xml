@@ -42,27 +42,6 @@
     <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
     <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_unknown">알 수 없음</string>
-    <string name="app_detail_insight_debuggable">디버그 액세스가 활성화되었습니다</string>
-    <string name="app_detail_insight_debug_certificate">안드로이드의 공유 디버그 키로 서명됨</string>
-    <string name="app_detail_insight_certificate_not_yet_valid">서명 인증서가 아직 유효하지 않습니다</string>
-    <plurals name="app_detail_insight_outdated_target">
-        <item quantity="other">%1$d API를 대상으로 하며, 이 기기보다 %2$d API 레벨이 낮습니다</item>
-    </plurals>
-    <string name="app_detail_insight_sideloaded">앱 스토어 외부에서 설치됨</string>
-    <plurals name="app_detail_insight_unused">
-        <item quantity="other">지난 %1$d개월 동안 열리지 않음</item>
-    </plurals>
-    <string name="app_detail_insight_background_location">백그라운드에서 실행 중일 때 위치에 접근할 수 있음</string>
-    <string name="app_detail_insight_messages">문자 메시지를 읽거나, 수신하거나, 보낼 수 있음</string>
-    <string name="app_detail_insight_call_history">통화 기록에 접근하거나 변경할 수 있음</string>
-    <string name="app_detail_insight_contacts">연락처에 접근하거나 변경할 수 있습니다</string>
-    <string name="app_detail_insight_calendar">일정 이벤트에 접근하거나 변경할 수 있습니다</string>
-    <string name="app_detail_badge_large">대형 앱</string>
-    <string name="app_detail_badge_system">시스템</string>
-    <string name="app_detail_badge_google_play">Google Play</string>
-    <string name="app_detail_badge_recently_installed">새로 만들기</string>
-    <string name="app_detail_badge_recently_updated">업데이트됨</string>
-    <string name="app_detail_badge_recently_used">최근 사용됨</string>
     <string name="general_info_title">일반 정보</string>
     <string name="general_info_error">일반 정보를 불러오는 데 실패했습니다</string>
     <string name="general_info_section_identification">식별</string>
@@ -490,5 +469,11 @@
     <string name="components_launch_started">시작 요청이 전송되었습니다 — 앱이 다음에 무엇을 할지 결정합니다.</string>
     <string name="components_launch_broadcast_sent">브로드캐스트가 전송되었습니다 — 여기서는 처리되었는지 여부를 보고하지 않습니다.</string>
     <string name="components_launch_failed">시스템이 이를 시작하는 것을 거부했습니다.</string>
+    <string name="certificates_validity_on_date_valid">이 날짜에 유효함</string>
+    <string name="certificates_validity_on_date_expired">이 날짜에 만료됨</string>
+    <string name="certificates_validity_on_date_not_yet">이 날짜에 아직 유효하지 않음</string>
+    <string name="certificates_validity_on_date_valid_explanation">Apk Analyzer가 기록한 날에 이 인증서는 유효 기간 내에 있었습니다.</string>
+    <string name="certificates_validity_on_date_expired_explanation">Apk Analyzer가 기록한 날에 이 인증서의 종료일은 이미 지났습니다.</string>
+    <string name="certificates_validity_on_date_not_yet_explanation">Apk Analyzer가 기록한 날에 이 인증서의 시작일은 아직 미래였습니다.</string>
     <string name="app_info_unavailable">이 기기에서는 앱 정보를 열 수 없습니다</string>
 </resources>

@@ -30,9 +30,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import sk.styk.martin.apkanalyzer.core.apps.insight.AppDetailBadge
-import sk.styk.martin.apkanalyzer.core.apps.insight.labelRes
-import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.AppIcon
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
@@ -41,6 +38,10 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ChipVariant
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.IconButton
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.CollapsingToolbarState
+import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.iconReference
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailBadge
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.labelRes
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.AppDetailState
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
 import kotlin.math.roundToInt
@@ -63,7 +64,7 @@ private val FADING_CONTENT_RISE = ICON_CONTAINER_SIZE - ICON_SIZE_COLLAPSED
 @Composable
 internal fun AppDetailToolbar(
     state: AppDetailState.Loaded,
-    appReference: AppReference,
+    appDetailInput: AppDetailInput,
     collapsingState: CollapsingToolbarState,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
@@ -146,8 +147,9 @@ internal fun AppDetailToolbar(
                 .padding(ICON_CONTAINER_PADDING),
         ) {
             AppIcon(
-                source = appReference,
+                source = appDetailInput.iconReference,
                 size = ICON_SIZE_EXPANDED,
+                missingIcon = ApkAnalyzerIcons.Android.takeIf { state.isHistorical },
             )
         }
 

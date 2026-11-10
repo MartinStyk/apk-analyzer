@@ -56,9 +56,14 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.rememberColla
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
+import java.time.Instant
+import sk.styk.martin.apkanalyzer.core.apphistory.R as HistoryR
 import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 
 @Composable
@@ -86,6 +91,7 @@ internal fun NativeLibrariesScreen(
         state = state,
         onAction = viewModel::onAction,
         modifier = modifier,
+        recordedAt = appDetailInput.recordedAt,
     )
 }
 
@@ -94,25 +100,31 @@ private fun NativeLibrariesContent(
     state: NativeLibrariesState,
     onAction: (NativeLibrariesAction) -> Unit,
     modifier: Modifier = Modifier,
+    recordedAt: Instant? = null,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(AppTheme.colors.background),
-    ) {
-        Toolbar(
-            title = stringResource(AppsR.string.nativelibraries_title),
-            onBack = { onAction(NativeLibrariesAction.Back) },
-        )
-        when (state) {
-            NativeLibrariesState.Loading -> SectionLoading()
-
-            NativeLibrariesState.Error -> SectionError(
-                message = stringResource(AppsR.string.nativelibraries_error),
-                onRetry = { onAction(NativeLibrariesAction.Retry) },
+    AppDetailModeFrame(recordedAt = recordedAt, modifier = modifier) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(AppTheme.colors.background),
+        ) {
+            Toolbar(
+                title = stringResource(AppsR.string.nativelibraries_title),
+                onBack = { onAction(NativeLibrariesAction.Back) },
             )
+            when (state) {
+                NativeLibrariesState.Loading -> SectionLoading()
 
-            is NativeLibrariesState.Loaded -> NativeLibrariesLoadedContent(state = state, onAction = onAction)
+                is NativeLibrariesState.Error -> SectionError(
+                    reason = state.reason,
+                    loadFailedMessage = stringResource(AppsR.string.nativelibraries_error),
+                    onRetry = { onAction(NativeLibrariesAction.Retry) },
+                )
+
+                NativeLibrariesState.NotRecorded -> SectionError(message = stringResource(HistoryR.string.app_history_not_recorded))
+
+                is NativeLibrariesState.Loaded -> NativeLibrariesLoadedContent(state = state, onAction = onAction)
+            }
         }
     }
 }
@@ -197,6 +209,7 @@ private fun NativeLibrariesLoadedContent(
     detailItem?.let { item ->
         NativeLibraryDetailBottomSheet(
             item = item,
+            showDeviceSupport = !state.isHistorical,
             onCopy = { label, value -> onAction(NativeLibrariesAction.CopyValue(label, value)) },
             onDismiss = { detailName = null },
         )
@@ -204,13 +217,15 @@ private fun NativeLibrariesLoadedContent(
 }
 
 @Composable
-private fun NativeLibraryRow(
+internal fun NativeLibraryRow(
     item: NativeLibraryItem,
     onClick: () -> Unit,
     onCopy: (label: String, value: String) -> Unit,
     modifier: Modifier = Modifier,
+    changeLines: List<String> = emptyList(),
 ) {
     val copyLabel = stringResource(AppsR.string.nativelibraries_title)
+    val copyValue = (listOf(item.name) + changeLines).joinToString("\n")
     Column(
         verticalArrangement = Arrangement.spacedBy(6.dp),
         modifier = modifier
@@ -219,7 +234,7 @@ private fun NativeLibraryRow(
             .background(AppTheme.colors.surface)
             .combinedClickable(
                 onClick = onClick,
-                onLongClick = { onCopy(copyLabel, item.name) },
+                onLongClick = { onCopy(copyLabel, copyValue) },
             )
             .padding(horizontal = 14.dp, vertical = 12.dp),
     ) {
@@ -239,20 +254,31 @@ private fun NativeLibraryRow(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
-                Spacer(modifier = Modifier.height(2.dp))
+                if (changeLines.isEmpty()) {
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Text(
+                        text = item.abis.joinToString(),
+                        style = AppTheme.typography.bodySmall,
+                        color = AppTheme.colors.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+            }
+            if (changeLines.isEmpty()) {
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = item.abis.joinToString(),
-                    style = AppTheme.typography.bodySmall,
+                    text = item.totalSize.formatted(),
+                    style = AppTheme.typography.bodyMedium,
                     color = AppTheme.colors.onSurfaceVariant,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
                 )
             }
-            Spacer(modifier = Modifier.width(8.dp))
+        }
+        changeLines.forEach { line ->
             Text(
-                text = item.totalSize.formatted(),
-                style = AppTheme.typography.bodyMedium,
-                color = AppTheme.colors.onSurfaceVariant,
+                text = line,
+                style = AppTheme.typography.bodySmall,
+                color = AppTheme.colors.onSurface,
             )
         }
         if (!item.isDeviceCompatible) {
@@ -310,10 +336,22 @@ private fun NativeLibrariesLoadingPreview() {
 
 @Preview
 @Composable
+private fun NativeLibrariesNotRecordedPreview() {
+    ApkAnalyzerTheme {
+        NativeLibrariesContent(
+            state = NativeLibrariesState.NotRecorded,
+            onAction = {},
+            recordedAt = Instant.ofEpochMilli(1_773_014_400_000),
+        )
+    }
+}
+
+@Preview
+@Composable
 private fun NativeLibrariesErrorPreview() {
     ApkAnalyzerTheme {
         NativeLibrariesContent(
-            state = NativeLibrariesState.Error,
+            state = NativeLibrariesState.Error(SectionErrorReason.LoadFailed),
             onAction = {},
         )
     }

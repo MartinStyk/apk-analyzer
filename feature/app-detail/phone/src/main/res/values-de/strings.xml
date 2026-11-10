@@ -238,4 +238,40 @@
     <string name="certificates_copied">In die Zwischenablage kopiert</string>
     <string name="certificates_expand_public_key">Öffentliche Schlüssel-Fingerabdrücke anzeigen</string>
     <string name="certificates_collapse_public_key">Öffentliche Schlüssel-Fingerabdrücke ausblenden</string>
+    <string name="app_detail_history_section">Verlauf</string>
+    <string name="app_history_toolbar_subtitle">Verlauf</string>
+    <string name="app_history_hub_no_entries">Die Erfassung beginnt bald</string>
+    <string name="app_history_hub_first_only">Noch keine Änderungen · erfasst seit %1$s</string>
+    <string name="app_history_hub_certificate">Signaturzertifikat geändert am %1$s</string>
+    <string name="app_history_hub_unavailable">Der Verlauf ist gerade nicht verfügbar</string>
+    <string name="app_history_context_first_only">Erfasst seit %1$s</string>
+    <string name="app_history_footer">Apk Analyzer kann nur Änderungen anzeigen, die nach dem Beginn der Erfassung dieser App entstanden sind.</string>
+    <string name="app_history_first_only_hint">Neue Zeilen erscheinen hier, wenn sich diese App ändert.</string>
+    <string name="app_history_empty_title">Noch nichts erfasst</string>
+    <string name="app_history_empty_body">Apk Analyzer erfasst diese App im Hintergrund. Ihr Verlauf beginnt hier.</string>
+    <string name="app_history_error">Der Verlauf dieser App konnte nicht geladen werden</string>
+    <string name="app_history_row_click_label">Änderungen ansehen</string>
+    <string name="app_history_row_first_click_label">Alle Details ansehen</string>
+    <string name="app_history_row_long_click_label">Kopieren</string>
+    <string name="app_history_full_detail">Alle Details dieser Version ansehen</string>
+    <string name="app_history_show_all">Alle %1$d anzeigen</string>
+    <string name="app_history_group_header">%1$s · %2$d</string>
+    <string name="app_history_group_header_scoped">%1$s · %2$s · %3$d</string>
+    <string name="app_history_what_changed">Was sich geändert hat</string>
+    <string name="app_history_as_seen_on">Stand vom %1$s</string>
+    <string name="app_history_as_seen_on_label">Stand vom</string>
+    <string name="app_history_as_seen_on_explanation">Das hat Apk Analyzer an diesem Tag erfasst. Es stimmt möglicherweise nicht mehr mit der App überein.</string>
+    <string name="app_history_as_seen_click_label">Erklären</string>
+    <string name="app_history_permissions_note">Der Status von Berechtigungen wird im Verlauf nicht erfasst.</string>
+    <string name="app_history_intent_filters_note">Diese Angaben werden im Verlauf nicht erfasst.</string>
+    <string name="app_history_version_not_found">Diese Version ist nicht mehr in deinem Verlauf.</string>
+    <string name="app_history_version_load_failed">Diese Version konnte nicht geladen werden</string>
+    <plurals name="app_history_hub_changes">
+        <item quantity="one">%1$d Änderung · zuletzt %2$s</item>
+        <item quantity="other">%1$d Änderungen · zuletzt %2$s</item>
+    </plurals>
+    <plurals name="app_history_context">
+        <item quantity="one">Erfasst seit %1$s · %2$d Änderung</item>
+        <item quantity="other">Erfasst seit %1$s · %2$d Änderungen</item>
+    </plurals>
 </resources>

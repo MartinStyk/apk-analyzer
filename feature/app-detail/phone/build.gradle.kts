@@ -8,8 +8,10 @@ android {
 
 dependencies {
     api(projects.feature.appDetail.api)
+    implementation(projects.feature.appDetail.domain)
     implementation(projects.feature.appExport.api)
     implementation(projects.core.apkFiles)
+    implementation(projects.core.appHistory)
     implementation(projects.core.apps)
     implementation(projects.core.aiInsights)
     implementation(projects.core.appPermissions)

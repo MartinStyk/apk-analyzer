@@ -21,19 +21,21 @@ import sk.styk.martin.apkanalyzer.core.apppermissions.detail.GrantState
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionItem
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionItemMapper
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionScope
-import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.toAppReference
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSectionRepository
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.isHistorical
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.toSectionErrorReason
 
 @HiltViewModel(assistedFactory = PermissionsViewModel.Factory::class)
 internal class PermissionsViewModel @AssistedInject constructor(
     @Assisted private val appDetailInput: AppDetailInput,
-    private val appDetailRepository: AppDetailRepository,
+    private val sectionRepository: AppDetailSectionRepository,
     private val dispatcherProvider: DispatcherProvider,
     private val clipboardManager: ClipboardManager,
     private val permissionItemMapper: PermissionItemMapper,
@@ -50,8 +52,8 @@ internal class PermissionsViewModel @AssistedInject constructor(
     val state: StateFlow<PermissionsState> = combine(source, narrowing) { source, narrowing ->
         when (source) {
             is PermissionsSource.Loading -> PermissionsState.Loading
-            is PermissionsSource.Error -> PermissionsState.Error
-            is PermissionsSource.Ready -> source.narrowedBy(narrowing)
+            is PermissionsSource.Error -> PermissionsState.Error(source.reason)
+            is PermissionsSource.Ready -> source.narrowedBy(narrowing, isHistorical = appDetailInput.isHistorical)
         }
     }
         .flowOn(dispatcherProvider.default())
@@ -96,9 +98,11 @@ internal class PermissionsViewModel @AssistedInject constructor(
         source.value = PermissionsSource.Loading
         viewModelScope.launch {
             source.value = withContext(dispatcherProvider.default()) {
-                appDetailRepository.details(appDetailInput.toAppReference()).fold(
+                sectionRepository.detail(appDetailInput).fold(
                     onSuccess = { it.toSource() },
-                    onFailure = { PermissionsSource.Error },
+                    onFailure = { failure ->
+                        PermissionsSource.Error(failure.toSectionErrorReason())
+                    },
                 )
             }
         }
@@ -112,7 +116,7 @@ internal class PermissionsViewModel @AssistedInject constructor(
 
 private sealed interface PermissionsSource {
     data object Loading : PermissionsSource
-    data object Error : PermissionsSource
+    data class Error(val reason: SectionErrorReason) : PermissionsSource
     data class Ready(val requested: List<PermissionItem>, val defined: List<PermissionItem>) : PermissionsSource
 }
 
@@ -125,7 +129,7 @@ private data class Narrowing(
     val grantStates: Set<GrantState> = emptySet(),
 )
 
-private fun PermissionsSource.Ready.narrowedBy(narrowing: Narrowing): PermissionsState.Loaded {
+private fun PermissionsSource.Ready.narrowedBy(narrowing: Narrowing, isHistorical: Boolean): PermissionsState.Loaded {
     val scopeOptions = if (defined.isEmpty()) {
         listOf(PermissionScope.Requested)
     } else {
@@ -163,6 +167,7 @@ private fun PermissionsSource.Ready.narrowedBy(narrowing: Narrowing): Permission
         grantStateOptions = grantStateOptions,
         query = narrowing.query,
         scopeTotal = scoped.size,
+        isHistorical = isHistorical,
         sections = orderedProtectionLevels
             .mapNotNull { level ->
                 matching.filter { it.protectionLevel == level }

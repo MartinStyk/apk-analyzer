@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_detail_insight_debuggable">Acesso de depuração está habilitado</string>
+    <string name="app_detail_insight_debug_certificate">Assinado com a chave de depuração compartilhada do Android</string>
+    <string name="app_detail_insight_certificate_not_yet_valid">O certificado de assinatura ainda não é válido</string>
+    <plurals name="app_detail_insight_outdated_target">
+        <item quantity="one">Alvo da API %1$d, um nível de API atrás deste dispositivo</item>
+        <item quantity="many">Alvo da API %1$d, %2$d níveis de API atrás deste dispositivo</item>
+        <item quantity="other">Alvo da API %1$d, %2$d níveis de API atrás deste dispositivo</item>
+    </plurals>
+    <string name="app_detail_insight_sideloaded">Instalado de fora de uma loja de aplicativos</string>
+    <plurals name="app_detail_insight_unused">
+        <item quantity="one">Não aberto há %1$d mês</item>
+        <item quantity="many">Não aberto nos últimos %1$d meses</item>
+        <item quantity="other">Não aberto nos últimos %1$d meses</item>
+    </plurals>
+    <string name="app_detail_insight_background_location">Pode acessar a localização enquanto está em segundo plano</string>
+    <string name="app_detail_insight_messages">Pode ler, receber ou enviar mensagens de texto</string>
+    <string name="app_detail_insight_call_history">Pode acessar ou alterar o histórico de chamadas</string>
+    <string name="app_detail_insight_contacts">Pode acessar ou alterar contatos</string>
+    <string name="app_detail_insight_calendar">Pode acessar ou alterar eventos do calendário</string>
+    <string name="app_detail_badge_large">Aplicativo Grande</string>
+    <string name="app_detail_badge_system">Sistema</string>
+    <string name="app_detail_badge_google_play">Google Play</string>
+    <string name="app_detail_badge_recently_installed">Novo</string>
+    <string name="app_detail_badge_recently_updated">Atualizado</string>
+    <string name="app_detail_badge_recently_used">Usado Recentemente</string>
+</resources>

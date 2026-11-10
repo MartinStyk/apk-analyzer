@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_detail_insight_debuggable">Přístup k ladění je povolen</string>
+    <string name="app_detail_insight_debug_certificate">Podepsáno sdíleným ladicím klíčem Androidu</string>
+    <string name="app_detail_insight_certificate_not_yet_valid">Certifikát pro podepisování ještě není platný</string>
+    <plurals name="app_detail_insight_outdated_target">
+        <item quantity="one">Cílí na API %1$d, jednu úroveň API za tímto zařízením</item>
+        <item quantity="few">Cílí na API %1$d, %2$d úrovně API za tímto zařízením</item>
+        <item quantity="many">Cílí na API %1$d, %2$d úrovní API za tímto zařízením</item>
+        <item quantity="other">Cílí na API %1$d, %2$d úrovní API za tímto zařízením</item>
+    </plurals>
+    <string name="app_detail_insight_sideloaded">Nainstalováno zvenčí obchodu s aplikacemi</string>
+    <plurals name="app_detail_insight_unused">
+        <item quantity="one">Nebylo otevřeno za poslední měsíc</item>
+        <item quantity="few">Nebylo otevřeno za posledních %1$d měsíců</item>
+        <item quantity="many">Nebylo otevřeno za posledních %1$d měsíců</item>
+        <item quantity="other">Nebylo otevřeno za posledních %1$d měsíců</item>
+    </plurals>
+    <string name="app_detail_insight_background_location">Může přistupovat k poloze během běhu na pozadí</string>
+    <string name="app_detail_insight_messages">Může číst, přijímat nebo posílat textové zprávy</string>
+    <string name="app_detail_insight_call_history">Může přistupovat nebo měnit historii hovorů</string>
+    <string name="app_detail_insight_contacts">Může přistupovat nebo měnit kontakty</string>
+    <string name="app_detail_insight_calendar">Může přistupovat nebo měnit události v kalendáři</string>
+    <string name="app_detail_badge_large">Velká aplikace</string>
+    <string name="app_detail_badge_system">Systém</string>
+    <string name="app_detail_badge_google_play">Google Play</string>
+    <string name="app_detail_badge_recently_installed">Nový</string>
+    <string name="app_detail_badge_recently_updated">Aktualizováno</string>
+    <string name="app_detail_badge_recently_used">Nedávno použité</string>
+</resources>
