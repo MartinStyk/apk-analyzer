@@ -79,7 +79,9 @@ Turn the log into notes for users of the app, not for contributors:
 * Group into short bullets: new features first, then improvements, then fixes.
 * Drop anything a user cannot observe — refactors, dependency bumps, CI and agent-context changes.
 * Never surface class names, module names, PR numbers, or Android API names.
-* Keep it short. The same text becomes the GitHub release body and is read on a phone or a TV.
+* Keep the complete notes, including headings and line breaks, within Google Play's 500-character
+  limit. The workflow rejects longer notes before building the release.
+* The same text becomes the GitHub release body and is read on a phone or a TV.
 
 ## Step 4 — Get approval, always
 
