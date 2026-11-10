@@ -11,7 +11,6 @@ internal sealed interface BrowseAppsState {
 
     @Immutable
     data class Loaded(
-        val bucketLabel: String = "",
         val query: String,
         val totalApps: Int,
         val apps: List<BrowseAppItem>,

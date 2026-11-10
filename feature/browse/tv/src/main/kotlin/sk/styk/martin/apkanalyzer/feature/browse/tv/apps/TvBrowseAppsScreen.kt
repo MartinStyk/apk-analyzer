@@ -72,7 +72,7 @@ internal fun TvBrowseAppsScreen(
     TvBrowseAppsContent(
         dimension = dimension,
         bucketKey = bucketKey,
-        bucketLabel = (state as? TvBrowseAppsState.Loaded)?.bucketLabel?.ifEmpty { bucketLabel } ?: bucketLabel,
+        bucketLabel = bucketLabel,
         subAttribute = subAttribute,
         state = state,
         onAction = viewModel::onAction,

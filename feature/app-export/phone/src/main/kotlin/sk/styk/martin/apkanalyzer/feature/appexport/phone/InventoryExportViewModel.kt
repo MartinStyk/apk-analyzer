@@ -39,9 +39,6 @@ import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterRepositories
 import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.core.common.settings.FingerprintFormat
-import sk.styk.martin.apkanalyzer.core.common.settings.Key
-import sk.styk.martin.apkanalyzer.core.common.settings.PersistenceRepository
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.apps.AppSelection
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.columns.ColumnSelection
 import java.time.LocalDateTime
@@ -56,7 +53,6 @@ internal class InventoryExportViewModel @AssistedInject constructor(
     private val inventoryExportPreferences: InventoryExportPreferences,
     usageStatsRepository: UsageStatsRepository,
     dispatcherProvider: DispatcherProvider,
-    private val persistenceRepository: PersistenceRepository,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -73,7 +69,6 @@ internal class InventoryExportViewModel @AssistedInject constructor(
 
     private val step = MutableStateFlow(steps.first())
     private val format = MutableStateFlow(InventoryFormat.Csv)
-    private val fingerprintFormat = persistenceRepository.observe(Key.HexFingerprintFormat)
     private val showStopConfirmation = MutableStateFlow(false)
     private val showIntro = MutableStateFlow(false)
     private val exportProgress = MutableStateFlow<InventoryExportProgressState>(InventoryExportProgressState.Idle)
@@ -83,13 +78,8 @@ internal class InventoryExportViewModel @AssistedInject constructor(
     private val isExporting: Boolean
         get() = exportProgress.value is InventoryExportProgressState.Running
 
-    private val previewContent: Flow<InventoryPreviewState> = combine(
-        apps.selectedApps,
-        columns.columns,
-        format,
-        fingerprintFormat,
-    ) { apps, columns, format, fingerprintFormat ->
-        apps?.takeIf { it.isNotEmpty() }?.let { inventoryRequest(it, columns, format, fingerprintFormat) }?.takeIf { it.columns.isNotEmpty() }
+    private val previewContent: Flow<InventoryPreviewState> = combine(apps.selectedApps, columns.columns, format) { apps, columns, format ->
+        apps?.takeIf { it.isNotEmpty() }?.let { inventoryRequest(it, columns, format) }?.takeIf { it.columns.isNotEmpty() }
     }
         .distinctUntilChanged()
         .transformLatest { request ->
@@ -232,13 +222,7 @@ internal class InventoryExportViewModel @AssistedInject constructor(
                 restoreJob.join()
                 format.value = exportFormat
                 val selection = InventorySelection(columns.columns.value, exportFormat)
-                val fingerprintFormat = persistenceRepository.get(Key.HexFingerprintFormat)
-                val request = inventoryRequest(
-                    apps.selectedApps.filterNotNull().first(),
-                    selection.columns,
-                    selection.format,
-                    fingerprintFormat,
-                )
+                val request = inventoryRequest(apps.selectedApps.filterNotNull().first(), selection.columns, selection.format)
                 if (request.apps.isEmpty() || request.columns.isEmpty()) {
                     showFeedback(InventoryExportFeedback.Failed)
                     return@launch
@@ -306,10 +290,8 @@ private fun inventoryRequest(
     apps: List<InstalledApp>,
     columns: Set<InventoryColumn>,
     format: InventoryFormat,
-    fingerprintFormat: FingerprintFormat,
 ) = InventoryExportRequest(
     apps = apps,
     columns = columns.exportedAs(format),
     format = format,
-    fingerprintFormat = fingerprintFormat,
 )

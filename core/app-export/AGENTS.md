@@ -37,8 +37,7 @@ Document I/O uses `core:common`'s `DocumentFileManager`. A caller passes an `Inv
   scripts, so add a new entry instead. Entries stay grouped by `InventoryColumnGroup` in group order.
 * Exported values are as stable as keys. Enum-backed values go through the explicit `token`
   mappings in `InventoryTokens.kt`, never an enum's `name`, so renaming a Kotlin enum never changes
-  users' data. Fingerprints use the user's selected format in every column and record; source values
-  remain raw hex so either format can be reconstructed without duplicate storage.
+  users' data. Every fingerprint is lowercase hex without separators, in every column and record.
 * Each column declares its `InventoryDataSource`, and the manager hands the loader only the sources the
   selected columns declare. Native libraries, signing schemes, intent filters, and readable
   manifests each use their existing lazy repository independently of app-detail analysis.
@@ -91,18 +90,17 @@ Document I/O uses `core:common`'s `DocumentFileManager`. A caller passes an `Inv
 ## Published Reference
 
 The user-facing contract lives in [`site/inventory-export/`](../../site/inventory-export/index.md):
-a readable reference and versioned JSON Schemas (JSON Schema 2020-12). The `Pages` workflow publishes
+a readable reference and `v1/schema.json` (JSON Schema 2020-12). The `Pages` workflow publishes
 `site/` to GitHub Pages from `develop`, at the address in `INVENTORY_REFERENCE_URL`; the feature
 links to it from the Export step.
 
 * Any change to a column, key, token, record field, or nullability updates the schema and the
-  reference in the same change. `PublishedSchemaTest` validates exported values against the current
-  schema version, and checks column order, enum tokens, and the schema version and address. Nothing
+  reference in the same change. `PublishedSchemaTest` validates exported values against
+  `v1/schema.json`, and checks column order, enum tokens, and the schema version and address. Nothing
   checks the reference page, so keep it in step by hand.
 * Additive changes (a new column, record field, or token) stay in the current version. A change
   that breaks existing scripts bumps `INVENTORY_SCHEMA_VERSION` and adds a new `vN/` schema;
-  published versions are never changed incompatibly. Version 1 supports uppercase continuous and
-  colon-separated fingerprints selected in Settings.
+  published versions are never changed incompatibly.
 
 ## Testing
 

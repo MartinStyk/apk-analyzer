@@ -18,14 +18,11 @@ import sk.styk.martin.apkanalyzer.core.appindex.AppIndexRepository
 import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseBucketDetail
 import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseBucketDetailResolver
 import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseDimension
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseDimensionLabeler
 import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseSubAttribute
 import sk.styk.martin.apkanalyzer.core.appindex.browse.bucketsFor
 import sk.styk.martin.apkanalyzer.core.appindex.model.AppIndexStatus
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.core.common.settings.Key
-import sk.styk.martin.apkanalyzer.core.common.settings.PersistenceRepository
 
 @HiltViewModel(assistedFactory = TvBrowseAppsViewModel.Factory::class)
 internal class TvBrowseAppsViewModel @AssistedInject constructor(
@@ -35,9 +32,7 @@ internal class TvBrowseAppsViewModel @AssistedInject constructor(
     appIndexRepository: AppIndexRepository,
     installedAppsRepository: InstalledAppsRepository,
     bucketDetailResolver: BrowseBucketDetailResolver,
-    labeler: BrowseDimensionLabeler,
     dispatcherProvider: DispatcherProvider,
-    persistenceRepository: PersistenceRepository,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -69,16 +64,11 @@ internal class TvBrowseAppsViewModel @AssistedInject constructor(
     }
         .flowOn(dispatcherProvider.default())
 
-    val state: StateFlow<TvBrowseAppsState> = combine(
-        bucket,
-        query,
-        persistenceRepository.observe(Key.HexFingerprintFormat),
-    ) { bucket, query, fingerprintFormat ->
+    val state: StateFlow<TvBrowseAppsState> = combine(bucket, query) { bucket, query ->
         when (bucket) {
             BucketApps.Loading -> TvBrowseAppsState.Loading
 
             is BucketApps.Data -> TvBrowseAppsState.Loaded(
-                bucketLabel = labeler.label(dimension, bucketKey, subAttribute, fingerprintFormat),
                 query = query,
                 totalApps = bucket.apps.size,
                 apps = bucket.apps.filter { it.matches(query) },

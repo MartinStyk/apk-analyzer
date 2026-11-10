@@ -5,7 +5,6 @@ import kotlinx.coroutines.flow.Flow
 import sk.styk.martin.apkanalyzer.core.appexport.column.InventoryColumn
 import sk.styk.martin.apkanalyzer.core.appexport.format.InventoryFormat
 import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
-import sk.styk.martin.apkanalyzer.core.common.settings.FingerprintFormat
 
 interface InventoryExportManager {
     suspend fun preview(request: InventoryExportRequest): Result<InventoryPreview>
@@ -16,7 +15,6 @@ data class InventoryExportRequest(
     val apps: List<InstalledApp>,
     val columns: List<InventoryColumn>,
     val format: InventoryFormat,
-    val fingerprintFormat: FingerprintFormat,
 )
 
 sealed interface InventoryDestination {

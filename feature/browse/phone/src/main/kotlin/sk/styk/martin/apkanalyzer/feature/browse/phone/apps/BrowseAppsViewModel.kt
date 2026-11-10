@@ -19,7 +19,6 @@ import sk.styk.martin.apkanalyzer.core.appindex.AppIndexRepository
 import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseBucketDetail
 import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseBucketDetailResolver
 import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseDimension
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseDimensionLabeler
 import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseSubAttribute
 import sk.styk.martin.apkanalyzer.core.appindex.browse.bucketsFor
 import sk.styk.martin.apkanalyzer.core.appindex.model.AppIndexStatus
@@ -27,9 +26,6 @@ import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
-import sk.styk.martin.apkanalyzer.core.common.settings.FingerprintFormat
-import sk.styk.martin.apkanalyzer.core.common.settings.Key
-import sk.styk.martin.apkanalyzer.core.common.settings.PersistenceRepository
 
 @HiltViewModel(assistedFactory = BrowseAppsViewModel.Factory::class)
 internal class BrowseAppsViewModel @AssistedInject constructor(
@@ -39,9 +35,7 @@ internal class BrowseAppsViewModel @AssistedInject constructor(
     appIndexRepository: AppIndexRepository,
     installedAppsRepository: InstalledAppsRepository,
     private val bucketDetailResolver: BrowseBucketDetailResolver,
-    private val labeler: BrowseDimensionLabeler,
     dispatcherProvider: DispatcherProvider,
-    persistenceRepository: PersistenceRepository,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -61,11 +55,7 @@ internal class BrowseAppsViewModel @AssistedInject constructor(
     ) { status, apps -> status.toBucketApps(apps) }
         .flowOn(dispatcherProvider.default())
 
-    val state: StateFlow<BrowseAppsState> = combine(
-        bucket,
-        query,
-        persistenceRepository.observe(Key.HexFingerprintFormat),
-    ) { bucket, query, fingerprintFormat -> bucket.toAppsState(query, fingerprintFormat) }
+    val state: StateFlow<BrowseAppsState> = combine(bucket, query) { bucket, query -> bucket.toAppsState(query) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), BrowseAppsState.Loading)
 
     private val eventChannel = Channel<BrowseAppsEvent>(Channel.BUFFERED)
@@ -92,7 +82,7 @@ internal class BrowseAppsViewModel @AssistedInject constructor(
         }
     }
 
-    private fun BucketApps.toAppsState(query: String, fingerprintFormat: FingerprintFormat): BrowseAppsState = when (this) {
+    private fun BucketApps.toAppsState(query: String): BrowseAppsState = when (this) {
         BucketApps.Loading -> BrowseAppsState.Loading
 
         is BucketApps.Data -> {
@@ -103,7 +93,6 @@ internal class BrowseAppsViewModel @AssistedInject constructor(
             }
 
             BrowseAppsState.Loaded(
-                bucketLabel = labeler.label(dimension, bucketKey, subAttribute, fingerprintFormat),
                 query = query,
                 totalApps = apps.size,
                 apps = filtered,

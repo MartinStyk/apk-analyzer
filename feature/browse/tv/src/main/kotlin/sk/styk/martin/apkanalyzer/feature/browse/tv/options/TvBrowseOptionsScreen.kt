@@ -44,11 +44,13 @@ import sk.styk.martin.apkanalyzer.core.appindex.browse.cardLabelRes
 import sk.styk.martin.apkanalyzer.core.appindex.browse.isSearchable
 import sk.styk.martin.apkanalyzer.core.appindex.browse.titleRes
 import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.common.digest.toFingerprint
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.AppIcon
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
+import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.LocalFingerprintFormat
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.FilterChip
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.FingerprintBox
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.IconBadge
@@ -311,7 +313,12 @@ private fun BrowseOption.title(): String = when (this) {
 private fun BrowseOption.summary(): String {
     val apps = pluralStringResource(AppIndexR.plurals.browse_apps_count, count, count)
     return when (this) {
-        is BrowseOption.CertificateHash -> stringResource(R.string.tv_browse_label_list, apps, label.take(FINGERPRINT_PREFIX_LENGTH))
+        is BrowseOption.CertificateHash -> stringResource(
+            R.string.tv_browse_label_list,
+            apps,
+            key.toFingerprint(LocalFingerprintFormat.current).take(FINGERPRINT_PREFIX_LENGTH),
+        )
+
         is BrowseOption.Labeled -> apps
     }
 }

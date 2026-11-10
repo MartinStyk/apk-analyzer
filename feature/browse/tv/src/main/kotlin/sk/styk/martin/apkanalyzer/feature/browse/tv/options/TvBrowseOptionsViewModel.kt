@@ -31,9 +31,6 @@ import sk.styk.martin.apkanalyzer.core.appindex.model.AppIndexStatus
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
-import sk.styk.martin.apkanalyzer.core.common.settings.FingerprintFormat
-import sk.styk.martin.apkanalyzer.core.common.settings.Key
-import sk.styk.martin.apkanalyzer.core.common.settings.PersistenceRepository
 import sk.styk.martin.apkanalyzer.feature.browse.tv.apps.TvBrowseAppItem
 
 @HiltViewModel(assistedFactory = TvBrowseOptionsViewModel.Factory::class)
@@ -44,7 +41,6 @@ internal class TvBrowseOptionsViewModel @AssistedInject constructor(
     private val labeler: BrowseDimensionLabeler,
     private val bucketDetailResolver: BrowseBucketDetailResolver,
     dispatcherProvider: DispatcherProvider,
-    persistenceRepository: PersistenceRepository,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -54,19 +50,13 @@ internal class TvBrowseOptionsViewModel @AssistedInject constructor(
 
     private val narrowing = MutableStateFlow(Narrowing())
 
-    private val source = combine(
-        appIndexRepository.index(),
-        installedAppsRepository.apps(),
-        persistenceRepository.observe(Key.HexFingerprintFormat),
-    ) { status, apps, fingerprintFormat ->
+    private val source = combine(appIndexRepository.index(), installedAppsRepository.apps()) { status, apps ->
         when (status) {
             AppIndexStatus.Loading -> OptionsSource.Loading
 
             is AppIndexStatus.Data -> OptionsSource.Ready(
                 index = status.index,
-                optionsBySubAttribute = dimension.subAttributesOrDefault().associateWith {
-                    status.index.browseOptions(dimension, it, labeler, fingerprintFormat)
-                },
+                optionsBySubAttribute = dimension.subAttributesOrDefault().associateWith { status.index.browseOptions(dimension, it, labeler) },
                 appNames = apps.associate { it.packageName to it.applicationName },
             )
         }

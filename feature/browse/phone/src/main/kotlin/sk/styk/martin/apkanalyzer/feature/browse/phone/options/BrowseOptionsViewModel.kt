@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -25,9 +26,6 @@ import sk.styk.martin.apkanalyzer.core.appindex.browse.matches
 import sk.styk.martin.apkanalyzer.core.appindex.browse.subAttributesOrDefault
 import sk.styk.martin.apkanalyzer.core.appindex.model.AppIndexStatus
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.core.common.settings.FingerprintFormat
-import sk.styk.martin.apkanalyzer.core.common.settings.Key
-import sk.styk.martin.apkanalyzer.core.common.settings.PersistenceRepository
 import sk.styk.martin.apkanalyzer.feature.browse.phone.BrowseAnalytics
 import sk.styk.martin.apkanalyzer.feature.browse.phone.BrowseAnalyticsEvent
 
@@ -38,7 +36,6 @@ internal class BrowseOptionsViewModel @AssistedInject constructor(
     private val labeler: BrowseDimensionLabeler,
     dispatcherProvider: DispatcherProvider,
     private val analytics: BrowseAnalytics,
-    persistenceRepository: PersistenceRepository,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -50,10 +47,8 @@ internal class BrowseOptionsViewModel @AssistedInject constructor(
 
     private val narrowing = MutableStateFlow(Narrowing())
 
-    private val source = combine(
-        appIndexRepository.index(),
-        persistenceRepository.observe(Key.HexFingerprintFormat),
-    ) { status, fingerprintFormat -> status.toSource(fingerprintFormat) }
+    private val source = appIndexRepository.index()
+        .map { it.toSource() }
         .flowOn(dispatcherProvider.io())
 
     val state: StateFlow<BrowseOptionsState> = combine(source, narrowing) { source, narrowing ->
@@ -87,13 +82,11 @@ internal class BrowseOptionsViewModel @AssistedInject constructor(
         }
     }
 
-    private fun AppIndexStatus.toSource(fingerprintFormat: FingerprintFormat): OptionsSource = when (this) {
+    private fun AppIndexStatus.toSource(): OptionsSource = when (this) {
         AppIndexStatus.Loading -> OptionsSource.Loading
 
         is AppIndexStatus.Data -> OptionsSource.Ready(
-            optionsBySubAttribute = subAttributes.associateWith { subAttribute ->
-                index.browseOptions(dimension, subAttribute, labeler, fingerprintFormat)
-            },
+            optionsBySubAttribute = subAttributes.associateWith { subAttribute -> index.browseOptions(dimension, subAttribute, labeler) },
         )
     }
 }

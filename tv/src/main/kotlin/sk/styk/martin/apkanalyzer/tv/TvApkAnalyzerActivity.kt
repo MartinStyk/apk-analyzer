@@ -8,6 +8,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import sk.styk.martin.apkanalyzer.core.common.settings.FingerprintFormat
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.LocalFingerprintFormat
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.theme.ApkAnalyzerTvTheme
 
@@ -20,11 +21,12 @@ class TvApkAnalyzerActivity : ComponentActivity() {
         setContent {
             ApkAnalyzerTvTheme {
                 val state by viewModel.state.collectAsStateWithLifecycle()
-                val loadedState = state as? TvApkAnalyzerState.Data
-                if (loadedState != null) {
-                    CompositionLocalProvider(LocalFingerprintFormat provides loadedState.fingerprintFormat) {
-                        TvApkAnalyzerApp(onBackAtRoot = ::finish)
-                    }
+                val fingerprintFormat = when (val current = state) {
+                    TvApkAnalyzerState.Loading -> FingerprintFormat.ColonSeparated
+                    is TvApkAnalyzerState.Data -> current.fingerprintFormat
+                }
+                CompositionLocalProvider(LocalFingerprintFormat provides fingerprintFormat) {
+                    TvApkAnalyzerApp(onBackAtRoot = ::finish)
                 }
             }
         }

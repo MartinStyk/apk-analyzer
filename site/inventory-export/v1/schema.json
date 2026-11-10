@@ -496,8 +496,8 @@
     },
     "fingerprint": {
       "type": "string",
-      "pattern": "^(?:[0-9A-F]{32}|[0-9A-F]{40}|[0-9A-F]{64}|(?:[0-9A-F]{2}:){15}[0-9A-F]{2}|(?:[0-9A-F]{2}:){19}[0-9A-F]{2}|(?:[0-9A-F]{2}:){31}[0-9A-F]{2})$",
-      "description": "Uppercase hexadecimal digest, with or without colon separators according to the fingerprint format setting."
+      "pattern": "^[0-9a-f]+$",
+      "description": "Lowercase hexadecimal digest without separators."
     },
     "category": {
       "enum": [

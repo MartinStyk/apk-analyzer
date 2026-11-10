@@ -62,7 +62,6 @@ import sk.styk.martin.apkanalyzer.core.apps.signing.WhatsAppCertificate
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
-import sk.styk.martin.apkanalyzer.core.common.settings.FingerprintFormat
 import java.io.StringWriter
 import java.time.Instant
 import java.util.function.Consumer
@@ -120,15 +119,6 @@ class PublishedSchemaTest {
         val apps = everyInstalledApp.map { it.withNoSourceLoaded() }
 
         val errors = validator.validate(exportedFile(apps), InputFormat.JSON, assertingFormats)
-
-        errors.map { it.toString() }.shouldBeEmpty()
-    }
-
-    @Test
-    fun `Given continuous fingerprints When exporting Then the file matches the schema`() {
-        val apps = everyInstalledApp.map { it.withEverySourceLoaded() }
-
-        val errors = validator.validate(exportedFile(apps, FingerprintFormat.Continuous), InputFormat.JSON, assertingFormats)
 
         errors.map { it.toString() }.shouldBeEmpty()
     }
@@ -230,11 +220,11 @@ private fun InstalledApp.withNoSourceLoaded() = InventoryAppData(
     manifest = SourceResult.Failed,
 )
 
-private fun exportedFile(apps: List<InventoryAppData>, fingerprintFormat: FingerprintFormat = FingerprintFormat.ColonSeparated): String {
+private fun exportedFile(apps: List<InventoryAppData>): String {
     val output = StringWriter()
     JsonInventoryWriter(InventoryColumn.entries, output, Instant.parse("2026-11-03T14:49:12.345Z")).use { writer ->
         writer.begin()
-        apps.forEach { app -> writer.writeApp(InventoryColumn.entries.map { it.valueOf(app, fingerprintFormat) }) }
+        apps.forEach { app -> writer.writeApp(InventoryColumn.entries.map { it.valueOf(app) }) }
     }
     return output.toString()
 }

@@ -22,7 +22,6 @@ class BrowseDimensionLabeler @Inject constructor(
         dimension: BrowseDimension,
         key: String,
         subAttribute: BrowseSubAttribute? = null,
-        fingerprintFormat: FingerprintFormat = FingerprintFormat.ColonSeparated,
     ): String = when (dimension) {
         BrowseDimension.Permission -> permissionLabelProvider.getLabel(key)
 
@@ -46,7 +45,7 @@ class BrowseDimensionLabeler @Inject constructor(
             BrowseSubAttribute.CertificateSha1,
             BrowseSubAttribute.CertificateMd5,
             null,
-            -> key.toFingerprint(fingerprintFormat)
+            -> key.toFingerprint(FingerprintFormat.ColonSeparated)
         }
     }
 
