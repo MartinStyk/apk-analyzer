@@ -84,6 +84,9 @@ exception is `InactiveSearchBar`, which lives in `SearchBarInactive.kt`.
   treatment; use it instead of a bare icon on cards, rows, and headers), `Icon`, `Text`.
 * `FingerprintBox` formats raw hashes using `LocalFingerprintFormat` before rendering a `CodeBox`.
   Keep `CodeBox` unchanged for generic code and identifiers.
+* `CrossfadeScrollablePanel` crossfades only its content over 120 ms. Use it for
+  focus-driven detail panes so the background, border, and scroll focus remain persistent; render
+  from the content lambda's item so outgoing content retains its own data.
 * `SearchField` is built on `BasicTextField` because TV Material has no text field. A text field
   swallows D-pad Up/Down for cursor movement, which traps remote users; it hands those keys back to
   focus navigation and keeps Left/Right for the cursor.

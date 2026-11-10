@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,7 +33,7 @@ internal fun DetailPane(
     isCodeValue: Boolean = false,
     content: @Composable ColumnScope.() -> Unit = {},
 ) {
-    ScrollablePanel(modifier = modifier.fillMaxHeight(), resetKey = title to value) {
+    Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         PaneHeader(title = title, icon = icon, status = status, highlighted = highlighted)
         if (value != null) {
             if (isCodeValue) {
@@ -74,11 +74,12 @@ private fun PaneHeader(
 @Composable
 private fun DetailPanePreview() {
     ApkAnalyzerTvTheme {
-        DetailPane(
-            title = "Package name",
-            value = "com.google.android.youtube.tv",
-            explanation = "The unique identifier Android and app stores use for this app. No two apps on a device can share it.",
-            modifier = Modifier.width(560.dp),
-        )
+        ScrollablePanel(modifier = Modifier.width(560.dp)) {
+            DetailPane(
+                title = "Package name",
+                value = "com.google.android.youtube.tv",
+                explanation = "The unique identifier Android and app stores use for this app. No two apps on a device can share it.",
+            )
+        }
     }
 }

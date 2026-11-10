@@ -1,7 +1,5 @@
 package sk.styk.martin.apkanalyzer.feature.browse.tv.options
 
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -51,11 +49,11 @@ import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzer
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.AppIcon
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.LocalFingerprintFormat
+import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.CrossfadeScrollablePanel
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.FilterChip
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.FingerprintBox
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.IconBadge
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.InfoListItem
-import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.ScrollablePanel
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.focus.RestorableFocus
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.focus.rememberRestorableFocus
@@ -151,18 +149,18 @@ private fun LoadedContent(
                     modifier = Modifier.focusRequester(listFocusRequester),
                 )
             }
-            Crossfade(
+            CrossfadeScrollablePanel(
                 targetState = state.preview,
-                animationSpec = tween(durationMillis = CROSSFADE_DURATION),
+                resetKey = state.preview?.option?.key,
                 modifier = Modifier.weight(PREVIEW_WEIGHT).fillMaxHeight(),
-                label = "optionPreview",
+                onClick = state.preview?.let { preview ->
+                    { onAction(TvBrowseOptionsAction.SelectOption(preview.option)) }
+                },
             ) { preview ->
                 if (preview != null) {
                     OptionPreview(
                         preview = preview,
                         icon = dimension.bucketIcon(preview.option.key),
-                        onClick = { onAction(TvBrowseOptionsAction.SelectOption(preview.option)) },
-                        modifier = Modifier.fillMaxSize(),
                     )
                 }
             }
@@ -234,10 +232,9 @@ private fun OptionList(
 private fun OptionPreview(
     preview: TvBrowseOptionPreview,
     icon: ImageVector,
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    ScrollablePanel(modifier = modifier, resetKey = preview.option.key, spacing = 20.dp, onClick = onClick) {
+    Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(20.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
             IconBadge(icon = icon, size = 40.dp)
             Column {
@@ -331,7 +328,6 @@ private const val SEARCH_KEY = "search"
 private const val EMPTY_KEY = "empty"
 private const val LIST_WEIGHT = 0.42f
 private const val PREVIEW_WEIGHT = 0.58f
-private const val CROSSFADE_DURATION = 180
 private const val FINGERPRINT_PREFIX_LENGTH = 11
 private val AppTileWidth = 76.dp
 

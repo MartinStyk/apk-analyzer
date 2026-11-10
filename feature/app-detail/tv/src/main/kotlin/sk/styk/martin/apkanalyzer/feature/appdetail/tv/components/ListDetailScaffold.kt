@@ -1,13 +1,13 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.tv.components
 
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -24,6 +24,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.AppIcon
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.rememberAppAccentColor
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.AccentBackdrop
+import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.CrossfadeScrollablePanel
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.InfoListItem
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.SectionHeader
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.Text
@@ -70,13 +71,11 @@ internal fun <T> ListDetailScaffold(
                     content = list,
                 )
             }
-            Crossfade(
+            CrossfadeScrollablePanel(
                 targetState = selected,
-                animationSpec = tween(durationMillis = CROSSFADE_DURATION),
-                modifier = Modifier.weight(DETAIL_WEIGHT),
-                label = "detailPane",
+                modifier = Modifier.weight(DETAIL_WEIGHT).fillMaxHeight(),
             ) { item ->
-                if (item != null) detail(item, Modifier.fillMaxSize())
+                if (item != null) detail(item, Modifier.fillMaxWidth())
             }
         }
     }
@@ -90,7 +89,6 @@ internal fun ListSectionHeader(text: String, modifier: Modifier = Modifier) {
 private const val LIST_WEIGHT = 0.55f
 private const val DETAIL_WEIGHT = 0.45f
 private const val BACKDROP_STRENGTH = 0.2f
-private const val CROSSFADE_DURATION = 180
 
 @Preview(device = Devices.TV_1080p, showBackground = true, backgroundColor = 0xFF000000)
 @Composable

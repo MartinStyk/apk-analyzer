@@ -1,5 +1,7 @@
 package sk.styk.martin.apkanalyzer.core.designsystem.tv.components
 
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -43,6 +45,29 @@ import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzer
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.modifier.pointerClickable
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.theme.ApkAnalyzerTvTheme
+
+@Composable
+fun <T> CrossfadeScrollablePanel(
+    targetState: T,
+    modifier: Modifier = Modifier,
+    resetKey: Any? = targetState,
+    onClick: (() -> Unit)? = null,
+    content: @Composable (T) -> Unit,
+) {
+    ScrollablePanel(
+        modifier = modifier,
+        resetKey = resetKey,
+        onClick = onClick,
+    ) {
+        Crossfade(
+            targetState = targetState,
+            modifier = Modifier.fillMaxWidth(),
+            animationSpec = tween(durationMillis = CONTENT_CROSSFADE_DURATION),
+            label = "panelContent",
+            content = content,
+        )
+    }
+}
 
 @Composable
 fun ScrollablePanel(
@@ -109,6 +134,7 @@ fun ScrollablePanel(
 }
 
 private val PanelShape = RoundedCornerShape(16.dp)
+private const val CONTENT_CROSSFADE_DURATION = 120
 private const val SCROLL_STEP = 240f
 private val ClickKeys = setOf(Key.DirectionCenter, Key.Enter, Key.NumPadEnter)
 
@@ -123,6 +149,16 @@ private fun ScrollablePanelPreview() {
                 style = AppTheme.typography.bodyMedium,
                 color = AppTheme.colors.onSurfaceVariant,
             )
+        }
+    }
+}
+
+@Preview(device = Devices.TV_1080p, showBackground = true, backgroundColor = 0xFF000000)
+@Composable
+private fun CrossfadeScrollablePanelPreview() {
+    ApkAnalyzerTvTheme {
+        CrossfadeScrollablePanel(targetState = "About this certificate", modifier = Modifier.width(400.dp)) { title ->
+            Text(text = title, style = AppTheme.typography.titleMedium)
         }
     }
 }
