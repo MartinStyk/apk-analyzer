@@ -12,29 +12,24 @@ import org.jetbrains.kotlin.psi.KtModifierListOwner
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtTypeReference
-import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 internal fun Rule.report(element: PsiElement, message: String) {
     report(Finding(Entity.from(element), message))
 }
 
-internal fun KtAnnotated.hasAnnotation(vararg names: String): Boolean = annotationEntries.any { it.shortName?.asString() in names }
+internal fun KtAnnotated.hasAnnotation(name: String): Boolean = annotationEntries.any { it.shortName?.asString() == name }
 
 internal fun KtModifierListOwner.isPrivateDeclaration(): Boolean = hasModifier(KtTokens.PRIVATE_KEYWORD)
-
-internal fun KtModifierListOwner.isHiddenFromOtherModules(): Boolean = hasModifier(KtTokens.PRIVATE_KEYWORD) || hasModifier(KtTokens.INTERNAL_KEYWORD)
 
 internal fun KtModifierListOwner.isOverride(): Boolean = hasModifier(KtTokens.OVERRIDE_KEYWORD)
 
 internal fun KtTypeReference.baseTypeName(): String = text.baseTypeName()
 
-internal fun String.baseTypeName(): String = substringBefore('<').removeSuffix("?").substringAfterLast('.').trim()
+private fun String.baseTypeName(): String = substringBefore('<').removeSuffix("?").substringAfterLast('.').trim()
 
 internal fun KtClassOrObject.superTypeNames(): List<String> = superTypeListEntries.mapNotNull { entry -> entry.typeReference?.baseTypeName() }
 
 internal fun KtCallExpression.calleeName(): String? = (calleeExpression as? KtNameReferenceExpression)?.getReferencedName()
-
-internal fun PsiElement.enclosingFunction(): KtNamedFunction? = getStrictParentOfType<KtNamedFunction>()
 
 internal fun KtNamedFunction.isComposable(): Boolean = hasAnnotation("Composable")
 

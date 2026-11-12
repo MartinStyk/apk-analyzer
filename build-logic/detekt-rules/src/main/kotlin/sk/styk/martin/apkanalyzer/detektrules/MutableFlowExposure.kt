@@ -18,7 +18,7 @@ class MutableFlowExposure(config: Config) :
             report(
                 expression,
                 "Replace the private mutable flow and $name() with an explicit backing field: " +
-                    "`val state: StateFlow<T>` followed by `field = MutableStateFlow(initial)`.",
+                    "`val state: StateFlow<T>` followed by `field = MutableStateFlow(initial)` (AGENTS.md > Architecture > ViewModels).",
             )
         }
     }
@@ -31,12 +31,12 @@ class MutableFlowExposure(config: Config) :
             report(
                 property,
                 "Don't expose '${property.name.orEmpty()}' as ${typeName.orEmpty()}. Keep it private and expose a read-only type, using an " +
-                    "explicit backing field for state.",
+                    "explicit backing field for state (AGENTS.md > Architecture > ViewModels).",
             )
         }
     }
 
     private companion object {
-        val MUTABLE_TYPES = setOf("MutableStateFlow", "MutableSharedFlow", "Channel", "MutableLiveData")
+        val MUTABLE_TYPES = setOf("MutableStateFlow", "MutableSharedFlow", "Channel")
     }
 }

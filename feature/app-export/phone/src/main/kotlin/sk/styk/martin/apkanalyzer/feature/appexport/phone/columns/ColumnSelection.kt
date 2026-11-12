@@ -12,8 +12,8 @@ internal class ColumnSelection {
     val columns: StateFlow<Set<InventoryColumn>>
         field = MutableStateFlow(InventoryPreset.Default.columns)
 
-    fun replace(columns: Set<InventoryColumn>) {
-        this.columns.value = columns
+    fun replace(selection: Set<InventoryColumn>) {
+        columns.value = selection
     }
 
     fun toggle(column: InventoryColumn) {

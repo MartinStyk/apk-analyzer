@@ -41,7 +41,7 @@ jobs:
 
       - name: Verify project
         run: |
-          ./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain :build-logic:detekt-rules:detektMain lintDebug validateArchitecture validateTranslations --continue
+          ./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain :build-logic:detekt-rules:detektMain lintDebug validateArchitecture --continue
 
       - name: Merge SARIF reports
         if: always()

@@ -68,10 +68,8 @@ follow-up commit instead of gating local iteration on them.
 | Iterating on one module | `./gradlew :feature:apps:phone:compileDebugKotlin` |
 | Writing or changing a class with unit tests | `./gradlew :core:apps:testDebugUnitTest` |
 | Before committing | `./gradlew spotlessApply` — the only gate required locally |
-| Changing a module's dependencies, build file, or source sets | `./gradlew validateArchitecture` |
-| Adding or changing strings in a localized module | `./gradlew validateTranslations` |
 | Changing a rule in `build-logic/detekt-rules` | `./gradlew -p build-logic :detekt-rules:test` |
-| Whole-app check (what CI gates on — don't run this locally unless debugging a CI failure) | `./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain :build-logic:detekt-rules:detektMain lintDebug testDebugUnitTest :build-logic:detekt-rules:test :app:assembleDebug :tv:assembleDebug validateArchitecture validateTranslations` |
+| Whole-app check (what CI gates on — don't run this locally unless debugging a CI failure) | `./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain :build-logic:detekt-rules:detektMain lintDebug testDebugUnitTest :build-logic:detekt-rules:test :app:assembleDebug :tv:assembleDebug validateArchitecture` |
 | After changing a context file, skill, adapter, or the module graph | `./gradlew validateAgentContext` — skip this too; CI covers it |
 
 A successful compile is not proof a Compose layout is correct. For visual or layout changes, render
@@ -83,24 +81,18 @@ runtime state a preview can't fake. Two failure modes that pass every gate: text
 lines inside a fixed-width column, and two indicators that disagree because each derived its own
 answer.
 
-`spotlessCheck` does not flag unused imports, but detekt's `UnusedImport` does. Deleting the last use
-of something does not delete its import, so remove it in the same edit.
+`spotlessCheck` does not flag unused imports. Detekt's `UnusedImport` does, but only in production
+sources. Deleting the last use of something does not delete its import, so remove it in the same edit.
 
 ## Guardrails
 
-Most rules in this file are enforced by the build, and CI fails on any violation. The custom detekt
-rule set `apkanalyzer` ([`build-logic/detekt-rules`](build-logic/detekt-rules/AGENTS.md)), the
-built-in detekt rules in [`.detekt/detekt.yml`](.detekt/detekt.yml), `validateArchitecture`, and
-`validateTranslations` cover them. [`docs/engineering/guardrails.md`](docs/engineering/guardrails.md)
-lists every check and the ones deliberately left out.
+Many rules in this file fail the build: the custom detekt rule set in
+[`build-logic/detekt-rules`](build-logic/detekt-rules/AGENTS.md), built-in detekt and lint rules, and
+`validateArchitecture`. [`docs/engineering/guardrails.md`](docs/engineering/guardrails.md) lists them.
 
-* A guardrail finding means the code is wrong, not the rule. Fix the code.
-* Never `@Suppress` a guardrail, add a baseline, or add an exclude to `.detekt/detekt.yml` to get a
-  build green. `ForbiddenSuppress` and `validateArchitecture` reject the first two.
-* When a rule is genuinely wrong, fix the rule, add a test case for it in
-  `build-logic/detekt-rules/src/test`, and update `docs/engineering/guardrails.md` in the same change.
-* The rules can't check semantics. Two indicators sharing one predicate, unique `LazyColumn` keys,
-  logic in classes, and user-facing copy still depend on you.
+* A finding means the code is wrong. Fix the code; never `@Suppress` it, add a baseline, or add an
+  exclude to get the build green.
+* When a rule is genuinely wrong, fix the rule and its test in the same change.
 
 ## Module Rules
 
@@ -141,6 +133,8 @@ Modules live under `app/`, `tv/`, `core/<name>/`, and `feature/<name>/{api,domai
 * Extend `ViewModel()` directly. No base class.
 * Expose exactly one `val state: StateFlow<FeatureState>` and one
   `fun onAction(action: FeatureAction)` with a `when` dispatch. No other public methods.
+* Back `state` with an explicit backing field (`val state: StateFlow<S>` + `field = MutableStateFlow(...)`),
+  never a private `_state` plus `asStateFlow()`. The same goes for any flow a class exposes.
 * One-shot events go through `Channel<Event>(Channel.BUFFERED)` exposed as `receiveAsFlow()` —
   never as state.
 * **State** — `sealed interface` or `@Immutable data class`. Never holds lambdas.
@@ -257,7 +251,8 @@ Modules live under `app/`, `tv/`, `core/<name>/`, and `feature/<name>/{api,domai
   `Logger.e("Tag", throwable, "msg")`. Declare `private const val TAG` at file level.
 * `@Serializable` for nav keys and new models. Parcelize only for existing Android-specific data
   already passed through intents/bundles.
-* Unit tests cover `core` and `feature/*/domain` modules only, for now. Read the `write-unit-tests` skill before writing
+* Unit tests cover `core` and `feature/*/domain` modules only, for now (plus the detekt rules in
+  `build-logic/detekt-rules`). Read the `write-unit-tests` skill before writing
   one: it defines the one test style. Write a test only if you can name the realistic bug it would
   catch; no coverage targets, no filler. Test libraries come from the `apkanalyzer.tests.unit`
   plugin; a library only one module's tests need goes in that module's build file. Don't add

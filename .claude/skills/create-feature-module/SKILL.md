@@ -67,7 +67,7 @@ dependencies {
 
 Drop the `androidResources.enable` line as soon as the screen has real UI copy and gets its own
 `res/values/strings.xml` — every user-facing string in this module's Composables must come from
-`stringResource`, so this almost always happens when the placeholder screen from Step 4 gets content.
+`stringResource`, so this almost always happens by the time Step 4's placeholder is replaced.
 
 ## Step 3 — Create entry provider
 
@@ -135,9 +135,7 @@ private fun <Name>ScreenPreview() {
 }
 ```
 
-The placeholder shows no text on purpose: a string literal in `Text` fails Detekt's
-`HardcodedComposeString` rule. The first real copy goes in `res/values/strings.xml`, read with
-`stringResource`.
+The placeholder has no text because a string literal fails detekt's `HardcodedComposeString`.
 
 ## Step 5 — Register in `settings.gradle.kts`
 

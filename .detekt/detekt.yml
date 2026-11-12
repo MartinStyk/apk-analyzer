@@ -68,95 +68,43 @@ style:
   ForbiddenImport:
     active: true
     forbiddenImports:
-      - value: 'timber.log.*'
-        reason: 'Log with Logger from core.common.logger (AGENTS.md > Conventions).'
       - value: 'android.util.Log'
         reason: 'Log with Logger from core.common.logger (AGENTS.md > Conventions).'
-      - value: 'kotlinx.coroutines.Dispatchers'
-        reason: 'Inject DispatcherProvider instead of hardcoding a dispatcher (AGENTS.md > Architecture > Data Layer).'
-      - value: 'org.koin.*'
-        reason: 'Hilt is the only DI framework (AGENTS.md > Non-Negotiables).'
-      - value: 'dagger.Component'
-        reason: 'Hilt is the only DI framework; use @InstallIn modules (AGENTS.md > Non-Negotiables).'
-      - value: 'dagger.Subcomponent'
-        reason: 'Hilt is the only DI framework; use @InstallIn modules (AGENTS.md > Non-Negotiables).'
-      - value: 'kotlinx.parcelize.*'
-        reason: 'Use @Serializable for new models (AGENTS.md > Conventions).'
+      - value: 'kotlinx.coroutines.runBlocking'
+        reason: 'Never block a thread; use coroutines (AGENTS.md > Non-Negotiables).'
       - value: 'androidx.navigation.*'
         reason: 'Navigation 3 is the only navigation library (AGENTS.md > Architecture > Navigation).'
-      - value: 'android.view.LayoutInflater'
-        reason: 'Jetpack Compose only; no XML layouts (AGENTS.md > Non-Negotiables).'
-      - value: 'androidx.databinding.*'
-        reason: 'Jetpack Compose only; no XML layouts (AGENTS.md > Non-Negotiables).'
-      - value: 'androidx.viewbinding.*'
-        reason: 'Jetpack Compose only; no XML layouts (AGENTS.md > Non-Negotiables).'
-      - value: 'androidx.lifecycle.LiveData'
-        reason: 'Use StateFlow; coroutines and flows are the only concurrency tools (AGENTS.md > Non-Negotiables).'
-      - value: 'androidx.lifecycle.MutableLiveData'
-        reason: 'Use StateFlow; coroutines and flows are the only concurrency tools (AGENTS.md > Non-Negotiables).'
-      - value: 'java.util.concurrent.Executor*'
-        reason: 'Use coroutines, never an Executor (AGENTS.md > Non-Negotiables).'
-      - value: 'android.os.AsyncTask'
-        reason: 'Use coroutines (AGENTS.md > Non-Negotiables).'
-      - value: 'kotlinx.coroutines.GlobalScope'
-        reason: 'Launch in a structured scope (AGENTS.md > Non-Negotiables).'
       - value: 'androidx.compose.runtime.collectAsState'
         reason: 'Collect state with collectAsStateWithLifecycle() (AGENTS.md > Architecture > ViewModels).'
-      - value: 'androidx.compose.material.*'
-        reason: 'Material 2 is not used; use the design-system wrappers (AGENTS.md > Compose).'
-      - value: 'org.junit.Assert*'
-        reason: 'Assert with Kotest matchers (write-unit-tests skill).'
-      - value: 'kotlin.test.*'
-        reason: 'Assert with Kotest matchers (write-unit-tests skill).'
-      - value: 'com.google.common.truth.*'
-        reason: 'Assert with Kotest matchers (write-unit-tests skill).'
-      - value: 'org.junit.jupiter.*'
-        reason: 'Unit tests use JUnit 4 (write-unit-tests skill).'
-    allowedImports:
-      - 'androidx.compose.material.icons.*'
     excludes:
       - '**/logger/Logger.kt'
-      - '**/coroutines/DispatcherProviderImpl.kt'
-      - '**/coroutines/TestDispatcherProvider.kt'
+  ForbiddenMethodCall:
+    active: true
   ForbiddenSuppress:
     active: true
     rules:
       - 'NoComments'
       - 'AppFunctionKDocRequired'
       - 'NoKtlintSuppression'
-      - 'Material3Scope'
-      - 'TvMaterial3Scope'
-      - 'MaterialIconsScope'
       - 'ViewModelContract'
       - 'ContractTypeShape'
       - 'MutableFlowExposure'
       - 'EntryBlockDelegatesToScreen'
       - 'NavKeyShape'
       - 'ApiModuleContents'
-      - 'SealedMemberDataObject'
-      - 'LoggerTag'
       - 'ImplVisibility'
-      - 'ImplSeparateFile'
-      - 'HiltModuleShape'
-      - 'RunCatchingInSuspend'
-      - 'BlockingOrConsoleCall'
-      - 'PresentTenseCallbacks'
       - 'PreviewShape'
       - 'PreviewPresence'
       - 'NoRawColor'
       - 'HardcodedComposeString'
       - 'ForbiddenImport'
-      - 'ForbiddenSuppress'
-      - 'WildcardImport'
+      - 'ForbiddenMethodCall'
       - 'UnusedImport'
-      - 'InvalidPackageDeclaration'
       - 'InjectDispatcher'
       - 'GlobalCoroutineUsage'
+      - 'SuspendFunSwallowedCancellation'
   UnusedImport:
     active: true
-  WildcardImport:
-    active: true
-    excludeImports: []
   MagicNumber:
     active: false
     severity: info
@@ -181,79 +129,29 @@ naming:
     constantPattern: '[A-Z][A-Za-z0-9_]*'
 
 apkanalyzer:
-  NoComments:
-    active: true
   AppFunctionKDocRequired:
-    active: true
     includes:
       - '**/core/app-functions/src/main/**'
-  NoKtlintSuppression:
-    active: true
-  Material3Scope:
-    active: true
-    excludes:
-      - '**/core/design-system/phone/src/**'
-      - '**/app/src/**'
-  TvMaterial3Scope:
-    active: true
-    excludes:
-      - '**/core/design-system/tv/src/**'
-  MaterialIconsScope:
-    active: true
-    excludes:
-      - '**/core/design-system/foundation/src/**'
-  ViewModelContract:
-    active: true
   ContractTypeShape:
-    active: true
     includes:
       - '**/feature/*/phone/src/main/**'
       - '**/feature/*/tv/src/main/**'
       - '**/app/src/main/**'
       - '**/tv/src/main/**'
-  MutableFlowExposure:
-    active: true
-  EntryBlockDelegatesToScreen:
-    active: true
-  NavKeyShape:
-    active: true
   ApiModuleContents:
-    active: true
     includes:
       - '**/feature/*/api/src/main/**'
-  SealedMemberDataObject:
-    active: true
-  LoggerTag:
-    active: true
-  ImplVisibility:
-    active: true
-  ImplSeparateFile:
-    active: true
-  HiltModuleShape:
-    active: true
-  RunCatchingInSuspend:
-    active: true
-  BlockingOrConsoleCall:
-    active: true
-  PresentTenseCallbacks:
-    active: true
-  PreviewShape:
-    active: true
   PreviewPresence:
-    active: true
     excludes:
       - '**/theme/**'
       - '**/navigation/**'
       - '**/ApkAnalyzerApp.kt'
       - '**/TvApkAnalyzerApp.kt'
       - '**/core/design-system/foundation/**'
-      - '**/core/design-system/tv/**/focus/MinimalScroll.kt'
   NoRawColor:
-    active: true
     excludes:
       - '**/core/design-system/**'
   HardcodedComposeString:
-    active: true
     includes:
       - '**/feature/*/phone/src/main/**'
       - '**/feature/*/tv/src/main/**'

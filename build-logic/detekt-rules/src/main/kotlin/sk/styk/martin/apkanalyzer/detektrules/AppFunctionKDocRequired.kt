@@ -4,6 +4,7 @@ import dev.detekt.api.Config
 import dev.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtDeclaration
+import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class AppFunctionKDocRequired(config: Config) :
@@ -14,7 +15,7 @@ class AppFunctionKDocRequired(config: Config) :
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
-        if (function.hasAnnotation("AppFunction")) requireKDoc(function)
+        if (function.hasAnnotation("AppFunctionDeclaration")) requireKDoc(function)
     }
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
@@ -25,7 +26,7 @@ class AppFunctionKDocRequired(config: Config) :
     private fun requireKDoc(declaration: KtDeclaration) {
         if (declaration.docComment != null) return
         report(
-            (declaration as? KtNamedFunction)?.nameIdentifier ?: (declaration as? KtClassOrObject)?.nameIdentifier ?: declaration,
+            (declaration as? KtNamedDeclaration)?.nameIdentifier ?: declaration,
             "Document '${declaration.name.orEmpty()}' with KDoc; on-device agents read it as the tool description " +
                 "(core/app-functions/AGENTS.md).",
         )

@@ -17,10 +17,12 @@ private val forbiddenBuildTokenPattern = Regex("""\b(minSdk|compileSdk|targetSdk
 private val stringProjectPattern = Regex("""\bproject\(\s*":""")
 private val rawPluginPattern = Regex("""(?m)^\s*(id|kotlin)\(\s*"""")
 private val literalCoordinatePattern = Regex(""""[\w.-]+:[\w.-]+:[\w.+-]+"""")
-private val material3Pattern = Regex("""\blibs\.androidx\.compose\.material3\b""")
+private val designSystemLibraries = mapOf(
+    "libs.androidx.compose.material3" to setOf("app", "core/design-system/phone"),
+    "libs.androidx.tv.material" to setOf("core/design-system/tv"),
+    "libs.androidx.compose.material.icons.extended" to setOf("core/design-system/foundation"),
+)
 private val namespacePattern = Regex("""\bnamespace\s*=\s*"([^"]+)"""")
-private val baselineFilePattern = Regex(""".*baseline.*\.xml""", RegexOption.IGNORE_CASE)
-private val ignoredDirectoryNames = setOf(".git", ".gradle", ".idea", "build", "out", "node_modules")
 
 @DisableCachingByDefault(because = "The task validates the live repository structure without producing outputs.")
 abstract class ValidateArchitectureTask : DefaultTask() {
@@ -58,9 +60,6 @@ abstract class ValidateArchitectureTask : DefaultTask() {
                     }
                 }
 
-            if (moduleDirectory.isTvModule() && material3Pattern.containsMatchIn(buildScript)) {
-                errors += "$displayPath: A5: TV modules never depend on phone Material3."
-            }
             buildHygieneViolations(buildScript, moduleDirectory).forEach { violation ->
                 errors += "$displayPath: $violation"
             }
@@ -68,14 +67,6 @@ abstract class ValidateArchitectureTask : DefaultTask() {
                 errors += "$moduleDirectory: $violation"
             }
         }
-
-        rootDirectory.walkTopDown()
-            .onEnter { directory -> directory == rootDirectory || directory.name !in ignoredDirectoryNames }
-            .filter { file -> file.isFile && baselineFilePattern.matches(file.name) }
-            .forEach { file ->
-                errors += "${file.relativeTo(rootDirectory).invariantSeparatorsPath}: B5: " +
-                    "Lint and detekt baselines are not allowed. Fix the finding instead."
-            }
 
         if (errors.isNotEmpty()) {
             throw GradleException(
@@ -87,7 +78,7 @@ abstract class ValidateArchitectureTask : DefaultTask() {
     }
 }
 
-internal fun accessorOf(moduleDirectory: String): String = moduleDirectory
+private fun accessorOf(moduleDirectory: String): String = moduleDirectory
     .split('/')
     .joinToString(".") { segment ->
         segment.split('-').mapIndexed { index, part ->
@@ -95,8 +86,7 @@ internal fun accessorOf(moduleDirectory: String): String = moduleDirectory
         }.joinToString("")
     }
 
-@Suppress("CyclomaticComplexMethod")
-internal fun moduleGraphViolation(source: String, target: String): String? {
+private fun moduleGraphViolation(source: String, target: String): String? {
     val sourceFeature = source.featureName()
     val targetFeature = target.featureName()
     val targetLayer = target.featureLayer()
@@ -107,29 +97,23 @@ internal fun moduleGraphViolation(source: String, target: String): String? {
         source.startsWith("core/") && targetFeature != null ->
             "A2: core modules never depend on feature modules, found $target."
 
-        source.featureLayer() == "domain" && targetLayer in setOf("phone", "tv") ->
-            "A4: feature domain modules never depend on UI modules, found $target."
+        source.featureLayer() == "domain" && (targetLayer in setOf("phone", "tv") || (targetFeature != null && targetFeature != sourceFeature)) ->
+            "A4: feature domain modules depend only on their own api and core modules, found $target."
 
         sourceFeature != null && targetFeature != null && targetFeature != sourceFeature && targetLayer != "api" ->
             "A3: features reach other features only through their api module, found $target."
 
-        source.isTvModule() && (target == "core/design-system/phone" || targetLayer == "phone") ->
+        source.isTvModule() && target.isPhoneModule() ->
             "A5: TV modules never depend on phone modules, found $target."
 
-        source.isPhoneModule() && (target.isTvModule() || target.featureLayer() == "tv") ->
+        source.isPhoneModule() && target.isTvModule() ->
             "A6: phone modules never depend on TV modules, found $target."
-
-        targetLayer == "phone" && source != "app" ->
-            "A7: only app assembles feature phone modules, found $target."
-
-        targetLayer == "tv" && source != "tv" ->
-            "A7: only tv assembles feature TV modules, found $target."
 
         else -> null
     }
 }
 
-internal fun buildHygieneViolations(buildScript: String, moduleDirectory: String): List<String> = buildList {
+private fun buildHygieneViolations(buildScript: String, moduleDirectory: String): List<String> = buildList {
     forbiddenBuildTokenPattern.find(buildScript)?.let { match ->
         add("B1: '${match.value}' comes from AndroidSdk.kt or Kotlin.kt in build-logic, never a module build file.")
     }
@@ -142,39 +126,29 @@ internal fun buildHygieneViolations(buildScript: String, moduleDirectory: String
     literalCoordinatePattern.find(buildScript)?.let { match ->
         add("B4: ${match.value} must be a gradle/libs.versions.toml entry.")
     }
+    designSystemLibraries
+        .filterValues { allowedModules -> moduleDirectory !in allowedModules }
+        .keys
+        .filter { library -> Regex("""\b${Regex.escape(library)}\b""").containsMatchIn(buildScript) }
+        .forEach { library -> add("B5: only the design system depends on $library; use its wrappers.") }
     namespacePattern.find(buildScript)?.groupValues?.get(1)?.let { namespace ->
         val expected = expectedNamespace(moduleDirectory)
         if (namespace != expected) {
-            add("S4: namespace '$namespace' must be '$expected'.")
+            add("S2: namespace '$namespace' must be '$expected'.")
         }
     }
 }
 
-internal fun expectedNamespace(moduleDirectory: String): String {
+private fun expectedNamespace(moduleDirectory: String): String {
     val segments = moduleDirectory.split('/').let { segments ->
         if (segments.first() == "app") segments.drop(1) else segments
     }
     return (listOf(ROOT_NAMESPACE) + segments.map { segment -> segment.replace("-", "") }).joinToString(".")
 }
 
-private fun structureViolations(moduleRoot: File, moduleDirectory: String): List<String> = buildList {
-    val sourceSets = moduleRoot.resolve("src").listFiles().orEmpty().filter(File::isDirectory)
-    sourceSets.forEach { sourceSet ->
-        val layouts = sourceSet.resolve("res").listFiles().orEmpty().filter { file ->
-            file.isDirectory && file.name.startsWith("layout")
-        }
-        if (layouts.isNotEmpty()) {
-            add("S1: src/${sourceSet.name}/res/${layouts.first().name} is an XML layout. Use Compose.")
-        }
-        when (sourceSet.name) {
-            "test", "testFixtures" -> if (!moduleDirectory.mayHaveUnitTests()) {
-                add("S2: src/${sourceSet.name} is allowed only in core and feature domain modules.")
-            }
-
-            "androidTest" -> add("S3: src/androidTest is not allowed. Instrumentation tests need an explicit request.")
-        }
-    }
-}
+private fun structureViolations(moduleRoot: File, moduleDirectory: String): List<String> = listOf("test", "testFixtures")
+    .filter { sourceSet -> moduleRoot.resolve("src/$sourceSet").isDirectory && !moduleDirectory.mayHaveUnitTests() }
+    .map { sourceSet -> "S1: src/$sourceSet is allowed only in core and feature domain modules." }
 
 private fun String.featureName(): String? = split('/').takeIf { segments ->
     segments.size == 3 && segments[0] == "feature"

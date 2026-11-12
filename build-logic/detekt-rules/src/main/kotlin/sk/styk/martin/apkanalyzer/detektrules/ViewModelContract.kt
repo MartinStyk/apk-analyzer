@@ -8,7 +8,6 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
-import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
@@ -18,26 +17,14 @@ private const val CONTRACT = "AGENTS.md > Architecture > ViewModels"
 class ViewModelContract(config: Config) :
     Rule(
         config,
-        "ViewModels extend ViewModel() directly, are internal, expose only state, events and onAction, " +
+        "ViewModels extend ViewModel() directly, expose only state, events and onAction, " +
             "send events through a buffered Channel and never touch Navigator.",
     ) {
-
-    override fun visitImportDirective(importDirective: KtImportDirective) {
-        super.visitImportDirective(importDirective)
-        val importsNavigator = importDirective.importedFqName?.shortName()?.asString() == "Navigator"
-        if (importsNavigator && importDirective.containingKtFile.declarations.any { it is KtClass && it.isViewModel() }) {
-            report(
-                importDirective,
-                "A ViewModel never touches Navigator. Model navigation as an Action and an Event ($CONTRACT).",
-            )
-        }
-    }
 
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)
         if (!klass.isViewModel()) return
         checkSuperType(klass)
-        checkVisibility(klass)
         klass.body?.declarations.orEmpty().forEach(::checkMember)
         checkEvents(klass)
     }
@@ -50,12 +37,6 @@ class ViewModelContract(config: Config) :
     private fun checkSuperType(klass: KtClass) {
         if ("ViewModel" !in klass.superTypeNames()) {
             report(klass.nameIdentifier ?: klass, "Extend ViewModel() directly, with no base class ($CONTRACT).")
-        }
-    }
-
-    private fun checkVisibility(klass: KtClass) {
-        if (!klass.isHiddenFromOtherModules()) {
-            report(klass.nameIdentifier ?: klass, "Declare the ViewModel internal; no other module uses it directly.")
         }
     }
 

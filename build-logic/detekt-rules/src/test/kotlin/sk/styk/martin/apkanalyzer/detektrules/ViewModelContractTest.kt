@@ -4,7 +4,6 @@ import dev.detekt.api.Config
 import dev.detekt.test.lint
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import org.junit.Test
 
@@ -103,18 +102,6 @@ class ViewModelContractTest {
     }
 
     @Test
-    fun `Given a public ViewModel When linting Then it is reported`() {
-        val code = """
-            class SettingsViewModel : ViewModel()
-        """.trimIndent()
-
-        val findings = rule.lint(code)
-
-        findings shouldHaveSize 1
-        findings.single().message shouldContain "Declare the ViewModel internal"
-    }
-
-    @Test
     fun `Given a HiltViewModel extending a base class When linting Then it is reported`() {
         val code = """
             @HiltViewModel
@@ -158,7 +145,7 @@ class ViewModelContractTest {
     }
 
     @Test
-    fun `Given a ViewModel injecting Navigator When linting Then the import and the usage are reported`() {
+    fun `Given a ViewModel injecting Navigator When linting Then it is reported`() {
         val code = """
             import sk.styk.martin.apkanalyzer.core.navigation.Navigator
 
@@ -169,7 +156,8 @@ class ViewModelContractTest {
 
         val findings = rule.lint(code)
 
-        findings.map { it.message.contains("never touches Navigator") } shouldBe listOf(true, true)
+        findings shouldHaveSize 1
+        findings.single().message shouldContain "never touches Navigator"
     }
 
     @Test

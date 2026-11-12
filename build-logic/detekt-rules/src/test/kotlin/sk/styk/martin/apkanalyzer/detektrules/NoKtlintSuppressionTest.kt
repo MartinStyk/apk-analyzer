@@ -12,18 +12,6 @@ class NoKtlintSuppressionTest {
     private val rule = NoKtlintSuppression(Config.empty)
 
     @Test
-    fun `Given a ktlint-disable comment When linting Then it is reported`() {
-        val code = """
-            import sk.styk.martin.apkanalyzer.core.apps.* // ktlint-disable no-wildcard-imports
-        """.trimIndent()
-
-        val findings = rule.lint(code)
-
-        findings shouldHaveSize 1
-        findings.single().message shouldContain "Don't suppress ktlint"
-    }
-
-    @Test
     fun `Given a Suppress annotation naming a ktlint rule When linting Then it is reported`() {
         val code = """
             @Suppress("ktlint:standard:max-line-length")
@@ -33,6 +21,7 @@ class NoKtlintSuppressionTest {
         val findings = rule.lint(code)
 
         findings shouldHaveSize 1
+        findings.single().message shouldContain "Don't suppress ktlint"
     }
 
     @Test

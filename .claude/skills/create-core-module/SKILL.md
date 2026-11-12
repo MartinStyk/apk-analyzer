@@ -103,8 +103,8 @@ internal class <Name>RepositoryImpl @Inject constructor(
 }
 ```
 
-The class is `internal`, and suspending code wraps failures with `runCatchingCancellable`, never
-`runCatching`. Detekt's `ImplVisibility` and `RunCatchingInSuspend` rules fail the build otherwise.
+The class is `internal` (detekt's `ImplVisibility` fails the build otherwise), and suspending code
+wraps failures with `runCatchingCancellable` so cancellation still propagates.
 
 ## Step 4 — Create Hilt module (if using DI)
 

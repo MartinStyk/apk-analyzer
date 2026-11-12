@@ -11,7 +11,6 @@ import android.provider.OpenableColumns
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.createBitmap
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
@@ -126,10 +125,8 @@ internal class AppExportManagerImpl @Inject constructor(
             writeCompleted = true
         } finally {
             if (!writeCompleted) {
-                withContext(NonCancellable) {
-                    runCatchingCancellable { contentResolver.delete(destination, null, null) }
-                        .onFailure { Logger.w(TAG, it, "Can not remove incomplete export") }
-                }
+                runCatching { contentResolver.delete(destination, null, null) }
+                    .onFailure { Logger.w(TAG, it, "Can not remove incomplete export") }
             }
         }
     }

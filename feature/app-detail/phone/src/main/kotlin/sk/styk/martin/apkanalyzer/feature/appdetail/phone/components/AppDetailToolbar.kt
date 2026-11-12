@@ -31,10 +31,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
-import sk.styk.martin.apkanalyzer.core.common.model.AppSource
-import sk.styk.martin.apkanalyzer.core.common.model.PackageName
-import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.AppIcon
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
@@ -51,7 +47,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailBadg
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.labelRes
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.AppDetailState
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
-import java.time.Instant
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.sampleLoadedState
 import kotlin.math.roundToInt
 
 private val BACK_BUTTON_SIZE = 48.dp
@@ -263,47 +259,8 @@ private fun AppDetailBadge.icon(): ImageVector = when (this) {
 private fun AppDetailToolbarPreview() {
     ApkAnalyzerTheme {
         AppDetailToolbar(
-            state = AppDetailState.Loaded(
-                analysisMode = AppDetail.AnalysisMode.InstalledPackage,
-                appName = "WhatsApp",
-                packageName = PackageName("com.whatsapp"),
-                processName = "com.whatsapp",
-                versionName = "2.25.14.78",
-                versionCode = 252147,
-                uid = 10187,
-                description = null,
-                isSystemApp = false,
-                source = AppSource.GooglePlay,
-                apkDirectory = "/data/app/com.whatsapp/base.apk",
-                dataDirectory = "/data/user/0/com.whatsapp",
-                apkSize = 64.megabytes,
-                totalSize = 510.megabytes,
-                targetSdkVersion = 35,
-                targetSdkLabel = "Android 15",
-                minSdkVersion = 21,
-                minSdkLabel = "Android 5.0",
-                installLocation = "InternalOnly",
-                appInstaller = PackageName("com.android.vending"),
-                firstInstallTime = Instant.ofEpochMilli(1_736_640_000_000),
-                lastUpdateTime = Instant.ofEpochMilli(1_748_736_000_000),
-                totalPermissionsCount = 64,
-                dangerousPermissionsCount = 12,
-                grantedDangerousPermissionsCount = 8,
-                dangerousPermissionPreviews = listOf(),
-                definedPermissionsCount = 4,
-                activitiesCount = 312,
-                servicesCount = 41,
-                contentProvidersCount = 9,
-                broadcastReceiversCount = 37,
-                certificatesCount = 1,
-                requirementsCount = 10,
-                requiredFeaturesCount = 6,
-                optionalFeaturesCount = 4,
-                unmetRequirementsCount = 0,
-                requirementPreviews = listOf(),
-                badges = listOf(AppDetailBadge.GooglePlay, AppDetailBadge.Large, AppDetailBadge.RecentlyUpdated),
-            ),
-            appDetailInput = AppDetailInput.InstalledPackage("com.whatsapp"),
+            state = sampleLoadedState(),
+            appDetailInput = AppDetailInput.InstalledPackage("com.spotify.music"),
             collapsingState = rememberCollapsingToolbarState(),
             onBack = {},
         )

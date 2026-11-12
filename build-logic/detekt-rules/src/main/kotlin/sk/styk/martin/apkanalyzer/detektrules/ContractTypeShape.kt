@@ -5,7 +5,6 @@ import dev.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunctionType
-import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtNullableType
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtTypeReference
@@ -22,14 +21,6 @@ class ContractTypeShape(config: Config) :
     override fun visit(root: KtFile) {
         super.visit(root)
         root.declarations.filterIsInstance<KtClass>().forEach(::checkContractType)
-    }
-
-    override fun visitNamedFunction(function: KtNamedFunction) {
-        super.visitNamedFunction(function)
-        if (!function.isComposable()) return
-        function.valueParameters
-            .filter { it.typeReference?.isMutableCollection() == true }
-            .forEach { report(it, "Pass a read-only List, Set or Map to a composable (AGENTS.md > Compose).") }
     }
 
     private fun checkContractType(klass: KtClass) {

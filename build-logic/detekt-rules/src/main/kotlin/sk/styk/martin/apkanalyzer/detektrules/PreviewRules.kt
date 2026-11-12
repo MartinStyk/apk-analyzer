@@ -10,16 +10,13 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 class PreviewShape(config: Config) :
     Rule(
         config,
-        "Previews are private, suffixed Preview and wrapped in the app theme.",
+        "Previews are suffixed Preview and wrapped in the app theme.",
     ) {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
         if (!function.isComposable() || !function.isPreview()) return
         val target = function.nameIdentifier ?: function
-        if (!function.isPrivateDeclaration()) {
-            report(target, "Declare preview '${function.name.orEmpty()}' private (AGENTS.md > Compose).")
-        }
         if (function.name?.endsWith("Preview") != true) {
             report(target, "Suffix preview '${function.name.orEmpty()}' with Preview (AGENTS.md > Compose).")
         }
@@ -36,7 +33,7 @@ class PreviewShape(config: Config) :
 class PreviewPresence(config: Config) :
     Rule(
         config,
-        "Every file that declares a public composable also declares a @Preview.",
+        "Every file that declares a non-private composable also declares a @Preview.",
     ) {
 
     override fun visit(root: KtFile) {

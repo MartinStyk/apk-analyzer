@@ -11,10 +11,9 @@ document is for anyone who wants to know what those commands are checking and wh
 |---|---|---|---|
 | Spotless (ktlint + compose-rules) | Formatting and Compose naming/parameter rules | [`SpotlessPlugin.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/SpotlessPlugin.kt) | Yes — `spotlessCheck` |
 | Detekt | Static analysis of Kotlin, including `build-logic` itself, plus the custom `apkanalyzer` guardrail rules | [`.detekt/detekt.yml`](../../.detekt/detekt.yml), [`DetektPlugin.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/DetektPlugin.kt) | Yes — at **warning** severity |
-| Android Lint | Android/API correctness, resources, manifest, accessibility | AGP defaults; `lint { }` in [`app/build.gradle.kts`](../../app/build.gradle.kts) | Yes — `lintDebug` |
+| Android Lint | Android/API correctness, resources, translations, manifest, accessibility | AGP defaults | Yes — `lintDebug` |
 | `validateAgentContext` | Structure of the shared AI context files | [`ValidateAgentContextTask.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/ValidateAgentContextTask.kt) | Yes — in its own workflow |
-| `validateArchitecture` | Module graph, build file hygiene, source set structure, no baselines | [`ValidateArchitectureTask.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/ValidateArchitectureTask.kt) | Yes — `verify` job |
-| `validateTranslations` | Every locale has exactly the base keys and placeholders | [`ValidateTranslationsTask.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/ValidateTranslationsTask.kt) | Yes — `verify` job |
+| `validateArchitecture` | Module graph, build file hygiene, source set structure | [`ValidateArchitectureTask.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/ValidateArchitectureTask.kt) | Yes — `verify` job |
 | Unit tests | Behavior of `core` classes, on the JVM | [`UnitTestPlugin.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/UnitTestPlugin.kt) | Yes — `testDebugUnitTest` |
 | LeakCanary | Activity/Fragment/ViewModel leaks at runtime | `debugImplementation` in [`app/build.gradle.kts`](../../app/build.gradle.kts) — phone app only | No — advisory, debug builds only |
 
@@ -51,10 +50,9 @@ of "known" findings.
 
 On top of the built-in rules, every module loads the custom `apkanalyzer` rule set from
 [`build-logic/detekt-rules`](../../build-logic/detekt-rules/AGENTS.md). It turns the conventions in
-`AGENTS.md` into build failures: the ViewModel contract, no comments, preview presence, scoped
-Material3 and icons, NavKey shape, and more. [Guardrails](guardrails.md) lists every check, why it
-exists, and the candidates that were rejected or deferred. Suppressing a guardrail is itself a
-finding (`ForbiddenSuppress`).
+`AGENTS.md` into build failures: the ViewModel contract, no comments, preview presence, NavKey
+shape, and more. [Guardrails](guardrails.md) lists every check.
+Suppressing a guardrail is itself a finding (`ForbiddenSuppress`).
 
 The rule most often hit in this codebase is `UnusedPrivateProperty`: a constructor parameter that is
 only read in a property initializer (a `combine` chain, for example) must be declared **without**
@@ -70,9 +68,9 @@ log.
 problems, obsolete or unsafe platform calls, accessibility issues. Given `minSdk` 28 and `targetSdk`
 37, Lint is the gate that catches "this call needs an API check" before a device does.
 
-The only suppression is `MissingTranslation` in [`app/build.gradle.kts`](../../app/build.gradle.kts)
-(the `tv` app module sets none), because locales ship incrementally — a string is added in English first and translated in a follow-up
-(see the [`translate-strings`](../../.claude/skills/translate-strings/SKILL.md) skill).
+No check is suppressed. `MissingTranslation` fails the build, so a new translatable string lands in
+every locale in the same change (see the [`translate-strings`](../../.claude/skills/translate-strings/SKILL.md)
+skill).
 
 ## LeakCanary
 
@@ -89,15 +87,14 @@ What a green build proves nothing about:
   three lines in a fixed-width column, or an item sheet that never opens, passes every gate. For any
   visual change, run it on a device — the [`run-app`](../../.claude/skills/run-app/SKILL.md) and
   [`navigate-app-adb`](../../.claude/skills/navigate-app-adb/SKILL.md) skills automate the loop.
-* **Semantic conventions.** Two indicators sharing one predicate, unique `LazyColumn` keys, and
-  user-facing copy. See the rejected entries in [Guardrails](guardrails.md).
+* **Semantic conventions.** See "Not checked" in [Guardrails](guardrails.md).
 
 ## Running the gates
 
 ```bash
 ./gradlew spotlessApply                                   # required before every commit
 ./gradlew :feature:apps:phone:compileDebugKotlin           # fast single-module check while iterating
-./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain :build-logic:detekt-rules:detektMain lintDebug testDebugUnitTest :build-logic:detekt-rules:test :app:assembleDebug :tv:assembleDebug validateArchitecture validateTranslations
+./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain :build-logic:detekt-rules:detektMain lintDebug testDebugUnitTest :build-logic:detekt-rules:test :app:assembleDebug :tv:assembleDebug validateArchitecture
 ./gradlew validateAgentContext                            # after touching AGENTS.md or a skill
 ./gradlew -p build-logic :detekt-rules:test               # after changing a guardrail rule
 ```
@@ -109,7 +106,7 @@ compile and let CI catch the rest.
 
 Every push and PR to `develop` runs `spotlessCheck detektDebug
 :build-logic:convention:detektMain :build-logic:detekt-rules:detektMain lintDebug validateArchitecture
-validateTranslations --continue` and uploads the merged SARIF to code scanning, with
+--continue` and uploads the merged SARIF to code scanning, with
 `testDebugUnitTest :build-logic:detekt-rules:test` in its own parallel job. The jobs, artifacts, and the rest of the pipeline are in
 [CI and release](ci-and-release.md).
 

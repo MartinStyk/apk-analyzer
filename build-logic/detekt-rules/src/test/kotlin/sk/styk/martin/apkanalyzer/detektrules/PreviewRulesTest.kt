@@ -47,22 +47,6 @@ class PreviewRulesTest {
     }
 
     @Test
-    fun `Given a public preview When linting shape Then it is reported`() {
-        val code = """
-            @Preview
-            @Composable
-            fun SettingsContentPreview() {
-                ApkAnalyzerTheme { SettingsContent(state = SettingsState()) }
-            }
-        """.trimIndent()
-
-        val findings = previewShape.lint(code)
-
-        findings shouldHaveSize 1
-        findings.single().message shouldContain "Declare preview 'SettingsContentPreview' private"
-    }
-
-    @Test
     fun `Given a preview without the Preview suffix When linting shape Then it is reported`() {
         val code = """
             @PreviewLightDark

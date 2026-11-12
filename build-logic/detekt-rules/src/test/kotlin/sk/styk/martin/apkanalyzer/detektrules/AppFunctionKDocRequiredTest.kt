@@ -12,10 +12,10 @@ class AppFunctionKDocRequiredTest {
     private val rule = AppFunctionKDocRequired(Config.empty)
 
     @Test
-    fun `Given an AppFunction without KDoc When linting Then it is reported`() {
+    fun `Given an AppFunctionDeclaration without KDoc When linting Then it is reported`() {
         val code = """
             class AppFunctions {
-                @AppFunction
+                @AppFunctionDeclaration
                 suspend fun findApps(query: String): List<String> = emptyList()
             }
         """.trimIndent()
@@ -27,13 +27,13 @@ class AppFunctionKDocRequiredTest {
     }
 
     @Test
-    fun `Given an AppFunction with KDoc When linting Then nothing is reported`() {
+    fun `Given an AppFunctionDeclaration with KDoc When linting Then nothing is reported`() {
         val code = """
             class AppFunctions {
                 /**
                  * Finds installed apps whose name matches the query.
                  */
-                @AppFunction
+                @AppFunctionDeclaration
                 suspend fun findApps(query: String): List<String> = emptyList()
             }
         """.trimIndent()

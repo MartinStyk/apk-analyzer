@@ -123,29 +123,4 @@ class ContractTypeShapeTest {
         findings shouldHaveSize 1
         findings.single().message shouldContain "State holds read-only List, Set and Map only"
     }
-
-    @Test
-    fun `Given a composable taking a MutableList When linting Then it is reported`() {
-        val code = """
-            @Composable
-            fun AppList(apps: MutableList<String>, modifier: Modifier = Modifier) = Unit
-        """.trimIndent()
-
-        val findings = rule.lint(code)
-
-        findings shouldHaveSize 1
-        findings.single().message shouldContain "Pass a read-only List, Set or Map to a composable"
-    }
-
-    @Test
-    fun `Given a composable taking a List When linting Then nothing is reported`() {
-        val code = """
-            @Composable
-            fun AppList(apps: List<String>, modifier: Modifier = Modifier) = Unit
-        """.trimIndent()
-
-        val findings = rule.lint(code)
-
-        findings.shouldBeEmpty()
-    }
 }

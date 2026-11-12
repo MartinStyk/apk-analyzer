@@ -24,7 +24,7 @@ on `push`, never on a pull request.
 
 | Job | What it does |
 |---|---|
-| `verify` | Runs the static checks, `spotlessCheck detektDebug :build-logic:convention:detektMain :build-logic:detekt-rules:detektMain lintDebug validateArchitecture validateTranslations --continue`, merges the SARIF reports, and uploads to code scanning |
+| `verify` | Runs the static checks, `spotlessCheck detektDebug :build-logic:convention:detektMain :build-logic:detekt-rules:detektMain lintDebug validateArchitecture --continue`, merges the SARIF reports, and uploads to code scanning |
 | `unit-tests` | Runs `testDebugUnitTest :build-logic:detekt-rules:test --continue` |
 | `build-apk` | Assembles a debug APK, renames it to `apk-analyzer.apk`, and uploads it with 14-day retention and no recompression |
 | `distribute` | Downloads the APK and sends it to the `internal-testers` group on Firebase App Distribution |

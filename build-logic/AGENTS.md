@@ -11,7 +11,7 @@ build scripts.
 | Plugin | Responsibility |
 |---|---|
 | `apkanalyzer.agent-context` | Registers the root `validateAgentContext` task. |
-| `apkanalyzer.architecture` | Registers the root `validateArchitecture` and `validateTranslations` tasks. |
+| `apkanalyzer.architecture` | Registers the root `validateArchitecture` task. |
 | `apkanalyzer.library` | Configures Android libraries, Kotlin, SDK levels, and formatting. |
 | `apkanalyzer.application` | Configures the Android app, Google services, Firebase, and release builds. |
 | `apkanalyzer.feature.api` | Configures serialization and Navigation 3 for dependency-light feature APIs. |
@@ -36,8 +36,7 @@ build scripts.
   skill metadata, unique adapters, and valid local Markdown links.
 * `validateArchitecture` parses module build files as text, never through the Gradle model, so it
   stays configuration-cache safe. It maps `projects.*` accessors back to module directories and
-  checks the module graph, build file hygiene, and source sets. `validateTranslations` compares each
-  `values-*/strings.xml` with its module's `values/strings.xml`. The rule IDs are listed in
+  checks the module graph, build file hygiene, and source sets. The rule IDs are listed in
   [`docs/engineering/guardrails.md`](../docs/engineering/guardrails.md).
 * `build-logic/detekt-rules` is a plain JVM project in this included build. `DetektPlugin` adds it
   as a `detektPlugins` dependency, so every module's detekt run loads the custom rules. See

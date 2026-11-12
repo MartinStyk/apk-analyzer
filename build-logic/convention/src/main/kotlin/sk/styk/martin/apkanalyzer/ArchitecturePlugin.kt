@@ -21,11 +21,6 @@ class ArchitecturePlugin : Plugin<Project> {
                 repositoryDirectory.set(layout.projectDirectory)
                 modules.set(modulesByPath)
             }
-
-            tasks.register<ValidateTranslationsTask>("validateTranslations") {
-                repositoryDirectory.set(layout.projectDirectory)
-                modules.set(modulesByPath)
-            }
         }
     }
 }

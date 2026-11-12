@@ -1348,7 +1348,7 @@ private val sampleHistoricalInput = AppDetailInput.Historical(
     capturedAt = Instant.ofEpochMilli(1_773_014_400_000),
 )
 
-private fun sampleLoadedState() = AppDetailState.Loaded(
+internal fun sampleLoadedState() = AppDetailState.Loaded(
     analysisMode = AppDetail.AnalysisMode.InstalledPackage,
     appName = "Spotify",
     packageName = PackageName("com.spotify.music"),

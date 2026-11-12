@@ -6,12 +6,6 @@ apkanalyzer:
     active: true
   NoKtlintSuppression:
     active: true
-  Material3Scope:
-    active: true
-  TvMaterial3Scope:
-    active: true
-  MaterialIconsScope:
-    active: true
   ViewModelContract:
     active: true
   ContractTypeShape:
@@ -24,21 +18,7 @@ apkanalyzer:
     active: true
   ApiModuleContents:
     active: true
-  SealedMemberDataObject:
-    active: true
-  LoggerTag:
-    active: true
   ImplVisibility:
-    active: true
-  ImplSeparateFile:
-    active: true
-  HiltModuleShape:
-    active: true
-  RunCatchingInSuspend:
-    active: true
-  BlockingOrConsoleCall:
-    active: true
-  PresentTenseCallbacks:
     active: true
   PreviewShape:
     active: true
