@@ -1,6 +1,5 @@
 package sk.styk.martin.apkanalyzer.core.apps.export
 
-import android.content.ContentResolver
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -12,6 +11,7 @@ import android.provider.OpenableColumns
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.createBitmap
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
@@ -23,6 +23,8 @@ import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject
+
+private const val TAG = "AppExportManager"
 
 internal class AppExportManagerImpl @Inject constructor(
     @ApplicationContext context: Context,
@@ -124,8 +126,10 @@ internal class AppExportManagerImpl @Inject constructor(
             writeCompleted = true
         } finally {
             if (!writeCompleted) {
-                runCatching { contentResolver.delete(destination, null, null) }
-                    .onFailure { Logger.w(TAG, it, "Can not remove incomplete export") }
+                withContext(NonCancellable) {
+                    runCatchingCancellable { contentResolver.delete(destination, null, null) }
+                        .onFailure { Logger.w(TAG, it, "Can not remove incomplete export") }
+                }
             }
         }
     }
@@ -167,7 +171,6 @@ internal class AppExportManagerImpl @Inject constructor(
     }
 
     private companion object {
-        const val TAG = "AppExportManager"
         const val DEFAULT_ICON_SIZE = 512
         const val COPY_BUFFER_SIZE = 64 * 1024
     }

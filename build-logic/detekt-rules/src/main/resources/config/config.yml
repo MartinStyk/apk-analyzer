@@ -1,0 +1,50 @@
+apkanalyzer:
+  active: true
+  NoComments:
+    active: true
+  AppFunctionKDocRequired:
+    active: true
+  NoKtlintSuppression:
+    active: true
+  Material3Scope:
+    active: true
+  TvMaterial3Scope:
+    active: true
+  MaterialIconsScope:
+    active: true
+  ViewModelContract:
+    active: true
+  ContractTypeShape:
+    active: true
+  MutableFlowExposure:
+    active: true
+  EntryBlockDelegatesToScreen:
+    active: true
+  NavKeyShape:
+    active: true
+  ApiModuleContents:
+    active: true
+  SealedMemberDataObject:
+    active: true
+  LoggerTag:
+    active: true
+  ImplVisibility:
+    active: true
+  ImplSeparateFile:
+    active: true
+  HiltModuleShape:
+    active: true
+  RunCatchingInSuspend:
+    active: true
+  BlockingOrConsoleCall:
+    active: true
+  PresentTenseCallbacks:
+    active: true
+  PreviewShape:
+    active: true
+  PreviewPresence:
+    active: true
+  NoRawColor:
+    active: true
+  HardcodedComposeString:
+    active: true

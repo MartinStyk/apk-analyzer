@@ -17,7 +17,7 @@ import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.domain.SdkVersionFil
 import javax.inject.Inject
 
 @HiltViewModel
-class SdkVersionFilterViewModel @Inject constructor(
+internal class SdkVersionFilterViewModel @Inject constructor(
     private val sdkVersionFilterCoordinator: SdkVersionFilterCoordinator,
     sdkVersionResolver: SdkVersionResolver,
     installedAppsRepository: InstalledAppsRepository,

@@ -162,6 +162,8 @@ ksp-gradle-plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.
 spotless-gradle-plugin = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless" }
 compose-rules-ktlint = { module = "io.nlopez.compose.rules:ktlint", version.ref = "compose-rules-ktlint" }
 detekt-gradle-plugin = { module = "dev.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+detekt-api = { module = "dev.detekt:detekt-api", version.ref = "detekt" }
+detekt-test = { module = "dev.detekt:detekt-test", version.ref = "detekt" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -183,6 +185,7 @@ androidx-baselineprofile = { id = "androidx.baselineprofile", version.ref = "and
 apkanalyzer-library = { id = "apkanalyzer.library" }
 apkanalyzer-application = { id = "apkanalyzer.application" }
 apkanalyzer-agent-context = { id = "apkanalyzer.agent-context" }
+apkanalyzer-architecture = { id = "apkanalyzer.architecture" }
 apkanalyzer-feature-api = { id = "apkanalyzer.feature.api" }
 apkanalyzer-feature-phone = { id = "apkanalyzer.feature.phone" }
 apkanalyzer-feature-tv = { id = "apkanalyzer.feature.tv" }

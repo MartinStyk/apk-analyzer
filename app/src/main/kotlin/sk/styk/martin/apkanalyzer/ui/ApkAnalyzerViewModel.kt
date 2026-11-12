@@ -16,8 +16,10 @@ import sk.styk.martin.apkanalyzer.core.common.settings.PersistenceRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class ApkAnalyzerViewModel @Inject constructor(persistenceRepository: PersistenceRepository, private val reviewEligibilityTracker: ReviewEligibilityTracker) :
-    ViewModel() {
+internal class ApkAnalyzerViewModel @Inject constructor(
+    persistenceRepository: PersistenceRepository,
+    private val reviewEligibilityTracker: ReviewEligibilityTracker,
+) : ViewModel() {
     val state: StateFlow<ApkAnalyzerState> =
         combine(
             persistenceRepository.observe(Key.ColorScheme),

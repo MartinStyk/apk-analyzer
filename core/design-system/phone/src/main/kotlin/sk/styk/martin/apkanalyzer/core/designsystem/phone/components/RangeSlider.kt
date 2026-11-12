@@ -3,7 +3,9 @@ package sk.styk.martin.apkanalyzer.core.designsystem.phone.components
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import androidx.compose.material3.RangeSlider as MaterialRangeSlider
 
 @Composable
@@ -26,4 +28,12 @@ fun RangeSlider(
             inactiveTrackColor = AppTheme.colors.surfaceVariant,
         ),
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun RangeSliderPreview() {
+    ApkAnalyzerTheme {
+        RangeSlider(value = 21f..35f, onValueChange = {}, valueRange = 1f..36f)
+    }
 }

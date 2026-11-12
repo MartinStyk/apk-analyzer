@@ -11,6 +11,7 @@ build scripts.
 | Plugin | Responsibility |
 |---|---|
 | `apkanalyzer.agent-context` | Registers the root `validateAgentContext` task. |
+| `apkanalyzer.architecture` | Registers the root `validateArchitecture` and `validateTranslations` tasks. |
 | `apkanalyzer.library` | Configures Android libraries, Kotlin, SDK levels, and formatting. |
 | `apkanalyzer.application` | Configures the Android app, Google services, Firebase, and release builds. |
 | `apkanalyzer.feature.api` | Configures serialization and Navigation 3 for dependency-light feature APIs. |
@@ -19,7 +20,7 @@ build scripts.
 | `apkanalyzer.tests.unit` | Enables `testFixtures` and supplies the shared test libraries. A module declares only a test library no other module needs. |
 | `apkanalyzer.compose` | Applies Compose, serialization, the BOM, and shared Compose/navigation bundles. |
 | `apkanalyzer.spotless` | Applies the repository ktlint and Compose formatting rules. |
-| `apkanalyzer.detekt` | Applies baseline-free, type-resolved static analysis. |
+| `apkanalyzer.detekt` | Applies baseline-free, type-resolved static analysis plus the custom `apkanalyzer` rule set from `build-logic/detekt-rules`. |
 | `apkanalyzer.sarif-merge` | Merges module Detekt and Lint SARIF reports for CI upload. |
 | `apkanalyzer.appfunctions` | Applies KSP and the `androidx.appfunctions` runtime/compiler for App Functions declarations. |
 
@@ -33,6 +34,14 @@ build scripts.
   second parser or reporting pipeline.
 * `validateAgentContext` enforces module-scoped `AGENTS.md` coverage, adjacent `CLAUDE.md` adapters,
   skill metadata, unique adapters, and valid local Markdown links.
+* `validateArchitecture` parses module build files as text, never through the Gradle model, so it
+  stays configuration-cache safe. It maps `projects.*` accessors back to module directories and
+  checks the module graph, build file hygiene, and source sets. `validateTranslations` compares each
+  `values-*/strings.xml` with its module's `values/strings.xml`. The rule IDs are listed in
+  [`docs/engineering/guardrails.md`](../docs/engineering/guardrails.md).
+* `build-logic/detekt-rules` is a plain JVM project in this included build. `DetektPlugin` adds it
+  as a `detektPlugins` dependency, so every module's detekt run loads the custom rules. See
+  [`detekt-rules/AGENTS.md`](detekt-rules/AGENTS.md).
 * The release `signingConfig` in `ApplicationPlugin` falls back to the debug keystore/credentials
   when the `signing.storeFile`/`signing.storePassword`/`signing.keyAlias`/`signing.keyPassword`
   Gradle properties aren't set, so a local `assembleRelease`/`bundleRelease` is always a signed,

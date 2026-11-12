@@ -11,14 +11,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.styk.martin.apkanalyzer.core.apps.sorting.AppSortType
+import sk.styk.martin.apkanalyzer.core.common.model.AppSource
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
+import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.AppRow
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.lazylist.ListItemPosition
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.feature.apps.phone.R
 import sk.styk.martin.apkanalyzer.feature.apps.phone.list.AppListItem
 import java.text.DateFormat
@@ -98,4 +103,41 @@ private fun Instant.toShortDate(ifEmpty: String): String = if (this < Instant.of
     ifEmpty
 } else {
     DateFormat.getDateInstance(DateFormat.SHORT, LocalLocale.current.platformLocale).format(Date(this.toEpochMilli()))
+}
+
+private val previewApp = AppListItem(
+    packageName = PackageName("com.whatsapp"),
+    applicationName = "WhatsApp",
+    targetSdk = 34,
+    apkSize = 64.megabytes,
+    totalSize = 510.megabytes,
+    lastUsedTime = Instant.ofEpochMilli(1_748_736_000_000),
+    installTime = Instant.ofEpochMilli(1_736_640_000_000),
+    lastUpdateTime = Instant.ofEpochMilli(1_748_736_000_000),
+    source = AppSource.GooglePlay,
+)
+
+@Preview
+@Composable
+private fun AppListItemRowPreview() {
+    ApkAnalyzerTheme {
+        AppListItemRow(
+            app = previewApp,
+            onClick = {},
+            position = ListItemPosition.Single,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun AppListItemRowSortedByApkSizePreview() {
+    ApkAnalyzerTheme {
+        AppListItemRow(
+            app = previewApp,
+            onClick = {},
+            position = ListItemPosition.Single,
+            sortType = AppSortType.ApkSize,
+        )
+    }
 }

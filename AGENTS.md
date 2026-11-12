@@ -68,7 +68,10 @@ follow-up commit instead of gating local iteration on them.
 | Iterating on one module | `./gradlew :feature:apps:phone:compileDebugKotlin` |
 | Writing or changing a class with unit tests | `./gradlew :core:apps:testDebugUnitTest` |
 | Before committing | `./gradlew spotlessApply` — the only gate required locally |
-| Whole-app check (what CI gates on — don't run this locally unless debugging a CI failure) | `./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug testDebugUnitTest :app:assembleDebug :tv:assembleDebug` |
+| Changing a module's dependencies, build file, or source sets | `./gradlew validateArchitecture` |
+| Adding or changing strings in a localized module | `./gradlew validateTranslations` |
+| Changing a rule in `build-logic/detekt-rules` | `./gradlew -p build-logic :detekt-rules:test` |
+| Whole-app check (what CI gates on — don't run this locally unless debugging a CI failure) | `./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain :build-logic:detekt-rules:detektMain lintDebug testDebugUnitTest :build-logic:detekt-rules:test :app:assembleDebug :tv:assembleDebug validateArchitecture validateTranslations` |
 | After changing a context file, skill, adapter, or the module graph | `./gradlew validateAgentContext` — skip this too; CI covers it |
 
 A successful compile is not proof a Compose layout is correct. For visual or layout changes, render
@@ -80,8 +83,24 @@ runtime state a preview can't fake. Two failure modes that pass every gate: text
 lines inside a fixed-width column, and two indicators that disagree because each derived its own
 answer.
 
-`spotlessCheck` does not flag unused imports. Deleting the last use of something does not delete its
-import, and no gate will tell you — check by hand.
+`spotlessCheck` does not flag unused imports, but detekt's `UnusedImport` does. Deleting the last use
+of something does not delete its import, so remove it in the same edit.
+
+## Guardrails
+
+Most rules in this file are enforced by the build, and CI fails on any violation. The custom detekt
+rule set `apkanalyzer` ([`build-logic/detekt-rules`](build-logic/detekt-rules/AGENTS.md)), the
+built-in detekt rules in [`.detekt/detekt.yml`](.detekt/detekt.yml), `validateArchitecture`, and
+`validateTranslations` cover them. [`docs/engineering/guardrails.md`](docs/engineering/guardrails.md)
+lists every check and the ones deliberately left out.
+
+* A guardrail finding means the code is wrong, not the rule. Fix the code.
+* Never `@Suppress` a guardrail, add a baseline, or add an exclude to `.detekt/detekt.yml` to get a
+  build green. `ForbiddenSuppress` and `validateArchitecture` reject the first two.
+* When a rule is genuinely wrong, fix the rule, add a test case for it in
+  `build-logic/detekt-rules/src/test`, and update `docs/engineering/guardrails.md` in the same change.
+* The rules can't check semantics. Two indicators sharing one predicate, unique `LazyColumn` keys,
+  logic in classes, and user-facing copy still depend on you.
 
 ## Module Rules
 

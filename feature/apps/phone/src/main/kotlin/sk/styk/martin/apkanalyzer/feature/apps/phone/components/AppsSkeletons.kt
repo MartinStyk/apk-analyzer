@@ -17,11 +17,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.SkeletonBox
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.card
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.shimmer
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 
 private val SKELETON_RECENT_ICON_SIZE = 56.dp
 
@@ -62,5 +64,13 @@ private fun RecentAppItemSkeleton(modifier: Modifier = Modifier) {
                 .fillMaxWidth(0.7f)
                 .height(11.dp),
         )
+    }
+}
+
+@Preview
+@Composable
+private fun RecentAppsRowSkeletonPreview() {
+    ApkAnalyzerTheme {
+        RecentAppsRowSkeleton()
     }
 }

@@ -9,7 +9,6 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.apps.packaging.groupedByLibrary
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
@@ -29,8 +28,8 @@ internal class TvNativeLibrariesViewModel @AssistedInject constructor(
         fun create(appDetailInput: AppDetailInput): TvNativeLibrariesViewModel
     }
 
-    private val mutableState = MutableStateFlow<TvNativeLibrariesState>(TvNativeLibrariesState.Loading)
-    val state: StateFlow<TvNativeLibrariesState> = mutableState.asStateFlow()
+    val state: StateFlow<TvNativeLibrariesState>
+        field = MutableStateFlow<TvNativeLibrariesState>(TvNativeLibrariesState.Loading)
 
     init {
         loadLibraries()
@@ -43,11 +42,11 @@ internal class TvNativeLibrariesViewModel @AssistedInject constructor(
     }
 
     private fun loadLibraries() {
-        mutableState.value = TvNativeLibrariesState.Loading
+        state.value = TvNativeLibrariesState.Loading
         viewModelScope.launch(dispatcherProvider.default()) {
             val appName = sectionRepository.detail(appDetailInput).getOrNull()?.info?.applicationName.orEmpty()
             val deviceAbis = Build.SUPPORTED_ABIS.toList()
-            mutableState.value = sectionRepository.nativeLibraries(appDetailInput).fold(
+            state.value = sectionRepository.nativeLibraries(appDetailInput).fold(
                 onSuccess = { section ->
                     when (section) {
                         is AppDetailSection.Available -> TvNativeLibrariesState.Loaded(

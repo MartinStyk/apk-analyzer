@@ -87,20 +87,24 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import javax.inject.Inject
 
-class <Name>RepositoryImpl @Inject constructor(
+internal class <Name>RepositoryImpl @Inject constructor(
     private val dispatcherProvider: DispatcherProvider,
 ) : <Name>Repository {
     override fun data(): Flow<List<MyModel>> = flow {
-        // implementation
+        emit(loadAll())
     }.flowOn(dispatcherProvider.io())
 
     override suspend fun getById(id: String): MyModel? = withContext(dispatcherProvider.io()) {
-        runCatching { /* ... */ }.getOrNull()
+        runCatchingCancellable { load(id) }.getOrNull()
     }
 }
 ```
+
+The class is `internal`, and suspending code wraps failures with `runCatchingCancellable`, never
+`runCatching`. Detekt's `ImplVisibility` and `RunCatchingInSuspend` rules fail the build otherwise.
 
 ## Step 4 — Create Hilt module (if using DI)
 

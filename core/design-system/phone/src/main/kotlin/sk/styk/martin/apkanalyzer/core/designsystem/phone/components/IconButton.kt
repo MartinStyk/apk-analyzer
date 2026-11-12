@@ -3,8 +3,6 @@
 package sk.styk.martin.apkanalyzer.core.designsystem.phone.components
 
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -16,6 +14,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 
@@ -99,7 +98,7 @@ fun IconButton(
 @Composable
 private fun IconButtonStandardPreview() {
     ApkAnalyzerTheme {
-        IconButton(imageVector = Icons.Filled.Star, onClick = {}, style = IconButtonStyle.Standard)
+        IconButton(imageVector = ApkAnalyzerIcons.Settings, onClick = {}, style = IconButtonStyle.Standard)
     }
 }
 
@@ -107,7 +106,7 @@ private fun IconButtonStandardPreview() {
 @Composable
 private fun IconButtonStandardMutedPreview() {
     ApkAnalyzerTheme {
-        IconButton(imageVector = Icons.Filled.Star, onClick = {}, style = IconButtonStyle.StandardMuted)
+        IconButton(imageVector = ApkAnalyzerIcons.Settings, onClick = {}, style = IconButtonStyle.StandardMuted)
     }
 }
 
@@ -115,7 +114,7 @@ private fun IconButtonStandardMutedPreview() {
 @Composable
 private fun IconButtonFilledPreview() {
     ApkAnalyzerTheme {
-        IconButton(imageVector = Icons.Filled.Star, onClick = {}, style = IconButtonStyle.Filled)
+        IconButton(imageVector = ApkAnalyzerIcons.Settings, onClick = {}, style = IconButtonStyle.Filled)
     }
 }
 
@@ -123,7 +122,7 @@ private fun IconButtonFilledPreview() {
 @Composable
 private fun IconButtonOutlinedPreview() {
     ApkAnalyzerTheme {
-        IconButton(imageVector = Icons.Filled.Star, onClick = {}, style = IconButtonStyle.Outlined)
+        IconButton(imageVector = ApkAnalyzerIcons.Settings, onClick = {}, style = IconButtonStyle.Outlined)
     }
 }
 
@@ -132,7 +131,7 @@ private fun IconButtonOutlinedPreview() {
 private fun IconButtonCompactPreview() {
     ApkAnalyzerTheme {
         IconButton(
-            imageVector = Icons.Filled.Star,
+            imageVector = ApkAnalyzerIcons.Settings,
             onClick = {},
             style = IconButtonStyle.Filled,
             iconSize = 18.dp,
@@ -145,6 +144,6 @@ private fun IconButtonCompactPreview() {
 @Composable
 private fun IconButtonHighlightedPreview() {
     ApkAnalyzerTheme {
-        IconButton(imageVector = Icons.Filled.Star, onClick = {}, style = IconButtonStyle.Highlighted)
+        IconButton(imageVector = ApkAnalyzerIcons.Settings, onClick = {}, style = IconButtonStyle.Highlighted)
     }
 }

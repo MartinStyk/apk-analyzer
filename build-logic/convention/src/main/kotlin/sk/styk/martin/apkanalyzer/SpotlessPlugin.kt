@@ -20,6 +20,7 @@ class SpotlessPlugin : Plugin<Project> {
                 target(
                     "src/**/*.kt",
                     "build-logic/convention/src/**/*.kt",
+                    "build-logic/detekt-rules/src/**/*.kt",
                 )
                 ktlint()
                     .customRuleSets(listOf(composeRulesKtlint))

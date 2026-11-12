@@ -1,7 +1,9 @@
 # Coding standards
 
 The conventions a contributor needs before writing the first line. Everything here is enforced in
-review, and most of it is enforced by [verification](verification.md) too. The short canonical list
+review, and most of it is enforced by [verification](verification.md) too — the mechanical rules
+fail the build through the custom Detekt rules and architecture checks listed in
+[Guardrails](guardrails.md). The short canonical list
 is in [`AGENTS.md`](../../AGENTS.md) and the PR-level workflow is in
 [`CONTRIBUTING.md`](../../CONTRIBUTING.md); this document explains the *why* behind the rules that
 surprise people.

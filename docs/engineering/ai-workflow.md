@@ -114,8 +114,13 @@ Two constraints worth restating, because they are the ones an agent most often v
 * **No new dependencies or new abstractions** without asking first. Unit tests follow the
   [`write-unit-tests`](../../.claude/skills/write-unit-tests/SKILL.md) skill.
 
+The conventions an agent drifts from most are also hard build gates: the custom Detekt rule set in
+`build-logic/detekt-rules`, `validateArchitecture`, and `validateTranslations`. They are listed in
+[Guardrails](guardrails.md). Fix a finding instead of suppressing it — `@Suppress` of an
+`apkanalyzer` rule fails the build too.
+
 ## Related
 
 * [Architecture](architecture.md) · [Coding standards](coding-standards.md) ·
-  [Verification](verification.md)
+  [Verification](verification.md) · [Guardrails](guardrails.md)
 * [`CONTRIBUTING.md`](../../CONTRIBUTING.md) — the human PR workflow

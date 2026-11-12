@@ -6,6 +6,8 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
@@ -15,7 +17,10 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 
 private val LocalShimmerProgress = compositionLocalOf<Float?> { null }
 
@@ -57,4 +62,12 @@ private fun rememberShimmerTransitionProgress(): Float {
         label = "shimmer_progress",
     )
     return progress
+}
+
+@Preview
+@Composable
+private fun ShimmerPreview() {
+    ApkAnalyzerTheme {
+        Box(modifier = Modifier.size(width = 160.dp, height = 24.dp).shimmer())
+    }
 }

@@ -67,7 +67,7 @@ dependencies {
 
 Drop the `androidResources.enable` line as soon as the screen has real UI copy and gets its own
 `res/values/strings.xml` — every user-facing string in this module's Composables must come from
-`stringResource`, so this almost always happens by the time Step 4's placeholder is replaced.
+`stringResource`, so this almost always happens when the placeholder screen from Step 4 gets content.
 
 ## Step 3 — Create entry provider
 
@@ -117,20 +117,13 @@ package sk.styk.martin.apkanalyzer.feature.<name>.phone
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 
 @Composable
 internal fun <Name>Screen() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(text = "<Name>")
-    }
+    Box(modifier = Modifier.fillMaxSize())
 }
 
 @Preview
@@ -141,6 +134,10 @@ private fun <Name>ScreenPreview() {
     }
 }
 ```
+
+The placeholder shows no text on purpose: a string literal in `Text` fails Detekt's
+`HardcodedComposeString` rule. The first real copy goes in `res/values/strings.xml`, read with
+`stringResource`.
 
 ## Step 5 — Register in `settings.gradle.kts`
 
