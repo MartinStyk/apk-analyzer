@@ -34,7 +34,7 @@ sources only, not on `src/test`.
 
 | Check | Enforces |
 |---|---|
-| detekt `ForbiddenImport` | No `android.util.Log`, `runBlocking`, legacy `androidx.navigation`, or `collectAsState` |
+| detekt `ForbiddenImport` | No `android.util.Log`, `runBlocking`, or `collectAsState` |
 | detekt `ForbiddenMethodCall` | detekt's default list: no `print`/`println`, `BigDecimal(Double)`/`BigDecimal(String)`, or `measureTimeMillis` |
 | detekt `ForbiddenSuppress` | No `@Suppress` of a guardrail |
 | detekt `UnusedImport` | No unused imports in production sources (ktlint doesn't report them) |

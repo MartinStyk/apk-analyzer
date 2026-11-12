@@ -72,8 +72,6 @@ style:
         reason: 'Log with Logger from core.common.logger (AGENTS.md > Conventions).'
       - value: 'kotlinx.coroutines.runBlocking'
         reason: 'Never block a thread; use coroutines (AGENTS.md > Non-Negotiables).'
-      - value: 'androidx.navigation.*'
-        reason: 'Navigation 3 is the only navigation library (AGENTS.md > Architecture > Navigation).'
       - value: 'androidx.compose.runtime.collectAsState'
         reason: 'Collect state with collectAsStateWithLifecycle() (AGENTS.md > Architecture > ViewModels).'
     excludes:
