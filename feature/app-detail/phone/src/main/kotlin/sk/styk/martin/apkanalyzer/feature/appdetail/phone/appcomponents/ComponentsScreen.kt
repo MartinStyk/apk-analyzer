@@ -97,7 +97,11 @@ internal fun ComponentsScreen(
                 is ComponentsEvent.LaunchComponent -> {
                     val result = when (event.type) {
                         ComponentType.Receiver -> context.sendForeignBroadcast(event.packageName, event.className)
-                        else -> context.startForeignActivity(event.packageName, event.className)
+
+                        ComponentType.Activity, ComponentType.Service, ComponentType.Provider -> context.startForeignActivity(
+                            event.packageName,
+                            event.className,
+                        )
                     }
                     val message = when {
                         result.isFailure -> AppsR.string.components_launch_failed

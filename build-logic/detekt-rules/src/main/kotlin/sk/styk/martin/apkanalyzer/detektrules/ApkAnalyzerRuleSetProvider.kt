@@ -21,6 +21,8 @@ class ApkAnalyzerRuleSetProvider : RuleSetProvider {
             ::NavKeyShape,
             ::ApiModuleContents,
             ::ImplVisibility,
+            ::SingletonRepositoryBinding,
+            ::SealedMemberDataObject,
             ::PreviewShape,
             ::PreviewPresence,
             ::NoRawColor,

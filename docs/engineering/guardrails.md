@@ -11,21 +11,23 @@ Gradle task.
 ## Custom detekt rules
 
 The `apkanalyzer` rule set in [`build-logic/detekt-rules`](../../build-logic/detekt-rules/AGENTS.md).
-Path scopes live in [`.detekt/detekt.yml`](../../.detekt/detekt.yml). CI runs detekt on production
-sources only, not on `src/test`.
+Path scopes live in [`.detekt/detekt.yml`](../../.detekt/detekt.yml). `detektDebug` also analyzes
+unit-test and test-fixture sources.
 
 | Rule | Enforces |
 |---|---|
 | `NoComments` | No comments or KDoc, except KDoc on App Functions declarations |
 | `AppFunctionKDocRequired` | `@AppFunctionDeclaration` and `@AppFunctionSerializable` have KDoc, the tool description agents read (the compiler accepts an empty one) |
 | `NoKtlintSuppression` | No `@Suppress("ktlint:...")` |
-| `ViewModelContract` | Extends `ViewModel()`; public API is only `state`, `events`, and `onAction`; events go through `Channel(BUFFERED)`; no `Navigator` |
+| `ViewModelContract` | `@HiltViewModel`; extends `ViewModel()`; public API is only `state`, `events`, and `onAction`; events go through `Channel(BUFFERED)` exposed with `receiveAsFlow()`; no `Navigator` |
 | `ContractTypeShape` | Action and Event are sealed interfaces; State is a sealed interface or an `@Immutable` data class without lambdas or mutable collections |
 | `MutableFlowExposure` | No public mutable flow or channel; an explicit backing field instead of a private flow plus `asStateFlow()` |
 | `EntryBlockDelegatesToScreen` | An `entry { }` block calls exactly one `*Screen` |
 | `NavKeyShape` | NavKeys are `@Serializable` `data class` or `data object` |
 | `ApiModuleContents` | Feature `api` modules hold only NavKeys |
 | `ImplVisibility` | `*Impl` classes are not public |
+| `SingletonRepositoryBinding` | `@Binds` for a Repository or Manager is scoped `@Singleton` |
+| `SealedMemberDataObject` | Objects implementing a sealed type are `data object`s |
 | `PreviewPresence`, `PreviewShape` | Files with non-private composables have previews; previews end in `Preview` and wrap the app theme |
 | `NoRawColor` | No raw colors outside the design system |
 | `HardcodedComposeString` | No string literals as user-facing text in Composables |
@@ -34,13 +36,16 @@ sources only, not on `src/test`.
 
 | Check | Enforces |
 |---|---|
-| detekt `ForbiddenImport` | No `android.util.Log`, `runBlocking`, or `collectAsState` |
-| detekt `ForbiddenMethodCall` | detekt's default list: no `print`/`println`, `BigDecimal(Double)`/`BigDecimal(String)`, or `measureTimeMillis` |
+| detekt `ForbiddenImport` | No `android.util.Log`, `runBlocking`, `Executor`s, or `collectAsState` |
+| detekt `ForbiddenMethodCall` | No `print`/`println`, `Thread`, `thread { }`, or `Thread.sleep` |
 | detekt `ForbiddenSuppress` | No `@Suppress` of a guardrail |
-| detekt `UnusedImport` | No unused imports in production sources (ktlint doesn't report them) |
+| detekt `UnusedImport` | No unused imports (ktlint doesn't report them) |
 | detekt `InjectDispatcher`, `GlobalCoroutineUsage`, `SuspendFunSwallowedCancellation` | Injected dispatchers, structured scopes, no swallowed cancellation |
+| detekt `ElseCaseInsteadOfExhaustiveWhen` | A `when` over a sealed type or enum lists every case, so a new variant fails to compile until handled |
+| detekt `DataClassShouldBeImmutable`, `Deprecation`, `MissingSuperCall` | No `var` in data classes, no deprecated APIs, no skipped `super` calls |
+| detekt default rule set plus the extra style rules in `detekt.yml` | Everything at warning severity fails the build |
 | ktlint and compose-rules (Spotless) | Present-tense callback names, private previews, no mutable Composable parameters, no wildcard imports |
-| Android lint | Missing and extra translations, format-string placeholders, plural quantities |
+| Android lint | Every warning fails the build (`warningsAsErrors`), including missing translations; only the dependency-version checks and `IconMissingDensityFolder` are off |
 
 ## validateArchitecture
 

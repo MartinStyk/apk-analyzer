@@ -20,6 +20,10 @@ apkanalyzer:
     active: true
   ImplVisibility:
     active: true
+  SingletonRepositoryBinding:
+    active: true
+  SealedMemberDataObject:
+    active: true
   PreviewShape:
     active: true
   PreviewPresence:

@@ -200,8 +200,7 @@ constructors of `AppsViewModel` and `FilterViewModel`.
   in [`core:apps`](../../core/apps/AGENTS.md) both replaced exactly that shape.
 * Extract a shared helper when the second consumer appears — and grep for a third before writing
   your own. Duplicated composables here have reached three copies before anyone noticed.
-* No wildcard imports. Detekt's `UnusedImport` flags an import left behind by a deletion in production
-  sources; in tests, check by hand.
+* No wildcard imports. Detekt's `UnusedImport` flags an import left behind by a deletion.
 * Prefer `private`; `internal` for module-visible; `public` only for real public API.
 * Logging goes through `Logger` from `core.common.logger`, never raw Timber: `Logger.d(TAG, "msg")`,
   `Logger.e(TAG, throwable, "msg")`, with a file-level `private const val TAG`.

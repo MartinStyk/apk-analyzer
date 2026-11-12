@@ -17,14 +17,17 @@ private const val CONTRACT = "AGENTS.md > Architecture > ViewModels"
 class ViewModelContract(config: Config) :
     Rule(
         config,
-        "ViewModels extend ViewModel() directly, expose only state, events and onAction, " +
-            "send events through a buffered Channel and never touch Navigator.",
+        "ViewModels are @HiltViewModel, extend ViewModel() directly, expose only state, events and onAction, " +
+            "send events through a buffered Channel exposed with receiveAsFlow() and never touch Navigator.",
     ) {
 
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)
         if (!klass.isViewModel()) return
         checkSuperType(klass)
+        if (!klass.hasAnnotation("HiltViewModel")) {
+            report(klass.nameIdentifier ?: klass, "Annotate the ViewModel with @HiltViewModel (AGENTS.md > Architecture > Hilt).")
+        }
         klass.body?.declarations.orEmpty().forEach(::checkMember)
         checkEvents(klass)
     }
@@ -41,6 +44,10 @@ class ViewModelContract(config: Config) :
     }
 
     private fun checkMember(declaration: KtDeclaration) {
+        if (declaration is KtProperty && declaration.name == "events" && !declaration.isReceiveAsFlow()) {
+            report(declaration, "Expose events as `eventChannel.receiveAsFlow()` ($CONTRACT).")
+            return
+        }
         if (declaration.isExemptMember()) return
         report(
             declaration,
@@ -57,6 +64,9 @@ class ViewModelContract(config: Config) :
         is KtClass -> isInterface() && hasAnnotation("AssistedFactory")
         else -> false
     }
+
+    private fun KtProperty.isReceiveAsFlow(): Boolean =
+        ((initializer as? KtDotQualifiedExpression)?.selectorExpression as? KtCallExpression)?.calleeName() == "receiveAsFlow"
 
     private fun checkEvents(klass: KtClass) {
         PsiTreeUtil.collectElementsOfType(klass, KtCallExpression::class.java).forEach { call ->

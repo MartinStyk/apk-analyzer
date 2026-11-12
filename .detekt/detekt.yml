@@ -35,6 +35,8 @@ coroutines:
     active: true
   SuspendFunSwallowedCancellation:
     active: true
+  SuspendFunWithCoroutineScopeReceiver:
+    active: true
 
 exceptions:
   TooGenericExceptionThrown:
@@ -47,6 +49,14 @@ exceptions:
     active: true
 
 potential-bugs:
+  Deprecation:
+    active: true
+  ElseCaseInsteadOfExhaustiveWhen:
+    active: true
+  MissingSuperCall:
+    active: true
+  UnnecessaryNotNullCheck:
+    active: true
   CastNullableToNonNullableType:
     active: true
   CastToNullableType:
@@ -64,7 +74,37 @@ potential-bugs:
   UnconditionalJumpStatementInLoop:
     active: true
 
+performance:
+  UnnecessaryPartOfBinaryExpression:
+    active: true
+  UnnecessaryTypeCasting:
+    active: true
+
 style:
+  CollapsibleIfStatements:
+    active: true
+  DataClassShouldBeImmutable:
+    active: true
+  DoubleNegativeExpression:
+    active: true
+  ExpressionBodySyntax:
+    active: true
+  RedundantExplicitType:
+    active: true
+  RedundantVisibilityModifier:
+    active: true
+  UnnecessaryAny:
+    active: true
+  UnnecessaryBackticks:
+    active: true
+  UnnecessaryInnerClass:
+    active: true
+  UnnecessaryLet:
+    active: true
+  UnnecessaryReversed:
+    active: true
+  UseIfEmptyOrIfBlank:
+    active: true
   ForbiddenImport:
     active: true
     forbiddenImports:
@@ -72,12 +112,25 @@ style:
         reason: 'Log with Logger from core.common.logger (AGENTS.md > Conventions).'
       - value: 'kotlinx.coroutines.runBlocking'
         reason: 'Never block a thread; use coroutines (AGENTS.md > Non-Negotiables).'
+      - value: 'java.util.concurrent.Executor*'
+        reason: 'Use coroutines, never an Executor (AGENTS.md > Non-Negotiables).'
       - value: 'androidx.compose.runtime.collectAsState'
         reason: 'Collect state with collectAsStateWithLifecycle() (AGENTS.md > Architecture > ViewModels).'
     excludes:
       - '**/logger/Logger.kt'
   ForbiddenMethodCall:
     active: true
+    methods:
+      - value: 'kotlin.io.print'
+        reason: 'Log with Logger from core.common.logger (AGENTS.md > Conventions).'
+      - value: 'kotlin.io.println'
+        reason: 'Log with Logger from core.common.logger (AGENTS.md > Conventions).'
+      - value: 'java.lang.Thread.<init>'
+        reason: 'Use coroutines, never a Thread (AGENTS.md > Non-Negotiables).'
+      - value: 'kotlin.concurrent.thread'
+        reason: 'Use coroutines, never a Thread (AGENTS.md > Non-Negotiables).'
+      - value: 'java.lang.Thread.sleep'
+        reason: 'Use delay() in a coroutine (AGENTS.md > Non-Negotiables).'
   ForbiddenSuppress:
     active: true
     rules:
@@ -91,6 +144,8 @@ style:
       - 'NavKeyShape'
       - 'ApiModuleContents'
       - 'ImplVisibility'
+      - 'SingletonRepositoryBinding'
+      - 'SealedMemberDataObject'
       - 'PreviewShape'
       - 'PreviewPresence'
       - 'NoRawColor'
@@ -101,6 +156,8 @@ style:
       - 'InjectDispatcher'
       - 'GlobalCoroutineUsage'
       - 'SuspendFunSwallowedCancellation'
+      - 'ElseCaseInsteadOfExhaustiveWhen'
+      - 'DataClassShouldBeImmutable'
   UnusedImport:
     active: true
   MagicNumber:

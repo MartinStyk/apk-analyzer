@@ -81,8 +81,8 @@ runtime state a preview can't fake. Two failure modes that pass every gate: text
 lines inside a fixed-width column, and two indicators that disagree because each derived its own
 answer.
 
-`spotlessCheck` does not flag unused imports. Detekt's `UnusedImport` does, but only in production
-sources. Deleting the last use of something does not delete its import, so remove it in the same edit.
+`spotlessCheck` does not flag unused imports. Detekt's `UnusedImport` does. Deleting the last use of
+something does not delete its import, so remove it in the same edit.
 
 ## Guardrails
 

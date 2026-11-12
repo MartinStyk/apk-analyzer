@@ -149,10 +149,7 @@ private fun ActivityQuickFilter?.displayName(): String = when (this) {
 }
 
 @Composable
-private fun ActivityQuickFilter?.chipDisplayName(): String = when (this) {
-    null -> stringResource(R.string.quick_filter_activity_sheet_title)
-    else -> displayName()
-}
+private fun ActivityQuickFilter?.chipDisplayName(): String = this?.displayName() ?: stringResource(R.string.quick_filter_activity_sheet_title)
 
 private fun AppDataPermission.titleRes(): Int = when (this) {
     AppDataPermission.UsageAccess -> R.string.quick_filter_permission_usage_title

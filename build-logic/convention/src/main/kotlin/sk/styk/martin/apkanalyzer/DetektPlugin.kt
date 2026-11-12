@@ -20,6 +20,10 @@ class DetektPlugin : Plugin<Project> {
             }
 
             dependencies.add("detektPlugins", "sk.styk.martin.apkanalyzer.buildlogic:detekt-rules")
+
+            tasks.named { name -> name == "detektDebug" }.configureEach {
+                dependsOn(listOf("detektDebugUnitTest", "detektDebugTestFixtures").filter { name -> name in tasks.names })
+            }
         }
     }
 }

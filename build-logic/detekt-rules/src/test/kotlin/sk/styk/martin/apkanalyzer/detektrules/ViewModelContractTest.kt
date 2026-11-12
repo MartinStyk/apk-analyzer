@@ -72,6 +72,7 @@ class ViewModelContractTest {
     @Test
     fun `Given a public method besides onAction When linting Then it is reported`() {
         val code = """
+            @HiltViewModel
             internal class SettingsViewModel : ViewModel() {
 
                 fun onAction(action: SettingsAction) = Unit
@@ -89,6 +90,7 @@ class ViewModelContractTest {
     @Test
     fun `Given state exposed as a plain Flow When linting Then it is reported`() {
         val code = """
+            @HiltViewModel
             internal class SettingsViewModel : ViewModel() {
 
                 val state: Flow<SettingsState> = flowOf(SettingsState())
@@ -117,6 +119,7 @@ class ViewModelContractTest {
     @Test
     fun `Given events sent through a MutableSharedFlow When linting Then it is reported`() {
         val code = """
+            @HiltViewModel
             internal class SettingsViewModel : ViewModel() {
 
                 private val eventFlow = MutableSharedFlow<SettingsEvent>()
@@ -132,6 +135,7 @@ class ViewModelContractTest {
     @Test
     fun `Given an unbuffered event channel When linting Then it is reported`() {
         val code = """
+            @HiltViewModel
             internal class SettingsViewModel : ViewModel() {
 
                 private val eventChannel = Channel<SettingsEvent>()
@@ -149,6 +153,7 @@ class ViewModelContractTest {
         val code = """
             import sk.styk.martin.apkanalyzer.core.navigation.Navigator
 
+            @HiltViewModel
             internal class SettingsViewModel(
                 private val navigator: Navigator,
             ) : ViewModel()
@@ -171,5 +176,34 @@ class ViewModelContractTest {
         val findings = rule.lint(code)
 
         findings.shouldBeEmpty()
+    }
+
+    @Test
+    fun `Given a ViewModel without HiltViewModel When linting Then it is reported`() {
+        val code = """
+            internal class SettingsViewModel @Inject constructor() : ViewModel()
+        """.trimIndent()
+
+        val findings = rule.lint(code)
+
+        findings shouldHaveSize 1
+        findings.single().message shouldContain "Annotate the ViewModel with @HiltViewModel"
+    }
+
+    @Test
+    fun `Given events exposed without receiveAsFlow When linting Then it is reported`() {
+        val code = """
+            @HiltViewModel
+            internal class SettingsViewModel @Inject constructor() : ViewModel() {
+
+                private val eventChannel = Channel<SettingsEvent>(Channel.BUFFERED)
+                val events = eventChannel.consumeAsFlow()
+            }
+        """.trimIndent()
+
+        val findings = rule.lint(code)
+
+        findings shouldHaveSize 1
+        findings.single().message shouldContain "receiveAsFlow()"
     }
 }

@@ -9,6 +9,7 @@ import sk.styk.martin.apkanalyzer.utils.COMPILE_SDK
 import sk.styk.martin.apkanalyzer.utils.MIN_SDK
 import sk.styk.martin.apkanalyzer.utils.TARGET_SDK
 import sk.styk.martin.apkanalyzer.utils.configureKotlin
+import sk.styk.martin.apkanalyzer.utils.configureLint
 import sk.styk.martin.apkanalyzer.utils.implementation
 import sk.styk.martin.apkanalyzer.utils.libs
 import sk.styk.martin.apkanalyzer.utils.stringProperty
@@ -29,6 +30,9 @@ class ApplicationPlugin : Plugin<Project> {
             defaultConfig {
                 targetSdk = TARGET_SDK
                 minSdk = MIN_SDK
+            }
+            lint {
+                configureLint()
             }
 
             signingConfigs {

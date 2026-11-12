@@ -11,7 +11,7 @@ document is for anyone who wants to know what those commands are checking and wh
 |---|---|---|---|
 | Spotless (ktlint + compose-rules) | Formatting and Compose naming/parameter rules | [`SpotlessPlugin.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/SpotlessPlugin.kt) | Yes — `spotlessCheck` |
 | Detekt | Static analysis of Kotlin, including `build-logic` itself, plus the custom `apkanalyzer` guardrail rules | [`.detekt/detekt.yml`](../../.detekt/detekt.yml), [`DetektPlugin.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/DetektPlugin.kt) | Yes — at **warning** severity |
-| Android Lint | Android/API correctness, resources, translations, manifest, accessibility | AGP defaults | Yes — `lintDebug` |
+| Android Lint | Android/API correctness, resources, translations, manifest, accessibility | [`Lint.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/utils/Lint.kt) | Yes — every warning, via `lintDebug` |
 | `validateAgentContext` | Structure of the shared AI context files | [`ValidateAgentContextTask.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/ValidateAgentContextTask.kt) | Yes — in its own workflow |
 | `validateArchitecture` | Module graph, build file hygiene, source set structure | [`ValidateArchitectureTask.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/ValidateArchitectureTask.kt) | Yes — `verify` job |
 | Unit tests | Behavior of `core` classes, on the JVM | [`UnitTestPlugin.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/UnitTestPlugin.kt) | Yes — `testDebugUnitTest` |
@@ -68,9 +68,12 @@ log.
 problems, obsolete or unsafe platform calls, accessibility issues. Given `minSdk` 28 and `targetSdk`
 37, Lint is the gate that catches "this call needs an API check" before a device does.
 
-No check is suppressed. `MissingTranslation` fails the build, so a new translatable string lands in
-every locale in the same change (see the [`translate-strings`](../../.claude/skills/translate-strings/SKILL.md)
-skill).
+Every lint warning fails the build (`warningsAsErrors`). `MissingTranslation` is one of them, so a new
+translatable string lands in every locale in the same change (see the
+[`translate-strings`](../../.claude/skills/translate-strings/SKILL.md) skill). The only checks turned
+off are the dependency-version ones, so that an upstream release can't break the build, and
+`IconMissingDensityFolder`, because the TV banner ships at `xhdpi` only. Test fixtures are not
+linted.
 
 ## LeakCanary
 

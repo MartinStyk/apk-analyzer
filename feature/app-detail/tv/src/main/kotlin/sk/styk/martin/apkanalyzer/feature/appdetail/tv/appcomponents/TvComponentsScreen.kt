@@ -76,7 +76,11 @@ internal fun TvComponentsScreen(
                 is TvComponentsEvent.LaunchComponent -> {
                     val result = when (event.kind) {
                         ComponentKind.Receiver -> context.sendForeignBroadcast(event.packageName, event.className)
-                        else -> context.startForeignActivity(event.packageName, event.className)
+
+                        ComponentKind.Activity, ComponentKind.Service, ComponentKind.Provider -> context.startForeignActivity(
+                            event.packageName,
+                            event.className,
+                        )
                     }
                     val message = when {
                         result.isFailure -> AppsR.string.components_launch_failed
