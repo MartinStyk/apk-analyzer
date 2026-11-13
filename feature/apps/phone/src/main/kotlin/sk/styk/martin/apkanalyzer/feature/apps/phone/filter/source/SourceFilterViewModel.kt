@@ -16,7 +16,7 @@ import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.domain.SourceFilterD
 import javax.inject.Inject
 
 @HiltViewModel
-class SourceFilterViewModel @Inject constructor(
+internal class SourceFilterViewModel @Inject constructor(
     private val sourceFilterCoordinator: SourceFilterCoordinator,
     installedAppsRepository: InstalledAppsRepository,
 ) : ViewModel() {

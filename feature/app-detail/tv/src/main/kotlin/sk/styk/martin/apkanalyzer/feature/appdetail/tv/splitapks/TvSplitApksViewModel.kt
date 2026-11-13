@@ -8,7 +8,6 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
@@ -26,8 +25,8 @@ internal class TvSplitApksViewModel @AssistedInject constructor(
         fun create(appDetailInput: AppDetailInput): TvSplitApksViewModel
     }
 
-    private val mutableState = MutableStateFlow<TvSplitApksState>(TvSplitApksState.Loading)
-    val state: StateFlow<TvSplitApksState> = mutableState.asStateFlow()
+    val state: StateFlow<TvSplitApksState>
+        field = MutableStateFlow<TvSplitApksState>(TvSplitApksState.Loading)
 
     init {
         loadSplits()
@@ -40,9 +39,9 @@ internal class TvSplitApksViewModel @AssistedInject constructor(
     }
 
     private fun loadSplits() {
-        mutableState.value = TvSplitApksState.Loading
+        state.value = TvSplitApksState.Loading
         viewModelScope.launch(dispatcherProvider.default()) {
-            mutableState.value = sectionRepository.detail(appDetailInput).fold(
+            state.value = sectionRepository.detail(appDetailInput).fold(
                 onSuccess = { detail ->
                     TvSplitApksState.Loaded(
                         appName = detail.info.applicationName,

@@ -468,14 +468,32 @@ private const val MAX_REQUIREMENT_PREVIEWS = 6
 
 private fun AppDetailEvent.toSection(): AppDetailAnalyticsEvent.Section = when (this) {
     AppDetailEvent.NavigateToManifest -> AppDetailAnalyticsEvent.Section.Manifest
+
     AppDetailEvent.NavigateToGeneralDetails -> AppDetailAnalyticsEvent.Section.General
+
     is AppDetailEvent.NavigateToPermissions -> AppDetailAnalyticsEvent.Section.Permissions
+
     AppDetailEvent.NavigateToComponents -> AppDetailAnalyticsEvent.Section.Components
+
     AppDetailEvent.NavigateToActivities -> AppDetailAnalyticsEvent.Section.Activities
+
     AppDetailEvent.NavigateToServices -> AppDetailAnalyticsEvent.Section.Services
+
     AppDetailEvent.NavigateToReceivers -> AppDetailAnalyticsEvent.Section.Receivers
+
     AppDetailEvent.NavigateToProviders -> AppDetailAnalyticsEvent.Section.Providers
+
     AppDetailEvent.NavigateToCertificates -> AppDetailAnalyticsEvent.Section.Certificates
+
     AppDetailEvent.NavigateToFeatures -> AppDetailAnalyticsEvent.Section.Features
-    else -> error("Unexpected event type: $this")
+
+    is AppDetailEvent.OpenPlayStore,
+    is AppDetailEvent.OpenAppInfo,
+    is AppDetailEvent.CreateDocument,
+    is AppDetailEvent.ShowSummaryPreview,
+    is AppDetailEvent.ShareSummary,
+    is AppDetailEvent.NavigateToInventoryExport,
+    is AppDetailEvent.ShowFeedback,
+    is AppDetailEvent.NavigateToHistory,
+    -> error("Unexpected event type: $this")
 }

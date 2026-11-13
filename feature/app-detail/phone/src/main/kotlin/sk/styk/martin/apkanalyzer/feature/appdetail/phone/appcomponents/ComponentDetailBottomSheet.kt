@@ -225,7 +225,7 @@ internal fun ComponentDetailBottomSheet(
                             DetailField(label = stringResource(AppsR.string.components_detail_authority), value = it, onCopy = onCopy)
                         }
 
-                        else -> Unit
+                        is ComponentDetails.ServiceDetails, is ComponentDetails.ReceiverDetails -> Unit
                     }
                     item.flags.forEach { flag ->
                         DetailField(

@@ -16,7 +16,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal object AppHistoryStorageModule {
+internal class AppHistoryStorageModule {
     @Provides
     @Singleton
     fun provideAppHistoryDatabase(@ApplicationContext context: Context): AppHistoryDatabase =

@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterRepository
 import sk.styk.martin.apkanalyzer.core.apps.filtering.filterBy
@@ -28,7 +27,7 @@ import sk.styk.martin.apkanalyzer.feature.apps.phone.components.AppDataPermissio
 import javax.inject.Inject
 
 @HiltViewModel
-class AppsViewModel @Inject constructor(
+internal class AppsViewModel @Inject constructor(
     installedAppsRepository: InstalledAppsRepository,
     recentlyViewedAppsRepository: RecentlyViewedAppsRepository,
     configurationRepository: ConfigurationRepository,

@@ -3,13 +3,9 @@ package sk.styk.martin.apkanalyzer.utils
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.LibraryExtension
 import com.diffplug.gradle.spotless.SpotlessExtension
-import org.gradle.api.Action
 import org.gradle.api.Project
-import org.gradle.api.artifacts.Dependency
 import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionCatalogsExtension
-import org.gradle.api.artifacts.dsl.DependencyHandler
-import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.getByType
 
 val Project.androidLibrary: LibraryExtension

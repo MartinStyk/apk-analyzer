@@ -8,7 +8,6 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeVersion
@@ -30,8 +29,8 @@ internal class TvCertificatesViewModel @AssistedInject constructor(
         fun create(appDetailInput: AppDetailInput): TvCertificatesViewModel
     }
 
-    private val mutableState = MutableStateFlow<TvCertificatesState>(TvCertificatesState.Loading)
-    val state: StateFlow<TvCertificatesState> = mutableState.asStateFlow()
+    val state: StateFlow<TvCertificatesState>
+        field = MutableStateFlow<TvCertificatesState>(TvCertificatesState.Loading)
 
     init {
         loadCertificates()
@@ -44,16 +43,16 @@ internal class TvCertificatesViewModel @AssistedInject constructor(
     }
 
     private fun loadCertificates() {
-        mutableState.value = TvCertificatesState.Loading
+        state.value = TvCertificatesState.Loading
         viewModelScope.launch(dispatcherProvider.default()) {
             val asOf = Instant.now()
             sectionRepository.detail(appDetailInput)
                 .onSuccess { detail ->
-                    mutableState.value = detail.toState(signingSchemeVersions = null, asOf = asOf)
+                    state.value = detail.toState(signingSchemeVersions = null, asOf = asOf)
                     val signingSchemeVersions = sectionRepository.signingSchemes(appDetailInput).getOrNull()
-                    mutableState.value = detail.toState(signingSchemeVersions = signingSchemeVersions, asOf = asOf)
+                    state.value = detail.toState(signingSchemeVersions = signingSchemeVersions, asOf = asOf)
                 }
-                .onFailure { mutableState.value = TvCertificatesState.Error }
+                .onFailure { state.value = TvCertificatesState.Error }
         }
     }
 }

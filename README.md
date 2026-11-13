@@ -229,7 +229,7 @@ configure. CI swaps in a freshly fetched config at build time.
 ./gradlew :tv:installDebug      # install the TV app on a connected Android TV device or emulator
 ./gradlew spotlessApply         # fix formatting — run before every commit
 ./gradlew :feature:apps:phone:compileDebugKotlin   # fast single-module check while iterating
-./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug :app:assembleDebug :tv:assembleDebug   # what CI gates on
+./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain :build-logic:detekt-rules:detektMain lintDebug :app:assembleDebug :tv:assembleDebug validateArchitecture   # what CI gates on
 ./gradlew validateAgentContext  # check the shared Claude and Copilot context files
 ```
 

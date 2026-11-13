@@ -33,23 +33,29 @@ internal class AppDetailSectionRepositoryImpl @Inject constructor(
 
     override suspend fun detail(input: AppDetailInput): Result<AppDetail> = when (input) {
         is AppDetailInput.Historical -> snapshot(input).map { it.detail }
-        else -> appDetailRepository.details(input.live())
+        is AppDetailInput.InstalledPackage, is AppDetailInput.ApkFile -> appDetailRepository.details(input.live())
     }
 
     override suspend fun nativeLibraries(input: AppDetailInput): Result<AppDetailSection<NativeLibraries>> = when (input) {
         is AppDetailInput.Historical -> snapshot(input).map { it.nativeLibraries.toSection() }
-        else -> nativeLibrariesRepository.nativeLibraries(input.live()).map { AppDetailSection.Available(it) }
+
+        is AppDetailInput.InstalledPackage, is AppDetailInput.ApkFile -> nativeLibrariesRepository.nativeLibraries(input.live()).map {
+            AppDetailSection.Available(it)
+        }
     }
 
     override suspend fun signingSchemes(input: AppDetailInput): Result<List<SigningSchemeVersion>?> = when (input) {
         is AppDetailInput.Historical -> snapshot(input).map { (it.signingSchemes as? AppHistorySection.Recorded)?.value }
-        else -> signingSchemeRepository.signingSchemeVersions(input.live())
+        is AppDetailInput.InstalledPackage, is AppDetailInput.ApkFile -> signingSchemeRepository.signingSchemeVersions(input.live())
     }
 
     override suspend fun intentFilters(input: AppDetailInput): Result<AppDetailSection<Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>>> =
         when (input) {
             is AppDetailInput.Historical -> Result.success(AppDetailSection.NotRecorded)
-            else -> intentFiltersRepository.componentIntentFilters(input.live()).map { AppDetailSection.Available(it) }
+
+            is AppDetailInput.InstalledPackage, is AppDetailInput.ApkFile -> intentFiltersRepository.componentIntentFilters(input.live()).map {
+                AppDetailSection.Available(it)
+            }
         }
 
     private fun AppDetailInput.live(): AppReference = checkNotNull(liveReference)

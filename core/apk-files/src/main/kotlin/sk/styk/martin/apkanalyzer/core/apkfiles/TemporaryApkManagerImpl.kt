@@ -17,6 +17,8 @@ import java.io.OutputStream
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
+private const val TAG = "TemporaryApkManager"
+
 internal class TemporaryApkManagerImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val activityManager: ActivityManager,
@@ -156,7 +158,6 @@ internal class TemporaryApkManagerImpl @Inject constructor(
     }
 
     private companion object {
-        const val TAG = "TemporaryApkManager"
         const val CACHE_DIRECTORY = "apk-analysis"
         const val TASK_DIRECTORY_PREFIX = "task_"
         const val FILE_PREFIX = "apk_"

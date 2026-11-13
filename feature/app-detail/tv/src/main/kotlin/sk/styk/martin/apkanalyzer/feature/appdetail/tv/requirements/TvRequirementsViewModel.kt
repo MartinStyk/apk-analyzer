@@ -8,7 +8,6 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.DeviceFeaturesRepository
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.requirements
@@ -29,8 +28,8 @@ internal class TvRequirementsViewModel @AssistedInject constructor(
         fun create(appDetailInput: AppDetailInput): TvRequirementsViewModel
     }
 
-    private val mutableState = MutableStateFlow<TvRequirementsState>(TvRequirementsState.Loading)
-    val state: StateFlow<TvRequirementsState> = mutableState.asStateFlow()
+    val state: StateFlow<TvRequirementsState>
+        field = MutableStateFlow<TvRequirementsState>(TvRequirementsState.Loading)
 
     init {
         loadRequirements()
@@ -43,10 +42,10 @@ internal class TvRequirementsViewModel @AssistedInject constructor(
     }
 
     private fun loadRequirements() {
-        mutableState.value = TvRequirementsState.Loading
+        state.value = TvRequirementsState.Loading
         viewModelScope.launch(dispatcherProvider.default()) {
             val deviceFeatures = deviceFeaturesRepository.deviceFeatures()
-            mutableState.value = sectionRepository.detail(appDetailInput).fold(
+            state.value = sectionRepository.detail(appDetailInput).fold(
                 onSuccess = { TvRequirementsState.Loaded(appName = it.info.applicationName, requirements = it.requirements(deviceFeatures)) },
                 onFailure = { TvRequirementsState.Error },
             )

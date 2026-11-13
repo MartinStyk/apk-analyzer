@@ -7,6 +7,7 @@ import org.gradle.kotlin.dsl.configure
 import sk.styk.martin.apkanalyzer.utils.COMPILE_SDK
 import sk.styk.martin.apkanalyzer.utils.MIN_SDK
 import sk.styk.martin.apkanalyzer.utils.configureKotlin
+import sk.styk.martin.apkanalyzer.utils.configureLint
 
 class LibraryPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
@@ -20,6 +21,9 @@ class LibraryPlugin : Plugin<Project> {
             compileSdk = COMPILE_SDK
             defaultConfig {
                 minSdk = MIN_SDK
+            }
+            lint {
+                configureLint()
             }
         }
 

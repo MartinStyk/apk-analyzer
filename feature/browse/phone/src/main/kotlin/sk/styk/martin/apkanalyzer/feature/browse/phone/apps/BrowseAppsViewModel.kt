@@ -25,7 +25,6 @@ import sk.styk.martin.apkanalyzer.core.appindex.model.AppIndexStatus
 import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 
 @HiltViewModel(assistedFactory = BrowseAppsViewModel.Factory::class)
 internal class BrowseAppsViewModel @AssistedInject constructor(

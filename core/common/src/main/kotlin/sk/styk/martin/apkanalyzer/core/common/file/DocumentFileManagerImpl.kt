@@ -49,7 +49,7 @@ internal class DocumentFileManagerImpl @Inject constructor(
     }
 
     override suspend fun displayNameOr(destination: Uri, fallback: String): String = withContext(dispatcherProvider.io()) {
-        val displayName = runCatching {
+        val displayName = runCatchingCancellable {
             contentResolver.query(destination, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)?.use { cursor ->
                 val index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
                 if (index >= 0 && cursor.moveToFirst()) cursor.getString(index) else null

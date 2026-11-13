@@ -89,7 +89,7 @@ private fun requirementSection(section: RequirementSection): InfoSection {
                 label = item.label(resources),
                 value = when (item.availability) {
                     FeatureAvailability.Missing -> item.missingText(resources)
-                    else -> resources.getString(item.availability.labelRes)
+                    FeatureAvailability.Available, FeatureAvailability.Unknown -> resources.getString(item.availability.labelRes)
                 },
                 explanation = listOf(
                     resources.getString(item.availabilityExplanationRes()),

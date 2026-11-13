@@ -10,9 +10,10 @@ document is for anyone who wants to know what those commands are checking and wh
 | Gate | Enforces | Configured in | Fails CI |
 |---|---|---|---|
 | Spotless (ktlint + compose-rules) | Formatting and Compose naming/parameter rules | [`SpotlessPlugin.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/SpotlessPlugin.kt) | Yes — `spotlessCheck` |
-| Detekt | Static analysis of Kotlin, including `build-logic` itself | [`.detekt/detekt.yml`](../../.detekt/detekt.yml), [`DetektPlugin.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/DetektPlugin.kt) | Yes — at **warning** severity |
-| Android Lint | Android/API correctness, resources, manifest, accessibility | AGP defaults; `lint { }` in [`app/build.gradle.kts`](../../app/build.gradle.kts) | Yes — `lintDebug` |
+| Detekt | Static analysis of Kotlin, including `build-logic` itself, plus the custom `apkanalyzer` guardrail rules | [`.detekt/detekt.yml`](../../.detekt/detekt.yml), [`DetektPlugin.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/DetektPlugin.kt) | Yes — at **warning** severity |
+| Android Lint | Android/API correctness, resources, translations, manifest, accessibility | [`Lint.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/utils/Lint.kt) | Yes — every warning, via `lintDebug` |
 | `validateAgentContext` | Structure of the shared AI context files | [`ValidateAgentContextTask.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/ValidateAgentContextTask.kt) | Yes — in its own workflow |
+| `validateArchitecture` | Module graph, build file hygiene, source set structure | [`ValidateArchitectureTask.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/ValidateArchitectureTask.kt) | Yes — `verify` job |
 | Unit tests | Behavior of `core` classes, on the JVM | [`UnitTestPlugin.kt`](../../build-logic/convention/src/main/kotlin/sk/styk/martin/apkanalyzer/UnitTestPlugin.kt) | Yes — `testDebugUnitTest` |
 | LeakCanary | Activity/Fragment/ViewModel leaks at runtime | `debugImplementation` in [`app/build.gradle.kts`](../../app/build.gradle.kts) — phone app only | No — advisory, debug builds only |
 
@@ -33,8 +34,7 @@ Non-default overrides, all in
 * `CompositionLocal` allowlist and `lambda-param-in-effect` compose rules are disabled
 * `@Composable` functions are exempt from the function-naming rule, so `PascalCase` composables pass
 
-**Spotless does not report unused imports.** Deleting the last use of a symbol leaves its import
-behind and no gate will tell you — check by hand. The
+**Spotless does not report unused imports**; Detekt's `UnusedImport` does. The
 [`spotless-fix`](../../.claude/skills/spotless-fix/SKILL.md) skill covers the fix loop for
 violations that `spotlessApply` can't resolve on its own.
 
@@ -45,8 +45,14 @@ Detekt runs with `buildUponDefaultConfig`, the repository config at
 `failOnSeverity = Warning`. A Detekt *warning* fails the build, so there is no accumulating backlog
 of "known" findings.
 
-`build-logic` is analysed too, via `:build-logic:convention:detektMain`; a convention plugin is
-production code here.
+`build-logic` is analysed too, via `:build-logic:convention:detektMain` and
+`:build-logic:detekt-rules:detektMain`; a convention plugin is production code here.
+
+On top of the built-in rules, every module loads the custom `apkanalyzer` rule set from
+[`build-logic/detekt-rules`](../../build-logic/detekt-rules/AGENTS.md). It turns the conventions in
+`AGENTS.md` into build failures: the ViewModel contract, no comments, preview presence, NavKey
+shape, and more. [Guardrails](guardrails.md) lists every check.
+Suppressing a guardrail is itself a finding (`ForbiddenSuppress`).
 
 The rule most often hit in this codebase is `UnusedPrivateProperty`: a constructor parameter that is
 only read in a property initializer (a `combine` chain, for example) must be declared **without**
@@ -62,9 +68,12 @@ log.
 problems, obsolete or unsafe platform calls, accessibility issues. Given `minSdk` 28 and `targetSdk`
 37, Lint is the gate that catches "this call needs an API check" before a device does.
 
-The only suppression is `MissingTranslation` in [`app/build.gradle.kts`](../../app/build.gradle.kts)
-(the `tv` app module sets none), because locales ship incrementally — a string is added in English first and translated in a follow-up
-(see the [`translate-strings`](../../.claude/skills/translate-strings/SKILL.md) skill).
+Every lint warning fails the build (`warningsAsErrors`). `MissingTranslation` is one of them, so a new
+translatable string lands in every locale in the same change (see the
+[`translate-strings`](../../.claude/skills/translate-strings/SKILL.md) skill). The only checks turned
+off are the dependency-version ones, so that an upstream release can't break the build, and
+`IconMissingDensityFolder`, because the TV banner ships at `xhdpi` only. Test fixtures are not
+linted.
 
 ## LeakCanary
 
@@ -75,21 +84,22 @@ screens keep hold of large parsed structures, so a leaked screen is not a cheap 
 
 ## What no gate catches
 
-Two things a green build proves nothing about:
+What a green build proves nothing about:
 
 * **Layout correctness.** A clean compile says nothing about a Compose screen. Text that wraps to
   three lines in a fixed-width column, or an item sheet that never opens, passes every gate. For any
   visual change, run it on a device — the [`run-app`](../../.claude/skills/run-app/SKILL.md) and
   [`navigate-app-adb`](../../.claude/skills/navigate-app-adb/SKILL.md) skills automate the loop.
-* **Unused imports**, as above.
+* **Semantic conventions.** See "Not checked" in [Guardrails](guardrails.md).
 
 ## Running the gates
 
 ```bash
 ./gradlew spotlessApply                                   # required before every commit
 ./gradlew :feature:apps:phone:compileDebugKotlin           # fast single-module check while iterating
-./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug testDebugUnitTest :app:assembleDebug :tv:assembleDebug
+./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain :build-logic:detekt-rules:detektMain lintDebug testDebugUnitTest :build-logic:detekt-rules:test :app:assembleDebug :tv:assembleDebug validateArchitecture
 ./gradlew validateAgentContext                            # after touching AGENTS.md or a skill
+./gradlew -p build-logic :detekt-rules:test               # after changing a guardrail rule
 ```
 
 Don't run the full check after every edit — CI runs it on every push. Iterate on a single-module
@@ -98,8 +108,9 @@ compile and let CI catch the rest.
 ## In CI
 
 Every push and PR to `develop` runs `spotlessCheck detektDebug
-:build-logic:convention:detektMain lintDebug --continue` and uploads the merged SARIF to code
-scanning, with `testDebugUnitTest` in its own parallel job. The jobs, artifacts, and the rest of the pipeline are in
+:build-logic:convention:detektMain :build-logic:detekt-rules:detektMain lintDebug validateArchitecture
+--continue` and uploads the merged SARIF to code scanning, with
+`testDebugUnitTest :build-logic:detekt-rules:test` in its own parallel job. The jobs, artifacts, and the rest of the pipeline are in
 [CI and release](ci-and-release.md).
 
 The [`analyze-ci-failure`](../../.claude/skills/analyze-ci-failure/SKILL.md) skill is the procedure

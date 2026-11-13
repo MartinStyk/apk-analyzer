@@ -15,7 +15,7 @@ import sk.styk.martin.apkanalyzer.core.common.settings.PersistenceRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor(
+internal class SettingsViewModel @Inject constructor(
     private val persistenceRepository: PersistenceRepository,
     private val appLanguageRepository: AppLanguageRepository,
 ) : ViewModel() {

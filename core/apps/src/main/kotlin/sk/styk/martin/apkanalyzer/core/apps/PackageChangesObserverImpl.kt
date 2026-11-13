@@ -17,7 +17,7 @@ import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import java.util.concurrent.CopyOnWriteArrayList
 import javax.inject.Inject
 
-class PackageChangesObserverImpl @Inject constructor(@ApplicationContext appContext: Context, appScope: CoroutineScope) : PackageChangesObserver {
+internal class PackageChangesObserverImpl @Inject constructor(@ApplicationContext appContext: Context, appScope: CoroutineScope) : PackageChangesObserver {
 
     private val actionsBeforeNotifying = CopyOnWriteArrayList<(PackageChangeEvent) -> Unit>()
 

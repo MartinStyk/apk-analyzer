@@ -9,7 +9,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.apps.UnparsableApkFileException
@@ -50,8 +49,8 @@ internal class TvAppDetailViewModel @AssistedInject constructor(
 
     private val appReference = checkNotNull(appDetailInput.liveReference)
 
-    private val mutableState = MutableStateFlow<TvAppDetailState>(TvAppDetailState.Loading)
-    val state: StateFlow<TvAppDetailState> = mutableState.asStateFlow()
+    val state: StateFlow<TvAppDetailState>
+        field = MutableStateFlow<TvAppDetailState>(TvAppDetailState.Loading)
 
     private val eventChannel = Channel<TvAppDetailEvent>(Channel.BUFFERED)
     val events = eventChannel.receiveAsFlow()
@@ -96,15 +95,15 @@ internal class TvAppDetailViewModel @AssistedInject constructor(
     }
 
     private fun withLoadedState(block: (TvAppDetailState.Loaded) -> Unit) {
-        (mutableState.value as? TvAppDetailState.Loaded)?.let(block)
+        (state.value as? TvAppDetailState.Loaded)?.let(block)
     }
 
     private fun loadDetail() {
-        mutableState.value = TvAppDetailState.Loading
+        state.value = TvAppDetailState.Loading
         viewModelScope.launch(dispatcherProvider.default()) {
             val deviceFeatures = deviceFeaturesRepository.deviceFeatures()
             val detailResult = sectionRepository.detail(appDetailInput)
-            mutableState.value = detailResult.fold(
+            state.value = detailResult.fold(
                 onSuccess = {
                     analytics.track(AppDetailAnalyticsEvent.Opened(appDetailInput))
                     it.toLoadedState(deviceFeatures)

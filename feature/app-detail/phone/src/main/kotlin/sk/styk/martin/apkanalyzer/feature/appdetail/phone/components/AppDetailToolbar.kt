@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
@@ -38,12 +39,15 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ChipVariant
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.IconButton
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.CollapsingToolbarState
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.rememberCollapsingToolbarState
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.iconReference
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailBadge
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.labelRes
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.AppDetailState
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.sampleLoadedState
 import kotlin.math.roundToInt
 
 private val BACK_BUTTON_SIZE = 48.dp
@@ -248,4 +252,17 @@ private fun AppDetailBadge.icon(): ImageVector = when (this) {
     AppDetailBadge.RecentlyInstalled -> ApkAnalyzerIcons.NewReleases
     AppDetailBadge.RecentlyUpdated -> ApkAnalyzerIcons.Sync
     AppDetailBadge.RecentlyUsed -> ApkAnalyzerIcons.History
+}
+
+@Preview
+@Composable
+private fun AppDetailToolbarPreview() {
+    ApkAnalyzerTheme {
+        AppDetailToolbar(
+            state = sampleLoadedState(),
+            appDetailInput = AppDetailInput.InstalledPackage("com.spotify.music"),
+            collapsingState = rememberCollapsingToolbarState(),
+            onBack = {},
+        )
+    }
 }

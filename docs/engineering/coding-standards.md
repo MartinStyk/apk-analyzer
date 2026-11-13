@@ -1,7 +1,8 @@
 # Coding standards
 
 The conventions a contributor needs before writing the first line. Everything here is enforced in
-review, and most of it is enforced by [verification](verification.md) too. The short canonical list
+review, and most of it is enforced by [verification](verification.md) and the
+[guardrails](guardrails.md) too. The short canonical list
 is in [`AGENTS.md`](../../AGENTS.md) and the PR-level workflow is in
 [`CONTRIBUTING.md`](../../CONTRIBUTING.md); this document explains the *why* behind the rules that
 surprise people.
@@ -199,7 +200,7 @@ constructors of `AppsViewModel` and `FilterViewModel`.
   in [`core:apps`](../../core/apps/AGENTS.md) both replaced exactly that shape.
 * Extract a shared helper when the second consumer appears — and grep for a third before writing
   your own. Duplicated composables here have reached three copies before anyone noticed.
-* No wildcard imports. Spotless will not flag an import left behind by a deletion, so check by hand.
+* No wildcard imports. Detekt's `UnusedImport` flags an import left behind by a deletion.
 * Prefer `private`; `internal` for module-visible; `public` only for real public API.
 * Logging goes through `Logger` from `core.common.logger`, never raw Timber: `Logger.d(TAG, "msg")`,
   `Logger.e(TAG, throwable, "msg")`, with a file-level `private const val TAG`.
