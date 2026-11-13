@@ -18,7 +18,7 @@ import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.domain.PermissionFil
 import javax.inject.Inject
 
 @HiltViewModel
-class PermissionFilterViewModel @Inject constructor(
+internal class PermissionFilterViewModel @Inject constructor(
     private val permissionFilterCoordinator: PermissionFilterCoordinator,
     devicePermissionsRepository: DevicePermissionsRepository,
 ) : ViewModel() {

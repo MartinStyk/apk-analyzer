@@ -13,6 +13,8 @@ import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import java.io.FileNotFoundException
 import javax.inject.Inject
 
+private const val TAG = "ManifestParser"
+
 internal class ComponentManifestParserImpl @Inject constructor() : ComponentManifestParser {
 
     override fun parseInstalled(
@@ -189,7 +191,6 @@ internal class ComponentManifestParserImpl @Inject constructor() : ComponentMani
     }
 
     companion object {
-        private const val TAG = "ManifestParser"
         private const val MANIFEST_FILE_NAME = "AndroidManifest.xml"
         private const val MANIFEST_TAG = "manifest"
         private const val INTENT_FILTER_TAG = "intent-filter"

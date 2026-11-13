@@ -33,7 +33,7 @@ import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.domain.SourceFilterC
 import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.domain.SourceFilterDraft
 
 @HiltViewModel(assistedFactory = FilterViewModel.Factory::class)
-class FilterViewModel @AssistedInject constructor(
+internal class FilterViewModel @AssistedInject constructor(
     @Assisted scopeId: String,
     appFilterRepositories: AppFilterRepositories,
     private val permissionFilterCoordinator: PermissionFilterCoordinator,

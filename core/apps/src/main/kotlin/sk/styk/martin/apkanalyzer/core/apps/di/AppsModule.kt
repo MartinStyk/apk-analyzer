@@ -62,7 +62,6 @@ import javax.inject.Singleton
 @Module
 internal interface AppsModule {
 
-    // root
     @Binds
     @Singleton
     fun bindInstalledAppsRepository(impl: InstalledAppsRepositoryImpl): InstalledAppsRepository
@@ -75,7 +74,6 @@ internal interface AppsModule {
     @Singleton
     fun bindAppDetailRepository(impl: AppDetailRepositoryImpl): AppDetailRepository
 
-    // signing
     @Binds
     @Singleton
     fun bindAppSigningRepository(impl: AppSigningRepositoryImpl): AppSigningRepository
@@ -95,12 +93,10 @@ internal interface AppsModule {
     @Singleton
     fun bindSigningSchemeRepository(impl: SigningSchemeRepositoryImpl): SigningSchemeRepository
 
-    // permissions
     @Binds
     @Singleton
     fun bindPermissionDefinitionResolver(impl: PermissionDefinitionResolverImpl): PermissionDefinitionResolver
 
-    // manifest
     @Binds
     fun bindManifestParser(impl: ManifestParserImpl): ManifestParser
 
@@ -110,26 +106,21 @@ internal interface AppsModule {
     @Binds
     fun bindManifestXmlRenderer(impl: ManifestXmlRendererImpl): ManifestXmlRenderer
 
-    // intentfilters
     @Binds
     @Singleton
     fun bindIntentFiltersRepository(impl: IntentFiltersRepositoryImpl): IntentFiltersRepository
 
-    // installsource
     @Binds
     fun bindInstallSourceResolver(impl: InstallSourceResolverImpl): InstallSourceResolver
 
-    // devicefeatures
     @Binds
     @Singleton
     fun bindDeviceFeaturesRepository(impl: DeviceFeaturesRepositoryImpl): DeviceFeaturesRepository
 
-    // packaging
     @Binds
     @Singleton
     fun bindNativeLibrariesRepository(impl: NativeLibrariesRepositoryImpl): NativeLibrariesRepository
 
-    // filtering
     @Binds
     @Singleton
     fun bindAppFilterRepository(impl: AppFilterRepositoryImpl): AppFilterRepository
@@ -138,7 +129,6 @@ internal interface AppsModule {
     @Singleton
     fun bindAppFilterRepositories(impl: AppFilterRepositoriesImpl): AppFilterRepositories
 
-    // usagestats
     @Binds
     @Singleton
     fun bindUsageStatsRepository(impl: UsageStatsRepositoryImpl): UsageStatsRepository
@@ -148,7 +138,6 @@ internal interface AppsModule {
     @Singleton
     fun bindUsageStatsAsLifecycleObserver(impl: UsageStatsRepositoryImpl): DefaultLifecycleObserver
 
-    // storagestats
     @Binds
     @Singleton
     fun bindStorageStatsRepository(impl: StorageStatsRepositoryImpl): StorageStatsRepository
@@ -158,7 +147,6 @@ internal interface AppsModule {
     @Singleton
     fun bindStorageStatsAsLifecycleObserver(impl: StorageStatsRepositoryImpl): DefaultLifecycleObserver
 
-    // export
     @Binds
     @Singleton
     fun bindAppExportManager(impl: AppExportManagerImpl): AppExportManager

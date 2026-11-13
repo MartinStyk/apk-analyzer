@@ -8,7 +8,9 @@ import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,5 +56,18 @@ fun DateRangePickerDialog(
         modifier = modifier,
     ) {
         DateRangePicker(state = state)
+    }
+}
+
+@Preview
+@Composable
+private fun DateRangePickerDialogPreview() {
+    ApkAnalyzerTheme {
+        DateRangePickerDialog(
+            onDismiss = {},
+            onConfirm = { _, _ -> },
+            initialStartMs = 1_736_640_000_000,
+            initialEndMs = 1_748_736_000_000,
+        )
     }
 }

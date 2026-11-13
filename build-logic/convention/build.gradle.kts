@@ -12,6 +12,7 @@ kotlin {
 }
 
 dependencies {
+    detektPlugins(project(":detekt-rules"))
     compileOnly(libs.android.gradle.plugin)
     compileOnly(libs.kotlin.compose.compiler.gradle.plugin)
     compileOnly(libs.kotlin.gradle.plugin)
@@ -33,6 +34,10 @@ gradlePlugin {
         register("apkanalyzer.agent-context") {
             id = "apkanalyzer.agent-context"
             implementationClass = "sk.styk.martin.apkanalyzer.AgentContextPlugin"
+        }
+        register("apkanalyzer.architecture") {
+            id = "apkanalyzer.architecture"
+            implementationClass = "sk.styk.martin.apkanalyzer.ArchitecturePlugin"
         }
         register("apkanalyzer.application") {
             id = "apkanalyzer.application"

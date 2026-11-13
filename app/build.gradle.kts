@@ -29,10 +29,6 @@ android {
     androidResources {
         generateLocaleConfig = true
     }
-
-    lint {
-        disable += "MissingTranslation"
-    }
 }
 
 baselineProfile {

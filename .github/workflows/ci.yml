@@ -41,7 +41,7 @@ jobs:
 
       - name: Verify project
         run: |
-          ./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug --continue
+          ./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain :build-logic:detekt-rules:detektMain lintDebug validateArchitecture --continue
 
       - name: Merge SARIF reports
         if: always()
@@ -70,7 +70,7 @@ jobs:
           firebase-project-id: ${{ secrets.FIREBASE_PROJECT_ID }}
 
       - name: Run unit tests
-        run: ./gradlew testDebugUnitTest --continue
+        run: ./gradlew testDebugUnitTest :build-logic:detekt-rules:test --continue
 
   build-apk:
     runs-on: ubuntu-latest

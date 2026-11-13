@@ -24,7 +24,7 @@ import sk.styk.martin.apkanalyzer.feature.apps.phone.list.toListItem
 import javax.inject.Inject
 
 @HiltViewModel
-class AppSearchViewModel @Inject constructor(
+internal class AppSearchViewModel @Inject constructor(
     installedAppsRepository: InstalledAppsRepository,
     private val searchHistoryRepository: SearchHistoryRepository,
     private val appFilterRepository: AppFilterRepository,

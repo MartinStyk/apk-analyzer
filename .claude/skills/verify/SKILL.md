@@ -30,7 +30,7 @@ The user invoked: `/verify $ARGUMENTS`
 
 - `--base=<ref>` — git ref to diff against. Default: `develop` (this repo's main branch).
 - `--full` — also run the whole-app check (`spotlessCheck detektDebug
-  :build-logic:convention:detektMain lintDebug testDebugUnitTest :app:assembleDebug :tv:assembleDebug`) in Stage 5, matching what CI
+  :build-logic:convention:detektMain :build-logic:detekt-rules:detektMain lintDebug testDebugUnitTest :build-logic:detekt-rules:test :app:assembleDebug :tv:assembleDebug validateArchitecture`) in Stage 5, matching what CI
   gates on. Without it, Stage 5 only runs `spotlessApply` plus a compile and Detekt pass of the touched modules —
   fast, matching the "iterate on a single-module compile" guidance in root `AGENTS.md`.
 
@@ -126,8 +126,10 @@ Collect every JSON response. Build a single `findings` list of issues (each tagg
    catches the same per-module findings CI's `detektDebug` would, without the whole-app run.
 4. **Conditional — `context_files_touched` is `true` OR `--full` was passed:**
    `./gradlew validateAgentContext`.
-5. **Conditional — `--full` was passed:** the whole-app check —
-   `./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug testDebugUnitTest :app:assembleDebug :tv:assembleDebug`.
+5. **Conditional — a `build.gradle.kts` or source set changed, OR `--full`:**
+   `./gradlew validateArchitecture`.
+6. **Conditional — `--full` was passed:** the whole-app check —
+   `./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain :build-logic:detekt-rules:detektMain lintDebug testDebugUnitTest :build-logic:detekt-rules:test :app:assembleDebug :tv:assembleDebug validateArchitecture`.
 
 Capture PASS / FAIL and the full failing-task output verbatim for every task actually run.
 

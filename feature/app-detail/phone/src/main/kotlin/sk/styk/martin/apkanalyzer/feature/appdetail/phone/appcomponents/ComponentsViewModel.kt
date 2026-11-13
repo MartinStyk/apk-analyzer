@@ -275,7 +275,7 @@ private fun ComponentsSource.Ready.narrowedBy(narrowing: Narrowing, isHistorical
     val scope = narrowing.scope.takeIf { it in scopeOptions } ?: ComponentScope.All
     val scopedTypes = when (scope) {
         ComponentScope.All -> ComponentType.entries
-        else -> listOfNotNull(scopeTypes[scope])
+        ComponentScope.Activities, ComponentScope.Services, ComponentScope.Receivers, ComponentScope.Providers -> listOfNotNull(scopeTypes[scope])
     }
     val scopeTotal = scopedTypes.sumOf { componentsByType[it].orEmpty().size }
     val sections = scopedTypes

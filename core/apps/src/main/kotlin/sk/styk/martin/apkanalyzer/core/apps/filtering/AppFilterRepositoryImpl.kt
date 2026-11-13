@@ -3,7 +3,6 @@ package sk.styk.martin.apkanalyzer.core.apps.filtering
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import sk.styk.martin.apkanalyzer.core.apps.AppClassificationThresholds
@@ -14,28 +13,28 @@ import java.time.Instant
 import javax.inject.Inject
 
 internal class AppFilterRepositoryImpl @Inject constructor() : AppFilterRepository {
-    private val _filter = MutableStateFlow(AppFilterState())
-    override val filter: StateFlow<AppFilterState> = _filter.asStateFlow()
+    final override val filter: StateFlow<AppFilterState>
+        field = MutableStateFlow(AppFilterState())
 
     override val activeQuickFilters: Flow<Set<QuickFilter>>
-        get() = _filter.map { deriveActiveQuickFilters(it) }
+        get() = filter.map { deriveActiveQuickFilters(it) }
 
     override val activeSourceQuickFilters: Flow<Set<SourceQuickFilter>>
-        get() = _filter.map { it.activeSourceQuickFilters }
+        get() = filter.map { it.activeSourceQuickFilters }
 
     override val activeActivityQuickFilter: Flow<ActivityQuickFilter?>
-        get() = _filter.map { it.activeActivityQuickFilter }
+        get() = filter.map { it.activeActivityQuickFilter }
 
     override fun update(filter: AppFilterState) {
-        _filter.value = filter
+        this.filter.value = filter
     }
 
     override fun clear() {
-        _filter.value = AppFilterState()
+        filter.value = AppFilterState()
     }
 
     override fun toggleQuickFilter(filter: QuickFilter) {
-        _filter.update { current ->
+        this.filter.update { current ->
             when (filter) {
                 QuickFilter.SensitivePermissions -> toggleSensitivePermissions(current)
                 QuickFilter.Large -> toggleLargeTotal(current)
@@ -46,7 +45,7 @@ internal class AppFilterRepositoryImpl @Inject constructor() : AppFilterReposito
     }
 
     override fun toggleSourceQuickFilter(filter: SourceQuickFilter) {
-        _filter.update { current ->
+        this.filter.update { current ->
             val sources = filter.appSources()
             val allSelected = sources.all { it in current.selectedSources }
             current.copy(
@@ -66,7 +65,7 @@ internal class AppFilterRepositoryImpl @Inject constructor() : AppFilterReposito
     }
 
     override fun selectActivityQuickFilter(filter: ActivityQuickFilter?) {
-        _filter.update { current ->
+        this.filter.update { current ->
             current.copy(
                 recentlyUsedDays = if (filter == ActivityQuickFilter.RecentlyUsed) AppClassificationThresholds.RECENTLY_USED_DAYS else null,
                 unusedPeriod = if (filter == ActivityQuickFilter.Unused) UnusedAppsPeriod.SIX_MONTHS else null,

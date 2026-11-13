@@ -9,7 +9,6 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraries
@@ -31,20 +30,20 @@ internal class TvGeneralInfoViewModel @AssistedInject constructor(
         fun create(appDetailInput: AppDetailInput): TvGeneralInfoViewModel
     }
 
-    private val mutableState = MutableStateFlow<TvGeneralInfoState>(TvGeneralInfoState.Loading)
-    val state: StateFlow<TvGeneralInfoState> = mutableState.asStateFlow()
+    val state: StateFlow<TvGeneralInfoState>
+        field = MutableStateFlow<TvGeneralInfoState>(TvGeneralInfoState.Loading)
 
     init {
         viewModelScope.launch(dispatcherProvider.default()) {
             val deviceAbis = Build.SUPPORTED_ABIS.toList()
             sectionRepository.detail(appDetailInput)
                 .onSuccess { detail ->
-                    mutableState.value = detail.toGeneralInfoState(NativeLibraries.Empty, deviceAbis)
+                    state.value = detail.toGeneralInfoState(NativeLibraries.Empty, deviceAbis)
                     val section = sectionRepository.nativeLibrariesOrFallback(appDetailInput)
                     val nativeLibraries = (section as? AppDetailSection.Available)?.value ?: NativeLibraries.Empty
-                    mutableState.value = detail.toGeneralInfoState(nativeLibraries, deviceAbis)
+                    state.value = detail.toGeneralInfoState(nativeLibraries, deviceAbis)
                 }
-                .onFailure { mutableState.value = TvGeneralInfoState.Error }
+                .onFailure { state.value = TvGeneralInfoState.Error }
         }
     }
 }

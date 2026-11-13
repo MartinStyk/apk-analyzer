@@ -31,7 +31,7 @@ tv-material = "1.1.0"
 # Navigation
 navigation3 = "1.2.1"
 lifecycle-viewmodel-nav3 = "2.11.0"
-hilt-navigation-compose = "1.4.0"
+hilt-lifecycle-viewmodel-compose = "1.4.0"
 
 # DI
 hilt = "2.60.1"
@@ -108,7 +108,7 @@ androidx-tv-material = { module = "androidx.tv:tv-material", version.ref = "tv-m
 # Navigation 3
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3" }
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
-androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
+androidx-hilt-lifecycle-viewmodel-compose = { module = "androidx.hilt:hilt-lifecycle-viewmodel-compose", version.ref = "hilt-lifecycle-viewmodel-compose" }
 androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "lifecycle-viewmodel-nav3" }
 
 # Hilt
@@ -162,6 +162,8 @@ ksp-gradle-plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.
 spotless-gradle-plugin = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless" }
 compose-rules-ktlint = { module = "io.nlopez.compose.rules:ktlint", version.ref = "compose-rules-ktlint" }
 detekt-gradle-plugin = { module = "dev.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+detekt-api = { module = "dev.detekt:detekt-api", version.ref = "detekt" }
+detekt-test = { module = "dev.detekt:detekt-test", version.ref = "detekt" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -183,6 +185,7 @@ androidx-baselineprofile = { id = "androidx.baselineprofile", version.ref = "and
 apkanalyzer-library = { id = "apkanalyzer.library" }
 apkanalyzer-application = { id = "apkanalyzer.application" }
 apkanalyzer-agent-context = { id = "apkanalyzer.agent-context" }
+apkanalyzer-architecture = { id = "apkanalyzer.architecture" }
 apkanalyzer-feature-api = { id = "apkanalyzer.feature.api" }
 apkanalyzer-feature-phone = { id = "apkanalyzer.feature.phone" }
 apkanalyzer-feature-tv = { id = "apkanalyzer.feature.tv" }
@@ -199,4 +202,4 @@ apkanalyzer-tests-unit = { id = "apkanalyzer.tests.unit" }
 
 [bundles]
 compose = ["androidx-compose-ui", "androidx-compose-ui-tooling", "androidx-compose-foundation", "androidx-compose-foundation-layout"]
-navigation3 = ["androidx-navigation3-runtime", "androidx-navigation3-ui", "androidx-hilt-navigation-compose", "androidx-lifecycle-viewmodel-navigation3"]
+navigation3 = ["androidx-navigation3-runtime", "androidx-navigation3-ui", "androidx-hilt-lifecycle-viewmodel-compose", "androidx-lifecycle-viewmodel-navigation3"]

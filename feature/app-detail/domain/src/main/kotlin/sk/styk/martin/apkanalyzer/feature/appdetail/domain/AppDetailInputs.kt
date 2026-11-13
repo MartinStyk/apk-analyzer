@@ -21,7 +21,7 @@ val AppDetailInput.liveReference: AppReference?
 val AppDetailInput.iconReference: AppReference
     get() = when (this) {
         is AppDetailInput.Historical -> AppReference.InstalledPackage(PackageName(packageName))
-        else -> checkNotNull(liveReference)
+        is AppDetailInput.InstalledPackage, is AppDetailInput.ApkFile -> checkNotNull(liveReference)
     }
 
 val AppDetailInput.installedPackage: PackageName?

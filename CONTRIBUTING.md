@@ -71,15 +71,14 @@ running the app on a device. Use them instead of copying an existing file and ho
 Then, if you want to pre-empt CI:
 
 ```bash
-./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug testDebugUnitTest :app:assembleDebug :tv:assembleDebug
+./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain :build-logic:detekt-rules:detektMain lintDebug testDebugUnitTest :build-logic:detekt-rules:test :app:assembleDebug :tv:assembleDebug validateArchitecture
 ```
 
 While iterating, a single-module compile is much faster:
 `./gradlew :feature:apps:phone:compileDebugKotlin`.
 
-Two things no gate catches, so check them by hand:
+One thing no gate catches, so check it by hand:
 
-* **Unused imports** — Spotless won't flag them.
 * **Layout correctness** — a clean compile proves nothing about a Compose screen. For any visual
   change, run it on a device (see the [`run-app`](.claude/skills/run-app/SKILL.md) skill) and look
   at it.

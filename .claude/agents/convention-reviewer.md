@@ -17,6 +17,13 @@ orchestrator names.
   waste cycles emitting MINOR / NIT findings — they will be filtered out before they reach the
   report.
 
+## Mechanical rules are already gated
+
+Detekt's `apkanalyzer` rule set, built-in detekt and lint rules, and `validateArchitecture` fail the build
+on the mechanical conventions; `docs/engineering/guardrails.md` lists which. Don't spend findings
+on a violation one of those gates already catches. Focus on what they can't see: semantics, naming
+quality, misplaced logic, duplicated helpers, and wrong abstractions.
+
 ## Input fields (in the dispatch prompt)
 
 - `diff` — the unified diff text, or a `diff_command` Bash command that produces it.

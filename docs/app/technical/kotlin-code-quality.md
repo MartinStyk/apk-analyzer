@@ -149,7 +149,8 @@ combined with Detekt-driven refactoring.
 - Fix high-confidence findings before making the checks blocking.
 - Keep complexity findings non-blocking until the affected code is refactored.
 - Do not create a baseline. Stage rule severities instead of hiding accepted findings.
-- Run every Android module's `detektDebug` task and `build-logic:convention:detektMain` in CI.
+- Run every Android module's `detektDebug` task, `build-logic:convention:detektMain`, and
+  `build-logic:detekt-rules:detektMain` in CI.
 
 **Exit criteria**
 
@@ -229,8 +230,12 @@ focused architecture checks rather than AST lint rules.
 After all steps, the main quality gate should be equivalent to:
 
 ```shell
-./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain lintDebug :app:assembleDebug :tv:assembleDebug
+./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain :build-logic:detekt-rules:detektMain validateArchitecture lintDebug :app:assembleDebug :tv:assembleDebug
 ```
+
+KQ-06 is implemented by the `apkanalyzer` Detekt rule set in `build-logic/detekt-rules` and the
+`validateArchitecture` task; see
+[Guardrails](../../engineering/guardrails.md).
 
 `spotlessApply` remains the only automatic formatting command. Detekt and Android Lint remain
 check-only tools.

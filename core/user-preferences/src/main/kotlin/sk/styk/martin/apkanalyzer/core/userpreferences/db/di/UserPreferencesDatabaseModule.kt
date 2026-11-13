@@ -14,7 +14,7 @@ private const val DATABASE_NAME = "user_preferences.db"
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal object UserPreferencesDatabaseModule {
+internal class UserPreferencesDatabaseModule {
     @Provides
     @Singleton
     fun provideUserPreferencesDatabase(@ApplicationContext context: Context): UserPreferencesDatabase =

@@ -44,7 +44,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 private val SettingsRowMinHeight = 48.dp
 
 @Composable
-fun SettingsScreen(
+internal fun SettingsScreen(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SettingsViewModel = hiltViewModel(),

@@ -17,7 +17,7 @@ import sk.styk.martin.apkanalyzer.feature.apps.phone.components.AppDataPermissio
 import javax.inject.Inject
 
 @HiltViewModel
-class QuickFilterRowViewModel @Inject constructor(
+internal class QuickFilterRowViewModel @Inject constructor(
     private val appFilterRepository: AppFilterRepository,
     private val usageStatsRepository: UsageStatsRepository,
     private val storageStatsRepository: StorageStatsRepository,

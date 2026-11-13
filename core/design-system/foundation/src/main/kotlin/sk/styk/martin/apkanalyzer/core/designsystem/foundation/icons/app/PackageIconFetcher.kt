@@ -20,6 +20,8 @@ import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 
+private const val TAG = "PackageIconFetcher"
+
 internal class PackageIconKeyer : Keyer<AppReference> {
     override fun key(data: AppReference, options: Options): String = when (data) {
         is AppReference.InstalledPackage -> "package_icon:installed:${data.packageName}"
@@ -102,7 +104,6 @@ internal class PackageIconFetcher(
     }
 
     private companion object {
-        const val TAG = "PackageIconFetcher"
         const val MAX_ICON_PX = 2048
     }
 }

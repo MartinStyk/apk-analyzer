@@ -117,20 +117,13 @@ package sk.styk.martin.apkanalyzer.feature.<name>.phone
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 
 @Composable
 internal fun <Name>Screen() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(text = "<Name>")
-    }
+    Box(modifier = Modifier.fillMaxSize())
 }
 
 @Preview
@@ -141,6 +134,8 @@ private fun <Name>ScreenPreview() {
     }
 }
 ```
+
+The placeholder has no text because a string literal fails detekt's `HardcodedComposeString`.
 
 ## Step 5 — Register in `settings.gradle.kts`
 

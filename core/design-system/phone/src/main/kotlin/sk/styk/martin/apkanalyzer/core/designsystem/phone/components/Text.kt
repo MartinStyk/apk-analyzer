@@ -6,7 +6,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import androidx.compose.material3.Text as MaterialText
 
 @Composable
@@ -28,4 +30,12 @@ fun Text(
         overflow = overflow,
         maxLines = maxLines,
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun TextPreview() {
+    ApkAnalyzerTheme {
+        Text(text = "WhatsApp", style = AppTheme.typography.titleMedium)
+    }
 }
