@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="database" path="app_history.db" />
+        <exclude domain="database" path="app_history.db-wal" />
+        <exclude domain="database" path="app_history.db-shm" />
+        <exclude domain="database" path="app_history.db-journal" />
+        <exclude domain="database" path="app_history_restore_staging.db" />
+        <exclude domain="database" path="app_history_restore_staging.db-wal" />
+        <exclude domain="database" path="app_history_restore_staging.db-shm" />
+        <exclude domain="database" path="app_history_restore_staging.db-journal" />
+        <exclude domain="database" path="app_history_v2.db" />
+        <exclude domain="database" path="app_history_v2.db-wal" />
+        <exclude domain="database" path="app_history_v2.db-shm" />
+        <exclude domain="database" path="app_history_v2.db-journal" />
+        <exclude domain="database" path="app_history_v2_restore_staging.db" />
+        <exclude domain="database" path="app_history_v2_restore_staging.db-wal" />
+        <exclude domain="database" path="app_history_v2_restore_staging.db-shm" />
+        <exclude domain="database" path="app_history_v2_restore_staging.db-journal" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="database" path="app_history.db" />
+        <exclude domain="database" path="app_history.db-wal" />
+        <exclude domain="database" path="app_history.db-shm" />
+        <exclude domain="database" path="app_history.db-journal" />
+        <exclude domain="database" path="app_history_restore_staging.db" />
+        <exclude domain="database" path="app_history_restore_staging.db-wal" />
+        <exclude domain="database" path="app_history_restore_staging.db-shm" />
+        <exclude domain="database" path="app_history_restore_staging.db-journal" />
+        <exclude domain="database" path="app_history_v2.db" />
+        <exclude domain="database" path="app_history_v2.db-wal" />
+        <exclude domain="database" path="app_history_v2.db-shm" />
+        <exclude domain="database" path="app_history_v2.db-journal" />
+        <exclude domain="database" path="app_history_v2_restore_staging.db" />
+        <exclude domain="database" path="app_history_v2_restore_staging.db-wal" />
+        <exclude domain="database" path="app_history_v2_restore_staging.db-shm" />
+        <exclude domain="database" path="app_history_v2_restore_staging.db-journal" />
+    </device-transfer>
+</data-extraction-rules>

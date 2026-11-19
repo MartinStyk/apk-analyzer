@@ -297,6 +297,15 @@ that registration forces Hilt to construct this singleton at app launch in the f
 else in the app injects `AppHistoryCaptureScheduler` directly, so without that forced construction
 background capture would never start.
 
+Startup observes `ConfigurationKey.AppHistoryRecordingEnabled` before starting any trigger or restore merge.
+The phone variant records only in debug; TV never records. Disabled recording cancels the existing
+periodic reconciliation. `AppHistoryStorageCleanup` runs independently to delete only legacy uncompressed databases.
+Disabling history never deletes or closes the current compressed database or its restore staging file.
+The scheduler observes recording configuration with `distinctUntilChanged` and
+`collectLatest`. Capture collectors and the delayed sweep are children of the enabled recording scope,
+so disabling recording cancels them and the periodic work without deleting snapshots. Re-enabling
+recording starts one fresh scope; repeated identical configuration emissions do not restart it.
+
 **Phone detail opening.** After a successful installed-package hub load, the phone ViewModel calls
 `AppHistoryCaptureRepository.requestCapture(packageName)`. It launches `reconcile(packageName)` in the
 application scope using `DispatcherProvider`, so detail loading never waits for capture and leaving
@@ -469,10 +478,12 @@ propagated days earlier — not from anything forced in the same session.
 
 ## Module Wiring
 
-Both apps record history. `app/build.gradle.kts` and `tv/build.gradle.kts` depend on this module
-directly (`implementation(projects.core.appHistory)`) to pull its Hilt bindings into the graph, and each
-app wires the same pieces: `apkanalyzer.work`, a `Configuration.Provider` application with
-`HiltWorkerFactory`, the manifest removing `WorkManagerInitializer`, and `AppHistoryBackupAgent` with
-`fullBackupOnly`. `feature:app-detail:domain` depends on it too, for reading history, but the bindings
-must not hinge on a feature: without each app's direct dependency capture could silently stop running.
-Keep it even though it looks unused from the apps' own Kotlin code.
+Only the phone supports history. `app/build.gradle.kts` and `tv/build.gradle.kts` depend on this module
+directly (`implementation(projects.core.appHistory)`) to pull its Hilt bindings into the graph. Both
+keep `apkanalyzer.work`, a `Configuration.Provider` application with `HiltWorkerFactory`, and the
+manifest removing `WorkManagerInitializer`: phone starts capture, while TV cancels previous work and
+cleans up legacy uncompressed files without creating a history database. Only phone registers `AppHistoryBackupAgent`
+with `fullBackupOnly`; TV excludes history from backup and device transfer.
+`feature:app-detail:domain` depends on this module too, for reading history, but startup and cleanup
+must not hinge on a feature dependency. Keep each app's direct dependency even though it looks unused
+from its own Kotlin code.

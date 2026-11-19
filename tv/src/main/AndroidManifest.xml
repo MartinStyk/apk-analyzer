@@ -19,8 +19,8 @@
     <application
         android:name=".TvApkAnalyzer"
         android:allowBackup="true"
-        android:backupAgent="sk.styk.martin.apkanalyzer.core.apphistory.restore.AppHistoryBackupAgent"
-        android:fullBackupOnly="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
         android:banner="@drawable/tv_banner"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"

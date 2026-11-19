@@ -1,25 +1,29 @@
 package sk.styk.martin.apkanalyzer.core.apphistory.capture
 
-import android.content.Context
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.work.await
 import dagger.Lazy
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.plus
 import sk.styk.martin.apkanalyzer.core.apphistory.restore.AppHistoryRestoreMerger
-import sk.styk.martin.apkanalyzer.core.apphistory.storage.database.UNCOMPRESSED_APP_HISTORY_DATABASE_NAMES
+import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryStorageCleanup
 import sk.styk.martin.apkanalyzer.core.apps.PackageChangeAction
 import sk.styk.martin.apkanalyzer.core.apps.PackageChangesObserver
+import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationKey
+import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
@@ -27,13 +31,16 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.time.Duration.Companion.minutes
 
+private const val PERIODIC_RECONCILIATION_WORK_NAME = "app_history_periodic_reconciliation"
+
 @Singleton
 internal class AppHistoryCaptureSchedulerImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val captureRepository: AppHistoryCaptureRepository,
     private val packageChangesObserver: PackageChangesObserver,
     private val workManager: Lazy<WorkManager>,
     private val restoreMerger: AppHistoryRestoreMerger,
+    private val storageCleanup: AppHistoryStorageCleanup,
+    private val configurationRepository: ConfigurationRepository,
     private val appScope: CoroutineScope,
     private val dispatcherProvider: DispatcherProvider,
 ) : AppHistoryCaptureScheduler,
@@ -49,14 +56,27 @@ internal class AppHistoryCaptureSchedulerImpl @Inject constructor(
         if (!started.compareAndSet(false, true)) return
 
         appScope.launch(dispatcherProvider.io()) {
-            deleteUncompressedDatabases()
-        }
+            // remove this in upcoming releases
+            storageCleanup.deleteUncompressedDatabases()
 
-        appScope.launch(dispatcherProvider.default()) {
+            configurationRepository.observe(ConfigurationKey.AppHistoryRecordingEnabled)
+                .distinctUntilChanged()
+                .collectLatest { enabled ->
+                    if (enabled) {
+                        recordHistory()
+                    } else {
+                        cancelPeriodicReconciliation()
+                    }
+                }
+        }
+    }
+
+    private suspend fun recordHistory(): Unit = coroutineScope {
+        launch {
             restoreMerger.mergeIfPending()
         }
 
-        appScope.launch(dispatcherProvider.default()) {
+        launch {
             delay(1.minutes)
             captureRepository.reconcileAll()
                 .onFailure { Logger.w(APP_HISTORY, it, "Reconciliation sweep failed") }
@@ -69,15 +89,9 @@ internal class AppHistoryCaptureSchedulerImpl @Inject constructor(
                         .onFailure { Logger.w(APP_HISTORY, it, "Fast-path capture failed for ${event.packageName.value}") }
                 }
             }
-            .launchIn(appScope + dispatcherProvider.default())
+            .launchIn(this)
 
         schedulePeriodicReconciliation()
-    }
-
-    private fun deleteUncompressedDatabases() {
-        UNCOMPRESSED_APP_HISTORY_DATABASE_NAMES
-            .filter { context.deleteDatabase(it) }
-            .forEach { Logger.i(APP_HISTORY, "Deleted uncompressed history database $it") }
     }
 
     private fun schedulePeriodicReconciliation() {
@@ -92,9 +106,15 @@ internal class AppHistoryCaptureSchedulerImpl @Inject constructor(
         ).setConstraints(constraints).build()
 
         workManager.get().enqueueUniquePeriodicWork(
-            uniqueWorkName = "app_history_periodic_reconciliation",
+            uniqueWorkName = PERIODIC_RECONCILIATION_WORK_NAME,
             existingPeriodicWorkPolicy = ExistingPeriodicWorkPolicy.KEEP,
             request = request,
         )
+    }
+
+    private suspend fun cancelPeriodicReconciliation() {
+        runCatchingCancellable {
+            workManager.get().cancelUniqueWork(PERIODIC_RECONCILIATION_WORK_NAME).await()
+        }.onFailure { Logger.w(APP_HISTORY, it, "Periodic history cancellation failed") }
     }
 }

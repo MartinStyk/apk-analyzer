@@ -31,6 +31,13 @@ The Activity observes app-level fingerprint preferences through its root ViewMod
 `LocalFingerprintFormat` once around the navigation host. Fingerprint components read that value;
 generic code and identifier components do not.
 
+The application binds `ApplicationVariant.Tv` through Hilt. `BuildConfigurationRepository` disables
+history for this variant, including debug builds. Keep the direct `core:app-history` dependency and
+WorkManager factory wiring: startup cancels old history work and deletes only legacy uncompressed
+history databases instead of recording or restoring snapshots. Existing compressed history is preserved.
+TV backup and device-transfer rules exclude history files;
+do not register the phone's history backup agent here.
+
 ## Manifest Contracts
 
 * `android.software.leanback` is required, so Play offers this bundle only to TVs.

@@ -14,7 +14,7 @@ class ConfigurationRepositoryFake(vararg enabledKeys: ConfigurationKey<Boolean>)
 
     override fun <T : Any> observe(key: ConfigurationKey<T>): Flow<T> = enabledKeys.map { resolve(key, it) }
 
-    override suspend fun <T : Any> get(key: ConfigurationKey<T>): T = resolve(key, enabledKeys.value)
+    override suspend operator fun <T : Any> get(key: ConfigurationKey<T>): T = resolve(key, enabledKeys.value)
 
     @Suppress("UNCHECKED_CAST")
     private fun <T : Any> resolve(key: ConfigurationKey<T>, enabled: Set<ConfigurationKey<Boolean>>): T = when (key) {
