@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_app_detail_loading">Carregando detalhes do aplicativo…</string>
+    <string name="tv_app_detail_error">Não foi possível carregar os detalhes deste aplicativo.</string>
+    <string name="tv_app_detail_error_unsupported_apk">Este arquivo não é um APK válido e não pode ser analisado.</string>
+    <string name="tv_app_detail_retry">Tente novamente</string>
+    <string name="tv_app_detail_action_app_info">Informações do aplicativo</string>
+    <string name="tv_app_detail_action_play_store">Play Store</string>
+    <string name="tv_app_detail_worth_knowing">Vale a pena saber</string>
+    <string name="tv_app_detail_details">Detalhes</string>
+    <string name="tv_app_detail_permissions_none">Nenhuma permissão solicitada</string>
+    <string name="tv_label_count">%1$s · %2$d</string>
+    <string name="tv_permissions_empty">Este aplicativo não solicita permissões.</string>
+    <string name="tv_components_scope_all">Todos</string>
+    <string name="tv_components_no_components">Este aplicativo não declara componentes.</string>
+    <string name="tv_components_intent_filter_title">Solicitação %1$d</string>
+    <string name="tv_components_launch_hint">Pressione OK para iniciar este componente</string>
+    <string name="tv_app_detail_signed_by">Assinado por %1$s</string>
+    <string name="tv_label_value">%1$s: %2$s</string>
+    <string name="tv_value_pair">%1$s · %2$s</string>
+    <string name="tv_app_detail_requirements_all_met">Tudo o que ele exige está neste dispositivo</string>
+    <plurals name="tv_app_detail_requirements_missing">
+        <item quantity="one">%1$d recurso exigido está faltando</item>
+        <item quantity="many">%1$d recursos exigidos estão faltando</item>
+        <item quantity="other">%1$d recursos exigidos estão faltando</item>
+    </plurals>
+    <string name="tv_app_detail_requirements_none">Nenhum requisito de dispositivo declarado</string>
+    <string name="tv_app_detail_manifest_description">Tudo o que este aplicativo declara em seu arquivo de manifesto</string>
+    <string name="tv_app_detail_stat_version">Versão</string>
+    <string name="tv_app_detail_stat_updated">Atualizado</string>
+    <string name="tv_app_detail_stat_target">API de destino</string>
+    <string name="tv_app_detail_stat_size">No dispositivo</string>
+    <string name="tv_app_detail_stat_apk">APK</string>
+    <string name="tv_app_detail_stat_granted">Sensíveis concedidas</string>
+    <string name="tv_app_detail_stat_sensitive">Sensíveis</string>
+    <string name="tv_app_detail_stat_requested">Solicitadas</string>
+    <string name="tv_app_detail_ratio">%1$d/%2$d</string>
+    <string name="tv_app_detail_api_level">API %1$d</string>
+    <plurals name="tv_app_detail_required_count">
+        <item quantity="one">%1$d exigido</item>
+        <item quantity="many">%1$d exigidos</item>
+        <item quantity="other">%1$d exigidos</item>
+    </plurals>
+    <plurals name="tv_app_detail_optional_count">
+        <item quantity="one">%1$d opcional</item>
+        <item quantity="many">%1$d opcionais</item>
+        <item quantity="other">%1$d opcionais</item>
+    </plurals>
+</resources>

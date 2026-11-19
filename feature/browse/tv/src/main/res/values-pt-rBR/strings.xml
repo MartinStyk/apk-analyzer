@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_browse_loading">Analisando aplicativos instalados…</string>
+    <string name="tv_browse_permission_about">Sobre esta permissão</string>
+    <string name="tv_browse_certificate_about">Sobre este certificado</string>
+    <string name="tv_browse_no_apps">Nenhum aplicativo neste dispositivo corresponde mais.</string>
+    <string name="tv_browse_label_list">%1$s · %2$s</string>
+    <string name="tv_browse_search">Pesquisar</string>
+    <string name="tv_browse_see_all">Ver todos</string>
+    <plurals name="tv_browse_more_apps">
+        <item quantity="one">+%1$d aplicativo a mais</item>
+        <item quantity="many">+%1$d aplicativos a mais</item>
+        <item quantity="other">+%1$d aplicativos a mais</item>
+    </plurals>
+</resources>
