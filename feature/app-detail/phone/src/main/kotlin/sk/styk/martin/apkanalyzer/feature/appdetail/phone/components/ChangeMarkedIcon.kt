@@ -22,21 +22,22 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryChangeDirection
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.apphistory.R as HistoryR
 
-internal fun TextStyle.markedBy(marker: RowChangeMarker?): TextStyle =
-    if (marker == RowChangeMarker.Removed) copy(textDecoration = TextDecoration.LineThrough) else this
+internal fun TextStyle.markedBy(marker: AppHistoryChangeDirection?): TextStyle =
+    if (marker == AppHistoryChangeDirection.Removed) copy(textDecoration = TextDecoration.LineThrough) else this
 
 @Composable
 internal fun ChangeMarkedIcon(
     imageVector: ImageVector,
     contentDescription: String?,
     tint: Color,
-    marker: RowChangeMarker?,
+    marker: AppHistoryChangeDirection?,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier.size(22.dp)) {
@@ -51,14 +52,14 @@ internal fun ChangeMarkedIcon(
 }
 
 @Composable
-private fun ChangeBadge(marker: RowChangeMarker, modifier: Modifier = Modifier) {
+private fun ChangeBadge(marker: AppHistoryChangeDirection, modifier: Modifier = Modifier) {
     ChangeMarkerDot(
         marker = marker,
         contentDescription = stringResource(
             when (marker) {
-                RowChangeMarker.Added -> HistoryR.string.app_history_group_added
-                RowChangeMarker.Removed -> HistoryR.string.app_history_group_removed
-                RowChangeMarker.Changed -> HistoryR.string.app_history_group_changed
+                AppHistoryChangeDirection.Added -> HistoryR.string.app_history_group_added
+                AppHistoryChangeDirection.Removed -> HistoryR.string.app_history_group_removed
+                AppHistoryChangeDirection.Changed -> HistoryR.string.app_history_group_changed
             },
         ),
         modifier = modifier
@@ -71,12 +72,12 @@ private fun ChangeBadge(marker: RowChangeMarker, modifier: Modifier = Modifier) 
 
 @Composable
 internal fun ChangeMarkerDot(
-    marker: RowChangeMarker,
+    marker: AppHistoryChangeDirection,
     contentDescription: String?,
     modifier: Modifier = Modifier,
     color: Color = marker.color,
 ) {
-    val isOutlined = marker == RowChangeMarker.Changed
+    val isOutlined = marker == AppHistoryChangeDirection.Changed
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
@@ -86,9 +87,9 @@ internal fun ChangeMarkerDot(
     ) {
         Icon(
             imageVector = when (marker) {
-                RowChangeMarker.Added -> ApkAnalyzerIcons.Add
-                RowChangeMarker.Removed -> ApkAnalyzerIcons.Remove
-                RowChangeMarker.Changed -> ApkAnalyzerIcons.ChevronRight
+                AppHistoryChangeDirection.Added -> ApkAnalyzerIcons.Add
+                AppHistoryChangeDirection.Removed -> ApkAnalyzerIcons.Remove
+                AppHistoryChangeDirection.Changed -> ApkAnalyzerIcons.ChevronRight
             },
             tint = if (isOutlined) color else AppTheme.colors.surface,
             modifier = Modifier.size(10.dp),
@@ -96,11 +97,11 @@ internal fun ChangeMarkerDot(
     }
 }
 
-private val RowChangeMarker.color: Color
+private val AppHistoryChangeDirection.color: Color
     @Composable
     get() = when (this) {
-        RowChangeMarker.Added -> AppTheme.colors.primary
-        RowChangeMarker.Removed, RowChangeMarker.Changed -> AppTheme.colors.onSurfaceVariant
+        AppHistoryChangeDirection.Added -> AppTheme.colors.primary
+        AppHistoryChangeDirection.Removed, AppHistoryChangeDirection.Changed -> AppTheme.colors.onSurfaceVariant
     }
 
 @Preview
@@ -108,9 +109,14 @@ private val RowChangeMarker.color: Color
 private fun ChangeMarkedIconPreview() {
     ApkAnalyzerTheme {
         Row(modifier = Modifier.background(AppTheme.colors.surface).padding(16.dp)) {
-            ChangeMarkedIcon(ApkAnalyzerIcons.Camera, contentDescription = null, tint = AppTheme.colors.primary, marker = RowChangeMarker.Added)
+            ChangeMarkedIcon(ApkAnalyzerIcons.Camera, contentDescription = null, tint = AppTheme.colors.primary, marker = AppHistoryChangeDirection.Added)
             Spacer(modifier = Modifier.width(24.dp))
-            ChangeMarkedIcon(ApkAnalyzerIcons.Phone, contentDescription = null, tint = AppTheme.colors.onSurfaceVariant, marker = RowChangeMarker.Removed)
+            ChangeMarkedIcon(
+                ApkAnalyzerIcons.Phone,
+                contentDescription = null,
+                tint = AppTheme.colors.onSurfaceVariant,
+                marker = AppHistoryChangeDirection.Removed,
+            )
         }
     }
 }

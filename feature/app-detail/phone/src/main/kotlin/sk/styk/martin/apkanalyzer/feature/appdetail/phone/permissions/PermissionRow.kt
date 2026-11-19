@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryChangeDirection
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.GrantState
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionItem
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.labelRes
@@ -33,7 +34,6 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ChangeMarkedIcon
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RowChangeLines
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RowChangeMarker
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.markedBy
 
 @Composable
@@ -44,7 +44,7 @@ internal fun PermissionRow(
     modifier: Modifier = Modifier,
     tag: String? = null,
     changeLines: List<String> = emptyList(),
-    changeMarker: RowChangeMarker? = null,
+    changeMarker: AppHistoryChangeDirection? = null,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -141,7 +141,8 @@ private fun PermissionRowPreview() {
 @Composable
 private fun PermissionRowAddedPreview() {
     ApkAnalyzerTheme {
-        PermissionRow(item = samplePermission(grantState = null), onClick = {}, onLongClick = {}, tag = "Dangerous", changeMarker = RowChangeMarker.Added)
+        PermissionRow(item = samplePermission(grantState = null), onClick = {
+        }, onLongClick = {}, tag = "Dangerous", changeMarker = AppHistoryChangeDirection.Added)
     }
 }
 
@@ -149,6 +150,6 @@ private fun PermissionRowAddedPreview() {
 @Composable
 private fun PermissionRowRemovedPreview() {
     ApkAnalyzerTheme {
-        PermissionRow(item = samplePermission(grantState = null), onClick = {}, onLongClick = {}, changeMarker = RowChangeMarker.Removed)
+        PermissionRow(item = samplePermission(grantState = null), onClick = {}, onLongClick = {}, changeMarker = AppHistoryChangeDirection.Removed)
     }
 }

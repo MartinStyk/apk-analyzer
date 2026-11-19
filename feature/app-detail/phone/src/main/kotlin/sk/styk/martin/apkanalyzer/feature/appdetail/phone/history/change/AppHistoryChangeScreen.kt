@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryChangeDirection
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryEntry
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryFieldChange
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryInstallSource
@@ -92,7 +93,6 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.InfoRow
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.InfoRowItem
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ListSectionHeader
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RationaleBottomSheet
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RowChangeMarker
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionCard
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
@@ -448,7 +448,8 @@ private fun LazyListScope.worthKnowing(
             )
         }
     }
-    items(items = section.dangerousPermissions, key = { "worth-knowing-permission:${it.name}" }) { permission ->
+    items(items = section.dangerousPermissions, key = { "worth-knowing-permission:${it.item.name}" }) { row ->
+        val permission = row.item
         val title = stringResource(HistoryR.string.app_history_summary_permission_added_single, permission.label)
         InfoCard(
             icon = permission.icon,
@@ -459,7 +460,7 @@ private fun LazyListScope.worthKnowing(
                 .padding(bottom = 6.dp)
                 .clip(Shapes.CardShape)
                 .combinedClickable(
-                    onClick = { onSelectRow("$REQUESTED_ADDED_GROUP_ID:${permission.name}") },
+                    onClick = { onSelectRow(row.key) },
                     onLongClick = { onCopy(title, permission.name) },
                 ),
         )
@@ -475,7 +476,7 @@ private fun LazyListScope.worthKnowing(
     }
     if (section.removedInsights.isNotEmpty()) {
         item(key = "worth-knowing-removed") {
-            InsightGroup(kind = HistoryChangeGroupKind.Removed, insights = section.removedInsights, isFirst = false)
+            InsightGroup(kind = AppHistoryChangeDirection.Removed, insights = section.removedInsights, isFirst = false)
         }
     }
 }
@@ -557,7 +558,14 @@ private fun LazyListScope.groups(
             items = if (isExpanded) group.rows else group.rows.take(COLLAPSED_GROUP_SIZE),
             key = { it.key },
         ) { row ->
-            ChangeRow(row = row, marker = group.kind.marker, onSelect = { onSelectRow(row.key) }, onCopy = onCopy)
+            ChangeRow(
+                row = row,
+                marker = group.kind.takeUnless {
+                    it == AppHistoryChangeDirection.Changed
+                },
+                onSelect = { onSelectRow(row.key) },
+                onCopy = onCopy,
+            )
         }
         if (!isExpanded) {
             item(key = "show-all-${group.id}") {
@@ -575,9 +583,9 @@ private fun LazyListScope.groups(
 private fun HistoryChangeGroup.headerText(): String {
     val kindText = stringResource(
         when (kind) {
-            HistoryChangeGroupKind.Added -> HistoryR.string.app_history_group_added
-            HistoryChangeGroupKind.Removed -> HistoryR.string.app_history_group_removed
-            HistoryChangeGroupKind.Changed -> HistoryR.string.app_history_group_changed
+            AppHistoryChangeDirection.Added -> HistoryR.string.app_history_group_added
+            AppHistoryChangeDirection.Removed -> HistoryR.string.app_history_group_removed
+            AppHistoryChangeDirection.Changed -> HistoryR.string.app_history_group_changed
         },
     ).uppercase()
     return when (val scope = scope) {
@@ -586,17 +594,10 @@ private fun HistoryChangeGroup.headerText(): String {
     }
 }
 
-private val HistoryChangeGroupKind.marker: RowChangeMarker?
-    get() = when (this) {
-        HistoryChangeGroupKind.Added -> RowChangeMarker.Added
-        HistoryChangeGroupKind.Removed -> RowChangeMarker.Removed
-        HistoryChangeGroupKind.Changed -> null
-    }
-
 @Composable
 private fun ChangeRow(
     row: HistoryChangeRow,
-    marker: RowChangeMarker?,
+    marker: AppHistoryChangeDirection?,
     onSelect: () -> Unit,
     onCopy: (String, String) -> Unit,
 ) {
@@ -643,7 +644,7 @@ private fun ChangeRow(
 
 @Composable
 private fun InsightGroup(
-    kind: HistoryChangeGroupKind,
+    kind: AppHistoryChangeDirection,
     insights: List<AppDetailInsight>,
     isFirst: Boolean,
 ) {
@@ -652,7 +653,7 @@ private fun InsightGroup(
         R.string.app_history_group_header,
         stringResource(
             if (kind ==
-                HistoryChangeGroupKind.Added
+                AppHistoryChangeDirection.Added
             ) {
                 HistoryR.string.app_history_group_added
             } else {
@@ -951,7 +952,7 @@ private val normalSections = listOf(
         groups = listOf(
             HistoryChangeGroup(
                 id = "requested-added",
-                kind = HistoryChangeGroupKind.Added,
+                kind = AppHistoryChangeDirection.Added,
                 scope = PermissionScope.Requested,
                 rows = listOf(
                     HistoryChangeRow.Permission("requested-added:camera", samplePermission("android.permission.CAMERA", "Camera", ProtectionLevel.Dangerous)),
@@ -967,7 +968,7 @@ private val normalSections = listOf(
         groups = listOf(
             HistoryChangeGroup(
                 id = "components-changed",
-                kind = HistoryChangeGroupKind.Changed,
+                kind = AppHistoryChangeDirection.Changed,
                 rows = listOf(
                     HistoryChangeRow.Component(
                         key = "components-changed:SyncService",
@@ -982,7 +983,7 @@ private val normalSections = listOf(
         groups = listOf(
             HistoryChangeGroup(
                 id = "native-added",
-                kind = HistoryChangeGroupKind.Added,
+                kind = AppHistoryChangeDirection.Added,
                 rows = listOf(
                     HistoryChangeRow.NativeLibrary(
                         key = "native-added:libfoo.so",
@@ -1044,7 +1045,12 @@ private fun AppHistoryChangeInsightsAndRequirementsPreview() {
                 sections = listOf(
                     HistoryChangeSection.WorthKnowing(
                         hasCertificateChange = false,
-                        dangerousPermissions = listOf(samplePermission("android.permission.CAMERA", "Camera", ProtectionLevel.Dangerous)),
+                        dangerousPermissions = listOf(
+                            HistoryChangeRow.Permission(
+                                key = "requested-added:android.permission.CAMERA",
+                                item = samplePermission("android.permission.CAMERA", "Camera", ProtectionLevel.Dangerous),
+                            ),
+                        ),
                         addedInsights = listOf(AppDetailInsight.Debuggable),
                         removedInsights = listOf(AppDetailInsight.DebugCertificate),
                     ),
@@ -1052,12 +1058,12 @@ private fun AppHistoryChangeInsightsAndRequirementsPreview() {
                         groups = listOf(
                             HistoryChangeGroup(
                                 id = "requirements-added",
-                                kind = HistoryChangeGroupKind.Added,
+                                kind = AppHistoryChangeDirection.Added,
                                 rows = listOf(HistoryChangeRow.Requirement(key = "requirements-added:nfc", item = nfc)),
                             ),
                             HistoryChangeGroup(
                                 id = "requirements-changed",
-                                kind = HistoryChangeGroupKind.Changed,
+                                kind = AppHistoryChangeDirection.Changed,
                                 rows = listOf(
                                     HistoryChangeRow.Requirement(
                                         key = "requirements-changed:camera",

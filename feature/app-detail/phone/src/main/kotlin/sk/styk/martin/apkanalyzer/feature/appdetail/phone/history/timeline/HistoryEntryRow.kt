@@ -46,7 +46,6 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ChangeMarkerDot
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RowChangeMarker
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.HistoryVersionTag
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.historyDate
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.historyDateTime
@@ -189,15 +188,17 @@ private fun HeadlineWithDate(
 private fun ChangeTokens(parts: List<AppHistorySummaryPart>, textColor: Color) {
     if (parts.isEmpty()) return
     val resources = LocalResources.current
-    val ordered = parts.sortedByDescending { it.needsAttention }
-    val visible = ordered.take(MAX_VISIBLE_TOKENS)
-    val hiddenCount = ordered.size - visible.size
+    val tokens = remember(parts, resources) {
+        parts.sortedByDescending { it.needsAttention }.map { part -> part to part.label(resources) }
+    }
+    val visible = tokens.take(MAX_VISIBLE_TOKENS)
+    val hiddenCount = tokens.size - visible.size
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        visible.forEach { part ->
-            ChangeToken(text = part.label(resources), marker = part.marker, needsAttention = part.needsAttention, textColor = textColor)
+        visible.forEach { (part, label) ->
+            ChangeToken(text = label, marker = part.direction, needsAttention = part.needsAttention, textColor = textColor)
         }
         if (hiddenCount > 0) {
             Text(
@@ -212,7 +213,7 @@ private fun ChangeTokens(parts: List<AppHistorySummaryPart>, textColor: Color) {
 @Composable
 private fun ChangeToken(
     text: String,
-    marker: RowChangeMarker,
+    marker: AppHistoryChangeDirection,
     needsAttention: Boolean,
     textColor: Color,
 ) {
@@ -232,13 +233,6 @@ private fun ChangeToken(
         )
     }
 }
-
-private val AppHistorySummaryPart.marker: RowChangeMarker
-    get() = when (direction) {
-        AppHistoryChangeDirection.Added -> RowChangeMarker.Added
-        AppHistoryChangeDirection.Removed -> RowChangeMarker.Removed
-        AppHistoryChangeDirection.Changed -> RowChangeMarker.Changed
-    }
 
 @Composable
 private fun BodyLine(text: String, color: Color) {

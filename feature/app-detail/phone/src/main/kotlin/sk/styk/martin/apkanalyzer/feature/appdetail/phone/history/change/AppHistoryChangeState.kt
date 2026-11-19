@@ -1,6 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.change
 
 import androidx.compose.runtime.Immutable
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryChangeDirection
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryEntry
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryFieldChange
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryInstallSource
@@ -19,13 +20,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents.Componen
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.HistoryVersionTag
 import java.time.Instant
 
-internal const val REQUESTED_ADDED_GROUP_ID = "requested-added"
-
-internal enum class HistoryChangeGroupKind {
-    Added,
-    Removed,
-    Changed,
-}
+internal fun historyRowKey(groupId: String, itemId: String): String = "$groupId:$itemId"
 
 @Immutable
 internal sealed interface HistoryChangeRow {
@@ -77,7 +72,7 @@ internal sealed interface HistoryChangeRow {
 @Immutable
 internal data class HistoryChangeGroup(
     val id: String,
-    val kind: HistoryChangeGroupKind,
+    val kind: AppHistoryChangeDirection,
     val scope: PermissionScope? = null,
     val rows: List<HistoryChangeRow>,
 )
@@ -94,7 +89,7 @@ internal sealed interface HistoryChangeSection {
     @Immutable
     data class WorthKnowing(
         val hasCertificateChange: Boolean,
-        val dangerousPermissions: List<PermissionItem>,
+        val dangerousPermissions: List<HistoryChangeRow.Permission>,
         val addedInsights: List<AppDetailInsight>,
         val removedInsights: List<AppDetailInsight>,
     ) : HistoryChangeSection

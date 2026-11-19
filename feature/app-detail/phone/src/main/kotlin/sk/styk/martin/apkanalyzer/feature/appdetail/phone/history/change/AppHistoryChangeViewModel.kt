@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.AppHistoryRepository
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryChangeDirection
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryDiff
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryEntry
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryFieldChange
@@ -48,6 +49,8 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents.mergeDup
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents.sortedForDisplay
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents.toItem
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.versionTag
+
+private const val REQUESTED_ADDED_GROUP_ID = "requested-added"
 
 @HiltViewModel(assistedFactory = AppHistoryChangeViewModel.Factory::class)
 internal class AppHistoryChangeViewModel @AssistedInject constructor(
@@ -158,6 +161,7 @@ internal class AppHistoryChangeViewModel @AssistedInject constructor(
         val dangerousPermissions = permissionItemMapper
             .recordedRequested(diff.addedDangerousPermissions, PackageName(packageName))
             .sortedBy { it.label.lowercase() }
+            .map { HistoryChangeRow.Permission(key = historyRowKey(REQUESTED_ADDED_GROUP_ID, it.name), item = it) }
         val addedInsights = insights?.added.orEmpty()
         val removedInsights = insights?.removed.orEmpty()
         val hasNoInsightOrPermission = listOf(dangerousPermissions, addedInsights, removedInsights).all { it.isEmpty() }
@@ -191,31 +195,31 @@ internal class AppHistoryChangeViewModel @AssistedInject constructor(
         val groups = listOfNotNull(
             permissionGroup(
                 id = REQUESTED_ADDED_GROUP_ID,
-                kind = HistoryChangeGroupKind.Added,
+                kind = AppHistoryChangeDirection.Added,
                 scope = PermissionScope.Requested,
                 items = permissionItemMapper.recordedRequested(requested?.added.orEmpty(), analysedPackage),
             ),
             permissionGroup(
                 id = "requested-removed",
-                kind = HistoryChangeGroupKind.Removed,
+                kind = AppHistoryChangeDirection.Removed,
                 scope = PermissionScope.Requested,
                 items = permissionItemMapper.recordedRequested(requested?.removed.orEmpty(), analysedPackage),
             ),
             permissionGroup(
                 id = "defined-added",
-                kind = HistoryChangeGroupKind.Added,
+                kind = AppHistoryChangeDirection.Added,
                 scope = PermissionScope.Defined,
                 items = permissionItemMapper.recordedDefined(defined?.added.orEmpty(), analysedPackage),
             ),
             permissionGroup(
                 id = "defined-removed",
-                kind = HistoryChangeGroupKind.Removed,
+                kind = AppHistoryChangeDirection.Removed,
                 scope = PermissionScope.Defined,
                 items = permissionItemMapper.recordedDefined(defined?.removed.orEmpty(), analysedPackage),
             ),
             permissionGroup(
                 id = "defined-changed",
-                kind = HistoryChangeGroupKind.Changed,
+                kind = AppHistoryChangeDirection.Changed,
                 scope = PermissionScope.Defined,
                 items = permissionItemMapper.recordedDefined(modifiedDefined.map { it.after }, analysedPackage),
                 fieldChangesByName = fieldChangesByName,
@@ -240,13 +244,13 @@ private fun ValueChange<Int?>.toSdkLevels(sdkVersionResolver: SdkVersionResolver
 
 private fun permissionGroup(
     id: String,
-    kind: HistoryChangeGroupKind,
+    kind: AppHistoryChangeDirection,
     scope: PermissionScope,
     items: List<PermissionItem>,
     fieldChangesByName: Map<String, List<AppHistoryFieldChange>> = emptyMap(),
 ): HistoryChangeGroup? = items
     .sortedWith(compareBy({ it.protectionLevel != ProtectionLevel.Dangerous }, { it.label.lowercase() }))
-    .map { HistoryChangeRow.Permission(key = "$id:${it.name}", item = it, fieldChanges = fieldChangesByName[it.name].orEmpty()) }
+    .map { HistoryChangeRow.Permission(key = historyRowKey(id, it.name), item = it, fieldChanges = fieldChangesByName[it.name].orEmpty()) }
     .takeIf { it.isNotEmpty() }
     ?.let { HistoryChangeGroup(id = id, kind = kind, scope = scope, rows = it) }
 
@@ -290,11 +294,11 @@ private fun AppHistoryDiff.componentsSection(): HistoryChangeSection? {
     )
     val modified = changes.flatMap { it.modified }
     val groups = listOfNotNull(
-        componentGroup(id = "components-added", kind = HistoryChangeGroupKind.Added, items = changes.flatMap { it.added }),
-        componentGroup(id = "components-removed", kind = HistoryChangeGroupKind.Removed, items = changes.flatMap { it.removed }),
+        componentGroup(id = "components-added", kind = AppHistoryChangeDirection.Added, items = changes.flatMap { it.added }),
+        componentGroup(id = "components-removed", kind = AppHistoryChangeDirection.Removed, items = changes.flatMap { it.removed }),
         componentGroup(
             id = "components-changed",
-            kind = HistoryChangeGroupKind.Changed,
+            kind = AppHistoryChangeDirection.Changed,
             items = modified.map { it.first },
             fieldChangesByKey = modified.associate { (item, fieldChanges) -> item.stableKey to fieldChanges },
         ),
@@ -304,24 +308,24 @@ private fun AppHistoryDiff.componentsSection(): HistoryChangeSection? {
 
 private fun componentGroup(
     id: String,
-    kind: HistoryChangeGroupKind,
+    kind: AppHistoryChangeDirection,
     items: List<ComponentItem>,
     fieldChangesByKey: Map<String, List<AppHistoryFieldChange>> = emptyMap(),
 ): HistoryChangeGroup? = items
     .mergeDuplicatesByStableKey()
     .sortedForDisplay()
-    .map { HistoryChangeRow.Component(key = "$id:${it.stableKey}", item = it, fieldChanges = fieldChangesByKey[it.stableKey].orEmpty()) }
+    .map { HistoryChangeRow.Component(key = historyRowKey(id, it.stableKey), item = it, fieldChanges = fieldChangesByKey[it.stableKey].orEmpty()) }
     .takeIf { it.isNotEmpty() }
     ?.let { HistoryChangeGroup(id = id, kind = kind, rows = it) }
 
 private fun AppHistoryDiff.requirementsSection(): HistoryChangeSection? {
     val features = requirements as? SetChange.Changed ?: return null
     val groups = listOfNotNull(
-        requirementGroup(id = "requirements-added", kind = HistoryChangeGroupKind.Added, features = features.added),
-        requirementGroup(id = "requirements-removed", kind = HistoryChangeGroupKind.Removed, features = features.removed),
+        requirementGroup(id = "requirements-added", kind = AppHistoryChangeDirection.Added, features = features.added),
+        requirementGroup(id = "requirements-removed", kind = AppHistoryChangeDirection.Removed, features = features.removed),
         requirementGroup(
             id = "requirements-changed",
-            kind = HistoryChangeGroupKind.Changed,
+            kind = AppHistoryChangeDirection.Changed,
             features = features.modified.map { it.after },
             fieldChanges = features.modified.map { it.after.fieldChangesFrom(it.before) },
         ),
@@ -331,13 +335,13 @@ private fun AppHistoryDiff.requirementsSection(): HistoryChangeSection? {
 
 private fun requirementGroup(
     id: String,
-    kind: HistoryChangeGroupKind,
+    kind: AppHistoryChangeDirection,
     features: List<Feature>,
     fieldChanges: List<List<AppHistoryFieldChange>> = emptyList(),
 ): HistoryChangeGroup? = features
     .mapIndexed { index, feature ->
         val item = feature.toRequirementItem(DeviceFeatures.Unknown)
-        HistoryChangeRow.Requirement(key = "$id:${item.identifier}", item = item, fieldChanges = fieldChanges.getOrNull(index).orEmpty())
+        HistoryChangeRow.Requirement(key = historyRowKey(id, item.identifier), item = item, fieldChanges = fieldChanges.getOrNull(index).orEmpty())
     }
     .sortedWith(compareBy({ !it.item.isRequired }, { it.item.identifier }))
     .takeIf { it.isNotEmpty() }
@@ -346,11 +350,11 @@ private fun requirementGroup(
 private fun AppHistoryDiff.nativeLibrariesSection(): HistoryChangeSection? {
     val libraries = nativeLibraries as? SetChange.Changed ?: return null
     val groups = listOfNotNull(
-        nativeGroup(id = "native-added", kind = HistoryChangeGroupKind.Added, files = libraries.added.flatMap { it.files }),
-        nativeGroup(id = "native-removed", kind = HistoryChangeGroupKind.Removed, files = libraries.removed.flatMap { it.files }),
+        nativeGroup(id = "native-added", kind = AppHistoryChangeDirection.Added, files = libraries.added.flatMap { it.files }),
+        nativeGroup(id = "native-removed", kind = AppHistoryChangeDirection.Removed, files = libraries.removed.flatMap { it.files }),
         nativeGroup(
             id = "native-changed",
-            kind = HistoryChangeGroupKind.Changed,
+            kind = AppHistoryChangeDirection.Changed,
             files = libraries.modified.flatMap { it.after.files },
             fieldChangesByName = libraries.modified.associate { it.after.name to it.after.fieldChangesFrom(it.before) },
         ),
@@ -360,11 +364,11 @@ private fun AppHistoryDiff.nativeLibrariesSection(): HistoryChangeSection? {
 
 private fun nativeGroup(
     id: String,
-    kind: HistoryChangeGroupKind,
+    kind: AppHistoryChangeDirection,
     files: List<NativeLibraryFile>,
     fieldChangesByName: Map<String, List<AppHistoryFieldChange>> = emptyMap(),
 ): HistoryChangeGroup? = files
     .groupedByLibrary(deviceAbis = emptySet())
-    .map { HistoryChangeRow.NativeLibrary(key = "$id:${it.name}", item = it, fieldChanges = fieldChangesByName[it.name].orEmpty()) }
+    .map { HistoryChangeRow.NativeLibrary(key = historyRowKey(id, it.name), item = it, fieldChanges = fieldChangesByName[it.name].orEmpty()) }
     .takeIf { it.isNotEmpty() }
     ?.let { HistoryChangeGroup(id = id, kind = kind, rows = it) }

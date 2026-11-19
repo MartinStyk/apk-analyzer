@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryChangeDirection
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.DeviceFeatures
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Feature
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.FeatureAvailability
@@ -31,7 +32,6 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ChangeMarkedIcon
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RowChangeLines
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RowChangeMarker
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.markedBy
 
 @Composable
@@ -41,7 +41,7 @@ internal fun RequirementRow(
     onLongClick: (label: String) -> Unit,
     modifier: Modifier = Modifier,
     changeLines: List<String> = emptyList(),
-    changeMarker: RowChangeMarker? = null,
+    changeMarker: AppHistoryChangeDirection? = null,
 ) {
     val label = item.label(LocalResources.current)
     val showIdentifier = label != item.identifier
@@ -121,7 +121,7 @@ private fun RequirementRowAddedPreview() {
             item = Feature.Hardware(name = "android.hardware.nfc").toRequirementItem(DeviceFeatures.Unknown),
             onClick = {},
             onLongClick = {},
-            changeMarker = RowChangeMarker.Added,
+            changeMarker = AppHistoryChangeDirection.Added,
         )
     }
 }
