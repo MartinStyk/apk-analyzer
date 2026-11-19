@@ -56,7 +56,6 @@ internal class AppHistoryCaptureSchedulerImpl @Inject constructor(
         if (!started.compareAndSet(false, true)) return
 
         appScope.launch(dispatcherProvider.io()) {
-            // remove this in upcoming releases
             storageCleanup.deleteUncompressedDatabases()
 
             configurationRepository.observe(ConfigurationKey.AppHistoryRecordingEnabled)
