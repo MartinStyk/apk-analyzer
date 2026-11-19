@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.apkfiles.TemporaryApkManager
+import sk.styk.martin.apkanalyzer.core.apphistory.capture.AppHistoryCaptureRepository
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.AppHistoryRepository
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryTimeline
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.overview
@@ -69,6 +70,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
     private val insightEvaluator: AppDetailInsightEvaluator,
     private val badgeEvaluator: AppDetailBadgeEvaluator,
     appHistoryRepository: AppHistoryRepository,
+    private val appHistoryCaptureRepository: AppHistoryCaptureRepository,
     private val appExportManager: AppExportManager,
     private val permissionLabelProvider: PermissionLabelProvider,
     private val dispatcherProvider: DispatcherProvider,
@@ -360,6 +362,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
             )
             val installedPackage = appDetailInput.installedPackage
             if (detailResult.isSuccess && installedPackage != null) {
+                appHistoryCaptureRepository.requestCapture(installedPackage)
                 recentlyViewedAppsRepository.addRecent(installedPackage)
             }
         }

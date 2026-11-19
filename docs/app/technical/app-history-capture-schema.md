@@ -445,7 +445,7 @@ When recording is enabled, the pipeline runs once per package that the gate says
 
 ## Triggers
 
-Two capture paths, sharing the same gate and pipeline above:
+Four triggers, sharing the same gate and pipeline above:
 
 * **Fast path** — `PackageChangesObserver`'s install/update broadcast. Only fires while the process
   is alive (a context-registered receiver can't survive process death), so it's best-effort
@@ -465,6 +465,13 @@ Two capture paths, sharing the same gate and pipeline above:
   since reconciliation never leaves the device. See
   [`core/app-history/AGENTS.md`](../../../core/app-history/AGENTS.md#triggers) for the scheduling and
   `HiltWorkerFactory` wiring.
+* **Phone app detail opening** — after successfully loading an installed package's hub, request
+  `AppHistoryCaptureRepository.requestCapture(packageName)` to cover the gap before the delayed
+  startup sweep. The request runs in the application coroutine scope, without blocking detail or
+  being cancelled when detail closes. It reuses single-package reconciliation, including the
+  recording flag, gate, and per-package mutex; persisted changes update the existing History card
+  and timeline observers. APK-file and historical detail remain read-only. TV does not request
+  capture on detail opening.
 
 ## Removal Handling
 

@@ -1,8 +1,10 @@
 package sk.styk.martin.apkanalyzer.core.apphistory.capture
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryCaptureKey
@@ -46,6 +48,7 @@ internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
     private val dispatcherProvider: DispatcherProvider,
     private val performanceTracker: PerformanceTracker,
     private val configurationRepository: ConfigurationRepository,
+    private val appScope: CoroutineScope,
 ) : AppHistoryCaptureRepository {
 
     private val perPackageMutexes = ConcurrentHashMap<PackageName, Mutex>()
@@ -60,6 +63,13 @@ internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
             lastUpdateTime = lastUpdateTime,
             versionCode = version,
         )
+
+    override fun requestCapture(packageName: PackageName) {
+        appScope.launch(dispatcherProvider.default()) {
+            reconcile(packageName)
+                .onFailure { Logger.w(APP_HISTORY, it, "Requested capture failed for ${packageName.value}") }
+        }
+    }
 
     override suspend fun reconcile(packageName: PackageName): Result<Unit> = runCatchingCancellable {
         ifRecordingEnabled {

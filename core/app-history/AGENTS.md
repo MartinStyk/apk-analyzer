@@ -6,8 +6,8 @@ Room-backed storage for full-state app history snapshots — one row per capture
 enough to reconstruct the existing app-detail screens against a past point in time. The package is
 `sk.styk.martin.apkanalyzer.core.apphistory`.
 
-**Status:** capture is implemented and running (schema, pipeline, all three triggers — fast-path
-broadcast, on-launch reconciliation, and periodic `WorkManager` reconciliation). Restore merging
+**Status:** capture is implemented and running (schema, pipeline, four triggers — fast-path
+broadcast, on-launch reconciliation, periodic `WorkManager` reconciliation, and phone detail opening). Restore merging
 (`HI-17`'s "merge, don't overwrite" for Android's free Auto Backup path) is also implemented — see
 [Restore Merge](#restore-merge). The diff engine (`HI-03`) is implemented as the per-app timeline
 read API — see [Timeline and Diff](#timeline-and-diff). `feature:app-detail:phone` reads it for the
@@ -35,9 +35,10 @@ implementation, and the internal differ, with its public read models — `AppHis
 text a timeline screen reads; see [Timeline and Diff](#timeline-and-diff)). See
 [Reading a Snapshot](#reading-a-snapshot) for `storage/`'s read path and
 [Capture Pipeline](#capture-pipeline) / [Triggers](#triggers) for `capture/`'s. Everything stays
-`internal` except `timeline/`'s repository interface and `timeline/model/`, and `AppHistoryBackupAgent`, which
-the manifest instantiates by name; nothing outside this module reads Room or wire-format types, or
-calls the scheduler/capture repository, directly.
+`internal` except `capture/`'s `AppHistoryCaptureRepository`, `timeline/`'s repository interface and
+`timeline/model/`, and `AppHistoryBackupAgent`, which the manifest instantiates by name. Phone app detail
+requests capture through the capture repository; nothing outside this module reads Room or wire-format
+types, or calls the scheduler directly.
 
 `storage/` splits gate-checking, writing, and reading into three separate `@Dao` interfaces rather
 than one combined DAO — not because Room requires it, but because those are genuinely different
@@ -286,15 +287,23 @@ per-package re-check inside the lock is authoritative.
 
 ## Triggers
 
-All three triggers live in `AppHistoryCaptureSchedulerImpl.start()`, called once from its
+The three background triggers live in `AppHistoryCaptureSchedulerImpl.start()`, called once from its
 `onCreate(owner)` override — not `onStart`, which re-fires on every foreground return and would
 double-run reconciliation and double-subscribe the fast-path collector. `onCreate` fires once, when
 `ProcessLifecycleOwner` reaches `CREATED`; Lifecycle dispatches the backlog of already-passed states
 to an observer added slightly late, so this fires reliably even though `ApkAnalyzer.onCreate()`
 registers the observer set itself. The `@IntoSet DefaultLifecycleObserver` binding exists solely so
 that registration forces Hilt to construct this singleton at app launch in the first place — nothing
-else in the app injects `AppHistoryCaptureScheduler`/`AppHistoryCaptureRepository` directly, so
-without that forced construction capture would never run.
+else in the app injects `AppHistoryCaptureScheduler` directly, so without that forced construction
+background capture would never start.
+
+**Phone detail opening.** After a successful installed-package hub load, the phone ViewModel calls
+`AppHistoryCaptureRepository.requestCapture(packageName)`. It launches `reconcile(packageName)` in the
+application scope using `DispatcherProvider`, so detail loading never waits for capture and leaving
+detail does not cancel it. The existing recording gate and per-package mutex apply; the display flag
+does not control recording. The History card and timeline already observe persisted changes, so no
+manual refresh is needed. APK-file and historical inputs do not request capture, and TV has no
+capture-on-open trigger. `AppHistoryRepository` remains read-only.
 
 `start()` guards itself with an `AtomicBoolean` so a second call is a no-op: `onCreate` is the only
 caller today, but `start()` is also reachable through the separately bound `AppHistoryCaptureScheduler`
