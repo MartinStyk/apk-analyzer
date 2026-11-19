@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_browse_loading">Сканування встановлених додатків…</string>
+    <string name="tv_browse_permission_about">Про цей дозвіл</string>
+    <string name="tv_browse_certificate_about">Про цей сертифікат</string>
+    <string name="tv_browse_no_apps">На цьому пристрої більше немає відповідних додатків.</string>
+    <string name="tv_browse_label_list">%1$s · %2$s</string>
+    <string name="tv_browse_search">Пошук</string>
+    <string name="tv_browse_see_all">Показати всі</string>
+    <plurals name="tv_browse_more_apps">
+        <item quantity="one">+%1$d додаток</item>
+        <item quantity="few">+%1$d додатки</item>
+        <item quantity="many">+%1$d додатків</item>
+        <item quantity="other">+%1$d додатка</item>
+    </plurals>
+</resources>

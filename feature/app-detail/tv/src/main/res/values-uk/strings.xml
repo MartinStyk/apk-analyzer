@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_app_detail_loading">Завантаження відомостей про додаток…</string>
+    <string name="tv_app_detail_error">Не вдалося завантажити відомості про цей додаток.</string>
+    <string name="tv_app_detail_error_unsupported_apk">Цей файл не є дійсним файлом APK, і його не можна проаналізувати.</string>
+    <string name="tv_app_detail_retry">Спробуйте ще раз</string>
+    <string name="tv_app_detail_action_app_info">Інформація про програму</string>
+    <string name="tv_app_detail_action_play_store">Play Store</string>
+    <string name="tv_app_detail_worth_knowing">Варто знати</string>
+    <string name="tv_app_detail_details">Деталі</string>
+    <string name="tv_app_detail_permissions_none">Дозволи не запитуються</string>
+    <string name="tv_label_count">%1$s · %2$d</string>
+    <string name="tv_permissions_empty">Цей додаток не запитує жодних дозволів.</string>
+    <string name="tv_components_scope_all">Усі</string>
+    <string name="tv_components_no_components">Цей додаток не оголошує жодних компонентів.</string>
+    <string name="tv_components_intent_filter_title">Запит %1$d</string>
+    <string name="tv_components_launch_hint">Натисніть OK, щоб запустити цей компонент</string>
+    <string name="tv_app_detail_signed_by">Підписано: %1$s</string>
+    <string name="tv_label_value">%1$s: %2$s</string>
+    <string name="tv_value_pair">%1$s · %2$s</string>
+    <string name="tv_app_detail_requirements_all_met">Усе необхідне є на цьому пристрої</string>
+    <plurals name="tv_app_detail_requirements_missing">
+        <item quantity="one">Бракує %1$d обов\'язкової функції</item>
+        <item quantity="few">Бракує %1$d обов\'язкових функцій</item>
+        <item quantity="many">Бракує %1$d обов\'язкових функцій</item>
+        <item quantity="other">Бракує %1$d обов\'язкової функції</item>
+    </plurals>
+    <string name="tv_app_detail_requirements_none">Вимоги до пристрою не оголошено</string>
+    <string name="tv_app_detail_manifest_description">Усе, що цей додаток оголошує у своєму файлі маніфесту</string>
+    <string name="tv_app_detail_stat_version">Версія</string>
+    <string name="tv_app_detail_stat_updated">Оновлено</string>
+    <string name="tv_app_detail_stat_target">Цільовий API</string>
+    <string name="tv_app_detail_stat_size">На пристрої</string>
+    <string name="tv_app_detail_stat_apk">APK</string>
+    <string name="tv_app_detail_stat_granted">Надано чутливих</string>
+    <string name="tv_app_detail_stat_sensitive">Чутливі</string>
+    <string name="tv_app_detail_stat_requested">Запитано</string>
+    <string name="tv_app_detail_ratio">%1$d/%2$d</string>
+    <string name="tv_app_detail_api_level">API %1$d</string>
+    <plurals name="tv_app_detail_required_count">
+        <item quantity="one">%1$d обов\'язкова</item>
+        <item quantity="few">%1$d обов\'язкові</item>
+        <item quantity="many">%1$d обов\'язкових</item>
+        <item quantity="other">%1$d обов\'язкової</item>
+    </plurals>
+    <plurals name="tv_app_detail_optional_count">
+        <item quantity="one">%1$d необов\'язкова</item>
+        <item quantity="few">%1$d необов\'язкові</item>
+        <item quantity="many">%1$d необов\'язкових</item>
+        <item quantity="other">%1$d необов\'язкової</item>
+    </plurals>
+</resources>

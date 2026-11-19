@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_browse_loading">Đang quét các ứng dụng đã cài đặt…</string>
+    <string name="tv_browse_permission_about">Về quyền này</string>
+    <string name="tv_browse_certificate_about">Về chứng chỉ này</string>
+    <string name="tv_browse_no_apps">Không còn ứng dụng nào trên thiết bị này khớp.</string>
+    <string name="tv_browse_label_list">%1$s · %2$s</string>
+    <string name="tv_browse_search">Tìm kiếm</string>
+    <string name="tv_browse_see_all">Xem tất cả</string>
+    <plurals name="tv_browse_more_apps">
+        <item quantity="other">+%1$d ứng dụng khác</item>
+    </plurals>
+</resources>

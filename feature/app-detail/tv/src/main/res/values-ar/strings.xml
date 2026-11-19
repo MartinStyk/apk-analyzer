@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_app_detail_loading">جارٍ تحميل تفاصيل التطبيق…</string>
+    <string name="tv_app_detail_error">تعذّر تحميل تفاصيل هذا التطبيق.</string>
+    <string name="tv_app_detail_error_unsupported_apk">هذا الملف ليس ملف APK صالحًا ولا يمكن تحليله.</string>
+    <string name="tv_app_detail_retry">حاول مرة أخرى</string>
+    <string name="tv_app_detail_action_app_info">معلومات التطبيق</string>
+    <string name="tv_app_detail_action_play_store">Play Store</string>
+    <string name="tv_app_detail_worth_knowing">من الجيد معرفته</string>
+    <string name="tv_app_detail_details">التفاصيل</string>
+    <string name="tv_app_detail_permissions_none">لا توجد أذونات مطلوبة</string>
+    <string name="tv_label_count">%1$s · %2$d</string>
+    <string name="tv_permissions_empty">هذا التطبيق لا يطلب أي أذونات.</string>
+    <string name="tv_components_scope_all">الكل</string>
+    <string name="tv_components_no_components">هذا التطبيق لا يعلن عن أي مكونات.</string>
+    <string name="tv_components_intent_filter_title">طلب %1$d</string>
+    <string name="tv_components_launch_hint">اضغط على OK لتشغيل هذا المكون</string>
+    <string name="tv_app_detail_signed_by">موقّع من %1$s</string>
+    <string name="tv_label_value">%1$s: %2$s</string>
+    <string name="tv_value_pair">%1$s · %2$s</string>
+    <string name="tv_app_detail_requirements_all_met">هذا الجهاز يلبي كل ما يتطلبه التطبيق</string>
+    <plurals name="tv_app_detail_requirements_missing">
+        <item quantity="zero">%1$d ميزة مطلوبة غير متوفرة</item>
+        <item quantity="one">%1$d ميزة مطلوبة غير متوفرة</item>
+        <item quantity="two">%1$d ميزتان مطلوبتان غير متوفرتين</item>
+        <item quantity="few">%1$d ميزات مطلوبة غير متوفرة</item>
+        <item quantity="many">%1$d ميزة مطلوبة غير متوفرة</item>
+        <item quantity="other">%1$d ميزة مطلوبة غير متوفرة</item>
+    </plurals>
+    <string name="tv_app_detail_requirements_none">لا توجد متطلبات معلنة للجهاز</string>
+    <string name="tv_app_detail_manifest_description">كل ما يعلن عنه هذا التطبيق في ملف manifest</string>
+    <string name="tv_app_detail_stat_version">الإصدار</string>
+    <string name="tv_app_detail_stat_updated">تم التحديث</string>
+    <string name="tv_app_detail_stat_target">API المستهدف</string>
+    <string name="tv_app_detail_stat_size">على الجهاز</string>
+    <string name="tv_app_detail_stat_apk">APK</string>
+    <string name="tv_app_detail_stat_granted">الحساسة الممنوحة</string>
+    <string name="tv_app_detail_stat_sensitive">الحساسة</string>
+    <string name="tv_app_detail_stat_requested">المطلوبة</string>
+    <string name="tv_app_detail_ratio">%1$d/%2$d</string>
+    <string name="tv_app_detail_api_level">API %1$d</string>
+    <plurals name="tv_app_detail_required_count">
+        <item quantity="zero">%1$d مطلوبة</item>
+        <item quantity="one">%1$d مطلوبة</item>
+        <item quantity="two">%1$d مطلوبتان</item>
+        <item quantity="few">%1$d مطلوبة</item>
+        <item quantity="many">%1$d مطلوبة</item>
+        <item quantity="other">%1$d مطلوبة</item>
+    </plurals>
+    <plurals name="tv_app_detail_optional_count">
+        <item quantity="zero">%1$d اختيارية</item>
+        <item quantity="one">%1$d اختيارية</item>
+        <item quantity="two">%1$d اختياريتان</item>
+        <item quantity="few">%1$d اختيارية</item>
+        <item quantity="many">%1$d اختيارية</item>
+        <item quantity="other">%1$d اختيارية</item>
+    </plurals>
+</resources>

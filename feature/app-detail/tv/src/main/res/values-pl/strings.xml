@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_app_detail_loading">Ładowanie szczegółów aplikacji…</string>
+    <string name="tv_app_detail_error">Nie udało się załadować szczegółów tej aplikacji.</string>
+    <string name="tv_app_detail_error_unsupported_apk">Ten plik nie jest prawidłowym plikiem APK i nie można go przeanalizować.</string>
+    <string name="tv_app_detail_retry">Spróbuj ponownie</string>
+    <string name="tv_app_detail_action_app_info">Informacje o aplikacji</string>
+    <string name="tv_app_detail_action_play_store">Play Store</string>
+    <string name="tv_app_detail_worth_knowing">Warto wiedzieć</string>
+    <string name="tv_app_detail_details">Szczegóły</string>
+    <string name="tv_app_detail_permissions_none">Nie żąda żadnych uprawnień</string>
+    <string name="tv_label_count">%1$s · %2$d</string>
+    <string name="tv_permissions_empty">Ta aplikacja nie żąda żadnych uprawnień.</string>
+    <string name="tv_components_scope_all">Wszystkie</string>
+    <string name="tv_components_no_components">Ta aplikacja nie deklaruje żadnych komponentów.</string>
+    <string name="tv_components_intent_filter_title">Żądanie %1$d</string>
+    <string name="tv_components_launch_hint">Naciśnij OK, aby uruchomić ten komponent</string>
+    <string name="tv_app_detail_signed_by">Podpisane przez %1$s</string>
+    <string name="tv_label_value">%1$s: %2$s</string>
+    <string name="tv_value_pair">%1$s · %2$s</string>
+    <string name="tv_app_detail_requirements_all_met">Wszystko, czego wymaga, jest dostępne na tym urządzeniu</string>
+    <plurals name="tv_app_detail_requirements_missing">
+        <item quantity="one">Brakuje %1$d wymaganej funkcji</item>
+        <item quantity="few">Brakuje %1$d wymaganych funkcji</item>
+        <item quantity="many">Brakuje %1$d wymaganych funkcji</item>
+        <item quantity="other">Brakuje %1$d wymaganej funkcji</item>
+    </plurals>
+    <string name="tv_app_detail_requirements_none">Nie deklaruje żadnych wymagań dotyczących urządzenia</string>
+    <string name="tv_app_detail_manifest_description">Wszystko, co ta aplikacja deklaruje w swoim pliku manifestu</string>
+    <string name="tv_app_detail_stat_version">Wersja</string>
+    <string name="tv_app_detail_stat_updated">Zaktualizowane</string>
+    <string name="tv_app_detail_stat_target">Docelowe API</string>
+    <string name="tv_app_detail_stat_size">Na urządzeniu</string>
+    <string name="tv_app_detail_stat_apk">APK</string>
+    <string name="tv_app_detail_stat_granted">Przyznane wrażliwe</string>
+    <string name="tv_app_detail_stat_sensitive">Wrażliwe</string>
+    <string name="tv_app_detail_stat_requested">Żądane</string>
+    <string name="tv_app_detail_ratio">%1$d/%2$d</string>
+    <string name="tv_app_detail_api_level">API %1$d</string>
+    <plurals name="tv_app_detail_required_count">
+        <item quantity="one">%1$d wymagana</item>
+        <item quantity="few">%1$d wymagane</item>
+        <item quantity="many">%1$d wymaganych</item>
+        <item quantity="other">%1$d wymaganej</item>
+    </plurals>
+    <plurals name="tv_app_detail_optional_count">
+        <item quantity="one">%1$d opcjonalna</item>
+        <item quantity="few">%1$d opcjonalne</item>
+        <item quantity="many">%1$d opcjonalnych</item>
+        <item quantity="other">%1$d opcjonalnej</item>
+    </plurals>
+</resources>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_app_detail_loading">Memuat rincian aplikasi…</string>
+    <string name="tv_app_detail_error">Rincian aplikasi ini tidak dapat dimuat.</string>
+    <string name="tv_app_detail_error_unsupported_apk">File ini bukan APK yang valid dan tidak dapat dianalisis.</string>
+    <string name="tv_app_detail_retry">Coba lagi</string>
+    <string name="tv_app_detail_action_app_info">Info aplikasi</string>
+    <string name="tv_app_detail_action_play_store">Play Store</string>
+    <string name="tv_app_detail_worth_knowing">Perlu diketahui</string>
+    <string name="tv_app_detail_details">Rincian</string>
+    <string name="tv_app_detail_permissions_none">Tidak ada izin yang diminta</string>
+    <string name="tv_label_count">%1$s · %2$d</string>
+    <string name="tv_permissions_empty">Aplikasi ini tidak meminta izin.</string>
+    <string name="tv_components_scope_all">Semua</string>
+    <string name="tv_components_no_components">Aplikasi ini tidak menyatakan komponen.</string>
+    <string name="tv_components_intent_filter_title">Permintaan %1$d</string>
+    <string name="tv_components_launch_hint">Tekan OK untuk memulai komponen ini</string>
+    <string name="tv_app_detail_signed_by">Ditandatangani oleh %1$s</string>
+    <string name="tv_label_value">%1$s: %2$s</string>
+    <string name="tv_value_pair">%1$s · %2$s</string>
+    <string name="tv_app_detail_requirements_all_met">Semua yang diperlukan tersedia di perangkat ini</string>
+    <plurals name="tv_app_detail_requirements_missing">
+        <item quantity="other">%1$d fitur yang diperlukan tidak tersedia</item>
+    </plurals>
+    <string name="tv_app_detail_requirements_none">Tidak ada persyaratan perangkat yang dinyatakan</string>
+    <string name="tv_app_detail_manifest_description">Semua yang dinyatakan aplikasi ini dalam file manifest-nya</string>
+    <string name="tv_app_detail_stat_version">Versi</string>
+    <string name="tv_app_detail_stat_updated">Diperbarui</string>
+    <string name="tv_app_detail_stat_target">API target</string>
+    <string name="tv_app_detail_stat_size">Di perangkat</string>
+    <string name="tv_app_detail_stat_apk">APK</string>
+    <string name="tv_app_detail_stat_granted">Sensitif diberikan</string>
+    <string name="tv_app_detail_stat_sensitive">Sensitif</string>
+    <string name="tv_app_detail_stat_requested">Diminta</string>
+    <string name="tv_app_detail_ratio">%1$d/%2$d</string>
+    <string name="tv_app_detail_api_level">API %1$d</string>
+    <plurals name="tv_app_detail_required_count">
+        <item quantity="other">%1$d diperlukan</item>
+    </plurals>
+    <plurals name="tv_app_detail_optional_count">
+        <item quantity="other">%1$d opsional</item>
+    </plurals>
+</resources>

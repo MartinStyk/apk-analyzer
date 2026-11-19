@@ -16,8 +16,8 @@
     <string name="tv_search_clear_history">Limpar histórico</string>
     <string name="tv_apps_sort_button">Classificar · %1$s</string>
     <string name="tv_apps_sort_title">Classificar por</string>
-    <string name="tv_apps_order_a_to_z">De A a Z</string>
-    <string name="tv_apps_order_z_to_a">De Z a A</string>
+    <string name="tv_apps_order_a_to_z">De A até Z</string>
+    <string name="tv_apps_order_z_to_a">De Z até A</string>
     <string name="tv_apps_order_smallest_first">Menores primeiro</string>
     <string name="tv_apps_order_largest_first">Maiores primeiro</string>
     <string name="tv_apps_order_oldest_first">Mais antigos primeiro</string>
@@ -30,7 +30,7 @@
     <string name="tv_apps_sort_install_date">Data de instalação</string>
     <string name="tv_apps_sort_last_updated">Última atualização</string>
     <string name="tv_apps_sort_last_used">Último uso</string>
-    <string name="tv_apps_sort_target_sdk">SDK de destino</string>
+    <string name="tv_apps_sort_target_sdk">Target SDK</string>
     <string name="tv_apps_value_target_sdk">Tem como alvo a API %1$d do Android</string>
     <string name="tv_apps_value_installed">Instalado em %1$s</string>
     <string name="tv_apps_value_updated">Atualizado em %1$s</string>

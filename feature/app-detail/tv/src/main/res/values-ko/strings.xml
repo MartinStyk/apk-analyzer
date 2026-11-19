@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_app_detail_loading">앱 세부정보를 불러오는 중…</string>
+    <string name="tv_app_detail_error">이 앱의 세부정보를 불러오지 못했습니다.</string>
+    <string name="tv_app_detail_error_unsupported_apk">이 파일은 유효한 APK가 아니어서 분석할 수 없습니다.</string>
+    <string name="tv_app_detail_retry">다시 시도</string>
+    <string name="tv_app_detail_action_app_info">앱 정보</string>
+    <string name="tv_app_detail_action_play_store">Play Store</string>
+    <string name="tv_app_detail_worth_knowing">알아두면 좋은 정보</string>
+    <string name="tv_app_detail_details">세부정보</string>
+    <string name="tv_app_detail_permissions_none">요청한 권한 없음</string>
+    <string name="tv_label_count">%1$s · %2$d</string>
+    <string name="tv_permissions_empty">이 앱은 권한을 요청하지 않습니다.</string>
+    <string name="tv_components_scope_all">전체</string>
+    <string name="tv_components_no_components">이 앱은 구성 요소를 선언하지 않습니다.</string>
+    <string name="tv_components_intent_filter_title">요청 %1$d</string>
+    <string name="tv_components_launch_hint">OK 버튼을 눌러 이 구성 요소를 시작하세요</string>
+    <string name="tv_app_detail_signed_by">서명자: %1$s</string>
+    <string name="tv_label_value">%1$s: %2$s</string>
+    <string name="tv_value_pair">%1$s · %2$s</string>
+    <string name="tv_app_detail_requirements_all_met">이 장치가 모든 요구 사항을 충족합니다</string>
+    <plurals name="tv_app_detail_requirements_missing">
+        <item quantity="other">필수 기능 %1$d개가 없습니다</item>
+    </plurals>
+    <string name="tv_app_detail_requirements_none">선언된 장치 요구 사항 없음</string>
+    <string name="tv_app_detail_manifest_description">이 앱이 매니페스트 파일에 선언한 모든 내용</string>
+    <string name="tv_app_detail_stat_version">버전</string>
+    <string name="tv_app_detail_stat_updated">업데이트</string>
+    <string name="tv_app_detail_stat_target">대상 API</string>
+    <string name="tv_app_detail_stat_size">장치 내 용량</string>
+    <string name="tv_app_detail_stat_apk">APK</string>
+    <string name="tv_app_detail_stat_granted">부여된 민감한 권한</string>
+    <string name="tv_app_detail_stat_sensitive">민감한 권한</string>
+    <string name="tv_app_detail_stat_requested">요청된 권한</string>
+    <string name="tv_app_detail_ratio">%1$d/%2$d</string>
+    <string name="tv_app_detail_api_level">API %1$d</string>
+    <plurals name="tv_app_detail_required_count">
+        <item quantity="other">필수 %1$d개</item>
+    </plurals>
+    <plurals name="tv_app_detail_optional_count">
+        <item quantity="other">선택 %1$d개</item>
+    </plurals>
+</resources>

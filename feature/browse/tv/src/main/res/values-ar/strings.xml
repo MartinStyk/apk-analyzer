@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_browse_loading">جارٍ فحص التطبيقات المثبتة…</string>
+    <string name="tv_browse_permission_about">حول هذا الإذن</string>
+    <string name="tv_browse_certificate_about">حول هذه الشهادة</string>
+    <string name="tv_browse_no_apps">لم يعد أي تطبيق على هذا الجهاز مطابقًا.</string>
+    <string name="tv_browse_label_list">%1$s · %2$s</string>
+    <string name="tv_browse_search">بحث</string>
+    <string name="tv_browse_see_all">عرض الكل</string>
+    <plurals name="tv_browse_more_apps">
+        <item quantity="zero">+%1$d تطبيق آخر</item>
+        <item quantity="one">+%1$d تطبيق آخر</item>
+        <item quantity="two">+%1$d تطبيقان آخران</item>
+        <item quantity="few">+%1$d تطبيقات أخرى</item>
+        <item quantity="many">+%1$d تطبيقًا آخر</item>
+        <item quantity="other">+%1$d تطبيق آخر</item>
+    </plurals>
+</resources>

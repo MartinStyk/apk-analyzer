@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_browse_loading">Prohledávání nainstalovaných aplikací…</string>
+    <string name="tv_browse_permission_about">O tomto oprávnění</string>
+    <string name="tv_browse_certificate_about">O tomto certifikátu</string>
+    <string name="tv_browse_no_apps">Na tomto zařízení už tomu neodpovídá žádná aplikace.</string>
+    <string name="tv_browse_label_list">%1$s · %2$s</string>
+    <string name="tv_browse_search">Hledat</string>
+    <string name="tv_browse_see_all">Zobrazit vše</string>
+    <plurals name="tv_browse_more_apps">
+        <item quantity="one">+%1$d další aplikace</item>
+        <item quantity="few">+%1$d další aplikace</item>
+        <item quantity="many">+%1$d další aplikace</item>
+        <item quantity="other">+%1$d dalších aplikací</item>
+    </plurals>
+</resources>

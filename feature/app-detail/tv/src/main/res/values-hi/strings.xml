@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_app_detail_loading">ऐप विवरण लोड हो रहा है…</string>
+    <string name="tv_app_detail_error">इस ऐप का विवरण लोड नहीं हो सका।</string>
+    <string name="tv_app_detail_error_unsupported_apk">यह फ़ाइल मान्य APK नहीं है और इसका विश्लेषण नहीं किया जा सकता।</string>
+    <string name="tv_app_detail_retry">फिर से प्रयास करें</string>
+    <string name="tv_app_detail_action_app_info">ऐप जानकारी</string>
+    <string name="tv_app_detail_action_play_store">Play Store</string>
+    <string name="tv_app_detail_worth_knowing">जानने लायक</string>
+    <string name="tv_app_detail_details">विवरण</string>
+    <string name="tv_app_detail_permissions_none">कोई अनुमति नहीं मांगी गई</string>
+    <string name="tv_label_count">%1$s · %2$d</string>
+    <string name="tv_permissions_empty">यह ऐप कोई अनुमति नहीं मांगता।</string>
+    <string name="tv_components_scope_all">सभी</string>
+    <string name="tv_components_no_components">यह ऐप कोई घटक घोषित नहीं करता।</string>
+    <string name="tv_components_intent_filter_title">अनुरोध %1$d</string>
+    <string name="tv_components_launch_hint">इस घटक को शुरू करने के लिए OK दबाएँ</string>
+    <string name="tv_app_detail_signed_by">%1$s द्वारा हस्ताक्षरित</string>
+    <string name="tv_label_value">%1$s: %2$s</string>
+    <string name="tv_value_pair">%1$s · %2$s</string>
+    <string name="tv_app_detail_requirements_all_met">यह डिवाइस ऐप की सभी आवश्यकताओं को पूरा करता है</string>
+    <plurals name="tv_app_detail_requirements_missing">
+        <item quantity="one">अनुपलब्ध आवश्यक विशेषताएँ: %1$d</item>
+        <item quantity="other">अनुपलब्ध आवश्यक विशेषताएँ: %1$d</item>
+    </plurals>
+    <string name="tv_app_detail_requirements_none">कोई डिवाइस आवश्यकता घोषित नहीं की गई</string>
+    <string name="tv_app_detail_manifest_description">वह सब कुछ जो यह ऐप अपनी manifest फ़ाइल में घोषित करता है</string>
+    <string name="tv_app_detail_stat_version">संस्करण</string>
+    <string name="tv_app_detail_stat_updated">अपडेट किया गया</string>
+    <string name="tv_app_detail_stat_target">लक्ष्य API</string>
+    <string name="tv_app_detail_stat_size">डिवाइस पर</string>
+    <string name="tv_app_detail_stat_apk">APK</string>
+    <string name="tv_app_detail_stat_granted">दी गई संवेदनशील</string>
+    <string name="tv_app_detail_stat_sensitive">संवेदनशील</string>
+    <string name="tv_app_detail_stat_requested">अनुरोधित</string>
+    <string name="tv_app_detail_ratio">%1$d/%2$d</string>
+    <string name="tv_app_detail_api_level">API %1$d</string>
+    <plurals name="tv_app_detail_required_count">
+        <item quantity="one">%1$d आवश्यक</item>
+        <item quantity="other">%1$d आवश्यक</item>
+    </plurals>
+    <plurals name="tv_app_detail_optional_count">
+        <item quantity="one">%1$d वैकल्पिक</item>
+        <item quantity="other">%1$d वैकल्पिक</item>
+    </plurals>
+</resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_browse_loading">설치된 앱을 스캔하는 중…</string>
+    <string name="tv_browse_permission_about">이 권한에 대한 정보</string>
+    <string name="tv_browse_certificate_about">이 인증서에 대한 정보</string>
+    <string name="tv_browse_no_apps">이 장치에서 더 이상 일치하는 앱이 없습니다.</string>
+    <string name="tv_browse_label_list">%1$s · %2$s</string>
+    <string name="tv_browse_search">검색</string>
+    <string name="tv_browse_see_all">모두 보기</string>
+    <plurals name="tv_browse_more_apps">
+        <item quantity="other">+%1$d개 앱 더 있음</item>
+    </plurals>
+</resources>

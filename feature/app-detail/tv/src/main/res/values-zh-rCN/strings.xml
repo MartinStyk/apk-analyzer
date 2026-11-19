@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_app_detail_loading">正在加载应用详情…</string>
+    <string name="tv_app_detail_error">无法加载此应用的详情。</string>
+    <string name="tv_app_detail_error_unsupported_apk">此文件不是有效的 APK，无法进行分析。</string>
+    <string name="tv_app_detail_retry">再试一次</string>
+    <string name="tv_app_detail_action_app_info">应用信息</string>
+    <string name="tv_app_detail_action_play_store">Play Store</string>
+    <string name="tv_app_detail_worth_knowing">值得知道</string>
+    <string name="tv_app_detail_details">详情</string>
+    <string name="tv_app_detail_permissions_none">未请求任何权限</string>
+    <string name="tv_label_count">%1$s · %2$d</string>
+    <string name="tv_permissions_empty">此应用不请求任何权限。</string>
+    <string name="tv_components_scope_all">全部</string>
+    <string name="tv_components_no_components">此应用未声明任何组件。</string>
+    <string name="tv_components_intent_filter_title">请求 %1$d</string>
+    <string name="tv_components_launch_hint">按 OK 键启动此组件</string>
+    <string name="tv_app_detail_signed_by">签名者：%1$s</string>
+    <string name="tv_label_value">%1$s：%2$s</string>
+    <string name="tv_value_pair">%1$s · %2$s</string>
+    <string name="tv_app_detail_requirements_all_met">此设备满足应用的所有要求</string>
+    <plurals name="tv_app_detail_requirements_missing">
+        <item quantity="other">缺少 %1$d 项必需功能</item>
+    </plurals>
+    <string name="tv_app_detail_requirements_none">未声明任何设备要求</string>
+    <string name="tv_app_detail_manifest_description">此应用在其清单文件中声明的所有内容</string>
+    <string name="tv_app_detail_stat_version">版本</string>
+    <string name="tv_app_detail_stat_updated">更新日期</string>
+    <string name="tv_app_detail_stat_target">目标 API</string>
+    <string name="tv_app_detail_stat_size">设备占用</string>
+    <string name="tv_app_detail_stat_apk">APK</string>
+    <string name="tv_app_detail_stat_granted">已授予敏感权限</string>
+    <string name="tv_app_detail_stat_sensitive">敏感权限</string>
+    <string name="tv_app_detail_stat_requested">已请求权限</string>
+    <string name="tv_app_detail_ratio">%1$d/%2$d</string>
+    <string name="tv_app_detail_api_level">API %1$d</string>
+    <plurals name="tv_app_detail_required_count">
+        <item quantity="other">%1$d 项必需</item>
+    </plurals>
+    <plurals name="tv_app_detail_optional_count">
+        <item quantity="other">%1$d 项可选</item>
+    </plurals>
+</resources>

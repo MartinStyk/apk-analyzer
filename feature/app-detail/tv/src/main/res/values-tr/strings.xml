@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_app_detail_loading">Uygulama detayları yükleniyor…</string>
+    <string name="tv_app_detail_error">Bu uygulamanın detayları yüklenemedi.</string>
+    <string name="tv_app_detail_error_unsupported_apk">Bu dosya geçerli bir APK değil ve analiz edilemiyor.</string>
+    <string name="tv_app_detail_retry">Tekrar dene</string>
+    <string name="tv_app_detail_action_app_info">Uygulama bilgisi</string>
+    <string name="tv_app_detail_action_play_store">Play Store</string>
+    <string name="tv_app_detail_worth_knowing">Bilmekte fayda var</string>
+    <string name="tv_app_detail_details">Ayrıntılar</string>
+    <string name="tv_app_detail_permissions_none">Hiçbir izin istenmedi</string>
+    <string name="tv_label_count">%1$s · %2$d</string>
+    <string name="tv_permissions_empty">Bu uygulama hiçbir izin talep etmiyor.</string>
+    <string name="tv_components_scope_all">Tümü</string>
+    <string name="tv_components_no_components">Bu uygulama hiçbir bileşen bildirmiyor.</string>
+    <string name="tv_components_intent_filter_title">İstek %1$d</string>
+    <string name="tv_components_launch_hint">Bu bileşeni başlatmak için OK tuşuna basın</string>
+    <string name="tv_app_detail_signed_by">%1$s tarafından imzalandı</string>
+    <string name="tv_label_value">%1$s: %2$s</string>
+    <string name="tv_value_pair">%1$s · %2$s</string>
+    <string name="tv_app_detail_requirements_all_met">Gerektirdiği her şey bu cihazda var</string>
+    <plurals name="tv_app_detail_requirements_missing">
+        <item quantity="one">%1$d gerekli özellik eksik</item>
+        <item quantity="other">%1$d gerekli özellik eksik</item>
+    </plurals>
+    <string name="tv_app_detail_requirements_none">Hiçbir cihaz gereksinimi bildirilmedi</string>
+    <string name="tv_app_detail_manifest_description">Bu uygulamanın manifest dosyasında bildirdiği her şey</string>
+    <string name="tv_app_detail_stat_version">Sürüm</string>
+    <string name="tv_app_detail_stat_updated">Güncellendi</string>
+    <string name="tv_app_detail_stat_target">Hedef API</string>
+    <string name="tv_app_detail_stat_size">Cihazda</string>
+    <string name="tv_app_detail_stat_apk">APK</string>
+    <string name="tv_app_detail_stat_granted">Verilen hassas</string>
+    <string name="tv_app_detail_stat_sensitive">Hassas</string>
+    <string name="tv_app_detail_stat_requested">Talep edilen</string>
+    <string name="tv_app_detail_ratio">%1$d/%2$d</string>
+    <string name="tv_app_detail_api_level">API %1$d</string>
+    <plurals name="tv_app_detail_required_count">
+        <item quantity="one">%1$d gerekli</item>
+        <item quantity="other">%1$d gerekli</item>
+    </plurals>
+    <plurals name="tv_app_detail_optional_count">
+        <item quantity="one">%1$d isteğe bağlı</item>
+        <item quantity="other">%1$d isteğe bağlı</item>
+    </plurals>
+</resources>

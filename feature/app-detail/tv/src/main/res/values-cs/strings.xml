@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_app_detail_loading">Načítání podrobností aplikace…</string>
+    <string name="tv_app_detail_error">Podrobnosti této aplikace se nepodařilo načíst.</string>
+    <string name="tv_app_detail_error_unsupported_apk">Tento soubor není platný soubor APK a nelze ho analyzovat.</string>
+    <string name="tv_app_detail_retry">Zkusit znovu</string>
+    <string name="tv_app_detail_action_app_info">Informace o aplikaci</string>
+    <string name="tv_app_detail_action_play_store">Play Store</string>
+    <string name="tv_app_detail_worth_knowing">Stojí za to vědět</string>
+    <string name="tv_app_detail_details">Podrobnosti</string>
+    <string name="tv_app_detail_permissions_none">Nežádá o žádná oprávnění</string>
+    <string name="tv_label_count">%1$s · %2$d</string>
+    <string name="tv_permissions_empty">Tato aplikace nežádá o žádná oprávnění.</string>
+    <string name="tv_components_scope_all">Všechny</string>
+    <string name="tv_components_no_components">Tato aplikace nedeklaruje žádné komponenty.</string>
+    <string name="tv_components_intent_filter_title">Žádost %1$d</string>
+    <string name="tv_components_launch_hint">Stisknutím OK spustíte tuto komponentu</string>
+    <string name="tv_app_detail_signed_by">Podepisovatel: %1$s</string>
+    <string name="tv_label_value">%1$s: %2$s</string>
+    <string name="tv_value_pair">%1$s · %2$s</string>
+    <string name="tv_app_detail_requirements_all_met">Vše potřebné je na tomto zařízení k dispozici</string>
+    <plurals name="tv_app_detail_requirements_missing">
+        <item quantity="one">Chybí %1$d požadovaná funkce</item>
+        <item quantity="few">Chybějí %1$d požadované funkce</item>
+        <item quantity="many">Chybí %1$d požadované funkce</item>
+        <item quantity="other">Chybí %1$d požadovaných funkcí</item>
+    </plurals>
+    <string name="tv_app_detail_requirements_none">Neuvádí žádné požadavky na zařízení</string>
+    <string name="tv_app_detail_manifest_description">Vše, co tato aplikace deklaruje ve svém souboru manifestu</string>
+    <string name="tv_app_detail_stat_version">Verze</string>
+    <string name="tv_app_detail_stat_updated">Aktualizováno</string>
+    <string name="tv_app_detail_stat_target">Cílové API</string>
+    <string name="tv_app_detail_stat_size">Na zařízení</string>
+    <string name="tv_app_detail_stat_apk">APK</string>
+    <string name="tv_app_detail_stat_granted">Udělená citlivá</string>
+    <string name="tv_app_detail_stat_sensitive">Citlivá</string>
+    <string name="tv_app_detail_stat_requested">Požadovaná</string>
+    <string name="tv_app_detail_ratio">%1$d/%2$d</string>
+    <string name="tv_app_detail_api_level">API %1$d</string>
+    <plurals name="tv_app_detail_required_count">
+        <item quantity="one">%1$d požadovaná</item>
+        <item quantity="few">%1$d požadované</item>
+        <item quantity="many">%1$d požadované</item>
+        <item quantity="other">%1$d požadovaných</item>
+    </plurals>
+    <plurals name="tv_app_detail_optional_count">
+        <item quantity="one">%1$d volitelná</item>
+        <item quantity="few">%1$d volitelné</item>
+        <item quantity="many">%1$d volitelné</item>
+        <item quantity="other">%1$d volitelných</item>
+    </plurals>
+</resources>

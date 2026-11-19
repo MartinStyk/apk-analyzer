@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_app_detail_loading">Загрузка сведений о приложении…</string>
+    <string name="tv_app_detail_error">Не удалось загрузить сведения об этом приложении.</string>
+    <string name="tv_app_detail_error_unsupported_apk">Этот файл не является допустимым APK и не может быть проанализирован.</string>
+    <string name="tv_app_detail_retry">Попробуйте снова</string>
+    <string name="tv_app_detail_action_app_info">Информация о приложении</string>
+    <string name="tv_app_detail_action_play_store">Play Store</string>
+    <string name="tv_app_detail_worth_knowing">Стоит знать</string>
+    <string name="tv_app_detail_details">Подробности</string>
+    <string name="tv_app_detail_permissions_none">Разрешения не запрашиваются</string>
+    <string name="tv_label_count">%1$s · %2$d</string>
+    <string name="tv_permissions_empty">Это приложение не запрашивает разрешений.</string>
+    <string name="tv_components_scope_all">Все</string>
+    <string name="tv_components_no_components">Это приложение не объявляет никаких компонентов.</string>
+    <string name="tv_components_intent_filter_title">Запрос %1$d</string>
+    <string name="tv_components_launch_hint">Нажмите OK, чтобы запустить этот компонент</string>
+    <string name="tv_app_detail_signed_by">Подписано: %1$s</string>
+    <string name="tv_label_value">%1$s: %2$s</string>
+    <string name="tv_value_pair">%1$s · %2$s</string>
+    <string name="tv_app_detail_requirements_all_met">Всё необходимое есть на этом устройстве</string>
+    <plurals name="tv_app_detail_requirements_missing">
+        <item quantity="one">Отсутствует %1$d обязательная функция</item>
+        <item quantity="few">Отсутствуют %1$d обязательные функции</item>
+        <item quantity="many">Отсутствуют %1$d обязательных функций</item>
+        <item quantity="other">Отсутствует %1$d обязательной функции</item>
+    </plurals>
+    <string name="tv_app_detail_requirements_none">Требования к устройству не объявлены</string>
+    <string name="tv_app_detail_manifest_description">Всё, что это приложение объявляет в своём файле манифеста</string>
+    <string name="tv_app_detail_stat_version">Версия</string>
+    <string name="tv_app_detail_stat_updated">Обновлено</string>
+    <string name="tv_app_detail_stat_target">Целевой API</string>
+    <string name="tv_app_detail_stat_size">На устройстве</string>
+    <string name="tv_app_detail_stat_apk">APK</string>
+    <string name="tv_app_detail_stat_granted">Предоставлено чувствительных</string>
+    <string name="tv_app_detail_stat_sensitive">Чувствительные</string>
+    <string name="tv_app_detail_stat_requested">Запрошено</string>
+    <string name="tv_app_detail_ratio">%1$d/%2$d</string>
+    <string name="tv_app_detail_api_level">API %1$d</string>
+    <plurals name="tv_app_detail_required_count">
+        <item quantity="one">%1$d обязательная</item>
+        <item quantity="few">%1$d обязательные</item>
+        <item quantity="many">%1$d обязательных</item>
+        <item quantity="other">%1$d обязательной</item>
+    </plurals>
+    <plurals name="tv_app_detail_optional_count">
+        <item quantity="one">%1$d необязательная</item>
+        <item quantity="few">%1$d необязательные</item>
+        <item quantity="many">%1$d необязательных</item>
+        <item quantity="other">%1$d необязательной</item>
+    </plurals>
+</resources>

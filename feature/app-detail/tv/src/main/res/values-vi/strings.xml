@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_app_detail_loading">Đang tải chi tiết ứng dụng…</string>
+    <string name="tv_app_detail_error">Không thể tải chi tiết của ứng dụng này.</string>
+    <string name="tv_app_detail_error_unsupported_apk">Tệp này không phải là APK hợp lệ nên không thể phân tích.</string>
+    <string name="tv_app_detail_retry">Thử lại</string>
+    <string name="tv_app_detail_action_app_info">Thông tin ứng dụng</string>
+    <string name="tv_app_detail_action_play_store">Play Store</string>
+    <string name="tv_app_detail_worth_knowing">Đáng để biết</string>
+    <string name="tv_app_detail_details">Chi tiết</string>
+    <string name="tv_app_detail_permissions_none">Không có quyền nào được yêu cầu</string>
+    <string name="tv_label_count">%1$s · %2$d</string>
+    <string name="tv_permissions_empty">Ứng dụng này không yêu cầu quyền nào.</string>
+    <string name="tv_components_scope_all">Tất cả</string>
+    <string name="tv_components_no_components">Ứng dụng này không khai báo thành phần nào.</string>
+    <string name="tv_components_intent_filter_title">Yêu cầu %1$d</string>
+    <string name="tv_components_launch_hint">Nhấn OK để khởi chạy thành phần này</string>
+    <string name="tv_app_detail_signed_by">Được ký bởi %1$s</string>
+    <string name="tv_label_value">%1$s: %2$s</string>
+    <string name="tv_value_pair">%1$s · %2$s</string>
+    <string name="tv_app_detail_requirements_all_met">Thiết bị này đáp ứng mọi yêu cầu của ứng dụng</string>
+    <plurals name="tv_app_detail_requirements_missing">
+        <item quantity="other">Thiếu %1$d tính năng bắt buộc</item>
+    </plurals>
+    <string name="tv_app_detail_requirements_none">Không khai báo yêu cầu thiết bị nào</string>
+    <string name="tv_app_detail_manifest_description">Mọi thứ ứng dụng này khai báo trong tệp manifest</string>
+    <string name="tv_app_detail_stat_version">Phiên bản</string>
+    <string name="tv_app_detail_stat_updated">Đã cập nhật</string>
+    <string name="tv_app_detail_stat_target">API mục tiêu</string>
+    <string name="tv_app_detail_stat_size">Trên thiết bị</string>
+    <string name="tv_app_detail_stat_apk">APK</string>
+    <string name="tv_app_detail_stat_granted">Nhạy cảm đã cấp</string>
+    <string name="tv_app_detail_stat_sensitive">Nhạy cảm</string>
+    <string name="tv_app_detail_stat_requested">Đã yêu cầu</string>
+    <string name="tv_app_detail_ratio">%1$d/%2$d</string>
+    <string name="tv_app_detail_api_level">API %1$d</string>
+    <plurals name="tv_app_detail_required_count">
+        <item quantity="other">%1$d bắt buộc</item>
+    </plurals>
+    <plurals name="tv_app_detail_optional_count">
+        <item quantity="other">%1$d tùy chọn</item>
+    </plurals>
+</resources>

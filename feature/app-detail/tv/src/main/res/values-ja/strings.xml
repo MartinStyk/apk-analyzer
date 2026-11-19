@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_app_detail_loading">アプリの詳細を読み込み中…</string>
+    <string name="tv_app_detail_error">このアプリの詳細を読み込めませんでした。</string>
+    <string name="tv_app_detail_error_unsupported_apk">このファイルは有効なAPKではないため、分析できません。</string>
+    <string name="tv_app_detail_retry">再試行</string>
+    <string name="tv_app_detail_action_app_info">アプリ情報</string>
+    <string name="tv_app_detail_action_play_store">Play Store</string>
+    <string name="tv_app_detail_worth_knowing">知っておくべきこと</string>
+    <string name="tv_app_detail_details">詳細</string>
+    <string name="tv_app_detail_permissions_none">要求された権限はありません</string>
+    <string name="tv_label_count">%1$s · %2$d</string>
+    <string name="tv_permissions_empty">このアプリは権限を要求していません。</string>
+    <string name="tv_components_scope_all">すべて</string>
+    <string name="tv_components_no_components">このアプリはコンポーネントを宣言していません。</string>
+    <string name="tv_components_intent_filter_title">リクエスト %1$d</string>
+    <string name="tv_components_launch_hint">OK を押してこのコンポーネントを開始</string>
+    <string name="tv_app_detail_signed_by">署名者：%1$s</string>
+    <string name="tv_label_value">%1$s：%2$s</string>
+    <string name="tv_value_pair">%1$s · %2$s</string>
+    <string name="tv_app_detail_requirements_all_met">このデバイスは必要な要件をすべて満たしています</string>
+    <plurals name="tv_app_detail_requirements_missing">
+        <item quantity="other">%1$d 個の必須機能がありません</item>
+    </plurals>
+    <string name="tv_app_detail_requirements_none">宣言されたデバイス要件はありません</string>
+    <string name="tv_app_detail_manifest_description">このアプリがマニフェストファイルで宣言しているすべての内容</string>
+    <string name="tv_app_detail_stat_version">バージョン</string>
+    <string name="tv_app_detail_stat_updated">更新日</string>
+    <string name="tv_app_detail_stat_target">ターゲット API</string>
+    <string name="tv_app_detail_stat_size">デバイス上の容量</string>
+    <string name="tv_app_detail_stat_apk">APK</string>
+    <string name="tv_app_detail_stat_granted">付与された敏感な権限</string>
+    <string name="tv_app_detail_stat_sensitive">敏感な権限</string>
+    <string name="tv_app_detail_stat_requested">要求された権限</string>
+    <string name="tv_app_detail_ratio">%1$d/%2$d</string>
+    <string name="tv_app_detail_api_level">API %1$d</string>
+    <plurals name="tv_app_detail_required_count">
+        <item quantity="other">必須 %1$d 個</item>
+    </plurals>
+    <plurals name="tv_app_detail_optional_count">
+        <item quantity="other">オプション %1$d 個</item>
+    </plurals>
+</resources>

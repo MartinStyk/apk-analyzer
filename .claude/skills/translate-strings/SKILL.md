@@ -102,10 +102,11 @@ an audit:
 - `permissions_level_dangerous` / `_signature` / `_internal` / `_normal` (`feature/app-detail/phone`)
   and their `browse_protection_level_*` counterparts (`feature/browse/phone`) → `Dangerous` /
   `Signature` / `Internal` / `Normal`.
-- `app_detail_target_sdk` and `general_info_target_sdk` (`feature/app-detail/phone`) → `Target SDK`.
-  `sort_target_sdk` (`feature/apps/phone`) → `Target Android SDK` (matches that key's own English
-  source, which includes "Android" where the other two don't — copy each key's own default text
-  verbatim rather than harmonizing the three into one phrase).
+- `app_detail_target_sdk` and `general_info_target_sdk` (`feature/app-detail/phone`) and
+  `tv_apps_sort_target_sdk` (`feature/apps/tv`) → `Target SDK`. `sort_target_sdk`
+  (`feature/apps/phone`) → `Target Android SDK` (matches that key's own English source, which
+  includes "Android" where the others don't — copy each key's own default text verbatim rather than
+  harmonizing them into one phrase).
 
 If a new key looks like it belongs in one of these families (e.g. a future `permission_label_ad_*`
 or another `*_target_sdk` label), ask before deciding whether it joins the always-English set or

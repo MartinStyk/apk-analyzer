@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_browse_loading">Yüklü uygulamalar taranıyor…</string>
+    <string name="tv_browse_permission_about">Bu izin hakkında</string>
+    <string name="tv_browse_certificate_about">Bu sertifika hakkında</string>
+    <string name="tv_browse_no_apps">Bu cihazda artık eşleşen uygulama yok.</string>
+    <string name="tv_browse_label_list">%1$s · %2$s</string>
+    <string name="tv_browse_search">Ara</string>
+    <string name="tv_browse_see_all">Tümünü gör</string>
+    <plurals name="tv_browse_more_apps">
+        <item quantity="one">+%1$d uygulama daha</item>
+        <item quantity="other">+%1$d uygulama daha</item>
+    </plurals>
+</resources>

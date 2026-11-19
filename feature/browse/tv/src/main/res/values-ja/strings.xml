@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_browse_loading">インストール済みアプリをスキャン中…</string>
+    <string name="tv_browse_permission_about">この権限について</string>
+    <string name="tv_browse_certificate_about">この証明書について</string>
+    <string name="tv_browse_no_apps">このデバイスには、一致するアプリがなくなりました。</string>
+    <string name="tv_browse_label_list">%1$s · %2$s</string>
+    <string name="tv_browse_search">検索</string>
+    <string name="tv_browse_see_all">すべて表示</string>
+    <plurals name="tv_browse_more_apps">
+        <item quantity="other">+%1$d 個のアプリ</item>
+    </plurals>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_browse_loading">Сканирование установленных приложений…</string>
+    <string name="tv_browse_permission_about">Об этом разрешении</string>
+    <string name="tv_browse_certificate_about">Об этом сертификате</string>
+    <string name="tv_browse_no_apps">На этом устройстве больше нет подходящих приложений.</string>
+    <string name="tv_browse_label_list">%1$s · %2$s</string>
+    <string name="tv_browse_search">Поиск</string>
+    <string name="tv_browse_see_all">Показать все</string>
+    <plurals name="tv_browse_more_apps">
+        <item quantity="one">+%1$d приложение</item>
+        <item quantity="few">+%1$d приложения</item>
+        <item quantity="many">+%1$d приложений</item>
+        <item quantity="other">+%1$d приложения</item>
+    </plurals>
+</resources>
