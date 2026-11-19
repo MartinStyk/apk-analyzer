@@ -29,6 +29,7 @@ enum class AppHistoryItemField {
     PermissionGroup,
     DeclaringPackage,
     Required,
+    FileName,
 }
 
 sealed interface AppHistoryFieldChange {
@@ -106,6 +107,7 @@ fun NativeLibrary.fieldChangesFrom(before: NativeLibrary): List<AppHistoryFieldC
         AppHistoryFieldChange.SizeValue(abi, change).takeIf { change.before != change.after }
     }
     return listOfNotNull(
+        valueChange(AppHistoryItemField.FileName, before.name, name),
         AppHistoryFieldChange.Abis(RuleDirection.Added, addedAbis).takeIf { addedAbis.isNotEmpty() },
         AppHistoryFieldChange.Abis(RuleDirection.Removed, removedAbis).takeIf { removedAbis.isNotEmpty() },
     ) + resized

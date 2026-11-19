@@ -24,6 +24,8 @@
     <string name="app_history_summary_min_sdk">Min SDK %1$s → %2$s</string>
     <string name="app_history_summary_size_up">Size +%1$s</string>
     <string name="app_history_summary_size_down">Size −%1$s</string>
+    <string name="app_history_delta_up" translatable="false">+%1$s</string>
+    <string name="app_history_delta_down" translatable="false">−%1$s</string>
     <string name="app_history_when_updated">Updated %1$s</string>
     <string name="app_history_when_reinstalled">Installed again %1$s</string>
     <string name="app_history_when_recorded">Recorded %1$s</string>

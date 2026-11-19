@@ -89,6 +89,49 @@ class AppHistoryDifferTest {
         changed.modified.single().after.fieldChangesFrom(changed.modified.single().before) shouldBe
             listOf(AppHistoryFieldChange.Abis(RuleDirection.Added, listOf("x86_64")))
     }
+
+    @Test
+    fun `Given a library whose file name carries its version When it updates Then it is one renamed library, not removed and added`() {
+        val old = aLibraryFile("arm64-v8a", 10.megabytes, name = "libcronet.130.0.6723.58.so")
+        val new = aLibraryFile("arm64-v8a", 10.megabytes, name = "libcronet.131.0.6778.2.so")
+
+        val diff = differ(aRecord(activities = emptyList(), libraries = listOf(old)), aRecord(activities = emptyList(), libraries = listOf(new)))
+
+        val changed = diff.nativeLibraries as SetChange.Changed
+        changed.added shouldBe emptyList()
+        changed.removed shouldBe emptyList()
+        changed.modified.single().after.fieldChangesFrom(changed.modified.single().before) shouldBe listOf(
+            AppHistoryFieldChange.Value(AppHistoryItemField.FileName, before = "libcronet.130.0.6723.58.so", after = "libcronet.131.0.6778.2.so"),
+        )
+    }
+
+    @Test
+    fun `Given two versions of one library shipped side by side When one is dropped Then they are not merged`() {
+        val first = aLibraryFile("arm64-v8a", 10.megabytes, name = "libfoo.1.so")
+        val second = aLibraryFile("arm64-v8a", 12.megabytes, name = "libfoo.2.so")
+
+        val diff = differ(aRecord(activities = emptyList(), libraries = listOf(first, second)), aRecord(activities = emptyList(), libraries = listOf(second)))
+
+        diff.nativeLibraries shouldBe SetChange.Changed(
+            added = emptyList(),
+            removed = listOf(NativeLibrary("libfoo.1.so", listOf(first))),
+            modified = emptyList(),
+        )
+    }
+
+    @Test
+    fun `Given libraries whose names end in digits without a separator When one is swapped Then they are not matched`() {
+        val old = aLibraryFile("arm64-v8a", 10.megabytes, name = "libsqlite3.so")
+        val new = aLibraryFile("arm64-v8a", 10.megabytes, name = "libsqlite.so")
+
+        val diff = differ(aRecord(activities = emptyList(), libraries = listOf(old)), aRecord(activities = emptyList(), libraries = listOf(new)))
+
+        diff.nativeLibraries shouldBe SetChange.Changed(
+            added = listOf(NativeLibrary("libsqlite.so", listOf(new))),
+            removed = listOf(NativeLibrary("libsqlite3.so", listOf(old))),
+            modified = emptyList(),
+        )
+    }
 }
 
 private fun anActivity(isExported: Boolean = false, isLauncher: Boolean? = false) = Activity(
@@ -98,7 +141,11 @@ private fun anActivity(isExported: Boolean = false, isLauncher: Boolean? = false
     isLauncher = isLauncher,
 )
 
-private fun aLibraryFile(abi: String, size: AppSize) = NativeLibraryFile(name = "libfoo.so", abi = abi, size = size, containingApkFileName = "base.apk")
+private fun aLibraryFile(
+    abi: String,
+    size: AppSize,
+    name: String = "libfoo.so",
+) = NativeLibraryFile(name = name, abi = abi, size = size, containingApkFileName = "base.apk")
 
 private fun aRecord(
     activities: List<Activity>,

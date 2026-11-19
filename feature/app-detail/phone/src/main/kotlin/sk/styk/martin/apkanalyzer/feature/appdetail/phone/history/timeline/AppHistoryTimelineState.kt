@@ -7,6 +7,7 @@ import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryVersi
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.ValueChange
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.HistoryVersionTag
 import java.time.Instant
+import java.time.YearMonth
 
 @Immutable
 internal sealed interface AppHistoryRowKind {
@@ -47,6 +48,9 @@ internal sealed interface AppHistoryTimelineState {
         val appName: String,
         val recordingSince: Instant,
         val changeCount: Int,
-        val runs: List<List<AppHistoryRow>>,
+        val months: List<AppHistoryMonth>,
     ) : AppHistoryTimelineState
 }
+
+@Immutable
+internal data class AppHistoryMonth(val month: YearMonth, val rows: List<AppHistoryRow>)

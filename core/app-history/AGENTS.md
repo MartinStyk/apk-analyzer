@@ -207,7 +207,11 @@ only when both sides know it. A change of nothing else is therefore not a change
 
 Screens read shared rules from `timeline/model/`, so a future TV screen or What Changed tab agrees with
 the phone: `hasCertificateChange` (the one predicate; it reads `certificates`, never the `Signing`
-category, which also fires on a scheme change), `summaryParts`, `isQuiet`, `changeCount`,
+category, which also fires on a scheme change), `addedDangerousPermissions` and `needsAttention` (the
+one rule for what a timeline row highlights and what change detail puts under "Worth knowing" — a
+dangerous permission added is its own `DangerousPermissionsAdded` part, never folded into
+`PermissionsAdded`), `direction` (whether a summary part adds, removes or changes something — an
+exhaustive `when`, so a new part must choose), `summaryParts`, `isQuiet`, `changeCount`,
 `recordingSince`, `overview`, and the matching text in `AppHistoryText.kt` with its strings in this
 module. Date a `FirstSeen` row with `snapshot.capturedAt`, never `timestamp`, which can be a factory date.
 
@@ -233,7 +237,11 @@ or permission name, certificate SHA-256, native library name) and judged
 certificates — a requested permission's details
 belong to its declaring package, and a certificate with the same SHA-256 is the same certificate.
 Native libraries are diffed per library name, matching how app detail lists and counts them: a
-`NativeLibrary` holds every ABI copy of one name. It is added or removed only when the name appears or
+`NativeLibrary` holds every ABI copy of one name. Names are matched with any version digits before
+`.so` stripped (`libcronet.130.0.6723.58.so` matches `libcronet.131.0.6778.2.so`), so a library that
+carries its version in its file name reads as one modified library with a `FileName` change, not as a
+removal plus an addition; when two names on one side strip to the same name, they fall back to exact
+matching so two libraries are never merged. It is added or removed only when the name appears or
 disappears; gaining or losing ABI copies, or one copy changing size, is a modification whose field
 changes say so ("Built for · added: x86_64"). A copy that only moved between base and split APKs at
 the same size is not a visible change.

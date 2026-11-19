@@ -9,18 +9,20 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailInsi
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailInsightEvaluator
 import javax.inject.Inject
 
+internal data class HistoryInsightChanges(val added: List<AppDetailInsight>, val removed: List<AppDetailInsight>)
+
 internal class HistoryInsightsComparer @Inject constructor(
     private val appHistoryRepository: AppHistoryRepository,
     private val insightEvaluator: AppDetailInsightEvaluator,
 ) {
     private val insightsBySnapshot = mutableMapOf<Long, List<AppDetailInsight>?>()
 
-    suspend fun compare(packageName: String, change: AppHistoryEntry.Change): HistoryChangeSection.Insights? {
+    suspend fun compare(packageName: String, change: AppHistoryEntry.Change): HistoryInsightChanges? {
         val before = recordedInsights(packageName, change.previous) ?: return null
         val after = recordedInsights(packageName, change.snapshot) ?: return null
         val added = after - before.toSet()
         val removed = before - after.toSet()
-        return HistoryChangeSection.Insights(added = added, removed = removed).takeIf { added.isNotEmpty() || removed.isNotEmpty() }
+        return HistoryInsightChanges(added = added, removed = removed).takeIf { added.isNotEmpty() || removed.isNotEmpty() }
     }
 
     private suspend fun recordedInsights(packageName: String, summary: AppHistorySnapshotSummary): List<AppDetailInsight>? =

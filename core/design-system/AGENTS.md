@@ -51,6 +51,11 @@ exception is `InactiveSearchBar`, which lives in `SearchBarInactive.kt`.
   shared component owns semantics and its shape-clipped ripple.
 * `Chip` is an interactive selector with a full touch target. `Tag` is a compact, non-interactive
   inline fact on a row. Do not use them interchangeably.
+* `InfoCard` is the one tinted message card: an icon, an optional title, a body, and an optional
+  trailing action such as a dismiss button. Its `InfoCardTone` picks the meaning: `Info` introduces a
+  screen or says what it shows, `Attention` flags something worth a look, `Warning` flags a problem.
+  Use it rather than a feature-local tinted card or banner; pass a clickable modifier when the card
+  leads somewhere.
 * `AppRow` (and `AppRowSkeleton`) is the shared installed-app row: icon, name, package, and a
   caller-supplied trailing slot, shaped by its `ListItemPosition` through `ListItemPosition.shape()`
   in `lazylist/`. Build app lists on it instead of a feature-local row.

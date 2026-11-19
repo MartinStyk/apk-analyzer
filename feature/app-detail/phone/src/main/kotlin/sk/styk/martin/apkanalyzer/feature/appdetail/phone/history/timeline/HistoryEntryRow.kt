@@ -5,10 +5,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -21,35 +21,41 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryChangeDirection
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryEntry
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistorySummaryPart
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryVersion
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.ValueChange
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.breakHeadlineRes
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.collapsedToTwoLines
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.direction
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.label
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.needsAttention
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Tag
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.lazylist.ListItemPosition
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.lazylist.shape
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ChangeMarkerDot
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RowChangeMarker
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.HistoryVersionTag
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.historyDate
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.historyDateTime
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.historyFullDate
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.text
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.unlessSameAs
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.icon
 import java.time.Instant
 import sk.styk.martin.apkanalyzer.core.apphistory.R as HistoryR
+
+private const val MAX_VISIBLE_TOKENS = 5
 
 @Composable
 internal fun HistoryEntryRow(
@@ -60,12 +66,10 @@ internal fun HistoryEntryRow(
     modifier: Modifier = Modifier,
 ) {
     val resources = LocalResources.current
-    val onRowColor = if (row.hasCertificateChange) AppTheme.colors.onSurface else AppTheme.colors.onSurfaceVariant
-    val headline = row.headline(resources)
-    val versionLine = row.versionText(resources).unlessSameAs(headline)
+    val secondaryColor = if (row.hasCertificateChange) AppTheme.colors.onSurface else AppTheme.colors.onSurfaceVariant
     val date = remember(row.date, row.showsTime) { if (row.showsTime) row.date.historyDateTime() else row.date.historyDate() }
     Row(
-        verticalAlignment = Alignment.Top,
+        verticalAlignment = if (row.isCompact) Alignment.CenterVertically else Alignment.Top,
         modifier = modifier
             .fillMaxWidth()
             .background(if (row.hasCertificateChange) AppTheme.colors.warningContainer else AppTheme.colors.surface, position.shape())
@@ -79,7 +83,7 @@ internal fun HistoryEntryRow(
                 onClick = onClick,
                 onLongClick = { onLongClick(row.copyText(resources)) },
             )
-            .padding(horizontal = 12.dp, vertical = 12.dp),
+            .padding(horizontal = 12.dp, vertical = if (row.isCompact) 8.dp else 12.dp),
     ) {
         Icon(
             imageVector = row.icon,
@@ -88,48 +92,153 @@ internal fun HistoryEntryRow(
             modifier = Modifier.size(22.dp),
         )
         Spacer(modifier = Modifier.width(14.dp))
-        Column(
-            verticalArrangement = Arrangement.spacedBy(2.dp),
-            modifier = Modifier.weight(1f),
-        ) {
-            Text(
-                text = date,
-                style = AppTheme.typography.labelMedium,
-                color = onRowColor,
-                maxLines = 1,
-            )
-            Text(
-                text = headline,
-                style = AppTheme.typography.titleSmall,
-                color = when {
-                    row.hasCertificateChange -> AppTheme.colors.onSurface
-                    row.isQuiet -> AppTheme.colors.onSurfaceVariant
-                    else -> AppTheme.colors.onBackground
-                },
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-            )
-            if (row.hasCertificateChange) {
-                row.breakHeadlineRes?.let { BodyLine(text = stringResource(it), color = onRowColor) }
-            }
-            versionLine?.let { BodyLine(text = it, color = onRowColor) }
-            row.summaryLines(resources).forEach { BodyLine(text = it, color = onRowColor) }
-            row.versionTag?.let {
-                Spacer(modifier = Modifier.height(4.dp))
-                Tag(text = stringResource(it.labelRes))
-            }
+        if (row.isCompact) {
+            CompactRowContent(row = row, date = date, modifier = Modifier.weight(1f))
+        } else {
+            FullRowContent(row = row, date = date, secondaryColor = secondaryColor, modifier = Modifier.weight(1f))
         }
         Spacer(modifier = Modifier.width(4.dp))
         Icon(
             imageVector = ApkAnalyzerIcons.ChevronRight,
             contentDescription = null,
-            tint = onRowColor,
+            tint = secondaryColor,
             modifier = Modifier
                 .size(20.dp)
                 .align(Alignment.CenterVertically),
         )
     }
 }
+
+@Composable
+private fun CompactRowContent(
+    row: AppHistoryRow,
+    date: String,
+    modifier: Modifier = Modifier,
+) {
+    val resources = LocalResources.current
+    HeadlineWithDate(
+        headline = row.compactLine(row.versionText(resources), resources),
+        headlineStyle = AppTheme.typography.bodySmall,
+        headlineColor = AppTheme.colors.onSurfaceVariant,
+        date = date,
+        dateColor = AppTheme.colors.onSurfaceVariant,
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun FullRowContent(
+    row: AppHistoryRow,
+    date: String,
+    secondaryColor: Color,
+    modifier: Modifier = Modifier,
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp), modifier = modifier) {
+        HeadlineWithDate(
+            headline = row.versionText(LocalResources.current),
+            headlineStyle = AppTheme.typography.titleSmall,
+            headlineColor = AppTheme.colors.onBackground,
+            date = date,
+            dateColor = secondaryColor,
+        )
+        if (row.hasCertificateChange) {
+            Text(
+                text = stringResource(HistoryR.string.app_history_certificate_changed),
+                style = AppTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                color = AppTheme.colors.onSurface,
+            )
+        }
+        row.breakHeadlineRes?.let { BodyLine(text = stringResource(it), color = secondaryColor) }
+        if (row.hasOnlyUncomparableDetails) {
+            BodyLine(text = stringResource(HistoryR.string.app_history_uncomparable_only), color = secondaryColor)
+        } else {
+            ChangeTokens(parts = row.summary, textColor = secondaryColor)
+        }
+    }
+}
+
+@Composable
+private fun HeadlineWithDate(
+    headline: String,
+    headlineStyle: TextStyle,
+    headlineColor: Color,
+    date: String,
+    dateColor: Color,
+    modifier: Modifier = Modifier,
+) {
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier) {
+        Text(
+            text = headline,
+            style = headlineStyle,
+            color = headlineColor,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f),
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = date,
+            style = AppTheme.typography.labelMedium,
+            color = dateColor,
+            maxLines = 1,
+        )
+    }
+}
+
+@Composable
+private fun ChangeTokens(parts: List<AppHistorySummaryPart>, textColor: Color) {
+    if (parts.isEmpty()) return
+    val resources = LocalResources.current
+    val ordered = parts.sortedByDescending { it.needsAttention }
+    val visible = ordered.take(MAX_VISIBLE_TOKENS)
+    val hiddenCount = ordered.size - visible.size
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        visible.forEach { part ->
+            ChangeToken(text = part.label(resources), marker = part.marker, needsAttention = part.needsAttention, textColor = textColor)
+        }
+        if (hiddenCount > 0) {
+            Text(
+                text = resources.getQuantityString(HistoryR.plurals.app_history_summary_more, hiddenCount, hiddenCount),
+                style = AppTheme.typography.bodySmall,
+                color = textColor,
+            )
+        }
+    }
+}
+
+@Composable
+private fun ChangeToken(
+    text: String,
+    marker: RowChangeMarker,
+    needsAttention: Boolean,
+    textColor: Color,
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        if (needsAttention) {
+            ChangeMarkerDot(marker = marker, contentDescription = null, color = AppTheme.colors.tertiary)
+        } else {
+            ChangeMarkerDot(marker = marker, contentDescription = null)
+        }
+        Spacer(modifier = Modifier.width(5.dp))
+        Text(
+            text = text,
+            style = if (needsAttention) AppTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium) else AppTheme.typography.bodySmall,
+            color = if (needsAttention) AppTheme.colors.tertiary else textColor,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
+}
+
+private val AppHistorySummaryPart.marker: RowChangeMarker
+    get() = when (direction) {
+        AppHistoryChangeDirection.Added -> RowChangeMarker.Added
+        AppHistoryChangeDirection.Removed -> RowChangeMarker.Removed
+        AppHistoryChangeDirection.Changed -> RowChangeMarker.Changed
+    }
 
 @Composable
 private fun BodyLine(text: String, color: Color) {
@@ -142,45 +251,48 @@ private fun BodyLine(text: String, color: Color) {
     )
 }
 
+private val AppHistoryRow.isCompact: Boolean
+    get() = isQuiet || kind == AppHistoryRowKind.FirstRecorded
+
 private val AppHistoryRow.breakHeadlineRes: Int?
     get() = changeKind?.breakHeadlineRes
 
 private val AppHistoryRow.icon: ImageVector
     get() = when {
         hasCertificateChange -> ApkAnalyzerIcons.Warning
-
-        else -> when (changeKind) {
-            null -> ApkAnalyzerIcons.History
-            AppHistoryEntry.Change.Kind.Updated -> ApkAnalyzerIcons.Sync
-            AppHistoryEntry.Change.Kind.Reinstalled -> ApkAnalyzerIcons.Export
-            AppHistoryEntry.Change.Kind.NewDevice -> ApkAnalyzerIcons.Screen
-        }
+        else -> changeKind?.icon(versionTag) ?: ApkAnalyzerIcons.History
     }
 
 private val AppHistoryRow.iconTint: Color
     @Composable
     get() = when {
         hasCertificateChange -> AppTheme.colors.warning
-        isQuiet || kind == AppHistoryRowKind.FirstRecorded || changeKind == AppHistoryEntry.Change.Kind.NewDevice -> AppTheme.colors.onSurfaceVariant
+        isCompact || changeKind == AppHistoryEntry.Change.Kind.NewDevice -> AppTheme.colors.onSurfaceVariant
         else -> AppTheme.colors.primary
     }
 
-private fun AppHistoryRow.versionText(resources: Resources): String = version.text(versionChange, resources)
+private fun AppHistoryRow.versionText(resources: Resources): String =
+    versionChange?.let { resources.getString(HistoryR.string.app_history_version, it.label(resources)) } ?: version.label(resources)
 
-private fun AppHistoryRow.headline(resources: Resources): String = when {
-    hasCertificateChange -> resources.getString(HistoryR.string.app_history_certificate_changed)
-    kind == AppHistoryRowKind.FirstRecorded -> resources.getString(HistoryR.string.app_history_first_recorded)
-    else -> breakHeadlineRes?.let(resources::getString) ?: versionText(resources)
+private fun AppHistoryRow.compactLine(versionText: String, resources: Resources): String {
+    val detail = if (kind == AppHistoryRowKind.FirstRecorded) {
+        resources.getString(HistoryR.string.app_history_first_recorded)
+    } else {
+        summary.joinedLabels(resources)
+    }
+    return detail?.let { resources.getString(HistoryR.string.app_history_summary_join, versionText, it) } ?: versionText
 }
 
-private fun AppHistoryRow.summaryLines(resources: Resources): List<String> {
-    if (hasOnlyUncomparableDetails) return listOf(resources.getString(HistoryR.string.app_history_uncomparable_only))
-    return summary.map { it.label(resources) }.collapsedToTwoLines(resources)
-}
+private fun List<AppHistorySummaryPart>.joinedLabels(resources: Resources): String? = map { it.label(resources) }
+    .reduceOrNull { joined, part -> resources.getString(HistoryR.string.app_history_summary_join, joined, part) }
 
 private fun AppHistoryRow.copyText(resources: Resources): String {
-    val headlineOrKind = if (changeKind == AppHistoryEntry.Change.Kind.Updated && !hasCertificateChange) null else headline(resources)
-    return (listOfNotNull(headlineOrKind, date.historyFullDate(), versionText(resources)) + summary.map { it.label(resources) })
+    val event = when {
+        hasCertificateChange -> resources.getString(HistoryR.string.app_history_certificate_changed)
+        kind == AppHistoryRowKind.FirstRecorded -> resources.getString(HistoryR.string.app_history_first_recorded)
+        else -> breakHeadlineRes?.let(resources::getString)
+    }
+    return (listOfNotNull(event, date.historyFullDate(), versionText(resources)) + summary.map { it.label(resources) })
         .reduce { joined, part -> resources.getString(HistoryR.string.app_history_summary_join, joined, part) }
 }
 
@@ -191,8 +303,10 @@ internal fun sampleHistoryRow(
     snapshotId: Long = 4,
     versionChange: ValueChange<AppHistoryVersion>? = ValueChange(AppHistoryVersion(31200, "312.0"), AppHistoryVersion(31500, "315.0")),
     summary: List<AppHistorySummaryPart> = listOf(
-        AppHistorySummaryPart.PermissionsAdded(firstLabel = "Camera", otherCount = 1),
-        AppHistorySummaryPart.ComponentsAdded(count = 3),
+        AppHistorySummaryPart.DangerousPermissionsAdded(firstLabel = "Camera", otherCount = 0),
+        AppHistorySummaryPart.PermissionsAdded(firstLabel = "View Wi-Fi connections", otherCount = 0),
+        AppHistorySummaryPart.ComponentsAdded(count = 6),
+        AppHistorySummaryPart.NativeLibrariesRemoved(count = 1),
         AppHistorySummaryPart.TargetSdkChanged(before = 34, after = 35),
         AppHistorySummaryPart.SizeChanged(before = 152.megabytes, after = 160.megabytes),
     ),
@@ -219,6 +333,19 @@ internal fun sampleHistoryRow(
 private fun HistoryEntryRowNormalPreview() {
     ApkAnalyzerTheme {
         HistoryEntryRow(row = sampleHistoryRow(), position = ListItemPosition.Single, onClick = {}, onLongClick = {})
+    }
+}
+
+@Preview
+@Composable
+private fun HistoryEntryRowQuietPreview() {
+    ApkAnalyzerTheme {
+        HistoryEntryRow(
+            row = sampleHistoryRow(summary = listOf(AppHistorySummaryPart.SizeChanged(before = 150.megabytes, after = 152.megabytes)), isQuiet = true),
+            position = ListItemPosition.Single,
+            onClick = {},
+            onLongClick = {},
+        )
     }
 }
 

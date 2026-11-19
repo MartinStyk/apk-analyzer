@@ -2,12 +2,14 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.phone.history
 
 import android.content.res.Resources
 import androidx.annotation.StringRes
+import androidx.compose.ui.graphics.vector.ImageVector
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryEntry
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryVersion
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.ValueChange
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.isOlderVersion
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.isSameVersionBuild
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.label
+import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.apphistory.R as HistoryR
 
 internal enum class HistoryVersionTag(@StringRes val labelRes: Int) {
@@ -22,6 +24,16 @@ internal val AppHistoryEntry.Change.versionTag: HistoryVersionTag?
         else -> null
     }
 
-internal fun AppHistoryVersion.text(change: ValueChange<AppHistoryVersion>?, resources: Resources): String = change?.label(resources) ?: label(resources)
+internal fun AppHistoryEntry.Change.Kind.icon(versionTag: HistoryVersionTag?): ImageVector = when (this) {
+    AppHistoryEntry.Change.Kind.Updated -> when (versionTag) {
+        HistoryVersionTag.OlderVersion -> ApkAnalyzerIcons.Downgrade
+        HistoryVersionTag.SameVersionBuild -> ApkAnalyzerIcons.Sync
+        null -> ApkAnalyzerIcons.Upgrade
+    }
 
-internal fun String.unlessSameAs(headline: String): String? = takeIf { it != headline }
+    AppHistoryEntry.Change.Kind.Reinstalled -> ApkAnalyzerIcons.Export
+
+    AppHistoryEntry.Change.Kind.NewDevice -> ApkAnalyzerIcons.Screen
+}
+
+internal fun AppHistoryVersion.text(change: ValueChange<AppHistoryVersion>?, resources: Resources): String = change?.label(resources) ?: label(resources)

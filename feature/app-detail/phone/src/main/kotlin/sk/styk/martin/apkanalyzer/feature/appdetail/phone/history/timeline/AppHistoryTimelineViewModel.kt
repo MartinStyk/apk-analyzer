@@ -30,6 +30,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.analytics.AppDetailAnalytics
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.analytics.AppDetailAnalyticsEvent
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.versionTag
+import java.time.YearMonth
 import java.time.ZoneId
 
 private const val FEW_CHANGES_LIMIT = 5
@@ -138,7 +139,7 @@ internal class AppHistoryTimelineViewModel @AssistedInject constructor(
             appName = first().snapshot.applicationName,
             recordingSince = since,
             changeCount = changeCount,
-            runs = map { it.toRow() }.withTimeOnSharedDays().splitIntoRuns(),
+            months = map { it.toRow() }.withTimeOnSharedDays().groupedByMonth(),
         )
     }
 
@@ -173,12 +174,7 @@ private fun List<AppHistoryRow>.withTimeOnSharedDays(): List<AppHistoryRow> {
     return map { it.copy(showsTime = rowsPerDay.getValue(it.date.atZone(zone).toLocalDate()) > 1) }
 }
 
-private fun List<AppHistoryRow>.splitIntoRuns(): List<List<AppHistoryRow>> {
-    val runs = mutableListOf(mutableListOf<AppHistoryRow>())
-    forEachIndexed { index, row ->
-        runs.last() += row
-        val endsRun = row.changeKind == AppHistoryEntry.Change.Kind.Reinstalled || row.changeKind == AppHistoryEntry.Change.Kind.NewDevice
-        if (endsRun && index != lastIndex) runs += mutableListOf<AppHistoryRow>()
-    }
-    return runs
+private fun List<AppHistoryRow>.groupedByMonth(): List<AppHistoryMonth> {
+    val zone = ZoneId.systemDefault()
+    return groupBy { YearMonth.from(it.date.atZone(zone)) }.map { (month, rows) -> AppHistoryMonth(month, rows) }
 }

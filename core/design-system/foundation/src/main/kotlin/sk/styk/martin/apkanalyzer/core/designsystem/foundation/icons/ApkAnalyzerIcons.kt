@@ -9,9 +9,12 @@ import androidx.compose.material.icons.outlined.Apps
 import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.InsertChart
 import androidx.compose.material.icons.outlined.Security
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Android
 import androidx.compose.material.icons.rounded.Animation
 import androidx.compose.material.icons.rounded.Apps
+import androidx.compose.material.icons.rounded.ArrowCircleDown
+import androidx.compose.material.icons.rounded.ArrowCircleUp
 import androidx.compose.material.icons.rounded.ArrowDownward
 import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.ArrowUpward
@@ -52,6 +55,7 @@ import androidx.compose.material.icons.rounded.Phone
 import androidx.compose.material.icons.rounded.PhotoCamera
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.Print
+import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Security
 import androidx.compose.material.icons.rounded.Sensors
@@ -145,6 +149,10 @@ data object ApkAnalyzerIcons {
     val DataObject = Icons.Rounded.DataObject
     val Sort = Icons.Rounded.SwapVert
     val Sync = Icons.Rounded.Sync
+    val Upgrade = Icons.Rounded.ArrowCircleUp
+    val Add = Icons.Rounded.Add
+    val Remove = Icons.Rounded.Remove
+    val Downgrade = Icons.Rounded.ArrowCircleDown
     val FileUpload = Icons.Rounded.UploadFile
     val File = Icons.AutoMirrored.Rounded.InsertDriveFile
     val Storage = Icons.Rounded.Storage

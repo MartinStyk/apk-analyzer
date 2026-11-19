@@ -95,13 +95,13 @@ class AppHistoryEntrySummaryTest {
 
         parts shouldBe listOf(
             AppHistorySummaryPart.DebuggingChanged(isEnabled = true),
-            AppHistorySummaryPart.PermissionsAdded(firstLabel = "android.permission.CAMERA", otherCount = 0),
+            AppHistorySummaryPart.DangerousPermissionsAdded(firstLabel = "android.permission.CAMERA", otherCount = 0),
             AppHistorySummaryPart.UnencryptedTrafficChanged(isAllowed = true),
         )
     }
 
     @Test
-    fun `Given a normal and a dangerous permission added When summarizing Then the dangerous one is named`() {
+    fun `Given a normal and a dangerous permission added When summarizing Then only the dangerous one needs attention`() {
         val change = aChange(
             aDiff(
                 requestedPermissions = SetChange.Changed(
@@ -117,7 +117,12 @@ class AppHistoryEntrySummaryTest {
 
         val parts = change.summaryParts { it }
 
-        parts shouldBe listOf(AppHistorySummaryPart.PermissionsAdded(firstLabel = "android.permission.CAMERA", otherCount = 1))
+        parts shouldBe listOf(
+            AppHistorySummaryPart.DangerousPermissionsAdded(firstLabel = "android.permission.CAMERA", otherCount = 0),
+            AppHistorySummaryPart.PermissionsAdded(firstLabel = "android.permission.INTERNET", otherCount = 0),
+        )
+        parts.filter { it.needsAttention } shouldBe listOf(parts.first())
+        change.diff.addedDangerousPermissions.map { it.permissionData.name } shouldBe listOf("android.permission.CAMERA")
     }
 
     @Test

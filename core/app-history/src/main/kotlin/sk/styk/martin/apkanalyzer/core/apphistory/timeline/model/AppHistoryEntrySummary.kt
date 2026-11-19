@@ -1,10 +1,54 @@
 package sk.styk.martin.apkanalyzer.core.apphistory.timeline.model
 
+import sk.styk.martin.apkanalyzer.core.apps.permissions.UsedPermission
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import java.time.Instant
 
 val AppHistoryDiff.hasCertificateChange: Boolean
     get() = certificates is SetChange.Changed
+
+val AppHistoryDiff.addedDangerousPermissions: List<UsedPermission>
+    get() = addedRequestedPermissions.filter { it.isDangerous }
+
+private val AppHistoryDiff.addedRequestedPermissions: List<UsedPermission>
+    get() = (requestedPermissions as? SetChange.Changed)?.added.orEmpty().distinctBy { it.permissionData.name }
+
+val AppHistorySummaryPart.needsAttention: Boolean
+    get() = this is AppHistorySummaryPart.DangerousPermissionsAdded
+
+enum class AppHistoryChangeDirection {
+    Added,
+    Removed,
+    Changed,
+}
+
+val AppHistorySummaryPart.direction: AppHistoryChangeDirection
+    get() = when (this) {
+        is AppHistorySummaryPart.DangerousPermissionsAdded,
+        is AppHistorySummaryPart.PermissionsAdded,
+        is AppHistorySummaryPart.ComponentsAdded,
+        is AppHistorySummaryPart.NativeLibrariesAdded,
+        -> AppHistoryChangeDirection.Added
+
+        is AppHistorySummaryPart.PermissionsRemoved,
+        is AppHistorySummaryPart.ComponentsRemoved,
+        is AppHistorySummaryPart.NativeLibrariesRemoved,
+        -> AppHistoryChangeDirection.Removed
+
+        AppHistorySummaryPart.SigningMethodChanged,
+        is AppHistorySummaryPart.InstallSourceChanged,
+        is AppHistorySummaryPart.DebuggingChanged,
+        is AppHistorySummaryPart.BackupChanged,
+        is AppHistorySummaryPart.UnencryptedTrafficChanged,
+        is AppHistorySummaryPart.DefinedPermissionsChanged,
+        is AppHistorySummaryPart.TargetSdkChanged,
+        is AppHistorySummaryPart.MinSdkChanged,
+        is AppHistorySummaryPart.ComponentsChanged,
+        is AppHistorySummaryPart.NativeLibrariesChanged,
+        AppHistorySummaryPart.RequirementsChanged,
+        is AppHistorySummaryPart.SizeChanged,
+        -> AppHistoryChangeDirection.Changed
+    }
 
 val AppHistoryEntry.Change.isOlderVersion: Boolean
     get() = diff.version?.let { it.after.versionCode < it.before.versionCode } == true
@@ -31,6 +75,8 @@ sealed interface AppHistorySummaryPart {
     data class BackupChanged(val isAllowed: Boolean) : AppHistorySummaryPart
 
     data class UnencryptedTrafficChanged(val isAllowed: Boolean) : AppHistorySummaryPart
+
+    data class DangerousPermissionsAdded(val firstLabel: String, val otherCount: Int) : AppHistorySummaryPart
 
     data class PermissionsAdded(val firstLabel: String, val otherCount: Int) : AppHistorySummaryPart
 
@@ -76,9 +122,13 @@ fun AppHistoryEntry.Change.summaryParts(permissionLabel: (String) -> String): Li
 
 private fun MutableList<AppHistorySummaryPart>.addPermissionParts(diff: AppHistoryDiff, permissionLabel: (String) -> String) {
     (diff.requestedPermissions as? SetChange.Changed)?.let { requested ->
-        val added = requested.added.distinctBy { it.permissionData.name }.sortedByDescending { it.isDangerous }
-        added.firstOrNull()?.let { first ->
-            add(AppHistorySummaryPart.PermissionsAdded(permissionLabel(first.permissionData.name), added.size - 1))
+        val dangerous = diff.addedDangerousPermissions
+        dangerous.firstOrNull()?.let { first ->
+            add(AppHistorySummaryPart.DangerousPermissionsAdded(permissionLabel(first.permissionData.name), dangerous.size - 1))
+        }
+        val other = diff.addedRequestedPermissions.filterNot { it.isDangerous }
+        other.firstOrNull()?.let { first ->
+            add(AppHistorySummaryPart.PermissionsAdded(permissionLabel(first.permissionData.name), other.size - 1))
         }
         val removedCount = requested.removed.distinctBy { it.permissionData.name }.size
         if (removedCount > 0) add(AppHistorySummaryPart.PermissionsRemoved(removedCount))

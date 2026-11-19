@@ -16,6 +16,7 @@ import sk.styk.martin.apkanalyzer.core.apps.components.ContentProvider
 import sk.styk.martin.apkanalyzer.core.apps.components.Service
 import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Feature
 import sk.styk.martin.apkanalyzer.core.apps.model.AppInfo
+import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraries
 import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryFile
 import sk.styk.martin.apkanalyzer.core.apps.permissions.Permission
 import javax.inject.Inject
@@ -61,13 +62,7 @@ internal class AppHistoryDiffer @Inject constructor() {
                 isModified = { _, _ -> false },
             ),
             signingSchemes = capturedSetChange(before.signingScheme, after.signingScheme, items = { it }, key = { it }),
-            nativeLibraries = capturedSetChange(
-                before = before.nativeLibraries,
-                after = after.nativeLibraries,
-                items = { it.files.groupedIntoLibraries() },
-                key = { it.name },
-                isModified = hasVisibleChange(NativeLibrary::fieldChangesFrom),
-            ),
+            nativeLibraries = nativeLibraryChange(before.nativeLibraries, after.nativeLibraries),
             requirements = setChange(
                 before = beforeDetail.features,
                 after = afterDetail.features,
@@ -95,6 +90,25 @@ private val Feature.requirementKey: String
         is Feature.Hardware -> name
         is Feature.OpenGlEs -> "opengles:$reqGlEsVersion"
     }
+
+private val VERSION_IN_FILE_NAME = Regex("""(?:[._-]\d+)+(?=\.so$)""")
+
+private fun nativeLibraryChange(before: CapturedSection<NativeLibraries>, after: CapturedSection<NativeLibraries>): SetChange<NativeLibrary> {
+    val beforeLibraries = (before as? CapturedSection.Captured)?.value?.files?.groupedIntoLibraries() ?: return SetChange.Uncomparable
+    val afterLibraries = (after as? CapturedSection.Captured)?.value?.files?.groupedIntoLibraries() ?: return SetChange.Uncomparable
+    val ambiguousNames = beforeLibraries.sharedVersionlessNames() + afterLibraries.sharedVersionlessNames()
+    return setChange(
+        before = beforeLibraries,
+        after = afterLibraries,
+        key = { library -> library.versionlessName.takeUnless { it in ambiguousNames } ?: library.name },
+        isModified = hasVisibleChange(NativeLibrary::fieldChangesFrom),
+    )
+}
+
+private val NativeLibrary.versionlessName: String
+    get() = name.replace(VERSION_IN_FILE_NAME, "")
+
+private fun List<NativeLibrary>.sharedVersionlessNames(): Set<String> = groupBy { it.versionlessName }.filterValues { it.size > 1 }.keys
 
 private fun List<NativeLibraryFile>.groupedIntoLibraries(): List<NativeLibrary> = groupBy { it.name }
     .map { (name, files) -> NativeLibrary(name, files.sortedWith(compareBy({ it.abi }, { it.containingApkFileName }))) }

@@ -52,6 +52,8 @@ import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Chip
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ChipVariant
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.InfoCard
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.InfoCardTone
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.LabeledHashBox
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
@@ -67,7 +69,6 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RationaleBo
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionCard
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.WarningBanner
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -261,9 +262,11 @@ private fun CertificateCard(
             )
         }
         if (certificate.trustLevel == CertificateTrustLevel.Debug) {
-            WarningBanner(
+            InfoCard(
+                icon = ApkAnalyzerIcons.Warning,
                 title = stringResource(AppsR.string.certificates_debug_title),
-                message = stringResource(AppsR.string.certificates_debug_description),
+                body = stringResource(AppsR.string.certificates_debug_description),
+                tone = InfoCardTone.Warning,
             )
         }
         SectionCard(

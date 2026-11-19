@@ -19,6 +19,7 @@ import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryField
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryTimeline
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.SetChange
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.ValueChange
+import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.addedDangerousPermissions
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.fieldChangesFrom
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.hasCertificateChange
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionItem
@@ -140,7 +141,7 @@ internal class AppHistoryChangeViewModel @AssistedInject constructor(
                 ?: AppHistoryChangeState.NotFound
     }
 
-    private fun AppHistoryEntry.Change.toLoadedState(insights: HistoryChangeSection.Insights?) = AppHistoryChangeState.Loaded(
+    private fun AppHistoryEntry.Change.toLoadedState(insights: HistoryInsightChanges?) = AppHistoryChangeState.Loaded(
         appName = snapshot.applicationName,
         kind = kind,
         timestamp = timestamp,
@@ -148,17 +149,33 @@ internal class AppHistoryChangeViewModel @AssistedInject constructor(
         version = snapshot.version,
         versionChange = diff.version,
         versionTag = versionTag,
-        sections = listOfNotNull(insights) + toSections(),
+        sections = listOfNotNull(worthKnowingSection(insights)) + toSections(),
         isSigningMethodUncomparable = diff.signingSchemes is SetChange.Uncomparable,
         isNativeLibrariesUncomparable = diff.nativeLibraries is SetChange.Uncomparable,
     )
+
+    private fun AppHistoryEntry.Change.worthKnowingSection(insights: HistoryInsightChanges?): HistoryChangeSection? {
+        val dangerousPermissions = permissionItemMapper
+            .recordedRequested(diff.addedDangerousPermissions, PackageName(packageName))
+            .sortedBy { it.label.lowercase() }
+        val addedInsights = insights?.added.orEmpty()
+        val removedInsights = insights?.removed.orEmpty()
+        val hasNoInsightOrPermission = listOf(dangerousPermissions, addedInsights, removedInsights).all { it.isEmpty() }
+        if (!diff.hasCertificateChange && hasNoInsightOrPermission) return null
+        return HistoryChangeSection.WorthKnowing(
+            hasCertificateChange = diff.hasCertificateChange,
+            dangerousPermissions = dangerousPermissions,
+            addedInsights = addedInsights,
+            removedInsights = removedInsights,
+        )
+    }
 
     private fun AppHistoryEntry.Change.toSections(): List<HistoryChangeSection> = listOfNotNull(
         diff.signingSection(),
         permissionsSection(),
         diff.installSource?.let { HistoryChangeSection.InstallSource(it) },
         diff.appSettingsSection(),
-        diff.androidVersionsSection(),
+        diff.androidVersionsSection(sdkVersionResolver),
         diff.componentsSection(),
         diff.nativeLibrariesSection(),
         diff.requirementsSection(),
@@ -173,7 +190,7 @@ internal class AppHistoryChangeViewModel @AssistedInject constructor(
         val fieldChangesByName = modifiedDefined.associate { it.after.name to it.after.fieldChangesFrom(it.before) }
         val groups = listOfNotNull(
             permissionGroup(
-                id = "requested-added",
+                id = REQUESTED_ADDED_GROUP_ID,
                 kind = HistoryChangeGroupKind.Added,
                 scope = PermissionScope.Requested,
                 items = permissionItemMapper.recordedRequested(requested?.added.orEmpty(), analysedPackage),
@@ -206,20 +223,20 @@ internal class AppHistoryChangeViewModel @AssistedInject constructor(
         )
         return groups.takeIf { it.isNotEmpty() }?.let { HistoryChangeSection.Permissions(it) }
     }
+}
 
-    private fun AppHistoryDiff.androidVersionsSection(): HistoryChangeSection? {
-        if (minSdkVersion == null && targetSdkVersion == null) return null
-        return HistoryChangeSection.AndroidVersions(
-            minSdk = minSdkVersion?.toSdkLevels(),
-            targetSdk = targetSdkVersion?.toSdkLevels(),
-        )
-    }
-
-    private fun ValueChange<Int?>.toSdkLevels() = ValueChange(
-        before = HistorySdkLevel(before, sdkVersionResolver.resolveVersion(before)),
-        after = HistorySdkLevel(after, sdkVersionResolver.resolveVersion(after)),
+private fun AppHistoryDiff.androidVersionsSection(sdkVersionResolver: SdkVersionResolver): HistoryChangeSection? {
+    if (minSdkVersion == null && targetSdkVersion == null) return null
+    return HistoryChangeSection.AndroidVersions(
+        minSdk = minSdkVersion?.toSdkLevels(sdkVersionResolver),
+        targetSdk = targetSdkVersion?.toSdkLevels(sdkVersionResolver),
     )
 }
+
+private fun ValueChange<Int?>.toSdkLevels(sdkVersionResolver: SdkVersionResolver) = ValueChange(
+    before = HistorySdkLevel(before, sdkVersionResolver.resolveVersion(before)),
+    after = HistorySdkLevel(after, sdkVersionResolver.resolveVersion(after)),
+)
 
 private fun permissionGroup(
     id: String,

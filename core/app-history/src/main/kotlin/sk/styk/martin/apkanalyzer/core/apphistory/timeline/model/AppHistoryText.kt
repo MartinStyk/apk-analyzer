@@ -44,7 +44,10 @@ private val AppHistoryVersion.displayName: String
 private fun AppHistoryVersion.nameWithCode(resources: Resources): String = resources.getString(R.string.app_history_version_with_code, versionName, versionCode)
 
 fun ValueChange<AppHistoryInstallSource>.installSourceLabel(resources: Resources): String =
-    resources.getString(R.string.app_history_value_change, before.text(this, resources), after.text(this, resources))
+    installSourceTexts(resources).let { resources.getString(R.string.app_history_value_change, it.before, it.after) }
+
+fun ValueChange<AppHistoryInstallSource>.installSourceTexts(resources: Resources): ValueChange<String> =
+    ValueChange(before.text(this, resources), after.text(this, resources))
 
 private fun AppHistoryInstallSource.text(change: ValueChange<AppHistoryInstallSource>, resources: Resources): String {
     val hasSameLabel = change.before.source == change.after.source
@@ -83,11 +86,9 @@ fun AppHistorySummaryPart.label(resources: Resources): String = when (this) {
     is AppHistorySummaryPart.UnencryptedTrafficChanged ->
         resources.getString(if (isAllowed) R.string.app_history_summary_cleartext_on else R.string.app_history_summary_cleartext_off)
 
-    is AppHistorySummaryPart.PermissionsAdded -> if (otherCount == 0) {
-        resources.getString(R.string.app_history_summary_permission_added_single, firstLabel)
-    } else {
-        resources.getQuantityString(R.plurals.app_history_summary_permission_added_named, otherCount, firstLabel, otherCount)
-    }
+    is AppHistorySummaryPart.DangerousPermissionsAdded -> permissionsAddedLabel(resources, firstLabel, otherCount)
+
+    is AppHistorySummaryPart.PermissionsAdded -> permissionsAddedLabel(resources, firstLabel, otherCount)
 
     is AppHistorySummaryPart.PermissionsRemoved -> resources.getQuantityString(R.plurals.app_history_summary_permissions_removed, count, count)
 
@@ -122,6 +123,16 @@ fun AppHistorySummaryPart.label(resources: Resources): String = when (this) {
             abs(delta).bytes.formatted(),
         )
     }
+}
+
+private fun permissionsAddedLabel(
+    resources: Resources,
+    firstLabel: String,
+    otherCount: Int,
+): String = if (otherCount == 0) {
+    resources.getString(R.string.app_history_summary_permission_added_single, firstLabel)
+} else {
+    resources.getQuantityString(R.plurals.app_history_summary_permission_added_named, otherCount, firstLabel, otherCount)
 }
 
 private fun Int?.sdkText(resources: Resources): String = this?.toString() ?: resources.getString(AppsR.string.app_detail_unknown)
@@ -190,4 +201,5 @@ private val AppHistoryItemField.labelRes: Int
         AppHistoryItemField.PermissionGroup -> PermissionsR.string.permissions_detail_group
         AppHistoryItemField.DeclaringPackage -> PermissionsR.string.permissions_detail_declared_by
         AppHistoryItemField.Required -> AppsR.string.requirements_section_required
+        AppHistoryItemField.FileName -> AppsR.string.splitapks_detail_file_name
     }

@@ -19,6 +19,8 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents.Componen
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.HistoryVersionTag
 import java.time.Instant
 
+internal const val REQUESTED_ADDED_GROUP_ID = "requested-added"
+
 internal enum class HistoryChangeGroupKind {
     Added,
     Removed,
@@ -90,7 +92,12 @@ internal sealed interface HistoryChangeSection {
     }
 
     @Immutable
-    data class Insights(val added: List<AppDetailInsight>, val removed: List<AppDetailInsight>) : HistoryChangeSection
+    data class WorthKnowing(
+        val hasCertificateChange: Boolean,
+        val dangerousPermissions: List<PermissionItem>,
+        val addedInsights: List<AppDetailInsight>,
+        val removedInsights: List<AppDetailInsight>,
+    ) : HistoryChangeSection
 
     @Immutable
     data class Signing(

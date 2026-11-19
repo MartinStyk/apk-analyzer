@@ -17,6 +17,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -37,11 +38,14 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.lazylist.itemsPosition
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ListSectionHeader
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.HistoryVersionTag
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.historyDate
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.historyMonth
 import java.time.Instant
+import java.time.YearMonth
 
 @Composable
 internal fun AppHistoryTimelineScreen(
@@ -115,6 +119,7 @@ private fun LoadedContent(
     onAction: (AppHistoryTimelineAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val locale = LocalConfiguration.current.locales[0]
     LazyColumn(
         contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 24.dp),
         modifier = modifier.fillMaxSize(),
@@ -131,18 +136,25 @@ private fun LoadedContent(
                 modifier = Modifier.padding(start = 4.dp, top = 4.dp, bottom = 12.dp),
             )
         }
-        state.runs.forEachIndexed { runIndex, run ->
+        state.months.forEachIndexed { index, month ->
+            stickyHeader(key = "month-${month.month}") {
+                ListSectionHeader(
+                    title = month.month.historyMonth(locale).uppercase(locale),
+                    topPadding = if (index == 0) 0.dp else 12.dp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(AppTheme.colors.background),
+                )
+            }
             itemsPositioned(
-                items = run,
+                items = month.rows,
                 key = { _, row -> row.snapshotId },
             ) { position, row ->
-                val isRunEnd = row === run.last() && runIndex != state.runs.lastIndex
                 HistoryEntryRow(
                     row = row,
                     position = position,
                     onClick = { onAction(AppHistoryTimelineAction.OpenRow(row)) },
                     onLongClick = { onAction(AppHistoryTimelineAction.CopyRow(state.appName, it)) },
-                    modifier = if (isRunEnd) Modifier.padding(bottom = 20.dp) else Modifier,
                 )
             }
         }
@@ -209,11 +221,11 @@ private fun firstRecordedRow() = sampleHistoryRow(
     summary = emptyList(),
 )
 
-private fun loadedState(vararg runs: List<AppHistoryRow>) = AppHistoryTimelineState.Loaded(
+private fun loadedState(vararg months: List<AppHistoryRow>) = AppHistoryTimelineState.Loaded(
     appName = "Spotify",
     recordingSince = sampleSince,
-    changeCount = runs.sumOf { it.size } - 1,
-    runs = runs.toList(),
+    changeCount = months.sumOf { it.size } - 1,
+    months = months.mapIndexed { index, rows -> AppHistoryMonth(YearMonth.of(2026, 3).minusMonths(index.toLong()), rows) },
 )
 
 @Preview
