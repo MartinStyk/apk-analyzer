@@ -34,7 +34,7 @@
     <string name="permission_label_activity_recognition">身體活動</string>
     <string name="permission_label_bluetooth_scan">搜尋附近裝置</string>
     <string name="permission_label_bluetooth_connect">連接藍牙裝置</string>
-    <string name="permission_label_bluetooth_advertise">Bluetooth Advertise</string>
+    <string name="permission_label_bluetooth_advertise">藍牙廣播</string>
     <string name="permission_label_bluetooth">藍牙</string>
     <string name="permission_label_uwb">UWB 測距</string>
     <string name="permission_label_notifications">顯示通知</string>
@@ -45,7 +45,7 @@
     <string name="permission_label_wifi_change">變更 Wi-Fi 連線</string>
     <string name="permission_label_wifi_state">Wi-Fi 狀態</string>
     <string name="permission_label_network_state">網路狀態</string>
-    <string name="permission_label_wake_lock">Wake lock</string>
+    <string name="permission_label_wake_lock">保持裝置喚醒</string>
     <string name="permission_label_boot">開機時執行</string>
     <string name="permission_label_foreground_service">前景服務</string>
     <string name="permission_label_foreground_service_camera">前景服務：相機</string>
@@ -55,10 +55,10 @@
     <string name="permission_label_foreground_service_media_projection">前景服務：螢幕分享</string>
     <string name="permission_label_foreground_service_phone_call">前景服務：通話</string>
     <string name="permission_label_foreground_service_connected_device">前景服務：裝置連線</string>
-    <string name="permission_label_ad_id">Advertising ID</string>
-    <string name="permission_label_ad_attribution">Ad Attribution</string>
-    <string name="permission_label_ad_custom_audience">Ad Audiences</string>
-    <string name="permission_label_ad_topics">Ad Topics</string>
+    <string name="permission_label_ad_id">廣告 ID</string>
+    <string name="permission_label_ad_attribution">廣告歸因</string>
+    <string name="permission_label_ad_custom_audience">廣告目標對象</string>
+    <string name="permission_label_ad_topics">廣告主題</string>
     <string name="permission_label_full_screen_intent">全螢幕通知</string>
     <string name="permission_label_push_messages">接收推播訊息</string>
     <string name="permission_label_running_apps">執行中的應用程式</string>

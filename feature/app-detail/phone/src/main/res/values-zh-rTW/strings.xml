@@ -11,7 +11,7 @@
     <string name="app_detail_version">版本</string>
     <string name="app_detail_apk_size">APK 大小</string>
     <string name="app_detail_total_size">總大小</string>
-    <string name="app_detail_target_sdk">Target SDK</string>
+    <string name="app_detail_target_sdk">目標 SDK</string>
     <string name="app_detail_updated">更新日期</string>
     <plurals name="app_detail_overview_more_details">
         <item quantity="other">「一般資訊」中還有 %1$d 項詳細資料</item>

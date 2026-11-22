@@ -11,7 +11,7 @@
     <string name="sort_size">APK 檔案大小</string>
     <string name="sort_total_size">應用程式總大小</string>
     <string name="sort_install_date">安裝日期</string>
-    <string name="sort_target_sdk">Target Android SDK</string>
+    <string name="sort_target_sdk">目標 Android SDK</string>
     <string name="sort_last_updated">上次更新</string>
     <string name="sort_last_used">上次使用</string>
     <string name="sort_bottom_sheet_title">排序方式</string>

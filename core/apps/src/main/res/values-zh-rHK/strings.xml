@@ -62,7 +62,7 @@
     <string name="general_info_version_name">版本名稱</string>
     <string name="general_info_version_code">版本代碼</string>
     <string name="general_info_min_sdk">最低 SDK</string>
-    <string name="general_info_target_sdk">Target SDK</string>
+    <string name="general_info_target_sdk">目標 SDK</string>
     <string name="general_info_debug_access">偵錯存取</string>
     <string name="general_info_app_data_backup">應用程式資料備份</string>
     <string name="general_info_unencrypted_traffic">未加密傳輸的預設設定</string>

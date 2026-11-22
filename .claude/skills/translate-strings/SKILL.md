@@ -79,42 +79,17 @@ from Android Studio, developer.android.com, or the Play Console in their languag
   Hindi. For these, the established local Android developer convention is almost always to keep the
   English term as a loanword (`Activity`, `Service`, `Broadcast Receiver`, `Content Provider`) — that
   also avoids inventing a translation no one in that market's Android ecosystem actually uses.
-- `APK`, `Intent`, `Manifest` stay in English in effectively every language, including ones with
-  localized docs — they function as fixed technical terms across the whole Android world, the same
-  way this skill already treats `APK` elsewhere.
+- Keep product names (`Android`, `Android Studio`), acronyms (`SDK`, `APK`, `API`), and raw code
+  identifiers (`android.permission.WAKE_LOCK`, `AndroidManifest.xml`) unchanged. Translate
+  surrounding wording and descriptive technical labels using established local terminology.
+  Preserving an acronym does not mean preserving the whole label in English: `Target SDK` and
+  `Advertising ID` can have localized labels while retaining `SDK` and `ID`.
 - If you're not sure for a specific language/term pair, say so and check developer.android.com in
   that locale (or ask) instead of guessing silently — getting this wrong reads as a translation that
   doesn't know the platform, which undermines trust more than an occasional English loanword would.
 
-## Always-English Keys
-
-A handful of specific keys are pinned to the exact English source text in **every** language,
-Slovak included — not translated, not adapted. These are deliberate app-owner calls (not derivable
-from the general platform-vocabulary rule above), so don't second-guess them into translation during
-an audit:
-
-- `permission_label_wake_lock` → `Wake lock`. The English source string itself reads "Keep Device
-  Awake" (plain prose, not this term) — every locale still renders the Android API name `Wake lock`
-  instead of translating that source sentence. This is an intentional exception to "translate the
-  English source," not an oversight.
-- `permission_label_ad_id` → `Advertising ID`, `permission_label_ad_attribution` → `Ad Attribution`,
-  `permission_label_ad_custom_audience` → `Ad Audiences`, `permission_label_ad_topics` → `Ad Topics`
-  (all `core/app-permissions`).
-- `permission_label_bluetooth_advertise` → `Bluetooth Advertise` (`core/app-permissions`).
-- `permissions_level_dangerous` / `_signature` / `_internal` / `_normal` (`core/app-permissions`)
-  and their `browse_protection_level_*` counterparts (`feature/browse/phone`) → `Dangerous` /
-  `Signature` / `Internal` / `Normal`, except in Taiwan and Hong Kong Traditional Chinese.
-  In `values-zh-rTW` and `values-zh-rHK`, translate these labels and use the same wording in
-  app detail and browsing.
-- `app_detail_target_sdk` (`feature/app-detail/phone`), `general_info_target_sdk` (`core/apps`), and
-  `tv_apps_sort_target_sdk` (`feature/apps/tv`) → `Target SDK`. `sort_target_sdk`
-  (`feature/apps/phone`) → `Target Android SDK` (matches that key's own English source, which
-  includes "Android" where the others don't — copy each key's own default text verbatim rather than
-  harmonizing them into one phrase).
-
-If a new key looks like it belongs in one of these families (e.g. a future `permission_label_ad_*`
-or another `*_target_sdk` label), ask before deciding whether it joins the always-English set or
-gets a normal translation — don't extend the pattern by inference.
+Permission labels describe the capability in the English source, not the raw API constant.
+Use consistent localized wording when the same concept appears in app detail, browsing, and sorting.
 
 ## Scope: One Module at a Time
 
