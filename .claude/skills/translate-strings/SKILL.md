@@ -22,8 +22,8 @@ sentence structure.
 | Italian | `values-it` | one, many, other | `many` same as Spanish |
 | Japanese | `values-ja` | other | No grammatical plural; only `quantity="other"` is ever selected |
 | Chinese (Simplified) | `values-zh-rCN` | other | |
-| Chinese (Traditional, Taiwan) | `values-zh-rTW` | other | Taiwan vocabulary and standard written Traditional Chinese |
-| Chinese (Traditional, Hong Kong) | `values-zh-rHK` | other | Hong Kong vocabulary and standard written Traditional Chinese, not colloquial Cantonese |
+| Chinese (Traditional, Taiwan) | `values-zh-rTW` | other | Taiwan vocabulary; translate from English, not by converting Simplified Chinese |
+| Chinese (Traditional, Hong Kong) | `values-zh-rHK` | other | Hong Kong vocabulary in standard written Chinese, not colloquial Cantonese or an unchanged copy of Taiwan |
 | Korean | `values-ko` | other | |
 | Vietnamese | `values-vi` | other | |
 | Indonesian | `values-in` | other | Android's legacy resource qualifier for Indonesian is `in`, not `id` |
@@ -38,19 +38,6 @@ sentence structure.
 
 If asked to add a language outside this table, confirm the language and its folder qualifier with the
 user before creating files — don't guess a BCP-47 tag.
-
-### Traditional Chinese Regions
-
-Taiwan and Hong Kong use the same script but have different vocabulary. Translate from English
-with the Slovak control in both regions; do not convert Simplified Chinese or copy the Taiwan file
-unchanged into Hong Kong. Shared wording can match, but review each string for regional usage.
-For example, Taiwan uses `軟體`, `硬體`, `隱私`, `網路`, `簡訊`, and `憑證`; Hong Kong uses
-`軟件`, `硬件`, `私隱`, `網絡`, `短訊`, and `證書`. Keep platform terms and the pinned
-English labels consistent with the rules below rather than replacing words mechanically.
-
-Google's Traditional Chinese Android developer documentation uses `hl=zh-tw`; it is a platform
-terminology reference, not a separate Hong Kong localization. When a page-fetch tool returns English
-despite that locale, inspect the translated HTML before concluding that the term is not localized.
 
 ## Control Language: Slovak (`values-sk`)
 
