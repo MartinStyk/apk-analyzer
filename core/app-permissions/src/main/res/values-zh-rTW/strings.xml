@@ -130,7 +130,7 @@
     <string name="permission_description_sms_read">讀取這台裝置上儲存的簡訊。</string>
     <string name="permission_description_sms_send">傳送簡訊，可能產生費用。</string>
     <string name="permission_description_sms_receive">接收並讀取收到的簡訊。</string>
-    <string name="permission_description_call_log_read">讀取您撥出及接聽電話的對象和時間。</string>
+    <string name="permission_description_call_log_read">讀取您撥打電話的對象、來電者及時間。</string>
     <string name="permission_description_call_log_write">新增或刪除通話記錄。</string>
     <string name="permission_description_call_phone">不透過撥號介面直接撥打電話，可能產生費用。</string>
     <string name="permission_description_phone_state">讀取電話狀態、電信業者資訊，以及是否正在通話。</string>

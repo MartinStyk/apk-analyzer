@@ -163,7 +163,7 @@
     <plurals name="components_filter_hint_providers">
         <item quantity="other">篩選 %1$d 個內容供應器</item>
     </plurals>
-    <string name="components_filter_exported">已匯出</string>
+    <string name="components_filter_exported">對外開放</string>
     <string name="components_filter_unprotected">未受保護</string>
     <string name="components_section_header">%1$s · %2$d</string>
     <string name="components_empty_query">沒有符合「%1$s」的元件。</string>
