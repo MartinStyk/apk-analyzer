@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="browse_title">瀏覽應用程式</string>
+    <string name="browse_protection_level_dangerous">危險</string>
+    <string name="browse_protection_level_signature">簽章</string>
+    <string name="browse_protection_level_internal">內部</string>
+    <string name="browse_protection_level_normal">一般</string>
+    <string name="browse_protection_level_dangerous_explanation">應用程式必須取得您的明確同意，才能使用這項權限。</string>
+    <string name="browse_protection_level_signature_explanation">只有與宣告這項權限的應用程式使用相同金鑰簽署的應用程式，才能取得這項權限。</string>
+    <string name="browse_protection_level_internal_explanation">保留給系統使用，由內部規則授予，而非由您授予。</string>
+    <string name="browse_protection_level_normal_explanation">通常在安裝時自動授予。這項權限本身的風險較低。</string>
+    <string name="browse_algorithm_strong">強</string>
+    <string name="browse_algorithm_weak">弱</string>
+    <string name="browse_algorithm_unknown">強度未知</string>
+    <string name="browse_algorithm_strong_explanation">%1$s 使用 SHA-256 或更強的摘要演算法。目前沒有已知可實際執行的碰撞攻擊，但整體安全性也取決於簽署金鑰的類型和長度。</string>
+    <string name="browse_algorithm_sha1_explanation">%1$s 使用 SHA-1。SHA-1 已無法抵抗碰撞攻擊，攻擊者能建立內容不同但摘要相同的資料。新的簽署憑證應使用 SHA-256 或更強的摘要演算法。</string>
+    <string name="browse_algorithm_md5_explanation">%1$s 使用 MD5。MD5 無法抵抗碰撞攻擊，不適合用於簽署憑證。新的簽署憑證應使用 SHA-256 或更強的摘要演算法。</string>
+    <string name="browse_algorithm_md2_explanation">%1$s 使用 MD2。MD2 已過時，且容易受到可實際執行的攻擊，不適合用於簽署憑證。新的簽署憑證應使用 SHA-256 或更強的摘要演算法。</string>
+    <string name="browse_algorithm_unknown_explanation">無法僅憑演算法名稱判斷 %1$s 的強度。金鑰的類型和長度也可能影響其安全性。</string>
+    <string name="browse_bucket_info_content_description">關於 %1$s</string>
+</resources>

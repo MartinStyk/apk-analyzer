@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="inventory_export_title">匯出應用程式資訊</string>
+    <string name="inventory_export_apps_title">應用程式</string>
+    <string name="inventory_export_apps_page_title">選擇應用程式</string>
+    <string name="inventory_export_columns_title">詳細資料</string>
+    <string name="inventory_export_columns_page_title">選擇詳細資料</string>
+    <string name="inventory_export_next">下一步</string>
+    <string name="inventory_export_step_export">匯出</string>
+    <string name="inventory_export_apps_loading">正在載入應用程式…</string>
+    <plurals name="inventory_export_app_count">
+        <item quantity="other">%1$d 個應用程式</item>
+    </plurals>
+    <string name="inventory_export_apps_left_out">未納入的應用程式：%1$d</string>
+    <string name="inventory_export_apps_all">包含所有已安裝的應用程式。</string>
+    <string name="inventory_export_apps_filtered">只包含符合篩選條件的應用程式。</string>
+    <string name="inventory_export_apps_selected">已選取 %1$d 個，共 %2$d 個</string>
+    <string name="inventory_export_search_apps">搜尋應用程式</string>
+    <string name="inventory_export_edit_filters">篩選</string>
+    <string name="inventory_export_no_apps">沒有符合篩選條件的應用程式</string>
+    <string name="inventory_export_no_apps_available">沒有可匯出的應用程式</string>
+    <string name="inventory_export_no_search_results">找不到符合搜尋條件的應用程式</string>
+    <string name="inventory_export_preset_basics">基本資訊</string>
+    <string name="inventory_export_preset_security_audit">安全稽核</string>
+    <string name="inventory_export_preset_permissions">權限與元件</string>
+    <string name="inventory_export_preset_everything">全部</string>
+    <string name="inventory_export_columns_more">%1$s，另有 %2$d 項</string>
+    <string name="inventory_export_columns_selected">已選取 %1$d 項詳細資料，共 %2$d 項</string>
+    <string name="inventory_export_select_all">全選</string>
+    <string name="inventory_export_clear">取消全選</string>
+    <string name="inventory_export_no_columns_hint">請至少選擇一項要匯出的詳細資料。</string>
+    <string name="inventory_export_slower_tag">較耗時</string>
+    <string name="inventory_export_slow_hint">部分選取的資料需要進一步檢查每個應用程式，因此匯出會花較長時間。</string>
+    <string name="inventory_export_usage_access_hint">允許存取使用情況資料後，才會填入上次使用時間和儲存空間大小。</string>
+    <string name="inventory_export_grant_access">允許存取</string>
+    <string name="inventory_export_attribute_category">類別</string>
+    <string name="inventory_export_attribute_certificate_sha256">憑證 SHA-256</string>
+    <string name="inventory_export_attribute_certificate_subject">憑證主體</string>
+    <string name="inventory_export_attribute_requested_permissions">要求的權限</string>
+    <string name="inventory_export_attribute_granted_permissions">已授予的權限</string>
+    <plurals name="inventory_export_column_count">
+        <item quantity="other">%1$d 項詳細資料</item>
+    </plurals>
+    <string name="inventory_export_format_title">格式</string>
+    <string name="inventory_export_format_csv">CSV 試算表</string>
+    <string name="inventory_export_format_csv_description">可用 Excel、Google 試算表和其他試算表應用程式開啟。</string>
+    <string name="inventory_export_format_json">JSON</string>
+    <string name="inventory_export_format_json_description">供指令碼和其他工具使用的結構化資料。</string>
+    <string name="inventory_export_format_reference">檔案格式說明</string>
+    <string name="inventory_export_preview_title">預覽</string>
+    <plurals name="inventory_export_preview_caption">
+        <item quantity="other">只顯示前 %1$d 個應用程式。</item>
+    </plurals>
+    <string name="inventory_export_preview_unavailable">目前無法顯示預覽。</string>
+    <string name="inventory_export_save">儲存</string>
+    <string name="inventory_export_share">分享</string>
+    <string name="inventory_export_cancel">取消</string>
+    <plurals name="inventory_export_progress">
+        <item quantity="other">正在匯出 %1$d / %2$d 個應用程式…</item>
+    </plurals>
+    <plurals name="inventory_export_saved">
+        <item quantity="other">已將 %1$d 個應用程式儲存至 %2$s</item>
+    </plurals>
+    <plurals name="inventory_export_incomplete">
+        <item quantity="other">%1$d 個應用程式缺少部分詳細資料。</item>
+    </plurals>
+    <string name="inventory_export_failed">無法匯出應用程式資訊</string>
+    <string name="inventory_export_picker_unavailable">沒有可儲存檔案的應用程式</string>
+    <string name="inventory_export_share_unavailable">沒有可分享檔案的應用程式</string>
+    <string name="inventory_export_attribute_activity_count">活動數量</string>
+    <string name="inventory_export_attribute_service_count">服務數量</string>
+    <string name="inventory_export_attribute_receiver_count">廣播接收器數量</string>
+    <string name="inventory_export_attribute_provider_count">內容供應器數量</string>
+    <string name="inventory_export_attribute_split_details">分割 APK 詳細資料</string>
+    <string name="inventory_export_attribute_permission_details">要求的權限詳細資料</string>
+    <string name="inventory_export_attribute_intent_filters">Intent 篩選器</string>
+    <string name="inventory_export_attribute_certificate_md5">憑證 MD5</string>
+    <string name="inventory_export_attribute_certificate_sha1">憑證 SHA-1</string>
+    <string name="inventory_export_attribute_public_key_md5">公開金鑰 MD5</string>
+    <string name="inventory_export_attribute_public_key_sha1">公開金鑰 SHA-1</string>
+    <string name="inventory_export_attribute_public_key_sha256">公開金鑰 SHA-256</string>
+    <string name="inventory_export_structured_hint">僅限 JSON 的詳細資料包含完整紀錄，而不只是數量。CSV 檔案不會納入這些資料。</string>
+    <string name="inventory_export_columns_omitted">CSV 檔案未納入：%1$s。CSV 無法儲存完整紀錄。</string>
+    <string name="inventory_export_use_json">改用 JSON</string>
+    <string name="inventory_export_json_only">僅限 JSON</string>
+    <string name="inventory_export_stop_title">停止匯出？</string>
+    <string name="inventory_export_stop_message">尚未完成的檔案將會刪除。您選取的應用程式、詳細資料和格式會保留。</string>
+    <string name="inventory_export_stop_and_back">停止並返回</string>
+    <string name="inventory_export_keep_exporting">繼續匯出</string>
+    <string name="inventory_export_intro_title">建立應用程式清單</string>
+    <string name="inventory_export_intro_description">將多個應用程式的資訊匯出至同一個 CSV 或 JSON 檔案。</string>
+    <string name="inventory_export_intro_got_it">瞭解</string>
+    <string name="inventory_export_intro_about">關於這次匯出</string>
+    <string name="inventory_export_apps_guidance">預設包含所有應用程式，取消勾選即可排除。使用篩選條件縮小清單範圍。</string>
+    <string name="inventory_export_columns_guidance">選擇每個應用程式要包含哪些詳細資料。</string>
+    <string name="inventory_export_format_guidance">試算表請選 CSV，完整資料請選 JSON，再儲存或分享。</string>
+    <string name="inventory_export_preset_basics_description">名稱、版本、SDK 等級、安裝來源和上次更新時間。</string>
+    <string name="inventory_export_preset_security_audit_description">偵錯與備份設定、簽署憑證和簽署方案。</string>
+    <string name="inventory_export_preset_permissions_description">要求與已授予的權限，以及元件數量。</string>
+    <string name="inventory_export_preset_everything_description">所有可用的詳細資料，包括完整紀錄。</string>
+</resources>

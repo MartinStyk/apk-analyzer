@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="android_versions">
+        <item>Android 1</item>
+        <item>Android 1.1</item>
+        <item>Android 1.5</item>
+        <item>Android 1.6</item>
+        <item>Android 2.0</item>
+        <item>Android 2.0.1</item>
+        <item>Android 2.1</item>
+        <item>Android 2.2</item>
+        <item>Android 2.3</item>
+        <item>Android 2.3.3</item>
+        <item>Android 3.0</item>
+        <item>Android 3.1</item>
+        <item>Android 3.2</item>
+        <item>Android 4.0</item>
+        <item>Android 4.0.3</item>
+        <item>Android 4.1</item>
+        <item>Android 4.2</item>
+        <item>Android 4.3</item>
+        <item>Android 4.4</item>
+        <item>Android 4.4W</item>
+        <item>Android 5.0</item>
+        <item>Android 5.1.1</item>
+        <item>Android 6.0</item>
+        <item>Android 7.0</item>
+        <item>Android 7.1.2</item>
+        <item>Android 8.0</item>
+        <item>Android 8.1</item>
+        <item>Android 9</item>
+        <item>Android 10</item>
+        <item>Android 11</item>
+        <item>Android 12</item>
+        <item>Android 12L</item>
+        <item>Android 13</item>
+        <item>Android 14</item>
+        <item>Android 15</item>
+        <item>Android 16</item>
+        <item>Android 17</item>
+    </string-array>
+
+    <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
+    <string name="app_detail_sdk_version_no_label">API %1$d</string>
+    <string name="app_detail_unknown">不明</string>
+    <string name="general_info_title">一般資訊</string>
+    <string name="general_info_error">無法載入一般資訊</string>
+    <string name="general_info_section_identification">識別資訊</string>
+    <string name="general_info_section_versioning">版本資訊</string>
+    <string name="general_info_section_api_targets">API 目標</string>
+    <string name="general_info_section_security">安全性設定</string>
+    <string name="general_info_section_installation">安裝與來源</string>
+    <string name="general_info_section_storage">儲存空間與路徑</string>
+    <string name="general_info_section_native_libraries">原生程式庫</string>
+    <string name="general_info_application_name">應用程式名稱</string>
+    <string name="general_info_package_name">套件名稱</string>
+    <string name="general_info_process_name">程序名稱</string>
+    <string name="general_info_uid">UID</string>
+    <string name="general_info_shared_user_id">共用身分</string>
+    <string name="general_info_description">說明</string>
+    <string name="general_info_version_name">版本名稱</string>
+    <string name="general_info_version_code">版本代碼</string>
+    <string name="general_info_min_sdk">最低 SDK</string>
+    <string name="general_info_target_sdk">Target SDK</string>
+    <string name="general_info_debug_access">偵錯存取</string>
+    <string name="general_info_app_data_backup">應用程式資料備份</string>
+    <string name="general_info_unencrypted_traffic">未加密傳輸</string>
+    <string name="general_info_enabled">已啟用</string>
+    <string name="general_info_disabled">已停用</string>
+    <string name="general_info_allowed">允許</string>
+    <string name="general_info_app_type">應用程式類型</string>
+    <string name="general_info_app_type_system">系統</string>
+    <string name="general_info_app_type_user">使用者</string>
+    <string name="general_info_install_source">安裝來源</string>
+    <string name="general_info_install_source_google_play">Google Play</string>
+    <string name="general_info_install_source_samsung_galaxy_store">Samsung Galaxy Store</string>
+    <string name="general_info_install_source_amazon_appstore">Amazon Appstore</string>
+    <string name="general_info_install_source_huawei_app_gallery">Huawei AppGallery</string>
+    <string name="general_info_install_source_xiaomi_get_apps">Xiaomi GetApps</string>
+    <string name="general_info_install_source_fdroid">F-Droid</string>
+    <string name="general_info_install_source_aurora_store">Aurora Store</string>
+    <string name="general_info_install_source_sideloaded">從檔案安裝</string>
+    <string name="general_info_install_source_local_install">從連接的電腦安裝</string>
+    <string name="general_info_install_source_system">系統</string>
+    <string name="general_info_install_source_unknown">不明</string>
+    <string name="general_info_installer_package">安裝程式套件</string>
+    <string name="general_info_install_initiator">發起安裝的應用程式</string>
+    <string name="general_info_install_originator">提供 APK 的套件</string>
+    <string name="general_info_first_installed">首次安裝時間</string>
+    <string name="general_info_last_updated">最近更新時間</string>
+    <string name="general_info_last_used">最近使用時間</string>
+    <string name="general_info_apk_directory">APK 目錄</string>
+    <string name="general_info_data_directory">資料目錄</string>
+    <string name="general_info_install_location">安裝位置</string>
+    <string name="general_info_apk_size">APK 大小</string>
+    <string name="general_info_split_apks">分割 APK</string>
+    <plurals name="general_info_split_apks_value">
+        <item quantity="other">以 %1$d 個分割 APK 安裝</item>
+    </plurals>
+    <string name="general_info_total_size">總大小</string>
+    <string name="general_info_native_library_abis">CPU 架構</string>
+    <string name="general_info_native_library_abis_none">沒有原生程式碼</string>
+    <string name="general_info_native_library_files">原生程式庫檔案</string>
+    <string name="general_info_native_library_files_none">未包含任何檔案</string>
+    <plurals name="general_info_native_library_file_count">
+        <item quantity="other">%1$d 個檔案</item>
+    </plurals>
+    <string name="general_info_rationale_application_name">應用程式在主畫面與應用程式列表中顯示的名稱。</string>
+    <string name="general_info_rationale_package_name">這個應用程式在裝置上的唯一識別名稱。兩個應用程式不能使用相同的套件名稱。</string>
+    <string name="general_info_rationale_process_name">應用程式執行時所使用的作業系統程序名稱，預設與套件名稱相同。</string>
+    <string name="general_info_rationale_uid">Android 系統為這個應用程式指派的唯一識別碼，用來決定應用程式存取系統資源與檔案的權限。</string>
+    <string name="general_info_rationale_shared_user_id">這個應用程式宣告與其他使用相同金鑰簽署的應用程式共用身分。共用身分的應用程式可以互相存取資料與權限，如同同一個應用程式。</string>
+    <string name="general_info_rationale_description">開發人員在 Manifest 中提供的簡介，可選擇不填寫。</string>
+    <string name="general_info_rationale_version_name">顯示給使用者閱讀的版本文字，例如「2.5.1」或「Beta 3」。</string>
+    <string name="general_info_rationale_version_code">每次發布新版本時遞增的內部整數代碼。系統會用它來判斷哪個版本較新。</string>
+    <string name="general_info_rationale_min_sdk">這個應用程式支援的最低 Android API 級別。使用較舊版本的裝置無法安裝。</string>
+    <string name="general_info_rationale_target_sdk">開發人員設計與測試這個應用程式時所針對的 API 級別，用來告知系統應採用哪些相容性行為。</string>
+    <string name="general_info_rationale_debug_access_enabled">開發工具可以在應用程式執行時檢查並控制它。這有助於測試，但正式發布的應用程式通常會關閉此功能，因為任何能對裝置進行偵錯的人都會取得更多應用程式存取權。</string>
+    <string name="general_info_rationale_debug_access_disabled">開發工具無法透過 Android 一般的應用程式偵錯存取方式連接這個應用程式。</string>
+    <string name="general_info_rationale_backup_allowed">Android 可能會將這個應用程式的資料納入備份，或移轉到其他裝置。實際包含哪些資料，取決於應用程式的備份規則與 Android 版本。</string>
+    <string name="general_info_rationale_backup_blocked">這個應用程式停用了 Android 雲端備份。裝置間的資料移轉仍可能因 Android 版本與裝置製造商而異。</string>
+    <string name="general_info_rationale_cleartext_allowed">應用程式在 Manifest 中的一般設定允許未加密的網路連線。自訂的網路安全性規則可以覆寫此設定。這不代表應用程式實際傳送了未加密資料。</string>
+    <string name="general_info_rationale_cleartext_blocked">應用程式在 Manifest 中的一般設定停用了未加密的網路連線。自訂的網路安全性規則與某些網路程式庫可能會有不同的行為。</string>
+    <string name="general_info_rationale_app_type">表示這是預先安裝的系統應用程式，還是使用者自行安裝的應用程式。系統應用程式擁有較高權限，且無法完全解除安裝。</string>
+    <string name="general_info_rationale_install_source_google_play">這個應用程式透過 Google Play 下載並安裝。Google Play 會在應用程式上架前進行審查。</string>
+    <string name="general_info_rationale_install_source_samsung_galaxy_store">這個應用程式透過 Samsung 自家的應用程式商店 Galaxy Store 下載並安裝。</string>
+    <string name="general_info_rationale_install_source_amazon_appstore">這個應用程式透過 Amazon Appstore 下載並安裝。</string>
+    <string name="general_info_rationale_install_source_huawei_app_gallery">這個應用程式透過 Huawei 自家的應用程式商店 AppGallery 下載並安裝。</string>
+    <string name="general_info_rationale_install_source_xiaomi_get_apps">這個應用程式透過 Xiaomi 自家的應用程式商店 GetApps 下載並安裝。</string>
+    <string name="general_info_rationale_install_source_fdroid">這個應用程式透過 F-Droid 下載並安裝。F-Droid 僅提供以公開原始碼建置的開放原始碼應用程式。</string>
+    <string name="general_info_rationale_install_source_aurora_store">這個應用程式透過 Aurora Store 下載並安裝。Aurora Store 是瀏覽與安裝 Google Play 應用程式的替代工具。</string>
+    <string name="general_info_rationale_install_source_sideloaded">這個應用程式是從下載的 APK 檔案手動安裝，而非透過應用程式商店，因此未經商店的審查流程。</string>
+    <string name="general_info_rationale_install_source_local_install">這個應用程式直接從連接的電腦安裝，通常使用 ADB 等開發工具，而非透過應用程式商店。</string>
+    <string name="general_info_rationale_install_source_system">這個應用程式預先安裝在裝置上，是作業系統或製造商軟體的一部分。</string>
+    <string name="general_info_rationale_install_source_unknown">Android 無法提供這個應用程式的安裝來源。還原裝置備份後，或使用某些製造商專用的安裝程式時，可能會發生這種情況。</string>
+    <string name="general_info_rationale_installer_package">執行安裝的應用程式套件名稱，例如 Google Play 的「com.android.vending」。</string>
+    <string name="general_info_rationale_install_initiator">發起安裝的應用程式。例如，從檔案安裝時可能是瀏覽器或檔案管理員，從商店安裝時則是應用程式商店。它可能與上方的安裝程式套件不同。</string>
+    <string name="general_info_rationale_install_originator">提供 APK 檔案的套件，僅在 Android 將它與發起安裝的應用程式分別回報時顯示。多數安裝不會提供這項資訊。</string>
+    <string name="general_info_rationale_first_installed">這個應用程式首次安裝到裝置上的日期與時間。</string>
+    <string name="general_info_rationale_last_updated">這個應用程式最近一次更新的日期與時間。</string>
+    <string name="general_info_rationale_last_used">使用者最近一次開啟這個應用程式的大約日期與時間。</string>
+    <string name="general_info_rationale_apk_directory">APK 檔案在裝置檔案系統中的儲存路徑。</string>
+    <string name="general_info_rationale_data_directory">應用程式在檔案系統中儲存私有資料、資料庫與共用偏好設定的路徑。</string>
+    <string name="general_info_rationale_install_location">開發人員宣告的偏好儲存位置：內部儲存空間、外部儲存空間或自動選擇。</string>
+    <string name="general_info_rationale_apk_size">已安裝 APK 檔案在儲存空間中占用的總大小，不包含應用程式資料、快取與執行時產生的檔案。多數從 Google Play 安裝的應用程式由基礎 APK 加上符合裝置語言與螢幕密度的其他 APK 組成；這個總大小包含所有這些檔案。</string>
+    <string name="general_info_rationale_total_size">APK、應用程式資料與快取檔案的總大小。需要使用情況存取權。</string>
+    <string name="general_info_rationale_native_library_abis">這個應用程式包含哪些處理器類型的已編譯原生程式碼。這項資訊來自 APK 本身的檔案，而非裝置回報的資料。</string>
+    <string name="general_info_native_library_device_support">這部裝置支援：%1$s。</string>
+    <string name="general_info_native_library_incompatible">這些處理器類型都不符合這部裝置支援的類型，因此應用程式的原生程式碼可能無法在此執行。</string>
+    <string name="components_title">元件</string>
+    <string name="components_error">無法載入元件</string>
+    <string name="components_type_activities">活動</string>
+    <string name="components_type_services">服務</string>
+    <string name="components_type_receivers">廣播接收器</string>
+    <string name="components_type_providers">內容供應器</string>
+    <string name="components_tag_exported">對外開放</string>
+    <string name="components_tag_launcher">啟動畫面</string>
+    <string name="components_detail_launcher">啟動畫面</string>
+    <string name="components_detail_launcher_explanation">輕觸應用程式圖示時，開啟的就是這個畫面。</string>
+    <string name="components_tag_unprotected">對外開放且無權限保護</string>
+    <string name="components_flag_stop_with_task">隨工作停止</string>
+    <string name="components_flag_stop_with_task_explanation">從最近使用的應用程式中滑除這個應用程式時，服務也會停止。</string>
+    <string name="components_flag_single_user">單一使用者</string>
+    <string name="components_flag_single_user_explanation">整部裝置只執行一份，不會為每個使用者設定檔各執行一份。</string>
+    <string name="components_flag_isolated_process">隔離程序</string>
+    <string name="components_flag_isolated_process_explanation">在沙箱中執行，本身不具備任何權限。</string>
+    <string name="components_flag_external_service">外部服務</string>
+    <string name="components_flag_external_service_explanation">其他應用程式可以在自己的程序中執行這個服務。</string>
+    <string name="components_flag_enabled">是</string>
+    <string name="components_detail_full_name">完整名稱</string>
+    <string name="components_detail_section_reachability">可存取性</string>
+    <string name="components_detail_section_details">詳細資訊</string>
+    <string name="components_detail_section_intent_filters">這個元件接受的請求</string>
+    <string name="components_detail_intent_filters_explanation">Android 與其他應用程式會根據這些宣告，判斷哪些請求、連結與內容可以傳送到這個元件。</string>
+    <string name="components_detail_intent_filters_unavailable">無法讀取這個應用程式的 Intent 篩選器。</string>
+    <string name="components_detail_intent_filters_open">查看 Intent 篩選器</string>
+    <plurals name="components_intent_filter_count">
+        <item quantity="other">%1$d 個 Intent 篩選器</item>
+    </plurals>
+    <string name="components_detail_intent_actions">動作</string>
+    <string name="components_detail_intent_actions_explanation">其他應用程式或 Android 要求這個元件執行的動作。</string>
+    <string name="components_detail_intent_categories">類別</string>
+    <string name="components_detail_intent_categories_explanation">這個篩選器允許的類別。請求指定的每個類別都必須列在這裡。</string>
+    <string name="components_detail_intent_data">連結與內容</string>
+    <string name="components_detail_intent_data_explanation">這個元件宣告可以處理的網址、檔案類型或其他內容。</string>
+    <string name="components_detail_intent_data_rule">%1$s：%2$s</string>
+    <string name="components_detail_intent_allowed_uri_parts">允許連結的條件</string>
+    <string name="components_detail_intent_allowed_uri_parts_explanation">連結必須符合這組中的所有條件，才會獲得允許。Android 會依 Manifest 中的順序評估各組條件。</string>
+    <string name="components_detail_intent_blocked_uri_parts">封鎖連結的條件</string>
+    <string name="components_detail_intent_blocked_uri_parts_explanation">這些條件定義了封鎖連結的比對規則。Android 會依 Manifest 中的順序，將它與篩選器的其他連結規則一併評估。</string>
+    <string name="components_detail_intent_auto_verify">驗證請求</string>
+    <string name="components_detail_intent_auto_verify_requested">已提出請求</string>
+    <string name="components_detail_intent_auto_verify_explanation">應用程式要求 Android 驗證其簽署身分是否獲准開啟這些網站連結。</string>
+    <string name="components_detail_intent_activity_priority">比對優先順序</string>
+    <string name="components_detail_intent_activity_priority_explanation">數值越高，這個活動越可能優先於其他符合條件的活動，但仍受 Android 的請求分派規則限制。</string>
+    <string name="components_detail_intent_receiver_priority">廣播優先順序</string>
+    <string name="components_detail_intent_receiver_priority_explanation">對有序廣播而言，數值越高，這個廣播接收器越可能先執行，但仍受 Android 的限制。</string>
+    <string name="components_detail_intent_declared_priority">宣告的優先順序</string>
+    <string name="components_detail_intent_declared_priority_explanation">Manifest 宣告了這個值，但 Android 不會用它來選擇符合條件的服務或內容供應器。</string>
+    <string name="components_detail_intent_order">傳送順序</string>
+    <string name="components_detail_intent_order_explanation">當這個應用程式有多個符合條件的篩選器時，會先考慮數值較高的篩選器。</string>
+    <string name="components_intent_data_scheme">網址配置</string>
+    <string name="components_intent_data_host">主機</string>
+    <string name="components_intent_data_port">通訊埠</string>
+    <string name="components_intent_data_path">精確路徑</string>
+    <string name="components_intent_data_path_prefix">路徑前綴</string>
+    <string name="components_intent_data_path_suffix">路徑後綴</string>
+    <string name="components_intent_data_path_pattern">路徑比對模式</string>
+    <string name="components_intent_data_path_advanced_pattern">進階路徑比對模式</string>
+    <string name="components_intent_data_scheme_specific_part">精確配置專屬部分</string>
+    <string name="components_intent_data_scheme_specific_part_prefix">配置專屬部分前綴</string>
+    <string name="components_intent_data_scheme_specific_part_suffix">配置專屬部分後綴</string>
+    <string name="components_intent_data_scheme_specific_part_pattern">配置專屬部分比對模式</string>
+    <string name="components_intent_data_scheme_specific_part_advanced_pattern">進階配置專屬部分比對模式</string>
+    <string name="components_intent_data_query">精確查詢字串</string>
+    <string name="components_intent_data_query_prefix">查詢字串前綴</string>
+    <string name="components_intent_data_query_suffix">查詢字串後綴</string>
+    <string name="components_intent_data_query_pattern">查詢字串比對模式</string>
+    <string name="components_intent_data_query_advanced_pattern">進階查詢字串比對模式</string>
+    <string name="components_intent_data_fragment">精確片段識別碼</string>
+    <string name="components_intent_data_fragment_prefix">片段識別碼前綴</string>
+    <string name="components_intent_data_fragment_suffix">片段識別碼後綴</string>
+    <string name="components_intent_data_fragment_pattern">片段識別碼比對模式</string>
+    <string name="components_intent_data_fragment_advanced_pattern">進階片段識別碼比對模式</string>
+    <string name="components_intent_data_mime_type">內容類型</string>
+    <string name="components_intent_data_mime_group">內容類型群組</string>
+    <string name="components_detail_exported">對外開放</string>
+    <string name="components_exported_yes">是</string>
+    <string name="components_exported_no">否</string>
+    <string name="components_exported_unprotected_explanation">這部裝置上的任何其他應用程式都可以啟動或繫結這個元件，不需要任何權限。</string>
+    <string name="components_exported_guarded_explanation">其他應用程式可以存取這個元件，但必須具備下方列出的權限。</string>
+    <string name="components_exported_launcher_explanation">這是正常情況，啟動器必須能存取這個元件，才能開啟應用程式。</string>
+    <string name="components_exported_no_explanation">只有這個應用程式可以存取此元件。</string>
+    <string name="components_detail_permission">所需權限</string>
+    <string name="components_detail_read_permission">讀取權限</string>
+    <string name="components_detail_write_permission">寫入權限</string>
+    <string name="components_detail_label">名稱</string>
+    <string name="components_detail_target_activity">目標活動</string>
+    <string name="components_detail_parent">上層活動</string>
+    <string name="components_detail_authority">主機名稱</string>
+    <string name="components_detail_section_path_permissions">路徑權限</string>
+    <string name="components_detail_path_permissions_explanation">這個內容供應器中特定路徑的規則。除了上方的一般讀取與寫入權限，個別路徑還可以另外授予或限制存取權。</string>
+    <string name="components_detail_path_permission_path">路徑</string>
+    <string name="components_detail_path_permission_open">不需要權限</string>
+    <string name="components_path_permission_type_literal">完全符合這個路徑</string>
+    <string name="components_path_permission_type_prefix">符合這個路徑及其下的所有路徑</string>
+    <string name="components_path_permission_type_simple_glob">使用萬用字元模式比對路徑</string>
+    <string name="components_path_permission_type_advanced_glob">使用進階萬用字元模式比對路徑</string>
+    <string name="components_path_permission_type_suffix">符合任何以此結尾的路徑</string>
+    <string name="certificates_title">簽署憑證</string>
+    <string name="certificates_error">無法載入簽署憑證</string>
+    <string name="certificates_empty">找不到簽署憑證</string>
+    <string name="certificates_card_position">%1$s（第 %2$d 個，共 %3$d 個）</string>
+    <string name="certificates_signer_position">簽署者 %1$d（共 %2$d 位）</string>
+    <string name="certificates_current_certificate">目前的簽署憑證</string>
+    <string name="certificates_current_certificates">目前的簽署憑證</string>
+    <string name="certificates_history">簽署紀錄</string>
+    <plurals name="certificates_history_description">
+        <item quantity="other">Android 已驗證在目前金鑰之前使用過的 %d 把簽署金鑰。最近使用過的舊金鑰會排在最前面。</item>
+    </plurals>
+    <string name="certificates_original_signing_key">最初的簽署金鑰</string>
+    <string name="certificates_previous_signing_key">先前的簽署金鑰</string>
+    <string name="certificates_debug_title">偵錯憑證</string>
+    <string name="certificates_debug_description">這個應用程式使用 Android 共用的偵錯金鑰，而非私有的發布金鑰。這適合用於測試，但不適合正式發布的應用程式。</string>
+    <string name="certificates_signer">簽署者</string>
+    <string name="certificates_details">憑證詳細資訊</string>
+    <string name="certificates_organization">組織</string>
+    <string name="certificates_name">名稱</string>
+    <string name="certificates_country">國家</string>
+    <string name="certificates_issuer">簽發者</string>
+    <string name="certificates_unknown_signer">不明簽署者</string>
+    <string name="certificates_self_signed">自我簽署</string>
+    <string name="certificates_self_signed_value">簽署者自行簽發了這張憑證</string>
+    <string name="certificates_self_signed_explanation">Android 應用程式使用自我簽署憑證是正常情況。需要確認發布者身分時，請將憑證指紋與可信來源提供的指紋比對。</string>
+    <string name="certificates_validity">有效期間</string>
+    <string name="certificates_date_range">%1$s 至 %2$s</string>
+    <string name="certificates_valid">有效</string>
+    <string name="certificates_expired">已過期</string>
+    <string name="certificates_not_yet_valid">尚未生效</string>
+    <string name="certificates_valid_explanation">憑證目前在其標示的有效期間內。</string>
+    <string name="certificates_expired_explanation">簽署憑證過期後，Android 仍可能接受已安裝的應用程式。如果應用程式或更新來源出乎預期，請將指紋與可信來源提供的指紋比對。</string>
+    <string name="certificates_not_yet_valid_explanation">憑證的有效期間尚未開始。信任這個應用程式之前，請檢查裝置日期並驗證指紋。</string>
+    <string name="certificates_current_signers">目前的簽署者</string>
+    <string name="certificates_single_signer">單一簽署者</string>
+    <string name="certificates_multiple_signers">多位簽署者</string>
+    <string name="certificates_single_signer_explanation">這個應用程式目前由一張憑證簽署。如果開發人員再次更換簽署金鑰，Android 會依據應用程式可信的簽署紀錄驗證這項變更。</string>
+    <string name="certificates_multiple_signers_explanation">這個應用程式目前由多張憑證簽署。Android 要求更新版本使用相同的一組簽署者。</string>
+    <string name="certificates_scheme">簽署方案</string>
+    <string name="certificates_scheme_v1">v1</string>
+    <string name="certificates_scheme_v2">v2</string>
+    <string name="certificates_scheme_v3">v3</string>
+    <string name="certificates_scheme_v3_1">v3.1</string>
+    <string name="certificates_scheme_explanation">簽署方案是 Android 驗證這個 APK 時使用的簽章格式。較新的方案（v2 及以上版本）也會保護整個檔案，而不只是個別項目，因此較新的應用程式若僅使用 v1 簽署，值得進一步確認。下方的演算法描述的是簽署憑證本身如何被簽署，並非 APK 的簽署方案。</string>
+    <string name="certificates_algorithm">演算法</string>
+    <string name="certificates_algorithm_strong">強</string>
+    <string name="certificates_algorithm_weak">弱</string>
+    <string name="certificates_algorithm_unknown">不明</string>
+    <string name="certificates_algorithm_strong_explanation">%1$s 使用 SHA-256 或更強的摘要演算法。目前沒有已知且實際可行的碰撞攻擊，但整體安全性也取決於簽署金鑰的類型與長度。</string>
+    <string name="certificates_algorithm_sha1_explanation">%1$s 使用 SHA-1。SHA-1 已無法抵抗碰撞攻擊，攻擊者可以製造出具有相同摘要的不同資料。新的簽署憑證應使用 SHA-256 或更強的演算法。</string>
+    <string name="certificates_algorithm_md5_explanation">%1$s 使用 MD5。MD5 無法抵抗碰撞攻擊，用於簽署憑證並不安全。新的簽署憑證應使用 SHA-256 或更強的演算法。</string>
+    <string name="certificates_algorithm_md2_explanation">%1$s 使用 MD2。MD2 已過時，且容易受到實際可行的攻擊，因此用於簽署憑證並不安全。新的簽署憑證應使用 SHA-256 或更強的演算法。</string>
+    <string name="certificates_algorithm_unknown_explanation">無法僅憑演算法名稱判斷 %1$s 的安全強度。金鑰類型與長度也可能影響安全性。</string>
+    <string name="certificates_serial">序號</string>
+    <string name="certificates_serial_explanation">憑證簽發者會指派這個號碼來識別憑證。請搭配簽發者名稱使用；這不是憑證指紋。</string>
+    <string name="certificates_certificate_fingerprints">憑證指紋</string>
+    <string name="certificates_public_key_fingerprints">公開金鑰指紋</string>
+    <string name="certificates_fingerprint">指紋</string>
+    <string name="certificates_sha256">SHA-256</string>
+    <string name="certificates_sha1">SHA-1</string>
+    <string name="certificates_md5">MD5</string>
+    <string name="certificates_explain">說明 %1$s</string>
+    <string name="requirements_title">裝置需求</string>
+    <string name="requirements_error">無法讀取這個應用程式的裝置需求。</string>
+    <string name="requirements_empty">這個應用程式未宣告任何裝置需求。</string>
+    <string name="requirements_section_header">%1$s · %2$d</string>
+    <string name="requirements_section_required">必要</string>
+    <string name="requirements_section_required_explanation">不具備這些功能，就無法安裝應用程式。</string>
+    <string name="requirements_section_optional">選用</string>
+    <string name="requirements_section_optional_explanation">裝置提供時才會使用。</string>
+    <plurals name="requirements_missing_summary">
+        <item quantity="other">這部裝置無法滿足 %1$d 項需求</item>
+    </plurals>
+    <string name="requirements_missing">這部裝置不具備</string>
+    <string name="requirements_missing_version">需要 %1$s · 這部裝置支援 %2$s</string>
+    <string name="requirements_open_gl_es">OpenGL ES %1$s</string>
+    <string name="requirements_label_with_version">%1$s %2$s</string>
+    <string name="requirements_detail_identifier">識別碼</string>
+    <string name="requirements_detail_necessity">需求狀態</string>
+    <string name="requirements_detail_availability">這部裝置的支援情況</string>
+    <string name="requirements_detail_version">版本</string>
+    <string name="requirements_detail_version_comparison">需要 %1$s · 這部裝置支援 %2$s</string>
+    <string name="requirements_availability_available">可用</string>
+    <string name="requirements_availability_available_explanation">這部裝置提供此功能，應用程式可以使用。</string>
+    <string name="requirements_availability_missing">不可用</string>
+    <string name="requirements_availability_missing_required_explanation">應用程式將此功能列為必要需求，但這部裝置並未提供。部分功能可能無法運作，重新安裝時通常也會受到限制。</string>
+    <string name="requirements_availability_missing_optional_explanation">應用程式即使沒有此功能也能運作。依賴此功能的部分會維持停用。</string>
+    <string name="requirements_availability_unknown">不明</string>
+    <string name="requirements_availability_unknown_explanation">無法讀取這部裝置的功能清單，因此無法判斷是否支援。</string>
+    <string name="requirement_camera">相機</string>
+    <string name="requirement_camera_any">前置或後置相機</string>
+    <string name="requirement_camera_front">前置相機</string>
+    <string name="requirement_camera_flash">相機閃光燈</string>
+    <string name="requirement_camera_autofocus">相機自動對焦</string>
+    <string name="requirement_camera_external">外接相機</string>
+    <string name="requirement_camera_level_full">相機手動控制</string>
+    <string name="requirement_camera_raw">RAW 照片拍攝</string>
+    <string name="requirement_microphone">麥克風</string>
+    <string name="requirement_bluetooth">藍牙</string>
+    <string name="requirement_bluetooth_le">低功耗藍牙</string>
+    <string name="requirement_wifi">Wi-Fi</string>
+    <string name="requirement_wifi_direct">Wi-Fi Direct</string>
+    <string name="requirement_wifi_aware">Wi-Fi Aware</string>
+    <string name="requirement_nfc">NFC</string>
+    <string name="requirement_nfc_hce">NFC 卡片模擬</string>
+    <string name="requirement_location">位置</string>
+    <string name="requirement_location_gps">GPS</string>
+    <string name="requirement_location_network">行動網路與 Wi-Fi 定位</string>
+    <string name="requirement_telephony">行動網路</string>
+    <string name="requirement_telephony_gsm">GSM 行動網路</string>
+    <string name="requirement_telephony_cdma">CDMA 行動網路</string>
+    <string name="requirement_touchscreen">觸控螢幕</string>
+    <string name="requirement_touchscreen_multitouch">多點觸控螢幕</string>
+    <string name="requirement_touchscreen_multitouch_distinct">雙指多點觸控</string>
+    <string name="requirement_touchscreen_multitouch_jazzhand">五指多點觸控</string>
+    <string name="requirement_faketouch">滑鼠等指標輸入</string>
+    <string name="requirement_screen_portrait">直向螢幕</string>
+    <string name="requirement_screen_landscape">橫向螢幕</string>
+    <string name="requirement_sensor_accelerometer">加速度計</string>
+    <string name="requirement_sensor_gyroscope">陀螺儀</string>
+    <string name="requirement_sensor_compass">指南針</string>
+    <string name="requirement_sensor_light">光線感應器</string>
+    <string name="requirement_sensor_proximity">近接感應器</string>
+    <string name="requirement_sensor_barometer">氣壓計</string>
+    <string name="requirement_sensor_step_counter">計步器</string>
+    <string name="requirement_sensor_step_detector">步伐偵測器</string>
+    <string name="requirement_sensor_heart_rate">心率感應器</string>
+    <string name="requirement_fingerprint">指紋辨識器</string>
+    <string name="requirement_face_unlock">臉部解鎖</string>
+    <string name="requirement_usb_host">USB 主機模式</string>
+    <string name="requirement_usb_accessory">USB 配件模式</string>
+    <string name="requirement_audio_output">喇叭或耳機輸出</string>
+    <string name="requirement_audio_low_latency">低延遲音訊</string>
+    <string name="requirement_audio_pro">專業音訊</string>
+    <string name="requirement_gamepad">遊戲控制器</string>
+    <string name="requirement_vulkan">Vulkan 圖形</string>
+    <string name="requirement_opengles_aep">OpenGL ES 擴充套件</string>
+    <string name="requirement_infrared">紅外線發射器</string>
+    <string name="requirement_ram_low">低記憶體裝置</string>
+    <string name="requirement_ram_normal">標準記憶體裝置</string>
+    <string name="requirement_type_watch">手錶</string>
+    <string name="requirement_type_television">電視</string>
+    <string name="requirement_type_automotive">車用螢幕</string>
+    <string name="requirement_type_pc">桌上型電腦</string>
+    <string name="requirement_vr">高效能 VR</string>
+    <string name="requirement_vr_mode">VR 模式</string>
+    <string name="requirement_vr_headtracking">VR 頭部追蹤</string>
+    <string name="requirement_webview">系統網頁檢視</string>
+    <string name="requirement_print">列印</string>
+    <string name="requirement_midi">MIDI</string>
+    <string name="requirement_leanback">電視介面</string>
+    <string name="requirement_live_wallpaper">動態桌布</string>
+    <string name="requirement_app_widgets">主畫面小工具</string>
+    <string name="requirement_home_screen">替代主畫面</string>
+    <string name="requirement_input_methods">自訂鍵盤</string>
+    <string name="requirement_device_admin">裝置管理</string>
+    <string name="requirement_managed_users">多位使用者或工作設定檔</string>
+    <string name="requirement_verified_boot">驗證開機</string>
+    <string name="requirement_picture_in_picture">子母畫面</string>
+    <string name="requirement_companion_device">配件裝置配對</string>
+    <string name="requirement_autofill">自動填入</string>
+    <string name="requirement_backup">系統備份</string>
+    <string name="requirement_sip_voip">網路通話</string>
+    <string name="requirement_connection_service">通話應用程式整合</string>
+    <string name="splitapks_title">分割 APK</string>
+    <plurals name="splitapks_heading">
+        <item quantity="other">已安裝 %1$d 個分割 APK</item>
+    </plurals>
+    <string name="splitapks_explanation">這個應用程式由基礎 APK 加上這些額外的分割 APK 安裝而成。Google Play 使用這種傳送格式，只提供裝置所需的程式碼與資源。</string>
+    <string name="splitapks_error">無法載入分割 APK</string>
+    <string name="splitapks_empty">這個應用程式沒有已安裝的分割 APK。</string>
+    <string name="splitapks_kind_feature">功能模組</string>
+    <string name="splitapks_kind_abi">CPU 架構</string>
+    <string name="splitapks_kind_density">螢幕密度</string>
+    <string name="splitapks_kind_language">語言</string>
+    <string name="splitapks_detail_type">類型</string>
+    <string name="splitapks_detail_identifier">識別碼</string>
+    <string name="splitapks_detail_file_name">檔案名稱</string>
+    <string name="splitapks_detail_size">大小</string>
+    <string name="splitapks_detail_path">完整路徑</string>
+    <string name="splitapks_abi_arm64_v8a">ARM64（64 位元）</string>
+    <string name="splitapks_abi_armeabi_v7a">ARM（32 位元）</string>
+    <string name="splitapks_abi_armeabi">ARM（舊版，32 位元）</string>
+    <string name="splitapks_abi_x86_64">Intel x86（64 位元）</string>
+    <string name="splitapks_abi_x86">Intel x86（32 位元）</string>
+    <string name="splitapks_abi_mips64">MIPS（64 位元）</string>
+    <string name="splitapks_abi_mips">MIPS（32 位元）</string>
+    <string name="splitapks_density_ldpi">低密度螢幕</string>
+    <string name="splitapks_density_mdpi">中密度螢幕</string>
+    <string name="splitapks_density_tvdpi">電視密度螢幕</string>
+    <string name="splitapks_density_hdpi">高密度螢幕</string>
+    <string name="splitapks_density_xhdpi">超高密度螢幕</string>
+    <string name="splitapks_density_xxhdpi">特高密度螢幕</string>
+    <string name="splitapks_density_xxxhdpi">極高密度螢幕</string>
+    <string name="splitapks_density_nodpi">不受密度影響的資源</string>
+    <string name="splitapks_density_anydpi">任何密度（向量資源）</string>
+    <string name="nativelibraries_title">原生程式庫檔案</string>
+    <plurals name="nativelibraries_heading">
+        <item quantity="other">包含 %1$d 個原生程式庫</item>
+    </plurals>
+    <string name="nativelibraries_explanation">這個應用程式包含的所有原生程式庫，每個檔案名稱各列一行，即使同一個程式庫有為不同處理器架構建置的版本，也只列一行。</string>
+    <string name="nativelibraries_error">無法載入原生程式庫</string>
+    <string name="nativelibraries_empty">這個應用程式未包含原生程式庫。</string>
+    <string name="nativelibraries_supported">這部裝置支援</string>
+    <string name="nativelibraries_not_supported">這部裝置不支援</string>
+    <string name="nativelibraries_not_supported_explanation">這個程式庫建置時所針對的處理器類型，都不符合這部裝置支援的類型，因此這些程式碼可能無法在此執行。</string>
+    <string name="nativelibraries_detail_device_support">這部裝置的支援情況</string>
+    <string name="nativelibraries_detail_abis">適用的處理器類型</string>
+    <string name="nativelibraries_detail_total_size">總大小</string>
+    <string name="nativelibraries_detail_section_variants">各處理器類型的版本</string>
+    <string name="nativelibraries_detail_variant_source">包含於 %1$s</string>
+    <string name="manifest_title">Android Manifest</string>
+    <string name="manifest_error">無法讀取 Manifest</string>
+    <plurals name="manifest_line_count">
+        <item quantity="other">%1$d 行</item>
+    </plurals>
+    <plurals name="manifest_base_split_note">
+        <item quantity="other">目前顯示基礎 APK 的 Manifest。這個應用程式另有 %1$d 個已安裝的分割 APK，各自包含自己的 Manifest。</item>
+    </plurals>
+    <string name="components_launch">啟動這個元件</string>
+    <string name="components_launch_started">已送出啟動請求，後續行為由應用程式決定。</string>
+    <string name="components_launch_broadcast_sent">已送出廣播，無法得知是否已處理。</string>
+    <string name="components_launch_failed">系統拒絕啟動這個元件。</string>
+    <string name="certificates_validity_on_date_valid">當天有效</string>
+    <string name="certificates_validity_on_date_expired">當天已過期</string>
+    <string name="certificates_validity_on_date_not_yet">當天尚未生效</string>
+    <string name="certificates_validity_on_date_valid_explanation">Apk Analyzer 記錄這張憑證的當天，憑證仍在有效期間內。</string>
+    <string name="certificates_validity_on_date_expired_explanation">Apk Analyzer 記錄這張憑證的當天，憑證已超過有效期限。</string>
+    <string name="certificates_validity_on_date_not_yet_explanation">Apk Analyzer 記錄這張憑證的當天，憑證的有效期間尚未開始。</string>
+    <string name="app_info_unavailable">這部裝置無法開啟應用程式資訊</string>
+</resources>

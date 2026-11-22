@@ -22,6 +22,8 @@ sentence structure.
 | Italian | `values-it` | one, many, other | `many` same as Spanish |
 | Japanese | `values-ja` | other | No grammatical plural; only `quantity="other"` is ever selected |
 | Chinese (Simplified) | `values-zh-rCN` | other | |
+| Chinese (Traditional, Taiwan) | `values-zh-rTW` | other | Taiwan vocabulary and standard written Traditional Chinese |
+| Chinese (Traditional, Hong Kong) | `values-zh-rHK` | other | Hong Kong vocabulary and standard written Traditional Chinese, not colloquial Cantonese |
 | Korean | `values-ko` | other | |
 | Vietnamese | `values-vi` | other | |
 | Indonesian | `values-in` | other | Android's legacy resource qualifier for Indonesian is `in`, not `id` |
@@ -36,6 +38,19 @@ sentence structure.
 
 If asked to add a language outside this table, confirm the language and its folder qualifier with the
 user before creating files — don't guess a BCP-47 tag.
+
+### Traditional Chinese Regions
+
+Taiwan and Hong Kong use the same script but have different vocabulary. Translate from English
+with the Slovak control in both regions; do not convert Simplified Chinese or copy the Taiwan file
+unchanged into Hong Kong. Shared wording can match, but review each string for regional usage.
+For example, Taiwan uses `軟體`, `硬體`, `隱私`, `網路`, `簡訊`, and `憑證`; Hong Kong uses
+`軟件`, `硬件`, `私隱`, `網絡`, `短訊`, and `證書`. Keep platform terms and the pinned
+English labels consistent with the rules below rather than replacing words mechanically.
+
+Google's Traditional Chinese Android developer documentation uses `hl=zh-tw`; it is a platform
+terminology reference, not a separate Hong Kong localization. When a page-fetch tool returns English
+despite that locale, inspect the translated HTML before concluding that the term is not localized.
 
 ## Control Language: Slovak (`values-sk`)
 
@@ -69,8 +84,8 @@ from Android Studio, developer.android.com, or the Play Console in their languag
 
 - **Google officially localizes Android developer docs for**: Spanish, Japanese, Korean, Portuguese
   (Brazil), Russian, Chinese (Simplified/Traditional), Indonesian, Turkish, Vietnamese — largely
-  overlapping with this table's `es`, `ja`, `ko`, `pt-rBR`, `ru`, `zh-rCN`, `in`, `tr`, `vi`. For
-  these, use the exact term developer.android.com uses in that locale for `Activity`/`Service`/
+  overlapping with this table's `es`, `ja`, `ko`, `pt-rBR`, `ru`, `zh-rCN`, `zh-rTW`, `zh-rHK`,
+  `in`, `tr`, `vi`. For these, use the exact term developer.android.com uses in that locale for `Activity`/`Service`/
   `Receiver`/`Provider`/etc. Verify the current term rather than recalling it from memory or an old
   session — Google's supported-docs-language list and its terminology both drift over time.
 - **Not officially localized**: German, French, Italian, Polish, Slovak, Czech, Ukrainian, Arabic,
@@ -99,10 +114,12 @@ an audit:
   `permission_label_ad_custom_audience` → `Ad Audiences`, `permission_label_ad_topics` → `Ad Topics`
   (all `core/app-permissions`).
 - `permission_label_bluetooth_advertise` → `Bluetooth Advertise` (`core/app-permissions`).
-- `permissions_level_dangerous` / `_signature` / `_internal` / `_normal` (`feature/app-detail/phone`)
+- `permissions_level_dangerous` / `_signature` / `_internal` / `_normal` (`core/app-permissions`)
   and their `browse_protection_level_*` counterparts (`feature/browse/phone`) → `Dangerous` /
-  `Signature` / `Internal` / `Normal`.
-- `app_detail_target_sdk` and `general_info_target_sdk` (`feature/app-detail/phone`) and
+  `Signature` / `Internal` / `Normal`, except in Taiwan and Hong Kong Traditional Chinese.
+  In `values-zh-rTW` and `values-zh-rHK`, translate these labels and use the same wording in
+  app detail and browsing.
+- `app_detail_target_sdk` (`feature/app-detail/phone`), `general_info_target_sdk` (`core/apps`), and
   `tv_apps_sort_target_sdk` (`feature/apps/tv`) → `Target SDK`. `sort_target_sdk`
   (`feature/apps/phone`) → `Target Android SDK` (matches that key's own English source, which
   includes "Android" where the others don't — copy each key's own default text verbatim rather than
@@ -114,8 +131,10 @@ gets a normal translation — don't extend the pattern by inference.
 
 ## Scope: One Module at a Time
 
-Every module with a `values/strings.xml` gets its own `values-<qualifier>/strings.xml` with the exact
-same key set. 
+Every module with translatable resources in `values/strings.xml` gets its own
+`values-<qualifier>/strings.xml` with the exact same translatable key set. Resources marked
+`translatable="false"` stay in the base file only. Do not create an empty locale file for a module
+whose only resources are non-translatable.
 
 Translate module by module. Don't merge keys from different modules into one file, and don't create a
 locale folder for a module that has no `values/strings.xml`.

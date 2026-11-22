@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">設定</string>
+    <string name="settings_appearance">外觀</string>
+    <string name="settings_color_scheme">色彩模式</string>
+    <string name="settings_color_scheme_day">淺色</string>
+    <string name="settings_color_scheme_night">深色</string>
+    <string name="settings_color_scheme_follow_system">依系統設定</string>
+    <string name="settings_fingerprint_format">指紋格式</string>
+    <string name="settings_fingerprint_format_colon_separated">以冒號分隔</string>
+    <string name="settings_fingerprint_format_continuous">不加分隔符號</string>
+    <string name="settings_apps_section">應用程式</string>
+    <string name="settings_recently_viewed_toggle">最近查看的應用程式</string>
+    <string name="settings_language_section">語言</string>
+    <string name="settings_language_app_language">應用程式語言</string>
+    <string name="settings_language_system_default">系統預設</string>
+</resources>

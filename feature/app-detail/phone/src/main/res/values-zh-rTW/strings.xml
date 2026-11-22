@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="content_description_back">返回</string>
+    <string name="app_detail_title">應用程式詳細資料</string>
+    <string name="app_detail_ai_summary_title">AI 摘要</string>
+    <string name="app_detail_ai_summary_download_action">下載裝置端 AI</string>
+    <string name="app_detail_ai_summary_downloading">正在下載裝置端 AI…</string>
+    <string name="app_detail_system_app">系統應用程式</string>
+    <string name="app_detail_overview_section">總覽</string>
+    <string name="app_detail_actions_section">快速操作</string>
+    <string name="app_detail_version">版本</string>
+    <string name="app_detail_apk_size">APK 大小</string>
+    <string name="app_detail_total_size">總大小</string>
+    <string name="app_detail_target_sdk">Target SDK</string>
+    <string name="app_detail_updated">更新日期</string>
+    <plurals name="app_detail_overview_more_details">
+        <item quantity="other">「一般資訊」中還有 %1$d 項詳細資料</item>
+    </plurals>
+    <plurals name="app_detail_overview_more_details_with_date">
+        <item quantity="other">「一般資訊」中還有 %1$d 項詳細資料，包括安裝日期</item>
+    </plurals>
+    <plurals name="app_detail_overview_more_details_with_history">
+        <item quantity="other">「一般資訊」中還有 %1$d 項詳細資料，包括安裝記錄</item>
+    </plurals>
+    <plurals name="app_detail_overview_more_details_with_network_security">
+        <item quantity="other">「一般資訊」中還有 %1$d 項詳細資料，包括網路安全設定</item>
+    </plurals>
+    <plurals name="app_detail_overview_more_details_with_split_apks">
+        <item quantity="other">「一般資訊」中還有 %1$d 項詳細資料，包括分割 APK</item>
+    </plurals>
+    <string name="app_detail_yes">是</string>
+    <string name="app_detail_no">否</string>
+    <string name="app_detail_error">無法載入應用程式詳細資料</string>
+    <string name="app_detail_error_unsupported_apk">此檔案不是有效的 APK，無法分析</string>
+    <string name="app_detail_retry">再試一次</string>
+    <string name="app_detail_action_manifest">Manifest</string>
+    <string name="app_detail_action_export_apk">匯出 APK</string>
+    <string name="app_detail_action_save_icon">儲存圖示</string>
+    <string name="app_detail_action_summary">摘要</string>
+    <string name="app_detail_action_copy_summary">複製</string>
+    <string name="app_detail_action_share_summary">分享</string>
+    <string name="app_detail_action_export_inventory">匯出詳細資料</string>
+    <string name="app_detail_summary_sheet_title">應用程式摘要</string>
+    <string name="app_detail_action_play_store">Play 商店</string>
+    <string name="app_detail_action_app_info">應用程式資訊</string>
+    <string name="app_detail_action_saving">正在儲存…</string>
+    <string name="app_detail_worth_knowing">值得留意</string>
+    <string name="app_detail_apk_saved">已儲存 %1$s</string>
+    <string name="app_detail_split_apk_saved_title">已儲存基礎 APK</string>
+    <string name="app_detail_split_apk_saved_description">已儲存 %1$s。此應用程式使用分割 APK，因此這個檔案不包含已安裝應用程式的完整內容。您可以檢視此檔案，但單獨安裝可能會失敗。</string>
+    <string name="app_detail_split_apk_saved_close">關閉</string>
+    <string name="app_detail_icon_saved">已儲存 %1$s</string>
+    <string name="app_detail_apk_save_failed">無法儲存 APK</string>
+    <string name="app_detail_icon_save_failed">無法儲存圖示</string>
+    <string name="app_detail_document_picker_unavailable">沒有可選擇儲存位置的應用程式</string>
+    <string name="app_detail_summary_copied">已將摘要複製到剪貼簿</string>
+    <string name="app_detail_summary_clip_label">%1$s 摘要</string>
+    <string name="app_detail_share_unavailable">沒有可處理分享的應用程式</string>
+    <string name="app_detail_summary_line">%1$s: %2$s</string>
+    <string name="app_detail_summary_header">%1$s (%2$s)</string>
+    <string name="app_detail_summary_version">%1$s (%2$d)</string>
+    <string name="app_detail_summary_signing_label">簽署</string>
+    <string name="app_detail_summary_permissions">%1$s · %2$s</string>
+    <string name="app_detail_summary_permissions_granted">%1$s · %2$s · %3$s</string>
+    <plurals name="app_detail_summary_permissions_requested">
+        <item quantity="other">已要求 %1$d 項權限</item>
+    </plurals>
+    <plurals name="app_detail_summary_permissions_dangerous">
+        <item quantity="other">%1$d 項危險權限</item>
+    </plurals>
+    <plurals name="app_detail_summary_permissions_granted_count">
+        <item quantity="other">已授予 %1$d 項權限</item>
+    </plurals>
+    <string name="app_detail_permissions_section">權限</string>
+    <string name="app_detail_total_permissions">權限總數</string>
+    <string name="app_detail_dangerous_permissions">危險權限</string>
+    <string name="app_detail_view_permissions">檢視權限</string>
+    <string name="app_detail_permissions_none">未要求任何權限</string>
+    <string name="app_detail_permissions_no_dangerous">未要求任何敏感權限</string>
+    <string name="app_detail_permissions_none_granted">未授予任何敏感權限</string>
+    <plurals name="app_detail_permissions_granted_summary">
+        <item quantity="other">已授予 %1$d 項敏感權限，共 %2$d 項</item>
+    </plurals>
+    <plurals name="app_detail_permissions_dangerous_summary">
+        <item quantity="other">已要求 %1$d 項敏感權限</item>
+    </plurals>
+    <plurals name="app_detail_permissions_total">
+        <item quantity="other">總共要求 %1$d 項權限</item>
+    </plurals>
+    <plurals name="app_detail_permissions_requested_count">
+        <item quantity="other">已要求 %d 項權限</item>
+    </plurals>
+    <plurals name="app_detail_permissions_sensitive_count">
+        <item quantity="other">%d 項敏感權限</item>
+    </plurals>
+    <string name="app_detail_count_pair">%1$s · %2$s</string>
+    <string name="app_detail_components_section">元件</string>
+    <string name="app_detail_activities">活動</string>
+    <string name="app_detail_services">服務</string>
+    <string name="app_detail_broadcast_receivers">廣播接收器</string>
+    <string name="app_detail_content_providers">內容供應器</string>
+    <string name="app_detail_certificates_section">憑證</string>
+    <string name="app_detail_certificates_count">憑證</string>
+    <string name="app_detail_view_details">檢視詳細資料</string>
+    <string name="app_detail_features_section">裝置需求</string>
+    <plurals name="app_detail_features_required_count">
+        <item quantity="other">%d 項必要功能</item>
+    </plurals>
+    <plurals name="app_detail_features_optional_count">
+        <item quantity="other">%d 項選用功能</item>
+    </plurals>
+    <string name="app_detail_features_all_met">此裝置符合應用程式的所有需求</string>
+    <string name="app_detail_features_none">此應用程式未宣告任何裝置需求</string>
+    <plurals name="app_detail_features_unmet">
+        <item quantity="other">此裝置無法符合 %1$d 項需求</item>
+    </plurals>
+    <string name="app_detail_certificate_signature_section">憑證</string>
+    <string name="app_detail_certificate_signed_by">由 %1$s 簽署</string>
+    <string name="app_detail_certificate_unknown_signer">簽署者不明</string>
+    <string name="app_detail_certificate_sha256_fingerprint">SHA-256 指紋</string>
+    <string name="app_detail_certificate_debug">偵錯憑證</string>
+    <string name="manifest_search">搜尋 Manifest</string>
+    <string name="manifest_expand">展開 Manifest</string>
+    <string name="manifest_collapse">收合 Manifest</string>
+    <string name="manifest_no_matches">Manifest 中沒有任何一行包含「%1$s」。</string>
+    <plurals name="manifest_match_count">
+        <item quantity="other">%1$d 行符合 · 共 %2$d 行</item>
+    </plurals>
+    <string name="certificates_copied">已複製到剪貼簿</string>
+    <string name="certificates_copy">複製%1$s</string>
+    <string name="certificates_expand_public_key">顯示公開金鑰指紋</string>
+    <string name="certificates_collapse_public_key">隱藏公開金鑰指紋</string>
+    <plurals name="permissions_filter_hint">
+        <item quantity="other">篩選 %1$d 項權限</item>
+    </plurals>
+    <string name="permissions_scope_sheet_title">顯示</string>
+    <string name="permissions_filter_protection_level">保護等級</string>
+    <string name="permissions_filter_grant_state">授權狀態</string>
+    <string name="permissions_filter_multiple_selection">%1$s +%2$d</string>
+    <string name="permissions_section_header">%1$s · %2$d</string>
+    <string name="permissions_empty_query">沒有符合「%1$s」的權限。</string>
+    <string name="permissions_empty_filters">沒有符合所選篩選條件的權限。</string>
+    <string name="permissions_empty_scope">此應用程式未要求任何權限。</string>
+    <string name="permissions_clear_narrowing">清除篩選條件</string>
+    <string name="components_scope_sheet_title">顯示</string>
+    <string name="components_scope_all">所有元件</string>
+    <string name="components_scope_activities">活動</string>
+    <string name="components_scope_services">服務</string>
+    <string name="components_scope_receivers">廣播接收器</string>
+    <string name="components_scope_providers">內容供應器</string>
+    <plurals name="components_filter_hint_all">
+        <item quantity="other">篩選 %1$d 個元件</item>
+    </plurals>
+    <plurals name="components_filter_hint_activities">
+        <item quantity="other">篩選 %1$d 個活動</item>
+    </plurals>
+    <plurals name="components_filter_hint_services">
+        <item quantity="other">篩選 %1$d 個服務</item>
+    </plurals>
+    <plurals name="components_filter_hint_receivers">
+        <item quantity="other">篩選 %1$d 個廣播接收器</item>
+    </plurals>
+    <plurals name="components_filter_hint_providers">
+        <item quantity="other">篩選 %1$d 個內容供應器</item>
+    </plurals>
+    <string name="components_filter_exported">已匯出</string>
+    <string name="components_filter_unprotected">未受保護</string>
+    <string name="components_section_header">%1$s · %2$d</string>
+    <string name="components_empty_query">沒有符合「%1$s」的元件。</string>
+    <string name="components_empty_filters">沒有符合所選篩選條件的元件。</string>
+    <string name="components_empty_scope">此應用程式未宣告這類元件。</string>
+    <string name="components_clear_narrowing">清除篩選條件</string>
+    <string name="intent_filters_title">Intent 篩選器</string>
+    <string name="intent_filters_error">無法載入 Intent 篩選器</string>
+    <string name="intent_filters_component_heading">%1$s 宣告的要求模式</string>
+    <string name="intent_filters_explanation">每個項目都是此元件宣告的要求模式。其他應用程式能否使用，也取決於元件是否可供存取，以及所需的權限。</string>
+    <plurals name="intent_filters_search_hint">
+        <item quantity="other">搜尋 %1$d 個 Intent 篩選器</item>
+    </plurals>
+    <string name="intent_filters_filter_fallback">Intent 篩選器</string>
+    <string name="intent_filters_purpose_launcher">應用程式啟動器入口</string>
+    <string name="intent_filters_purpose_tv_launcher">電視啟動器入口</string>
+    <string name="intent_filters_purpose_main">主入口要求</string>
+    <string name="intent_filters_purpose_view">連結或內容要求</string>
+    <string name="intent_filters_purpose_share">分享內容要求</string>
+    <string name="intent_filters_purpose_send_to">傳送給指定收件人的訊息要求</string>
+    <string name="intent_filters_purpose_edit">編輯內容要求</string>
+    <string name="intent_filters_purpose_choose_content">選擇內容要求</string>
+    <string name="intent_filters_purpose_search">搜尋要求</string>
+    <string name="intent_filters_purpose_call">撥打電話要求</string>
+    <string name="intent_filters_purpose_device_start">裝置啟動廣播</string>
+    <string name="intent_filters_purpose_app_change">已安裝應用程式變更廣播</string>
+    <string name="intent_filters_purpose_power">充電狀態廣播</string>
+    <string name="intent_filters_purpose_multiple">接受多種要求類型</string>
+    <string name="intent_filters_purpose_activity_other">自訂活動要求</string>
+    <string name="intent_filters_purpose_receiver_other">自訂廣播</string>
+    <string name="intent_filters_purpose_service_other">自訂服務要求</string>
+    <string name="intent_filters_purpose_provider_other">自訂內容供應器要求</string>
+    <string name="intent_filters_tag_verified">已要求驗證</string>
+    <string name="intent_filters_tag_blocked_rules">封鎖連結規則</string>
+    <string name="intent_filters_empty">此元件未宣告任何 Intent 篩選器。</string>
+    <string name="intent_filters_empty_query">沒有符合「%1$s」的 Intent 篩選器。</string>
+    <string name="intent_filters_clear_search">清除搜尋</string>
+    <plurals name="splitapks_search_hint">
+        <item quantity="other">搜尋 %1$d 個分割 APK</item>
+    </plurals>
+    <string name="splitapks_empty_query">沒有符合「%1$s」的分割 APK。</string>
+    <string name="splitapks_clear_search">清除搜尋</string>
+    <plurals name="nativelibraries_search_hint">
+        <item quantity="other">搜尋 %1$d 個原生程式庫</item>
+    </plurals>
+    <string name="nativelibraries_empty_query">沒有符合「%1$s」的原生程式庫。</string>
+    <string name="nativelibraries_clear_search">清除搜尋</string>
+    <string name="general_info_copied">已複製到剪貼簿</string>
+    <string name="app_detail_history_section">歷史記錄</string>
+    <string name="app_history_toolbar_subtitle">歷史記錄</string>
+    <string name="app_history_hub_no_entries">即將開始記錄</string>
+    <string name="app_history_hub_first_only">尚無變更 · 自 %1$s 起記錄</string>
+    <string name="app_history_hub_certificate">簽署憑證於 %1$s 變更</string>
+    <string name="app_history_hub_unavailable">目前無法取得歷史記錄</string>
+    <string name="app_history_context_first_only">自 %1$s 起記錄</string>
+    <string name="app_history_footer">Apk Analyzer 只能顯示開始記錄此應用程式之後發生的變更。</string>
+    <string name="app_history_first_only_hint">此應用程式變更時，新的記錄會顯示在這裡。</string>
+    <string name="app_history_empty_title">尚無記錄</string>
+    <string name="app_history_empty_body">Apk Analyzer 會在背景記錄此應用程式。歷史記錄從這裡開始。</string>
+    <string name="app_history_error">無法載入此應用程式的歷史記錄</string>
+    <string name="app_history_row_click_label">查看變更內容</string>
+    <string name="app_history_row_first_click_label">查看完整詳細資料</string>
+    <string name="app_history_row_long_click_label">複製</string>
+    <string name="app_history_full_detail">查看此版本的完整詳細資料</string>
+    <string name="app_history_show_all">顯示全部 %1$d 項</string>
+    <string name="app_history_group_header">%1$s · %2$d</string>
+    <string name="app_history_group_header_scoped">%1$s · %2$s · %3$d</string>
+    <string name="app_history_what_changed">變更內容</string>
+    <string name="app_history_as_seen_on">%1$s 當時的狀態</string>
+    <string name="app_history_as_seen_on_label">當時的狀態</string>
+    <string name="app_history_as_seen_on_explanation">這是 Apk Analyzer 在該日期記錄的內容，可能與應用程式目前的狀態不同。</string>
+    <string name="app_history_as_seen_click_label">說明</string>
+    <string name="app_history_permissions_note">歷史記錄不包含權限狀態。</string>
+    <string name="app_history_intent_filters_note">歷史記錄不包含這些資料。</string>
+    <string name="app_history_version_not_found">歷史記錄中已沒有此版本。</string>
+    <string name="app_history_version_load_failed">無法載入此版本</string>
+    <plurals name="app_history_hub_changes">
+        <item quantity="other">%1$d 項變更 · 最近一次於 %2$s</item>
+    </plurals>
+    <plurals name="app_history_context">
+        <item quantity="other">自 %1$s 起記錄 · %2$d 項變更</item>
+    </plurals>
+</resources>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="external_apk_open_error">無法開啟這個 APK</string>
+    <string name="app_function_app_display_description">讓 AI 助理查詢這部裝置上的應用程式詳細資料，包括版本、權限、安裝來源和簽署證書。</string>
+</resources>
