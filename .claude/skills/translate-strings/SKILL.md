@@ -22,6 +22,8 @@ sentence structure.
 | Italian | `values-it` | one, many, other | `many` same as Spanish |
 | Japanese | `values-ja` | other | No grammatical plural; only `quantity="other"` is ever selected |
 | Chinese (Simplified) | `values-zh-rCN` | other | |
+| Chinese (Traditional, Taiwan) | `values-zh-rTW` | other | Taiwan vocabulary; translate from English, not by converting Simplified Chinese |
+| Chinese (Traditional, Hong Kong) | `values-zh-rHK` | other | Hong Kong vocabulary in standard written Chinese, not colloquial Cantonese or an unchanged copy of Taiwan |
 | Korean | `values-ko` | other | |
 | Vietnamese | `values-vi` | other | |
 | Indonesian | `values-in` | other | Android's legacy resource qualifier for Indonesian is `in`, not `id` |
@@ -69,53 +71,32 @@ from Android Studio, developer.android.com, or the Play Console in their languag
 
 - **Google officially localizes Android developer docs for**: Spanish, Japanese, Korean, Portuguese
   (Brazil), Russian, Chinese (Simplified/Traditional), Indonesian, Turkish, Vietnamese — largely
-  overlapping with this table's `es`, `ja`, `ko`, `pt-rBR`, `ru`, `zh-rCN`, `in`, `tr`, `vi`. For
-  these, use the exact term developer.android.com uses in that locale for `Activity`/`Service`/
+  overlapping with this table's `es`, `ja`, `ko`, `pt-rBR`, `ru`, `zh-rCN`, `zh-rTW`, `zh-rHK`,
+  `in`, `tr`, `vi`. For these, use the exact term developer.android.com uses in that locale for `Activity`/`Service`/
   `Receiver`/`Provider`/etc. Verify the current term rather than recalling it from memory or an old
   session — Google's supported-docs-language list and its terminology both drift over time.
 - **Not officially localized**: German, French, Italian, Polish, Slovak, Czech, Ukrainian, Arabic,
   Hindi. For these, the established local Android developer convention is almost always to keep the
   English term as a loanword (`Activity`, `Service`, `Broadcast Receiver`, `Content Provider`) — that
   also avoids inventing a translation no one in that market's Android ecosystem actually uses.
-- `APK`, `Intent`, `Manifest` stay in English in effectively every language, including ones with
-  localized docs — they function as fixed technical terms across the whole Android world, the same
-  way this skill already treats `APK` elsewhere.
+- Keep product names (`Android`, `Android Studio`), acronyms (`SDK`, `APK`, `API`), and raw code
+  identifiers (`android.permission.WAKE_LOCK`, `AndroidManifest.xml`) unchanged. Translate
+  surrounding wording and descriptive technical labels using established local terminology.
+  Preserving an acronym does not mean preserving the whole label in English: `Target SDK` and
+  `Advertising ID` can have localized labels while retaining `SDK` and `ID`.
 - If you're not sure for a specific language/term pair, say so and check developer.android.com in
   that locale (or ask) instead of guessing silently — getting this wrong reads as a translation that
   doesn't know the platform, which undermines trust more than an occasional English loanword would.
 
-## Always-English Keys
-
-A handful of specific keys are pinned to the exact English source text in **every** language,
-Slovak included — not translated, not adapted. These are deliberate app-owner calls (not derivable
-from the general platform-vocabulary rule above), so don't second-guess them into translation during
-an audit:
-
-- `permission_label_wake_lock` → `Wake lock`. The English source string itself reads "Keep Device
-  Awake" (plain prose, not this term) — every locale still renders the Android API name `Wake lock`
-  instead of translating that source sentence. This is an intentional exception to "translate the
-  English source," not an oversight.
-- `permission_label_ad_id` → `Advertising ID`, `permission_label_ad_attribution` → `Ad Attribution`,
-  `permission_label_ad_custom_audience` → `Ad Audiences`, `permission_label_ad_topics` → `Ad Topics`
-  (all `core/app-permissions`).
-- `permission_label_bluetooth_advertise` → `Bluetooth Advertise` (`core/app-permissions`).
-- `permissions_level_dangerous` / `_signature` / `_internal` / `_normal` (`feature/app-detail/phone`)
-  and their `browse_protection_level_*` counterparts (`feature/browse/phone`) → `Dangerous` /
-  `Signature` / `Internal` / `Normal`.
-- `app_detail_target_sdk` and `general_info_target_sdk` (`feature/app-detail/phone`) and
-  `tv_apps_sort_target_sdk` (`feature/apps/tv`) → `Target SDK`. `sort_target_sdk`
-  (`feature/apps/phone`) → `Target Android SDK` (matches that key's own English source, which
-  includes "Android" where the others don't — copy each key's own default text verbatim rather than
-  harmonizing them into one phrase).
-
-If a new key looks like it belongs in one of these families (e.g. a future `permission_label_ad_*`
-or another `*_target_sdk` label), ask before deciding whether it joins the always-English set or
-gets a normal translation — don't extend the pattern by inference.
+Permission labels describe the capability in the English source, not the raw API constant.
+Use consistent localized wording when the same concept appears in app detail, browsing, and sorting.
 
 ## Scope: One Module at a Time
 
-Every module with a `values/strings.xml` gets its own `values-<qualifier>/strings.xml` with the exact
-same key set. 
+Every module with translatable resources in `values/strings.xml` gets its own
+`values-<qualifier>/strings.xml` with the exact same translatable key set. Resources marked
+`translatable="false"` stay in the base file only. Do not create an empty locale file for a module
+whose only resources are non-translatable.
 
 Translate module by module. Don't merge keys from different modules into one file, and don't create a
 locale folder for a module that has no `values/strings.xml`.

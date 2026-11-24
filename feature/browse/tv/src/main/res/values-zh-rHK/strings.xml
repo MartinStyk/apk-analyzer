@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_browse_loading">正在掃描已安裝的應用程式…</string>
+    <string name="tv_browse_permission_about">關於這項權限</string>
+    <string name="tv_browse_certificate_about">關於這張證書</string>
+    <string name="tv_browse_no_apps">這部裝置上已沒有符合條件的應用程式。</string>
+    <string name="tv_browse_label_list">%1$s · %2$s</string>
+    <string name="tv_browse_search">搜尋</string>
+    <string name="tv_browse_see_all">查看全部</string>
+    <plurals name="tv_browse_more_apps">
+        <item quantity="other">另有 %1$d 個應用程式</item>
+    </plurals>
+</resources>
