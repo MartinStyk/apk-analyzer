@@ -44,7 +44,6 @@ internal class TvSplitApksViewModel @AssistedInject constructor(
             state.value = sectionRepository.detail(appDetailInput).fold(
                 onSuccess = { detail ->
                     TvSplitApksState.Loaded(
-                        appName = detail.info.applicationName,
                         splits = detail.info.installedSplits.sortedWith(compareBy({ it.kind }, { it.qualifier })),
                     )
                 },

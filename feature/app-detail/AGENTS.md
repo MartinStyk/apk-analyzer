@@ -22,7 +22,12 @@ only, is described under [TV Module](#tv-module).
 ## Package Map
 
 * The root implementation package owns the hub State/Action/Event/ViewModel and input adapters.
-* `components/` owns interaction and loading/error UI shared across detail sections.
+* `components/` owns interaction, sub-screen chrome (`AppDetailSectionScaffold`), and loading/error
+  UI shared across detail sections. Every phone sub-screen — all detail sections and the history
+  screens — renders through `AppDetailSectionScaffold` with the screen title as the primary toolbar
+  title and the app name as the subtitle. Internal section nav keys carry `appName` from the loaded
+  hub (and forward it to nested sub-screens) so headers survive process recreation and section load
+  failures without an extra data load; `AppDetailNavKey` in `api` stays free of display metadata.
 * The "Worth knowing" insight policy and the badges live in `domain`'s `insight/`, shared with TV. Their
   evaluators take the `AppDetailInput`, so they judge a historical input at its capture date, without
   this device's SDK, and without recency badges.
@@ -58,8 +63,9 @@ a past state means nothing to them.
   recents, launching components). A historical input has neither, so it cannot reach them by accident.
   A mode check reads `isHistorical` or `isOnDevice`, never a null `liveReference` or `recordedAt`.
 * **One label.** Every app-detail stateless content composable wraps its root in `AppDetailModeFrame`
-  with the input's `recordedAt`, which pins `AsSeenOnBar` above the screen in every state and shows it
-  in previews. A new app-detail destination must do the same.
+  with the input's `recordedAt` (section sub-screens get this via `AppDetailSectionScaffold`), which
+  pins `AsSeenOnBar` above the screen in every state and shows it in previews. A new app-detail
+  destination must do the same.
 * **Judge as of the recorded date, against no device.** Dates are judged at `recordedAt ?: now`: the
   capture date for a historical input, now otherwise. That covers certificate validity, "not yet valid", unused
   time, and recency badges. Device facts (features, ABIs, SDK) need a live app, so a screen reads them
@@ -96,8 +102,9 @@ Split APKs, and the manifest. It never depends on `phone`.
   data (stats, a protection-level bar, the fingerprint in a `CodeBox`) rather than sentences, and use
   the warning tone only when the card's own predicate flags a problem.
 * Every row carries the same icon the phone uses for that thing; the pane repeats it with a status
-  chip and puts identifiers and hashes in a `CodeBox`. Empty sections use `SectionEmpty`, which keeps
-  the header and backdrop.
+  chip and puts identifiers and hashes in a `CodeBox`. Every section renders its header (section
+  title over app-name subtitle, beside the app icon) through `components/SectionAppHeader` across
+  loading, error, empty, and loaded states using `appName` carried by its internal nav key.
 * Sections use `components/ListDetailScaffold` (via `InfoSectionList` for plain rows): focusing a row
   shows its explanation in the pane, so OK does nothing unless the row leads to another screen
   (chevron). This replaces the phone's tap-to-explain sheets; TV has no copy action.

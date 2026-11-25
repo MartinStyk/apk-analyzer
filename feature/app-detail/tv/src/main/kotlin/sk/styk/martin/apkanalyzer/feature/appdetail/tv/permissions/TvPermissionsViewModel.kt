@@ -64,7 +64,6 @@ internal class TvPermissionsViewModel @AssistedInject constructor(
                 sectionRepository.detail(appDetailInput).fold(
                     onSuccess = { detail ->
                         PermissionsSource.Ready(
-                            appName = detail.info.applicationName,
                             requested = permissionItemMapper.requested(detail),
                             defined = permissionItemMapper.defined(detail),
                         )
@@ -79,11 +78,7 @@ internal class TvPermissionsViewModel @AssistedInject constructor(
 private sealed interface PermissionsSource {
     data object Loading : PermissionsSource
     data object Error : PermissionsSource
-    data class Ready(
-        val appName: String,
-        val requested: List<PermissionItem>,
-        val defined: List<PermissionItem>,
-    ) : PermissionsSource
+    data class Ready(val requested: List<PermissionItem>, val defined: List<PermissionItem>) : PermissionsSource
 }
 
 private val orderedProtectionLevels: List<ProtectionLevel?> = ProtectionLevel.entries + null
@@ -99,7 +94,6 @@ private fun PermissionsSource.Ready.toState(selectedScope: PermissionScope, init
         PermissionScope.Defined -> defined
     }
     return TvPermissionsState.Loaded(
-        appName = appName,
         scope = scope,
         scopeOptions = scopeOptions,
         sections = orderedProtectionLevels.mapNotNull { level ->

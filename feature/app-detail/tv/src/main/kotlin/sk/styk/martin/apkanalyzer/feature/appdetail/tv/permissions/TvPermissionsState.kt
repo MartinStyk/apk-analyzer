@@ -19,7 +19,6 @@ internal sealed interface TvPermissionsState {
 
     @Immutable
     data class Loaded(
-        val appName: String,
         val scope: PermissionScope,
         val scopeOptions: List<TvPermissionScopeOption>,
         val sections: List<TvPermissionSection>,

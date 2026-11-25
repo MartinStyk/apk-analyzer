@@ -12,28 +12,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
-import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.AppIcon
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.rememberAppAccentColor
-import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.AccentBackdrop
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.CrossfadeScrollablePanel
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.InfoListItem
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.SectionHeader
-import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.theme.ApkAnalyzerTvTheme
 
 @Composable
 internal fun <T> ListDetailScaffold(
     title: String,
-    subtitle: String,
+    appName: String,
     appReference: AppReference,
     selected: T?,
     detail: @Composable (T, Modifier) -> Unit,
@@ -41,7 +36,7 @@ internal fun <T> ListDetailScaffold(
     controls: (@Composable () -> Unit)? = null,
     list: LazyListScope.() -> Unit,
 ) {
-    AccentBackdrop(accent = rememberAppAccentColor(appReference), strength = BACKDROP_STRENGTH, modifier = modifier) {
+    AccentBackdrop(accent = rememberAppAccentColor(appReference), strength = SECTION_BACKDROP_STRENGTH, modifier = modifier) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
@@ -49,19 +44,7 @@ internal fun <T> ListDetailScaffold(
             horizontalArrangement = Arrangement.spacedBy(32.dp),
         ) {
             Column(modifier = Modifier.weight(LIST_WEIGHT), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    AppIcon(source = appReference, size = 56.dp)
-                    Column {
-                        Text(text = title, style = AppTheme.typography.headlineSmall)
-                        Text(
-                            text = subtitle,
-                            style = AppTheme.typography.bodyMedium,
-                            color = AppTheme.colors.onSurfaceVariant,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    }
-                }
+                SectionAppHeader(title = title, appName = appName, appReference = appReference)
                 if (controls != null) {
                     Box(modifier = Modifier.padding(top = 12.dp)) { controls() }
                 }
@@ -88,7 +71,6 @@ internal fun ListSectionHeader(text: String, modifier: Modifier = Modifier) {
 
 private const val LIST_WEIGHT = 0.55f
 private const val DETAIL_WEIGHT = 0.45f
-private const val BACKDROP_STRENGTH = 0.2f
 
 @Preview(device = Devices.TV_1080p, showBackground = true, backgroundColor = 0xFF000000)
 @Composable
@@ -96,7 +78,7 @@ private fun ListDetailScaffoldPreview() {
     ApkAnalyzerTvTheme {
         ListDetailScaffold(
             title = "Permissions",
-            subtitle = "YouTube",
+            appName = "YouTube",
             appReference = AppReference.InstalledPackage(PackageName("com.google.android.youtube.tv")),
             selected = "Camera",
             detail = { title, modifier ->

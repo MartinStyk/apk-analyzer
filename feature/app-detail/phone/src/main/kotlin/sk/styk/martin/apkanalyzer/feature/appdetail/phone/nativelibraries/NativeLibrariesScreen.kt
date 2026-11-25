@@ -40,7 +40,6 @@ import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.SearchBarActive
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.TextButton
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.collapsingHeader
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.collapsingHeaderContainer
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.rememberCollapsingHeaderState
@@ -49,7 +48,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailSectionScaffold
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
 import java.time.Instant
@@ -59,6 +58,7 @@ import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 @Composable
 internal fun NativeLibrariesScreen(
     appDetailInput: AppDetailInput,
+    appName: String,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: NativeLibrariesViewModel = hiltViewModel { factory: NativeLibrariesViewModel.Factory ->
@@ -79,6 +79,7 @@ internal fun NativeLibrariesScreen(
 
     NativeLibrariesContent(
         state = state,
+        appName = appName,
         onAction = viewModel::onAction,
         modifier = modifier,
         recordedAt = appDetailInput.recordedAt,
@@ -88,33 +89,30 @@ internal fun NativeLibrariesScreen(
 @Composable
 private fun NativeLibrariesContent(
     state: NativeLibrariesState,
+    appName: String,
     onAction: (NativeLibrariesAction) -> Unit,
     modifier: Modifier = Modifier,
     recordedAt: Instant? = null,
 ) {
-    AppDetailModeFrame(recordedAt = recordedAt, modifier = modifier) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(AppTheme.colors.background),
-        ) {
-            Toolbar(
-                title = stringResource(AppsR.string.nativelibraries_title),
-                onBack = { onAction(NativeLibrariesAction.Back) },
+    AppDetailSectionScaffold(
+        title = stringResource(AppsR.string.nativelibraries_title),
+        appName = appName,
+        onBack = { onAction(NativeLibrariesAction.Back) },
+        recordedAt = recordedAt,
+        modifier = modifier,
+    ) {
+        when (state) {
+            NativeLibrariesState.Loading -> SectionLoading()
+
+            is NativeLibrariesState.Error -> SectionError(
+                reason = state.reason,
+                loadFailedMessage = stringResource(AppsR.string.nativelibraries_error),
+                onRetry = { onAction(NativeLibrariesAction.Retry) },
             )
-            when (state) {
-                NativeLibrariesState.Loading -> SectionLoading()
 
-                is NativeLibrariesState.Error -> SectionError(
-                    reason = state.reason,
-                    loadFailedMessage = stringResource(AppsR.string.nativelibraries_error),
-                    onRetry = { onAction(NativeLibrariesAction.Retry) },
-                )
+            NativeLibrariesState.NotRecorded -> SectionError(message = stringResource(HistoryR.string.app_history_not_recorded))
 
-                NativeLibrariesState.NotRecorded -> SectionError(message = stringResource(HistoryR.string.app_history_not_recorded))
-
-                is NativeLibrariesState.Loaded -> NativeLibrariesLoadedContent(state = state, onAction = onAction)
-            }
+            is NativeLibrariesState.Loaded -> NativeLibrariesLoadedContent(state = state, onAction = onAction)
         }
     }
 }
@@ -245,6 +243,7 @@ private fun NativeLibrariesLoadingPreview() {
     ApkAnalyzerTheme {
         NativeLibrariesContent(
             state = NativeLibrariesState.Loading,
+            appName = "Spotify",
             onAction = {},
         )
     }
@@ -256,6 +255,7 @@ private fun NativeLibrariesNotRecordedPreview() {
     ApkAnalyzerTheme {
         NativeLibrariesContent(
             state = NativeLibrariesState.NotRecorded,
+            appName = "Spotify",
             onAction = {},
             recordedAt = Instant.ofEpochMilli(1_773_014_400_000),
         )
@@ -268,6 +268,7 @@ private fun NativeLibrariesErrorPreview() {
     ApkAnalyzerTheme {
         NativeLibrariesContent(
             state = NativeLibrariesState.Error(SectionErrorReason.LoadFailed),
+            appName = "Spotify",
             onAction = {},
         )
     }
@@ -312,6 +313,7 @@ private fun NativeLibrariesLoadedPreview() {
                     ),
                 ),
             ),
+            appName = "Spotify",
             onAction = {},
         )
     }
@@ -327,6 +329,7 @@ private fun NativeLibrariesEmptyPreview() {
                 totalCount = 3,
                 items = listOf(),
             ),
+            appName = "Spotify",
             onAction = {},
         )
     }

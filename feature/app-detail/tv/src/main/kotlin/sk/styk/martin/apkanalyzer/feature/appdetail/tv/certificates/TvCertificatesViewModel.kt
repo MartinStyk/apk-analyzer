@@ -58,7 +58,6 @@ internal class TvCertificatesViewModel @AssistedInject constructor(
 }
 
 private fun AppDetail.toState(signingSchemeVersions: List<SigningSchemeVersion>?, asOf: Instant): TvCertificatesState.Loaded = TvCertificatesState.Loaded(
-    appName = info.applicationName,
     currentCertificates = signing.currentCertificates.map { TvCertificate(it, it.validityAt(asOf)) },
     pastCertificates = signing.pastCertificates.reversed().map { TvCertificate(it, it.validityAt(asOf)) },
     hasMultipleSigners = signing.hasMultipleSigners,

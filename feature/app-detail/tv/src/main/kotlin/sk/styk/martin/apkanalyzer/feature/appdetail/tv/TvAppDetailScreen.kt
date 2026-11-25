@@ -84,12 +84,12 @@ import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 @Composable
 internal fun TvAppDetailScreen(
     appDetailInput: AppDetailInput,
-    onNavigateToGeneralInfo: () -> Unit,
-    onNavigateToPermissions: (permissionName: String?) -> Unit,
-    onNavigateToComponents: () -> Unit,
-    onNavigateToCertificates: () -> Unit,
-    onNavigateToRequirements: () -> Unit,
-    onNavigateToManifest: () -> Unit,
+    onNavigateToGeneralInfo: (appName: String) -> Unit,
+    onNavigateToPermissions: (appName: String, permissionName: String?) -> Unit,
+    onNavigateToComponents: (appName: String) -> Unit,
+    onNavigateToCertificates: (appName: String) -> Unit,
+    onNavigateToRequirements: (appName: String) -> Unit,
+    onNavigateToManifest: (appName: String) -> Unit,
     viewModel: TvAppDetailViewModel = hiltViewModel { factory: TvAppDetailViewModel.Factory ->
         factory.create(appDetailInput)
     },
@@ -106,17 +106,17 @@ internal fun TvAppDetailScreen(
 
                 is TvAppDetailEvent.OpenPlayStore -> context.openGooglePlay(event.packageName)
 
-                TvAppDetailEvent.NavigateToGeneralInfo -> onNavigateToGeneralInfo()
+                is TvAppDetailEvent.NavigateToGeneralInfo -> onNavigateToGeneralInfo(event.appName)
 
-                is TvAppDetailEvent.NavigateToPermissions -> onNavigateToPermissions(event.permissionName)
+                is TvAppDetailEvent.NavigateToPermissions -> onNavigateToPermissions(event.appName, event.permissionName)
 
-                TvAppDetailEvent.NavigateToComponents -> onNavigateToComponents()
+                is TvAppDetailEvent.NavigateToComponents -> onNavigateToComponents(event.appName)
 
-                TvAppDetailEvent.NavigateToCertificates -> onNavigateToCertificates()
+                is TvAppDetailEvent.NavigateToCertificates -> onNavigateToCertificates(event.appName)
 
-                TvAppDetailEvent.NavigateToRequirements -> onNavigateToRequirements()
+                is TvAppDetailEvent.NavigateToRequirements -> onNavigateToRequirements(event.appName)
 
-                TvAppDetailEvent.NavigateToManifest -> onNavigateToManifest()
+                is TvAppDetailEvent.NavigateToManifest -> onNavigateToManifest(event.appName)
             }
         }
     }

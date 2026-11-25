@@ -50,7 +50,6 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.SearchBarActive
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.TextButton
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.collapsingHeader
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.collapsingHeaderContainer
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.rememberCollapsingHeaderState
@@ -60,7 +59,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailSectionScaffold
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
 import java.time.Instant
@@ -69,6 +68,7 @@ import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 @Composable
 internal fun SplitApksScreen(
     appDetailInput: AppDetailInput,
+    appName: String,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SplitApksViewModel = hiltViewModel { factory: SplitApksViewModel.Factory ->
@@ -89,6 +89,7 @@ internal fun SplitApksScreen(
 
     SplitApksContent(
         state = state,
+        appName = appName,
         onAction = viewModel::onAction,
         modifier = modifier,
         recordedAt = appDetailInput.recordedAt,
@@ -98,31 +99,28 @@ internal fun SplitApksScreen(
 @Composable
 private fun SplitApksContent(
     state: SplitApksState,
+    appName: String,
     onAction: (SplitApksAction) -> Unit,
     modifier: Modifier = Modifier,
     recordedAt: Instant? = null,
 ) {
-    AppDetailModeFrame(recordedAt = recordedAt, modifier = modifier) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(AppTheme.colors.background),
-        ) {
-            Toolbar(
-                title = stringResource(AppsR.string.splitapks_title),
-                onBack = { onAction(SplitApksAction.Back) },
+    AppDetailSectionScaffold(
+        title = stringResource(AppsR.string.splitapks_title),
+        appName = appName,
+        onBack = { onAction(SplitApksAction.Back) },
+        recordedAt = recordedAt,
+        modifier = modifier,
+    ) {
+        when (state) {
+            SplitApksState.Loading -> SectionLoading()
+
+            is SplitApksState.Error -> SectionError(
+                reason = state.reason,
+                loadFailedMessage = stringResource(AppsR.string.splitapks_error),
+                onRetry = { onAction(SplitApksAction.Retry) },
             )
-            when (state) {
-                SplitApksState.Loading -> SectionLoading()
 
-                is SplitApksState.Error -> SectionError(
-                    reason = state.reason,
-                    loadFailedMessage = stringResource(AppsR.string.splitapks_error),
-                    onRetry = { onAction(SplitApksAction.Retry) },
-                )
-
-                is SplitApksState.Loaded -> SplitApksLoadedContent(state = state, onAction = onAction)
-            }
+            is SplitApksState.Loaded -> SplitApksLoadedContent(state = state, onAction = onAction)
         }
     }
 }
@@ -303,6 +301,7 @@ private fun SplitApksLoadingPreview() {
     ApkAnalyzerTheme {
         SplitApksContent(
             state = SplitApksState.Loading,
+            appName = "Spotify",
             onAction = {},
         )
     }
@@ -314,6 +313,7 @@ private fun SplitApksErrorPreview() {
     ApkAnalyzerTheme {
         SplitApksContent(
             state = SplitApksState.Error(SectionErrorReason.LoadFailed),
+            appName = "Spotify",
             onAction = {},
         )
     }
@@ -358,6 +358,7 @@ private fun SplitApksLoadedPreview() {
                     ),
                 ),
             ),
+            appName = "Spotify",
             onAction = {},
         )
     }
@@ -373,6 +374,7 @@ private fun SplitApksEmptyPreview() {
                 totalCount = 4,
                 items = listOf(),
             ),
+            appName = "Spotify",
             onAction = {},
         )
     }

@@ -33,11 +33,11 @@ import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzer
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.lazylist.itemsPositioned
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailSectionScaffold
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ListSectionHeader
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
@@ -88,16 +88,12 @@ private fun AppHistoryTimelineContent(
     onAction: (AppHistoryTimelineAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(AppTheme.colors.background),
+    AppDetailSectionScaffold(
+        title = stringResource(R.string.app_history_toolbar_subtitle),
+        appName = (state as? AppHistoryTimelineState.Loaded)?.appName ?: fallbackAppName,
+        onBack = { onAction(AppHistoryTimelineAction.Back) },
+        modifier = modifier,
     ) {
-        Toolbar(
-            title = (state as? AppHistoryTimelineState.Loaded)?.appName ?: fallbackAppName,
-            subtitle = stringResource(R.string.app_history_toolbar_subtitle),
-            onBack = { onAction(AppHistoryTimelineAction.Back) },
-        )
         when (state) {
             AppHistoryTimelineState.Loading -> SectionLoading()
 

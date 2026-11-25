@@ -10,9 +10,5 @@ internal sealed interface TvNativeLibrariesState {
     data object Error : TvNativeLibrariesState
 
     @Immutable
-    data class Loaded(
-        val appName: String,
-        val items: List<NativeLibraryItem>,
-        val deviceAbis: List<String>,
-    ) : TvNativeLibrariesState
+    data class Loaded(val items: List<NativeLibraryItem>, val deviceAbis: List<String>) : TvNativeLibrariesState
 }

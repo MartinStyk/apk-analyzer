@@ -31,39 +31,54 @@ import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 @Composable
 internal fun TvNativeLibrariesScreen(
     appDetailInput: AppDetailInput,
+    appName: String,
     viewModel: TvNativeLibrariesViewModel = hiltViewModel { factory: TvNativeLibrariesViewModel.Factory ->
         factory.create(appDetailInput)
     },
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    TvNativeLibrariesContent(state = state, appReference = appDetailInput.iconReference, onAction = viewModel::onAction)
+    TvNativeLibrariesContent(
+        state = state,
+        appName = appName,
+        appReference = appDetailInput.iconReference,
+        onAction = viewModel::onAction,
+    )
 }
 
 @Composable
 private fun TvNativeLibrariesContent(
     state: TvNativeLibrariesState,
+    appName: String,
     appReference: AppReference,
     onAction: (TvNativeLibrariesAction) -> Unit,
 ) {
+    val title = stringResource(AppsR.string.nativelibraries_title)
     when (state) {
-        TvNativeLibrariesState.Loading -> SectionLoading()
+        TvNativeLibrariesState.Loading -> SectionLoading(
+            title = title,
+            appName = appName,
+            appReference = appReference,
+        )
 
         TvNativeLibrariesState.Error -> SectionError(
+            title = title,
+            appName = appName,
+            appReference = appReference,
             message = stringResource(AppsR.string.nativelibraries_error),
             onRetry = { onAction(TvNativeLibrariesAction.Retry) },
         )
 
         is TvNativeLibrariesState.Loaded -> if (state.items.isEmpty()) {
             SectionEmpty(
-                title = stringResource(AppsR.string.nativelibraries_title),
-                subtitle = state.appName,
+                title = title,
+                appName = appName,
                 appReference = appReference,
                 message = stringResource(AppsR.string.nativelibraries_empty),
             )
         } else {
             InfoSectionList(
-                title = stringResource(AppsR.string.nativelibraries_title),
-                subtitle = state.appName,
+                title = title,
+                appName = appName,
                 appReference = appReference,
                 sections = listOf(
                     InfoSection(
@@ -112,9 +127,9 @@ private fun NativeLibraryVariant.describe(resources: Resources): String = resour
 private fun TvNativeLibrariesContentPreview() {
     ApkAnalyzerTvTheme {
         TvNativeLibrariesContent(
+            appName = "YouTube",
             appReference = AppReference.InstalledPackage(PackageName("com.google.android.youtube.tv")),
             state = TvNativeLibrariesState.Loaded(
-                appName = "YouTube",
                 items = listOf(
                     NativeLibraryItem(
                         name = "libcronet.so",

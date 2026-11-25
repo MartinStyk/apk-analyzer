@@ -49,36 +49,59 @@ import sk.styk.martin.apkanalyzer.core.apppermissions.R as PermissionsR
 @Composable
 internal fun TvPermissionsScreen(
     appDetailInput: AppDetailInput,
+    appName: String,
     initialPermissionName: String?,
     viewModel: TvPermissionsViewModel = hiltViewModel { factory: TvPermissionsViewModel.Factory ->
         factory.create(appDetailInput, initialPermissionName)
     },
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    TvPermissionsContent(state = state, appReference = appDetailInput.iconReference, onAction = viewModel::onAction)
+    TvPermissionsContent(
+        state = state,
+        appName = appName,
+        appReference = appDetailInput.iconReference,
+        onAction = viewModel::onAction,
+    )
 }
 
 @Composable
 private fun TvPermissionsContent(
     state: TvPermissionsState,
+    appName: String,
     appReference: AppReference,
     onAction: (TvPermissionsAction) -> Unit,
 ) {
+    val title = stringResource(PermissionsR.string.permissions_title)
     when (state) {
-        TvPermissionsState.Loading -> SectionLoading()
+        TvPermissionsState.Loading -> SectionLoading(
+            title = title,
+            appName = appName,
+            appReference = appReference,
+        )
 
         TvPermissionsState.Error -> SectionError(
+            title = title,
+            appName = appName,
+            appReference = appReference,
             message = stringResource(PermissionsR.string.permissions_error),
             onRetry = { onAction(TvPermissionsAction.Retry) },
         )
 
-        is TvPermissionsState.Loaded -> LoadedContent(state = state, appReference = appReference, onAction = onAction)
+        is TvPermissionsState.Loaded -> LoadedContent(
+            title = title,
+            state = state,
+            appName = appName,
+            appReference = appReference,
+            onAction = onAction,
+        )
     }
 }
 
 @Composable
 private fun LoadedContent(
+    title: String,
     state: TvPermissionsState.Loaded,
+    appName: String,
     appReference: AppReference,
     onAction: (TvPermissionsAction) -> Unit,
 ) {
@@ -96,8 +119,8 @@ private fun LoadedContent(
     )
 
     ListDetailScaffold(
-        title = stringResource(PermissionsR.string.permissions_title),
-        subtitle = state.appName,
+        title = title,
+        appName = appName,
         appReference = appReference,
         selected = selected,
         controls = if (state.hasScopeChoice) {
@@ -235,9 +258,9 @@ private fun TvPermissionsContentPreview() {
     )
     ApkAnalyzerTvTheme {
         TvPermissionsContent(
+            appName = "YouTube",
             appReference = AppReference.InstalledPackage(PackageName("com.google.android.youtube.tv")),
             state = TvPermissionsState.Loaded(
-                appName = "YouTube",
                 scope = PermissionScope.Requested,
                 scopeOptions = listOf(
                     TvPermissionScopeOption(PermissionScope.Requested, 2),

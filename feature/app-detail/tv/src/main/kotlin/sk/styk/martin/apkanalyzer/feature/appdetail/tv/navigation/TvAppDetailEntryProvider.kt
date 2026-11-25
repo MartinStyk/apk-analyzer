@@ -19,48 +19,55 @@ fun EntryProviderScope<NavKey>.tvAppDetailEntries(navigator: Navigator) {
     entry<AppDetailNavKey>(metadata = slideFromEndEntryMetadata()) { key ->
         TvAppDetailScreen(
             appDetailInput = key.detailInput,
-            onNavigateToGeneralInfo = { navigator.navigate(TvGeneralInfoNavKey(key.detailInput)) },
-            onNavigateToPermissions = { permissionName -> navigator.navigate(TvPermissionsNavKey(key.detailInput, permissionName)) },
-            onNavigateToComponents = { navigator.navigate(TvComponentsNavKey(key.detailInput)) },
-            onNavigateToCertificates = { navigator.navigate(TvCertificatesNavKey(key.detailInput)) },
-            onNavigateToRequirements = { navigator.navigate(TvRequirementsNavKey(key.detailInput)) },
-            onNavigateToManifest = { navigator.navigate(TvManifestNavKey(key.detailInput)) },
+            onNavigateToGeneralInfo = { appName -> navigator.navigate(TvGeneralInfoNavKey(key.detailInput, appName)) },
+            onNavigateToPermissions = { appName, permissionName ->
+                navigator.navigate(TvPermissionsNavKey(key.detailInput, appName, permissionName))
+            },
+            onNavigateToComponents = { appName -> navigator.navigate(TvComponentsNavKey(key.detailInput, appName)) },
+            onNavigateToCertificates = { appName -> navigator.navigate(TvCertificatesNavKey(key.detailInput, appName)) },
+            onNavigateToRequirements = { appName -> navigator.navigate(TvRequirementsNavKey(key.detailInput, appName)) },
+            onNavigateToManifest = { appName -> navigator.navigate(TvManifestNavKey(key.detailInput, appName)) },
         )
     }
 
     entry<TvGeneralInfoNavKey>(metadata = slideFromEndEntryMetadata()) { key ->
         TvGeneralInfoScreen(
             appDetailInput = key.detailInput,
-            onNavigateToSplitApks = { navigator.navigate(TvSplitApksNavKey(key.detailInput)) },
-            onNavigateToNativeLibraries = { navigator.navigate(TvNativeLibrariesNavKey(key.detailInput)) },
+            appName = key.appName,
+            onNavigateToSplitApks = { navigator.navigate(TvSplitApksNavKey(key.detailInput, key.appName)) },
+            onNavigateToNativeLibraries = { navigator.navigate(TvNativeLibrariesNavKey(key.detailInput, key.appName)) },
         )
     }
 
     entry<TvPermissionsNavKey>(metadata = slideFromEndEntryMetadata()) { key ->
-        TvPermissionsScreen(appDetailInput = key.detailInput, initialPermissionName = key.permissionName)
+        TvPermissionsScreen(
+            appDetailInput = key.detailInput,
+            appName = key.appName,
+            initialPermissionName = key.permissionName,
+        )
     }
 
     entry<TvComponentsNavKey>(metadata = slideFromEndEntryMetadata()) { key ->
-        TvComponentsScreen(appDetailInput = key.detailInput)
+        TvComponentsScreen(appDetailInput = key.detailInput, appName = key.appName)
     }
 
     entry<TvCertificatesNavKey>(metadata = slideFromEndEntryMetadata()) { key ->
-        TvCertificatesScreen(appDetailInput = key.detailInput)
+        TvCertificatesScreen(appDetailInput = key.detailInput, appName = key.appName)
     }
 
     entry<TvRequirementsNavKey>(metadata = slideFromEndEntryMetadata()) { key ->
-        TvRequirementsScreen(appDetailInput = key.detailInput)
+        TvRequirementsScreen(appDetailInput = key.detailInput, appName = key.appName)
     }
 
     entry<TvNativeLibrariesNavKey>(metadata = slideFromEndEntryMetadata()) { key ->
-        TvNativeLibrariesScreen(appDetailInput = key.detailInput)
+        TvNativeLibrariesScreen(appDetailInput = key.detailInput, appName = key.appName)
     }
 
     entry<TvSplitApksNavKey>(metadata = slideFromEndEntryMetadata()) { key ->
-        TvSplitApksScreen(appDetailInput = key.detailInput)
+        TvSplitApksScreen(appDetailInput = key.detailInput, appName = key.appName)
     }
 
     entry<TvManifestNavKey>(metadata = slideFromEndEntryMetadata()) { key ->
-        TvManifestScreen(appDetailInput = key.detailInput)
+        TvManifestScreen(appDetailInput = key.detailInput, appName = key.appName)
     }
 }

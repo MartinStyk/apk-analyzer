@@ -32,39 +32,54 @@ import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 @Composable
 internal fun TvSplitApksScreen(
     appDetailInput: AppDetailInput,
+    appName: String,
     viewModel: TvSplitApksViewModel = hiltViewModel { factory: TvSplitApksViewModel.Factory ->
         factory.create(appDetailInput)
     },
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    TvSplitApksContent(state = state, appReference = appDetailInput.iconReference, onAction = viewModel::onAction)
+    TvSplitApksContent(
+        state = state,
+        appName = appName,
+        appReference = appDetailInput.iconReference,
+        onAction = viewModel::onAction,
+    )
 }
 
 @Composable
 private fun TvSplitApksContent(
     state: TvSplitApksState,
+    appName: String,
     appReference: AppReference,
     onAction: (TvSplitApksAction) -> Unit,
 ) {
+    val title = stringResource(AppsR.string.splitapks_title)
     when (state) {
-        TvSplitApksState.Loading -> SectionLoading()
+        TvSplitApksState.Loading -> SectionLoading(
+            title = title,
+            appName = appName,
+            appReference = appReference,
+        )
 
         TvSplitApksState.Error -> SectionError(
+            title = title,
+            appName = appName,
+            appReference = appReference,
             message = stringResource(AppsR.string.splitapks_error),
             onRetry = { onAction(TvSplitApksAction.Retry) },
         )
 
         is TvSplitApksState.Loaded -> if (state.splits.isEmpty()) {
             SectionEmpty(
-                title = stringResource(AppsR.string.splitapks_title),
-                subtitle = state.appName,
+                title = title,
+                appName = appName,
                 appReference = appReference,
                 message = stringResource(AppsR.string.splitapks_empty),
             )
         } else {
             InfoSectionList(
-                title = stringResource(AppsR.string.splitapks_title),
-                subtitle = state.appName,
+                title = title,
+                appName = appName,
                 appReference = appReference,
                 sections = listOf(
                     InfoSection(
@@ -106,9 +121,9 @@ private fun splitRow(split: InstalledSplitApk): InfoRow {
 private fun TvSplitApksContentPreview() {
     ApkAnalyzerTvTheme {
         TvSplitApksContent(
+            appName = "YouTube",
             appReference = AppReference.InstalledPackage(PackageName("com.google.android.youtube.tv")),
             state = TvSplitApksState.Loaded(
-                appName = "YouTube",
                 splits = listOf(
                     InstalledSplitApk(
                         fileName = "split_config.arm64_v8a.apk",

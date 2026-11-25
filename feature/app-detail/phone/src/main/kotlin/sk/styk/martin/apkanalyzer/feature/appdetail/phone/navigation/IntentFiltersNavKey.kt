@@ -8,6 +8,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents.Componen
 @Serializable
 internal data class IntentFiltersNavKey(
     val detailInput: AppDetailInput,
+    val appName: String,
     val componentName: String,
     val componentType: ComponentType,
 ) : NavKey

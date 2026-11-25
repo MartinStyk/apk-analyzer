@@ -142,7 +142,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
         when (action) {
             is AppDetailAction.Retry -> loadDetail()
 
-            is AppDetailAction.ViewManifest -> sendSectionEvent(AppDetailEvent.NavigateToManifest)
+            is AppDetailAction.ViewManifest -> sendSectionEvent(AppDetailEvent::NavigateToManifest)
 
             is AppDetailAction.ExportApk -> requestDocument(AppDetailExport.Apk)
 
@@ -168,23 +168,25 @@ internal class AppDetailViewModel @AssistedInject constructor(
                 sendEvent(AppDetailEvent.OpenAppInfo(it.packageName))
             }
 
-            is AppDetailAction.NavigateGeneralDetails -> sendSectionEvent(AppDetailEvent.NavigateToGeneralDetails)
+            is AppDetailAction.NavigateGeneralDetails -> sendSectionEvent(AppDetailEvent::NavigateToGeneralDetails)
 
-            is AppDetailAction.NavigatePermissions -> sendSectionEvent(AppDetailEvent.NavigateToPermissions(action.permissionName))
+            is AppDetailAction.NavigatePermissions -> sendSectionEvent {
+                AppDetailEvent.NavigateToPermissions(it, action.permissionName)
+            }
 
-            is AppDetailAction.NavigateComponents -> sendSectionEvent(AppDetailEvent.NavigateToComponents)
+            is AppDetailAction.NavigateComponents -> sendSectionEvent(AppDetailEvent::NavigateToComponents)
 
-            is AppDetailAction.NavigateActivities -> sendSectionEvent(AppDetailEvent.NavigateToActivities)
+            is AppDetailAction.NavigateActivities -> sendSectionEvent(AppDetailEvent::NavigateToActivities)
 
-            is AppDetailAction.NavigateServices -> sendSectionEvent(AppDetailEvent.NavigateToServices)
+            is AppDetailAction.NavigateServices -> sendSectionEvent(AppDetailEvent::NavigateToServices)
 
-            is AppDetailAction.NavigateReceivers -> sendSectionEvent(AppDetailEvent.NavigateToReceivers)
+            is AppDetailAction.NavigateReceivers -> sendSectionEvent(AppDetailEvent::NavigateToReceivers)
 
-            is AppDetailAction.NavigateProviders -> sendSectionEvent(AppDetailEvent.NavigateToProviders)
+            is AppDetailAction.NavigateProviders -> sendSectionEvent(AppDetailEvent::NavigateToProviders)
 
-            is AppDetailAction.NavigateCertificates -> sendSectionEvent(AppDetailEvent.NavigateToCertificates)
+            is AppDetailAction.NavigateCertificates -> sendSectionEvent(AppDetailEvent::NavigateToCertificates)
 
-            is AppDetailAction.NavigateFeatures -> sendSectionEvent(AppDetailEvent.NavigateToFeatures)
+            is AppDetailAction.NavigateFeatures -> sendSectionEvent(AppDetailEvent::NavigateToFeatures)
 
             is AppDetailAction.NavigateHistory -> withLoadedState {
                 engaged = true
@@ -275,14 +277,15 @@ internal class AppDetailViewModel @AssistedInject constructor(
             AppDetailInsight.Sideloaded,
             is AppDetailInsight.OutdatedTargetSdk,
             is AppDetailInsight.Unused,
-            -> sendSectionEvent(AppDetailEvent.NavigateToGeneralDetails)
+            -> sendSectionEvent(AppDetailEvent::NavigateToGeneralDetails)
 
             AppDetailInsight.DebugCertificate,
             AppDetailInsight.CertificateNotYetValid,
-            -> sendSectionEvent(AppDetailEvent.NavigateToCertificates)
+            -> sendSectionEvent(AppDetailEvent::NavigateToCertificates)
 
-            is AppDetailInsight.SensitivePermission ->
-                sendSectionEvent(AppDetailEvent.NavigateToPermissions(insight.permissionName))
+            is AppDetailInsight.SensitivePermission -> sendSectionEvent {
+                AppDetailEvent.NavigateToPermissions(it, insight.permissionName)
+            }
         }
     }
 
@@ -333,10 +336,11 @@ internal class AppDetailViewModel @AssistedInject constructor(
         analytics.track(AppDetailAnalyticsEvent.ActionPerformed(action, appDetailInput))
     }
 
-    private fun sendSectionEvent(event: AppDetailEvent) {
+    private fun sendSectionEvent(event: (String) -> AppDetailEvent) = withLoadedState { state ->
+        val resolved = event(state.appName)
         engaged = true
-        analytics.track(AppDetailAnalyticsEvent.SectionOpened(event.toSection(), appDetailInput))
-        sendEvent(event)
+        analytics.track(AppDetailAnalyticsEvent.SectionOpened(resolved.toSection(), appDetailInput))
+        sendEvent(resolved)
     }
 
     private fun withLoadedState(block: (AppDetailState.Loaded) -> Unit) {
@@ -470,25 +474,25 @@ private const val MAX_BADGES = 3
 private const val MAX_REQUIREMENT_PREVIEWS = 6
 
 private fun AppDetailEvent.toSection(): AppDetailAnalyticsEvent.Section = when (this) {
-    AppDetailEvent.NavigateToManifest -> AppDetailAnalyticsEvent.Section.Manifest
+    is AppDetailEvent.NavigateToManifest -> AppDetailAnalyticsEvent.Section.Manifest
 
-    AppDetailEvent.NavigateToGeneralDetails -> AppDetailAnalyticsEvent.Section.General
+    is AppDetailEvent.NavigateToGeneralDetails -> AppDetailAnalyticsEvent.Section.General
 
     is AppDetailEvent.NavigateToPermissions -> AppDetailAnalyticsEvent.Section.Permissions
 
-    AppDetailEvent.NavigateToComponents -> AppDetailAnalyticsEvent.Section.Components
+    is AppDetailEvent.NavigateToComponents -> AppDetailAnalyticsEvent.Section.Components
 
-    AppDetailEvent.NavigateToActivities -> AppDetailAnalyticsEvent.Section.Activities
+    is AppDetailEvent.NavigateToActivities -> AppDetailAnalyticsEvent.Section.Activities
 
-    AppDetailEvent.NavigateToServices -> AppDetailAnalyticsEvent.Section.Services
+    is AppDetailEvent.NavigateToServices -> AppDetailAnalyticsEvent.Section.Services
 
-    AppDetailEvent.NavigateToReceivers -> AppDetailAnalyticsEvent.Section.Receivers
+    is AppDetailEvent.NavigateToReceivers -> AppDetailAnalyticsEvent.Section.Receivers
 
-    AppDetailEvent.NavigateToProviders -> AppDetailAnalyticsEvent.Section.Providers
+    is AppDetailEvent.NavigateToProviders -> AppDetailAnalyticsEvent.Section.Providers
 
-    AppDetailEvent.NavigateToCertificates -> AppDetailAnalyticsEvent.Section.Certificates
+    is AppDetailEvent.NavigateToCertificates -> AppDetailAnalyticsEvent.Section.Certificates
 
-    AppDetailEvent.NavigateToFeatures -> AppDetailAnalyticsEvent.Section.Features
+    is AppDetailEvent.NavigateToFeatures -> AppDetailAnalyticsEvent.Section.Features
 
     is AppDetailEvent.OpenPlayStore,
     is AppDetailEvent.OpenAppInfo,

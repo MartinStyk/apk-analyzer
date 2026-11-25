@@ -53,7 +53,6 @@ internal sealed interface TvComponentsState {
 
     @Immutable
     data class Loaded(
-        val appName: String,
         val scope: TvComponentScope,
         val scopeOptions: List<TvComponentScopeOption>,
         val sections: List<TvComponentSection>,

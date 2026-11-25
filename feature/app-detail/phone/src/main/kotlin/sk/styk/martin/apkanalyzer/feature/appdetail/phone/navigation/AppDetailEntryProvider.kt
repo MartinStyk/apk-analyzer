@@ -27,16 +27,26 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
         AppDetailScreen(
             appDetailInput = key.detailInput,
             onBack = navigator::goBack,
-            onNavigateToManifest = { navigator.navigate(ManifestNavKey(key.detailInput)) },
-            onNavigateToGeneralDetails = { navigator.navigate(GeneralInfoNavKey(key.detailInput)) },
-            onNavigateToPermissions = { permissionName -> navigator.navigate(PermissionsNavKey(key.detailInput, permissionName)) },
-            onNavigateToComponents = { navigator.navigate(ComponentsNavKey(key.detailInput)) },
-            onNavigateToActivities = { navigator.navigate(ComponentsNavKey(key.detailInput, ComponentScope.Activities)) },
-            onNavigateToServices = { navigator.navigate(ComponentsNavKey(key.detailInput, ComponentScope.Services)) },
-            onNavigateToReceivers = { navigator.navigate(ComponentsNavKey(key.detailInput, ComponentScope.Receivers)) },
-            onNavigateToProviders = { navigator.navigate(ComponentsNavKey(key.detailInput, ComponentScope.Providers)) },
-            onNavigateToCertificates = { navigator.navigate(CertificatesNavKey(key.detailInput)) },
-            onNavigateToFeatures = { navigator.navigate(RequirementsNavKey(key.detailInput)) },
+            onNavigateToManifest = { appName -> navigator.navigate(ManifestNavKey(key.detailInput, appName)) },
+            onNavigateToGeneralDetails = { appName -> navigator.navigate(GeneralInfoNavKey(key.detailInput, appName)) },
+            onNavigateToPermissions = { appName, permissionName ->
+                navigator.navigate(PermissionsNavKey(key.detailInput, appName, permissionName))
+            },
+            onNavigateToComponents = { appName -> navigator.navigate(ComponentsNavKey(key.detailInput, appName)) },
+            onNavigateToActivities = { appName ->
+                navigator.navigate(ComponentsNavKey(key.detailInput, appName, ComponentScope.Activities))
+            },
+            onNavigateToServices = { appName ->
+                navigator.navigate(ComponentsNavKey(key.detailInput, appName, ComponentScope.Services))
+            },
+            onNavigateToReceivers = { appName ->
+                navigator.navigate(ComponentsNavKey(key.detailInput, appName, ComponentScope.Receivers))
+            },
+            onNavigateToProviders = { appName ->
+                navigator.navigate(ComponentsNavKey(key.detailInput, appName, ComponentScope.Providers))
+            },
+            onNavigateToCertificates = { appName -> navigator.navigate(CertificatesNavKey(key.detailInput, appName)) },
+            onNavigateToFeatures = { appName -> navigator.navigate(RequirementsNavKey(key.detailInput, appName)) },
             onNavigateToInventoryExport = { packageName -> navigator.navigate(AppInventoryExportNavKey(packageName.value)) },
             onNavigateToHistory = { packageName, appName -> navigator.navigate(AppHistoryTimelineNavKey(packageName.value, appName)) },
         )
@@ -47,9 +57,10 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
     ) { key ->
         GeneralInfoScreen(
             appDetailInput = key.detailInput,
+            appName = key.appName,
             onBack = { navigator.goBack() },
-            onNavigateToSplitApks = { navigator.navigate(SplitApksNavKey(key.detailInput)) },
-            onNavigateToNativeLibraries = { navigator.navigate(NativeLibrariesNavKey(key.detailInput)) },
+            onNavigateToSplitApks = { navigator.navigate(SplitApksNavKey(key.detailInput, key.appName)) },
+            onNavigateToNativeLibraries = { navigator.navigate(NativeLibrariesNavKey(key.detailInput, key.appName)) },
         )
     }
 
@@ -58,6 +69,7 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
     ) { key ->
         SplitApksScreen(
             appDetailInput = key.detailInput,
+            appName = key.appName,
             onBack = { navigator.goBack() },
         )
     }
@@ -67,6 +79,7 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
     ) { key ->
         NativeLibrariesScreen(
             appDetailInput = key.detailInput,
+            appName = key.appName,
             onBack = { navigator.goBack() },
         )
     }
@@ -76,6 +89,7 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
     ) { key ->
         PermissionsScreen(
             appDetailInput = key.detailInput,
+            appName = key.appName,
             focusedPermission = key.focusedPermission,
             onBack = { navigator.goBack() },
         )
@@ -86,11 +100,12 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
     ) { key ->
         ComponentsScreen(
             appDetailInput = key.detailInput,
+            appName = key.appName,
             initialScope = key.scope,
             initialFilters = key.filters,
             onBack = { navigator.goBack() },
             onNavigateToIntentFilters = { componentName, componentType ->
-                navigator.navigate(IntentFiltersNavKey(key.detailInput, componentName, componentType))
+                navigator.navigate(IntentFiltersNavKey(key.detailInput, key.appName, componentName, componentType))
             },
         )
     }
@@ -100,6 +115,7 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
     ) { key ->
         IntentFiltersScreen(
             appDetailInput = key.detailInput,
+            appName = key.appName,
             componentName = key.componentName,
             componentType = key.componentType,
             onBack = { navigator.goBack() },
@@ -111,6 +127,7 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
     ) { key ->
         CertificatesScreen(
             appDetailInput = key.detailInput,
+            appName = key.appName,
             onBack = { navigator.goBack() },
         )
     }
@@ -120,6 +137,7 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
     ) { key ->
         RequirementsScreen(
             appDetailInput = key.detailInput,
+            appName = key.appName,
             onBack = { navigator.goBack() },
         )
     }
@@ -129,6 +147,7 @@ fun EntryProviderScope<NavKey>.appDetailEntries(navigator: Navigator) {
     ) { key ->
         ManifestScreen(
             appDetailInput = key.detailInput,
+            appName = key.appName,
             onBack = { navigator.goBack() },
         )
     }

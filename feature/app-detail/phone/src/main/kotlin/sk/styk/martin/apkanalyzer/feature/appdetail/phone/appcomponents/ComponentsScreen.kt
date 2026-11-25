@@ -45,7 +45,6 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.SearchBarAc
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.SelectorChip
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.TextButton
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.collapsingHeader
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.collapsingHeaderContainer
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.rememberCollapsingHeaderState
@@ -54,7 +53,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailSectionScaffold
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ListSectionHeader
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
@@ -64,6 +63,7 @@ import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 @Composable
 internal fun ComponentsScreen(
     appDetailInput: AppDetailInput,
+    appName: String,
     initialScope: ComponentScope,
     initialFilters: Set<ComponentFilter>,
     onBack: () -> Unit,
@@ -103,6 +103,7 @@ internal fun ComponentsScreen(
 
     ComponentsContent(
         state = state,
+        appName = appName,
         onAction = viewModel::onAction,
         onBack = onBack,
         onNavigateToIntentFilters = onNavigateToIntentFilters,
@@ -114,37 +115,34 @@ internal fun ComponentsScreen(
 @Composable
 private fun ComponentsContent(
     state: ComponentsState,
+    appName: String,
     onAction: (ComponentsAction) -> Unit,
     onBack: () -> Unit,
     onNavigateToIntentFilters: (componentName: String, componentType: ComponentType) -> Unit,
     modifier: Modifier = Modifier,
     recordedAt: Instant? = null,
 ) {
-    AppDetailModeFrame(recordedAt = recordedAt, modifier = modifier) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(AppTheme.colors.background),
-        ) {
-            Toolbar(
-                title = stringResource(AppsR.string.components_title),
-                onBack = onBack,
+    AppDetailSectionScaffold(
+        title = stringResource(AppsR.string.components_title),
+        appName = appName,
+        onBack = onBack,
+        recordedAt = recordedAt,
+        modifier = modifier,
+    ) {
+        when (state) {
+            is ComponentsState.Loading -> SectionLoading()
+
+            is ComponentsState.Error -> SectionError(
+                reason = state.reason,
+                loadFailedMessage = stringResource(AppsR.string.components_error),
+                onRetry = { onAction(ComponentsAction.Retry) },
             )
-            when (state) {
-                is ComponentsState.Loading -> SectionLoading()
 
-                is ComponentsState.Error -> SectionError(
-                    reason = state.reason,
-                    loadFailedMessage = stringResource(AppsR.string.components_error),
-                    onRetry = { onAction(ComponentsAction.Retry) },
-                )
-
-                is ComponentsState.Loaded -> LoadedContent(
-                    state = state,
-                    onAction = onAction,
-                    onNavigateToIntentFilters = onNavigateToIntentFilters,
-                )
-            }
+            is ComponentsState.Loaded -> LoadedContent(
+                state = state,
+                onAction = onAction,
+                onNavigateToIntentFilters = onNavigateToIntentFilters,
+            )
         }
     }
 }
@@ -316,6 +314,7 @@ private fun ComponentsLoadingPreview() {
     ApkAnalyzerTheme {
         ComponentsContent(
             state = ComponentsState.Loading,
+            appName = "Spotify",
             onAction = {},
             onBack = {},
             onNavigateToIntentFilters = { _, _ -> },
@@ -329,6 +328,7 @@ private fun ComponentsErrorPreview() {
     ApkAnalyzerTheme {
         ComponentsContent(
             state = ComponentsState.Error(SectionErrorReason.LoadFailed),
+            appName = "Spotify",
             onAction = {},
             onBack = {},
             onNavigateToIntentFilters = { _, _ -> },
@@ -342,6 +342,7 @@ private fun ComponentsLoadedPreview() {
     ApkAnalyzerTheme {
         ComponentsContent(
             state = sampleLoadedState(),
+            appName = "Spotify",
             onAction = {},
             onBack = {},
             onNavigateToIntentFilters = { _, _ -> },
@@ -355,6 +356,7 @@ private fun ComponentsEmptyResultPreview() {
     ApkAnalyzerTheme {
         ComponentsContent(
             state = sampleLoadedState().copy(query = "widget", sections = listOf()),
+            appName = "Spotify",
             onAction = {},
             onBack = {},
             onNavigateToIntentFilters = { _, _ -> },

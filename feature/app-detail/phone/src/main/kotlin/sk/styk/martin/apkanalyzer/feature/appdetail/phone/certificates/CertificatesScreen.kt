@@ -3,7 +3,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone.certificates
 
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -56,14 +55,13 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.InfoCard
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.InfoCardTone
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.LabeledHashBox
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailSectionScaffold
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.InfoRow
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RationaleBottomSheet
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionCard
@@ -79,6 +77,7 @@ import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 @Composable
 internal fun CertificatesScreen(
     appDetailInput: AppDetailInput,
+    appName: String,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: CertificatesViewModel = hiltViewModel { factory: CertificatesViewModel.Factory ->
@@ -98,6 +97,7 @@ internal fun CertificatesScreen(
 
     CertificatesContent(
         state = state,
+        appName = appName,
         onAction = viewModel::onAction,
         onBack = onBack,
         modifier = modifier,
@@ -108,32 +108,29 @@ internal fun CertificatesScreen(
 @Composable
 private fun CertificatesContent(
     state: CertificatesState,
+    appName: String,
     onAction: (CertificatesAction) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     recordedAt: Instant? = null,
 ) {
-    AppDetailModeFrame(recordedAt = recordedAt, modifier = modifier) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(AppTheme.colors.background),
-        ) {
-            Toolbar(
-                title = stringResource(AppsR.string.certificates_title),
-                onBack = onBack,
+    AppDetailSectionScaffold(
+        title = stringResource(AppsR.string.certificates_title),
+        appName = appName,
+        onBack = onBack,
+        recordedAt = recordedAt,
+        modifier = modifier,
+    ) {
+        when (state) {
+            CertificatesState.Loading -> SectionLoading()
+
+            is CertificatesState.Error -> SectionError(
+                reason = state.reason,
+                loadFailedMessage = stringResource(AppsR.string.certificates_error),
+                onRetry = { onAction(CertificatesAction.Retry) },
             )
-            when (state) {
-                CertificatesState.Loading -> SectionLoading()
 
-                is CertificatesState.Error -> SectionError(
-                    reason = state.reason,
-                    loadFailedMessage = stringResource(AppsR.string.certificates_error),
-                    onRetry = { onAction(CertificatesAction.Retry) },
-                )
-
-                is CertificatesState.Loaded -> LoadedContent(state = state, onAction = onAction)
-            }
+            is CertificatesState.Loaded -> LoadedContent(state = state, onAction = onAction)
         }
     }
 }
@@ -779,6 +776,7 @@ private fun CertificatesLoadedPreview() {
     ApkAnalyzerTheme {
         CertificatesContent(
             state = sampleLoadedState(),
+            appName = "Spotify",
             onAction = {},
             onBack = {},
         )
@@ -796,6 +794,7 @@ private fun CertificatesDebugPreview() {
                     validity = CertificateValidity.Expired,
                 ),
             ),
+            appName = "Spotify",
             onAction = {},
             onBack = {},
         )
@@ -808,6 +807,7 @@ private fun CertificatesHistoricalPreview() {
     ApkAnalyzerTheme {
         CertificatesContent(
             state = sampleLoadedState().copy(isHistorical = true),
+            appName = "Spotify",
             onAction = {},
             onBack = {},
             recordedAt = Instant.ofEpochMilli(1_773_014_400_000),
@@ -830,6 +830,7 @@ private fun CertificatesRotationHistoryPreview() {
                 hasMultipleSigners = false,
                 signingSchemeVersions = listOf(SigningSchemeVersion.V2, SigningSchemeVersion.V3),
             ),
+            appName = "Spotify",
             onAction = {},
             onBack = {},
         )
@@ -842,6 +843,7 @@ private fun CertificatesLoadingPreview() {
     ApkAnalyzerTheme {
         CertificatesContent(
             state = CertificatesState.Loading,
+            appName = "Spotify",
             onAction = {},
             onBack = {},
         )
@@ -854,6 +856,7 @@ private fun CertificatesErrorPreview() {
     ApkAnalyzerTheme {
         CertificatesContent(
             state = CertificatesState.Error(SectionErrorReason.LoadFailed),
+            appName = "Spotify",
             onAction = {},
             onBack = {},
         )
@@ -871,6 +874,7 @@ private fun CertificatesEmptyPreview() {
                 hasMultipleSigners = false,
                 signingSchemeVersions = null,
             ),
+            appName = "Spotify",
             onAction = {},
             onBack = {},
         )

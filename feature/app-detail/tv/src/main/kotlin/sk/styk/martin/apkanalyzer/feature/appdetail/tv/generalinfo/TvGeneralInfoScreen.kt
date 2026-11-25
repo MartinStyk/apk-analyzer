@@ -31,6 +31,7 @@ import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 @Composable
 internal fun TvGeneralInfoScreen(
     appDetailInput: AppDetailInput,
+    appName: String,
     onNavigateToSplitApks: () -> Unit,
     onNavigateToNativeLibraries: () -> Unit,
     viewModel: TvGeneralInfoViewModel = hiltViewModel { factory: TvGeneralInfoViewModel.Factory ->
@@ -40,6 +41,7 @@ internal fun TvGeneralInfoScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     TvGeneralInfoContent(
         state = state,
+        appName = appName,
         appReference = appDetailInput.iconReference,
         onNavigateToSplitApks = onNavigateToSplitApks,
         onNavigateToNativeLibraries = onNavigateToNativeLibraries,
@@ -49,18 +51,29 @@ internal fun TvGeneralInfoScreen(
 @Composable
 private fun TvGeneralInfoContent(
     state: TvGeneralInfoState,
+    appName: String,
     appReference: AppReference,
     onNavigateToSplitApks: () -> Unit,
     onNavigateToNativeLibraries: () -> Unit,
 ) {
+    val title = stringResource(AppsR.string.general_info_title)
     when (state) {
-        TvGeneralInfoState.Loading -> SectionLoading()
+        TvGeneralInfoState.Loading -> SectionLoading(
+            title = title,
+            appName = appName,
+            appReference = appReference,
+        )
 
-        TvGeneralInfoState.Error -> SectionError(message = stringResource(AppsR.string.general_info_error))
+        TvGeneralInfoState.Error -> SectionError(
+            title = title,
+            appName = appName,
+            appReference = appReference,
+            message = stringResource(AppsR.string.general_info_error),
+        )
 
         is TvGeneralInfoState.Loaded -> InfoSectionList(
-            title = stringResource(AppsR.string.general_info_title),
-            subtitle = state.applicationName,
+            title = title,
+            appName = appName,
             sections = generalInfoSections(state),
             appReference = appReference,
             onClickRow = { row ->
@@ -266,6 +279,7 @@ private const val NATIVE_LIBRARIES_KEY = "native-libraries"
 private fun TvGeneralInfoContentPreview() {
     ApkAnalyzerTvTheme {
         TvGeneralInfoContent(
+            appName = "YouTube",
             appReference = AppReference.InstalledPackage(PackageName("com.google.android.youtube.tv")),
             state = TvGeneralInfoState.Loaded(
                 applicationName = "YouTube",

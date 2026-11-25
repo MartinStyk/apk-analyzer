@@ -47,7 +47,6 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.SearchBarAc
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Tag
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.TextButton
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.collapsingHeader
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.collapsingHeaderContainer
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.rememberCollapsingHeaderState
@@ -56,7 +55,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailSectionScaffold
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
 import java.time.Instant
@@ -65,6 +64,7 @@ import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 @Composable
 internal fun IntentFiltersScreen(
     appDetailInput: AppDetailInput,
+    appName: String,
     componentName: String,
     componentType: ComponentType,
     onBack: () -> Unit,
@@ -87,6 +87,7 @@ internal fun IntentFiltersScreen(
 
     IntentFiltersContent(
         state = state,
+        appName = appName,
         onAction = viewModel::onAction,
         modifier = modifier,
         recordedAt = appDetailInput.recordedAt,
@@ -96,34 +97,31 @@ internal fun IntentFiltersScreen(
 @Composable
 private fun IntentFiltersContent(
     state: IntentFiltersState,
+    appName: String,
     onAction: (IntentFiltersAction) -> Unit,
     modifier: Modifier = Modifier,
     recordedAt: Instant? = null,
 ) {
-    AppDetailModeFrame(recordedAt = recordedAt, modifier = modifier) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(AppTheme.colors.background),
-        ) {
-            Toolbar(
-                title = stringResource(R.string.intent_filters_title),
-                onBack = { onAction(IntentFiltersAction.Back) },
+    AppDetailSectionScaffold(
+        title = stringResource(R.string.intent_filters_title),
+        appName = appName,
+        onBack = { onAction(IntentFiltersAction.Back) },
+        recordedAt = recordedAt,
+        modifier = modifier,
+    ) {
+        when (state) {
+            IntentFiltersState.Loading -> SectionLoading()
+
+            IntentFiltersState.Error -> SectionError(
+                message = stringResource(R.string.intent_filters_error),
+                onRetry = { onAction(IntentFiltersAction.Retry) },
             )
-            when (state) {
-                IntentFiltersState.Loading -> SectionLoading()
 
-                IntentFiltersState.Error -> SectionError(
-                    message = stringResource(R.string.intent_filters_error),
-                    onRetry = { onAction(IntentFiltersAction.Retry) },
-                )
+            IntentFiltersState.Unavailable -> SectionError(
+                message = stringResource(AppsR.string.components_detail_intent_filters_unavailable),
+            )
 
-                IntentFiltersState.Unavailable -> SectionError(
-                    message = stringResource(AppsR.string.components_detail_intent_filters_unavailable),
-                )
-
-                is IntentFiltersState.Loaded -> IntentFiltersLoadedContent(state = state, onAction = onAction)
-            }
+            is IntentFiltersState.Loaded -> IntentFiltersLoadedContent(state = state, onAction = onAction)
         }
     }
 }
@@ -488,6 +486,7 @@ private fun IntentFiltersLoadedPreview() {
                 totalCount = 2,
                 filters = listOf(sampleIntentFilter(), sampleCustomActionIntentFilter()),
             ),
+            appName = "Spotify",
             onAction = {},
         )
     }
@@ -505,6 +504,7 @@ private fun IntentFiltersEmptyPreview() {
                 totalCount = 2,
                 filters = listOf(),
             ),
+            appName = "Spotify",
             onAction = {},
         )
     }

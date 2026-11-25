@@ -36,39 +36,54 @@ import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 @Composable
 internal fun TvRequirementsScreen(
     appDetailInput: AppDetailInput,
+    appName: String,
     viewModel: TvRequirementsViewModel = hiltViewModel { factory: TvRequirementsViewModel.Factory ->
         factory.create(appDetailInput)
     },
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    TvRequirementsContent(state = state, appReference = appDetailInput.iconReference, onAction = viewModel::onAction)
+    TvRequirementsContent(
+        state = state,
+        appName = appName,
+        appReference = appDetailInput.iconReference,
+        onAction = viewModel::onAction,
+    )
 }
 
 @Composable
 private fun TvRequirementsContent(
     state: TvRequirementsState,
+    appName: String,
     appReference: AppReference,
     onAction: (TvRequirementsAction) -> Unit,
 ) {
+    val title = stringResource(AppsR.string.requirements_title)
     when (state) {
-        TvRequirementsState.Loading -> SectionLoading()
+        TvRequirementsState.Loading -> SectionLoading(
+            title = title,
+            appName = appName,
+            appReference = appReference,
+        )
 
         TvRequirementsState.Error -> SectionError(
+            title = title,
+            appName = appName,
+            appReference = appReference,
             message = stringResource(AppsR.string.requirements_error),
             onRetry = { onAction(TvRequirementsAction.Retry) },
         )
 
         is TvRequirementsState.Loaded -> if (state.requirements.sections.isEmpty()) {
             SectionEmpty(
-                title = stringResource(AppsR.string.requirements_title),
-                subtitle = state.appName,
+                title = title,
+                appName = appName,
                 appReference = appReference,
                 message = stringResource(AppsR.string.requirements_empty),
             )
         } else {
             InfoSectionList(
-                title = stringResource(AppsR.string.requirements_title),
-                subtitle = state.appName,
+                title = title,
+                appName = appName,
                 appReference = appReference,
                 sections = state.requirements.sections.map { requirementSection(it) },
             )
@@ -112,9 +127,9 @@ private fun requirementSection(section: RequirementSection): InfoSection {
 private fun TvRequirementsContentPreview() {
     ApkAnalyzerTvTheme {
         TvRequirementsContent(
+            appName = "Camera Pro",
             appReference = AppReference.InstalledPackage(PackageName("com.google.android.youtube.tv")),
             state = TvRequirementsState.Loaded(
-                appName = "Camera Pro",
                 requirements = Requirements(
                     sections = listOf(
                         RequirementSection(

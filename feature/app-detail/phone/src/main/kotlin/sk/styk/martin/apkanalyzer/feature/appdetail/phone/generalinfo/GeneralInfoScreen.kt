@@ -1,7 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone.generalinfo
 
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -30,14 +29,12 @@ import sk.styk.martin.apkanalyzer.core.apps.installsource.rationaleRes
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
-import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailSectionScaffold
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.InfoRow
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.InfoRowItem
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.NavigableInfoRowItem
@@ -55,6 +52,7 @@ import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 @Composable
 internal fun GeneralInfoScreen(
     appDetailInput: AppDetailInput,
+    appName: String,
     onBack: () -> Unit,
     onNavigateToSplitApks: () -> Unit,
     onNavigateToNativeLibraries: () -> Unit,
@@ -76,6 +74,7 @@ internal fun GeneralInfoScreen(
 
     GeneralInfoContent(
         state = state,
+        appName = appName,
         onAction = viewModel::onAction,
         onBack = onBack,
         onNavigateToSplitApks = onNavigateToSplitApks,
@@ -88,6 +87,7 @@ internal fun GeneralInfoScreen(
 @Composable
 private fun GeneralInfoContent(
     state: GeneralInfoState,
+    appName: String,
     onAction: (GeneralInfoAction) -> Unit,
     onBack: () -> Unit,
     onNavigateToSplitApks: () -> Unit,
@@ -95,32 +95,28 @@ private fun GeneralInfoContent(
     modifier: Modifier = Modifier,
     recordedAt: Instant? = null,
 ) {
-    AppDetailModeFrame(recordedAt = recordedAt, modifier = modifier) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(AppTheme.colors.background),
-        ) {
-            Toolbar(
-                title = stringResource(AppsR.string.general_info_title),
-                onBack = onBack,
+    AppDetailSectionScaffold(
+        title = stringResource(AppsR.string.general_info_title),
+        appName = appName,
+        onBack = onBack,
+        recordedAt = recordedAt,
+        modifier = modifier,
+    ) {
+        when (state) {
+            is GeneralInfoState.Loading -> SectionLoading()
+
+            is GeneralInfoState.Error -> SectionError(
+                reason = state.reason,
+                loadFailedMessage = stringResource(AppsR.string.general_info_error),
+                onRetry = { onAction(GeneralInfoAction.Retry) },
             )
-            when (state) {
-                is GeneralInfoState.Loading -> SectionLoading()
 
-                is GeneralInfoState.Error -> SectionError(
-                    reason = state.reason,
-                    loadFailedMessage = stringResource(AppsR.string.general_info_error),
-                    onRetry = { onAction(GeneralInfoAction.Retry) },
-                )
-
-                is GeneralInfoState.Loaded -> LoadedContent(
-                    state = state,
-                    onAction = onAction,
-                    onNavigateToSplitApks = onNavigateToSplitApks,
-                    onNavigateToNativeLibraries = onNavigateToNativeLibraries,
-                )
-            }
+            is GeneralInfoState.Loaded -> LoadedContent(
+                state = state,
+                onAction = onAction,
+                onNavigateToSplitApks = onNavigateToSplitApks,
+                onNavigateToNativeLibraries = onNavigateToNativeLibraries,
+            )
         }
     }
 }
@@ -549,6 +545,7 @@ private fun GeneralInfoLoadingPreview() {
     ApkAnalyzerTheme {
         GeneralInfoContent(
             state = GeneralInfoState.Loading,
+            appName = "Spotify",
             onAction = {},
             onBack = {},
             onNavigateToSplitApks = {},
@@ -563,6 +560,7 @@ private fun GeneralInfoErrorPreview() {
     ApkAnalyzerTheme {
         GeneralInfoContent(
             state = GeneralInfoState.Error(SectionErrorReason.LoadFailed),
+            appName = "Spotify",
             onAction = {},
             onBack = {},
             onNavigateToSplitApks = {},
@@ -586,6 +584,7 @@ private fun GeneralInfoNotRecordedPreview() {
                 apkDirectory = null,
                 dataDirectory = null,
             ),
+            appName = "Spotify",
             onAction = {},
             onBack = {},
             onNavigateToSplitApks = {},
@@ -601,6 +600,7 @@ private fun GeneralInfoLoadedPreview() {
     ApkAnalyzerTheme {
         GeneralInfoContent(
             state = sampleGeneralInfoState(),
+            appName = "Spotify",
             onAction = {},
             onBack = {},
             onNavigateToSplitApks = {},
