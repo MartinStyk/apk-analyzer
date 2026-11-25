@@ -10,5 +10,5 @@ internal sealed interface TvSplitApksState {
     data object Error : TvSplitApksState
 
     @Immutable
-    data class Loaded(val appName: String, val splits: List<InstalledSplitApk>) : TvSplitApksState
+    data class Loaded(val splits: List<InstalledSplitApk>) : TvSplitApksState
 }

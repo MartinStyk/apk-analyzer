@@ -21,7 +21,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.tv.theme.ApkAnalyzerTvTheme
 @Composable
 internal fun InfoSectionList(
     title: String,
-    subtitle: String,
+    appName: String,
     sections: List<InfoSection>,
     appReference: AppReference,
     modifier: Modifier = Modifier,
@@ -39,7 +39,7 @@ internal fun InfoSectionList(
 
     ListDetailScaffold(
         title = title,
-        subtitle = subtitle,
+        appName = appName,
         appReference = appReference,
         selected = selectedRow,
         modifier = modifier,
@@ -81,7 +81,7 @@ private fun InfoSectionListPreview() {
     ApkAnalyzerTvTheme {
         InfoSectionList(
             title = "General information",
-            subtitle = "YouTube",
+            appName = "YouTube",
             appReference = AppReference.InstalledPackage(PackageName("com.google.android.youtube.tv")),
             sections = listOf(
                 InfoSection(

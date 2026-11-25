@@ -101,16 +101,16 @@ private const val ICON_MIME_TYPE = "image/png"
 internal fun AppDetailScreen(
     appDetailInput: AppDetailInput,
     onBack: () -> Unit,
-    onNavigateToManifest: () -> Unit,
-    onNavigateToGeneralDetails: () -> Unit,
-    onNavigateToPermissions: (permissionName: String?) -> Unit,
-    onNavigateToComponents: () -> Unit,
-    onNavigateToActivities: () -> Unit,
-    onNavigateToServices: () -> Unit,
-    onNavigateToReceivers: () -> Unit,
-    onNavigateToProviders: () -> Unit,
-    onNavigateToCertificates: () -> Unit,
-    onNavigateToFeatures: () -> Unit,
+    onNavigateToManifest: (appName: String) -> Unit,
+    onNavigateToGeneralDetails: (appName: String) -> Unit,
+    onNavigateToPermissions: (appName: String, permissionName: String?) -> Unit,
+    onNavigateToComponents: (appName: String) -> Unit,
+    onNavigateToActivities: (appName: String) -> Unit,
+    onNavigateToServices: (appName: String) -> Unit,
+    onNavigateToReceivers: (appName: String) -> Unit,
+    onNavigateToProviders: (appName: String) -> Unit,
+    onNavigateToCertificates: (appName: String) -> Unit,
+    onNavigateToFeatures: (appName: String) -> Unit,
     onNavigateToInventoryExport: (PackageName) -> Unit,
     onNavigateToHistory: (PackageName, appName: String) -> Unit,
     modifier: Modifier = Modifier,
@@ -183,25 +183,25 @@ internal fun AppDetailScreen(
                     }
                 }
 
-                is AppDetailEvent.NavigateToManifest -> onNavigateToManifest()
+                is AppDetailEvent.NavigateToManifest -> onNavigateToManifest(event.appName)
 
-                is AppDetailEvent.NavigateToGeneralDetails -> onNavigateToGeneralDetails()
+                is AppDetailEvent.NavigateToGeneralDetails -> onNavigateToGeneralDetails(event.appName)
 
-                is AppDetailEvent.NavigateToPermissions -> onNavigateToPermissions(event.permissionName)
+                is AppDetailEvent.NavigateToPermissions -> onNavigateToPermissions(event.appName, event.permissionName)
 
-                is AppDetailEvent.NavigateToComponents -> onNavigateToComponents()
+                is AppDetailEvent.NavigateToComponents -> onNavigateToComponents(event.appName)
 
-                is AppDetailEvent.NavigateToActivities -> onNavigateToActivities()
+                is AppDetailEvent.NavigateToActivities -> onNavigateToActivities(event.appName)
 
-                is AppDetailEvent.NavigateToServices -> onNavigateToServices()
+                is AppDetailEvent.NavigateToServices -> onNavigateToServices(event.appName)
 
-                is AppDetailEvent.NavigateToReceivers -> onNavigateToReceivers()
+                is AppDetailEvent.NavigateToReceivers -> onNavigateToReceivers(event.appName)
 
-                is AppDetailEvent.NavigateToProviders -> onNavigateToProviders()
+                is AppDetailEvent.NavigateToProviders -> onNavigateToProviders(event.appName)
 
-                is AppDetailEvent.NavigateToCertificates -> onNavigateToCertificates()
+                is AppDetailEvent.NavigateToCertificates -> onNavigateToCertificates(event.appName)
 
-                is AppDetailEvent.NavigateToFeatures -> onNavigateToFeatures()
+                is AppDetailEvent.NavigateToFeatures -> onNavigateToFeatures(event.appName)
 
                 is AppDetailEvent.NavigateToInventoryExport -> onNavigateToInventoryExport(event.packageName)
 

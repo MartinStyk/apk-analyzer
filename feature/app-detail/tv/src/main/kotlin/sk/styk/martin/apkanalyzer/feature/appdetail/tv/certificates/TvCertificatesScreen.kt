@@ -38,39 +38,54 @@ import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 @Composable
 internal fun TvCertificatesScreen(
     appDetailInput: AppDetailInput,
+    appName: String,
     viewModel: TvCertificatesViewModel = hiltViewModel { factory: TvCertificatesViewModel.Factory ->
         factory.create(appDetailInput)
     },
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    TvCertificatesContent(state = state, appReference = appDetailInput.iconReference, onAction = viewModel::onAction)
+    TvCertificatesContent(
+        state = state,
+        appName = appName,
+        appReference = appDetailInput.iconReference,
+        onAction = viewModel::onAction,
+    )
 }
 
 @Composable
 private fun TvCertificatesContent(
     state: TvCertificatesState,
+    appName: String,
     appReference: AppReference,
     onAction: (TvCertificatesAction) -> Unit,
 ) {
+    val title = stringResource(AppsR.string.certificates_title)
     when (state) {
-        TvCertificatesState.Loading -> SectionLoading()
+        TvCertificatesState.Loading -> SectionLoading(
+            title = title,
+            appName = appName,
+            appReference = appReference,
+        )
 
         TvCertificatesState.Error -> SectionError(
+            title = title,
+            appName = appName,
+            appReference = appReference,
             message = stringResource(AppsR.string.certificates_error),
             onRetry = { onAction(TvCertificatesAction.Retry) },
         )
 
         is TvCertificatesState.Loaded -> if (state.currentCertificates.isEmpty() && state.pastCertificates.isEmpty()) {
             SectionEmpty(
-                title = stringResource(AppsR.string.certificates_title),
-                subtitle = state.appName,
+                title = title,
+                appName = appName,
                 appReference = appReference,
                 message = stringResource(AppsR.string.certificates_empty),
             )
         } else {
             InfoSectionList(
-                title = stringResource(AppsR.string.certificates_title),
-                subtitle = state.appName,
+                title = title,
+                appName = appName,
                 sections = certificateSections(state),
                 appReference = appReference,
             )
@@ -294,9 +309,9 @@ private fun TvCertificatesContentPreview() {
     )
     ApkAnalyzerTvTheme {
         TvCertificatesContent(
+            appName = "YouTube",
             appReference = AppReference.InstalledPackage(PackageName("com.google.android.youtube.tv")),
             state = TvCertificatesState.Loaded(
-                appName = "YouTube",
                 currentCertificates = listOf(TvCertificate(certificate, CertificateValidity.Valid)),
                 pastCertificates = listOf(),
                 hasMultipleSigners = false,

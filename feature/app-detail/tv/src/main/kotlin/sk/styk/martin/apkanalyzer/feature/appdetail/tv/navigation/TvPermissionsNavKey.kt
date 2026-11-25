@@ -5,4 +5,8 @@ import kotlinx.serialization.Serializable
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 
 @Serializable
-internal data class TvPermissionsNavKey(val detailInput: AppDetailInput, val permissionName: String? = null) : NavKey
+internal data class TvPermissionsNavKey(
+    val detailInput: AppDetailInput,
+    val appName: String,
+    val permissionName: String? = null,
+) : NavKey

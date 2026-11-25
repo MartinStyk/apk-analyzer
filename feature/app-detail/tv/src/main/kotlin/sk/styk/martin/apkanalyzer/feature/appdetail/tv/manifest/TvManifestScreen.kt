@@ -43,10 +43,17 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
+import sk.styk.martin.apkanalyzer.core.common.model.AppReference
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
+import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.rememberAppAccentColor
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
+import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.AccentBackdrop
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.theme.ApkAnalyzerTvTheme
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.iconReference
+import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SECTION_BACKDROP_STRENGTH
+import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionAppHeader
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionLoading
 import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
@@ -54,50 +61,86 @@ import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 @Composable
 internal fun TvManifestScreen(
     appDetailInput: AppDetailInput,
+    appName: String,
     viewModel: TvManifestViewModel = hiltViewModel { factory: TvManifestViewModel.Factory ->
         factory.create(appDetailInput)
     },
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    TvManifestContent(state = state, onAction = viewModel::onAction)
+    TvManifestContent(
+        state = state,
+        appName = appName,
+        appReference = appDetailInput.iconReference,
+        onAction = viewModel::onAction,
+    )
 }
 
 @Composable
-private fun TvManifestContent(state: TvManifestState, onAction: (TvManifestAction) -> Unit) {
+private fun TvManifestContent(
+    state: TvManifestState,
+    appName: String,
+    appReference: AppReference,
+    onAction: (TvManifestAction) -> Unit,
+) {
+    val title = stringResource(AppsR.string.manifest_title)
     when (state) {
-        TvManifestState.Loading -> SectionLoading()
+        TvManifestState.Loading -> SectionLoading(
+            title = title,
+            appName = appName,
+            appReference = appReference,
+        )
 
         TvManifestState.Error -> SectionError(
+            title = title,
+            appName = appName,
+            appReference = appReference,
             message = stringResource(AppsR.string.manifest_error),
             onRetry = { onAction(TvManifestAction.Retry) },
         )
 
-        is TvManifestState.Loaded -> LoadedContent(state = state)
+        is TvManifestState.Loaded -> LoadedContent(
+            title = title,
+            state = state,
+            appName = appName,
+            appReference = appReference,
+        )
     }
 }
 
 @Composable
-private fun LoadedContent(state: TvManifestState.Loaded) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 48.dp, vertical = 27.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
-    ) {
-        Text(text = stringResource(AppsR.string.manifest_title), style = AppTheme.typography.headlineSmall)
-        Text(
-            text = pluralStringResource(AppsR.plurals.manifest_line_count, state.lines.size, state.lines.size),
-            style = AppTheme.typography.titleMedium,
-            color = AppTheme.colors.onSurfaceVariant,
-        )
-        if (state.additionalInstalledSplits > 0) {
-            Text(
-                text = pluralStringResource(AppsR.plurals.manifest_base_split_note, state.additionalInstalledSplits, state.additionalInstalledSplits),
-                style = AppTheme.typography.bodyLarge,
-                color = AppTheme.colors.onSurfaceVariant,
+private fun LoadedContent(
+    title: String,
+    state: TvManifestState.Loaded,
+    appName: String,
+    appReference: AppReference,
+) {
+    AccentBackdrop(accent = rememberAppAccentColor(appReference), strength = SECTION_BACKDROP_STRENGTH) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 48.dp, vertical = 27.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            SectionAppHeader(
+                title = title,
+                appName = appName,
+                appReference = appReference,
             )
+            Text(
+                text = pluralStringResource(AppsR.plurals.manifest_line_count, state.lines.size, state.lines.size),
+                style = AppTheme.typography.titleMedium,
+                color = AppTheme.colors.onSurfaceVariant,
+                modifier = Modifier.padding(top = 12.dp),
+            )
+            if (state.additionalInstalledSplits > 0) {
+                Text(
+                    text = pluralStringResource(AppsR.plurals.manifest_base_split_note, state.additionalInstalledSplits, state.additionalInstalledSplits),
+                    style = AppTheme.typography.bodyLarge,
+                    color = AppTheme.colors.onSurfaceVariant,
+                )
+            }
+            ManifestCode(lines = state.lines, modifier = Modifier.padding(top = 12.dp))
         }
-        ManifestCode(lines = state.lines, modifier = Modifier.padding(top = 16.dp))
     }
 }
 
@@ -159,6 +202,8 @@ private const val NUMBER_CHAR_WIDTH = 12
 private fun TvManifestContentPreview() {
     ApkAnalyzerTvTheme {
         TvManifestContent(
+            appName = "YouTube",
+            appReference = AppReference.InstalledPackage(PackageName("com.google.android.youtube.tv")),
             state = TvManifestState.Loaded(
                 lines = listOf(
                     "<manifest package=\"com.google.android.youtube.tv\">",

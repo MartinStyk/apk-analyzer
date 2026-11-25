@@ -16,7 +16,6 @@ internal sealed interface TvCertificatesState {
 
     @Immutable
     data class Loaded(
-        val appName: String,
         val currentCertificates: List<TvCertificate>,
         val pastCertificates: List<TvCertificate>,
         val hasMultipleSigners: Boolean,

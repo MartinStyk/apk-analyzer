@@ -9,6 +9,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents.Componen
 @Serializable
 internal data class ComponentsNavKey(
     val detailInput: AppDetailInput,
+    val appName: String,
     val scope: ComponentScope = ComponentScope.All,
     val filters: Set<ComponentFilter> = setOf(),
 ) : NavKey

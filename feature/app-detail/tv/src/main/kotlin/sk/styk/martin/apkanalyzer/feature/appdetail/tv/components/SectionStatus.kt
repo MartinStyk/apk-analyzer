@@ -17,6 +17,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import sk.styk.martin.apkanalyzer.core.common.model.AppReference
+import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.Button
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.Text
@@ -27,6 +29,18 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.tv.R
 internal fun SectionLoading(modifier: Modifier = Modifier) {
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text(text = stringResource(R.string.tv_app_detail_loading), color = AppTheme.colors.onSurfaceVariant)
+    }
+}
+
+@Composable
+internal fun SectionLoading(
+    title: String,
+    appName: String,
+    appReference: AppReference,
+    modifier: Modifier = Modifier,
+) {
+    SectionStateFrame(title = title, appName = appName, appReference = appReference, modifier = modifier) {
+        SectionLoading()
     }
 }
 
@@ -60,6 +74,20 @@ internal fun SectionError(
     }
 }
 
+@Composable
+internal fun SectionError(
+    title: String,
+    appName: String,
+    appReference: AppReference,
+    message: String,
+    modifier: Modifier = Modifier,
+    onRetry: (() -> Unit)? = null,
+) {
+    SectionStateFrame(title = title, appName = appName, appReference = appReference, modifier = modifier) {
+        SectionError(message = message, onRetry = onRetry)
+    }
+}
+
 @Preview(device = Devices.TV_1080p, showBackground = true, backgroundColor = 0xFF000000)
 @Composable
 private fun SectionErrorPreview() {
@@ -70,8 +98,34 @@ private fun SectionErrorPreview() {
 
 @Preview(device = Devices.TV_1080p, showBackground = true, backgroundColor = 0xFF000000)
 @Composable
+private fun SectionErrorWithHeaderLongNamePreview() {
+    ApkAnalyzerTvTheme {
+        SectionError(
+            title = "Permissions",
+            appName = "Super Ultra Long Streaming Application Title That Should Truncate Cleanly",
+            appReference = AppReference.InstalledPackage(PackageName("com.google.android.youtube.tv")),
+            message = "Failed to load permissions.",
+            onRetry = {},
+        )
+    }
+}
+
+@Preview(device = Devices.TV_1080p, showBackground = true, backgroundColor = 0xFF000000)
+@Composable
 private fun SectionLoadingPreview() {
     ApkAnalyzerTvTheme {
         SectionLoading()
+    }
+}
+
+@Preview(device = Devices.TV_1080p, showBackground = true, backgroundColor = 0xFF000000)
+@Composable
+private fun SectionLoadingWithHeaderPreview() {
+    ApkAnalyzerTvTheme {
+        SectionLoading(
+            title = "Android manifest",
+            appName = "YouTube",
+            appReference = AppReference.InstalledPackage(PackageName("com.google.android.youtube.tv")),
+        )
     }
 }

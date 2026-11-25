@@ -100,7 +100,7 @@ internal class TvComponentsViewModel @AssistedInject constructor(
 private sealed interface ComponentsSource {
     data object Loading : ComponentsSource
     data object Error : ComponentsSource
-    data class Ready(val appName: String, val componentsByKind: Map<ComponentKind, List<TvComponentItem>>) : ComponentsSource
+    data class Ready(val componentsByKind: Map<ComponentKind, List<TvComponentItem>>) : ComponentsSource
 }
 
 private fun AppDetail.toSource(
@@ -109,7 +109,6 @@ private fun AppDetail.toSource(
 ): ComponentsSource.Ready {
     fun filtersFor(name: String, kind: ComponentKind) = intentFiltersByComponent?.let { it[ComponentIntentFilterKey(name, kind)].orEmpty() }
     return ComponentsSource.Ready(
-        appName = info.applicationName,
         componentsByKind = mapOf(
             ComponentKind.Activity to activities.map { it.toItem(canLaunch, filtersFor(it.name, ComponentKind.Activity)) },
             ComponentKind.Service to services.map { it.toItem(filtersFor(it.name, ComponentKind.Service)) },
@@ -195,7 +194,6 @@ private fun ComponentsSource.Ready.toState(selectedScope: TvComponentScope): TvC
         is TvComponentScope.Only -> listOf(scope.kind)
     }
     return TvComponentsState.Loaded(
-        appName = appName,
         scope = scope,
         scopeOptions = scopeOptions,
         sections = kinds.map { TvComponentSection(it, componentsByKind[it].orEmpty()) },

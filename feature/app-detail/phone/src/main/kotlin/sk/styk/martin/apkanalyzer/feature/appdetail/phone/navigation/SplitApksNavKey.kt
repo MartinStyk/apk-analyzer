@@ -5,4 +5,4 @@ import kotlinx.serialization.Serializable
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 
 @Serializable
-internal data class SplitApksNavKey(val detailInput: AppDetailInput) : NavKey
+internal data class SplitApksNavKey(val detailInput: AppDetailInput, val appName: String) : NavKey

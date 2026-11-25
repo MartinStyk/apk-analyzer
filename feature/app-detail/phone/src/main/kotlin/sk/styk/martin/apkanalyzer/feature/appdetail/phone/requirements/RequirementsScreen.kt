@@ -1,7 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone.requirements
 
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -40,13 +39,12 @@ import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.InfoCard
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.InfoCardTone
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailSectionScaffold
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ListSectionHeader
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
@@ -56,6 +54,7 @@ import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 @Composable
 internal fun RequirementsScreen(
     appDetailInput: AppDetailInput,
+    appName: String,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: RequirementsViewModel = hiltViewModel { factory: RequirementsViewModel.Factory ->
@@ -75,6 +74,7 @@ internal fun RequirementsScreen(
 
     RequirementsContent(
         state = state,
+        appName = appName,
         onAction = viewModel::onAction,
         onBack = onBack,
         modifier = modifier,
@@ -85,32 +85,29 @@ internal fun RequirementsScreen(
 @Composable
 private fun RequirementsContent(
     state: RequirementsState,
+    appName: String,
     onAction: (RequirementsAction) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     recordedAt: Instant? = null,
 ) {
-    AppDetailModeFrame(recordedAt = recordedAt, modifier = modifier) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(AppTheme.colors.background),
-        ) {
-            Toolbar(
-                title = stringResource(AppsR.string.requirements_title),
-                onBack = onBack,
+    AppDetailSectionScaffold(
+        title = stringResource(AppsR.string.requirements_title),
+        appName = appName,
+        onBack = onBack,
+        recordedAt = recordedAt,
+        modifier = modifier,
+    ) {
+        when (state) {
+            is RequirementsState.Loading -> SectionLoading()
+
+            is RequirementsState.Error -> SectionError(
+                reason = state.reason,
+                loadFailedMessage = stringResource(AppsR.string.requirements_error),
+                onRetry = { onAction(RequirementsAction.Retry) },
             )
-            when (state) {
-                is RequirementsState.Loading -> SectionLoading()
 
-                is RequirementsState.Error -> SectionError(
-                    reason = state.reason,
-                    loadFailedMessage = stringResource(AppsR.string.requirements_error),
-                    onRetry = { onAction(RequirementsAction.Retry) },
-                )
-
-                is RequirementsState.Loaded -> LoadedContent(state = state, onAction = onAction)
-            }
+            is RequirementsState.Loaded -> LoadedContent(state = state, onAction = onAction)
         }
     }
 }
@@ -206,6 +203,7 @@ private fun RequirementsLoadingPreview() {
     ApkAnalyzerTheme {
         RequirementsContent(
             state = RequirementsState.Loading,
+            appName = "Spotify",
             onAction = {},
             onBack = {},
         )
@@ -218,6 +216,7 @@ private fun RequirementsErrorPreview() {
     ApkAnalyzerTheme {
         RequirementsContent(
             state = RequirementsState.Error(SectionErrorReason.LoadFailed),
+            appName = "Spotify",
             onAction = {},
             onBack = {},
         )
@@ -230,6 +229,7 @@ private fun RequirementsLoadedPreview() {
     ApkAnalyzerTheme {
         RequirementsContent(
             state = sampleLoadedState(),
+            appName = "Spotify",
             onAction = {},
             onBack = {},
         )
@@ -242,6 +242,7 @@ private fun RequirementsEmptyPreview() {
     ApkAnalyzerTheme {
         RequirementsContent(
             state = RequirementsState.Loaded(sections = listOf(), missingRequiredCount = 0),
+            appName = "Spotify",
             onAction = {},
             onBack = {},
         )

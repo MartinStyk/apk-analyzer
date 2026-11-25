@@ -10,5 +10,5 @@ internal sealed interface TvRequirementsState {
     data object Error : TvRequirementsState
 
     @Immutable
-    data class Loaded(val appName: String, val requirements: Requirements) : TvRequirementsState
+    data class Loaded(val requirements: Requirements) : TvRequirementsState
 }

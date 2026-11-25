@@ -64,6 +64,7 @@ import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 @Composable
 internal fun TvComponentsScreen(
     appDetailInput: AppDetailInput,
+    appName: String,
     viewModel: TvComponentsViewModel = hiltViewModel { factory: TvComponentsViewModel.Factory ->
         factory.create(appDetailInput)
     },
@@ -92,30 +93,52 @@ internal fun TvComponentsScreen(
             }
         }
     }
-    TvComponentsContent(state = state, appReference = appDetailInput.iconReference, onAction = viewModel::onAction)
+    TvComponentsContent(
+        state = state,
+        appName = appName,
+        appReference = appDetailInput.iconReference,
+        onAction = viewModel::onAction,
+    )
 }
 
 @Composable
 private fun TvComponentsContent(
     state: TvComponentsState,
+    appName: String,
     appReference: AppReference,
     onAction: (TvComponentsAction) -> Unit,
 ) {
+    val title = stringResource(AppsR.string.components_title)
     when (state) {
-        TvComponentsState.Loading -> SectionLoading()
+        TvComponentsState.Loading -> SectionLoading(
+            title = title,
+            appName = appName,
+            appReference = appReference,
+        )
 
         TvComponentsState.Error -> SectionError(
+            title = title,
+            appName = appName,
+            appReference = appReference,
             message = stringResource(AppsR.string.components_error),
             onRetry = { onAction(TvComponentsAction.Retry) },
         )
 
-        is TvComponentsState.Loaded -> LoadedContent(state = state, appReference = appReference, onAction = onAction)
+        is TvComponentsState.Loaded -> LoadedContent(
+            title = title,
+            state = state,
+            appName = appName,
+            appReference = appReference,
+            onAction = onAction,
+        )
     }
 }
 
 @Composable
 private fun LoadedContent(
+    title: String,
     state: TvComponentsState.Loaded,
+    appName: String,
     appReference: AppReference,
     onAction: (TvComponentsAction) -> Unit,
 ) {
@@ -131,8 +154,8 @@ private fun LoadedContent(
     )
 
     ListDetailScaffold(
-        title = stringResource(AppsR.string.components_title),
-        subtitle = state.appName,
+        title = title,
+        appName = appName,
         appReference = appReference,
         selected = selected,
         controls = { ScopeChips(state = state, focus = focus, onAction = onAction) },
@@ -406,9 +429,9 @@ private fun TvComponentsContentPreview() {
     )
     ApkAnalyzerTvTheme {
         TvComponentsContent(
+            appName = "YouTube",
             appReference = AppReference.InstalledPackage(PackageName("com.google.android.youtube.tv")),
             state = TvComponentsState.Loaded(
-                appName = "YouTube",
                 scope = TvComponentScope.All,
                 scopeOptions = listOf(
                     TvComponentScopeOption(TvComponentScope.All, 2),

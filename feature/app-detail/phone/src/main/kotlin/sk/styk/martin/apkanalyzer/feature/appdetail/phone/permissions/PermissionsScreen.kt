@@ -1,4 +1,4 @@
-﻿package sk.styk.martin.apkanalyzer.feature.appdetail.phone.permissions
+package sk.styk.martin.apkanalyzer.feature.appdetail.phone.permissions
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -50,7 +50,6 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.SearchBarAc
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.SelectorChip
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.TextButton
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.collapsingHeader
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.collapsingHeaderContainer
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.rememberCollapsingHeaderState
@@ -59,7 +58,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailSectionScaffold
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ListSectionHeader
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
@@ -71,6 +70,7 @@ private const val UNRESOLVED_SECTION_KEY = "unresolved"
 @Composable
 internal fun PermissionsScreen(
     appDetailInput: AppDetailInput,
+    appName: String,
     focusedPermission: String?,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
@@ -91,6 +91,7 @@ internal fun PermissionsScreen(
 
     PermissionsContent(
         state = state,
+        appName = appName,
         onAction = viewModel::onAction,
         onBack = onBack,
         focusedPermission = focusedPermission,
@@ -102,33 +103,30 @@ internal fun PermissionsScreen(
 @Composable
 private fun PermissionsContent(
     state: PermissionsState,
+    appName: String,
     onAction: (PermissionsAction) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     recordedAt: Instant? = null,
     focusedPermission: String? = null,
 ) {
-    AppDetailModeFrame(recordedAt = recordedAt, modifier = modifier) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(AppTheme.colors.background),
-        ) {
-            Toolbar(
-                title = stringResource(PermissionsR.string.permissions_title),
-                onBack = onBack,
+    AppDetailSectionScaffold(
+        title = stringResource(PermissionsR.string.permissions_title),
+        appName = appName,
+        onBack = onBack,
+        recordedAt = recordedAt,
+        modifier = modifier,
+    ) {
+        when (state) {
+            is PermissionsState.Loading -> SectionLoading()
+
+            is PermissionsState.Error -> SectionError(
+                reason = state.reason,
+                loadFailedMessage = stringResource(PermissionsR.string.permissions_error),
+                onRetry = { onAction(PermissionsAction.Retry) },
             )
-            when (state) {
-                is PermissionsState.Loading -> SectionLoading()
 
-                is PermissionsState.Error -> SectionError(
-                    reason = state.reason,
-                    loadFailedMessage = stringResource(PermissionsR.string.permissions_error),
-                    onRetry = { onAction(PermissionsAction.Retry) },
-                )
-
-                is PermissionsState.Loaded -> LoadedContent(state = state, onAction = onAction, focusedPermission = focusedPermission)
-            }
+            is PermissionsState.Loaded -> LoadedContent(state = state, onAction = onAction, focusedPermission = focusedPermission)
         }
     }
 }
@@ -343,6 +341,7 @@ private fun PermissionsLoadingPreview() {
     ApkAnalyzerTheme {
         PermissionsContent(
             state = PermissionsState.Loading,
+            appName = "Spotify",
             onAction = {},
             onBack = {},
         )
@@ -355,6 +354,7 @@ private fun PermissionsErrorPreview() {
     ApkAnalyzerTheme {
         PermissionsContent(
             state = PermissionsState.Error(SectionErrorReason.LoadFailed),
+            appName = "Spotify",
             onAction = {},
             onBack = {},
         )
@@ -367,6 +367,7 @@ private fun PermissionsLoadedPreview() {
     ApkAnalyzerTheme {
         PermissionsContent(
             state = sampleLoadedState(),
+            appName = "Spotify",
             onAction = {},
             onBack = {},
         )
@@ -379,6 +380,7 @@ private fun PermissionsHistoricalPreview() {
     ApkAnalyzerTheme {
         PermissionsContent(
             state = sampleLoadedState().copy(isHistorical = true, grantStateOptions = emptyList()),
+            appName = "Spotify",
             onAction = {},
             onBack = {},
             recordedAt = Instant.ofEpochMilli(1_773_014_400_000),
@@ -392,6 +394,7 @@ private fun PermissionsEmptyResultPreview() {
     ApkAnalyzerTheme {
         PermissionsContent(
             state = sampleLoadedState().copy(query = "bluetooth", sections = listOf()),
+            appName = "Spotify",
             onAction = {},
             onBack = {},
         )

@@ -44,13 +44,11 @@ internal class TvNativeLibrariesViewModel @AssistedInject constructor(
     private fun loadLibraries() {
         state.value = TvNativeLibrariesState.Loading
         viewModelScope.launch(dispatcherProvider.default()) {
-            val appName = sectionRepository.detail(appDetailInput).getOrNull()?.info?.applicationName.orEmpty()
             val deviceAbis = Build.SUPPORTED_ABIS.toList()
             state.value = sectionRepository.nativeLibraries(appDetailInput).fold(
                 onSuccess = { section ->
                     when (section) {
                         is AppDetailSection.Available -> TvNativeLibrariesState.Loaded(
-                            appName = appName,
                             items = section.value.files.groupedByLibrary(deviceAbis.toSet()),
                             deviceAbis = deviceAbis,
                         )

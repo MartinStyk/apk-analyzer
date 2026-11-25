@@ -48,12 +48,11 @@ import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.IconButton
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.SearchBarActive
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailModeFrame
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailSectionScaffold
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
 import java.time.Instant
@@ -62,6 +61,7 @@ import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
 @Composable
 internal fun ManifestScreen(
     appDetailInput: AppDetailInput,
+    appName: String,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ManifestViewModel = hiltViewModel { factory: ManifestViewModel.Factory ->
@@ -71,6 +71,7 @@ internal fun ManifestScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     ManifestContent(
         state = state,
+        appName = appName,
         onAction = viewModel::onAction,
         onBack = onBack,
         modifier = modifier,
@@ -81,6 +82,7 @@ internal fun ManifestScreen(
 @Composable
 private fun ManifestContent(
     state: ManifestState,
+    appName: String,
     onAction: (ManifestAction) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
@@ -103,35 +105,13 @@ private fun ManifestContent(
         }
     }
 
-    AppDetailModeFrame(recordedAt = recordedAt, modifier = modifier) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(AppTheme.colors.background),
-        ) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                Toolbar(
-                    title = stringResource(AppsR.string.manifest_title),
-                    onBack = onBack,
-                )
-                when (state) {
-                    ManifestState.Loading -> SectionLoading()
-
-                    ManifestState.Error -> SectionError(
-                        message = stringResource(AppsR.string.manifest_error),
-                        onRetry = { onAction(ManifestAction.Retry) },
-                    )
-
-                    is ManifestState.Loaded -> ManifestLoadedContent(
-                        state = state,
-                        listState = listState,
-                        onAction = onAction,
-                        onExpand = expand,
-                    )
-                }
-            }
+    AppDetailSectionScaffold(
+        title = stringResource(AppsR.string.manifest_title),
+        appName = appName,
+        onBack = onBack,
+        recordedAt = recordedAt,
+        modifier = modifier,
+        overlay = {
             if (loadedState != null) {
                 AnimatedVisibility(
                     visible = isExpanded,
@@ -156,6 +136,22 @@ private fun ManifestContent(
                     )
                 }
             }
+        },
+    ) {
+        when (state) {
+            ManifestState.Loading -> SectionLoading()
+
+            ManifestState.Error -> SectionError(
+                message = stringResource(AppsR.string.manifest_error),
+                onRetry = { onAction(ManifestAction.Retry) },
+            )
+
+            is ManifestState.Loaded -> ManifestLoadedContent(
+                state = state,
+                listState = listState,
+                onAction = onAction,
+                onExpand = expand,
+            )
         }
     }
 }
@@ -304,6 +300,7 @@ private fun ManifestLoadedPreview() {
                 matchCount = 2,
                 additionalInstalledSplits = 3,
             ),
+            appName = "Spotify",
             onAction = {},
             onBack = {},
         )
@@ -316,6 +313,7 @@ private fun ManifestErrorPreview() {
     ApkAnalyzerTheme {
         ManifestContent(
             state = ManifestState.Error,
+            appName = "Spotify",
             onAction = {},
             onBack = {},
         )

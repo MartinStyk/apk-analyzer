@@ -10,16 +10,16 @@ internal sealed interface AppDetailEvent {
     data class ShareSummary(val text: String) : AppDetailEvent
     data class NavigateToInventoryExport(val packageName: PackageName) : AppDetailEvent
     data class ShowFeedback(val feedback: AppDetailFeedback) : AppDetailEvent
-    data object NavigateToManifest : AppDetailEvent
-    data object NavigateToGeneralDetails : AppDetailEvent
-    data class NavigateToPermissions(val permissionName: String?) : AppDetailEvent
-    data object NavigateToComponents : AppDetailEvent
-    data object NavigateToActivities : AppDetailEvent
-    data object NavigateToServices : AppDetailEvent
-    data object NavigateToReceivers : AppDetailEvent
-    data object NavigateToProviders : AppDetailEvent
-    data object NavigateToCertificates : AppDetailEvent
-    data object NavigateToFeatures : AppDetailEvent
+    data class NavigateToManifest(val appName: String) : AppDetailEvent
+    data class NavigateToGeneralDetails(val appName: String) : AppDetailEvent
+    data class NavigateToPermissions(val appName: String, val permissionName: String?) : AppDetailEvent
+    data class NavigateToComponents(val appName: String) : AppDetailEvent
+    data class NavigateToActivities(val appName: String) : AppDetailEvent
+    data class NavigateToServices(val appName: String) : AppDetailEvent
+    data class NavigateToReceivers(val appName: String) : AppDetailEvent
+    data class NavigateToProviders(val appName: String) : AppDetailEvent
+    data class NavigateToCertificates(val appName: String) : AppDetailEvent
+    data class NavigateToFeatures(val appName: String) : AppDetailEvent
     data class NavigateToHistory(val packageName: PackageName, val appName: String) : AppDetailEvent
 }
 

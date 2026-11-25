@@ -76,7 +76,6 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.LabeledHash
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.OutlinedButton
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.TextButton
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.card
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
@@ -89,6 +88,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents.Componen
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents.ComponentItem
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents.ComponentRow
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents.ComponentType
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailSectionScaffold
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.InfoRow
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.InfoRowItem
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ListSectionHeader
@@ -157,18 +157,15 @@ private fun AppHistoryChangeContent(
     onAction: (AppHistoryChangeAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(AppTheme.colors.background),
+    val loaded = state as? AppHistoryChangeState.Loaded
+    val resources = LocalResources.current
+    AppDetailSectionScaffold(
+        title = loaded?.let { it.version.text(it.versionChange, resources) }
+            ?: stringResource(R.string.app_history_what_changed),
+        appName = loaded?.appName ?: fallbackAppName,
+        onBack = { onAction(AppHistoryChangeAction.Back) },
+        modifier = modifier,
     ) {
-        val loaded = state as? AppHistoryChangeState.Loaded
-        val resources = LocalResources.current
-        Toolbar(
-            title = loaded?.appName ?: fallbackAppName,
-            subtitle = loaded?.let { it.version.text(it.versionChange, resources) },
-            onBack = { onAction(AppHistoryChangeAction.Back) },
-        )
         Box(modifier = Modifier.weight(1f)) {
             when (state) {
                 AppHistoryChangeState.Loading -> SectionLoading()

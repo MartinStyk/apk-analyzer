@@ -46,7 +46,7 @@ internal class TvRequirementsViewModel @AssistedInject constructor(
         viewModelScope.launch(dispatcherProvider.default()) {
             val deviceFeatures = deviceFeaturesRepository.deviceFeatures()
             state.value = sectionRepository.detail(appDetailInput).fold(
-                onSuccess = { TvRequirementsState.Loaded(appName = it.info.applicationName, requirements = it.requirements(deviceFeatures)) },
+                onSuccess = { TvRequirementsState.Loaded(requirements = it.requirements(deviceFeatures)) },
                 onFailure = { TvRequirementsState.Error },
             )
         }
