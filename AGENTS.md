@@ -110,6 +110,10 @@ Modules live under `app/`, `tv/`, `core/<name>/`, and `feature/<name>/{api,domai
   as `phone`, but it never depends on its sibling `phone`. Logic both need moves to the feature's
   `domain` when it is about this feature, or to `core` when it is a domain rule other features use.
 * `core/*` — may depend on other `core` modules. **Never** depends on a `feature` module.
+* A core domain module split into `core/<name>/api` and an implementation submodule (`impl`, or one
+  per implementation such as `play`/`noop`) is consumed through `api` only; only the app shells
+  depend on the implementation, so everything at its top level is `private` or `internal`. See
+  [core API/impl split](docs/app/technical/core-api-impl-split.md).
 * A feature never depends on another feature's `phone` or `tv`. Cross-feature navigation goes through the
   target's `api` module.
 * `app` — wiring only: the launcher Activity, the external-APK document Activity, nav hosts, and

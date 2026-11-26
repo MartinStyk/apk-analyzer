@@ -144,6 +144,7 @@ style:
       - 'NavKeyShape'
       - 'ApiModuleContents'
       - 'ImplVisibility'
+      - 'ImplModuleVisibility'
       - 'SingletonRepositoryBinding'
       - 'SealedMemberDataObject'
       - 'PreviewShape'
@@ -196,6 +197,12 @@ apkanalyzer:
   ApiModuleContents:
     includes:
       - '**/feature/*/api/src/main/**'
+  ImplModuleVisibility:
+    includes:
+      - '**/core/*/*/src/main/**'
+    excludes:
+      - '**/core/*/api/**'
+      - '**/core/design-system/**'
   PreviewPresence:
     excludes:
       - '**/theme/**'
