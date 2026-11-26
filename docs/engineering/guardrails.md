@@ -26,6 +26,7 @@ unit-test and test-fixture sources.
 | `NavKeyShape` | NavKeys are `@Serializable` `data class` or `data object` |
 | `ApiModuleContents` | Feature `api` modules hold only NavKeys |
 | `ImplVisibility` | `*Impl` classes are not public |
+| `ImplModuleVisibility` | Every top-level declaration in a core implementation module (`core/<name>/<impl>`, anything but `api`) is `private` or `internal` |
 | `SingletonRepositoryBinding` | `@Binds` for a Repository or Manager is scoped `@Singleton` |
 | `SealedMemberDataObject` | Objects implementing a sealed type are `data object`s |
 | `PreviewPresence`, `PreviewShape` | Files with non-private composables have previews; previews end in `Preview` and wrap the app theme |

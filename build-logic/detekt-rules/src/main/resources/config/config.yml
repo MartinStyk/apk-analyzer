@@ -20,6 +20,8 @@ apkanalyzer:
     active: true
   ImplVisibility:
     active: true
+  ImplModuleVisibility:
+    active: true
   SingletonRepositoryBinding:
     active: true
   SealedMemberDataObject:
