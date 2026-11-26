@@ -175,6 +175,12 @@ The product design decides the actual entitlements. The shape to keep:
 * **`validateArchitecture`.** Built: A7 keeps an `api` module on `api` modules and `core:common`, A8
   keeps implementation modules off everything but the app shells, and B6/B7 check which convention
   each side applies, so an `api` module never gets Hilt.
+* **The `api` classpath and `ForbiddenImport/CoreApiPlatformAccess`.** Hilt, Room, WorkManager, and
+  Compose are not on an `api` module's classpath, so the compiler rejects them. The Android framework
+  always is, so a second, path-scoped instance of detekt's `ForbiddenImport` rejects every `android.*`
+  and `androidx.*` import in `api` main and test-fixture sources except `android.net.Uri` (a value in
+  contracts), `android.content.res.Resources` (resolving labels), and `androidx.annotation.*`.
+  Mapping a platform value such as a `PackageInfo` flag to an `api` model belongs in `impl`.
 * **A detekt rule in `build-logic/detekt-rules`.** Built: `ImplModuleVisibility` reports any public
   top-level declaration in a nested core module other than `api` and `design-system`, so every new
   implementation module (`impl`, `play`, `noop`) is covered without a config change.

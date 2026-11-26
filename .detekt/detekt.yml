@@ -118,6 +118,20 @@ style:
         reason: 'Collect state with collectAsStateWithLifecycle() (AGENTS.md > Architecture > ViewModels).'
     excludes:
       - '**/logger/Logger.kt'
+  ForbiddenImport/CoreApiPlatformAccess:
+    active: true
+    forbiddenImports:
+      - value: 'android.*'
+        reason: 'A core api module holds contracts, not platform access; map platform types in its impl module (docs/app/technical/core-api-impl-split.md).'
+      - value: 'androidx.*'
+        reason: 'A core api module holds contracts, not platform access; map platform types in its impl module (docs/app/technical/core-api-impl-split.md).'
+    allowedImports:
+      - 'android.net.Uri'
+      - 'android.content.res.Resources'
+      - 'androidx.annotation.*'
+    includes:
+      - '**/core/*/api/src/main/**'
+      - '**/core/*/api/src/testFixtures/**'
   ForbiddenMethodCall:
     active: true
     methods:

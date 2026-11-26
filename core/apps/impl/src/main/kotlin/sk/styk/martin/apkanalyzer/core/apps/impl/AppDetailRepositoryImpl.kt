@@ -18,7 +18,6 @@ import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.Feature
 import sk.styk.martin.apkanalyzer.core.apps.api.installsource.resolveAppInstallSource
 import sk.styk.martin.apkanalyzer.core.apps.api.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.api.model.AppInfo
-import sk.styk.martin.apkanalyzer.core.apps.api.model.InstallLocation
 import sk.styk.martin.apkanalyzer.core.apps.api.packaging.InstalledSplitApk
 import sk.styk.martin.apkanalyzer.core.apps.api.packaging.SplitApkKind
 import sk.styk.martin.apkanalyzer.core.apps.api.permissions.Permission
@@ -31,6 +30,7 @@ import sk.styk.martin.apkanalyzer.core.apps.api.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.apps.impl.components.resolvePathPermissions
 import sk.styk.martin.apkanalyzer.core.apps.impl.installsource.InstallSourceResolver
 import sk.styk.martin.apkanalyzer.core.apps.impl.installsource.isSystemInstalledApp
+import sk.styk.martin.apkanalyzer.core.apps.impl.model.resolveInstallLocation
 import sk.styk.martin.apkanalyzer.core.apps.impl.permissions.toPermissionDetails
 import sk.styk.martin.apkanalyzer.core.apps.impl.signing.CertificateExtractor
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
@@ -274,7 +274,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
             apkDirectory = applicationInfo?.sourceDir,
             dataDirectory = applicationInfo?.dataDir,
             installSourceChain = installSourceChain,
-            installLocation = InstallLocation.from(packageInfo.installLocation),
+            installLocation = resolveInstallLocation(packageInfo.installLocation),
             apkSize = computeApkSize(applicationInfo),
             firstInstallTime = if (packageInfo.firstInstallTime > 0) Instant.ofEpochMilli(packageInfo.firstInstallTime) else null,
             lastUpdateTime = if (packageInfo.lastUpdateTime > 0) Instant.ofEpochMilli(packageInfo.lastUpdateTime) else null,
