@@ -23,6 +23,11 @@ private val designSystemLibraries = mapOf(
     "libs.androidx.compose.material.icons.extended" to setOf("core/design-system/foundation"),
 )
 private val namespacePattern = Regex("""\bnamespace\s*=\s*"([^"]+)"""")
+private val appShells = setOf("app", "tv", "app/baselineprofile")
+private val unsplitCoreModules = setOf("design-system")
+private val coreApiPluginPattern = Regex("""\blibs\.plugins\.apkanalyzer\.core\.api\b""")
+private val coreImplPluginPattern = Regex("""\blibs\.plugins\.apkanalyzer\.core\.impl\b""")
+private val coreApiForbiddenPluginPattern = Regex("""\blibs\.plugins\.apkanalyzer\.(hilt|compose|core\.impl)\b""")
 
 @DisableCachingByDefault(because = "The task validates the live repository structure without producing outputs.")
 abstract class ValidateArchitectureTask : DefaultTask() {
@@ -97,6 +102,12 @@ private fun moduleGraphViolation(source: String, target: String): String? {
         source.startsWith("core/") && targetFeature != null ->
             "A2: core modules never depend on feature modules, found $target."
 
+        source.isCoreApiModule() && target.startsWith("core/") && target != "core/common" && !target.isCoreApiModule() ->
+            "A7: core api modules depend only on other core api modules and core:common, found $target."
+
+        target.isCoreImplementationModule() && source !in appShells ->
+            "A8: only the app shells depend on core implementation modules; depend on its api module, found $target."
+
         source.featureLayer() == "domain" && (targetLayer in setOf("phone", "tv") || (targetFeature != null && targetFeature != sourceFeature)) ->
             "A4: feature domain modules depend only on their own api and core modules, found $target."
 
@@ -131,6 +142,16 @@ private fun buildHygieneViolations(buildScript: String, moduleDirectory: String)
         .keys
         .filter { library -> Regex("""\b${Regex.escape(library)}\b""").containsMatchIn(buildScript) }
         .forEach { library -> add("B5: only the design system depends on $library; use its wrappers.") }
+    if (moduleDirectory.isCoreApiModule() &&
+        (!coreApiPluginPattern.containsMatchIn(buildScript) || coreApiForbiddenPluginPattern.containsMatchIn(buildScript))
+    ) {
+        add("B6: core api modules apply apkanalyzer.core.api and never Hilt, Compose, or apkanalyzer.core.impl.")
+    }
+    if (moduleDirectory.isCoreImplementationModule() &&
+        (!coreImplPluginPattern.containsMatchIn(buildScript) || coreApiPluginPattern.containsMatchIn(buildScript))
+    ) {
+        add("B7: core implementation modules apply apkanalyzer.core.impl and never apkanalyzer.core.api.")
+    }
     namespacePattern.find(buildScript)?.groupValues?.get(1)?.let { namespace ->
         val expected = expectedNamespace(moduleDirectory)
         if (namespace != expected) {
@@ -163,3 +184,11 @@ private fun String.isTvModule(): Boolean = this == "tv" || this == "core/design-
 private fun String.isPhoneModule(): Boolean = this == "app" || this == "core/design-system/phone" || featureLayer() == "phone"
 
 private fun String.mayHaveUnitTests(): Boolean = startsWith("core/") || featureLayer() == "domain"
+
+private fun String.coreSubmodule(): String? = split('/').takeIf { segments ->
+    segments.size == 3 && segments[0] == "core" && segments[1] !in unsplitCoreModules
+}?.get(2)
+
+private fun String.isCoreApiModule(): Boolean = coreSubmodule() == "api"
+
+private fun String.isCoreImplementationModule(): Boolean = coreSubmodule().let { submodule -> submodule != null && submodule != "api" }

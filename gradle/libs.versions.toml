@@ -150,6 +150,7 @@ coil-core = { module = "io.coil-kt.coil3:coil-core", version.ref = "coil" }
 json-schema-validator = { module = "com.networknt:json-schema-validator", version.ref = "json-schema-validator" }
 junit = { module = "junit:junit", version.ref = "junit" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
@@ -186,6 +187,8 @@ apkanalyzer-library = { id = "apkanalyzer.library" }
 apkanalyzer-application = { id = "apkanalyzer.application" }
 apkanalyzer-agent-context = { id = "apkanalyzer.agent-context" }
 apkanalyzer-architecture = { id = "apkanalyzer.architecture" }
+apkanalyzer-core-api = { id = "apkanalyzer.core.api" }
+apkanalyzer-core-impl = { id = "apkanalyzer.core.impl" }
 apkanalyzer-feature-api = { id = "apkanalyzer.feature.api" }
 apkanalyzer-feature-phone = { id = "apkanalyzer.feature.phone" }
 apkanalyzer-feature-tv = { id = "apkanalyzer.feature.tv" }
