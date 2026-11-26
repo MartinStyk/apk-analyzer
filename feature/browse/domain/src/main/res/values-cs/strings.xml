@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="browse_subtitle">
+        <item quantity="one">Zobrazit %1$d aplikaci nainstalovanou na tomto zařízení</item>
+        <item quantity="few">Zobrazit %1$d aplikace nainstalované na tomto zařízení</item>
+        <item quantity="many">Zobrazit %1$d nainstalovaných aplikací na tomto zařízení</item>
+        <item quantity="other">Zobrazit %1$d nainstalovaných aplikací na tomto zařízení</item>
+    </plurals>
+    <plurals name="browse_dimension_option_count">
+        <item quantity="one">%1$d možnost</item>
+        <item quantity="few">%1$d možnosti</item>
+        <item quantity="many">%1$d možností</item>
+        <item quantity="other">%1$d možností</item>
+    </plurals>
+    <string name="browse_certificate_self_signed">Self-signed</string>
+    <string name="browse_certificate_self_signed_explanation">Certifikáty self-signed jsou normální pro Android aplikace. Porovnejte otisk certifikátu s důvěryhodným zdrojem, když potřebujete ověřit vydavatele.</string>
+    <plurals name="browse_options_filter_hint">
+        <item quantity="one">Filtr %1$d možnost</item>
+        <item quantity="few">Filtr %1$d možnosti</item>
+        <item quantity="many">Filtr %1$d možností</item>
+        <item quantity="other">Filtr %1$d možností</item>
+    </plurals>
+    <string name="browse_options_empty_query">Žádné možnosti neodpovídají „%1$s“</string>
+    <plurals name="browse_apps_count">
+        <item quantity="one">%1$d aplikace</item>
+        <item quantity="few">%1$d aplikace</item>
+        <item quantity="many">%1$d aplikací</item>
+        <item quantity="other">%1$d aplikací</item>
+    </plurals>
+    <plurals name="browse_apps_filter_hint">
+        <item quantity="one">Filtr %1$d aplikace</item>
+        <item quantity="few">Filtr %1$d aplikace</item>
+        <item quantity="many">Filtr %1$d aplikací</item>
+        <item quantity="other">Filtr %1$d aplikací</item>
+    </plurals>
+    <string name="browse_apps_empty_query">Žádné aplikace neodpovídají “%1$s”</string>
+</resources>

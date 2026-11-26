@@ -18,4 +18,6 @@
     <string name="browse_algorithm_md2_explanation">%1$sはMD2を使用します。MD2は時代遅れで実用的な攻撃に対して脆弱であるため、署名証明書には安全ではありません。新しい署名証明書はSHA-256またはそれ以上を使用するべきです。</string>
     <string name="browse_algorithm_unknown_explanation">%1$sの強度はそのアルゴリズム名から評価できません。鍵の種類とサイズもそのセキュリティに影響を与える可能性があります。</string>
     <string name="browse_bucket_info_content_description">%1$sについて</string>
+    <string name="browse_subtitle_loading">インストールされたアプリをスキャン中…</string>
+    <string name="browse_sub_attribute_sheet_title">グループ化</string>
 </resources>

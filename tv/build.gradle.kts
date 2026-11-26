@@ -26,6 +26,8 @@ dependencies {
     implementation(projects.core.appHistory)
     implementation(projects.core.apps.api)
     implementation(projects.core.apps.impl)
+    implementation(projects.core.appIndex.api)
+    implementation(projects.core.appIndex.impl)
     implementation(projects.core.appPermissions.api)
     implementation(projects.core.appPermissions.impl)
     implementation(projects.core.common)

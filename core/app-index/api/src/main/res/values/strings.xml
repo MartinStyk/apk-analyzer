@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="browse_dimension_permission_title">Permissions</string>
+    <string name="browse_dimension_permission_subtitle">See which apps use a given permission</string>
+    <string name="browse_dimension_certificate_title">Signing certificate</string>
+    <string name="browse_dimension_certificate_subtitle">Group apps by signer identity, publisher name, or country</string>
+    <string name="browse_dimension_target_sdk_title">Target Android version</string>
+    <string name="browse_dimension_target_sdk_subtitle">See which Android version each app was built for</string>
+    <string name="browse_dimension_min_sdk_title">Minimum Android version</string>
+    <string name="browse_dimension_min_sdk_subtitle">See the oldest Android version each app still supports</string>
+    <string name="browse_dimension_install_source_title">Install source</string>
+    <string name="browse_dimension_install_source_subtitle">See where each app came from</string>
+    <string name="browse_dimension_shared_user_id_title">Shared identity</string>
+    <string name="browse_dimension_shared_user_id_subtitle">Find apps that run under the same device identity and can access each other\'s data</string>
+    <string name="browse_dimension_app_category_title">App category</string>
+    <string name="browse_dimension_app_category_subtitle">See what kind of app each one declares itself to be</string>
+    <string name="browse_signer_unknown">Unknown signer</string>
+    <string name="browse_certificate_attribute_sha256">Identity (SHA-256)</string>
+    <string name="browse_certificate_attribute_sha1">Identity (SHA-1)</string>
+    <string name="browse_certificate_attribute_md5">Identity (MD5)</string>
+    <string name="browse_certificate_attribute_organization">Publisher name</string>
+    <string name="browse_certificate_attribute_country">Country</string>
+    <string name="browse_certificate_hash_sha256">SHA-256</string>
+    <string name="browse_certificate_hash_sha1">SHA-1</string>
+    <string name="browse_certificate_hash_md5">MD5</string>
+</resources>

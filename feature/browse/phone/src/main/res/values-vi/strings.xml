@@ -18,4 +18,6 @@
     <string name="browse_algorithm_md2_explanation">%1$s sử dụng MD2. MD2 đã lỗi thời và dễ bị tấn công thực tiễn, vì vậy nó không an toàn cho các chứng chỉ ký. Các chứng chỉ ký mới nên sử dụng SHA-256 hoặc mạnh hơn.</string>
     <string name="browse_algorithm_unknown_explanation">Sức mạnh của %1$s không thể được đánh giá từ tên thuật toán của nó. Loại và kích thước khóa cũng có thể ảnh hưởng đến độ bảo mật của nó.</string>
     <string name="browse_bucket_info_content_description">Về %1$s</string>
+    <string name="browse_subtitle_loading">Đang quét các ứng dụng đã cài đặt…</string>
+    <string name="browse_sub_attribute_sheet_title">Nhóm theo</string>
 </resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="browse_sdk_unknown">API 级别 %1$s</string>
+    <string name="browse_api_level">API %1$s</string>
+    <string name="browse_source_google_play">Google Play</string>
+    <string name="browse_source_samsung_galaxy_store">三星 Galaxy 商店</string>
+    <string name="browse_source_amazon_appstore">亚马逊应用商店</string>
+    <string name="browse_source_huawei_app_gallery">华为应用市场</string>
+    <string name="browse_source_xiaomi_get_apps">小米应用商店</string>
+    <string name="browse_source_fdroid">F-Droid</string>
+    <string name="browse_source_aurora_store">Aurora 商店</string>
+    <string name="browse_source_sideloaded">从文件安装</string>
+    <string name="browse_source_local_install">通过计算机安装</string>
+    <string name="browse_source_system">系统</string>
+    <string name="browse_source_unknown">未知</string>
+    <string name="browse_country_unknown">未知国家</string>
+    <string name="browse_category_undefined">未分类</string>
+    <string name="browse_category_game">游戏</string>
+    <string name="browse_category_audio">音频</string>
+    <string name="browse_category_video">视频</string>
+    <string name="browse_category_image">图像</string>
+    <string name="browse_category_social">社交</string>
+    <string name="browse_category_news">新闻与杂志</string>
+    <string name="browse_category_maps">地图与导航</string>
+    <string name="browse_category_productivity">生产力</string>
+    <string name="browse_category_accessibility">无障碍</string>
+</resources>

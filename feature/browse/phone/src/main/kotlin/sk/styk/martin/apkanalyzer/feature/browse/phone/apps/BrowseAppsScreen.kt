@@ -34,10 +34,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseBucketDetail
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseDimension
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseSubAttribute
-import sk.styk.martin.apkanalyzer.core.appindex.browse.isCertificateHash
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseBucketDetail
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseDimension
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseSubAttribute
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.isCertificateHash
 import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateValidity
@@ -64,7 +64,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.browse.phone.R
 import java.time.Instant
-import sk.styk.martin.apkanalyzer.core.appindex.R as AppIndexR
+import sk.styk.martin.apkanalyzer.feature.browse.domain.R as BrowseDomainR
 
 @Composable
 internal fun BrowseAppsScreen(
@@ -203,7 +203,7 @@ private fun CertificateDetailContent(detail: BrowseBucketDetail.Certificate, mod
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             Chip(label = stringResource(detail.algorithmAssessment.labelRes), variant = detail.algorithmAssessment.chipVariant())
             if (detail.isSelfSigned) {
-                Chip(label = stringResource(AppIndexR.string.browse_certificate_self_signed), variant = ChipVariant.Default)
+                Chip(label = stringResource(BrowseDomainR.string.browse_certificate_self_signed), variant = ChipVariant.Default)
             }
         }
         Spacer(modifier = Modifier.height(12.dp))
@@ -215,7 +215,7 @@ private fun CertificateDetailContent(detail: BrowseBucketDetail.Certificate, mod
         if (detail.isSelfSigned) {
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = stringResource(AppIndexR.string.browse_certificate_self_signed_explanation),
+                text = stringResource(BrowseDomainR.string.browse_certificate_self_signed_explanation),
                 style = AppTheme.typography.bodyMedium,
                 color = AppTheme.colors.onSurfaceVariant,
             )
@@ -299,7 +299,7 @@ private fun BrowseAppsList(
         ) {
             SearchBarActive(
                 query = state.query,
-                placeholder = pluralStringResource(AppIndexR.plurals.browse_apps_filter_hint, state.totalApps, state.totalApps),
+                placeholder = pluralStringResource(BrowseDomainR.plurals.browse_apps_filter_hint, state.totalApps, state.totalApps),
                 sharedElementKey = null,
                 onQueryChange = { onAction(BrowseAppsAction.ChangeQuery(it)) },
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -323,7 +323,7 @@ private fun BrowseAppsList(
             }
         } else {
             Text(
-                text = stringResource(AppIndexR.string.browse_apps_empty_query, state.query),
+                text = stringResource(BrowseDomainR.string.browse_apps_empty_query, state.query),
                 style = AppTheme.typography.bodyLarge,
                 color = AppTheme.colors.onBackground,
                 textAlign = TextAlign.Center,

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="browse_subtitle">
+        <item quantity="other">このデバイスにインストールされている %1$d アプリを探索する</item>
+    </plurals>
+    <plurals name="browse_dimension_option_count">
+        <item quantity="other">%1$d オプション</item>
+    </plurals>
+    <string name="browse_certificate_self_signed">自己署名</string>
+    <string name="browse_certificate_self_signed_explanation">自己署名証明書はAndroidアプリでは一般的です。発行者を確認する必要がある場合は、証明書のフィンガープリントを信頼できるソースと比較してください。</string>
+    <plurals name="browse_options_filter_hint">
+        <item quantity="other">フィルター %1$d オプション</item>
+    </plurals>
+    <string name="browse_options_empty_query">オプションは “%1$s” に一致しません</string>
+    <plurals name="browse_apps_count">
+        <item quantity="other">%1$d アプリ</item>
+    </plurals>
+    <plurals name="browse_apps_filter_hint">
+        <item quantity="other">フィルター %1$d アプリ</item>
+    </plurals>
+    <string name="browse_apps_empty_query">アプリは “%1$s” に一致しません</string>
+</resources>

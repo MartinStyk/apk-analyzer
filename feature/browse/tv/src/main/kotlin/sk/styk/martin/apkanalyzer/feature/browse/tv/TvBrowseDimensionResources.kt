@@ -1,7 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.browse.tv
 
 import androidx.compose.ui.graphics.vector.ImageVector
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseDimension
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseDimension
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.permissionIcon
 

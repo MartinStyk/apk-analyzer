@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="browse_subtitle">
+        <item quantity="one">इस डिवाइस पर स्थापित %1$d ऐप का अन्वेषण करें</item>
+        <item quantity="other">इस डिवाइस पर स्थापित %1$d ऐप्स का अन्वेषण करें</item>
+    </plurals>
+    <plurals name="browse_dimension_option_count">
+        <item quantity="one">%1$d विकल्प</item>
+        <item quantity="other">%1$d विकल्प</item>
+    </plurals>
+    <string name="browse_certificate_self_signed">स्व-हस्ताक्षरित</string>
+    <string name="browse_certificate_self_signed_explanation">स्व-हस्ताक्षरित प्रमाणपत्र Android ऐप्स के लिए सामान्य हैं। जब आपको प्रकाशक की पुष्टि करने की आवश्यकता हो, तो प्रमाणपत्र के फिंगरप्रिंट की तुलना एक विश्वसनीय स्रोत से करें।</string>
+    <plurals name="browse_options_filter_hint">
+        <item quantity="one">%1$d विकल्प फ़िल्टर करें</item>
+        <item quantity="other">%1$d विकल्पों को फ़िल्टर करें</item>
+    </plurals>
+    <string name="browse_options_empty_query">कोई विकल्प “%1$s” से मेल नहीं खाता</string>
+    <plurals name="browse_apps_count">
+        <item quantity="one">%1$d ऐप</item>
+        <item quantity="other">%1$d ऐप्स</item>
+    </plurals>
+    <plurals name="browse_apps_filter_hint">
+        <item quantity="one">%1$d ऐप फ़िल्टर करें</item>
+        <item quantity="other">%1$d ऐप्स फ़िल्टर करें</item>
+    </plurals>
+    <string name="browse_apps_empty_query">कोई ऐप “%1$s” से मेल नहीं खाता</string>
+</resources>

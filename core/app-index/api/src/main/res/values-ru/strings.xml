@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="browse_dimension_permission_title">Разрешения</string>
+    <string name="browse_dimension_permission_subtitle">Посмотрите, какие приложения используют данное разрешение</string>
+    <string name="browse_dimension_certificate_title">Сертификат подписи</string>
+    <string name="browse_dimension_certificate_subtitle">Группировать приложения по идентичности подписчика, имени издателя или стране</string>
+    <string name="browse_dimension_target_sdk_title">Целевая версия Android</string>
+    <string name="browse_dimension_target_sdk_subtitle">Посмотрите, для какой версии Android было создано каждое приложение</string>
+    <string name="browse_dimension_min_sdk_title">Минимальная версия Android</string>
+    <string name="browse_dimension_min_sdk_subtitle">Посмотрите, какую самую старую версию Android каждое приложение все еще поддерживает</string>
+    <string name="browse_dimension_install_source_title">Источник установки</string>
+    <string name="browse_dimension_install_source_subtitle">Посмотрите, откуда пришло каждое приложение</string>
+    <string name="browse_dimension_shared_user_id_title">Общая идентичность</string>
+    <string name="browse_dimension_shared_user_id_subtitle">Найдите приложения, которые работают под одной и той же идентичностью устройства и могут получать доступ к данным друг друга</string>
+    <string name="browse_dimension_app_category_title">Категория приложения</string>
+    <string name="browse_dimension_app_category_subtitle">Посмотрите, каким приложением каждое из них заявляет быть</string>
+    <string name="browse_signer_unknown">Неизвестный подписант</string>
+    <string name="browse_certificate_attribute_sha256">Идентификатор (SHA-256)</string>
+    <string name="browse_certificate_attribute_sha1">Идентификатор (SHA-1)</string>
+    <string name="browse_certificate_attribute_md5">Идентификатор (MD5)</string>
+    <string name="browse_certificate_attribute_organization">Имя издателя</string>
+    <string name="browse_certificate_attribute_country">Страна</string>
+    <string name="browse_certificate_hash_sha256">SHA-256</string>
+    <string name="browse_certificate_hash_sha1">SHA-1</string>
+    <string name="browse_certificate_hash_md5">MD5</string>
+</resources>

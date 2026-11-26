@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="browse_subtitle">
+        <item quantity="zero">استكشاف %1$d تطبيق مثبت على هذا الجهاز</item>
+        <item quantity="one">استكشاف %1$d تطبيق مثبت على هذا الجهاز</item>
+        <item quantity="two">استكشاف %1$d تطبيقين مثبتين على هذا الجهاز</item>
+        <item quantity="few">استكشاف %1$d تطبيقات مثبتة على هذا الجهاز</item>
+        <item quantity="many">استكشاف %1$d تطبيق مثبت على هذا الجهاز</item>
+        <item quantity="other">استكشاف %1$d تطبيق مثبت على هذا الجهاز</item>
+    </plurals>
+    <plurals name="browse_dimension_option_count">
+        <item quantity="zero">%1$d خيارات</item>
+        <item quantity="one">%1$d خيار</item>
+        <item quantity="two">%1$d خيارين</item>
+        <item quantity="few">%1$d خيارات</item>
+        <item quantity="many">%1$d خيار</item>
+        <item quantity="other">%1$d خيار</item>
+    </plurals>
+    <string name="browse_certificate_self_signed">موقع ذاتيًا</string>
+    <string name="browse_certificate_self_signed_explanation">الشهادات الموقعة ذاتياً هي أمر طبيعي لتطبيقات Android. قارن بصمة الشهادة مع مصدر موثوق عندما تحتاج إلى التحقق من الناشر.</string>
+    <plurals name="browse_options_filter_hint">
+        <item quantity="zero">تصفية خيارات %1$d</item>
+        <item quantity="one">تصفية خيار %1$d</item>
+        <item quantity="two">تصفية خيارين %1$d</item>
+        <item quantity="few">تصفية خيارات %1$d</item>
+        <item quantity="many">تصفية خيار %1$d</item>
+        <item quantity="other">تصفية خيار %1$d</item>
+    </plurals>
+    <string name="browse_options_empty_query">لا توجد خيارات تتطابق مع “%1$s”</string>
+    <plurals name="browse_apps_count">
+        <item quantity="zero">%1$d تطبيقات</item>
+        <item quantity="one">%1$d تطبيق</item>
+        <item quantity="two">%1$d تطبيقين</item>
+        <item quantity="few">%1$d تطبيقات</item>
+        <item quantity="many">%1$d تطبيق</item>
+        <item quantity="other">%1$d تطبيق</item>
+    </plurals>
+    <plurals name="browse_apps_filter_hint">
+        <item quantity="zero">تصفية %1$d تطبيقات</item>
+        <item quantity="one">تصفية %1$d تطبيق</item>
+        <item quantity="two">تصفية %1$d تطبيقين</item>
+        <item quantity="few">تصفية %1$d تطبيقات</item>
+        <item quantity="many">تصفية %1$d تطبيق</item>
+        <item quantity="other">تصفية %1$d تطبيق</item>
+    </plurals>
+    <string name="browse_apps_empty_query">لا توجد تطبيقات تتطابق مع “%1$s”</string>
+</resources>

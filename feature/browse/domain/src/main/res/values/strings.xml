@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="browse_subtitle">
+        <item quantity="one">Explore %1$d app installed on this device</item>
+        <item quantity="other">Explore %1$d apps installed on this device</item>
+    </plurals>
+    <plurals name="browse_dimension_option_count">
+        <item quantity="one">%1$d option</item>
+        <item quantity="other">%1$d options</item>
+    </plurals>
+    <string name="browse_certificate_self_signed">Self-signed</string>
+    <string name="browse_certificate_self_signed_explanation">Self-signed certificates are normal for Android apps. Compare the certificate fingerprint with a trusted source when you need to verify the publisher.</string>
+    <plurals name="browse_options_filter_hint">
+        <item quantity="one">Filter %1$d option</item>
+        <item quantity="other">Filter %1$d options</item>
+    </plurals>
+    <string name="browse_options_empty_query">No options match “%1$s”</string>
+    <plurals name="browse_apps_count">
+        <item quantity="one">%1$d app</item>
+        <item quantity="other">%1$d apps</item>
+    </plurals>
+    <plurals name="browse_apps_filter_hint">
+        <item quantity="one">Filter %1$d app</item>
+        <item quantity="other">Filter %1$d apps</item>
+    </plurals>
+    <string name="browse_apps_empty_query">No apps match “%1$s”</string>
+</resources>

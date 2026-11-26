@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="browse_dimension_permission_title">الأذونات</string>
+    <string name="browse_dimension_permission_subtitle">انظر أي التطبيقات تستخدم إذنًا معينًا</string>
+    <string name="browse_dimension_certificate_title">شهادة التوقيع</string>
+    <string name="browse_dimension_certificate_subtitle">تجميع التطبيقات حسب هوية الموقّع، اسم الناشر، أو البلد</string>
+    <string name="browse_dimension_target_sdk_title">إصدار Android المستهدف</string>
+    <string name="browse_dimension_target_sdk_subtitle">انظر أي إصدار Android تم بناء كل تطبيق له</string>
+    <string name="browse_dimension_min_sdk_title">أدنى إصدار Android</string>
+    <string name="browse_dimension_min_sdk_subtitle">انظر أقدم إصدار Android لا يزال يدعمه كل تطبيق</string>
+    <string name="browse_dimension_install_source_title">مصدر التثبيت</string>
+    <string name="browse_dimension_install_source_subtitle">انظر من أين جاء كل تطبيق</string>
+    <string name="browse_dimension_shared_user_id_title">الهوية المشتركة</string>
+    <string name="browse_dimension_shared_user_id_subtitle">ابحث عن التطبيقات التي تعمل تحت نفس هوية الجهاز ويمكنها الوصول إلى بيانات بعضها البعض</string>
+    <string name="browse_dimension_app_category_title">فئة التطبيق</string>
+    <string name="browse_dimension_app_category_subtitle">شاهد ما نوع التطبيق الذي يعلنه كل واحد</string>
+    <string name="browse_signer_unknown">موقّع غير معروف</string>
+    <string name="browse_certificate_attribute_sha256">الهوية (SHA-256)</string>
+    <string name="browse_certificate_attribute_sha1">الهوية (SHA-1)</string>
+    <string name="browse_certificate_attribute_md5">الهوية (MD5)</string>
+    <string name="browse_certificate_attribute_organization">اسم الناشر</string>
+    <string name="browse_certificate_attribute_country">البلد</string>
+    <string name="browse_certificate_hash_sha256">SHA-256</string>
+    <string name="browse_certificate_hash_sha1">SHA-1</string>
+    <string name="browse_certificate_hash_md5">MD5</string>
+</resources>

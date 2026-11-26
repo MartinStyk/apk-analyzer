@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
-import sk.styk.martin.apkanalyzer.core.appindex.AppIndexRepository
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseDimensionLabeler
-import sk.styk.martin.apkanalyzer.core.appindex.browse.dimensionSummaries
-import sk.styk.martin.apkanalyzer.core.appindex.model.AppIndexStatus
+import sk.styk.martin.apkanalyzer.core.appindex.api.AppIndexRepository
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseDimensionLabeler
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.dimensionSummaries
+import sk.styk.martin.apkanalyzer.core.appindex.api.model.AppIndexStatus
 import sk.styk.martin.apkanalyzer.core.apps.api.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.apps.api.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider

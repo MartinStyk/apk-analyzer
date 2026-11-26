@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="browse_subtitle">
+        <item quantity="one">Explore %1$d aplicativo instalado neste dispositivo</item>
+        <item quantity="many">Explore os %1$d aplicativos instalados neste dispositivo</item>
+        <item quantity="other">Explore os %1$d aplicativos instalados neste dispositivo</item>
+    </plurals>
+    <plurals name="browse_dimension_option_count">
+        <item quantity="one">%1$d opção</item>
+        <item quantity="other">%1$d opções</item>
+        <item quantity="many">%1$d opções</item>
+    </plurals>
+    <string name="browse_certificate_self_signed">Autoassinado</string>
+    <string name="browse_certificate_self_signed_explanation">Certificados autoassinados são normais para aplicativos Android. Compare a impressão digital do certificado com uma fonte confiável quando precisar verificar o editor.</string>
+    <plurals name="browse_options_filter_hint">
+        <item quantity="one">Filtrar %1$d opção</item>
+        <item quantity="many">Filtrar %1$d opções</item>
+        <item quantity="other">Filtrar %1$d opções</item>
+    </plurals>
+    <string name="browse_options_empty_query">Nenhuma opção corresponde a “%1$s”</string>
+    <plurals name="browse_apps_count">
+        <item quantity="one">%1$d aplicativo</item>
+        <item quantity="other">%1$d aplicativos</item>
+        <item quantity="many">%1$d aplicativos</item>
+    </plurals>
+    <plurals name="browse_apps_filter_hint">
+        <item quantity="one">Filtrar %1$d aplicativo</item>
+        <item quantity="many">Filtrar %1$d aplicativos</item>
+        <item quantity="other">Filtrar %1$d aplicativos</item>
+    </plurals>
+    <string name="browse_apps_empty_query">Nenhum aplicativo corresponde a “%1$s”</string>
+</resources>

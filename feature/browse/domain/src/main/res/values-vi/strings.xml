@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="browse_subtitle">
+        <item quantity="other">Khám phá %1$d ứng dụng đã cài đặt trên thiết bị này</item>
+    </plurals>
+    <plurals name="browse_dimension_option_count">
+        <item quantity="other">%1$d tùy chọn</item>
+    </plurals>
+    <string name="browse_certificate_self_signed">Tự ký</string>
+    <string name="browse_certificate_self_signed_explanation">Chứng chỉ tự ký là bình thường cho các ứng dụng Android. So sánh dấu vân tay chứng chỉ với một nguồn đáng tin cậy khi bạn cần xác minh nhà phát hành.</string>
+    <plurals name="browse_options_filter_hint">
+        <item quantity="other">Lọc %1$d tùy chọn</item>
+    </plurals>
+    <string name="browse_options_empty_query">Không có tùy chọn nào khớp với “%1$s”</string>
+    <plurals name="browse_apps_count">
+        <item quantity="other">%1$d ứng dụng</item>
+    </plurals>
+    <plurals name="browse_apps_filter_hint">
+        <item quantity="other">Lọc %1$d ứng dụng</item>
+    </plurals>
+    <string name="browse_apps_empty_query">Không có ứng dụng nào khớp với “%1$s”</string>
+</resources>

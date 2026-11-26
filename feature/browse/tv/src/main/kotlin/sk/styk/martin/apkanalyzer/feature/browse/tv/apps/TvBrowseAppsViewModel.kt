@@ -14,13 +14,13 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
-import sk.styk.martin.apkanalyzer.core.appindex.AppIndexRepository
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseBucketDetail
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseBucketDetailResolver
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseDimension
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseSubAttribute
-import sk.styk.martin.apkanalyzer.core.appindex.browse.bucketsFor
-import sk.styk.martin.apkanalyzer.core.appindex.model.AppIndexStatus
+import sk.styk.martin.apkanalyzer.core.appindex.api.AppIndexRepository
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseBucketDetail
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseBucketDetailResolver
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseDimension
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseSubAttribute
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.bucketsFor
+import sk.styk.martin.apkanalyzer.core.appindex.api.model.AppIndexStatus
 import sk.styk.martin.apkanalyzer.core.apps.api.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 

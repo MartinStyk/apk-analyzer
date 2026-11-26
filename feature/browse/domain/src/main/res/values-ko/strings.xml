@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="browse_subtitle">
+        <item quantity="other">이 장치에 설치된 %1$d 앱 탐색</item>
+    </plurals>
+    <plurals name="browse_dimension_option_count">
+        <item quantity="other">%1$d 옵션</item>
+    </plurals>
+    <string name="browse_certificate_self_signed">자체 서명</string>
+    <string name="browse_certificate_self_signed_explanation">자체 서명 인증서는 Android 앱에서 일반적입니다. 발행자를 확인해야 할 때 인증서 지문을 신뢰할 수 있는 출처와 비교하십시오.</string>
+    <plurals name="browse_options_filter_hint">
+        <item quantity="other">필터 %1$d 옵션</item>
+    </plurals>
+    <string name="browse_options_empty_query">옵션이 “%1$s”와 일치하지 않습니다</string>
+    <plurals name="browse_apps_count">
+        <item quantity="other">%1$d 앱</item>
+    </plurals>
+    <plurals name="browse_apps_filter_hint">
+        <item quantity="other">필터 %1$d 앱</item>
+    </plurals>
+    <string name="browse_apps_empty_query">앱이 “%1$s”와 일치하지 않습니다</string>
+</resources>

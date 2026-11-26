@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="browse_subtitle">
+        <item quantity="other">Jelajahi %1$d aplikasi yang terpasang di perangkat ini</item>
+    </plurals>
+    <plurals name="browse_dimension_option_count">
+        <item quantity="other">%1$d opsi</item>
+    </plurals>
+    <string name="browse_certificate_self_signed">Ditandatangani sendiri</string>
+    <string name="browse_certificate_self_signed_explanation">Sertifikat yang ditandatangani sendiri adalah hal yang normal untuk aplikasi Android. Bandingkan sidik jari sertifikat dengan sumber tepercaya ketika Anda perlu memverifikasi penerbit.</string>
+    <plurals name="browse_options_filter_hint">
+        <item quantity="other">Saring %1$d opsi</item>
+    </plurals>
+    <string name="browse_options_empty_query">Tidak ada opsi yang cocok dengan “%1$s”</string>
+    <plurals name="browse_apps_count">
+        <item quantity="other">%1$d aplikasi</item>
+    </plurals>
+    <plurals name="browse_apps_filter_hint">
+        <item quantity="other">Saring %1$d aplikasi</item>
+    </plurals>
+    <string name="browse_apps_empty_query">Tidak ada aplikasi yang cocok dengan “%1$s”</string>
+</resources>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="browse_subtitle">
+        <item quantity="one">Просмотрите приложение %1$d, установленное на этом устройстве</item>
+        <item quantity="few">Просмотрите приложения %1$d, установленные на этом устройстве</item>
+        <item quantity="many">Просмотрите приложений %1$d, установленных на этом устройстве</item>
+        <item quantity="other">Просмотрите приложений %1$d, установленных на этом устройстве</item>
+    </plurals>
+    <plurals name="browse_dimension_option_count">
+        <item quantity="one">%1$d опция</item>
+        <item quantity="few">%1$d опции</item>
+        <item quantity="many">%1$d опций</item>
+        <item quantity="other">%1$d опций</item>
+    </plurals>
+    <string name="browse_certificate_self_signed">Самоподписанный</string>
+    <string name="browse_certificate_self_signed_explanation">Самоподписанные сертификаты являются нормой для приложений Android. Сравните отпечаток сертификата с доверенным источником, когда вам нужно проверить издателя.</string>
+    <plurals name="browse_options_filter_hint">
+        <item quantity="one">Отфильтровать %1$d опцию</item>
+        <item quantity="few">Отфильтровать %1$d опции</item>
+        <item quantity="many">Отфильтровать %1$d опций</item>
+        <item quantity="other">Отфильтровать %1$d опций</item>
+    </plurals>
+    <string name="browse_options_empty_query">Нет опций, соответствующих “%1$s”</string>
+    <plurals name="browse_apps_count">
+        <item quantity="one">%1$d приложение</item>
+        <item quantity="few">%1$d приложения</item>
+        <item quantity="many">%1$d приложений</item>
+        <item quantity="other">%1$d приложений</item>
+    </plurals>
+    <plurals name="browse_apps_filter_hint">
+        <item quantity="one">Отфильтровать %1$d приложение</item>
+        <item quantity="few">Отфильтровать %1$d приложения</item>
+        <item quantity="many">Отфильтровать %1$d приложений</item>
+        <item quantity="other">Отфильтровать %1$d приложений</item>
+    </plurals>
+    <string name="browse_apps_empty_query">Нет приложений, соответствующих “%1$s”</string>
+</resources>

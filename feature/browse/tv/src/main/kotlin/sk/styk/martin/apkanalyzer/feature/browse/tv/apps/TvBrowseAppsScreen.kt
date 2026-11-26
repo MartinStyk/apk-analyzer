@@ -24,11 +24,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseBucketDetail
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseDimension
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseSubAttribute
-import sk.styk.martin.apkanalyzer.core.appindex.browse.cardLabelRes
-import sk.styk.martin.apkanalyzer.core.appindex.browse.isCertificateHash
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseBucketDetail
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseDimension
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseSubAttribute
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.cardLabelRes
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.isCertificateHash
 import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
@@ -46,7 +46,8 @@ import sk.styk.martin.apkanalyzer.feature.browse.tv.components.BrowseHeader
 import sk.styk.martin.apkanalyzer.feature.browse.tv.components.BrowseLoading
 import sk.styk.martin.apkanalyzer.feature.browse.tv.components.BrowseSearch
 import sk.styk.martin.apkanalyzer.feature.browse.tv.components.BucketDetailInfo
-import sk.styk.martin.apkanalyzer.core.appindex.R as AppIndexR
+import sk.styk.martin.apkanalyzer.core.appindex.api.R as AppIndexR
+import sk.styk.martin.apkanalyzer.feature.browse.domain.R as BrowseDomainR
 
 @Composable
 internal fun TvBrowseAppsScreen(
@@ -129,12 +130,12 @@ private fun LoadedContent(
                 else -> (state.bucketDetail as? BrowseBucketDetail.Certificate)?.subject?.displayName
                     ?: stringResource(AppIndexR.string.browse_signer_unknown)
             },
-            subtitle = pluralStringResource(AppIndexR.plurals.browse_apps_count, state.totalApps, state.totalApps),
+            subtitle = pluralStringResource(BrowseDomainR.plurals.browse_apps_count, state.totalApps, state.totalApps),
         ) {
             BrowseSearch(
                 query = state.query,
                 onQueryChange = { onAction(TvBrowseAppsAction.ChangeQuery(it)) },
-                placeholder = pluralStringResource(AppIndexR.plurals.browse_apps_filter_hint, state.totalApps, state.totalApps),
+                placeholder = pluralStringResource(BrowseDomainR.plurals.browse_apps_filter_hint, state.totalApps, state.totalApps),
                 modifier = Modifier.restorableFocus(focus, SEARCH_KEY),
             )
         }
@@ -160,7 +161,7 @@ private fun LoadedContent(
                             text = if (state.query.isBlank()) {
                                 stringResource(R.string.tv_browse_no_apps)
                             } else {
-                                stringResource(AppIndexR.string.browse_apps_empty_query, state.query)
+                                stringResource(BrowseDomainR.string.browse_apps_empty_query, state.query)
                             },
                             style = AppTheme.typography.titleMedium,
                             color = AppTheme.colors.onSurfaceVariant,

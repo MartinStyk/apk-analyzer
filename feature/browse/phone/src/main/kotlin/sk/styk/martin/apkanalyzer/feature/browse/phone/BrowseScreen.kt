@@ -30,8 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseDimension
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseDimensionSummary
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseDimension
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseDimensionSummary
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Chip
@@ -42,7 +42,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.navigationBarContentPadding
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
-import sk.styk.martin.apkanalyzer.core.appindex.R as AppIndexR
+import sk.styk.martin.apkanalyzer.feature.browse.domain.R as BrowseDomainR
 
 @Composable
 internal fun BrowseScreen(
@@ -111,8 +111,8 @@ private fun BrowseHeader(state: BrowseState, modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = when (state) {
-                is BrowseState.Loading -> stringResource(AppIndexR.string.browse_subtitle_loading)
-                is BrowseState.Loaded -> pluralStringResource(AppIndexR.plurals.browse_subtitle, state.totalApps, state.totalApps)
+                is BrowseState.Loading -> stringResource(R.string.browse_subtitle_loading)
+                is BrowseState.Loaded -> pluralStringResource(BrowseDomainR.plurals.browse_subtitle, state.totalApps, state.totalApps)
             },
             style = AppTheme.typography.bodyMedium,
             color = AppTheme.colors.onSurfaceVariant,
@@ -190,7 +190,7 @@ private fun DimensionCard(
 
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = pluralStringResource(AppIndexR.plurals.browse_dimension_option_count, summary.optionCount, summary.optionCount),
+            text = pluralStringResource(BrowseDomainR.plurals.browse_dimension_option_count, summary.optionCount, summary.optionCount),
             style = AppTheme.typography.labelMedium,
             color = AppTheme.colors.primary,
             modifier = Modifier.padding(start = 76.dp, end = 16.dp, bottom = 16.dp),

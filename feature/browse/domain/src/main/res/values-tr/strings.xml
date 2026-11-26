@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="browse_subtitle">
+        <item quantity="one">Bu cihazda yüklü %1$d uygulamayı keşfedin</item>
+        <item quantity="other">Bu cihazda yüklü %1$d uygulamayı keşfedin</item>
+    </plurals>
+    <plurals name="browse_dimension_option_count">
+        <item quantity="one">%1$d seçenek</item>
+        <item quantity="other">%1$d seçenek</item>
+    </plurals>
+    <string name="browse_certificate_self_signed">Kendi kendine imzalı</string>
+    <string name="browse_certificate_self_signed_explanation">Kendinden imzalı sertifikalar Android uygulamaları için normaldir. Yayıncıyı doğrulamak gerektiğinde sertifika parmak izini güvenilir bir kaynakla karşılaştırın.</string>
+    <plurals name="browse_options_filter_hint">
+        <item quantity="one">%1$d seçeneği filtrele</item>
+        <item quantity="other">%1$d seçeneği filtrele</item>
+    </plurals>
+    <string name="browse_options_empty_query">“%1$s” ile eşleşen seçenek yok</string>
+    <plurals name="browse_apps_count">
+        <item quantity="one">%1$d uygulama</item>
+        <item quantity="other">%1$d uygulama</item>
+    </plurals>
+    <plurals name="browse_apps_filter_hint">
+        <item quantity="one">%1$d uygulamayı filtrele</item>
+        <item quantity="other">%1$d uygulamayı filtrele</item>
+    </plurals>
+    <string name="browse_apps_empty_query">“%1$s” ile eşleşen uygulama yok</string>
+</resources>

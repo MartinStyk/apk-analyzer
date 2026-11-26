@@ -1,7 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.browse.tv
 
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseDimension
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseSubAttribute
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseDimension
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseSubAttribute
 
 internal sealed interface TvBrowseEvent {
     data class NavigateToDimension(val dimension: BrowseDimension) : TvBrowseEvent

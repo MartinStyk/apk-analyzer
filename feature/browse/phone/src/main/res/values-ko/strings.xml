@@ -18,4 +18,6 @@
     <string name="browse_algorithm_md2_explanation">%1$s는 MD2를 사용합니다. MD2는 구식이며 실용적인 공격에 취약하므로 서명 인증서에 안전하지 않습니다. 새로운 서명 인증서는 SHA-256 또는 더 강력한 것을 사용해야 합니다.</string>
     <string name="browse_algorithm_unknown_explanation">%1$s의 강도는 알고리즘 이름으로 평가할 수 없습니다. 키 유형과 크기도 보안에 영향을 미칠 수 있습니다.</string>
     <string name="browse_bucket_info_content_description">%1$s에 대한 정보</string>
+    <string name="browse_subtitle_loading">설치된 앱 스캔 중…</string>
+    <string name="browse_sub_attribute_sheet_title">그룹화 기준</string>
 </resources>

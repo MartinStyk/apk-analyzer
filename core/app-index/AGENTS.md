@@ -2,8 +2,12 @@
 
 ## Purpose and Boundary
 
-Builds device-wide `attribute -> apps` indexes for `feature:browse`. The package is
-`sk.styk.martin.apkanalyzer.core.appindex`.
+Builds device-wide `attribute -> apps` indexes for `feature:browse`. It is split per
+[core API/impl split](../../docs/app/technical/core-api-impl-split.md): `api`
+(`sk.styk.martin.apkanalyzer.core.appindex.api`) holds `AppIndexRepository`, the index models, and
+the `browse/` contract; `impl` (`sk.styk.martin.apkanalyzer.core.appindex.impl`) holds the internal
+repository, `BrowseDimensionLabelerImpl`, `BrowseBucketDetailResolverImpl`, the label strings only
+they read, and the Hilt module.
 
 The index itself is a pure bucketing layer over public `core:apps` repositories. It owns no
 `PackageManager` access and must never reach into analysis internals.
@@ -12,7 +16,8 @@ The index itself is a pure bucketing layer over public `core:apps` repositories.
 `BrowseDimension` and `BrowseSubAttribute` enums, bucket lookup, `BrowseDimensionLabeler` (friendly
 labels and raw identifiers), hub summaries, option building and matching, and
 `BrowseBucketDetailResolver`, plus their localized strings. Each app keeps only its own layout, icons,
-and screen copy; a rule or label both Browse screens show goes here.
+and screen copy; a rule or label both Browse screens show goes here. Screen copy both Browse apps
+show, such as counts and empty-search text, lives in `feature:browse`'s `domain`.
 
 ## Index Semantics
 
