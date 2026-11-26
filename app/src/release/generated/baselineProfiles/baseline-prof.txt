@@ -32511,8 +32511,8 @@ SPLsk/styk/martin/apkanalyzer/core/apkfiles/impl/di/TemporaryApkModule$Companion
 SPLsk/styk/martin/apkanalyzer/core/apkfiles/impl/di/TemporaryApkModule$Companion;->provideActivityManager(Landroid/content/Context;)Landroid/app/ActivityManager;
 Lsk/styk/martin/apkanalyzer/core/apkfiles/impl/di/TemporaryApkModule_Companion_ProvideActivityManagerFactory;
 SPLsk/styk/martin/apkanalyzer/core/apkfiles/impl/di/TemporaryApkModule_Companion_ProvideActivityManagerFactory;->provideActivityManager(Landroid/content/Context;)Landroid/app/ActivityManager;
-Lsk/styk/martin/apkanalyzer/core/appexport/column/InventoryDetailValuesKt$$ExternalSyntheticBackport0;
-SPLsk/styk/martin/apkanalyzer/core/appexport/column/InventoryDetailValuesKt$$ExternalSyntheticBackport0;->m(II)I
+Lsk/styk/martin/apkanalyzer/core/appexport/impl/column/InventoryDetailValuesKt$$ExternalSyntheticBackport0;
+SPLsk/styk/martin/apkanalyzer/core/appexport/impl/column/InventoryDetailValuesKt$$ExternalSyntheticBackport0;->m(II)I
 Lsk/styk/martin/apkanalyzer/core/apphistory/capture/AppHistoryCaptureRepository;
 Lsk/styk/martin/apkanalyzer/core/apphistory/capture/AppHistoryCaptureRepositoryImpl;
 SPLsk/styk/martin/apkanalyzer/core/apphistory/capture/AppHistoryCaptureRepositoryImpl;-><init>(Lsk/styk/martin/apkanalyzer/core/apps/api/InstalledAppsRepository;Lsk/styk/martin/apkanalyzer/core/apps/api/AppDetailRepository;Lsk/styk/martin/apkanalyzer/core/apps/api/packaging/NativeLibrariesRepository;Lsk/styk/martin/apkanalyzer/core/apps/api/signing/SigningSchemeRepository;Lsk/styk/martin/apkanalyzer/core/apphistory/storage/AppHistoryPersistenceRepository;Lsk/styk/martin/apkanalyzer/core/common/device/DeviceInfoProvider;Lsk/styk/martin/apkanalyzer/core/common/coroutines/DispatcherProvider;Lsk/styk/martin/apkanalyzer/core/common/performance/PerformanceTracker;Lsk/styk/martin/apkanalyzer/core/common/configuration/ConfigurationRepository;Lkotlinx/coroutines/CoroutineScope;)V

@@ -36,7 +36,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
-import sk.styk.martin.apkanalyzer.core.appexport.format.InventoryFormat
+import sk.styk.martin.apkanalyzer.core.appexport.api.format.InventoryFormat
 import sk.styk.martin.apkanalyzer.core.common.util.openBrowser
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.animation.NAV_DURATION_STANDARD
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons

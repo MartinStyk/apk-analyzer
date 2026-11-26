@@ -1,7 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.appexport.phone
 
 import android.net.Uri
-import sk.styk.martin.apkanalyzer.core.appexport.format.InventoryFormat
+import sk.styk.martin.apkanalyzer.core.appexport.api.format.InventoryFormat
 
 sealed interface InventoryExportEvent {
     data object NavigateBack : InventoryExportEvent

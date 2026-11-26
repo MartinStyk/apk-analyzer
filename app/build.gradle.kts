@@ -42,6 +42,8 @@ dependencies {
     implementation(projects.core.apkFiles.impl)
     implementation(projects.core.apps.api)
     implementation(projects.core.apps.impl)
+    implementation(projects.core.appExport.api)
+    implementation(projects.core.appExport.impl)
     implementation(projects.core.aiInsights.api)
     implementation(projects.core.aiInsights.impl)
     implementation(projects.core.userPreferences.api)

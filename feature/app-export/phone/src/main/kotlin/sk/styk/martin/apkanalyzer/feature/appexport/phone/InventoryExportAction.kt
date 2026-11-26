@@ -1,10 +1,10 @@
 package sk.styk.martin.apkanalyzer.feature.appexport.phone
 
 import android.net.Uri
-import sk.styk.martin.apkanalyzer.core.appexport.column.InventoryColumn
-import sk.styk.martin.apkanalyzer.core.appexport.column.InventoryColumnGroup
-import sk.styk.martin.apkanalyzer.core.appexport.column.InventoryPreset
-import sk.styk.martin.apkanalyzer.core.appexport.format.InventoryFormat
+import sk.styk.martin.apkanalyzer.core.appexport.api.column.InventoryColumn
+import sk.styk.martin.apkanalyzer.core.appexport.api.column.InventoryColumnGroup
+import sk.styk.martin.apkanalyzer.core.appexport.api.column.InventoryPreset
+import sk.styk.martin.apkanalyzer.core.appexport.api.format.InventoryFormat
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 
 sealed interface InventoryExportAction {

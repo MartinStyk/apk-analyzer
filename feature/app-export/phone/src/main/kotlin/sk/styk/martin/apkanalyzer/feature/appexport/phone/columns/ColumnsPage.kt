@@ -24,10 +24,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.styk.martin.apkanalyzer.core.appexport.column.InventoryColumn
-import sk.styk.martin.apkanalyzer.core.appexport.column.InventoryColumnGroup
-import sk.styk.martin.apkanalyzer.core.appexport.column.InventoryColumnShape
-import sk.styk.martin.apkanalyzer.core.appexport.column.InventoryPreset
+import sk.styk.martin.apkanalyzer.core.appexport.api.column.InventoryColumn
+import sk.styk.martin.apkanalyzer.core.appexport.api.column.InventoryColumnGroup
+import sk.styk.martin.apkanalyzer.core.appexport.api.column.InventoryColumnShape
+import sk.styk.martin.apkanalyzer.core.appexport.api.column.InventoryPreset
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Checkbox
