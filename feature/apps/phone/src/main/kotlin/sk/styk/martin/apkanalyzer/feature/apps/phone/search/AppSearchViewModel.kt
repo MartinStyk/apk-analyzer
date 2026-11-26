@@ -19,7 +19,7 @@ import sk.styk.martin.apkanalyzer.core.apps.api.filtering.filterBy
 import sk.styk.martin.apkanalyzer.core.apps.api.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.apps.api.search.search
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.core.userpreferences.searchhistory.SearchHistoryRepository
+import sk.styk.martin.apkanalyzer.core.userpreferences.api.searchhistory.SearchHistoryRepository
 import sk.styk.martin.apkanalyzer.feature.apps.phone.list.toListItem
 import javax.inject.Inject
 

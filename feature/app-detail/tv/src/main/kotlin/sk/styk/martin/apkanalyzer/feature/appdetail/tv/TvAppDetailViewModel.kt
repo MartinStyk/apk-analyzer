@@ -19,7 +19,7 @@ import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.requirements
 import sk.styk.martin.apkanalyzer.core.apps.api.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.core.userpreferences.recentlyviewed.RecentlyViewedAppsRepository
+import sk.styk.martin.apkanalyzer.core.userpreferences.api.recentlyviewed.RecentlyViewedAppsRepository
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.AppDetailSectionRepository
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.analytics.AppDetailAnalytics

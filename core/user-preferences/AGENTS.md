@@ -2,8 +2,11 @@
 
 ## Purpose and Boundary
 
-Owns lightweight user-facing history. The package is
-`sk.styk.martin.apkanalyzer.core.userpreferences`.
+Owns lightweight user-facing history. It is split per
+[core API/impl split](../../docs/app/technical/core-api-impl-split.md): `api`
+(`sk.styk.martin.apkanalyzer.core.userpreferences.api`) holds the two repository interfaces and
+their models; `impl` (`sk.styk.martin.apkanalyzer.core.userpreferences.impl`) holds the Room
+database, DAOs, entities, internal repositories, and Hilt modules.
 
 Recently viewed apps and search history are independent repository families, each in its own
 subpackage, and their public contracts stay separate even though both are keyed on package name and

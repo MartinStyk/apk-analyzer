@@ -133,7 +133,7 @@ Each fork:
 ```
 
 2. Maps the top stack frame onto this repo. The frames are package-qualified
-   (`sk.styk.martin.apkanalyzer.core.userpreferences.searchhistory.SearchHistoryDao_Impl`), so the
+   (`sk.styk.martin.apkanalyzer.core.userpreferences.impl.searchhistory.SearchHistoryDao_Impl`), so the
    owning module follows directly from the package — see the module/package mapping in `AGENTS.md`.
    Ignore framework-only frames when locating the owner — find the deepest
    `sk.styk.martin.apkanalyzer.*` frame.

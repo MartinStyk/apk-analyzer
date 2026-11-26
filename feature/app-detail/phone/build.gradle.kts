@@ -16,6 +16,6 @@ dependencies {
     implementation(projects.core.aiInsights)
     implementation(projects.core.appPermissions.api)
     implementation(projects.core.common)
-    implementation(projects.core.userPreferences)
+    implementation(projects.core.userPreferences.api)
     implementation(libs.coil.compose)
 }

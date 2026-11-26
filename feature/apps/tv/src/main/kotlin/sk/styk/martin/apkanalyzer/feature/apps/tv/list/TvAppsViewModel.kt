@@ -23,7 +23,7 @@ import sk.styk.martin.apkanalyzer.core.apps.api.sorting.comparator
 import sk.styk.martin.apkanalyzer.core.apps.api.storagestats.StorageStatsRepository
 import sk.styk.martin.apkanalyzer.core.apps.api.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
-import sk.styk.martin.apkanalyzer.core.userpreferences.recentlyviewed.RecentlyViewedAppsRepository
+import sk.styk.martin.apkanalyzer.core.userpreferences.api.recentlyviewed.RecentlyViewedAppsRepository
 import sk.styk.martin.apkanalyzer.feature.apps.tv.components.toTvAppItem
 import javax.inject.Inject
 

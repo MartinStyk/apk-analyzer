@@ -12,5 +12,5 @@ dependencies {
     implementation(projects.core.appPermissions.api)
     implementation(projects.core.apps.api)
     implementation(projects.core.common)
-    implementation(projects.core.userPreferences)
+    implementation(projects.core.userPreferences.api)
 }

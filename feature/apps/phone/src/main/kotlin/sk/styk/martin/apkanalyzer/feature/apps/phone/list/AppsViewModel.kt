@@ -22,7 +22,7 @@ import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationKey
 import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.combine
-import sk.styk.martin.apkanalyzer.core.userpreferences.recentlyviewed.RecentlyViewedAppsRepository
+import sk.styk.martin.apkanalyzer.core.userpreferences.api.recentlyviewed.RecentlyViewedAppsRepository
 import sk.styk.martin.apkanalyzer.feature.apps.phone.components.AppDataPermission
 import javax.inject.Inject
 

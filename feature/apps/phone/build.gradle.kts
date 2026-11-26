@@ -13,7 +13,7 @@ dependencies {
     implementation(projects.feature.appExport.api)
     implementation(projects.core.apkFiles.api)
     implementation(projects.core.apps.api)
-    implementation(projects.core.userPreferences)
+    implementation(projects.core.userPreferences.api)
     implementation(projects.core.appPermissions.api)
     implementation(libs.coil.compose)
 }

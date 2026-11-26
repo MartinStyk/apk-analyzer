@@ -42,6 +42,8 @@ dependencies {
     implementation(projects.core.apkFiles.impl)
     implementation(projects.core.apps.api)
     implementation(projects.core.apps.impl)
+    implementation(projects.core.userPreferences.api)
+    implementation(projects.core.userPreferences.impl)
     implementation(projects.core.appIndex.api)
     implementation(projects.core.appIndex.impl)
     implementation(projects.core.appPermissions.api)
@@ -49,7 +51,6 @@ dependencies {
     implementation(projects.core.appFunctions)
     implementation(projects.core.appHistory)
     implementation(projects.core.common)
-    implementation(projects.core.userPreferences)
     implementation(projects.core.navigation)
     implementation(projects.core.designSystem.phone)
 
