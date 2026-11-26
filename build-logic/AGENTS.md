@@ -14,6 +14,8 @@ build scripts.
 | `apkanalyzer.architecture` | Registers the root `validateArchitecture` task. |
 | `apkanalyzer.library` | Configures Android libraries, Kotlin, SDK levels, and formatting. |
 | `apkanalyzer.application` | Configures the Android app, Google services, Firebase, and release builds. |
+| `apkanalyzer.core.api` | Configures a core domain `api` module: Android library, coroutines and serialization runtimes, the serialization plugin, and `apkanalyzer.tests.unit` for `testFixtures`. No Hilt or Compose. |
+| `apkanalyzer.core.impl` | Configures a core domain implementation module: Android library plus Hilt. |
 | `apkanalyzer.feature.api` | Configures serialization and Navigation 3 for dependency-light feature APIs. |
 | `apkanalyzer.feature.phone` | Configures Compose, Hilt, Navigation 3, and shared UI/navigation modules. |
 | `apkanalyzer.hilt` | Applies Hilt and KSP compiler configuration. |

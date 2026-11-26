@@ -39,7 +39,7 @@ if (lastUsed.isBefore(now.minus(AppClassificationThresholds.UNUSED_PERIOD))) {
 ```
 
 The comments are gone because
-[`AppClassificationThresholds`](../../core/apps/src/main/kotlin/sk/styk/martin/apkanalyzer/core/apps/AppClassificationThresholds.kt)
+[`AppClassificationThresholds`](../../core/apps/api/src/main/kotlin/sk/styk/martin/apkanalyzer/core/apps/api/AppClassificationThresholds.kt)
 now names each number once, in one place, and every screen that classifies an app reads the same
 constant. "Large" means the same thing in the badge, in the quick filter, and in the insight list —
 which a comment next to a literal could never guarantee.
@@ -57,11 +57,11 @@ interface AppDetailRepository {
 }
 ```
 
-— [`AppDetailRepository`](../../core/apps/src/main/kotlin/sk/styk/martin/apkanalyzer/core/apps/AppDetailRepository.kt),
+— [`AppDetailRepository`](../../core/apps/api/src/main/kotlin/sk/styk/martin/apkanalyzer/core/apps/api/AppDetailRepository.kt),
 with the same shape in
-[`AppExportManager`](../../core/apps/src/main/kotlin/sk/styk/martin/apkanalyzer/core/apps/export/AppExportManager.kt)
+[`AppExportManager`](../../core/apps/api/src/main/kotlin/sk/styk/martin/apkanalyzer/core/apps/api/export/AppExportManager.kt)
 and
-[`SigningSchemeRepository`](../../core/apps/src/main/kotlin/sk/styk/martin/apkanalyzer/core/apps/signing/SigningSchemeRepository.kt),
+[`SigningSchemeRepository`](../../core/apps/api/src/main/kotlin/sk/styk/martin/apkanalyzer/core/apps/api/signing/SigningSchemeRepository.kt),
 where a `Result<List<SigningSchemeVersion>?>` distinguishes "failed to read" from "nothing to read".
 
 Wrap the failing work with
@@ -112,7 +112,7 @@ internal class StorageStatsRepositoryImpl @Inject constructor(
 }
 ```
 
-— [`StorageStatsRepositoryImpl`](../../core/apps/src/main/kotlin/sk/styk/martin/apkanalyzer/core/apps/storagestats/StorageStatsRepositoryImpl.kt).
+— [`StorageStatsRepositoryImpl`](../../core/apps/impl/src/main/kotlin/sk/styk/martin/apkanalyzer/core/apps/impl/storagestats/StorageStatsRepositoryImpl.kt).
 
 This replaces the older `private val _x = MutableStateFlow(); val x: StateFlow<X> = _x.asStateFlow()`
 pair with a single declaration. The effect is the same either way: exposing the `MutableStateFlow`

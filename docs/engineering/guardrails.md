@@ -61,11 +61,15 @@ reads module build files as text. It covers what detekt can't see: the module gr
 | A4 | `feature/*/domain` depends only on its own `api` and on `core`. |
 | A5 | TV modules never depend on phone modules or `core:design-system:phone`. |
 | A6 | Phone modules never depend on TV modules. |
+| A7 | `core/<name>/api` depends only on other core `api` modules and `core:common`. |
+| A8 | Only `app`, `tv`, and `app:baselineprofile` depend on a core implementation module (`core/<name>/<impl>`, anything but `api`, outside `design-system`). |
 | B1 | Module build files never set SDK levels, `jvmToolchain`, `jvmTarget`, or `JavaVersion`. |
 | B2 | No `project(":...")`; typesafe accessors only. |
 | B3 | Plugins applied with `alias(libs.plugins.*)` only. |
 | B4 | No string-literal dependency coordinates. |
 | B5 | Material3 (`core:design-system:phone`, `app`), TV Material (`core:design-system:tv`), and Material icons (`core:design-system:foundation`) are dependencies of those modules only. The compiler then rejects their imports everywhere else. |
+| B6 | A core `api` module applies `apkanalyzer.core.api` and never Hilt, Compose, or `apkanalyzer.core.impl`. |
+| B7 | A core implementation module applies `apkanalyzer.core.impl` and never `apkanalyzer.core.api`. |
 | S1 | `src/test` and `src/testFixtures` only in `core/**` and `feature/*/domain`. |
 | S2 | A declared `namespace` matches the module path with hyphens removed. |
 

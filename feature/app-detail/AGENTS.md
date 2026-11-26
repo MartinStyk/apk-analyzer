@@ -93,7 +93,8 @@ Split APKs, and the manifest. It never depends on `phone`.
 * Every rule and explanation both apps show lives in this feature's `domain` (`insight/`) or in core:
   `core:apps` (`signing/`,
   `components/`, `devicefeatures/`, `packaging/`, `installsource/` text files and their strings) and
-  `core:app-permissions` `detail/`. Each app keeps only its own screen text. Add a new explanation
+  `core:app-permissions` `detail/`. Each app keeps only its own screen text; screen copy both apps show
+  lives in `domain`'s `res/`. Add a new explanation
   there, not in either feature module, so both apps stay translated and agree with each other.
 * The hub is a fixed profile column (icon, name, package, badges, App info and Play Store) beside a
   three-column grid of section cards, with "Worth knowing" below; everything fits one screen. Cards
