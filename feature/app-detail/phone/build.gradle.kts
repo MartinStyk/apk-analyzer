@@ -13,7 +13,7 @@ dependencies {
     implementation(projects.core.apkFiles.api)
     implementation(projects.core.appHistory)
     implementation(projects.core.apps.api)
-    implementation(projects.core.aiInsights)
+    implementation(projects.core.aiInsights.api)
     implementation(projects.core.appPermissions.api)
     implementation(projects.core.common)
     implementation(projects.core.userPreferences.api)

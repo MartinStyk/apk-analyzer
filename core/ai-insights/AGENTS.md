@@ -3,8 +3,11 @@
 ## Purpose and Boundary
 
 Home for on-device AI features. Today it holds exactly one: a short, factual summary of one app
-(installed package or APK file) generated from data already produced by `core:apps`. The package is
-`sk.styk.martin.apkanalyzer.core.aiinsights`.
+(installed package or APK file) generated from data already produced by `core:apps`. It is split
+per [core API/impl split](../../docs/app/technical/core-api-impl-split.md): `api`
+(`sk.styk.martin.apkanalyzer.core.aiinsights.api`) holds `AppAiDescriptionRepository`,
+`AppAiDescription`, and `AiAvailability`; `impl` (`sk.styk.martin.apkanalyzer.core.aiinsights.impl`)
+holds everything else below. Only the phone app shell depends on `impl`; TV has no AI summary.
 
 This module owns no UI. `feature/app-detail/phone`'s `components/aisummary/` package owns the
 `AiSummaryCard` composable and its ViewModel, and they are the only consumers of
