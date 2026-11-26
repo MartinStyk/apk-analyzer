@@ -1,0 +1,98 @@
+name: Build app release
+
+on:
+  workflow_call:
+    inputs:
+      form-factor:
+        required: true
+        type: string
+      module:
+        required: true
+        type: string
+      artifact:
+        required: true
+        type: string
+    secrets:
+      FIREBASE_TOKEN:
+        required: true
+      FIREBASE_APP_ID:
+        required: true
+      FIREBASE_PROJECT_ID:
+        required: true
+      SIGN_KEY:
+        required: true
+      SIGN_KEY_ALIAS:
+        required: true
+      SIGN_KEY_STORE_PASSWORD:
+        required: true
+      SIGN_KEY_PASSWORD:
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build and sign
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up Gradle build environment
+        uses: ./.github/actions/setup-gradle-build
+
+      - name: Fetch Firebase google-services.json
+        uses: ./.github/actions/fetch-google-services
+        with:
+          firebase-token: ${{ secrets.FIREBASE_TOKEN }}
+          firebase-app-id: ${{ secrets.FIREBASE_APP_ID }}
+          firebase-project-id: ${{ secrets.FIREBASE_PROJECT_ID }}
+
+      - name: Compute versionCode from tag
+        id: version
+        run: |
+          CODE=$(bash .github/scripts/version-code.sh "$GITHUB_REF_NAME" "${{ inputs.form-factor }}")
+          echo "code=$CODE" >> "$GITHUB_OUTPUT"
+
+      - name: Set up release signing
+        uses: ./.github/actions/setup-release-signing
+        with:
+          sign-key: ${{ secrets.SIGN_KEY }}
+          sign-key-alias: ${{ secrets.SIGN_KEY_ALIAS }}
+          sign-key-store-password: ${{ secrets.SIGN_KEY_STORE_PASSWORD }}
+          sign-key-password: ${{ secrets.SIGN_KEY_PASSWORD }}
+
+      - name: Build and sign release AAB and APK
+        run: |
+          ./gradlew :${{ inputs.module }}:bundleRelease :${{ inputs.module }}:assembleRelease \
+            -Pversion.code=${{ steps.version.outputs.code }} \
+            -Pversion.name="$GITHUB_REF_NAME"
+
+      - name: Rename release artifacts
+        run: |
+          mv ${{ inputs.module }}/build/outputs/bundle/release/*.aab "${{ inputs.module }}/build/outputs/bundle/release/${{ inputs.artifact }}-${{ github.ref_name }}.aab"
+          mv ${{ inputs.module }}/build/outputs/apk/release/*.apk "${{ inputs.module }}/build/outputs/apk/release/${{ inputs.artifact }}-${{ github.ref_name }}.apk"
+
+      - name: Upload AAB artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.artifact }}-aab
+          path: ${{ inputs.module }}/build/outputs/bundle/release/${{ inputs.artifact }}-${{ github.ref_name }}.aab
+          compression-level: 0
+          if-no-files-found: error
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.artifact }}-apk
+          path: ${{ inputs.module }}/build/outputs/apk/release/${{ inputs.artifact }}-${{ github.ref_name }}.apk
+          compression-level: 0
+          if-no-files-found: error
+
+      - name: Upload mapping file artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.artifact }}-mapping
+          path: ${{ inputs.module }}/build/outputs/mapping/release/mapping.txt
+          if-no-files-found: error

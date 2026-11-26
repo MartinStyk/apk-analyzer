@@ -61,83 +61,28 @@ jobs:
         run: |
           ./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain :build-logic:detekt-rules:detektMain lintRelease testDebugUnitTest :build-logic:detekt-rules:test validateArchitecture --continue
 
-  build-release:
+  build-phone-release:
+    name: Build phone release
     needs: [ check-tag ]
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - form-factor: phone
-            module: app
-            artifact: apk-analyzer
-          - form-factor: tv
-            module: tv
-            artifact: apk-analyzer-tv
+    uses: ./.github/workflows/build-app-release.yml
+    with:
+      form-factor: phone
+      module: app
+      artifact: apk-analyzer
+    secrets: inherit
 
-    steps:
-      - uses: actions/checkout@v7
-
-      - name: Set up Gradle build environment
-        uses: ./.github/actions/setup-gradle-build
-
-      - name: Fetch Firebase google-services.json
-        uses: ./.github/actions/fetch-google-services
-        with:
-          firebase-token: ${{ secrets.FIREBASE_TOKEN }}
-          firebase-app-id: ${{ secrets.FIREBASE_APP_ID }}
-          firebase-project-id: ${{ secrets.FIREBASE_PROJECT_ID }}
-
-      - name: Compute versionCode from tag
-        id: version
-        run: |
-          CODE=$(bash .github/scripts/version-code.sh "$GITHUB_REF_NAME" "${{ matrix.form-factor }}")
-          echo "code=$CODE" >> "$GITHUB_OUTPUT"
-
-      - name: Set up release signing
-        uses: ./.github/actions/setup-release-signing
-        with:
-          sign-key: ${{ secrets.SIGN_KEY }}
-          sign-key-alias: ${{ secrets.SIGN_KEY_ALIAS }}
-          sign-key-store-password: ${{ secrets.SIGN_KEY_STORE_PASSWORD }}
-          sign-key-password: ${{ secrets.SIGN_KEY_PASSWORD }}
-
-      - name: Build and sign release AAB and APK
-        run: |
-          ./gradlew :${{ matrix.module }}:bundleRelease :${{ matrix.module }}:assembleRelease \
-            -Pversion.code=${{ steps.version.outputs.code }} \
-            -Pversion.name="$GITHUB_REF_NAME"
-
-      - name: Rename release artifacts
-        run: |
-          mv ${{ matrix.module }}/build/outputs/bundle/release/*.aab "${{ matrix.module }}/build/outputs/bundle/release/${{ matrix.artifact }}-${{ github.ref_name }}.aab"
-          mv ${{ matrix.module }}/build/outputs/apk/release/*.apk "${{ matrix.module }}/build/outputs/apk/release/${{ matrix.artifact }}-${{ github.ref_name }}.apk"
-
-      - name: Upload AAB artifact
-        uses: actions/upload-artifact@v7
-        with:
-          name: ${{ matrix.artifact }}-aab
-          path: ${{ matrix.module }}/build/outputs/bundle/release/${{ matrix.artifact }}-${{ github.ref_name }}.aab
-          compression-level: 0
-          if-no-files-found: error
-
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v7
-        with:
-          name: ${{ matrix.artifact }}-apk
-          path: ${{ matrix.module }}/build/outputs/apk/release/${{ matrix.artifact }}-${{ github.ref_name }}.apk
-          compression-level: 0
-          if-no-files-found: error
-
-      - name: Upload mapping file artifact
-        uses: actions/upload-artifact@v7
-        with:
-          name: ${{ matrix.artifact }}-mapping
-          path: ${{ matrix.module }}/build/outputs/mapping/release/mapping.txt
-          if-no-files-found: error
+  build-tv-release:
+    name: Build TV release
+    needs: [ check-tag ]
+    uses: ./.github/workflows/build-app-release.yml
+    with:
+      form-factor: tv
+      module: tv
+      artifact: apk-analyzer-tv
+    secrets: inherit
 
   publish-github-release:
-    needs: [ check-tag, verify, build-release ]
+    needs: [ check-tag, verify, build-phone-release, build-tv-release ]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -161,7 +106,7 @@ jobs:
             artifacts/apk-analyzer-tv-${{ github.ref_name }}.apk
 
   publish-play-store:
-    needs: [ check-tag, verify, build-release ]
+    needs: [ check-tag, verify, build-phone-release, build-tv-release ]
     if: ${{ !cancelled() && needs.check-tag.result == 'success' && needs.verify.result == 'success' }}
     runs-on: ubuntu-latest
     strategy:
@@ -203,7 +148,7 @@ jobs:
         run: ./gradlew :${{ matrix.module }}:publishBundle --artifact-dir artifacts --track "$TRACK"
 
   distribute-app-distribution:
-    needs: [ verify, build-release ]
+    needs: [ verify, build-phone-release, build-tv-release ]
     if: ${{ !cancelled() && needs.verify.result == 'success' }}
     runs-on: ubuntu-latest
 

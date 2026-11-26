@@ -14,7 +14,7 @@ They live at `.github/workflows/`.
 | File | Name | Trigger | What it runs |
 |---|---|---|---|
 | `.github/workflows/ci.yml` | `Continuous integration` | Push to or pull request against `develop` | Parallel `verify` and `build-apk` jobs; `distribute` on pushes after both pass |
-| `.github/workflows/release.yml` | `Release` | Push of a semantic version tag (`X.Y.Z`) | Parallel `verify` and `build-release` jobs; GitHub Release, Play Store beta, and Firebase App Distribution publish after both pass |
+| `.github/workflows/release.yml` | `Release` | Push of a semantic version tag (`X.Y.Z`) | Parallel `verify`, `build-phone-release`, and `build-tv-release` jobs; GitHub Release needs all three, while Play Store beta and Firebase App Distribution can still upload available artifacts if one build fails |
 | `.github/workflows/agent-context.yml` | `Agent context` | Context, skill, adapter, root-build, or module-graph changes against `develop` | `validate`: `validateAgentContext` |
 
 ## Step 1 — Find the run
@@ -34,7 +34,7 @@ They live at `.github/workflows/`.
 have parallel verification and artifact-build jobs followed by downstream distribution jobs. The
 release workflow also has Play Store and GitHub Release jobs. Confirm the failed job and its
 dependencies before assuming the cause; a downstream artifact failure may still originate in
-`build-apk` or `build-release`.
+`build-apk`, `build-phone-release`, or `build-tv-release`.
 
 ## Step 3 — Pull only the failing job's log, then filter for the signal
 

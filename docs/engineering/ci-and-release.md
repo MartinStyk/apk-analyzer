@@ -10,8 +10,8 @@ secrets it needs. What the verification gates themselves check is in
 |---|---|---|---|
 | [`ci.yml`](../../.github/workflows/ci.yml) | Push and PR to `develop` | `verify`, `unit-tests`, `build-apk`, `distribute` | SARIF results, a debug APK artifact, an internal-tester build on push |
 | [`agent-context.yml`](../../.github/workflows/agent-context.yml) | Push and PR to `develop` touching a context file, a skill, or the module graph | `validate` | Pass/fail on `validateAgentContext` |
-| [`release.yml`](../../.github/workflows/release.yml) | Push of a `MAJOR.MINOR.PATCH` tag | `check-tag`, `verify`, `build-release`, `publish-github-release`, `publish-play-store`, `distribute-app-distribution` | Signed phone and TV AABs and APKs, a GitHub release, Play beta releases for both apps, an internal-tester build |
-| [`promote-release.yml`](../../.github/workflows/promote-release.yml) | Manual `workflow_dispatch` | `promote` | A Play production release of the phone app, the TV app, or both, at the chosen rollout percentage |
+| [`release.yml`](../../.github/workflows/release.yml) | Push of a `MAJOR.MINOR.PATCH` tag | `check-tag`, `verify`, `build-phone-release`, `build-tv-release`, `publish-github-release`, `publish-play-store`, `distribute-app-distribution` | Signed phone and TV AABs and APKs, a GitHub release, Play beta releases for both apps, an internal-tester build |
+| [`promote-release.yml`](../../.github/workflows/promote-release.yml) | Manual `workflow_dispatch` | `promote-phone`, `promote-tv` | A Play production release of the phone app, the TV app, or both, at the chosen rollout percentage |
 
 `ci.yml` and `agent-context.yml` cancel in-progress runs for the same ref. `ci.yml` skips runs for
 pushes that only touch Markdown, `.claude/`, `LICENSE`, `.editorconfig`, or `.gitignore` — the
@@ -48,7 +48,7 @@ reaches phone or TV users is decided later, at promotion.
 |---|---|
 | `check-tag` | Fails if the tag annotation is empty or exceeds Google Play's 500-character release-note limit. The annotation body becomes the GitHub release body |
 | `verify` | Repeats the CI gates against the release variant (`lintRelease` rather than `lintDebug`) |
-| `build-release` | One matrix leg per app (`app`, `tv`): derives `versionCode` from the tag, decodes the signing keystore, runs `bundleRelease assembleRelease`, and uploads the AAB, APK, and ProGuard `mapping.txt` as separate artifacts |
+| `build-phone-release`, `build-tv-release` | Independent jobs using `build-app-release.yml`: derive `versionCode` from the tag, decode the signing keystore, run `bundleRelease assembleRelease`, and upload the AAB, APK, and ProGuard `mapping.txt` as separate artifacts |
 | `publish-github-release` | Attaches both APKs to a GitHub release named after the tag |
 | `publish-play-store` | One matrix leg per app: writes the tag annotation to a track-specific English release-notes file, then sends the phone bundle to `beta` and the TV bundle to `tv:Beta TV`. New releases never land on production |
 | `distribute-app-distribution` | Sends the phone release APK to `internal-testers`, tagged with the release notes |
@@ -59,15 +59,15 @@ Non-obvious details:
   Play requires unique version codes across all tracks of the same application ID. It is computed
   only by [`version-code.sh`](../../.github/scripts/version-code.sh); the tag itself becomes
   `version.name` for both apps.
-* `build-release` fails outright if any of the four signing secrets is missing, rather than falling
+* Each release build fails outright if any of the four signing secrets is missing, rather than falling
   back to the debug key — a debug-signed release that uploads successfully is worse than a failed
   build.
-* The phone and TV legs are independent: `fail-fast` is off, and the Play and App Distribution jobs
+* The phone and TV builds are independent, and the Play and App Distribution jobs
   run whenever `verify` passed, so a TV build failure doesn't block the phone upload (the TV publish
   leg then fails on its missing artifact). The GitHub release needs both builds.
 * Both apps share one application ID, so concurrent Play edits would invalidate each other. The
-  `publish-play-store` legs, and the `both` legs of `promote-release.yml`, run with
-  `max-parallel: 1`.
+  `publish-play-store` legs run with `max-parallel: 1`. Promotion runs the phone job before the TV
+  job; TV still runs if phone fails, and a TV-only promotion runs even though the phone job is skipped.
 * `tv:Beta TV` is the closed testing track named "Beta TV" on Play's dedicated Android TV form
   factor; a custom track's API name is `tv:` plus its exact name.
 
@@ -79,7 +79,7 @@ step.
 | Input | Required | Meaning |
 |---|---|---|
 | `version` | Yes | The version being promoted, e.g. `3.5.0`. Selects the version code to promote on each app's track |
-| `form-factor` | Yes, defaults to `phone` | `phone`, `tv`, or `both`. `both` runs one independent matrix leg per app, one after the other |
+| `form-factor` | Yes, defaults to `phone` | `phone`, `tv`, or `both`. Selects the explicit phone and TV jobs; `both` runs phone first, then TV |
 | `rollout-percentage` | No, defaults to `100` | Share of production users receiving the update, 1–100 |
 
 * Promote an app only when the release changes something its users can see. Every release still
@@ -94,6 +94,11 @@ step.
   percentage, so re-running with a higher number widens a staged rollout.
 
 ## Shared pieces
+
+[`build-app-release.yml`](../../.github/workflows/build-app-release.yml) and
+[`promote-app-release.yml`](../../.github/workflows/promote-app-release.yml) are reusable workflows.
+Their callers declare the phone and TV module, artifact, and track values explicitly, while the
+shared workflows keep the build and promotion steps in one place.
 
 Two composite actions keep the workflows from repeating themselves. Both assume `actions/checkout`
 has already run.
@@ -113,8 +118,8 @@ Names only; values live in repository settings.
 |---|---|
 | `FIREBASE_TOKEN`, `FIREBASE_APP_ID`, `FIREBASE_PROJECT_ID` | `fetch-google-services` in `ci.yml` and `release.yml` |
 | `FIREBASE_TOKEN`, `FIREBASE_APP_ID` | The App Distribution steps in `ci.yml` and `release.yml` |
-| `SIGN_KEY`, `SIGN_KEY_ALIAS`, `SIGN_KEY_STORE_PASSWORD`, `SIGN_KEY_PASSWORD` | `build-release` in `release.yml` |
-| `GOOGLE_SERVICE_ACCOUNT` | `publish-play-store` in `release.yml`, and both Play steps in `promote-release.yml` |
+| `SIGN_KEY`, `SIGN_KEY_ALIAS`, `SIGN_KEY_STORE_PASSWORD`, `SIGN_KEY_PASSWORD` | Both release builds through `build-app-release.yml` |
+| `GOOGLE_SERVICE_ACCOUNT` | `publish-play-store` in `release.yml`, and promotion through `promote-app-release.yml` |
 
 `agent-context.yml` needs no secrets.
 
