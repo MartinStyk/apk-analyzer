@@ -22,10 +22,10 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.apkfiles.api.TemporaryApkManager
-import sk.styk.martin.apkanalyzer.core.apphistory.capture.AppHistoryCaptureRepository
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.AppHistoryRepository
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryTimeline
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.overview
+import sk.styk.martin.apkanalyzer.core.apphistory.api.capture.AppHistoryCaptureRepository
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.AppHistoryRepository
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryTimeline
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.overview
 import sk.styk.martin.apkanalyzer.core.apppermissions.api.PermissionLabelProvider
 import sk.styk.martin.apkanalyzer.core.apps.api.UnparsableApkFileException
 import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.DeviceFeatures

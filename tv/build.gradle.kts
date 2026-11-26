@@ -23,9 +23,10 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.appHistory)
     implementation(projects.core.apps.api)
     implementation(projects.core.apps.impl)
+    implementation(projects.core.appHistory.api)
+    implementation(projects.core.appHistory.impl)
     implementation(projects.core.userPreferences.api)
     implementation(projects.core.userPreferences.impl)
     implementation(projects.core.appIndex.api)

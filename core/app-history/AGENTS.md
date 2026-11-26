@@ -3,8 +3,11 @@
 ## Purpose and Boundary
 
 Room-backed storage for full-state app history snapshots — one row per captured install instance,
-enough to reconstruct the existing app-detail screens against a past point in time. The package is
-`sk.styk.martin.apkanalyzer.core.apphistory`.
+enough to reconstruct the existing app-detail screens against a past point in time. It is split per
+[core API/impl split](../../docs/app/technical/core-api-impl-split.md): `api`
+(`sk.styk.martin.apkanalyzer.core.apphistory.api`) holds `AppHistoryCaptureRepository`,
+`AppHistoryRepository`, and `timeline/model/` with its strings; `impl`
+(`sk.styk.martin.apkanalyzer.core.apphistory.impl`) holds everything else, the Room schemas included.
 
 **Status:** capture is implemented and running (schema, pipeline, four triggers — fast-path
 broadcast, on-launch reconciliation, periodic `WorkManager` reconciliation, and phone detail opening). Restore merging
@@ -34,9 +37,10 @@ implementation, and the internal differ, with its public read models — `AppHis
 `AppHistoryEntry`, `AppHistoryDiff` and their parts — in `timeline/model/`, next to the shared rules and
 text a timeline screen reads; see [Timeline and Diff](#timeline-and-diff)). See
 [Reading a Snapshot](#reading-a-snapshot) for `storage/`'s read path and
-[Capture Pipeline](#capture-pipeline) / [Triggers](#triggers) for `capture/`'s. Everything stays
-`internal` except `capture/`'s `AppHistoryCaptureRepository`, `timeline/`'s repository interface and
-`timeline/model/`, and `AppHistoryBackupAgent`, which the manifest instantiates by name. Phone app detail
+[Capture Pipeline](#capture-pipeline) / [Triggers](#triggers) for `capture/`'s. Only `capture/`'s
+`AppHistoryCaptureRepository`, `timeline/`'s repository interface, and `timeline/model/` are in `api`;
+everything in `impl` is `internal`, including `AppHistoryBackupAgent`, which the manifest still
+instantiates by name because Kotlin `internal` compiles to a public JVM class. Phone app detail
 requests capture through the capture repository; nothing outside this module reads Room or wire-format
 types, or calls the scheduler directly.
 
@@ -327,8 +331,11 @@ was the reason that observer was extended off a bare `Flow<Unit>`.
 never opened for a long stretch, so no process ever runs to fire the on-launch sweep or observe a
 broadcast. `schedulePeriodicReconciliation()` enqueues a weekly `AppHistoryReconciliationWorker`
 (`@HiltWorker`, delegates straight to `captureRepository.reconcileAll()`) via
-`enqueueUniquePeriodicWork(..., ExistingPeriodicWorkPolicy.KEEP, ...)` — `KEEP` so calling `start()`
-on every app launch re-affirms the schedule without resetting its window each time. Constraints
+`enqueueUniquePeriodicWork(..., ExistingPeriodicWorkPolicy.UPDATE, ...)` — `UPDATE` so calling
+`start()` on every app launch re-affirms the schedule without resetting its window each time, and so an
+already-enqueued request picks up a new worker class name. WorkManager stores the worker's fully
+qualified name; under `KEEP`, work enqueued before the worker moved to the `impl` package would keep
+pointing at a class that no longer exists. Constraints
 (`setRequiresBatteryNotLow`, `setRequiresStorageNotLow`) are the "favorable conditions" gate; no
 network constraint, since reconciliation is entirely on-device. This worker races the other two
 triggers' calls to `reconcileAll()`/`reconcile()` under the same per-package `Mutex` described in
@@ -353,8 +360,8 @@ in `ApkAnalyzer.onCreate()` — after `super.onCreate()`'s field injection has f
 
 ## Restore Merge
 
-`AppHistoryBackupAgent` (`restore/`, public — the manifest names it directly, same pattern as
-`core:app-functions`'s service) is wired via `app`'s `android:backupAgent` manifest attribute. It
+`AppHistoryBackupAgent` (`restore/`, `internal` but a public JVM class — the manifest names it
+directly) is wired via `app`'s `android:backupAgent` manifest attribute. It
 exists because Android's default Auto Backup (`android:allowBackup="true"`, already set for other
 reasons) includes `app_history.db` in whole-app backups by default, and restoring it verbatim onto
 a fresh install — the observed, verified-on-device behavior before this existed — silently replaces

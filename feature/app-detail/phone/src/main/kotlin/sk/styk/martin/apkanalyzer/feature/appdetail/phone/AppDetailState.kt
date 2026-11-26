@@ -1,7 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone
 
 import androidx.compose.runtime.Immutable
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryOverview
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryOverview
 import sk.styk.martin.apkanalyzer.core.apps.api.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateTrustLevel

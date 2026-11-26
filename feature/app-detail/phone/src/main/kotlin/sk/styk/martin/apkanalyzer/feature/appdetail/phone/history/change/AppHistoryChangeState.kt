@@ -1,13 +1,13 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.change
 
 import androidx.compose.runtime.Immutable
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryChangeDirection
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryEntry
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryFieldChange
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryInstallSource
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryVersion
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.SetChange
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.ValueChange
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryChangeDirection
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryEntry
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryFieldChange
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryInstallSource
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryVersion
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.SetChange
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.ValueChange
 import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.PermissionItem
 import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.PermissionScope
 import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.RequirementItem

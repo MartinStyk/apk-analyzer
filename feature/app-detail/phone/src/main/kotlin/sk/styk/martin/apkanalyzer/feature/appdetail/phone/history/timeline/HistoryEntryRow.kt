@@ -26,15 +26,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryChangeDirection
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryEntry
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistorySummaryPart
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryVersion
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.ValueChange
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.breakHeadlineRes
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.direction
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.label
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.needsAttention
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryChangeDirection
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryEntry
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySummaryPart
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryVersion
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.ValueChange
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.breakHeadlineRes
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.direction
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.label
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.needsAttention
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
@@ -52,7 +52,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.historyDateTim
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.historyFullDate
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.icon
 import java.time.Instant
-import sk.styk.martin.apkanalyzer.core.apphistory.R as HistoryR
+import sk.styk.martin.apkanalyzer.core.apphistory.api.R as HistoryR
 
 private const val MAX_VISIBLE_TOKENS = 5
 
@@ -142,14 +142,14 @@ private fun FullRowContent(
         )
         if (row.hasCertificateChange) {
             Text(
-                text = stringResource(HistoryR.string.app_history_certificate_changed),
+                text = stringResource(R.string.app_history_certificate_changed),
                 style = AppTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
                 color = AppTheme.colors.onSurface,
             )
         }
         row.breakHeadlineRes?.let { BodyLine(text = stringResource(it), color = secondaryColor) }
         if (row.hasOnlyUncomparableDetails) {
-            BodyLine(text = stringResource(HistoryR.string.app_history_uncomparable_only), color = secondaryColor)
+            BodyLine(text = stringResource(R.string.app_history_uncomparable_only), color = secondaryColor)
         } else {
             ChangeTokens(parts = row.summary, textColor = secondaryColor)
         }
@@ -270,7 +270,7 @@ private fun AppHistoryRow.versionText(resources: Resources): String =
 
 private fun AppHistoryRow.compactLine(versionText: String, resources: Resources): String {
     val detail = if (kind == AppHistoryRowKind.FirstRecorded) {
-        resources.getString(HistoryR.string.app_history_first_recorded)
+        resources.getString(R.string.app_history_first_recorded)
     } else {
         summary.joinedLabels(resources)
     }
@@ -282,8 +282,8 @@ private fun List<AppHistorySummaryPart>.joinedLabels(resources: Resources): Stri
 
 private fun AppHistoryRow.copyText(resources: Resources): String {
     val event = when {
-        hasCertificateChange -> resources.getString(HistoryR.string.app_history_certificate_changed)
-        kind == AppHistoryRowKind.FirstRecorded -> resources.getString(HistoryR.string.app_history_first_recorded)
+        hasCertificateChange -> resources.getString(R.string.app_history_certificate_changed)
+        kind == AppHistoryRowKind.FirstRecorded -> resources.getString(R.string.app_history_first_recorded)
         else -> breakHeadlineRes?.let(resources::getString)
     }
     return (listOfNotNull(event, date.historyFullDate(), versionText(resources)) + summary.map { it.label(resources) })

@@ -1,10 +1,10 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.domain
 
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.AppHistoryRepository
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistorySection
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistorySnapshot
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistorySnapshotId
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistorySnapshotRead
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.AppHistoryRepository
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySection
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySnapshot
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySnapshotId
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySnapshotRead
 import sk.styk.martin.apkanalyzer.core.apps.api.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilter
 import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilterKey

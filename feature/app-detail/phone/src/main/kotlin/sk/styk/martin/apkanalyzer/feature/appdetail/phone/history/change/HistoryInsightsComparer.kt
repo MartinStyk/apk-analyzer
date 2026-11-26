@@ -1,9 +1,9 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.change
 
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.AppHistoryRepository
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryEntry
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistorySnapshotRead
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistorySnapshotSummary
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.AppHistoryRepository
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryEntry
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySnapshotRead
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySnapshotSummary
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailInsight
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailInsightEvaluator

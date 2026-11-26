@@ -11,7 +11,7 @@ dependencies {
     implementation(projects.feature.appDetail.domain)
     implementation(projects.feature.appExport.api)
     implementation(projects.core.apkFiles.api)
-    implementation(projects.core.appHistory)
+    implementation(projects.core.appHistory.api)
     implementation(projects.core.apps.api)
     implementation(projects.core.aiInsights.api)
     implementation(projects.core.appPermissions.api)

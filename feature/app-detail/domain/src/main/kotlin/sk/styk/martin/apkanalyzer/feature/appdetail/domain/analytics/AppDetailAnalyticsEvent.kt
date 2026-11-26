@@ -1,6 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.domain.analytics
 
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryChangeCategory
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryChangeCategory
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 
 sealed interface AppDetailAnalyticsEvent {

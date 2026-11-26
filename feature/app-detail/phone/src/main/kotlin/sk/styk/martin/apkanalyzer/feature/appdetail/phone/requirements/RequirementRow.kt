@@ -18,7 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryChangeDirection
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryChangeDirection
 import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.DeviceFeatures
 import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.Feature
 import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.FeatureAvailability

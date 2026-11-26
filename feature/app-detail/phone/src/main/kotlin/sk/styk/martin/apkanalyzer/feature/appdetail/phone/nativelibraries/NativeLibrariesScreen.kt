@@ -52,7 +52,6 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailSe
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
 import java.time.Instant
-import sk.styk.martin.apkanalyzer.core.apphistory.R as HistoryR
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 @Composable
@@ -110,7 +109,7 @@ private fun NativeLibrariesContent(
                 onRetry = { onAction(NativeLibrariesAction.Retry) },
             )
 
-            NativeLibrariesState.NotRecorded -> SectionError(message = stringResource(HistoryR.string.app_history_not_recorded))
+            NativeLibrariesState.NotRecorded -> SectionError(message = stringResource(R.string.app_history_not_recorded))
 
             is NativeLibrariesState.Loaded -> NativeLibrariesLoadedContent(state = state, onAction = onAction)
         }

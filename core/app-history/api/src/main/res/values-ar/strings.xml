@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_history_signing_method_changed">تغيّرت طريقة التوقيع</string>
+    <string name="app_history_reinstalled">أُزيل ثم ثُبّت من جديد</string>
+    <string name="app_history_new_device">استمر على جهاز جديد</string>
+    <string name="app_history_version">الإصدار %1$s</string>
+    <string name="app_history_version_with_code">%1$s (%2$d)</string>
+    <string name="app_history_value_change">\u2068%1$s\u2069 ← \u2068%2$s\u2069</string>
+    <string name="app_history_summary_join">%1$s · %2$s</string>
+    <string name="app_history_summary_permission_added_single">أُضيف إذن: %1$s</string>
+    <string name="app_history_summary_source">تغيّر مصدر التثبيت إلى %1$s</string>
+    <string name="app_history_summary_debug_on">تم تشغيل تصحيح الأخطاء</string>
+    <string name="app_history_summary_debug_off">تم إيقاف تصحيح الأخطاء</string>
+    <string name="app_history_summary_backup_on">تم تشغيل نسخ بيانات التطبيق احتياطيًا</string>
+    <string name="app_history_summary_backup_off">تم إيقاف نسخ بيانات التطبيق احتياطيًا</string>
+    <string name="app_history_summary_cleartext_on">تم السماح بالنقل غير المشفّر</string>
+    <string name="app_history_summary_cleartext_off">تم حظر النقل غير المشفّر</string>
+    <string name="app_history_summary_target_sdk">Target SDK \u2068%1$s\u2069 ← \u2068%2$s\u2069</string>
+    <string name="app_history_summary_min_sdk">Min SDK \u2068%1$s\u2069 ← \u2068%2$s\u2069</string>
+    <string name="app_history_summary_size_up">الحجم \u2068+%1$s\u2069</string>
+    <string name="app_history_summary_size_down">الحجم \u2068−%1$s\u2069</string>
+    <string name="app_history_field_change">%1$s: \u2068%2$s\u2069 ← \u2068%3$s\u2069</string>
+    <string name="app_history_field_added">%1$s: أُضيف</string>
+    <string name="app_history_field_removed">%1$s: أُزيل</string>
+    <string name="app_history_certificate_updated_explanation">لا يقبل Android تحديثًا بشهادة مختلفة إلا إذا وافق عليه المفتاح القديم، لذا يكون هذا عادةً تغييرًا مخططًا للمفتاح من المطوّر.</string>
+    <string name="app_history_certificate_new_copy_explanation">هذه النسخة موقّعة بشهادة تختلف عن التي رُصدت سابقًا. تحقّق من أنها جاءت من مصدر تثق به.</string>
+    <plurals name="app_history_summary_more">
+        <item quantity="zero">و%1$d أخرى</item>
+        <item quantity="one">و%1$d أخرى</item>
+        <item quantity="two">و%1$d أخرى</item>
+        <item quantity="few">و%1$d أخرى</item>
+        <item quantity="many">و%1$d أخرى</item>
+        <item quantity="other">و%1$d أخرى</item>
+    </plurals>
+    <plurals name="app_history_summary_permission_added_named">
+        <item quantity="zero">أُضيف: %1$s و%2$d إذن آخر</item>
+        <item quantity="one">أُضيف: %1$s و%2$d إذن آخر</item>
+        <item quantity="two">أُضيف: %1$s و%2$d إذنان آخران</item>
+        <item quantity="few">أُضيف: %1$s و%2$d أذونات أخرى</item>
+        <item quantity="many">أُضيف: %1$s و%2$d إذنًا آخر</item>
+        <item quantity="other">أُضيف: %1$s و%2$d إذن آخر</item>
+    </plurals>
+    <plurals name="app_history_summary_permissions_removed">
+        <item quantity="zero">أُزيل %1$d إذن</item>
+        <item quantity="one">أُزيل %1$d إذن</item>
+        <item quantity="two">أُزيل %1$d إذنان</item>
+        <item quantity="few">أُزيلت %1$d أذونات</item>
+        <item quantity="many">أُزيل %1$d إذنًا</item>
+        <item quantity="other">أُزيل %1$d إذن</item>
+    </plurals>
+    <plurals name="app_history_summary_defined_permissions">
+        <item quantity="zero">تغيّر %1$d إذن يعرّفه هذا التطبيق</item>
+        <item quantity="one">تغيّر %1$d إذن يعرّفه هذا التطبيق</item>
+        <item quantity="two">تغيّر %1$d إذنان يعرّفهما هذا التطبيق</item>
+        <item quantity="few">تغيّرت %1$d أذونات يعرّفها هذا التطبيق</item>
+        <item quantity="many">تغيّر %1$d إذنًا يعرّفه هذا التطبيق</item>
+        <item quantity="other">تغيّر %1$d إذن يعرّفه هذا التطبيق</item>
+    </plurals>
+    <plurals name="app_history_summary_components_added">
+        <item quantity="zero">أُضيف %1$d مكوّن</item>
+        <item quantity="one">أُضيف %1$d مكوّن</item>
+        <item quantity="two">أُضيف %1$d مكوّنان</item>
+        <item quantity="few">أُضيفت %1$d مكوّنات</item>
+        <item quantity="many">أُضيف %1$d مكوّنًا</item>
+        <item quantity="other">أُضيف %1$d مكوّن</item>
+    </plurals>
+    <plurals name="app_history_summary_components_removed">
+        <item quantity="zero">أُزيل %1$d مكوّن</item>
+        <item quantity="one">أُزيل %1$d مكوّن</item>
+        <item quantity="two">أُزيل %1$d مكوّنان</item>
+        <item quantity="few">أُزيلت %1$d مكوّنات</item>
+        <item quantity="many">أُزيل %1$d مكوّنًا</item>
+        <item quantity="other">أُزيل %1$d مكوّن</item>
+    </plurals>
+    <plurals name="app_history_summary_components_changed">
+        <item quantity="zero">تغيّر %1$d مكوّن</item>
+        <item quantity="one">تغيّر %1$d مكوّن</item>
+        <item quantity="two">تغيّر %1$d مكوّنان</item>
+        <item quantity="few">تغيّرت %1$d مكوّنات</item>
+        <item quantity="many">تغيّر %1$d مكوّنًا</item>
+        <item quantity="other">تغيّر %1$d مكوّن</item>
+    </plurals>
+    <plurals name="app_history_summary_native_added">
+        <item quantity="zero">أُضيفت %1$d مكتبة أصلية</item>
+        <item quantity="one">أُضيفت %1$d مكتبة أصلية</item>
+        <item quantity="two">أُضيفت %1$d مكتبتان أصليتان</item>
+        <item quantity="few">أُضيفت %1$d مكتبات أصلية</item>
+        <item quantity="many">أُضيفت %1$d مكتبة أصلية</item>
+        <item quantity="other">أُضيفت %1$d مكتبة أصلية</item>
+    </plurals>
+    <plurals name="app_history_summary_native_removed">
+        <item quantity="zero">أُزيلت %1$d مكتبة أصلية</item>
+        <item quantity="one">أُزيلت %1$d مكتبة أصلية</item>
+        <item quantity="two">أُزيلت %1$d مكتبتان أصليتان</item>
+        <item quantity="few">أُزيلت %1$d مكتبات أصلية</item>
+        <item quantity="many">أُزيلت %1$d مكتبة أصلية</item>
+        <item quantity="other">أُزيلت %1$d مكتبة أصلية</item>
+    </plurals>
+    <plurals name="app_history_summary_native_changed">
+        <item quantity="zero">تغيّرت %1$d مكتبة أصلية</item>
+        <item quantity="one">تغيّرت %1$d مكتبة أصلية</item>
+        <item quantity="two">تغيّرت %1$d مكتبتان أصليتان</item>
+        <item quantity="few">تغيّرت %1$d مكتبات أصلية</item>
+        <item quantity="many">تغيّرت %1$d مكتبة أصلية</item>
+        <item quantity="other">تغيّرت %1$d مكتبة أصلية</item>
+    </plurals>
+    <string name="app_history_size_change_up">\u2068%1$s\u2069 ← \u2068%2$s\u2069 (\u2068+%3$s\u2069)</string>
+    <string name="app_history_size_change_down">\u2068%1$s\u2069 ← \u2068%2$s\u2069 (\u2068−%3$s\u2069)</string>
+    <string name="app_history_field_value">%1$s: %2$s</string>
+    <string name="app_history_rule_added">%1$s · أُضيف: %2$s</string>
+    <string name="app_history_rule_removed">%1$s · أُزيل: %2$s</string>
+    <string name="app_history_path_rule">%1$s (قراءة: %2$s، كتابة: %3$s)</string>
+    <string name="app_history_summary_requirements">تغيّرت متطلبات الجهاز</string>
+</resources>

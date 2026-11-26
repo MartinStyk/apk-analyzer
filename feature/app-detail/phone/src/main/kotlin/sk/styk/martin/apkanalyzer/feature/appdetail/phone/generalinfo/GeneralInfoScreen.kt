@@ -46,7 +46,6 @@ import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.Date
 import java.util.Locale
-import sk.styk.martin.apkanalyzer.core.apphistory.R as HistoryR
 import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
@@ -484,8 +483,8 @@ private fun NativeLibrariesSection(
         if (!state.isNativeLibrariesRecorded) {
             InfoRowItem(
                 label = stringResource(AppsR.string.general_info_native_library_abis),
-                value = stringResource(HistoryR.string.app_history_not_recorded),
-                rationale = stringResource(HistoryR.string.app_history_not_recorded_explanation),
+                value = stringResource(R.string.app_history_not_recorded),
+                rationale = stringResource(R.string.app_history_not_recorded_explanation),
                 onShowRationale = onShowRationale,
                 onCopy = onCopy,
             )

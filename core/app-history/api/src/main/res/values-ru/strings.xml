@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_history_signing_method_changed">Способ подписи изменился</string>
+    <string name="app_history_reinstalled">Удалено и установлено снова</string>
+    <string name="app_history_new_device">Продолжено на новом устройстве</string>
+    <string name="app_history_version">Версия %1$s</string>
+    <string name="app_history_version_with_code">%1$s (%2$d)</string>
+    <string name="app_history_value_change">%1$s → %2$s</string>
+    <string name="app_history_summary_join">%1$s · %2$s</string>
+    <string name="app_history_summary_permission_added_single">Добавлено разрешение: %1$s</string>
+    <string name="app_history_summary_source">Источник установки изменён на %1$s</string>
+    <string name="app_history_summary_debug_on">Отладка включена</string>
+    <string name="app_history_summary_debug_off">Отладка отключена</string>
+    <string name="app_history_summary_backup_on">Резервное копирование данных включено</string>
+    <string name="app_history_summary_backup_off">Резервное копирование данных отключено</string>
+    <string name="app_history_summary_cleartext_on">Незашифрованный трафик разрешён</string>
+    <string name="app_history_summary_cleartext_off">Незашифрованный трафик заблокирован</string>
+    <string name="app_history_summary_target_sdk">Target SDK %1$s → %2$s</string>
+    <string name="app_history_summary_min_sdk">Min SDK %1$s → %2$s</string>
+    <string name="app_history_summary_size_up">Размер +%1$s</string>
+    <string name="app_history_summary_size_down">Размер −%1$s</string>
+    <string name="app_history_field_change">%1$s: %2$s → %3$s</string>
+    <string name="app_history_field_added">%1$s: добавлено</string>
+    <string name="app_history_field_removed">%1$s: удалено</string>
+    <string name="app_history_certificate_updated_explanation">Android принимает обновление с другим сертификатом, только если его одобрил старый ключ, поэтому обычно это плановая смена ключа разработчиком.</string>
+    <string name="app_history_certificate_new_copy_explanation">Эта копия подписана другим сертификатом, чем зафиксированный ранее. Проверьте, что она получена из надёжного источника.</string>
+    <plurals name="app_history_summary_more">
+        <item quantity="one">и ещё %1$d</item>
+        <item quantity="few">и ещё %1$d</item>
+        <item quantity="many">и ещё %1$d</item>
+        <item quantity="other">и ещё %1$d</item>
+    </plurals>
+    <plurals name="app_history_summary_permission_added_named">
+        <item quantity="one">Добавлено: %1$s и ещё %2$d разрешение</item>
+        <item quantity="few">Добавлено: %1$s и ещё %2$d разрешения</item>
+        <item quantity="many">Добавлено: %1$s и ещё %2$d разрешений</item>
+        <item quantity="other">Добавлено: %1$s и ещё %2$d разрешения</item>
+    </plurals>
+    <plurals name="app_history_summary_permissions_removed">
+        <item quantity="one">Удалено %1$d разрешение</item>
+        <item quantity="few">Удалено %1$d разрешения</item>
+        <item quantity="many">Удалено %1$d разрешений</item>
+        <item quantity="other">Удалено %1$d разрешения</item>
+    </plurals>
+    <plurals name="app_history_summary_defined_permissions">
+        <item quantity="one">Изменено %1$d разрешение, определённое приложением</item>
+        <item quantity="few">Изменено %1$d разрешения, определённых приложением</item>
+        <item quantity="many">Изменено %1$d разрешений, определённых приложением</item>
+        <item quantity="other">Изменено %1$d разрешения, определённого приложением</item>
+    </plurals>
+    <plurals name="app_history_summary_components_added">
+        <item quantity="one">Добавлен %1$d компонент</item>
+        <item quantity="few">Добавлено %1$d компонента</item>
+        <item quantity="many">Добавлено %1$d компонентов</item>
+        <item quantity="other">Добавлено %1$d компонента</item>
+    </plurals>
+    <plurals name="app_history_summary_components_removed">
+        <item quantity="one">Удалён %1$d компонент</item>
+        <item quantity="few">Удалено %1$d компонента</item>
+        <item quantity="many">Удалено %1$d компонентов</item>
+        <item quantity="other">Удалено %1$d компонента</item>
+    </plurals>
+    <plurals name="app_history_summary_components_changed">
+        <item quantity="one">Изменён %1$d компонент</item>
+        <item quantity="few">Изменено %1$d компонента</item>
+        <item quantity="many">Изменено %1$d компонентов</item>
+        <item quantity="other">Изменено %1$d компонента</item>
+    </plurals>
+    <plurals name="app_history_summary_native_added">
+        <item quantity="one">Добавлена %1$d нативная библиотека</item>
+        <item quantity="few">Добавлено %1$d нативные библиотеки</item>
+        <item quantity="many">Добавлено %1$d нативных библиотек</item>
+        <item quantity="other">Добавлено %1$d нативной библиотеки</item>
+    </plurals>
+    <plurals name="app_history_summary_native_removed">
+        <item quantity="one">Удалена %1$d нативная библиотека</item>
+        <item quantity="few">Удалено %1$d нативные библиотеки</item>
+        <item quantity="many">Удалено %1$d нативных библиотек</item>
+        <item quantity="other">Удалено %1$d нативной библиотеки</item>
+    </plurals>
+    <plurals name="app_history_summary_native_changed">
+        <item quantity="one">Изменена %1$d нативная библиотека</item>
+        <item quantity="few">Изменено %1$d нативные библиотеки</item>
+        <item quantity="many">Изменено %1$d нативных библиотек</item>
+        <item quantity="other">Изменено %1$d нативной библиотеки</item>
+    </plurals>
+    <string name="app_history_size_change_up">%1$s → %2$s (+%3$s)</string>
+    <string name="app_history_size_change_down">%1$s → %2$s (−%3$s)</string>
+    <string name="app_history_field_value">%1$s: %2$s</string>
+    <string name="app_history_rule_added">%1$s · добавлено: %2$s</string>
+    <string name="app_history_rule_removed">%1$s · удалено: %2$s</string>
+    <string name="app_history_path_rule">%1$s (чтение: %2$s, запись: %3$s)</string>
+    <string name="app_history_summary_requirements">Изменились требования к устройству</string>
+</resources>

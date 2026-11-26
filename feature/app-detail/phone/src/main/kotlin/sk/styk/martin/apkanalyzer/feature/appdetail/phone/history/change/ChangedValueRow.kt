@@ -21,14 +21,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.ValueChange
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.ValueChange
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.card
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.InfoRow
-import sk.styk.martin.apkanalyzer.core.apphistory.R as HistoryR
+import sk.styk.martin.apkanalyzer.core.apphistory.api.R as HistoryR
 
 @Composable
 internal fun ChangedValueRow(

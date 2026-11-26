@@ -1,10 +1,10 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.timeline
 
 import androidx.compose.runtime.Immutable
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryEntry
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistorySummaryPart
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryVersion
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.ValueChange
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryEntry
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySummaryPart
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryVersion
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.ValueChange
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.HistoryVersionTag
 import java.time.Instant
 import java.time.YearMonth

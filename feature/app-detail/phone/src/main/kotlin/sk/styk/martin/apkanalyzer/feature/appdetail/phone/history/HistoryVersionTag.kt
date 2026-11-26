@@ -3,18 +3,18 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.phone.history
 import android.content.res.Resources
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryEntry
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryVersion
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.ValueChange
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.isOlderVersion
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.isSameVersionBuild
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.label
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryEntry
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryVersion
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.ValueChange
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.isOlderVersion
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.isSameVersionBuild
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.label
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
-import sk.styk.martin.apkanalyzer.core.apphistory.R as HistoryR
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
 
 internal enum class HistoryVersionTag(@StringRes val labelRes: Int) {
-    OlderVersion(HistoryR.string.app_history_older_version),
-    SameVersionBuild(HistoryR.string.app_history_same_version),
+    OlderVersion(R.string.app_history_older_version),
+    SameVersionBuild(R.string.app_history_same_version),
 }
 
 internal val AppHistoryEntry.Change.versionTag: HistoryVersionTag?

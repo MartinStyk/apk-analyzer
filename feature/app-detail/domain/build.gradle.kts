@@ -11,7 +11,7 @@ android {
 dependencies {
     api(projects.feature.appDetail.api)
     api(projects.core.apps.api)
-    implementation(projects.core.appHistory)
+    implementation(projects.core.appHistory.api)
     implementation(projects.core.common)
 
     testImplementation(testFixtures(projects.core.apps.api))

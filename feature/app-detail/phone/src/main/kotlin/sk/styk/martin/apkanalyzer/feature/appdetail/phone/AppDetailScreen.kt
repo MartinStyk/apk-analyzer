@@ -49,7 +49,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryOverview
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryOverview
 import sk.styk.martin.apkanalyzer.core.apps.api.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateTrustLevel
