@@ -20,7 +20,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryChangeDirection
-import sk.styk.martin.apkanalyzer.core.apps.components.labelRes
+import sk.styk.martin.apkanalyzer.core.apps.api.components.labelRes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
@@ -30,10 +30,11 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Tag
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ChangeMarkedIcon
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RowChangeLines
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.markedBy
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 @Composable
 internal fun ComponentRow(
@@ -91,19 +92,19 @@ internal fun ComponentRow(
                     if (item.isUnprotected) {
                         Icon(
                             imageVector = ApkAnalyzerIcons.Warning,
-                            contentDescription = stringResource(AppsR.string.components_tag_unprotected),
+                            contentDescription = stringResource(DomainR.string.components_tag_unprotected),
                             tint = AppTheme.colors.warning,
                             modifier = Modifier.size(16.dp),
                         )
                     }
                     if (item.isLauncher) {
                         Tag(
-                            text = stringResource(AppsR.string.components_tag_launcher),
+                            text = stringResource(DomainR.string.components_tag_launcher),
                             highlighted = true,
                         )
                     }
                     if (item.isExported) {
-                        Tag(text = stringResource(AppsR.string.components_tag_exported))
+                        Tag(text = stringResource(DomainR.string.components_tag_exported))
                     }
                     item.flags.forEach { flag ->
                         Tag(text = stringResource(flag.labelRes))
@@ -117,7 +118,7 @@ internal fun ComponentRow(
                 imageVector = ApkAnalyzerIcons.PlayArrow,
                 onClick = onLaunch,
                 style = IconButtonStyle.Filled,
-                contentDescription = stringResource(AppsR.string.components_launch),
+                contentDescription = stringResource(R.string.components_launch),
                 iconSize = 18.dp,
                 modifier = Modifier.size(34.dp),
             )

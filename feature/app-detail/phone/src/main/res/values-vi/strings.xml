@@ -246,4 +246,36 @@
     <plurals name="app_history_context">
         <item quantity="other">Ghi nhận từ %1$s · %2$d thay đổi</item>
     </plurals>
+    <string name="components_detail_full_name">Họ và tên đầy đủ</string>
+    <string name="components_detail_intent_filters_open">Xem bộ lọc ý định</string>
+    <plurals name="components_intent_filter_count">
+        <item quantity="other">%1$d bộ lọc ý định</item>
+    </plurals>
+    <string name="components_detail_intent_actions_explanation">Những gì một ứng dụng khác hoặc Android yêu cầu thành phần này thực hiện.</string>
+    <string name="components_detail_intent_categories_explanation">Các danh mục mà bộ lọc này cho phép. Mỗi danh mục được cung cấp bởi một yêu cầu phải được liệt kê ở đây.</string>
+    <string name="components_detail_intent_data_explanation">Các địa chỉ web, loại tệp, hoặc nội dung khác mà thành phần này nói rằng nó có thể xử lý.</string>
+    <string name="components_detail_intent_allowed_uri_parts_explanation">Tất cả các chi tiết trong nhóm này phải khớp để nhóm cho phép một liên kết. Android đánh giá các nhóm theo thứ tự khai báo.</string>
+    <string name="components_detail_intent_blocked_uri_parts_explanation">Những chi tiết này xác định một quy tắc khớp chặn. Android đánh giá nó với các quy tắc liên kết khác của bộ lọc theo thứ tự khai báo.</string>
+    <string name="components_detail_intent_activity_priority_explanation">Một số cao hơn có thể làm cho hoạt động này được ưu tiên hơn các hoạt động khớp khác, tùy thuộc vào quy tắc định tuyến của Android.</string>
+    <string name="components_detail_intent_receiver_priority_explanation">Đối với các phát sóng có thứ tự, một số cao hơn có thể làm cho bộ nhận này chạy sớm hơn, tùy thuộc vào giới hạn của Android.</string>
+    <string name="components_detail_intent_declared_priority_explanation">Khai báo này xác định giá trị này, nhưng Android không sử dụng nó để chọn giữa các dịch vụ hoặc nhà cung cấp khớp.</string>
+    <string name="components_detail_intent_order_explanation">Một số cao hơn được xem xét trước khi ứng dụng này có nhiều bộ lọc khớp.</string>
+    <plurals name="certificates_history_description">
+        <item quantity="other">Các khóa ký %d đã được xác minh bởi Android được sử dụng trước khóa hiện tại. Khóa trước đây được sử dụng gần đây nhất sẽ xuất hiện đầu tiên.</item>
+    </plurals>
+    <string name="certificates_details">Chi tiết chứng chỉ</string>
+    <string name="certificates_fingerprint">dấu vân tay</string>
+    <plurals name="requirements_missing_summary">
+        <item quantity="other">%1$d yêu cầu mà thiết bị này không thể đáp ứng</item>
+    </plurals>
+    <string name="requirements_detail_necessity">Cần thiết</string>
+    <string name="requirements_detail_availability">Trên thiết bị này</string>
+    <string name="requirements_detail_version">Phiên bản</string>
+    <string name="requirements_detail_version_comparison">%1$s cần thiết · %2$s trên thiết bị này</string>
+    <string name="splitapks_detail_type">Loại</string>
+    <string name="splitapks_detail_size">Kích thước</string>
+    <string name="nativelibraries_explanation">Mỗi tệp mã gốc khác nhau mà ứng dụng này cung cấp, một hàng cho mỗi tên tệp ngay cả khi cùng một thư viện được xây dựng cho nhiều kiến trúc bộ xử lý.</string>
+    <string name="nativelibraries_detail_device_support">Trên thiết bị này</string>
+    <string name="nativelibraries_detail_total_size">Tổng kích thước</string>
+    <string name="components_launch">Bắt đầu thành phần này</string>
 </resources>

@@ -1,9 +1,9 @@
 package sk.styk.martin.apkanalyzer.core.apppermissions.detail
 
 import sk.styk.martin.apkanalyzer.core.apppermissions.PermissionLabelProvider
-import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
-import sk.styk.martin.apkanalyzer.core.apps.permissions.Permission
-import sk.styk.martin.apkanalyzer.core.apps.permissions.UsedPermission
+import sk.styk.martin.apkanalyzer.core.apps.api.model.AppDetail
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.Permission
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.UsedPermission
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import javax.inject.Inject
 import javax.inject.Singleton

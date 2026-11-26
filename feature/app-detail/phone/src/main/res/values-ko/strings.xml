@@ -246,4 +246,36 @@
     <plurals name="app_history_context">
         <item quantity="other">%1$s부터 기록 중 · 변경 %2$d건</item>
     </plurals>
+    <string name="components_detail_full_name">전체 이름</string>
+    <string name="components_detail_intent_filters_open">인텐트 필터 보기</string>
+    <plurals name="components_intent_filter_count">
+        <item quantity="other">%1$d 인텐트 필터</item>
+    </plurals>
+    <string name="components_detail_intent_actions_explanation">다른 앱이나 Android가 이 구성 요소에 요청하는 작업입니다.</string>
+    <string name="components_detail_intent_categories_explanation">이 필터가 허용하는 카테고리. 요청에 제공된 모든 카테고리는 여기 나열되어야 합니다.</string>
+    <string name="components_detail_intent_data_explanation">이 구성 요소가 처리할 수 있다고 말하는 웹 주소, 파일 유형 또는 기타 콘텐츠.</string>
+    <string name="components_detail_intent_allowed_uri_parts_explanation">이 그룹의 모든 세부정보는 링크를 허용하기 위해 일치해야 합니다. Android는 매니페스트 순서에 따라 그룹을 평가합니다.</string>
+    <string name="components_detail_intent_blocked_uri_parts_explanation">이 세부정보는 차단 일치 규칙을 정의합니다. Android는 매니페스트 순서에 따라 필터의 다른 링크 규칙과 함께 평가합니다.</string>
+    <string name="components_detail_intent_activity_priority_explanation">더 높은 숫자는 Android의 라우팅 규칙에 따라 이 활동이 다른 일치 활동보다 선호되도록 만들 수 있습니다.</string>
+    <string name="components_detail_intent_receiver_priority_explanation">주문된 브로드캐스트의 경우, 더 높은 숫자는 이 수신기가 더 일찍 실행되도록 만들 수 있으며, Android의 제한에 따릅니다.</string>
+    <string name="components_detail_intent_declared_priority_explanation">매니페스트가 이 값을 선언하지만, Android는 일치하는 서비스나 공급자를 선택하는 데 사용하지 않습니다.</string>
+    <string name="components_detail_intent_order_explanation">더 높은 숫자는 이 앱에 여러 개의 일치 필터가 있을 때 먼저 고려됩니다.</string>
+    <plurals name="certificates_history_description">
+        <item quantity="other">현재 키 이전에 사용된 Android 검증 %d 서명 키. 가장 최근에 사용된 이전 키가 먼저 나타납니다.</item>
+    </plurals>
+    <string name="certificates_details">인증서 세부정보</string>
+    <string name="certificates_fingerprint">지문</string>
+    <plurals name="requirements_missing_summary">
+        <item quantity="other">%1$d 요구 사항을 이 장치가 충족할 수 없습니다</item>
+    </plurals>
+    <string name="requirements_detail_necessity">필요성</string>
+    <string name="requirements_detail_availability">이 장치에서</string>
+    <string name="requirements_detail_version">버전</string>
+    <string name="requirements_detail_version_comparison">%1$s 필요 · %2$s 이 장치에서</string>
+    <string name="splitapks_detail_type">유형</string>
+    <string name="splitapks_detail_size">크기</string>
+    <string name="nativelibraries_explanation">이 앱이 제공하는 각기 다른 네이티브 코드 파일, 파일 이름당 한 행, 동일한 라이브러리가 여러 프로세서 아키텍처를 위해 빌드되더라도.</string>
+    <string name="nativelibraries_detail_device_support">이 장치에서</string>
+    <string name="nativelibraries_detail_total_size">총 크기</string>
+    <string name="components_launch">이 구성 요소 시작</string>
 </resources>

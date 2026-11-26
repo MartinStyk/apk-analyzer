@@ -1,7 +1,7 @@
-package sk.styk.martin.apkanalyzer.core.apps.manifest
+package sk.styk.martin.apkanalyzer.core.apps.api.manifest
 
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilterKey
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilterKey
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 
 interface ManifestParser {

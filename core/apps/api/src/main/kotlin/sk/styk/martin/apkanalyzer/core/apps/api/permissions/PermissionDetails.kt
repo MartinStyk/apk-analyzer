@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apps.permissions
+package sk.styk.martin.apkanalyzer.core.apps.api.permissions
 
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 

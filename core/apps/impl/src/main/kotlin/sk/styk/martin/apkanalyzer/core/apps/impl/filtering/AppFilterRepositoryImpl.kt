@@ -1,11 +1,20 @@
-package sk.styk.martin.apkanalyzer.core.apps.filtering
+package sk.styk.martin.apkanalyzer.core.apps.impl.filtering
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
-import sk.styk.martin.apkanalyzer.core.apps.AppClassificationThresholds
+import sk.styk.martin.apkanalyzer.core.apps.api.AppClassificationThresholds
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.ActivityQuickFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.AppFilterRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.AppFilterState
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.AppSizeRange
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.DateRange
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.PermissionPreset
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.QuickFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.SourceQuickFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.UnusedAppsPeriod
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import sk.styk.martin.apkanalyzer.core.common.model.isSideloaded

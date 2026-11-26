@@ -1,13 +1,13 @@
 package sk.styk.martin.apkanalyzer.core.appexport.source
 
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilterKey
-import sk.styk.martin.apkanalyzer.core.apps.manifest.ParsedManifest
-import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
-import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraries
-import sk.styk.martin.apkanalyzer.core.apps.signing.AppSigning
-import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeVersion
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilterKey
+import sk.styk.martin.apkanalyzer.core.apps.api.manifest.ParsedManifest
+import sk.styk.martin.apkanalyzer.core.apps.api.model.AppDetail
+import sk.styk.martin.apkanalyzer.core.apps.api.model.InstalledApp
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraries
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.AppSigning
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.SigningSchemeVersion
 
 internal class InventoryAppData(
     val app: InstalledApp,

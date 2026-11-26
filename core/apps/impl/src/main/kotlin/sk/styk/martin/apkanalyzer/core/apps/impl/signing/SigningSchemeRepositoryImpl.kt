@@ -1,9 +1,11 @@
-package sk.styk.martin.apkanalyzer.core.apps.signing
+package sk.styk.martin.apkanalyzer.core.apps.impl.signing
 
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import kotlinx.coroutines.withContext
-import sk.styk.martin.apkanalyzer.core.apps.PackageChangesObserver
+import sk.styk.martin.apkanalyzer.core.apps.api.PackageChangesObserver
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.SigningSchemeRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.SigningSchemeVersion
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger

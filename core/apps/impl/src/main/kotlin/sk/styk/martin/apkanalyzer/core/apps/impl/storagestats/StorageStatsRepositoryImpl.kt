@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apps.storagestats
+package sk.styk.martin.apkanalyzer.core.apps.impl.storagestats
 
 import android.app.AppOpsManager
 import android.app.usage.StorageStatsManager
@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import sk.styk.martin.apkanalyzer.core.apps.api.storagestats.StorageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger

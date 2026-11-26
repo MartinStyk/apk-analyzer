@@ -1,5 +1,8 @@
-package sk.styk.martin.apkanalyzer.core.apps.filtering
+package sk.styk.martin.apkanalyzer.core.apps.impl.filtering
 
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.AppFilterRepositories
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.AppFilterRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.AppFilterScope
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 

@@ -1,7 +1,7 @@
-package sk.styk.martin.apkanalyzer.core.apps.model
+package sk.styk.martin.apkanalyzer.core.apps.api.model
 
-import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceChain
-import sk.styk.martin.apkanalyzer.core.apps.packaging.InstalledSplitApk
+import sk.styk.martin.apkanalyzer.core.apps.api.installsource.InstallSourceChain
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.InstalledSplitApk
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName

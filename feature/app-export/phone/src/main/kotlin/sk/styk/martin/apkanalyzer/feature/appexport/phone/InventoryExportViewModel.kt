@@ -34,10 +34,10 @@ import sk.styk.martin.apkanalyzer.core.appexport.format.INVENTORY_REFERENCE_URL
 import sk.styk.martin.apkanalyzer.core.appexport.format.InventoryFormat
 import sk.styk.martin.apkanalyzer.core.appexport.preferences.InventoryExportPreferences
 import sk.styk.martin.apkanalyzer.core.appexport.preferences.InventorySelection
-import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
-import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterRepositories
-import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
-import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.InstalledAppsRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.AppFilterRepositories
+import sk.styk.martin.apkanalyzer.core.apps.api.model.InstalledApp
+import sk.styk.martin.apkanalyzer.core.apps.api.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.apps.AppSelection
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.columns.ColumnSelection

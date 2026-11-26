@@ -3,8 +3,8 @@ package sk.styk.martin.apkanalyzer.core.appfunctions.usecase
 import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.appfunctions.model.AppDetailResult
 import sk.styk.martin.apkanalyzer.core.appfunctions.toAppFunctionLabel
-import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
-import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
+import sk.styk.martin.apkanalyzer.core.apps.api.AppDetailRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName

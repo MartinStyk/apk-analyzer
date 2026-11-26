@@ -1,8 +1,9 @@
-package sk.styk.martin.apkanalyzer.core.apps.installsource
+package sk.styk.martin.apkanalyzer.core.apps.impl.installsource
 
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
+import sk.styk.martin.apkanalyzer.core.apps.api.installsource.InstallSourceChain
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import javax.inject.Inject
 

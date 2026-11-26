@@ -1,7 +1,7 @@
-package sk.styk.martin.apkanalyzer.core.apps.installsource
+package sk.styk.martin.apkanalyzer.core.apps.api.installsource
 
 import androidx.annotation.StringRes
-import sk.styk.martin.apkanalyzer.core.apps.R
+import sk.styk.martin.apkanalyzer.core.apps.api.R
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 
 @get:StringRes

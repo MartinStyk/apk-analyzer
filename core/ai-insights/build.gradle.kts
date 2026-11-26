@@ -10,6 +10,6 @@ android {
 
 dependencies {
     implementation(projects.core.common)
-    implementation(projects.core.apps)
+    implementation(projects.core.apps.api)
     implementation(libs.mlkit.genai.prompt)
 }

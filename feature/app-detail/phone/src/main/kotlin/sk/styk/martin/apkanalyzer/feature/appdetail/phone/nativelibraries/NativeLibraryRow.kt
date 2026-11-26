@@ -19,8 +19,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryChangeDirection
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryItem
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryVariant
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraryItem
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraryVariant
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
@@ -30,7 +30,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ChangeMarkedIcon
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.markedBy
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 @Composable
 internal fun NativeLibraryRow(
@@ -41,7 +41,7 @@ internal fun NativeLibraryRow(
     changeLines: List<String> = emptyList(),
     changeMarker: AppHistoryChangeDirection? = null,
 ) {
-    val copyLabel = stringResource(AppsR.string.nativelibraries_title)
+    val copyLabel = stringResource(DomainR.string.nativelibraries_title)
     val copyValue = (listOf(item.name) + changeLines).joinToString("\n")
     Column(
         verticalArrangement = Arrangement.spacedBy(6.dp),
@@ -100,7 +100,7 @@ internal fun NativeLibraryRow(
         }
         if (!item.isDeviceCompatible) {
             Tag(
-                text = stringResource(AppsR.string.nativelibraries_not_supported),
+                text = stringResource(DomainR.string.nativelibraries_not_supported),
                 icon = ApkAnalyzerIcons.Warning,
             )
         }

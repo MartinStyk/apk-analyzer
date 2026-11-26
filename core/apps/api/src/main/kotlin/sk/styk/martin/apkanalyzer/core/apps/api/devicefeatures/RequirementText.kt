@@ -1,8 +1,8 @@
-package sk.styk.martin.apkanalyzer.core.apps.devicefeatures
+package sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures
 
 import android.content.res.Resources
 import androidx.annotation.StringRes
-import sk.styk.martin.apkanalyzer.core.apps.R
+import sk.styk.martin.apkanalyzer.core.apps.api.R
 
 @get:StringRes
 val RequirementItem.Hardware.labelRes: Int?

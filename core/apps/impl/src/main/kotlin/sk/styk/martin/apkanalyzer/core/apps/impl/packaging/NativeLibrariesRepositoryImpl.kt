@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apps.packaging
+package sk.styk.martin.apkanalyzer.core.apps.impl.packaging
 
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
@@ -6,7 +6,10 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
-import sk.styk.martin.apkanalyzer.core.apps.PackageChangesObserver
+import sk.styk.martin.apkanalyzer.core.apps.api.PackageChangesObserver
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraries
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibrariesRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraryFile
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger

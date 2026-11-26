@@ -1,12 +1,12 @@
-package sk.styk.martin.apkanalyzer.core.apps.model
+package sk.styk.martin.apkanalyzer.core.apps.api.model
 
-import sk.styk.martin.apkanalyzer.core.apps.components.Activity
-import sk.styk.martin.apkanalyzer.core.apps.components.BroadcastReceiver
-import sk.styk.martin.apkanalyzer.core.apps.components.ContentProvider
-import sk.styk.martin.apkanalyzer.core.apps.components.Service
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Feature
-import sk.styk.martin.apkanalyzer.core.apps.permissions.Permissions
-import sk.styk.martin.apkanalyzer.core.apps.signing.AppSigning
+import sk.styk.martin.apkanalyzer.core.apps.api.components.Activity
+import sk.styk.martin.apkanalyzer.core.apps.api.components.BroadcastReceiver
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ContentProvider
+import sk.styk.martin.apkanalyzer.core.apps.api.components.Service
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.Feature
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.Permissions
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.AppSigning
 
 data class AppDetail(
     val analysisMode: AnalysisMode,

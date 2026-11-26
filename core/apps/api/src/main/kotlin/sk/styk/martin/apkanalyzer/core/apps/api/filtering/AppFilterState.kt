@@ -1,6 +1,6 @@
-package sk.styk.martin.apkanalyzer.core.apps.filtering
+package sk.styk.martin.apkanalyzer.core.apps.api.filtering
 
-import sk.styk.martin.apkanalyzer.core.apps.AppClassificationThresholds
+import sk.styk.martin.apkanalyzer.core.apps.api.AppClassificationThresholds
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.isSideloaded

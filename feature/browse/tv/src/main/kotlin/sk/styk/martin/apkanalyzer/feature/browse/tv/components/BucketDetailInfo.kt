@@ -14,12 +14,12 @@ import androidx.compose.ui.unit.dp
 import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseBucketDetail
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.explanationRes
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.labelRes
-import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateValidity
-import sk.styk.martin.apkanalyzer.core.apps.signing.displayLine
-import sk.styk.martin.apkanalyzer.core.apps.signing.explanationRes
-import sk.styk.martin.apkanalyzer.core.apps.signing.isWeak
-import sk.styk.martin.apkanalyzer.core.apps.signing.labelRes
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateValidity
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.displayLine
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.explanationRes
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.isWeak
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.labelRes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.Tag
@@ -28,7 +28,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.tv.theme.ApkAnalyzerTvTheme
 import java.text.DateFormat
 import java.util.Date
 import sk.styk.martin.apkanalyzer.core.appindex.R as AppIndexR
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
 
 @Composable
 internal fun BucketDetailInfo(detail: BrowseBucketDetail, modifier: Modifier = Modifier) {

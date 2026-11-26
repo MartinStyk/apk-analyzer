@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apps.filtering
+package sk.styk.martin.apkanalyzer.core.apps.api.filtering
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow

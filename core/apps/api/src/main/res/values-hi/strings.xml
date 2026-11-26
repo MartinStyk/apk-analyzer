@@ -1,56 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string-array name="android_versions">
-        <item>Android 1</item>
-        <item>Android 1.1</item>
-        <item>Android 1.5</item>
-        <item>Android 1.6</item>
-        <item>Android 2.0</item>
-        <item>Android 2.0.1</item>
-        <item>Android 2.1</item>
-        <item>Android 2.2</item>
-        <item>Android 2.3</item>
-        <item>Android 2.3.3</item>
-        <item>Android 3.0</item>
-        <item>Android 3.1</item>
-        <item>Android 3.2</item>
-        <item>Android 4.0</item>
-        <item>Android 4.0.3</item>
-        <item>Android 4.1</item>
-        <item>Android 4.2</item>
-        <item>Android 4.3</item>
-        <item>Android 4.4</item>
-        <item>Android 4.4W</item>
-        <item>Android 5.0</item>
-        <item>Android 5.1.1</item>
-        <item>Android 6.0</item>
-        <item>Android 7.0</item>
-        <item>Android 7.1.2</item>
-        <item>Android 8.0</item>
-        <item>Android 8.1</item>
-        <item>Android 9</item>
-        <item>Android 10</item>
-        <item>Android 11</item>
-        <item>Android 12</item>
-        <item>Android 12L</item>
-        <item>Android 13</item>
-        <item>Android 14</item>
-        <item>Android 15</item>
-        <item>Android 16</item>
-        <item>Android 17</item>
-    </string-array>
-    <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
-    <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_unknown">अज्ञात</string>
-    <string name="general_info_title">सामान्य जानकारी</string>
-    <string name="general_info_error">सामान्य जानकारी लोड करने में विफल</string>
     <string name="general_info_section_identification">पहचान</string>
     <string name="general_info_section_versioning">संस्करण</string>
     <string name="general_info_section_api_targets">API लक्ष्य</string>
     <string name="general_info_section_security">सुरक्षा सेटिंग्स</string>
     <string name="general_info_section_installation">स्थापना और स्रोत</string>
     <string name="general_info_section_storage">स्टोरेज और पथ</string>
-    <string name="general_info_section_native_libraries">नेटिव लाइब्रेरी</string>
     <string name="general_info_application_name">एप्लिकेशन नाम</string>
     <string name="general_info_package_name">Package नाम</string>
     <string name="general_info_process_name">प्रक्रिया नाम</string>
@@ -64,12 +20,7 @@
     <string name="general_info_debug_access">डीबग एक्सेस</string>
     <string name="general_info_app_data_backup">ऐप डेटा बैकअप</string>
     <string name="general_info_unencrypted_traffic">अनएन्क्रिप्टेड ट्रैफ़िक डिफ़ॉल्ट</string>
-    <string name="general_info_enabled">सक्रिय</string>
-    <string name="general_info_disabled">निष्क्रिय</string>
-    <string name="general_info_allowed">अनुमति दी गई</string>
     <string name="general_info_app_type">ऐप प्रकार</string>
-    <string name="general_info_app_type_system">सिस्टम</string>
-    <string name="general_info_app_type_user">उपयोगकर्ता</string>
     <string name="general_info_install_source">इंस्टॉल स्रोत</string>
     <string name="general_info_install_source_google_play">गूगल प्ले</string>
     <string name="general_info_install_source_samsung_galaxy_store">सैमसंग गैलेक्सी स्टोर</string>
@@ -93,36 +44,9 @@
     <string name="general_info_install_location">स्थापना स्थान</string>
     <string name="general_info_apk_size">APK आकार</string>
     <string name="general_info_split_apks">विभाजित APK</string>
-    <plurals name="general_info_split_apks_value">
-        <item quantity="one">%1$d विभाजित APK के रूप में स्थापित</item>
-        <item quantity="other">%1$d विभाजित APK के रूप में स्थापित</item>
-    </plurals>
     <string name="general_info_total_size">कुल आकार</string>
     <string name="general_info_native_library_abis">CPU आर्किटेक्चर</string>
-    <string name="general_info_native_library_abis_none">कोई स्थानीय कोड नहीं</string>
     <string name="general_info_native_library_files">स्थानीय पुस्तकालय फ़ाइलें</string>
-    <string name="general_info_native_library_files_none">कोई बंडल नहीं</string>
-    <plurals name="general_info_native_library_file_count">
-        <item quantity="one">%1$d फ़ाइल</item>
-        <item quantity="other">%1$d फ़ाइलें</item>
-    </plurals>
-    <string name="general_info_rationale_application_name">ऐप का उपयोगकर्ता-दृश्यमान लेबल, जो होम स्क्रीन और ऐप ड्रॉअर में दिखाया जाता है।</string>
-    <string name="general_info_rationale_package_name">इस ऐप के लिए डिवाइस पर अद्वितीय पहचानकर्ता। कोई दो ऐप एक ही पैकेज नाम साझा नहीं कर सकते।</string>
-    <string name="general_info_rationale_process_name">ऑपरेटिंग सिस्टम प्रक्रिया का नाम जिसमें ऐप चलता है। डिफ़ॉल्ट रूप से, यह पैकेज नाम से मेल खाता है।</string>
-    <string name="general_info_rationale_uid">Android सिस्टम द्वारा इस ऐप को सौंपा गया अद्वितीय पहचानकर्ता। यह ऐप की सिस्टम संसाधनों और फ़ाइल अनुमतियों तक पहुँच को निर्धारित करता है।</string>
-    <string name="general_info_rationale_shared_user_id">यह ऐप घोषित करता है कि यह उसी कुंजी द्वारा हस्ताक्षरित अन्य ऐप्स के साथ साझा पहचान के तहत चलता है। साझा पहचान वाले ऐप्स एक-दूसरे के डेटा और अनुमतियों तक पहुँच सकते हैं जैसे कि वे एक ऐप हों।</string>
-    <string name="general_info_rationale_description">मैनिफेस्ट में ऐप डेवलपर द्वारा प्रदान किया गया एक वैकल्पिक सारांश।</string>
-    <string name="general_info_rationale_version_name">उपयोगकर्ताओं को प्रदर्शित किया गया मानव-पठनीय संस्करण स्ट्रिंग, जैसे "2.5.1" या "Beta 3"।</string>
-    <string name="general_info_rationale_version_code">एक आंतरिक पूर्णांक जो हर रिलीज के साथ बढ़ता है। सिस्टम इसका उपयोग यह निर्धारित करने के लिए करता है कि एक संस्करण दूसरे से नया है या नहीं।</string>
-    <string name="general_info_rationale_min_sdk">न्यूनतम Android API स्तर जिसे यह ऐप समर्थन करता है। पुराने संस्करण पर चलने वाले डिवाइस इसे स्थापित नहीं कर सकते।</string>
-    <string name="general_info_rationale_target_sdk">यह ऐप जिस API स्तर के लिए डिज़ाइन और परीक्षण किया गया था। यह सिस्टम को बताता है कि कौन सी संगतता व्यवहार लागू करना है।</string>
-    <string name="general_info_rationale_debug_access_enabled">विकास उपकरण इस ऐप का निरीक्षण और नियंत्रण कर सकते हैं जबकि यह चलता है। यह परीक्षण के दौरान मदद करता है, लेकिन प्रकाशित ऐप्स आमतौर पर इसे बंद कर देते हैं क्योंकि किसी के पास डिवाइस तक डिबगिंग पहुँच होने पर ऐप तक अतिरिक्त पहुँच मिलती है।</string>
-    <string name="general_info_rationale_debug_access_disabled">विकास उपकरण इस ऐप से Android के सामान्य ऐप-डिबगिंग पहुँच का उपयोग करके संलग्न नहीं हो सकते।</string>
-    <string name="general_info_rationale_backup_allowed">Android इस ऐप के डेटा को बैकअप में शामिल कर सकता है या इसे दूसरे डिवाइस पर स्थानांतरित कर सकता है। सटीक डेटा ऐप के बैकअप नियमों और Android संस्करण पर निर्भर करता है।</string>
-    <string name="general_info_rationale_backup_blocked">यह ऐप Android क्लाउड बैकअप को अक्षम करता है। डिवाइस-से-डिवाइस ट्रांसफर अभी भी Android संस्करण और डिवाइस निर्माता के अनुसार भिन्न हो सकता है।</string>
-    <string name="general_info_rationale_cleartext_allowed">ऐप की सामान्य मैनिफेस्ट सेटिंग बिना एन्क्रिप्शन के नेटवर्क कनेक्शनों की अनुमति देती है। कस्टम नेटवर्क सुरक्षा नियम इस सेटिंग को ओवरराइड कर सकते हैं। यह साबित नहीं करता कि ऐप बिना एन्क्रिप्टेड डेटा भेजता है।</string>
-    <string name="general_info_rationale_cleartext_blocked">ऐप की सामान्य मैनिफेस्ट सेटिंग बिना एन्क्रिप्शन के नेटवर्क कनेक्शनों को अक्षम करती है। कस्टम नेटवर्क सुरक्षा नियम और कुछ नेटवर्किंग पुस्तकालय अलग तरीके से व्यवहार कर सकते हैं।</string>
-    <string name="general_info_rationale_app_type">क्या ऐप एक पूर्व-स्थापित सिस्टम ऐप है या एक उपयोगकर्ता-स्थापित ऐप। सिस्टम ऐप्स के पास उच्चाधिकार होते हैं और इन्हें पूरी तरह से अनइंस्टॉल नहीं किया जा सकता।</string>
     <string name="general_info_rationale_install_source_google_play">यह ऐप Google Play के माध्यम से डाउनलोड और इंस्टॉल किया गया था, जो ऐप्स को प्रकाशित करने से पहले स्क्रीन करता है।</string>
     <string name="general_info_rationale_install_source_samsung_galaxy_store">यह ऐप Samsung के Galaxy Store के माध्यम से डाउनलोड और इंस्टॉल किया गया था, जो निर्माता का अपना ऐप स्टोर है।</string>
     <string name="general_info_rationale_install_source_amazon_appstore">यह ऐप Amazon Appstore के माध्यम से डाउनलोड और इंस्टॉल किया गया था।</string>
@@ -134,31 +58,12 @@
     <string name="general_info_rationale_install_source_local_install">यह ऐप एक जुड़े कंप्यूटर से सीधे इंस्टॉल किया गया था, आमतौर पर ADB जैसे डेवलपर टूल का उपयोग करके, न कि ऐप स्टोर के माध्यम से।</string>
     <string name="general_info_rationale_install_source_system">यह ऐप डिवाइस पर ऑपरेटिंग सिस्टम या निर्माता सॉफ़्टवेयर के हिस्से के रूप में पूर्व-स्थापित आया था।</string>
     <string name="general_info_rationale_install_source_unknown">Android यह रिपोर्ट नहीं कर सका कि यह ऐप कहाँ से इंस्टॉल किया गया था। यह एक डिवाइस बैकअप को पुनर्स्थापित करने के बाद या कुछ निर्माता-विशिष्ट इंस्टॉलर के साथ हो सकता है।</string>
-    <string name="general_info_rationale_installer_package">ऐप का पैकेज नाम जिसने इंस्टॉलेशन किया, जैसे कि "com.android.vending" Google Play के लिए।</string>
-    <string name="general_info_rationale_install_initiator">ऐप जिसने इंस्टॉलेशन शुरू किया, जैसे कि एक ब्राउज़र या साइडलोडेड ऐप के लिए फ़ाइल प्रबंधक, या स्टोर इंस्टॉलेशन के लिए एक ऐप स्टोर। यह ऊपर दिए गए इंस्टॉलर पैकेज से भिन्न हो सकता है।</string>
-    <string name="general_info_rationale_install_originator">पैकेज जिसने APK फ़ाइल प्रदान की, जब Android इसे इंस्टॉलेशन शुरू करने वाले ऐप से अलग रिपोर्ट करता है। अधिकांश इंस्टॉलेशन इसे खाली छोड़ देते हैं।</string>
-    <string name="general_info_rationale_first_installed">इस ऐप की पहली बार इंस्टॉलेशन की तारीख और समय।</string>
-    <string name="general_info_rationale_last_updated">इस ऐप के सबसे हाल के अपडेट की तारीख और समय।</string>
-    <string name="general_info_rationale_last_used">लगभग तारीख और समय जब इस ऐप को अंतिम बार उपयोगकर्ता द्वारा खोला गया था।</string>
-    <string name="general_info_rationale_apk_directory">फ़ाइल सिस्टम पथ जहां डिवाइस पर APK फ़ाइल संग्रहीत है।</string>
-    <string name="general_info_rationale_data_directory">फ़ाइल सिस्टम पथ जहां ऐप अपने निजी डेटा, डेटाबेस और साझा प्राथमिकताएँ संग्रहीत करता है।</string>
-    <string name="general_info_rationale_install_location">डेवलपर द्वारा घोषित पसंदीदा संग्रहण स्थान - आंतरिक संग्रहण, बाहरी संग्रहण, या स्वचालित।</string>
-    <string name="general_info_rationale_apk_size">डिस्क पर स्थापित APK फ़ाइलों का संयुक्त आकार, ऐप डेटा, कैश और रनटाइम-जनित फ़ाइलों को छोड़कर। Google Play से स्थापित अधिकांश ऐप्स एक बेस APK में विभाजित होते हैं और आपके डिवाइस की भाषा और स्क्रीन घनत्व के लिए अतिरिक्त APKs; यह कुल सभी को कवर करता है।</string>
-    <string name="general_info_rationale_total_size">APK, ऐप डेटा, और कैश की गई फ़ाइलों का संयुक्त आकार। उपयोग एक्सेस अनुमति की आवश्यकता है।</string>
-    <string name="general_info_rationale_native_library_abis">प्रोसेसर प्रकार जिनके लिए इस ऐप में संकलित नेटिव कोड शामिल है, APK की अपनी फ़ाइलों से पढ़ा गया है न कि जो यह डिवाइस रिपोर्ट करता है।</string>
-    <string name="general_info_native_library_device_support">यह डिवाइस का समर्थन करता है: %1$s।</string>
-    <string name="general_info_native_library_incompatible">उन प्रोसेसर प्रकारों में से कोई भी इस डिवाइस के समर्थन से मेल नहीं खाता है, इसलिए इस ऐप का नेटिव कोड यहाँ चलने की संभावना नहीं है।</string>
     <string name="components_title">घटक</string>
-    <string name="components_error">घटक लोड करने में विफल</string>
     <string name="components_type_activities">Activities</string>
     <string name="components_type_services">Services</string>
     <string name="components_type_receivers">Receivers</string>
     <string name="components_type_providers">Providers</string>
-    <string name="components_tag_exported">निर्यातित</string>
-    <string name="components_tag_launcher">लॉन्चर</string>
     <string name="components_detail_launcher">लॉन्चर स्क्रीन</string>
-    <string name="components_detail_launcher_explanation">यह वह है जो तब खुलता है जब आप ऐप के आइकन पर टैप करते हैं।</string>
-    <string name="components_tag_unprotected">कोई अनुमति सुरक्षा के बिना निर्यातित</string>
     <string name="components_flag_stop_with_task">कार्य के साथ रुकता है</string>
     <string name="components_flag_stop_with_task_explanation">जब आप ऐप को हाल की सूची से स्वाइप करते हैं तो बंद हो जाता है।</string>
     <string name="components_flag_single_user">एकल उपयोगकर्ता</string>
@@ -167,40 +72,6 @@
     <string name="components_flag_isolated_process_explanation">यह अपने स्वयं के किसी भी अनुमति के बिना सैंडबॉक्स में चलता है।</string>
     <string name="components_flag_external_service">बाहरी सेवा</string>
     <string name="components_flag_external_service_explanation">अन्य ऐप्स इसे अपने प्रोसेस के अंदर चला सकते हैं।</string>
-    <string name="components_flag_enabled">हाँ</string>
-    <string name="components_detail_full_name">पूरा नाम</string>
-    <string name="components_detail_section_reachability">पहुँचयोग्यता</string>
-    <string name="components_detail_section_details">विवरण</string>
-    <string name="components_detail_section_intent_filters">अनुरोध जो यह घटक स्वीकार करता है</string>
-    <string name="components_detail_intent_filters_explanation">Android और अन्य ऐप्स इन घोषणाओं का उपयोग यह तय करने के लिए करते हैं कि कौन से अनुरोध, लिंक, और सामग्री इस घटक तक पहुँच सकती है।</string>
-    <string name="components_detail_intent_filters_unavailable">Intent filters इस ऐप के लिए पढ़े नहीं जा सके।</string>
-    <string name="components_detail_intent_filters_open">इंटेंट फ़िल्टर देखें</string>
-    <plurals name="components_intent_filter_count">
-        <item quantity="one">%1$d इंटेंट फ़िल्टर</item>
-        <item quantity="other">%1$d इंटेंट फ़िल्टर</item>
-    </plurals>
-    <string name="components_detail_intent_actions">क्रियाएँ</string>
-    <string name="components_detail_intent_actions_explanation">कोई अन्य ऐप या Android इस घटक से क्या करने के लिए कहता है।</string>
-    <string name="components_detail_intent_categories">श्रेणियाँ</string>
-    <string name="components_detail_intent_categories_explanation">श्रेणियाँ जो यह फ़िल्टर अनुमति देता है। प्रत्येक अनुरोध द्वारा प्रदान की गई श्रेणी को यहाँ सूचीबद्ध किया जाना चाहिए।</string>
-    <string name="components_detail_intent_data">लिंक और सामग्री</string>
-    <string name="components_detail_intent_data_explanation">वेब पते, फ़ाइल प्रकार, या अन्य सामग्री जो यह घटक कहता है कि वह संभाल सकता है।</string>
-    <string name="components_detail_intent_data_rule">%1$s: %2$s</string>
-    <string name="components_detail_intent_allowed_uri_parts">अनुमत लिंक विवरण</string>
-    <string name="components_detail_intent_allowed_uri_parts_explanation">इस समूह में सभी विवरणों का मेल खाना चाहिए ताकि समूह एक लिंक की अनुमति दे सके। Android समूहों का मूल्यांकन मैनिफेस्ट क्रम में करता है।</string>
-    <string name="components_detail_intent_blocked_uri_parts">ब्लॉक किए गए लिंक विवरण</string>
-    <string name="components_detail_intent_blocked_uri_parts_explanation">ये विवरण एक ब्लॉकिंग मैच नियम को परिभाषित करते हैं। Android इसे मैनिफेस्ट क्रम में फ़िल्टर के अन्य लिंक नियमों के साथ मूल्यांकन करता है।</string>
-    <string name="components_detail_intent_auto_verify">सत्यापन अनुरोध</string>
-    <string name="components_detail_intent_auto_verify_requested">अनुरोधित</string>
-    <string name="components_detail_intent_auto_verify_explanation">ऐप Android से यह सत्यापित करने के लिए कहता है कि इसकी साइनिंग पहचान इन वेबसाइट लिंक को खोलने की अनुमति है।</string>
-    <string name="components_detail_intent_activity_priority">मैचिंग प्राथमिकता</string>
-    <string name="components_detail_intent_activity_priority_explanation">एक उच्च संख्या इस गतिविधि को अन्य मिलती-जुलती गतिविधियों पर प्राथमिकता दे सकती है, Android के रूटिंग नियमों के अधीन।</string>
-    <string name="components_detail_intent_receiver_priority">ब्रॉडकास्ट प्राथमिकता</string>
-    <string name="components_detail_intent_receiver_priority_explanation">क्रमबद्ध ब्रॉडकास्ट के लिए, एक उच्च संख्या इस रिसीवर को पहले चलाने में मदद कर सकती है, Android की सीमाओं के अधीन।</string>
-    <string name="components_detail_intent_declared_priority">घोषित प्राथमिकता</string>
-    <string name="components_detail_intent_declared_priority_explanation">मैनिफेस्ट इस मान को घोषित करता है, लेकिन Android इसे मिलते-जुलते सेवाओं या प्रदाताओं के बीच चयन करने के लिए उपयोग नहीं करता है।</string>
-    <string name="components_detail_intent_order">डिलीवरी क्रम</string>
-    <string name="components_detail_intent_order_explanation">एक उच्च संख्या को पहले माना जाता है जब इस ऐप के पास कई मिलते-जुलते फ़िल्टर होते हैं।</string>
     <string name="components_intent_data_scheme">पता योजना</string>
     <string name="components_intent_data_host">होस्ट</string>
     <string name="components_intent_data_port">पोर्ट</string>
@@ -236,13 +107,10 @@
     <string name="components_detail_permission">आवश्यक अनुमति</string>
     <string name="components_detail_read_permission">पढ़ने की अनुमति</string>
     <string name="components_detail_write_permission">लिखने की अनुमति</string>
-    <string name="components_detail_label">लेबल</string>
     <string name="components_detail_target_activity">लक्ष्य Activity</string>
     <string name="components_detail_parent">माता Activity</string>
     <string name="components_detail_authority">अधिकार</string>
     <string name="components_detail_section_path_permissions">पथ अनुमतियाँ</string>
-    <string name="components_detail_path_permissions_explanation">इस provider के तहत विशिष्ट पथों के लिए नियम। एक पथ सामान्य पढ़ने और लिखने की अनुमतियों से परे पहुँच प्रदान या हटा सकता है।</string>
-    <string name="components_detail_path_permission_path">पथ</string>
     <string name="components_detail_path_permission_open">कोई अनुमति आवश्यक नहीं</string>
     <string name="components_path_permission_type_literal">इस सटीक पथ से मेल खाता है</string>
     <string name="components_path_permission_type_prefix">इस पथ और इसके तहत सब कुछ से मेल खाता है</string>
@@ -250,31 +118,12 @@
     <string name="components_path_permission_type_advanced_glob">एक उन्नत वाइल्डकार्ड पैटर्न का उपयोग करके इस पथ से मेल खाता है</string>
     <string name="components_path_permission_type_suffix">इससे समाप्त होने वाले किसी भी पथ से मेल खाता है</string>
     <string name="certificates_title">साइनिंग प्रमाणपत्र</string>
-    <string name="certificates_error">साइनिंग प्रमाणपत्र लोड करने में विफल</string>
-    <string name="certificates_empty">कोई साइनिंग प्रमाणपत्र नहीं मिला</string>
-    <string name="certificates_card_position">%1$s (%2$d का %3$d)</string>
-    <string name="certificates_signer_position">Signer %1$d का %2$d</string>
-    <string name="certificates_current_certificate">वर्तमान साइनिंग सर्टिफिकेट</string>
     <string name="certificates_current_certificates">वर्तमान साइनिंग सर्टिफिकेट्स</string>
     <string name="certificates_history">साइनिंग इतिहास</string>
-    <plurals name="certificates_history_description">
-        <item quantity="one">Android द्वारा सत्यापित %1$d साइनिंग कुंजी जो वर्तमान कुंजी से पहले उपयोग की गई थी।</item>
-        <item quantity="other">Android द्वारा सत्यापित %1$d साइनिंग कुंजी जो वर्तमान कुंजी से पहले उपयोग की गई थीं। सबसे हाल ही में उपयोग की गई पूर्व कुंजी पहले दिखाई देती है।</item>
-    </plurals>
-    <string name="certificates_original_signing_key">मूल साइनिंग कुंजी</string>
-    <string name="certificates_previous_signing_key">पिछली साइनिंग कुंजी</string>
-    <string name="certificates_debug_title">डीबग प्रमाणपत्र</string>
-    <string name="certificates_debug_description">यह ऐप Android\'s साझा डिबग कुंजी का उपयोग करता है बजाय एक निजी प्रकाशन कुंजी के। यह परीक्षण के लिए सामान्य है, लेकिन एक प्रकाशित ऐप के लिए नहीं।</string>
-    <string name="certificates_signer">Signer</string>
-    <string name="certificates_details">सर्टिफिकेट विवरण</string>
     <string name="certificates_organization">संस्थान</string>
     <string name="certificates_name">नाम</string>
     <string name="certificates_country">देश</string>
     <string name="certificates_issuer">जारी किया गया द्वारा</string>
-    <string name="certificates_unknown_signer">अज्ञात हस्ताक्षरकर्ता</string>
-    <string name="certificates_self_signed">स्व-हस्ताक्षरित</string>
-    <string name="certificates_self_signed_value">साइनर ने यह सर्टिफिकेट जारी किया</string>
-    <string name="certificates_self_signed_explanation">स्व-हस्ताक्षरित प्रमाणपत्र Android ऐप्स के लिए सामान्य हैं। जब आपको प्रकाशक की पुष्टि करने की आवश्यकता हो, तो प्रमाणपत्र के फिंगरप्रिंट की तुलना एक विश्वसनीय स्रोत से करें।</string>
     <string name="certificates_validity">वैधता</string>
     <string name="certificates_date_range">%1$s से %2$s</string>
     <string name="certificates_valid">वैध</string>
@@ -283,18 +132,12 @@
     <string name="certificates_valid_explanation">प्रमाणपत्र अपनी निर्धारित वैधता अवधि के भीतर है।</string>
     <string name="certificates_expired_explanation">Android एक स्थापित ऐप को उसके हस्ताक्षरित प्रमाणपत्र की समाप्ति के बाद भी स्वीकार करना जारी रख सकता है। यदि ऐप या अपडेट अप्रत्याशित है, तो फिंगरप्रिंट की तुलना एक विश्वसनीय स्रोत से करें।</string>
     <string name="certificates_not_yet_valid_explanation">प्रमाणपत्र की वैधता अवधि शुरू नहीं हुई है। इस ऐप पर भरोसा करने से पहले डिवाइस की तारीख की जांच करें और फिंगरप्रिंट की पुष्टि करें।</string>
-    <string name="certificates_current_signers">वर्तमान हस्ताक्षरकर्ता</string>
-    <string name="certificates_single_signer">एकल हस्ताक्षरकर्ता</string>
     <string name="certificates_multiple_signers">कई हस्ताक्षरकर्ता</string>
-    <string name="certificates_single_signer_explanation">यह ऐप वर्तमान में एक प्रमाणपत्र द्वारा हस्ताक्षरित है। यदि डेवलपर फिर से हस्ताक्षर कुंजी को बदलता है, तो Android इस ऐप के विश्वसनीय हस्ताक्षर इतिहास के खिलाफ परिवर्तन की पुष्टि करता है।</string>
-    <string name="certificates_multiple_signers_explanation">यह ऐप वर्तमान में कई प्रमाणपत्रों द्वारा हस्ताक्षरित है। Android को अपडेट के लिए समान हस्ताक्षरकर्ता सेट का उपयोग करने की आवश्यकता है।</string>
     <string name="certificates_scheme">स्कीम</string>
     <string name="certificates_scheme_v1">v1</string>
     <string name="certificates_scheme_v2">v2</string>
     <string name="certificates_scheme_v3">v3</string>
     <string name="certificates_scheme_v3_1">v3.1</string>
-    <string name="certificates_scheme_explanation">यह योजना APK को सत्यापित करने के लिए Android द्वारा उपयोग किया जाने वाला हस्ताक्षर प्रारूप है। नए योजनाएँ (v2 और बाद में) पूरे फ़ाइल की सुरक्षा करती हैं, न कि केवल व्यक्तिगत प्रविष्टियों की, इसलिए केवल v1 के साथ हस्ताक्षरित एक आधुनिक ऐप पर फिर से विचार करना उचित है। नीचे दिया गया एल्गोरिदम बताता है कि हस्ताक्षर प्रमाणपत्र स्वयं कैसे हस्ताक्षरित किया गया था, न कि APK हस्ताक्षर योजना।</string>
-    <string name="certificates_algorithm">एल्गोरिदम</string>
     <string name="certificates_algorithm_strong">मजबूत</string>
     <string name="certificates_algorithm_weak">कमजोर</string>
     <string name="certificates_algorithm_unknown">अज्ञात ताकत</string>
@@ -303,36 +146,16 @@
     <string name="certificates_algorithm_md5_explanation">%1$s MD5 का उपयोग करता है। MD5 टकराव प्रतिरोधी नहीं है और हस्ताक्षर प्रमाणपत्रों के लिए असुरक्षित है। नए हस्ताक्षर प्रमाणपत्रों को SHA-256 या मजबूत का उपयोग करना चाहिए।</string>
     <string name="certificates_algorithm_md2_explanation">%1$s MD2 का उपयोग करता है। MD2 अप्रचलित है और व्यावहारिक हमलों के प्रति संवेदनशील है, इसलिए यह हस्ताक्षर प्रमाणपत्रों के लिए असुरक्षित है। नए हस्ताक्षर प्रमाणपत्रों को SHA-256 या मजबूत का उपयोग करना चाहिए।</string>
     <string name="certificates_algorithm_unknown_explanation">%1$s की ताकत उसके एल्गोरिदम नाम से आंकी नहीं जा सकती। कुंजी का प्रकार और आकार भी इसकी सुरक्षा को प्रभावित कर सकता है।</string>
-    <string name="certificates_serial">क्रमांक</string>
-    <string name="certificates_serial_explanation">प्रमाणपत्र जारीकर्ता इस संख्या को प्रमाणपत्र की पहचान के लिए असाइन करता है। इसे जारीकर्ता नाम के साथ उपयोग करें; यह प्रमाणपत्र की फिंगरप्रिंट नहीं है।</string>
-    <string name="certificates_certificate_fingerprints">प्रमाणपत्र फिंगरप्रिंट</string>
-    <string name="certificates_public_key_fingerprints">सार्वजनिक कुंजी फिंगरप्रिंट</string>
-    <string name="certificates_fingerprint">फिंगरप्रिंट</string>
-    <string name="certificates_sha256">SHA-256</string>
-    <string name="certificates_sha1">SHA-1</string>
-    <string name="certificates_md5">MD5</string>
     <string name="certificates_explain">%1$s समझाएं</string>
     <string name="requirements_title">डिवाइस आवश्यकताएँ</string>
-    <string name="requirements_error">इस ऐप की डिवाइस आवश्यकताओं को पढ़ा नहीं जा सका।</string>
-    <string name="requirements_empty">इस ऐप ने कोई डिवाइस आवश्यकताएँ घोषित नहीं की हैं।</string>
-    <string name="requirements_section_header">%1$s · %2$d</string>
     <string name="requirements_section_required">आवश्यक</string>
     <string name="requirements_section_required_explanation">बिना इनके ऐप स्थापित नहीं होगा।</string>
     <string name="requirements_section_optional">वैकल्पिक</string>
     <string name="requirements_section_optional_explanation">उपलब्ध होने पर उपयोग किया जाता है।</string>
-    <plurals name="requirements_missing_summary">
-        <item quantity="one">%1$d आवश्यकता जिसे यह डिवाइस पूरा नहीं कर सकता</item>
-        <item quantity="other">%1$d आवश्यकताएँ जिन्हें यह डिवाइस पूरा नहीं कर सकता</item>
-    </plurals>
     <string name="requirements_missing">इस डिवाइस पर नहीं</string>
     <string name="requirements_missing_version">%1$s की आवश्यकता है · इस डिवाइस में %2$s है</string>
     <string name="requirements_open_gl_es">OpenGL ES %1$s</string>
     <string name="requirements_label_with_version">%1$s %2$s</string>
-    <string name="requirements_detail_identifier">पहचानकर्ता</string>
-    <string name="requirements_detail_necessity">आवश्यकता</string>
-    <string name="requirements_detail_availability">इस डिवाइस पर</string>
-    <string name="requirements_detail_version">संस्करण</string>
-    <string name="requirements_detail_version_comparison">%1$s की आवश्यकता है · %2$s इस डिवाइस पर</string>
     <string name="requirements_availability_available">उपलब्ध</string>
     <string name="requirements_availability_available_explanation">यह डिवाइस इसे प्रदान करता है, इसलिए ऐप इसका उपयोग कर सकता है।</string>
     <string name="requirements_availability_missing">उपलब्ध नहीं</string>
@@ -415,23 +238,11 @@
     <string name="requirement_backup">सिस्टम बैकअप</string>
     <string name="requirement_sip_voip">इंटरनेट कॉलिंग</string>
     <string name="requirement_connection_service">कॉलिंग ऐप एकीकरण</string>
-    <string name="splitapks_title">विभाजित APK</string>
-    <plurals name="splitapks_heading">
-        <item quantity="one">%1$d विभाजित APK स्थापित</item>
-        <item quantity="other">%1$d विभाजित APK स्थापित</item>
-    </plurals>
-    <string name="splitapks_explanation">यह ऐप एक बेस APK के रूप में स्थापित किया गया था और इन अतिरिक्त विभाजित APK के साथ, एक वितरण प्रारूप जो Google Play केवल उस कोड और संसाधनों को भेजने के लिए उपयोग करता है जिसकी आपके डिवाइस को आवश्यकता है।</string>
-    <string name="splitapks_error">विभाजित APK लोड करने में विफल</string>
-    <string name="splitapks_empty">इस ऐप में कोई विभाजित APK स्थापित नहीं है।</string>
     <string name="splitapks_kind_feature">फीचर मॉड्यूल</string>
     <string name="splitapks_kind_abi">CPU आर्किटेक्चर</string>
     <string name="splitapks_kind_density">स्क्रीन घनत्व</string>
     <string name="splitapks_kind_language">भाषा</string>
-    <string name="splitapks_detail_type">प्रकार</string>
-    <string name="splitapks_detail_identifier">पहचानकर्ता</string>
     <string name="splitapks_detail_file_name">फाइल नाम</string>
-    <string name="splitapks_detail_size">आकार</string>
-    <string name="splitapks_detail_path">पूर्ण पथ</string>
     <string name="splitapks_abi_arm64_v8a">ARM64 (64-बिट)</string>
     <string name="splitapks_abi_armeabi_v7a">ARM (32-बिट)</string>
     <string name="splitapks_abi_armeabi">ARM (विरासत, 32-बिट)</string>
@@ -448,41 +259,12 @@
     <string name="splitapks_density_xxxhdpi">अतिरिक्त-अतिरिक्त-अतिरिक्त-उच्च घनत्व वाली स्क्रीन</string>
     <string name="splitapks_density_nodpi">घनत्व-स्वतंत्र संसाधन</string>
     <string name="splitapks_density_anydpi">कोई भी घनत्व (वेक्टर संसाधन)</string>
-    <string name="nativelibraries_title">स्थानीय पुस्तकालय फ़ाइलें</string>
-    <plurals name="nativelibraries_heading">
-        <item quantity="one">%1$d स्थानीय पुस्तकालय बंडल किया गया</item>
-        <item quantity="other">%1$d स्थानीय पुस्तकालय बंडल किए गए</item>
-    </plurals>
-    <string name="nativelibraries_explanation">इस ऐप के द्वारा भेजे गए प्रत्येक अलग मूल कोड फ़ाइल के लिए, फ़ाइल नाम के अनुसार एक पंक्ति, भले ही एक ही पुस्तकालय कई प्रोसेसर आर्किटेक्चर के लिए बनाया गया हो।</string>
-    <string name="nativelibraries_error">मूल पुस्तकालय लोड करने में विफल</string>
-    <string name="nativelibraries_empty">इस ऐप में कोई बंडल किया गया मूल पुस्तकालय नहीं है।</string>
-    <string name="nativelibraries_supported">इस डिवाइस पर समर्थित</string>
-    <string name="nativelibraries_not_supported">इस डिवाइस पर समर्थित नहीं</string>
-    <string name="nativelibraries_not_supported_explanation">इस पुस्तकालय के लिए बनाए गए प्रोसेसर प्रकारों में से कोई भी उस डिवाइस का समर्थन नहीं करता है, इसलिए यह कोड यहाँ चलने की संभावना नहीं है।</string>
-    <string name="nativelibraries_detail_device_support">इस डिवाइस पर</string>
     <string name="nativelibraries_detail_abis">के लिए बनाया गया</string>
-    <string name="nativelibraries_detail_total_size">कुल आकार</string>
-    <string name="nativelibraries_detail_section_variants">प्रोसेसर प्रकार के अनुसार</string>
-    <string name="nativelibraries_detail_variant_source">%1$s में बंडल किया गया</string>
     <string name="manifest_title">Android manifest</string>
-    <string name="manifest_error">Manifest को पढ़ा नहीं जा सका</string>
-    <plurals name="manifest_line_count">
-        <item quantity="one">%1$d लाइन</item>
-        <item quantity="other">%1$d लाइनें</item>
-    </plurals>
-    <plurals name="manifest_base_split_note">
-        <item quantity="one">बेस APK manifest दिखाता है। इस ऐप में %1$d अतिरिक्त स्थापित विभाजन हैं जिनका अपना manifest है।</item>
-        <item quantity="other">बेस APK manifest दिखाता है। इस ऐप में %1$d अतिरिक्त स्थापित विभाजन हैं जिनका अपना manifest है।</item>
-    </plurals>
-    <string name="components_launch">इस घटक को प्रारंभ करें</string>
-    <string name="components_launch_started">प्रारंभ अनुरोध भेजा गया - ऐप तय करता है कि आगे क्या होगा।</string>
-    <string name="components_launch_broadcast_sent">ब्रॉडकास्ट भेजा गया - यहाँ कुछ भी रिपोर्ट नहीं करता कि इसे संभाला गया या नहीं।</string>
-    <string name="components_launch_failed">सिस्टम ने इसे प्रारंभ करने से इनकार कर दिया।</string>
     <string name="certificates_validity_on_date_valid">इस तारीख को मान्य</string>
     <string name="certificates_validity_on_date_expired">इस तारीख को समाप्त</string>
     <string name="certificates_validity_on_date_not_yet">इस तारीख को अभी मान्य नहीं</string>
     <string name="certificates_validity_on_date_valid_explanation">जिस दिन Apk Analyzer ने इसे दर्ज किया, यह प्रमाणपत्र अपनी वैधता अवधि में था।</string>
     <string name="certificates_validity_on_date_expired_explanation">जिस दिन Apk Analyzer ने इसे दर्ज किया, इस प्रमाणपत्र की समाप्ति तिथि बीत चुकी थी।</string>
     <string name="certificates_validity_on_date_not_yet_explanation">जिस दिन Apk Analyzer ने इसे दर्ज किया, इस प्रमाणपत्र की शुरुआती तिथि अभी आने वाली थी।</string>
-    <string name="app_info_unavailable">यह डिवाइस ऐप जानकारी नहीं खोल सकता</string>
 </resources>

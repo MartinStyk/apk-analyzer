@@ -274,4 +274,39 @@
         <item quantity="one">%1$s से दर्ज · %2$d बदलाव</item>
         <item quantity="other">%1$s से दर्ज · %2$d बदलाव</item>
     </plurals>
+    <string name="components_detail_full_name">पूरा नाम</string>
+    <string name="components_detail_intent_filters_open">इंटेंट फ़िल्टर देखें</string>
+    <plurals name="components_intent_filter_count">
+        <item quantity="one">%1$d इंटेंट फ़िल्टर</item>
+        <item quantity="other">%1$d इंटेंट फ़िल्टर</item>
+    </plurals>
+    <string name="components_detail_intent_actions_explanation">कोई अन्य ऐप या Android इस घटक से क्या करने के लिए कहता है।</string>
+    <string name="components_detail_intent_categories_explanation">श्रेणियाँ जो यह फ़िल्टर अनुमति देता है। प्रत्येक अनुरोध द्वारा प्रदान की गई श्रेणी को यहाँ सूचीबद्ध किया जाना चाहिए।</string>
+    <string name="components_detail_intent_data_explanation">वेब पते, फ़ाइल प्रकार, या अन्य सामग्री जो यह घटक कहता है कि वह संभाल सकता है।</string>
+    <string name="components_detail_intent_allowed_uri_parts_explanation">इस समूह में सभी विवरणों का मेल खाना चाहिए ताकि समूह एक लिंक की अनुमति दे सके। Android समूहों का मूल्यांकन मैनिफेस्ट क्रम में करता है।</string>
+    <string name="components_detail_intent_blocked_uri_parts_explanation">ये विवरण एक ब्लॉकिंग मैच नियम को परिभाषित करते हैं। Android इसे मैनिफेस्ट क्रम में फ़िल्टर के अन्य लिंक नियमों के साथ मूल्यांकन करता है।</string>
+    <string name="components_detail_intent_activity_priority_explanation">एक उच्च संख्या इस गतिविधि को अन्य मिलती-जुलती गतिविधियों पर प्राथमिकता दे सकती है, Android के रूटिंग नियमों के अधीन।</string>
+    <string name="components_detail_intent_receiver_priority_explanation">क्रमबद्ध ब्रॉडकास्ट के लिए, एक उच्च संख्या इस रिसीवर को पहले चलाने में मदद कर सकती है, Android की सीमाओं के अधीन।</string>
+    <string name="components_detail_intent_declared_priority_explanation">मैनिफेस्ट इस मान को घोषित करता है, लेकिन Android इसे मिलते-जुलते सेवाओं या प्रदाताओं के बीच चयन करने के लिए उपयोग नहीं करता है।</string>
+    <string name="components_detail_intent_order_explanation">एक उच्च संख्या को पहले माना जाता है जब इस ऐप के पास कई मिलते-जुलते फ़िल्टर होते हैं।</string>
+    <plurals name="certificates_history_description">
+        <item quantity="one">Android द्वारा सत्यापित %1$d साइनिंग कुंजी जो वर्तमान कुंजी से पहले उपयोग की गई थी।</item>
+        <item quantity="other">Android द्वारा सत्यापित %1$d साइनिंग कुंजी जो वर्तमान कुंजी से पहले उपयोग की गई थीं। सबसे हाल ही में उपयोग की गई पूर्व कुंजी पहले दिखाई देती है।</item>
+    </plurals>
+    <string name="certificates_details">सर्टिफिकेट विवरण</string>
+    <string name="certificates_fingerprint">फिंगरप्रिंट</string>
+    <plurals name="requirements_missing_summary">
+        <item quantity="one">%1$d आवश्यकता जिसे यह डिवाइस पूरा नहीं कर सकता</item>
+        <item quantity="other">%1$d आवश्यकताएँ जिन्हें यह डिवाइस पूरा नहीं कर सकता</item>
+    </plurals>
+    <string name="requirements_detail_necessity">आवश्यकता</string>
+    <string name="requirements_detail_availability">इस डिवाइस पर</string>
+    <string name="requirements_detail_version">संस्करण</string>
+    <string name="requirements_detail_version_comparison">%1$s की आवश्यकता है · %2$s इस डिवाइस पर</string>
+    <string name="splitapks_detail_type">प्रकार</string>
+    <string name="splitapks_detail_size">आकार</string>
+    <string name="nativelibraries_explanation">इस ऐप के द्वारा भेजे गए प्रत्येक अलग मूल कोड फ़ाइल के लिए, फ़ाइल नाम के अनुसार एक पंक्ति, भले ही एक ही पुस्तकालय कई प्रोसेसर आर्किटेक्चर के लिए बनाया गया हो।</string>
+    <string name="nativelibraries_detail_device_support">इस डिवाइस पर</string>
+    <string name="nativelibraries_detail_total_size">कुल आकार</string>
+    <string name="components_launch">इस घटक को प्रारंभ करें</string>
 </resources>

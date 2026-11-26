@@ -3,7 +3,7 @@ package sk.styk.martin.apkanalyzer.core.userpreferences.searchhistory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
-import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import javax.inject.Inject
 

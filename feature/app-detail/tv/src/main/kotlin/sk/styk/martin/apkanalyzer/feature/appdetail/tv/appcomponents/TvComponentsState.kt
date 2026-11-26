@@ -1,10 +1,10 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.tv.appcomponents
 
 import androidx.compose.runtime.Immutable
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentFlag
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentKind
-import sk.styk.martin.apkanalyzer.core.apps.components.ProviderPathPermission
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentFlag
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentKind
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ProviderPathPermission
 
 @Immutable
 internal data class TvComponentItem(

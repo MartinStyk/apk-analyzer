@@ -1,56 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string-array name="android_versions">
-        <item>Android 1</item>
-        <item>Android 1.1</item>
-        <item>Android 1.5</item>
-        <item>Android 1.6</item>
-        <item>Android 2.0</item>
-        <item>Android 2.0.1</item>
-        <item>Android 2.1</item>
-        <item>Android 2.2</item>
-        <item>Android 2.3</item>
-        <item>Android 2.3.3</item>
-        <item>Android 3.0</item>
-        <item>Android 3.1</item>
-        <item>Android 3.2</item>
-        <item>Android 4.0</item>
-        <item>Android 4.0.3</item>
-        <item>Android 4.1</item>
-        <item>Android 4.2</item>
-        <item>Android 4.3</item>
-        <item>Android 4.4</item>
-        <item>Android 4.4W</item>
-        <item>Android 5.0</item>
-        <item>Android 5.1.1</item>
-        <item>Android 6.0</item>
-        <item>Android 7.0</item>
-        <item>Android 7.1.2</item>
-        <item>Android 8.0</item>
-        <item>Android 8.1</item>
-        <item>Android 9</item>
-        <item>Android 10</item>
-        <item>Android 11</item>
-        <item>Android 12</item>
-        <item>Android 12L</item>
-        <item>Android 13</item>
-        <item>Android 14</item>
-        <item>Android 15</item>
-        <item>Android 16</item>
-        <item>Android 17</item>
-    </string-array>
-    <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
-    <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_unknown">Tidak diketahui</string>
-    <string name="general_info_title">Informasi umum</string>
-    <string name="general_info_error">Gagal memuat informasi umum</string>
     <string name="general_info_section_identification">Identifikasi</string>
     <string name="general_info_section_versioning">Versi</string>
     <string name="general_info_section_api_targets">Target API</string>
     <string name="general_info_section_security">Pengaturan keamanan</string>
     <string name="general_info_section_installation">Instalasi &amp; Sumber</string>
     <string name="general_info_section_storage">Penyimpanan &amp; Jalur</string>
-    <string name="general_info_section_native_libraries">Perpustakaan asli</string>
     <string name="general_info_application_name">Nama aplikasi</string>
     <string name="general_info_package_name">Nama paket</string>
     <string name="general_info_process_name">Nama proses</string>
@@ -64,12 +20,7 @@
     <string name="general_info_debug_access">Akses debug</string>
     <string name="general_info_app_data_backup">Cadangan data aplikasi</string>
     <string name="general_info_unencrypted_traffic">Traffic tidak terenkripsi default</string>
-    <string name="general_info_enabled">Diaktifkan</string>
-    <string name="general_info_disabled">Dinonaktifkan</string>
-    <string name="general_info_allowed">Diizinkan</string>
     <string name="general_info_app_type">Tipe aplikasi</string>
-    <string name="general_info_app_type_system">Sistem</string>
-    <string name="general_info_app_type_user">Pengguna</string>
     <string name="general_info_install_source">Sumber instalasi</string>
     <string name="general_info_install_source_google_play">Google Play</string>
     <string name="general_info_install_source_samsung_galaxy_store">Samsung Galaxy Store</string>
@@ -93,34 +44,9 @@
     <string name="general_info_install_location">Lokasi instalasi</string>
     <string name="general_info_apk_size">Ukuran APK</string>
     <string name="general_info_split_apks">APK terpisah</string>
-    <plurals name="general_info_split_apks_value">
-        <item quantity="other">Dipasang sebagai %1$d APK terpisah</item>
-    </plurals>
     <string name="general_info_total_size">Ukuran total</string>
     <string name="general_info_native_library_abis">arsitektur CPU</string>
-    <string name="general_info_native_library_abis_none">Tidak ada kode asli</string>
     <string name="general_info_native_library_files">File pustaka asli</string>
-    <string name="general_info_native_library_files_none">Tidak ada yang dibundel</string>
-    <plurals name="general_info_native_library_file_count">
-        <item quantity="other">%1$d file</item>
-    </plurals>
-    <string name="general_info_rationale_application_name">Label yang terlihat oleh pengguna dari aplikasi, seperti yang ditampilkan di layar beranda dan di laci aplikasi.</string>
-    <string name="general_info_rationale_package_name">Pengidentifikasi unik untuk aplikasi ini di perangkat. Tidak ada dua aplikasi yang dapat berbagi nama paket yang sama.</string>
-    <string name="general_info_rationale_process_name">Nama proses sistem operasi tempat aplikasi berjalan. Secara default, ini cocok dengan nama paket.</string>
-    <string name="general_info_rationale_uid">Pengidentifikasi unik yang diberikan kepada aplikasi ini oleh sistem Android. Ini menentukan akses aplikasi ke sumber daya sistem dan izin file.</string>
-    <string name="general_info_rationale_shared_user_id">Aplikasi ini menyatakan bahwa ia berjalan di bawah identitas bersama dengan aplikasi lain yang ditandatangani dengan kunci yang sama. Aplikasi yang berbagi identitas ini dapat mengakses data dan izin satu sama lain seolah-olah mereka adalah satu aplikasi.</string>
-    <string name="general_info_rationale_description">Ringkasan opsional yang disediakan oleh pengembang aplikasi dalam manifest.</string>
-    <string name="general_info_rationale_version_name">String versi yang dapat dibaca manusia yang ditampilkan kepada pengguna, seperti "2.5.1" atau "Beta 3".</string>
-    <string name="general_info_rationale_version_code">Integer internal yang meningkat dengan setiap rilis. Sistem menggunakannya untuk menentukan apakah satu versi lebih baru dari yang lain.</string>
-    <string name="general_info_rationale_min_sdk">Tingkat API Android terendah yang didukung aplikasi ini. Perangkat yang menjalankan versi yang lebih lama tidak dapat menginstalnya.</string>
-    <string name="general_info_rationale_target_sdk">Tingkat API yang dirancang dan diuji untuk aplikasi ini. Ini memberi tahu sistem perilaku kompatibilitas mana yang harus diterapkan.</string>
-    <string name="general_info_rationale_debug_access_enabled">Alat pengembangan dapat memeriksa dan mengontrol aplikasi ini saat berjalan. Ini membantu selama pengujian, tetapi aplikasi yang diterbitkan biasanya mematikannya karena siapa pun yang memiliki akses debugging ke perangkat mendapatkan akses tambahan ke aplikasi.</string>
-    <string name="general_info_rationale_debug_access_disabled">Alat pengembangan tidak dapat terhubung ke aplikasi ini menggunakan akses debugging aplikasi Android yang normal.</string>
-    <string name="general_info_rationale_backup_allowed">Android dapat menyertakan data aplikasi ini dalam cadangan atau memindahkannya ke perangkat lain. Data yang tepat tergantung pada aturan cadangan aplikasi dan versi Android.</string>
-    <string name="general_info_rationale_backup_blocked">Aplikasi ini menonaktifkan cadangan cloud Android. Transfer antar perangkat mungkin masih bervariasi berdasarkan versi Android dan produsen perangkat.</string>
-    <string name="general_info_rationale_cleartext_allowed">Pengaturan manifest umum aplikasi memungkinkan koneksi jaringan tanpa enkripsi. Aturan keamanan jaringan kustom dapat menimpa pengaturan ini. Ini tidak membuktikan bahwa aplikasi mengirim data yang tidak terenkripsi.</string>
-    <string name="general_info_rationale_cleartext_blocked">Pengaturan manifest umum aplikasi menonaktifkan koneksi jaringan tanpa enkripsi. Aturan keamanan jaringan kustom dan beberapa pustaka jaringan dapat berperilaku berbeda.</string>
-    <string name="general_info_rationale_app_type">Apakah aplikasi ini adalah aplikasi sistem yang diinstal sebelumnya atau aplikasi yang diinstal pengguna. Aplikasi sistem memiliki hak istimewa yang lebih tinggi dan tidak dapat dihapus sepenuhnya.</string>
     <string name="general_info_rationale_install_source_google_play">Aplikasi ini diunduh dan diinstal melalui Google Play, yang menyaring aplikasi sebelum menerbitkannya.</string>
     <string name="general_info_rationale_install_source_samsung_galaxy_store">Aplikasi ini diunduh dan diinstal melalui Galaxy Store Samsung, toko aplikasi milik produsen.</string>
     <string name="general_info_rationale_install_source_amazon_appstore">Aplikasi ini diunduh dan diinstal melalui Amazon Appstore.</string>
@@ -132,31 +58,12 @@
     <string name="general_info_rationale_install_source_local_install">Aplikasi ini diinstal langsung dari komputer yang terhubung, biasanya menggunakan alat pengembang seperti ADB, daripada melalui toko aplikasi.</string>
     <string name="general_info_rationale_install_source_system">Aplikasi ini sudah terpasang sebelumnya di perangkat sebagai bagian dari sistem operasi atau perangkat lunak produsen.</string>
     <string name="general_info_rationale_install_source_unknown">Android tidak dapat melaporkan dari mana aplikasi ini diinstal. Ini bisa terjadi setelah memulihkan cadangan perangkat atau dengan beberapa penginstal khusus produsen.</string>
-    <string name="general_info_rationale_installer_package">Nama paket aplikasi yang melakukan instalasi, seperti "com.android.vending" untuk Google Play.</string>
-    <string name="general_info_rationale_install_initiator">Aplikasi yang memulai instalasi, seperti browser atau pengelola file untuk aplikasi yang diinstal secara sideload, atau toko aplikasi untuk instalasi dari toko. Ini bisa berbeda dari paket penginstal di atas.</string>
-    <string name="general_info_rationale_install_originator">Paket yang menyediakan file APK, ketika Android melaporkannya terpisah dari aplikasi yang memulai instalasi. Sebagian besar instalasi meninggalkan ini kosong.</string>
-    <string name="general_info_rationale_first_installed">Tanggal dan waktu aplikasi ini pertama kali diinstal di perangkat.</string>
-    <string name="general_info_rationale_last_updated">Tanggal dan waktu pembaruan terbaru untuk aplikasi ini.</string>
-    <string name="general_info_rationale_last_used">Tanggal dan waktu perkiraan aplikasi ini terakhir dibuka oleh pengguna.</string>
-    <string name="general_info_rationale_apk_directory">Jalur sistem file tempat file APK disimpan di perangkat.</string>
-    <string name="general_info_rationale_data_directory">Jalur sistem file tempat aplikasi menyimpan data pribadi, basis data, dan preferensi bersama.</string>
-    <string name="general_info_rationale_install_location">Lokasi penyimpanan yang disukai yang dinyatakan oleh pengembang — penyimpanan internal, penyimpanan eksternal, atau otomatis.</string>
-    <string name="general_info_rationale_apk_size">Ukuran gabungan dari file APK yang terinstal di disk, tidak termasuk data aplikasi, cache, dan file yang dihasilkan saat runtime. Sebagian besar aplikasi yang diinstal dari Google Play dibagi menjadi satu APK dasar ditambah APK tambahan untuk bahasa dan kepadatan layar perangkat Anda; total ini mencakup semuanya.</string>
-    <string name="general_info_rationale_total_size">Ukuran gabungan dari APK, data aplikasi, dan file yang di-cache. Memerlukan izin akses penggunaan.</string>
-    <string name="general_info_rationale_native_library_abis">Jenis prosesor yang termasuk kode native yang dikompilasi untuk aplikasi ini, dibaca dari file APK\'s sendiri daripada apa yang dilaporkan perangkat ini.</string>
-    <string name="general_info_native_library_device_support">Perangkat ini mendukung: %1$s.</string>
-    <string name="general_info_native_library_incompatible">Tidak ada jenis prosesor tersebut yang cocok dengan apa yang didukung perangkat ini, jadi kode native aplikasi ini kemungkinan tidak akan berjalan di sini.</string>
     <string name="components_title">Komponen</string>
-    <string name="components_error">Gagal memuat komponen</string>
     <string name="components_type_activities">Aktivitas</string>
     <string name="components_type_services">Layanan</string>
     <string name="components_type_receivers">Penerima</string>
     <string name="components_type_providers">Penyedia</string>
-    <string name="components_tag_exported">Diekspor</string>
-    <string name="components_tag_launcher">Peluncur</string>
     <string name="components_detail_launcher">Layar peluncur</string>
-    <string name="components_detail_launcher_explanation">Ini yang terbuka ketika Anda mengetuk ikon aplikasi.</string>
-    <string name="components_tag_unprotected">Diekspor tanpa pengaman izin</string>
     <string name="components_flag_stop_with_task">Berhenti dengan tugas</string>
     <string name="components_flag_stop_with_task_explanation">Menutup saat Anda menggeser aplikasi dari daftar terbaru.</string>
     <string name="components_flag_single_user">Pengguna tunggal</string>
@@ -165,39 +72,6 @@
     <string name="components_flag_isolated_process_explanation">Berjalan dalam sandbox tanpa izin sendiri.</string>
     <string name="components_flag_external_service">Layanan eksternal</string>
     <string name="components_flag_external_service_explanation">Aplikasi lain dapat menjalankan ini di dalam proses mereka sendiri.</string>
-    <string name="components_flag_enabled">Ya</string>
-    <string name="components_detail_full_name">Nama lengkap</string>
-    <string name="components_detail_section_reachability">Keterjangkauan</string>
-    <string name="components_detail_section_details">Rincian</string>
-    <string name="components_detail_section_intent_filters">Permintaan yang diterima komponen ini</string>
-    <string name="components_detail_intent_filters_explanation">Android dan aplikasi lain menggunakan deklarasi ini untuk memutuskan permintaan, tautan, dan konten mana yang dapat mencapai komponen ini.</string>
-    <string name="components_detail_intent_filters_unavailable">Filter intent tidak dapat dibaca untuk aplikasi ini.</string>
-    <string name="components_detail_intent_filters_open">Lihat filter intent</string>
-    <plurals name="components_intent_filter_count">
-        <item quantity="other">%1$d filter intent</item>
-    </plurals>
-    <string name="components_detail_intent_actions">Tindakan</string>
-    <string name="components_detail_intent_actions_explanation">Apa yang diminta aplikasi lain atau Android untuk dilakukan oleh komponen ini.</string>
-    <string name="components_detail_intent_categories">Kategori</string>
-    <string name="components_detail_intent_categories_explanation">Kategori yang diizinkan oleh filter ini. Setiap kategori yang disediakan oleh permintaan harus dicantumkan di sini.</string>
-    <string name="components_detail_intent_data">Tautan dan konten</string>
-    <string name="components_detail_intent_data_explanation">Alamat web, jenis file, atau konten lain yang dapat ditangani oleh komponen ini.</string>
-    <string name="components_detail_intent_data_rule">%1$s: %2$s</string>
-    <string name="components_detail_intent_allowed_uri_parts">Detail tautan yang diizinkan</string>
-    <string name="components_detail_intent_allowed_uri_parts_explanation">Semua detail dalam grup ini harus cocok agar grup dapat mengizinkan tautan. Android mengevaluasi grup dalam urutan manifest.</string>
-    <string name="components_detail_intent_blocked_uri_parts">Detail tautan yang diblokir</string>
-    <string name="components_detail_intent_blocked_uri_parts_explanation">Detail ini mendefinisikan aturan pencocokan pemblokiran. Android mengevaluasinya dengan aturan tautan lain dari filter dalam urutan manifest.</string>
-    <string name="components_detail_intent_auto_verify">Permintaan verifikasi</string>
-    <string name="components_detail_intent_auto_verify_requested">Diminta</string>
-    <string name="components_detail_intent_auto_verify_explanation">Aplikasi meminta Android untuk memverifikasi bahwa identitas penandatanganannya diizinkan untuk membuka tautan situs web ini.</string>
-    <string name="components_detail_intent_activity_priority">Prioritas pencocokan</string>
-    <string name="components_detail_intent_activity_priority_explanation">Angka yang lebih tinggi dapat membuat aktivitas ini lebih disukai dibandingkan aktivitas pencocokan lainnya, tergantung pada aturan pengalihan Android.</string>
-    <string name="components_detail_intent_receiver_priority">Prioritas siaran</string>
-    <string name="components_detail_intent_receiver_priority_explanation">Untuk siaran terurut, angka yang lebih tinggi dapat membuat penerima ini berjalan lebih awal, tergantung pada batasan Android.</string>
-    <string name="components_detail_intent_declared_priority">Prioritas yang dinyatakan</string>
-    <string name="components_detail_intent_declared_priority_explanation">Manifest menyatakan nilai ini, tetapi Android tidak menggunakannya untuk memilih antara layanan atau penyedia yang cocok.</string>
-    <string name="components_detail_intent_order">Urutan pengiriman</string>
-    <string name="components_detail_intent_order_explanation">Angka yang lebih tinggi dianggap pertama ketika aplikasi ini memiliki beberapa filter yang cocok.</string>
     <string name="components_intent_data_scheme">Skema alamat</string>
     <string name="components_intent_data_host">Host</string>
     <string name="components_intent_data_port">Port</string>
@@ -233,13 +107,10 @@
     <string name="components_detail_permission">Izin yang diperlukan</string>
     <string name="components_detail_read_permission">Izin baca</string>
     <string name="components_detail_write_permission">Izin tulis</string>
-    <string name="components_detail_label">Label</string>
     <string name="components_detail_target_activity">Aktivitas target</string>
     <string name="components_detail_parent">Aktivitas induk</string>
     <string name="components_detail_authority">Otoritas</string>
     <string name="components_detail_section_path_permissions">Izin jalur</string>
-    <string name="components_detail_path_permissions_explanation">Aturan untuk jalur tertentu di bawah penyedia ini. Sebuah jalur dapat memberikan atau mencabut akses di luar izin baca dan tulis umum di atas.</string>
-    <string name="components_detail_path_permission_path">Jalur</string>
     <string name="components_detail_path_permission_open">Tidak ada izin yang diperlukan</string>
     <string name="components_path_permission_type_literal">Cocok dengan jalur ini persis</string>
     <string name="components_path_permission_type_prefix">Cocok dengan jalur ini dan segala sesuatu di bawahnya</string>
@@ -247,30 +118,12 @@
     <string name="components_path_permission_type_advanced_glob">Cocok dengan jalur ini menggunakan pola wildcard yang lebih canggih</string>
     <string name="components_path_permission_type_suffix">Cocok dengan jalur apa pun yang diakhiri dengan ini</string>
     <string name="certificates_title">Sertifikat penandatangan</string>
-    <string name="certificates_error">Gagal memuat sertifikat penandatangan</string>
-    <string name="certificates_empty">Tidak ada sertifikat penandatangan yang ditemukan</string>
-    <string name="certificates_card_position">%1$s (%2$d dari %3$d)</string>
-    <string name="certificates_signer_position">Penandatangan %1$d dari %2$d</string>
-    <string name="certificates_current_certificate">Sertifikat penandatangan saat ini</string>
     <string name="certificates_current_certificates">Sertifikat penandatanganan saat ini</string>
     <string name="certificates_history">Riwayat penandatanganan</string>
-    <plurals name="certificates_history_description">
-        <item quantity="other">Kunci penandatanganan %d yang diverifikasi Android digunakan sebelum kunci saat ini. Kunci sebelumnya yang paling baru digunakan muncul pertama.</item>
-    </plurals>
-    <string name="certificates_original_signing_key">Kunci penandatanganan asli</string>
-    <string name="certificates_previous_signing_key">Kunci penandatanganan sebelumnya</string>
-    <string name="certificates_debug_title">Sertifikat debug</string>
-    <string name="certificates_debug_description">Aplikasi ini menggunakan kunci debug bersama Android bukannya kunci penerbitan pribadi. Itu normal untuk pengujian, tetapi tidak untuk aplikasi yang diterbitkan.</string>
-    <string name="certificates_signer">Penandatangan</string>
-    <string name="certificates_details">Detail sertifikat</string>
     <string name="certificates_organization">Organisasi</string>
     <string name="certificates_name">Nama</string>
     <string name="certificates_country">Negara</string>
     <string name="certificates_issuer">Diterbitkan oleh</string>
-    <string name="certificates_unknown_signer">Penanda tangan tidak dikenal</string>
-    <string name="certificates_self_signed">Ditandatangani sendiri</string>
-    <string name="certificates_self_signed_value">Penandatangan menerbitkan sertifikat ini</string>
-    <string name="certificates_self_signed_explanation">Sertifikat yang ditandatangani sendiri adalah hal yang normal untuk aplikasi Android. Bandingkan sidik jari sertifikat dengan sumber tepercaya ketika Anda perlu memverifikasi penerbit.</string>
     <string name="certificates_validity">Keabsahan</string>
     <string name="certificates_date_range">%1$s hingga %2$s</string>
     <string name="certificates_valid">Valid</string>
@@ -279,18 +132,12 @@
     <string name="certificates_valid_explanation">Sertifikat berada dalam periode validitas yang dinyatakan.</string>
     <string name="certificates_expired_explanation">Android dapat terus menerima aplikasi yang diinstal setelah sertifikat penandatanganannya kedaluwarsa. Bandingkan sidik jari dengan sumber tepercaya jika aplikasi atau pembaruan tidak terduga.</string>
     <string name="certificates_not_yet_valid_explanation">Periode validitas sertifikat belum dimulai. Periksa tanggal perangkat dan verifikasi sidik jari sebelum mempercayai aplikasi ini.</string>
-    <string name="certificates_current_signers">Penandatangan saat ini</string>
-    <string name="certificates_single_signer">Penandatangan tunggal</string>
     <string name="certificates_multiple_signers">Beberapa penandatangan</string>
-    <string name="certificates_single_signer_explanation">Aplikasi ini saat ini ditandatangani oleh satu sertifikat. Jika pengembang memutar kunci penandatanganan lagi, Android memverifikasi perubahan tersebut terhadap riwayat penandatanganan tepercaya aplikasi ini.</string>
-    <string name="certificates_multiple_signers_explanation">Aplikasi ini saat ini ditandatangani oleh beberapa sertifikat. Android mengharuskan pembaruan menggunakan set penandatangan yang sama.</string>
     <string name="certificates_scheme">Skema</string>
     <string name="certificates_scheme_v1">v1</string>
     <string name="certificates_scheme_v2">v2</string>
     <string name="certificates_scheme_v3">v3</string>
     <string name="certificates_scheme_v3_1">v3.1</string>
-    <string name="certificates_scheme_explanation">Skema adalah format tanda tangan yang digunakan Android untuk memverifikasi APK ini. Skema yang lebih baru (v2 dan seterusnya) juga melindungi seluruh file, bukan hanya entri individu, jadi aplikasi modern yang hanya ditandatangani dengan v1 layak untuk diperhatikan. Algoritma di bawah ini menggambarkan bagaimana sertifikat penandatanganan itu sendiri ditandatangani, bukan skema penandatanganan APK.</string>
-    <string name="certificates_algorithm">Algoritma</string>
     <string name="certificates_algorithm_strong">Kuat</string>
     <string name="certificates_algorithm_weak">Lemah</string>
     <string name="certificates_algorithm_unknown">Kekuatan tidak diketahui</string>
@@ -299,35 +146,16 @@
     <string name="certificates_algorithm_md5_explanation">%1$s menggunakan MD5. MD5 tidak tahan tabrakan dan tidak aman untuk sertifikat tanda tangan. Sertifikat tanda tangan baru harus menggunakan SHA-256 atau yang lebih kuat.</string>
     <string name="certificates_algorithm_md2_explanation">%1$s menggunakan MD2. MD2 sudah usang dan rentan terhadap serangan praktis, sehingga tidak aman untuk sertifikat tanda tangan. Sertifikat tanda tangan baru harus menggunakan SHA-256 atau yang lebih kuat.</string>
     <string name="certificates_algorithm_unknown_explanation">Kekuatan %1$s tidak dapat dinilai dari nama algoritmanya. Jenis dan ukuran kunci juga dapat mempengaruhi keamanannya.</string>
-    <string name="certificates_serial">Nomor seri</string>
-    <string name="certificates_serial_explanation">Penerbit sertifikat memberikan nomor ini untuk mengidentifikasi sertifikat. Gunakan bersama dengan nama penerbit; ini bukan sidik jari sertifikat.</string>
-    <string name="certificates_certificate_fingerprints">Sidik jari sertifikat</string>
-    <string name="certificates_public_key_fingerprints">Sidik jari kunci publik</string>
-    <string name="certificates_fingerprint">sidik jari</string>
-    <string name="certificates_sha256">SHA-256</string>
-    <string name="certificates_sha1">SHA-1</string>
-    <string name="certificates_md5">MD5</string>
     <string name="certificates_explain">Jelaskan %1$s</string>
     <string name="requirements_title">Persyaratan perangkat</string>
-    <string name="requirements_error">Tidak dapat membaca persyaratan perangkat dari aplikasi ini.</string>
-    <string name="requirements_empty">Aplikasi ini tidak menyatakan persyaratan perangkat.</string>
-    <string name="requirements_section_header">%1$s · %2$d</string>
     <string name="requirements_section_required">Diperlukan</string>
     <string name="requirements_section_required_explanation">Aplikasi tidak akan diinstal tanpa ini.</string>
     <string name="requirements_section_optional">Opsional</string>
     <string name="requirements_section_optional_explanation">Digunakan jika tersedia.</string>
-    <plurals name="requirements_missing_summary">
-        <item quantity="other">%1$d persyaratan yang tidak dapat dipenuhi perangkat ini</item>
-    </plurals>
     <string name="requirements_missing">Tidak ada di perangkat ini</string>
     <string name="requirements_missing_version">Membutuhkan %1$s · perangkat ini memiliki %2$s</string>
     <string name="requirements_open_gl_es">OpenGL ES %1$s</string>
     <string name="requirements_label_with_version">%1$s %2$s</string>
-    <string name="requirements_detail_identifier">Pengidentifikasi</string>
-    <string name="requirements_detail_necessity">Kepentingan</string>
-    <string name="requirements_detail_availability">Di perangkat ini</string>
-    <string name="requirements_detail_version">Versi</string>
-    <string name="requirements_detail_version_comparison">%1$s diperlukan · %2$s di perangkat ini</string>
     <string name="requirements_availability_available">Tersedia</string>
     <string name="requirements_availability_available_explanation">Perangkat ini menyediakannya, jadi aplikasi dapat menggunakannya.</string>
     <string name="requirements_availability_missing">Tidak tersedia</string>
@@ -410,22 +238,11 @@
     <string name="requirement_backup">Cadangan sistem</string>
     <string name="requirement_sip_voip">Panggilan internet</string>
     <string name="requirement_connection_service">Integrasi aplikasi panggilan</string>
-    <string name="splitapks_title">APK terpisah</string>
-    <plurals name="splitapks_heading">
-        <item quantity="other">%1$d APK terpisah terpasang</item>
-    </plurals>
-    <string name="splitapks_explanation">Aplikasi ini diinstal sebagai APK dasar ditambah APK terpisah tambahan ini, format pengiriman yang digunakan Google Play untuk mengirim hanya kode dan sumber daya yang dibutuhkan perangkat Anda.</string>
-    <string name="splitapks_error">Gagal memuat APK terpisah</string>
-    <string name="splitapks_empty">Aplikasi ini tidak memiliki APK terpisah yang terpasang.</string>
     <string name="splitapks_kind_feature">Modul fitur</string>
     <string name="splitapks_kind_abi">Arsitektur CPU</string>
     <string name="splitapks_kind_density">Kepadatan layar</string>
     <string name="splitapks_kind_language">Bahasa</string>
-    <string name="splitapks_detail_type">Tipe</string>
-    <string name="splitapks_detail_identifier">Pengidentifikasi</string>
     <string name="splitapks_detail_file_name">Nama file</string>
-    <string name="splitapks_detail_size">Ukuran</string>
-    <string name="splitapks_detail_path">Jalur lengkap</string>
     <string name="splitapks_abi_arm64_v8a">ARM64 (64-bit)</string>
     <string name="splitapks_abi_armeabi_v7a">ARM (32-bit)</string>
     <string name="splitapks_abi_armeabi">ARM (legacy, 32-bit)</string>
@@ -442,38 +259,12 @@
     <string name="splitapks_density_xxxhdpi">Layar dengan kepadatan ekstra-ekstra-ekstra tinggi</string>
     <string name="splitapks_density_nodpi">Sumber daya yang tidak tergantung pada kepadatan</string>
     <string name="splitapks_density_anydpi">Kepadatan apa pun (sumber daya vektor)</string>
-    <string name="nativelibraries_title">File pustaka asli</string>
-    <plurals name="nativelibraries_heading">
-        <item quantity="other">%1$d pustaka native yang dibundel</item>
-    </plurals>
-    <string name="nativelibraries_explanation">Setiap file kode native yang berbeda yang dikirimkan aplikasi ini, satu baris per nama file bahkan ketika pustaka yang sama dibangun untuk beberapa arsitektur prosesor.</string>
-    <string name="nativelibraries_error">Gagal memuat pustaka native</string>
-    <string name="nativelibraries_empty">Aplikasi ini tidak memiliki pustaka native yang dibundel.</string>
-    <string name="nativelibraries_supported">Didukung di perangkat ini</string>
-    <string name="nativelibraries_not_supported">Tidak didukung di perangkat ini</string>
-    <string name="nativelibraries_not_supported_explanation">Tidak ada jenis prosesor yang dibangun untuk pustaka ini yang cocok dengan apa yang didukung perangkat ini, jadi kode ini kemungkinan tidak akan berjalan di sini.</string>
-    <string name="nativelibraries_detail_device_support">Di perangkat ini</string>
     <string name="nativelibraries_detail_abis">Dibangun untuk</string>
-    <string name="nativelibraries_detail_total_size">Ukuran total</string>
-    <string name="nativelibraries_detail_section_variants">Per jenis prosesor</string>
-    <string name="nativelibraries_detail_variant_source">Dibundel di %1$s</string>
     <string name="manifest_title">Manifest Android</string>
-    <string name="manifest_error">Manifest tidak dapat dibaca</string>
-    <plurals name="manifest_line_count">
-        <item quantity="other">%1$d baris</item>
-    </plurals>
-    <plurals name="manifest_base_split_note">
-        <item quantity="other">Menampilkan manifest APK dasar. Aplikasi ini memiliki %1$d pemisahan tambahan yang terinstal dengan manifest mereka sendiri.</item>
-    </plurals>
-    <string name="components_launch">Mulai komponen ini</string>
-    <string name="components_launch_started">Permintaan mulai dikirim — aplikasi memutuskan apa yang terjadi selanjutnya.</string>
-    <string name="components_launch_broadcast_sent">Siaran dikirim — tidak ada yang melaporkan apakah itu ditangani.</string>
-    <string name="components_launch_failed">Sistem menolak untuk memulai ini.</string>
     <string name="certificates_validity_on_date_valid">Berlaku pada tanggal ini</string>
     <string name="certificates_validity_on_date_expired">Kedaluwarsa pada tanggal ini</string>
     <string name="certificates_validity_on_date_not_yet">Belum berlaku pada tanggal ini</string>
     <string name="certificates_validity_on_date_valid_explanation">Sertifikat ini masih dalam masa berlaku pada hari Apk Analyzer mencatatnya.</string>
     <string name="certificates_validity_on_date_expired_explanation">Tanggal akhir sertifikat ini sudah lewat pada hari Apk Analyzer mencatatnya.</string>
     <string name="certificates_validity_on_date_not_yet_explanation">Tanggal mulai sertifikat ini masih di masa depan pada hari Apk Analyzer mencatatnya.</string>
-    <string name="app_info_unavailable">Perangkat ini tidak dapat membuka Info aplikasi</string>
 </resources>

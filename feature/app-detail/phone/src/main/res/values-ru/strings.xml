@@ -330,4 +330,45 @@
         <item quantity="many">Фиксируется с %1$s · %2$d изменений</item>
         <item quantity="other">Фиксируется с %1$s · %2$d изменения</item>
     </plurals>
+    <string name="components_detail_full_name">Полное имя</string>
+    <string name="components_detail_intent_filters_open">Просмотреть фильтры намерений</string>
+    <plurals name="components_intent_filter_count">
+        <item quantity="one">%1$d фильтр намерений</item>
+        <item quantity="few">%1$d фильтры намерений</item>
+        <item quantity="many">%1$d фильтры намерений</item>
+        <item quantity="other">%1$d фильтры намерений</item>
+    </plurals>
+    <string name="components_detail_intent_actions_explanation">Что другое приложение или Android просит этот компонент сделать.</string>
+    <string name="components_detail_intent_categories_explanation">Категории, которые разрешает этот фильтр. Каждая категория, предоставленная запросом, должна быть указана здесь.</string>
+    <string name="components_detail_intent_data_explanation">Веб-адреса, типы файлов или другой контент, который этот компонент говорит, что может обрабатывать.</string>
+    <string name="components_detail_intent_allowed_uri_parts_explanation">Все детали в этой группе должны совпадать, чтобы группа разрешила ссылку. Android оценивает группы в порядке манифеста.</string>
+    <string name="components_detail_intent_blocked_uri_parts_explanation">Эти детали определяют правило блокировки совпадения. Android оценивает его вместе с другими правилами ссылок фильтра в порядке манифеста.</string>
+    <string name="components_detail_intent_activity_priority_explanation">Большее число может сделать это действие предпочтительным по сравнению с другими совпадающими действиями, в соответствии с правилами маршрутизации Android.</string>
+    <string name="components_detail_intent_receiver_priority_explanation">Для упорядоченных широковещательных рассылок большее число может заставить этот приемник работать раньше, в соответствии с ограничениями Android.</string>
+    <string name="components_detail_intent_declared_priority_explanation">Манифест объявляет это значение, но Android не использует его для выбора между совпадающими службами или провайдерами.</string>
+    <string name="components_detail_intent_order_explanation">Большее число рассматривается первым, когда у этого приложения есть несколько совпадающих фильтров.</string>
+    <plurals name="certificates_history_description">
+        <item quantity="one">Android проверил %d ключ подписи, использованный до текущего ключа.</item>
+        <item quantity="few">Android проверил %d ключа подписи, использованных до текущего ключа. Последний использованный предыдущий ключ отображается первым.</item>
+        <item quantity="many">Android проверил %d ключей подписи, использованных до текущего ключа. Последний использованный предыдущий ключ отображается первым.</item>
+        <item quantity="other">Android проверил %d ключей подписи, использованных до текущего ключа. Последний использованный предыдущий ключ отображается первым.</item>
+    </plurals>
+    <string name="certificates_details">Детали сертификата</string>
+    <string name="certificates_fingerprint">отпечаток</string>
+    <plurals name="requirements_missing_summary">
+        <item quantity="one">%1$d требование, которое это устройство не может выполнить</item>
+        <item quantity="few">%1$d требования, которые это устройство не может выполнить</item>
+        <item quantity="many">%1$d требований, которые это устройство не может выполнить</item>
+        <item quantity="other">%1$d требований, которые это устройство не может выполнить</item>
+    </plurals>
+    <string name="requirements_detail_necessity">Необходимость</string>
+    <string name="requirements_detail_availability">На этом устройстве</string>
+    <string name="requirements_detail_version">Версия</string>
+    <string name="requirements_detail_version_comparison">%1$s требуется · %2$s на этом устройстве</string>
+    <string name="splitapks_detail_type">Тип</string>
+    <string name="splitapks_detail_size">Размер</string>
+    <string name="nativelibraries_explanation">Каждый отдельный файл нативного кода, который поставляется с этим приложением, одна строка на имя файла, даже если одна и та же библиотека собрана для нескольких архитектур процессоров.</string>
+    <string name="nativelibraries_detail_device_support">На этом устройстве</string>
+    <string name="nativelibraries_detail_total_size">Общий размер</string>
+    <string name="components_launch">Запустить этот компонент</string>
 </resources>

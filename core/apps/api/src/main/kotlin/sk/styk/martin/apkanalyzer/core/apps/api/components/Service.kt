@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apps.components
+package sk.styk.martin.apkanalyzer.core.apps.api.components
 
 data class Service(
     val name: String,

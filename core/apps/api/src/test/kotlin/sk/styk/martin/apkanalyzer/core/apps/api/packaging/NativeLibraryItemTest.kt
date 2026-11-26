@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apps.packaging
+package sk.styk.martin.apkanalyzer.core.apps.api.packaging
 
 import io.kotest.matchers.shouldBe
 import org.junit.Test

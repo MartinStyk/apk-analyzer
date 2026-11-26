@@ -12,11 +12,11 @@ import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryDevice
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryPersistenceRepository
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryRecord
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.CapturedSection
-import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
-import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
-import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibrariesRepository
-import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.AppDetailRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.InstalledAppsRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.model.InstalledApp
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibrariesRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.SigningSchemeRepository
 import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationKey
 import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider

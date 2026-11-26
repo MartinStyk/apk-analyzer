@@ -1,10 +1,10 @@
 package sk.styk.martin.apkanalyzer.core.aiinsights.appdescription.metadata
 
 import sk.styk.martin.apkanalyzer.core.aiinsights.appdescription.AppAiContext
-import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
-import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
-import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
-import sk.styk.martin.apkanalyzer.core.apps.permissions.UsedPermission
+import sk.styk.martin.apkanalyzer.core.apps.api.AppDetailRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.model.AppDetail
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.UsedPermission
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import javax.inject.Inject

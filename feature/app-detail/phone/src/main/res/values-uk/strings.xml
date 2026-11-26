@@ -330,4 +330,45 @@
         <item quantity="many">Фіксується з %1$s · %2$d змін</item>
         <item quantity="other">Фіксується з %1$s · %2$d зміни</item>
     </plurals>
+    <string name="components_detail_full_name">Повне ім\'я</string>
+    <string name="components_detail_intent_filters_open">Переглянути intent filters</string>
+    <plurals name="components_intent_filter_count">
+        <item quantity="one">%1$d intent filter</item>
+        <item quantity="few">%1$d intent filters</item>
+        <item quantity="many">%1$d intent filters</item>
+        <item quantity="other">%1$d intent filters</item>
+    </plurals>
+    <string name="components_detail_intent_actions_explanation">Що інша програма або Android просить цей компонент зробити.</string>
+    <string name="components_detail_intent_categories_explanation">Категорії, які цей фільтр дозволяє. Кожна категорія, надана запитом, повинна бути вказана тут.</string>
+    <string name="components_detail_intent_data_explanation">Веб-адреси, типи файлів або інший вміст, який цей компонент стверджує, що може обробляти.</string>
+    <string name="components_detail_intent_allowed_uri_parts_explanation">Усі деталі в цій групі повинні збігатися, щоб група дозволила посилання. Android оцінює групи в порядку маніфесту.</string>
+    <string name="components_detail_intent_blocked_uri_parts_explanation">Ці деталі визначають правило блокування. Android оцінює його разом з іншими правилами посилань фільтра в порядку маніфесту.</string>
+    <string name="components_detail_intent_activity_priority_explanation">Вищий номер може зробити цю Activity переважною над іншими відповідними Activities, відповідно до правил маршрутизації Android.</string>
+    <string name="components_detail_intent_receiver_priority_explanation">Для впорядкованих трансляцій вищий номер може змусити цей Receiver виконуватися раніше, відповідно до обмежень Android.</string>
+    <string name="components_detail_intent_declared_priority_explanation">Маніфест оголошує це значення, але Android не використовує його для вибору між відповідними Services або Providers.</string>
+    <string name="components_detail_intent_order_explanation">Вищий номер вважається першим, коли у цього додатка є кілька відповідних фільтрів.</string>
+    <plurals name="certificates_history_description">
+        <item quantity="one">Android підтвердив %d ключ підпису, що використовувався раніше, ніж поточний ключ.</item>
+        <item quantity="few">Android підтвердив %d ключі підпису, що використовувалися раніше, ніж поточний ключ. Найбільш нещодавно використаний попередній ключ з\'являється першим.</item>
+        <item quantity="many">Android підтвердив %d ключів підпису, що використовувалися раніше, ніж поточний ключ. Найбільш нещодавно використаний попередній ключ з\'являється першим.</item>
+        <item quantity="other">Android підтвердив %d ключів підпису, що використовувалися раніше, ніж поточний ключ. Найбільш нещодавно використаний попередній ключ з\'являється першим.</item>
+    </plurals>
+    <string name="certificates_details">Деталі сертифіката</string>
+    <string name="certificates_fingerprint">відбиток</string>
+    <plurals name="requirements_missing_summary">
+        <item quantity="one">%1$d вимога, яку цей пристрій не може виконати</item>
+        <item quantity="few">%1$d вимоги, які цей пристрій не може виконати</item>
+        <item quantity="many">%1$d вимог, які цей пристрій не може виконати</item>
+        <item quantity="other">%1$d вимог, які цей пристрій не може виконати</item>
+    </plurals>
+    <string name="requirements_detail_necessity">Необхідність</string>
+    <string name="requirements_detail_availability">На цьому пристрої</string>
+    <string name="requirements_detail_version">Версія</string>
+    <string name="requirements_detail_version_comparison">%1$s потрібно · %2$s на цьому пристрої</string>
+    <string name="splitapks_detail_type">Тип</string>
+    <string name="splitapks_detail_size">Розмір</string>
+    <string name="nativelibraries_explanation">Кожен окремий файл рідного коду, який постачається з цим додатком, один рядок на ім\'я файлу, навіть коли одна й та ж бібліотека створена для кількох архітектур процесорів.</string>
+    <string name="nativelibraries_detail_device_support">На цьому пристрої</string>
+    <string name="nativelibraries_detail_total_size">Загальний розмір</string>
+    <string name="components_launch">Запустіть цей компонент</string>
 </resources>

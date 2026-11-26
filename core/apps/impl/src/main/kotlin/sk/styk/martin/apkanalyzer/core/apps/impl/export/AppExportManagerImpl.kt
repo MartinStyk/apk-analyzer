@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apps.export
+package sk.styk.martin.apkanalyzer.core.apps.impl.export
 
 import android.content.Context
 import android.content.pm.PackageManager
@@ -14,6 +14,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
+import sk.styk.martin.apkanalyzer.core.apps.api.export.ApkExportResult
+import sk.styk.martin.apkanalyzer.core.apps.api.export.AppExportManager
+import sk.styk.martin.apkanalyzer.core.apps.api.export.IconExportResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger

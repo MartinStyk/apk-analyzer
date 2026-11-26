@@ -1,56 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string-array name="android_versions">
-        <item>Android 1</item>
-        <item>Android 1.1</item>
-        <item>Android 1.5</item>
-        <item>Android 1.6</item>
-        <item>Android 2.0</item>
-        <item>Android 2.0.1</item>
-        <item>Android 2.1</item>
-        <item>Android 2.2</item>
-        <item>Android 2.3</item>
-        <item>Android 2.3.3</item>
-        <item>Android 3.0</item>
-        <item>Android 3.1</item>
-        <item>Android 3.2</item>
-        <item>Android 4.0</item>
-        <item>Android 4.0.3</item>
-        <item>Android 4.1</item>
-        <item>Android 4.2</item>
-        <item>Android 4.3</item>
-        <item>Android 4.4</item>
-        <item>Android 4.4W</item>
-        <item>Android 5.0</item>
-        <item>Android 5.1.1</item>
-        <item>Android 6.0</item>
-        <item>Android 7.0</item>
-        <item>Android 7.1.2</item>
-        <item>Android 8.0</item>
-        <item>Android 8.1</item>
-        <item>Android 9</item>
-        <item>Android 10</item>
-        <item>Android 11</item>
-        <item>Android 12</item>
-        <item>Android 12L</item>
-        <item>Android 13</item>
-        <item>Android 14</item>
-        <item>Android 15</item>
-        <item>Android 16</item>
-        <item>Android 17</item>
-    </string-array>
-    <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
-    <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_unknown">Невідомо</string>
-    <string name="general_info_title">Загальна інформація</string>
-    <string name="general_info_error">Не вдалося завантажити загальну інформацію</string>
     <string name="general_info_section_identification">Ідентифікація</string>
     <string name="general_info_section_versioning">Версії</string>
     <string name="general_info_section_api_targets">Цілі API</string>
     <string name="general_info_section_security">Налаштування безпеки</string>
     <string name="general_info_section_installation">Встановлення та джерело</string>
     <string name="general_info_section_storage">Сховище та шляхи</string>
-    <string name="general_info_section_native_libraries">Рідні бібліотеки</string>
     <string name="general_info_application_name">Назва програми</string>
     <string name="general_info_package_name">Назва пакета</string>
     <string name="general_info_process_name">Назва процесу</string>
@@ -64,12 +20,7 @@
     <string name="general_info_debug_access">Доступ до налагодження</string>
     <string name="general_info_app_data_backup">Резервне копіювання даних програми</string>
     <string name="general_info_unencrypted_traffic">За замовчуванням незашифрований трафік</string>
-    <string name="general_info_enabled">Увімкнено</string>
-    <string name="general_info_disabled">Вимкнено</string>
-    <string name="general_info_allowed">Дозволено</string>
     <string name="general_info_app_type">Тип програми</string>
-    <string name="general_info_app_type_system">Система</string>
-    <string name="general_info_app_type_user">Користувач</string>
     <string name="general_info_install_source">Джерело встановлення</string>
     <string name="general_info_install_source_google_play">Google Play</string>
     <string name="general_info_install_source_samsung_galaxy_store">Samsung Galaxy Store</string>
@@ -93,40 +44,9 @@
     <string name="general_info_install_location">Місце встановлення</string>
     <string name="general_info_apk_size">Розмір APK</string>
     <string name="general_info_split_apks">Розділені APK</string>
-    <plurals name="general_info_split_apks_value">
-        <item quantity="one">Встановлено як %1$d розділений APK</item>
-        <item quantity="few">Встановлено як %1$d розділені APK</item>
-        <item quantity="many">Встановлено як %1$d розділених APK</item>
-        <item quantity="other">Встановлено як %1$d розділених APK</item>
-    </plurals>
     <string name="general_info_total_size">Загальний розмір</string>
     <string name="general_info_native_library_abis">Архітектури ЦП</string>
-    <string name="general_info_native_library_abis_none">Немає рідного коду</string>
     <string name="general_info_native_library_files">Файли рідної бібліотеки</string>
-    <string name="general_info_native_library_files_none">Не включено</string>
-    <plurals name="general_info_native_library_file_count">
-        <item quantity="one">%1$d файл</item>
-        <item quantity="few">%1$d файли</item>
-        <item quantity="many">%1$d файлів</item>
-        <item quantity="other">%1$d файлів</item>
-    </plurals>
-    <string name="general_info_rationale_application_name">Видима користувачеві мітка програми, як показано на головному екрані та в меню програм.</string>
-    <string name="general_info_rationale_package_name">Унікальний ідентифікатор для цієї програми на пристрої. Жодні дві програми не можуть мати однакову назву пакета.</string>
-    <string name="general_info_rationale_process_name">Назва процесу операційної системи, в якому працює програма. За замовчуванням вона збігається з назвою пакета.</string>
-    <string name="general_info_rationale_uid">Унікальний ідентифікатор, призначений цій програмі системою Android. Він визначає доступ програми до системних ресурсів і дозволів на файли.</string>
-    <string name="general_info_rationale_shared_user_id">Ця програма заявляє, що вона працює під спільною ідентичністю з іншими програмами, підписаними тим самим ключем. Програми, що ділять цю ідентичність, можуть отримувати доступ до даних і дозволів одна одної, як якщо б це була одна програма.</string>
-    <string name="general_info_rationale_description">Необов\'язковий опис, наданий розробником програми в маніфесті.</string>
-    <string name="general_info_rationale_version_name">Людсько-зрозуміла версія рядка, що відображається користувачам, наприклад, "2.5.1" або "Бета 3".</string>
-    <string name="general_info_rationale_version_code">Внутрішнє ціле число, яке збільшується з кожним випуском. Система використовує його, щоб визначити, чи є одна версія новішою за іншу.</string>
-    <string name="general_info_rationale_min_sdk">Найнижчий рівень Android API, який підтримує ця програма. Пристрої, що працюють на старішій версії, не можуть її встановити.</string>
-    <string name="general_info_rationale_target_sdk">Рівень API, для якого програма була спроектована та протестована. Це говорить системі, які поведінкові сумісності застосовувати.</string>
-    <string name="general_info_rationale_debug_access_enabled">Інструменти розробки можуть перевіряти та контролювати цю програму під час її роботи. Це допомагає під час тестування, але опубліковані програми зазвичай вимикають це, оскільки будь-хто з доступом до налагодження пристрою отримує додатковий доступ до програми.</string>
-    <string name="general_info_rationale_debug_access_disabled">Інструменти розробки не можуть підключитися до цієї програми, використовуючи звичайний доступ до налагодження програм Android.</string>
-    <string name="general_info_rationale_backup_allowed">Android може включати дані цієї програми в резервні копії або переміщати їх на інший пристрій. Точні дані залежать від правил резервного копіювання програми та версії Android.</string>
-    <string name="general_info_rationale_backup_blocked">Програма вимикає резервне копіювання в хмарі Android. Передача з пристроя на пристрій може все ще варіюватися залежно від версії Android та виробника пристрою.</string>
-    <string name="general_info_rationale_cleartext_allowed">Загальні налаштування маніфесту програми дозволяють мережеві з\'єднання без шифрування. Користувацькі правила безпеки мережі можуть переважати над цим налаштуванням. Це не доводить, що програма надсилає нешифровані дані.</string>
-    <string name="general_info_rationale_cleartext_blocked">Загальні налаштування маніфесту програми забороняють мережеві з\'єднання без шифрування. Користувацькі правила безпеки мережі та деякі бібліотеки мережі можуть поводитися інакше.</string>
-    <string name="general_info_rationale_app_type">Чи є програма попередньо встановленою системною програмою або програмою, встановленою користувачем. Системні програми мають підвищені привілеї і не можуть бути повністю видалені.</string>
     <string name="general_info_rationale_install_source_google_play">Цю програму було завантажено та встановлено через Google Play, який перевіряє програми перед їх публікацією.</string>
     <string name="general_info_rationale_install_source_samsung_galaxy_store">Цю програму було завантажено та встановлено через Galaxy Store від Samsung, власний магазин програм виробника.</string>
     <string name="general_info_rationale_install_source_amazon_appstore">Цю програму було завантажено та встановлено через Amazon Appstore.</string>
@@ -138,31 +58,12 @@
     <string name="general_info_rationale_install_source_local_install">Цю програму було встановлено безпосередньо з підключеного комп\'ютера, зазвичай за допомогою інструмента для розробників, такого як ADB, а не через магазин програм.</string>
     <string name="general_info_rationale_install_source_system">Цю програму було попередньо встановлено на пристрій як частину операційної системи або програмного забезпечення виробника.</string>
     <string name="general_info_rationale_install_source_unknown">Android не зміг повідомити, звідки була встановлена ця програма. Це може статися після відновлення резервної копії пристрою або з деякими специфічними для виробника установниками.</string>
-    <string name="general_info_rationale_installer_package">Ім\'я пакета програми, яка виконала установку, наприклад, "com.android.vending" для Google Play.</string>
-    <string name="general_info_rationale_install_initiator">Програма, яка розпочала установку, наприклад, браузер або файловий менеджер для програми, встановленої з боку, або магазин програм для установки з магазину. Це може відрізнятися від пакета установника вище.</string>
-    <string name="general_info_rationale_install_originator">Пакет, який надав APK файл, коли Android повідомляє про це окремо від програми, яка розпочала установку. Більшість установок залишають це поле порожнім.</string>
-    <string name="general_info_rationale_first_installed">Дата та час, коли ця програма була вперше встановлена на пристрій.</string>
-    <string name="general_info_rationale_last_updated">Дата та час останнього оновлення цього додатку.</string>
-    <string name="general_info_rationale_last_used">Приблизна дата та час, коли цей додаток востаннє відкривався користувачем.</string>
-    <string name="general_info_rationale_apk_directory">Шлях файлової системи, де зберігається файл APK на пристрої.</string>
-    <string name="general_info_rationale_data_directory">Шлях файлової системи, де додаток зберігає свої приватні дані, бази даних та спільні налаштування.</string>
-    <string name="general_info_rationale_install_location">Переважне місце зберігання, оголошене розробником — внутрішнє зберігання, зовнішнє зберігання або автоматичне.</string>
-    <string name="general_info_rationale_apk_size">Сумарний розмір встановлених файлів APK на диску, без урахування даних додатку, кешів та файлів, згенерованих під час виконання. Більшість додатків, встановлених з Google Play, розділені на базовий APK плюс додаткові APKs для мови та щільності екрана вашого пристрою; цей загальний обсяг охоплює всі з них.</string>
-    <string name="general_info_rationale_total_size">Сумарний розмір APK, даних додатку та кешованих файлів. Потрібно дозволити доступ до використання.</string>
-    <string name="general_info_rationale_native_library_abis">Типи процесорів, для яких цей додаток включає скомпільований рідний код, читаються з власних файлів APK, а не з того, що повідомляє цей пристрій.</string>
-    <string name="general_info_native_library_device_support">Цей пристрій підтримує: %1$s.</string>
-    <string name="general_info_native_library_incompatible">Жоден з цих типів процесорів не відповідає тому, що підтримує цей пристрій, тому рідний код цього додатку, ймовірно, не запуститься тут.</string>
     <string name="components_title">Компоненти</string>
-    <string name="components_error">Не вдалося завантажити компоненти</string>
     <string name="components_type_activities">Activities</string>
     <string name="components_type_services">Services</string>
     <string name="components_type_receivers">Receivers</string>
     <string name="components_type_providers">Providers</string>
-    <string name="components_tag_exported">Експортований</string>
-    <string name="components_tag_launcher">Лаунчер</string>
     <string name="components_detail_launcher">Екран лаунчера</string>
-    <string name="components_detail_launcher_explanation">Це те, що відкривається, коли ви натискаєте на іконку додатка.</string>
-    <string name="components_tag_unprotected">Експортовано без захисту дозволів</string>
     <string name="components_flag_stop_with_task">Зупиняється з завданням</string>
     <string name="components_flag_stop_with_task_explanation">Закривається, коли ви проводите додаток вбік з останніх.</string>
     <string name="components_flag_single_user">Один користувач</string>
@@ -171,42 +72,6 @@
     <string name="components_flag_isolated_process_explanation">Запускається в пісочниці без власних дозволів.</string>
     <string name="components_flag_external_service">Зовнішня служба</string>
     <string name="components_flag_external_service_explanation">Інші програми можуть виконувати це у своєму власному процесі.</string>
-    <string name="components_flag_enabled">Так</string>
-    <string name="components_detail_full_name">Повне ім\'я</string>
-    <string name="components_detail_section_reachability">Доступність</string>
-    <string name="components_detail_section_details">Деталі</string>
-    <string name="components_detail_section_intent_filters">Запити, які цей компонент приймає</string>
-    <string name="components_detail_intent_filters_explanation">Android та інші програми використовують ці декларації, щоб вирішити, які запити, посилання та вміст можуть досягти цього компонента.</string>
-    <string name="components_detail_intent_filters_unavailable">Intent filters не вдалося прочитати для цього додатку.</string>
-    <string name="components_detail_intent_filters_open">Переглянути intent filters</string>
-    <plurals name="components_intent_filter_count">
-        <item quantity="one">%1$d intent filter</item>
-        <item quantity="few">%1$d intent filters</item>
-        <item quantity="many">%1$d intent filters</item>
-        <item quantity="other">%1$d intent filters</item>
-    </plurals>
-    <string name="components_detail_intent_actions">Дії</string>
-    <string name="components_detail_intent_actions_explanation">Що інша програма або Android просить цей компонент зробити.</string>
-    <string name="components_detail_intent_categories">Категорії</string>
-    <string name="components_detail_intent_categories_explanation">Категорії, які цей фільтр дозволяє. Кожна категорія, надана запитом, повинна бути вказана тут.</string>
-    <string name="components_detail_intent_data">Посилання та вміст</string>
-    <string name="components_detail_intent_data_explanation">Веб-адреси, типи файлів або інший вміст, який цей компонент стверджує, що може обробляти.</string>
-    <string name="components_detail_intent_data_rule">%1$s: %2$s</string>
-    <string name="components_detail_intent_allowed_uri_parts">Деталі дозволених посилань</string>
-    <string name="components_detail_intent_allowed_uri_parts_explanation">Усі деталі в цій групі повинні збігатися, щоб група дозволила посилання. Android оцінює групи в порядку маніфесту.</string>
-    <string name="components_detail_intent_blocked_uri_parts">Деталі заблокованого посилання</string>
-    <string name="components_detail_intent_blocked_uri_parts_explanation">Ці деталі визначають правило блокування. Android оцінює його разом з іншими правилами посилань фільтра в порядку маніфесту.</string>
-    <string name="components_detail_intent_auto_verify">Запит на перевірку</string>
-    <string name="components_detail_intent_auto_verify_requested">Запитано</string>
-    <string name="components_detail_intent_auto_verify_explanation">Додаток запитує у Android перевірити, чи дозволено його підписаній ідентичності відкривати ці веб-сайти.</string>
-    <string name="components_detail_intent_activity_priority">Пріоритет відповідності</string>
-    <string name="components_detail_intent_activity_priority_explanation">Вищий номер може зробити цю Activity переважною над іншими відповідними Activities, відповідно до правил маршрутизації Android.</string>
-    <string name="components_detail_intent_receiver_priority">Пріоритет трансляції</string>
-    <string name="components_detail_intent_receiver_priority_explanation">Для впорядкованих трансляцій вищий номер може змусити цей Receiver виконуватися раніше, відповідно до обмежень Android.</string>
-    <string name="components_detail_intent_declared_priority">Оголошений пріоритет</string>
-    <string name="components_detail_intent_declared_priority_explanation">Маніфест оголошує це значення, але Android не використовує його для вибору між відповідними Services або Providers.</string>
-    <string name="components_detail_intent_order">Порядок доставки</string>
-    <string name="components_detail_intent_order_explanation">Вищий номер вважається першим, коли у цього додатка є кілька відповідних фільтрів.</string>
     <string name="components_intent_data_scheme">Схема адреси</string>
     <string name="components_intent_data_host">Хост</string>
     <string name="components_intent_data_port">Порт</string>
@@ -242,13 +107,10 @@
     <string name="components_detail_permission">Необхідний дозвіл</string>
     <string name="components_detail_read_permission">Дозвіл на читання</string>
     <string name="components_detail_write_permission">Дозвіл на запис</string>
-    <string name="components_detail_label">Мітка</string>
     <string name="components_detail_target_activity">Цільова Activity</string>
     <string name="components_detail_parent">Батьківська Activity</string>
     <string name="components_detail_authority">Авторитет</string>
     <string name="components_detail_section_path_permissions">Дозволи на шляхи</string>
-    <string name="components_detail_path_permissions_explanation">Правила для конкретних шляхів під цим провайдером. Шлях може надавати або забирати доступ понад загальні дозволи на читання та запис вище.</string>
-    <string name="components_detail_path_permission_path">Шлях</string>
     <string name="components_detail_path_permission_open">Дозвіл не потрібен</string>
     <string name="components_path_permission_type_literal">Відповідає цьому точному шляху</string>
     <string name="components_path_permission_type_prefix">Відповідає цьому шляху та всьому, що під ним</string>
@@ -256,33 +118,12 @@
     <string name="components_path_permission_type_advanced_glob">Відповідає цьому шляху, використовуючи розширений шаблон підстановки</string>
     <string name="components_path_permission_type_suffix">Відповідає будь-якому шляху, що закінчується на це</string>
     <string name="certificates_title">Сертифікат підпису</string>
-    <string name="certificates_error">Не вдалося завантажити сертифікат підпису</string>
-    <string name="certificates_empty">Сертифікат підпису не знайдено</string>
-    <string name="certificates_card_position">%1$s (%2$d з %3$d)</string>
-    <string name="certificates_signer_position">Підписувач %1$d з %2$d</string>
-    <string name="certificates_current_certificate">Поточний сертифікат підпису</string>
     <string name="certificates_current_certificates">Поточні сертифікати підпису</string>
     <string name="certificates_history">Історія підпису</string>
-    <plurals name="certificates_history_description">
-        <item quantity="one">Android підтвердив %d ключ підпису, що використовувався раніше, ніж поточний ключ.</item>
-        <item quantity="few">Android підтвердив %d ключі підпису, що використовувалися раніше, ніж поточний ключ. Найбільш нещодавно використаний попередній ключ з\'являється першим.</item>
-        <item quantity="many">Android підтвердив %d ключів підпису, що використовувалися раніше, ніж поточний ключ. Найбільш нещодавно використаний попередній ключ з\'являється першим.</item>
-        <item quantity="other">Android підтвердив %d ключів підпису, що використовувалися раніше, ніж поточний ключ. Найбільш нещодавно використаний попередній ключ з\'являється першим.</item>
-    </plurals>
-    <string name="certificates_original_signing_key">Оригінальний ключ підпису</string>
-    <string name="certificates_previous_signing_key">Попередній ключ підпису</string>
-    <string name="certificates_debug_title">Сертифікат для налагодження</string>
-    <string name="certificates_debug_description">Цей додаток використовує спільний ключ налагодження Android замість приватного ключа публікації. Це нормально для тестування, але не для опублікованого додатка.</string>
-    <string name="certificates_signer">Підписувач</string>
-    <string name="certificates_details">Деталі сертифіката</string>
     <string name="certificates_organization">Організація</string>
     <string name="certificates_name">Ім\'я</string>
     <string name="certificates_country">Країна</string>
     <string name="certificates_issuer">Видано</string>
-    <string name="certificates_unknown_signer">Невідомий підписувач</string>
-    <string name="certificates_self_signed">Самопідписаний</string>
-    <string name="certificates_self_signed_value">Підписувач видав цей сертифікат</string>
-    <string name="certificates_self_signed_explanation">Самопідписані сертифікати є нормальними для Android додатків. Порівняйте відбиток сертифіката з надійним джерелом, коли вам потрібно перевірити видавця.</string>
     <string name="certificates_validity">Дійсність</string>
     <string name="certificates_date_range">%1$s до %2$s</string>
     <string name="certificates_valid">Дійсний</string>
@@ -291,18 +132,12 @@
     <string name="certificates_valid_explanation">Сертифікат знаходиться в межах свого заявленого терміну дії.</string>
     <string name="certificates_expired_explanation">Android може продовжувати приймати встановлений додаток після закінчення терміну дії його підписного сертифіката. Порівняйте відбиток з надійним джерелом, якщо додаток або оновлення є несподіваними.</string>
     <string name="certificates_not_yet_valid_explanation">Термін дії сертифіката ще не розпочався. Перевірте дату на пристрої та перевірте відбиток перед тим, як довіряти цьому додатку.</string>
-    <string name="certificates_current_signers">Поточні підписувачі</string>
-    <string name="certificates_single_signer">Один підписувач</string>
     <string name="certificates_multiple_signers">Кілька підписувачів</string>
-    <string name="certificates_single_signer_explanation">Цей додаток в даний час підписаний одним сертифікатом. Якщо розробник знову змінить підписний ключ, Android перевіряє зміну на основі історії довірених підписів цього додатку.</string>
-    <string name="certificates_multiple_signers_explanation">Цей додаток в даний час підписаний кількома сертифікатами. Android вимагає, щоб оновлення використовували той же набір підписувачів.</string>
     <string name="certificates_scheme">Схема</string>
     <string name="certificates_scheme_v1">v1</string>
     <string name="certificates_scheme_v2">v2</string>
     <string name="certificates_scheme_v3">v3</string>
     <string name="certificates_scheme_v3_1">v3.1</string>
-    <string name="certificates_scheme_explanation">Схема - це формат підпису, який Android використовував для перевірки цього APK. Новіші схеми (v2 і пізніше) також захищають увесь файл, а не лише окремі записи, тому сучасний додаток, підписаний лише v1, варто переглянути ще раз. Алгоритм нижче описує, як сам сертифікат підпису був підписаний, а не схему підпису APK.</string>
-    <string name="certificates_algorithm">Алгоритм</string>
     <string name="certificates_algorithm_strong">Сильний</string>
     <string name="certificates_algorithm_weak">Слабкий</string>
     <string name="certificates_algorithm_unknown">Невідома сила</string>
@@ -311,38 +146,16 @@
     <string name="certificates_algorithm_md5_explanation">%1$s використовує MD5. MD5 не є стійким до колізій і небезпечний для сертифікатів підпису. Нові сертифікати підпису повинні використовувати SHA-256 або сильніші.</string>
     <string name="certificates_algorithm_md2_explanation">%1$s використовує MD2. MD2 застарілий і вразливий до практичних атак, тому він небезпечний для сертифікатів підпису. Нові сертифікати підпису повинні використовувати SHA-256 або сильніші.</string>
     <string name="certificates_algorithm_unknown_explanation">Силу %1$s не можна оцінити за його назвою алгоритму. Тип і розмір ключа також можуть впливати на його безпеку.</string>
-    <string name="certificates_serial">Серійний номер</string>
-    <string name="certificates_serial_explanation">Видавець сертифіката призначає цей номер для ідентифікації сертифіката. Використовуйте його разом з назвою видавця; це не відбиток сертифіката.</string>
-    <string name="certificates_certificate_fingerprints">Відбитки сертифікатів</string>
-    <string name="certificates_public_key_fingerprints">Відбитки публічних ключів</string>
-    <string name="certificates_fingerprint">відбиток</string>
-    <string name="certificates_sha256">SHA-256</string>
-    <string name="certificates_sha1">SHA-1</string>
-    <string name="certificates_md5">MD5</string>
     <string name="certificates_explain">Пояснити %1$s</string>
     <string name="requirements_title">Вимоги до пристрою</string>
-    <string name="requirements_error">Не вдалося прочитати вимоги до пристрою цього додатка.</string>
-    <string name="requirements_empty">Цей додаток не оголошує вимог до пристрою.</string>
-    <string name="requirements_section_header">%1$s · %2$d</string>
     <string name="requirements_section_required">Обов\'язково</string>
     <string name="requirements_section_required_explanation">Додаток не буде встановлено без цих вимог.</string>
     <string name="requirements_section_optional">Необов\'язково</string>
     <string name="requirements_section_optional_explanation">Використовується, коли доступно.</string>
-    <plurals name="requirements_missing_summary">
-        <item quantity="one">%1$d вимога, яку цей пристрій не може виконати</item>
-        <item quantity="few">%1$d вимоги, які цей пристрій не може виконати</item>
-        <item quantity="many">%1$d вимог, які цей пристрій не може виконати</item>
-        <item quantity="other">%1$d вимог, які цей пристрій не може виконати</item>
-    </plurals>
     <string name="requirements_missing">Не на цьому пристрої</string>
     <string name="requirements_missing_version">Потрібно %1$s · цей пристрій має %2$s</string>
     <string name="requirements_open_gl_es">OpenGL ES %1$s</string>
     <string name="requirements_label_with_version">%1$s %2$s</string>
-    <string name="requirements_detail_identifier">Ідентифікатор</string>
-    <string name="requirements_detail_necessity">Необхідність</string>
-    <string name="requirements_detail_availability">На цьому пристрої</string>
-    <string name="requirements_detail_version">Версія</string>
-    <string name="requirements_detail_version_comparison">%1$s потрібно · %2$s на цьому пристрої</string>
     <string name="requirements_availability_available">Доступно</string>
     <string name="requirements_availability_available_explanation">Цей пристрій надає це, тому додаток може його використовувати.</string>
     <string name="requirements_availability_missing">Недоступно</string>
@@ -425,25 +238,11 @@
     <string name="requirement_backup">Системне резервне копіювання</string>
     <string name="requirement_sip_voip">Інтернет-дзвінки</string>
     <string name="requirement_connection_service">Інтеграція програми дзвінків</string>
-    <string name="splitapks_title">Розділені APK</string>
-    <plurals name="splitapks_heading">
-        <item quantity="one">%1$d розділений APK встановлено</item>
-        <item quantity="few">%1$d розділені APK встановлено</item>
-        <item quantity="many">%1$d розділених APK встановлено</item>
-        <item quantity="other">%1$d розділених APK встановлено</item>
-    </plurals>
-    <string name="splitapks_explanation">Ця програма була встановлена як базовий APK плюс ці додаткові розділені APK, формат доставки, який використовує Google Play, щоб надіслати лише код і ресурси, які потрібні вашому пристрою.</string>
-    <string name="splitapks_error">Не вдалося завантажити розділені APK</string>
-    <string name="splitapks_empty">Ця програма не має встановлених розділених APK.</string>
     <string name="splitapks_kind_feature">Модуль функцій</string>
     <string name="splitapks_kind_abi">Архітектура ЦП</string>
     <string name="splitapks_kind_density">Щільність екрану</string>
     <string name="splitapks_kind_language">Мова</string>
-    <string name="splitapks_detail_type">Тип</string>
-    <string name="splitapks_detail_identifier">Ідентифікатор</string>
     <string name="splitapks_detail_file_name">Ім\'я файлу</string>
-    <string name="splitapks_detail_size">Розмір</string>
-    <string name="splitapks_detail_path">Повний шлях</string>
     <string name="splitapks_abi_arm64_v8a">ARM64 (64-розрядний)</string>
     <string name="splitapks_abi_armeabi_v7a">ARM (32-розрядний)</string>
     <string name="splitapks_abi_armeabi">ARM (спадковий, 32-розрядний)</string>
@@ -460,47 +259,12 @@
     <string name="splitapks_density_xxxhdpi">Екрани з наднаднадвисокою щільністю</string>
     <string name="splitapks_density_nodpi">Ресурси, незалежні від щільності</string>
     <string name="splitapks_density_anydpi">Будь-яка щільність (векторні ресурси)</string>
-    <string name="nativelibraries_title">Файли рідної бібліотеки</string>
-    <plurals name="nativelibraries_heading">
-        <item quantity="one">%1$d нативна бібліотека в комплекті</item>
-        <item quantity="few">%1$d нативні бібліотеки в комплекті</item>
-        <item quantity="many">%1$d нативних бібліотек в комплекті</item>
-        <item quantity="other">%1$d нативних бібліотек в комплекті</item>
-    </plurals>
-    <string name="nativelibraries_explanation">Кожен окремий файл рідного коду, який постачається з цим додатком, один рядок на ім\'я файлу, навіть коли одна й та ж бібліотека створена для кількох архітектур процесорів.</string>
-    <string name="nativelibraries_error">Не вдалося завантажити рідні бібліотеки</string>
-    <string name="nativelibraries_empty">Цей додаток не має вбудованих рідних бібліотек.</string>
-    <string name="nativelibraries_supported">Підтримується на цьому пристрої</string>
-    <string name="nativelibraries_not_supported">Не підтримується на цьому пристрої</string>
-    <string name="nativelibraries_not_supported_explanation">Жоден з типів процесорів, для яких була створена ця бібліотека, не відповідає тому, що підтримує цей пристрій, тому цей код, ймовірно, не запуститься тут.</string>
-    <string name="nativelibraries_detail_device_support">На цьому пристрої</string>
     <string name="nativelibraries_detail_abis">Створено для</string>
-    <string name="nativelibraries_detail_total_size">Загальний розмір</string>
-    <string name="nativelibraries_detail_section_variants">На тип процесора</string>
-    <string name="nativelibraries_detail_variant_source">Включено в %1$s</string>
     <string name="manifest_title">Android manifest</string>
-    <string name="manifest_error">Не вдалося прочитати маніфест</string>
-    <plurals name="manifest_line_count">
-        <item quantity="one">%1$d рядок</item>
-        <item quantity="few">%1$d рядки</item>
-        <item quantity="many">%1$d рядків</item>
-        <item quantity="other">%1$d рядків</item>
-    </plurals>
-    <plurals name="manifest_base_split_note">
-        <item quantity="one">Показує базовий APK маніфест. Ця програма має %1$d додатково встановлений спліт з власним маніфестом.</item>
-        <item quantity="few">Показує базовий APK маніфест. Ця програма має %1$d додатково встановлені спліти з їхніми власними маніфестами.</item>
-        <item quantity="many">Показує базовий APK маніфест. Ця програма має %1$d додатково встановлених сплітів з їхніми власними маніфестами.</item>
-        <item quantity="other">Показує базовий APK маніфест. Ця програма має %1$d додатково встановлених сплітів з їхніми власними маніфестами.</item>
-    </plurals>
-    <string name="components_launch">Запустіть цей компонент</string>
-    <string name="components_launch_started">Запит на запуск надіслано — додаток вирішує, що робити далі.</string>
-    <string name="components_launch_broadcast_sent">Відправлено широкомовлення — нічого не повідомляє, чи було це оброблено.</string>
-    <string name="components_launch_failed">Система відмовилася запустити це.</string>
     <string name="certificates_validity_on_date_valid">Дійсний на цю дату</string>
     <string name="certificates_validity_on_date_expired">Минув на цю дату</string>
     <string name="certificates_validity_on_date_not_yet">Ще не дійсний на цю дату</string>
     <string name="certificates_validity_on_date_valid_explanation">У день фіксації в Apk Analyzer цей сертифікат був у межах терміну дії.</string>
     <string name="certificates_validity_on_date_expired_explanation">У день фіксації в Apk Analyzer дата закінчення цього сертифіката вже минула.</string>
     <string name="certificates_validity_on_date_not_yet_explanation">У день фіксації в Apk Analyzer дата початку цього сертифіката ще не настала.</string>
-    <string name="app_info_unavailable">Цей пристрій не може відкрити «Інформація про програму»</string>
 </resources>

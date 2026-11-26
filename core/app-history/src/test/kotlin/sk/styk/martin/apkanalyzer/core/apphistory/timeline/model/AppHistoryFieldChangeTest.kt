@@ -2,11 +2,11 @@ package sk.styk.martin.apkanalyzer.core.apphistory.timeline.model
 
 import io.kotest.matchers.shouldBe
 import org.junit.Test
-import sk.styk.martin.apkanalyzer.core.apps.components.Activity
-import sk.styk.martin.apkanalyzer.core.apps.components.ContentProvider
-import sk.styk.martin.apkanalyzer.core.apps.components.ProviderPathMatchType
-import sk.styk.martin.apkanalyzer.core.apps.components.ProviderPathPermission
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryFile
+import sk.styk.martin.apkanalyzer.core.apps.api.components.Activity
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ContentProvider
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ProviderPathMatchType
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ProviderPathPermission
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraryFile
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes

@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apkfiles
+package sk.styk.martin.apkanalyzer.core.apkfiles.api
 
 import android.net.Uri
 import sk.styk.martin.apkanalyzer.core.common.model.bytes

@@ -11,15 +11,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.styk.martin.apkanalyzer.core.apps.components.IntentFilterDataRuleType
-import sk.styk.martin.apkanalyzer.core.apps.components.labelRes
+import sk.styk.martin.apkanalyzer.core.apps.api.components.IntentFilterDataRuleType
+import sk.styk.martin.apkanalyzer.core.apps.api.components.labelRes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.BottomSheet
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.DetailField
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 @Composable
 internal fun IntentFilterDetailBottomSheet(
@@ -44,25 +44,25 @@ internal fun IntentFilterDetailBottomSheet(
             Spacer(modifier = Modifier.height(16.dp))
             if (filter.actions.isNotEmpty()) {
                 DetailField(
-                    label = stringResource(AppsR.string.components_detail_intent_actions),
+                    label = stringResource(DomainR.string.components_detail_intent_actions),
                     value = filter.actions.map { it.toDisplayRequestType() }.joinToString(separator = "\n"),
-                    explanation = stringResource(AppsR.string.components_detail_intent_actions_explanation),
+                    explanation = stringResource(R.string.components_detail_intent_actions_explanation),
                     onCopy = onCopy,
                 )
             }
             if (filter.categories.isNotEmpty()) {
                 DetailField(
-                    label = stringResource(AppsR.string.components_detail_intent_categories),
+                    label = stringResource(DomainR.string.components_detail_intent_categories),
                     value = filter.categories.map { it.toDisplayCategory() }.joinToString(separator = "\n"),
-                    explanation = stringResource(AppsR.string.components_detail_intent_categories_explanation),
+                    explanation = stringResource(R.string.components_detail_intent_categories_explanation),
                     onCopy = onCopy,
                 )
             }
             if (filter.dataRules.isNotEmpty()) {
                 DetailField(
-                    label = stringResource(AppsR.string.components_detail_intent_data),
+                    label = stringResource(DomainR.string.components_detail_intent_data),
                     value = filter.dataRules.toDisplayText(),
-                    explanation = stringResource(AppsR.string.components_detail_intent_data_explanation),
+                    explanation = stringResource(R.string.components_detail_intent_data_explanation),
                     onCopy = onCopy,
                 )
             }
@@ -70,17 +70,17 @@ internal fun IntentFilterDetailBottomSheet(
                 DetailField(
                     label = stringResource(
                         if (group.isAllowed) {
-                            AppsR.string.components_detail_intent_allowed_uri_parts
+                            DomainR.string.components_detail_intent_allowed_uri_parts
                         } else {
-                            AppsR.string.components_detail_intent_blocked_uri_parts
+                            DomainR.string.components_detail_intent_blocked_uri_parts
                         },
                     ),
                     value = group.dataRules.toDisplayText(),
                     explanation = stringResource(
                         if (group.isAllowed) {
-                            AppsR.string.components_detail_intent_allowed_uri_parts_explanation
+                            R.string.components_detail_intent_allowed_uri_parts_explanation
                         } else {
-                            AppsR.string.components_detail_intent_blocked_uri_parts_explanation
+                            R.string.components_detail_intent_blocked_uri_parts_explanation
                         },
                     ),
                     onCopy = onCopy,
@@ -88,26 +88,26 @@ internal fun IntentFilterDetailBottomSheet(
             }
             if (filter.isAutoVerify) {
                 DetailField(
-                    label = stringResource(AppsR.string.components_detail_intent_auto_verify),
-                    value = stringResource(AppsR.string.components_detail_intent_auto_verify_requested),
-                    explanation = stringResource(AppsR.string.components_detail_intent_auto_verify_explanation),
+                    label = stringResource(DomainR.string.components_detail_intent_auto_verify),
+                    value = stringResource(DomainR.string.components_detail_intent_auto_verify_requested),
+                    explanation = stringResource(DomainR.string.components_detail_intent_auto_verify_explanation),
                     onCopy = onCopy,
                 )
             }
             if (filter.priority != 0) {
                 val (labelRes, explanationRes) = when (componentType) {
                     ComponentType.Activity ->
-                        AppsR.string.components_detail_intent_activity_priority to
-                            AppsR.string.components_detail_intent_activity_priority_explanation
+                        DomainR.string.components_detail_intent_activity_priority to
+                            R.string.components_detail_intent_activity_priority_explanation
 
                     ComponentType.Receiver ->
-                        AppsR.string.components_detail_intent_receiver_priority to
-                            AppsR.string.components_detail_intent_receiver_priority_explanation
+                        DomainR.string.components_detail_intent_receiver_priority to
+                            R.string.components_detail_intent_receiver_priority_explanation
 
                     ComponentType.Service,
                     ComponentType.Provider,
-                    -> AppsR.string.components_detail_intent_declared_priority to
-                        AppsR.string.components_detail_intent_declared_priority_explanation
+                    -> DomainR.string.components_detail_intent_declared_priority to
+                        R.string.components_detail_intent_declared_priority_explanation
                 }
                 DetailField(
                     label = stringResource(labelRes),
@@ -118,9 +118,9 @@ internal fun IntentFilterDetailBottomSheet(
             }
             if (filter.order != 0) {
                 DetailField(
-                    label = stringResource(AppsR.string.components_detail_intent_order),
+                    label = stringResource(DomainR.string.components_detail_intent_order),
                     value = filter.order.toString(),
-                    explanation = stringResource(AppsR.string.components_detail_intent_order_explanation),
+                    explanation = stringResource(R.string.components_detail_intent_order_explanation),
                     onCopy = onCopy,
                 )
             }
@@ -136,7 +136,7 @@ internal fun ComponentIntentFilterItem.displayTitle(componentType: ComponentType
 @Composable
 private fun List<IntentFilterDataRuleItem>.toDisplayText(): String = map { rule ->
     stringResource(
-        AppsR.string.components_detail_intent_data_rule,
+        DomainR.string.components_detail_intent_data_rule,
         stringResource(rule.type.labelRes),
         rule.value,
     )

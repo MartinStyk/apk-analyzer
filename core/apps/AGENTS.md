@@ -3,16 +3,30 @@
 ## Purpose and Boundary
 
 Core domain module for installed-app and APK analysis. It owns platform extraction, normalization,
-caching, and the domain models consumed by features. The package is
-`sk.styk.martin.apkanalyzer.core.apps`.
+caching, and the domain models consumed by features.
 
 Expose repositories and typed models, not Android framework structures. Features may interpret the
 domain data for presentation but must not repeat extraction or security policy.
 
+## Modules
+
+The domain is split per [core API/impl split](../../docs/app/technical/core-api-impl-split.md).
+
+* `api` (`sk.styk.martin.apkanalyzer.core.apps.api`) - repository and resolver interfaces, models,
+  the `*Text.kt` labels with their strings, pure predicates and helpers over the models (`filterBy`,
+  `search`, `comparator`, `requirements`, `groupedByLibrary`, `resolveAppInstallSource`,
+  `resolveCertificateTrustLevel`, the `isLaunchable`/reachability predicates), and the fakes and
+  model factories in `testFixtures`. No Hilt and no platform access.
+* `impl` (`sk.styk.martin.apkanalyzer.core.apps.impl`) - every `*Impl`, the `AppsModule` bindings,
+  manifest and signing-block parsing, and the `PackageInfo`/`ApplicationInfo` helpers
+  (`isSystemInstalledApp`, `resolveAppCategory`). Everything is `internal`; only the app shells
+  depend on it.
+
 ## Domain Package Map
 
-The module uses package-by-domain organization. Each domain package keeps its repository or resolver,
-models, implementation, and private analysis helpers together.
+The module uses package-by-domain organization. Each domain package exists in both modules under the
+same name: `api` keeps its interface, models, and labels; `impl` keeps its implementation and private
+analysis helpers.
 
 * `model/` - the small set of app-level models composed across domains.
 * `signing/` - certificates, signer history, trust, algorithms, and signing-scheme inspection.
@@ -27,7 +41,8 @@ models, implementation, and private analysis helpers together.
 * `usagestats/` and `storagestats/` - permission-gated device statistics.
 * `export/` - single-app APK and icon export. Multi-app inventory export lives in
   [`core:app-export`](../app-export/AGENTS.md).
-* `sdkversion/` - Android version labels.
+* `sdkversion/` - Android version labels. `SdkVersionResolver` is in `api`; the version array it
+  reads is an `impl` resource.
 * `sorting/` - `AppSortType` and its comparator over `InstalledApp`, shared by the phone and TV app
   lists so both order apps identically. Which options a screen offers stays with the screen.
 * `filtering/` - `AppFilterState`, the `filterBy` predicate, permission presets, quick filters, and
@@ -41,12 +56,13 @@ models, implementation, and private analysis helpers together.
 Keep the Hilt bindings grouped by these domains. A new independent repository family earns its own
 domain package; do not return to flat `analysis/`, `model/`, or `util/` grab-bags.
 
-Shared presentation text lives next to its domain, in `*Text.kt` files with the strings in this
-module's `res/`: labels and explanations for install sources, certificates, components, device
-requirements, split APKs, and the General info fields. Both app-detail UIs (phone and TV) use them,
-so every explanation is written and translated once. Requirement sectioning (`requirements`) and
-native-library grouping (`groupedByLibrary`) live here for the same reason. Screen chrome that only
-one app shows stays in that feature module.
+Shared presentation text lives next to its domain, in `api`'s `*Text.kt` files with the strings in
+`api`'s `res/`: labels and explanations for install sources, certificates, components, device
+requirements, split APKs, and the General info fields. Both app-detail UIs (phone and TV),
+`core:app-history`, and inventory export use them, so every explanation is written and translated
+once. Requirement sectioning (`requirements`) and native-library grouping (`groupedByLibrary`) live
+here for the same reason. Copy only `feature:app-detail` shows lives in that feature: its `domain`
+when phone and TV both show it, its `phone` module otherwise.
 
 ## Repository and Cache Boundaries
 

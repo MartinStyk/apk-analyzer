@@ -8,15 +8,15 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.FeatureAvailability
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.RequirementItem
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.RequirementSection
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Requirements
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.availabilityExplanationRes
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.explanationRes
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.label
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.labelRes
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.missingText
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.FeatureAvailability
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.RequirementItem
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.RequirementSection
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.Requirements
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.availabilityExplanationRes
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.explanationRes
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.label
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.labelRes
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.missingText
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
@@ -31,7 +31,8 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.InfoSectionLis
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionEmpty
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionLoading
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 @Composable
 internal fun TvRequirementsScreen(
@@ -69,7 +70,7 @@ private fun TvRequirementsContent(
             title = title,
             appName = appName,
             appReference = appReference,
-            message = stringResource(AppsR.string.requirements_error),
+            message = stringResource(DomainR.string.requirements_error),
             onRetry = { onAction(TvRequirementsAction.Retry) },
         )
 
@@ -78,7 +79,7 @@ private fun TvRequirementsContent(
                 title = title,
                 appName = appName,
                 appReference = appReference,
-                message = stringResource(AppsR.string.requirements_empty),
+                message = stringResource(DomainR.string.requirements_empty),
             )
         } else {
             InfoSectionList(
@@ -94,10 +95,10 @@ private fun TvRequirementsContent(
 @Composable
 private fun requirementSection(section: RequirementSection): InfoSection {
     val resources = LocalResources.current
-    val identifierLabel = stringResource(AppsR.string.requirements_detail_identifier)
+    val identifierLabel = stringResource(DomainR.string.requirements_detail_identifier)
     val sectionExplanation = stringResource(section.explanationRes)
     return InfoSection(
-        title = stringResource(AppsR.string.requirements_section_header, stringResource(section.labelRes), section.requirements.size),
+        title = stringResource(DomainR.string.requirements_section_header, stringResource(section.labelRes), section.requirements.size),
         rows = section.requirements.map { item ->
             InfoRow(
                 key = "${section.isRequired}:${item.identifier}",

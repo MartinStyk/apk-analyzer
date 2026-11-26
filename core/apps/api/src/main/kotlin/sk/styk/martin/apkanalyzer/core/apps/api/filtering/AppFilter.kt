@@ -1,6 +1,6 @@
-package sk.styk.martin.apkanalyzer.core.apps.filtering
+package sk.styk.martin.apkanalyzer.core.apps.api.filtering
 
-import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
+import sk.styk.martin.apkanalyzer.core.apps.api.model.InstalledApp
 import java.time.Instant
 import kotlin.time.Duration.Companion.days
 import kotlin.time.toJavaDuration

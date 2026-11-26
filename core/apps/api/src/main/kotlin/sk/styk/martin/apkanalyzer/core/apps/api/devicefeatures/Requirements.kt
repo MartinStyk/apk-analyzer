@@ -1,6 +1,6 @@
-package sk.styk.martin.apkanalyzer.core.apps.devicefeatures
+package sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures
 
-import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
+import sk.styk.martin.apkanalyzer.core.apps.api.model.AppDetail
 import java.util.Locale
 
 data class Requirements(val sections: List<RequirementSection>, val missingRequiredCount: Int)

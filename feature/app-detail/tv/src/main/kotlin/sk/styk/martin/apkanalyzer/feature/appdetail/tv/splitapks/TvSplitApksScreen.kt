@@ -9,10 +9,10 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.apps.packaging.InstalledSplitApk
-import sk.styk.martin.apkanalyzer.core.apps.packaging.SplitApkKind
-import sk.styk.martin.apkanalyzer.core.apps.packaging.friendlyQualifier
-import sk.styk.martin.apkanalyzer.core.apps.packaging.labelRes
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.InstalledSplitApk
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.SplitApkKind
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.friendlyQualifier
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.labelRes
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
@@ -27,7 +27,8 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.InfoSectionLis
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionEmpty
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionLoading
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 @Composable
 internal fun TvSplitApksScreen(
@@ -53,7 +54,7 @@ private fun TvSplitApksContent(
     appReference: AppReference,
     onAction: (TvSplitApksAction) -> Unit,
 ) {
-    val title = stringResource(AppsR.string.splitapks_title)
+    val title = stringResource(DomainR.string.splitapks_title)
     when (state) {
         TvSplitApksState.Loading -> SectionLoading(
             title = title,
@@ -65,7 +66,7 @@ private fun TvSplitApksContent(
             title = title,
             appName = appName,
             appReference = appReference,
-            message = stringResource(AppsR.string.splitapks_error),
+            message = stringResource(DomainR.string.splitapks_error),
             onRetry = { onAction(TvSplitApksAction.Retry) },
         )
 
@@ -74,7 +75,7 @@ private fun TvSplitApksContent(
                 title = title,
                 appName = appName,
                 appReference = appReference,
-                message = stringResource(AppsR.string.splitapks_empty),
+                message = stringResource(DomainR.string.splitapks_empty),
             )
         } else {
             InfoSectionList(
@@ -83,7 +84,7 @@ private fun TvSplitApksContent(
                 appReference = appReference,
                 sections = listOf(
                     InfoSection(
-                        title = pluralStringResource(AppsR.plurals.splitapks_heading, state.splits.size, state.splits.size),
+                        title = pluralStringResource(DomainR.plurals.splitapks_heading, state.splits.size, state.splits.size),
                         rows = state.splits.map { splitRow(it) },
                     ),
                 ),
@@ -106,10 +107,10 @@ private fun splitRow(split: InstalledSplitApk): InfoRow {
         label = split.kind.friendlyQualifier(split.qualifier, LocalResources.current),
         value = stringResource(R.string.tv_value_pair, kind, split.size.formatted()),
         explanation = listOfNotNull(
-            stringResource(AppsR.string.splitapks_explanation),
-            stringResource(R.string.tv_label_value, stringResource(AppsR.string.splitapks_detail_identifier), split.qualifier),
+            stringResource(DomainR.string.splitapks_explanation),
+            stringResource(R.string.tv_label_value, stringResource(DomainR.string.splitapks_detail_identifier), split.qualifier),
             stringResource(R.string.tv_label_value, stringResource(AppsR.string.splitapks_detail_file_name), split.fileName),
-            split.filePath?.let { stringResource(R.string.tv_label_value, stringResource(AppsR.string.splitapks_detail_path), it) },
+            split.filePath?.let { stringResource(R.string.tv_label_value, stringResource(DomainR.string.splitapks_detail_path), it) },
         ).joinToString(separator = "\n\n"),
         icon = icon,
         status = kind,

@@ -1,7 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone.requirements
 
 import androidx.compose.ui.graphics.vector.ImageVector
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.RequirementItem
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.RequirementItem
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.requirementIcon
 

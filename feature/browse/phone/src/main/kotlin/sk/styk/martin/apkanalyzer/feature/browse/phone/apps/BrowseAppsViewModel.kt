@@ -22,8 +22,8 @@ import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseDimension
 import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseSubAttribute
 import sk.styk.martin.apkanalyzer.core.appindex.browse.bucketsFor
 import sk.styk.martin.apkanalyzer.core.appindex.model.AppIndexStatus
-import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
-import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
+import sk.styk.martin.apkanalyzer.core.apps.api.InstalledAppsRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 
 @HiltViewModel(assistedFactory = BrowseAppsViewModel.Factory::class)

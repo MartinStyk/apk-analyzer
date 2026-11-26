@@ -1,11 +1,11 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone.certificates
 
 import androidx.compose.runtime.Immutable
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificatePrincipal
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateValidity
-import sk.styk.martin.apkanalyzer.core.apps.signing.SignatureAlgorithmAssessment
-import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeVersion
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificatePrincipal
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateTrustLevel
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateValidity
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.SignatureAlgorithmAssessment
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.SigningSchemeVersion
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
 import java.time.Instant
 

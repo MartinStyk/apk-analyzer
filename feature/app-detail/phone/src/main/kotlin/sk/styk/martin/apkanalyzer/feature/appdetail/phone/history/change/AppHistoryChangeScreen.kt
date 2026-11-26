@@ -50,19 +50,19 @@ import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.label
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionItem
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionScope
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.labelRes
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.DeviceFeatures
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Feature
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.label
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.toRequirementItem
-import sk.styk.martin.apkanalyzer.core.apps.installsource.rationaleRes
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryItem
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryVariant
-import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
-import sk.styk.martin.apkanalyzer.core.apps.signing.Certificate
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificatePrincipal
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
-import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeVersion
-import sk.styk.martin.apkanalyzer.core.apps.signing.labelRes
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.DeviceFeatures
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.Feature
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.label
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.toRequirementItem
+import sk.styk.martin.apkanalyzer.core.apps.api.installsource.rationaleRes
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraryItem
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraryVariant
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.Certificate
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificatePrincipal
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateTrustLevel
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.SigningSchemeVersion
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.labelRes
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
@@ -113,7 +113,8 @@ import java.time.Instant
 import kotlin.math.abs
 import sk.styk.martin.apkanalyzer.core.apphistory.R as HistoryR
 import sk.styk.martin.apkanalyzer.core.apppermissions.R as PermissionsR
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 private const val COLLAPSED_GROUP_SIZE = 5
 
@@ -355,7 +356,7 @@ private fun LazyListScope.section(
                     ValueRow(
                         label = stringResource(AppsR.string.certificates_scheme),
                         value = schemes.schemeChangeText(),
-                        rationale = stringResource(AppsR.string.certificates_scheme_explanation),
+                        rationale = stringResource(DomainR.string.certificates_scheme_explanation),
                         onShowRationale = onShowRationale,
                         onCopy = onCopy,
                     )
@@ -397,12 +398,12 @@ private fun LazyListScope.section(
             categoryHeader(key = "android-versions", titleRes = HistoryR.string.app_history_category_android_versions)
             section.minSdk?.let { change ->
                 item(key = "min-sdk") {
-                    SdkRow(AppsR.string.general_info_min_sdk, AppsR.string.general_info_rationale_min_sdk, change, onShowRationale, onCopy)
+                    SdkRow(AppsR.string.general_info_min_sdk, DomainR.string.general_info_rationale_min_sdk, change, onShowRationale, onCopy)
                 }
             }
             section.targetSdk?.let { change ->
                 item(key = "target-sdk") {
-                    SdkRow(AppsR.string.general_info_target_sdk, AppsR.string.general_info_rationale_target_sdk, change, onShowRationale, onCopy)
+                    SdkRow(AppsR.string.general_info_target_sdk, DomainR.string.general_info_rationale_target_sdk, change, onShowRationale, onCopy)
                 }
             }
         }
@@ -418,7 +419,7 @@ private fun LazyListScope.section(
                         if (delta >= 0) HistoryR.string.app_history_delta_up else HistoryR.string.app_history_delta_down,
                         abs(delta).bytes.formatted(),
                     ),
-                    rationale = stringResource(AppsR.string.general_info_rationale_apk_size),
+                    rationale = stringResource(DomainR.string.general_info_rationale_apk_size),
                     onShowRationale = onShowRationale,
                     onCopy = onCopy,
                 )
@@ -503,24 +504,24 @@ private enum class AppSetting(
 ) {
     Debug(
         labelRes = AppsR.string.general_info_debug_access,
-        onValueRes = AppsR.string.general_info_enabled,
-        offValueRes = AppsR.string.general_info_disabled,
-        onRationaleRes = AppsR.string.general_info_rationale_debug_access_enabled,
-        offRationaleRes = AppsR.string.general_info_rationale_debug_access_disabled,
+        onValueRes = DomainR.string.general_info_enabled,
+        offValueRes = DomainR.string.general_info_disabled,
+        onRationaleRes = DomainR.string.general_info_rationale_debug_access_enabled,
+        offRationaleRes = DomainR.string.general_info_rationale_debug_access_disabled,
     ),
     Backup(
         labelRes = AppsR.string.general_info_app_data_backup,
-        onValueRes = AppsR.string.general_info_allowed,
-        offValueRes = AppsR.string.general_info_disabled,
-        onRationaleRes = AppsR.string.general_info_rationale_backup_allowed,
-        offRationaleRes = AppsR.string.general_info_rationale_backup_blocked,
+        onValueRes = DomainR.string.general_info_allowed,
+        offValueRes = DomainR.string.general_info_disabled,
+        onRationaleRes = DomainR.string.general_info_rationale_backup_allowed,
+        offRationaleRes = DomainR.string.general_info_rationale_backup_blocked,
     ),
     Cleartext(
         labelRes = AppsR.string.general_info_unencrypted_traffic,
-        onValueRes = AppsR.string.general_info_allowed,
-        offValueRes = AppsR.string.general_info_disabled,
-        onRationaleRes = AppsR.string.general_info_rationale_cleartext_allowed,
-        offRationaleRes = AppsR.string.general_info_rationale_cleartext_blocked,
+        onValueRes = DomainR.string.general_info_allowed,
+        offValueRes = DomainR.string.general_info_disabled,
+        onRationaleRes = DomainR.string.general_info_rationale_cleartext_allowed,
+        offRationaleRes = DomainR.string.general_info_rationale_cleartext_blocked,
     ),
 }
 
@@ -802,8 +803,8 @@ private fun SdkRow(
 
 @Composable
 private fun HistorySdkLevel.text(): String = when {
-    version != null && label != null -> stringResource(AppsR.string.app_detail_sdk_version, version, label)
-    version != null -> stringResource(AppsR.string.app_detail_sdk_version_no_label, version)
+    version != null && label != null -> stringResource(DomainR.string.app_detail_sdk_version, version, label)
+    version != null -> stringResource(DomainR.string.app_detail_sdk_version_no_label, version)
     else -> stringResource(AppsR.string.app_detail_unknown)
 }
 
@@ -840,13 +841,13 @@ private fun CertificatesCard(
             if (name != null || organization == null) {
                 InfoRowItem(
                     label = stringResource(AppsR.string.certificates_name),
-                    value = name ?: stringResource(AppsR.string.certificates_unknown_signer),
+                    value = name ?: stringResource(DomainR.string.certificates_unknown_signer),
                     rationale = signerRationale,
                     onShowRationale = onShowRationale,
                     onCopy = onCopy,
                 )
             }
-            val hashLabel = stringResource(AppsR.string.certificates_sha256)
+            val hashLabel = stringResource(DomainR.string.certificates_sha256)
             LabeledHashBox(
                 label = hashLabel,
                 value = certificate.certificateHashSha256,

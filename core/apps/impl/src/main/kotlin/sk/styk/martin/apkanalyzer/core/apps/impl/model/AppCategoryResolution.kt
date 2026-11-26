@@ -1,6 +1,7 @@
-package sk.styk.martin.apkanalyzer.core.apps.model
+package sk.styk.martin.apkanalyzer.core.apps.impl.model
 
 import android.content.pm.ApplicationInfo
+import sk.styk.martin.apkanalyzer.core.apps.api.model.AppCategory
 
 internal fun resolveAppCategory(category: Int): AppCategory = when (category) {
     ApplicationInfo.CATEGORY_GAME -> AppCategory.Game

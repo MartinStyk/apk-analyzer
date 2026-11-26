@@ -1,8 +1,8 @@
 package sk.styk.martin.apkanalyzer.core.apphistory.timeline.model
 
-import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraries
-import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeVersion
+import sk.styk.martin.apkanalyzer.core.apps.api.model.AppDetail
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraries
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.SigningSchemeVersion
 import java.time.Instant
 
 sealed interface AppHistorySnapshotRead {

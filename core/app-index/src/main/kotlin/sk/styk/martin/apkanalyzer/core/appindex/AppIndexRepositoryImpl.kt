@@ -9,11 +9,11 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import sk.styk.martin.apkanalyzer.core.appindex.model.AppAttributeIndex
 import sk.styk.martin.apkanalyzer.core.appindex.model.AppIndexStatus
-import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
-import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
-import sk.styk.martin.apkanalyzer.core.apps.signing.AppSigning
-import sk.styk.martin.apkanalyzer.core.apps.signing.AppSigningRepository
-import sk.styk.martin.apkanalyzer.core.apps.signing.Certificate
+import sk.styk.martin.apkanalyzer.core.apps.api.InstalledAppsRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.model.InstalledApp
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.AppSigning
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.AppSigningRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.Certificate
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger

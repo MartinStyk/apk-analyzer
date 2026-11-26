@@ -1,9 +1,9 @@
-package sk.styk.martin.apkanalyzer.core.apps.search
+package sk.styk.martin.apkanalyzer.core.apps.api.search
 
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.shouldBe
 import org.junit.Test
-import sk.styk.martin.apkanalyzer.core.apps.model.anApp
+import sk.styk.martin.apkanalyzer.core.apps.api.model.anApp
 
 class AppSearchTest {
 

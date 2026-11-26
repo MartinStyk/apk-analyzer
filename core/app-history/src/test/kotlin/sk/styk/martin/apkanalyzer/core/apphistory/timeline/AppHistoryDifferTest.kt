@@ -12,11 +12,11 @@ import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.RuleDirection
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.SetChange
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.ValueChange
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.fieldChangesFrom
-import sk.styk.martin.apkanalyzer.core.apps.components.Activity
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Feature
-import sk.styk.martin.apkanalyzer.core.apps.model.Detail.WhatsApp
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraries
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryFile
+import sk.styk.martin.apkanalyzer.core.apps.api.components.Activity
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.Feature
+import sk.styk.martin.apkanalyzer.core.apps.api.model.Detail.WhatsApp
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraries
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraryFile
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import java.time.Instant

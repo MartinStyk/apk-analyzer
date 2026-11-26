@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apkfiles
+package sk.styk.martin.apkanalyzer.core.apkfiles.impl
 
 import android.app.ActivityManager
 import android.content.Context
@@ -7,6 +7,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
+import sk.styk.martin.apkanalyzer.core.apkfiles.api.ApkTooLargeException
+import sk.styk.martin.apkanalyzer.core.apkfiles.api.TemporaryApkManager
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import java.io.File

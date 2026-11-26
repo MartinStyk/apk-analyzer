@@ -2,7 +2,7 @@ package sk.styk.martin.apkanalyzer.core.apphistory.storage.database.snapshot
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Feature
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.Feature
 
 @Serializable
 internal sealed interface FeatureSnapshot {

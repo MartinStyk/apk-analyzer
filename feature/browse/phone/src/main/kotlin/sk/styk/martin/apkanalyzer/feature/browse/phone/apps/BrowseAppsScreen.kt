@@ -38,10 +38,10 @@ import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseBucketDetail
 import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseDimension
 import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseSubAttribute
 import sk.styk.martin.apkanalyzer.core.appindex.browse.isCertificateHash
-import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificatePrincipal
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateValidity
-import sk.styk.martin.apkanalyzer.core.apps.signing.SignatureAlgorithmAssessment
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificatePrincipal
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateValidity
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.SignatureAlgorithmAssessment
 import sk.styk.martin.apkanalyzer.core.common.digest.toFingerprint
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName

@@ -1,6 +1,6 @@
 package sk.styk.martin.apkanalyzer.core.apphistory.timeline.model
 
-import sk.styk.martin.apkanalyzer.core.apps.permissions.UsedPermission
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.UsedPermission
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import java.time.Instant
 

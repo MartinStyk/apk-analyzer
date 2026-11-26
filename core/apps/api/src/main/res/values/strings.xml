@@ -1,58 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="android_versions">
-        <item>Android 1</item>
-        <item>Android 1.1</item>
-        <item>Android 1.5</item>
-        <item>Android 1.6</item>
-        <item>Android 2.0</item>
-        <item>Android 2.0.1</item>
-        <item>Android 2.1</item>
-        <item>Android 2.2</item>
-        <item>Android 2.3</item>
-        <item>Android 2.3.3</item>
-        <item>Android 3.0</item>
-        <item>Android 3.1</item>
-        <item>Android 3.2</item>
-        <item>Android 4.0</item>
-        <item>Android 4.0.3</item>
-        <item>Android 4.1</item>
-        <item>Android 4.2</item>
-        <item>Android 4.3</item>
-        <item>Android 4.4</item>
-        <item>Android 4.4W</item>
-        <item>Android 5.0</item>
-        <item>Android 5.1.1</item>
-        <item>Android 6.0</item>
-        <item>Android 7.0</item>
-        <item>Android 7.1.2</item>
-        <item>Android 8.0</item>
-        <item>Android 8.1</item>
-        <item>Android 9</item>
-        <item>Android 10</item>
-        <item>Android 11</item>
-        <item>Android 12</item>
-        <item>Android 12L</item>
-        <item>Android 13</item>
-        <item>Android 14</item>
-        <item>Android 15</item>
-        <item>Android 16</item>
-        <item>Android 17</item>
-    </string-array>
 
-    <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
-    <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_unknown">Unknown</string>
-    <string name="general_info_title">General Information</string>
-    <string name="general_info_error">Failed to load general information</string>
     <string name="general_info_section_identification">Identification</string>
     <string name="general_info_section_versioning">Versioning</string>
     <string name="general_info_section_api_targets">API Targets</string>
     <string name="general_info_section_security">Security settings</string>
     <string name="general_info_section_installation">Installation &amp; Source</string>
     <string name="general_info_section_storage">Storage &amp; Paths</string>
-    <string name="general_info_section_native_libraries">Native libraries</string>
     <string name="general_info_application_name">Application Name</string>
     <string name="general_info_package_name">Package Name</string>
     <string name="general_info_process_name">Process Name</string>
@@ -66,12 +22,7 @@
     <string name="general_info_debug_access">Debug access</string>
     <string name="general_info_app_data_backup">App data backup</string>
     <string name="general_info_unencrypted_traffic">Unencrypted traffic default</string>
-    <string name="general_info_enabled">Enabled</string>
-    <string name="general_info_disabled">Disabled</string>
-    <string name="general_info_allowed">Allowed</string>
     <string name="general_info_app_type">App Type</string>
-    <string name="general_info_app_type_system">System</string>
-    <string name="general_info_app_type_user">User</string>
     <string name="general_info_install_source">Install Source</string>
     <string name="general_info_install_source_google_play">Google Play</string>
     <string name="general_info_install_source_samsung_galaxy_store">Samsung Galaxy Store</string>
@@ -95,36 +46,9 @@
     <string name="general_info_install_location">Install Location</string>
     <string name="general_info_apk_size">APK Size</string>
     <string name="general_info_split_apks">Split APKs</string>
-    <plurals name="general_info_split_apks_value">
-        <item quantity="one">Installed as %1$d split APK</item>
-        <item quantity="other">Installed as %1$d split APKs</item>
-    </plurals>
     <string name="general_info_total_size">Total Size</string>
     <string name="general_info_native_library_abis">CPU architectures</string>
-    <string name="general_info_native_library_abis_none">No native code</string>
     <string name="general_info_native_library_files">Native library files</string>
-    <string name="general_info_native_library_files_none">None bundled</string>
-    <plurals name="general_info_native_library_file_count">
-        <item quantity="one">%1$d file</item>
-        <item quantity="other">%1$d files</item>
-    </plurals>
-    <string name="general_info_rationale_application_name">The user-visible label of the app, as shown on the home screen and in the app drawer.</string>
-    <string name="general_info_rationale_package_name">The unique identifier for this app on the device. No two apps can share the same package name.</string>
-    <string name="general_info_rationale_process_name">The name of the operating system process the app runs in. By default, it matches the package name.</string>
-    <string name="general_info_rationale_uid">The unique identifier assigned to this app by the Android system. It determines the app\'s access to system resources and file permissions.</string>
-    <string name="general_info_rationale_shared_user_id">This app declares that it runs under a shared identity with other apps signed by the same key. Apps sharing this identity can access each other\'s data and permissions as if they were one app.</string>
-    <string name="general_info_rationale_description">An optional summary provided by the app developer in the manifest.</string>
-    <string name="general_info_rationale_version_name">The human-readable version string displayed to users, such as \"2.5.1\" or \"Beta 3\".</string>
-    <string name="general_info_rationale_version_code">An internal integer that increases with every release. The system uses it to determine whether one version is newer than another.</string>
-    <string name="general_info_rationale_min_sdk">The lowest Android API level this app supports. Devices running an older version cannot install it.</string>
-    <string name="general_info_rationale_target_sdk">The API level the app was designed and tested for. It tells the system which compatibility behaviors to apply.</string>
-    <string name="general_info_rationale_debug_access_enabled">Development tools can inspect and control this app while it runs. This helps during testing, but published apps usually turn it off because anyone with debugging access to the device gets extra access to the app.</string>
-    <string name="general_info_rationale_debug_access_disabled">Development tools cannot attach to this app using Android\'s normal app-debugging access.</string>
-    <string name="general_info_rationale_backup_allowed">Android may include this app\'s data in backups or move it to another device. The exact data depends on the app\'s backup rules and the Android version.</string>
-    <string name="general_info_rationale_backup_blocked">The app disables Android cloud backup. Device-to-device transfer may still vary by Android version and device manufacturer.</string>
-    <string name="general_info_rationale_cleartext_allowed">The app\'s general manifest setting allows network connections without encryption. Custom network security rules can override this setting. This does not prove the app sends unencrypted data.</string>
-    <string name="general_info_rationale_cleartext_blocked">The app\'s general manifest setting disables network connections without encryption. Custom network security rules and some networking libraries can behave differently.</string>
-    <string name="general_info_rationale_app_type">Whether the app is a pre-installed system app or a user-installed app. System apps have elevated privileges and cannot be fully uninstalled.</string>
     <string name="general_info_rationale_install_source_google_play">This app was downloaded and installed through Google Play, which screens apps before publishing them.</string>
     <string name="general_info_rationale_install_source_samsung_galaxy_store">This app was downloaded and installed through Samsung\'s Galaxy Store, the manufacturer\'s own app store.</string>
     <string name="general_info_rationale_install_source_amazon_appstore">This app was downloaded and installed through the Amazon Appstore.</string>
@@ -136,31 +60,12 @@
     <string name="general_info_rationale_install_source_local_install">This app was installed directly from a connected computer, typically using a developer tool such as ADB, rather than through an app store.</string>
     <string name="general_info_rationale_install_source_system">This app came preinstalled on the device as part of the operating system or manufacturer software.</string>
     <string name="general_info_rationale_install_source_unknown">Android could not report where this app was installed from. This can happen after restoring a device backup or with some manufacturer-specific installers.</string>
-    <string name="general_info_rationale_installer_package">The package name of the app that performed the installation, such as \"com.android.vending\" for Google Play.</string>
-    <string name="general_info_rationale_install_initiator">The app that started the installation, such as a browser or file manager for a sideloaded app, or an app store for a store install. This can differ from the installer package above.</string>
-    <string name="general_info_rationale_install_originator">The package that provided the APK file, when Android reports it separately from the app that started the installation. Most installs leave this blank.</string>
-    <string name="general_info_rationale_first_installed">The date and time this app was first installed on the device.</string>
-    <string name="general_info_rationale_last_updated">The date and time of the most recent update to this app.</string>
-    <string name="general_info_rationale_last_used">The approximate date and time this app was last opened by the user.</string>
-    <string name="general_info_rationale_apk_directory">The file system path where the APK file is stored on the device.</string>
-    <string name="general_info_rationale_data_directory">The file system path where the app stores its private data, databases, and shared preferences.</string>
-    <string name="general_info_rationale_install_location">The preferred storage location declared by the developer — internal storage, external storage, or automatic.</string>
-    <string name="general_info_rationale_apk_size">The combined size of the installed APK files on disk, excluding app data, caches, and runtime-generated files. Most apps installed from Google Play are split into a base APK plus additional APKs for your device\'s language and screen density; this total covers all of them.</string>
-    <string name="general_info_rationale_total_size">The combined size of the APK, app data, and cached files. Requires usage access permission.</string>
-    <string name="general_info_rationale_native_library_abis">The processor types this app includes compiled native code for, read from the APK\'s own files rather than what this device reports.</string>
-    <string name="general_info_native_library_device_support">This device supports: %1$s.</string>
-    <string name="general_info_native_library_incompatible">None of those processor types match what this device supports, so this app\'s native code likely won\'t run here.</string>
     <string name="components_title">Components</string>
-    <string name="components_error">Failed to load components</string>
     <string name="components_type_activities">Activities</string>
     <string name="components_type_services">Services</string>
     <string name="components_type_receivers">Receivers</string>
     <string name="components_type_providers">Providers</string>
-    <string name="components_tag_exported">Exported</string>
-    <string name="components_tag_launcher">Launcher</string>
     <string name="components_detail_launcher">Launcher screen</string>
-    <string name="components_detail_launcher_explanation">This is what opens when you tap the app\'s icon.</string>
-    <string name="components_tag_unprotected">Exported with no permission guard</string>
     <string name="components_flag_stop_with_task">Stops with task</string>
     <string name="components_flag_stop_with_task_explanation">Shuts down when you swipe the app away from recents.</string>
     <string name="components_flag_single_user">Single user</string>
@@ -169,40 +74,6 @@
     <string name="components_flag_isolated_process_explanation">Runs sandboxed with no permissions of its own.</string>
     <string name="components_flag_external_service">External service</string>
     <string name="components_flag_external_service_explanation">Other apps can run this inside their own process.</string>
-    <string name="components_flag_enabled">Yes</string>
-    <string name="components_detail_full_name">Full name</string>
-    <string name="components_detail_section_reachability">Reachability</string>
-    <string name="components_detail_section_details">Details</string>
-    <string name="components_detail_section_intent_filters">Requests this component accepts</string>
-    <string name="components_detail_intent_filters_explanation">Android and other apps use these declarations to decide which requests, links, and content can reach this component.</string>
-    <string name="components_detail_intent_filters_unavailable">Intent filters could not be read for this app.</string>
-    <string name="components_detail_intent_filters_open">View intent filters</string>
-    <plurals name="components_intent_filter_count">
-        <item quantity="one">%1$d intent filter</item>
-        <item quantity="other">%1$d intent filters</item>
-    </plurals>
-    <string name="components_detail_intent_actions">Actions</string>
-    <string name="components_detail_intent_actions_explanation">What another app or Android asks this component to do.</string>
-    <string name="components_detail_intent_categories">Categories</string>
-    <string name="components_detail_intent_categories_explanation">Categories this filter permits. Every category supplied by a request must be listed here.</string>
-    <string name="components_detail_intent_data">Links and content</string>
-    <string name="components_detail_intent_data_explanation">The web addresses, file types, or other content this component says it can handle.</string>
-    <string name="components_detail_intent_data_rule">%1$s: %2$s</string>
-    <string name="components_detail_intent_allowed_uri_parts">Allowed link details</string>
-    <string name="components_detail_intent_allowed_uri_parts_explanation">All details in this group must match for the group to allow a link. Android evaluates groups in manifest order.</string>
-    <string name="components_detail_intent_blocked_uri_parts">Blocked link details</string>
-    <string name="components_detail_intent_blocked_uri_parts_explanation">These details define a blocking match rule. Android evaluates it with the filter\'s other link rules in manifest order.</string>
-    <string name="components_detail_intent_auto_verify">Verification request</string>
-    <string name="components_detail_intent_auto_verify_requested">Requested</string>
-    <string name="components_detail_intent_auto_verify_explanation">The app asks Android to verify that its signing identity is allowed to open these website links.</string>
-    <string name="components_detail_intent_activity_priority">Matching priority</string>
-    <string name="components_detail_intent_activity_priority_explanation">A higher number can make this activity preferred over other matching activities, subject to Android\'s routing rules.</string>
-    <string name="components_detail_intent_receiver_priority">Broadcast priority</string>
-    <string name="components_detail_intent_receiver_priority_explanation">For ordered broadcasts, a higher number can make this receiver run earlier, subject to Android\'s limits.</string>
-    <string name="components_detail_intent_declared_priority">Declared priority</string>
-    <string name="components_detail_intent_declared_priority_explanation">The manifest declares this value, but Android does not use it to choose between matching services or providers.</string>
-    <string name="components_detail_intent_order">Delivery order</string>
-    <string name="components_detail_intent_order_explanation">A higher number is considered first when this app has multiple matching filters.</string>
     <string name="components_intent_data_scheme">Address scheme</string>
     <string name="components_intent_data_host">Host</string>
     <string name="components_intent_data_port">Port</string>
@@ -238,13 +109,10 @@
     <string name="components_detail_permission">Required permission</string>
     <string name="components_detail_read_permission">Read permission</string>
     <string name="components_detail_write_permission">Write permission</string>
-    <string name="components_detail_label">Label</string>
     <string name="components_detail_target_activity">Target activity</string>
     <string name="components_detail_parent">Parent activity</string>
     <string name="components_detail_authority">Authority</string>
     <string name="components_detail_section_path_permissions">Path permissions</string>
-    <string name="components_detail_path_permissions_explanation">Rules for specific paths under this provider. A path can grant or remove access beyond the general read and write permissions above.</string>
-    <string name="components_detail_path_permission_path">Path</string>
     <string name="components_detail_path_permission_open">No permission required</string>
     <string name="components_path_permission_type_literal">Matches this exact path</string>
     <string name="components_path_permission_type_prefix">Matches this path and everything under it</string>
@@ -252,31 +120,12 @@
     <string name="components_path_permission_type_advanced_glob">Matches this path using an advanced wildcard pattern</string>
     <string name="components_path_permission_type_suffix">Matches any path ending with this</string>
     <string name="certificates_title">Signing certificate</string>
-    <string name="certificates_error">Failed to load the signing certificate</string>
-    <string name="certificates_empty">No signing certificate found</string>
-    <string name="certificates_card_position">%1$s (%2$d of %3$d)</string>
-    <string name="certificates_signer_position">Signer %1$d of %2$d</string>
-    <string name="certificates_current_certificate">Current signing certificate</string>
     <string name="certificates_current_certificates">Current signing certificates</string>
     <string name="certificates_history">Signing history</string>
-    <plurals name="certificates_history_description">
-        <item quantity="one">Android verified one signing key used before the current key.</item>
-        <item quantity="other">Android verified %d signing keys used before the current key. The most recently used previous key appears first.</item>
-    </plurals>
-    <string name="certificates_original_signing_key">Original signing key</string>
-    <string name="certificates_previous_signing_key">Previous signing key</string>
-    <string name="certificates_debug_title">Debug certificate</string>
-    <string name="certificates_debug_description">This app uses Android\'s shared debug key instead of a private publishing key. That is normal for testing, but not for a published app.</string>
-    <string name="certificates_signer">Signer</string>
-    <string name="certificates_details">Certificate details</string>
     <string name="certificates_organization">Organization</string>
     <string name="certificates_name">Name</string>
     <string name="certificates_country">Country</string>
     <string name="certificates_issuer">Issued by</string>
-    <string name="certificates_unknown_signer">Unknown signer</string>
-    <string name="certificates_self_signed">Self-signed</string>
-    <string name="certificates_self_signed_value">The signer issued this certificate</string>
-    <string name="certificates_self_signed_explanation">Self-signed certificates are normal for Android apps. Compare the certificate fingerprint with a trusted source when you need to verify the publisher.</string>
     <string name="certificates_validity">Validity</string>
     <string name="certificates_date_range">%1$s to %2$s</string>
     <string name="certificates_valid">Valid</string>
@@ -285,18 +134,12 @@
     <string name="certificates_valid_explanation">The certificate is within its stated validity period.</string>
     <string name="certificates_expired_explanation">Android can keep accepting an installed app after its signing certificate expires. Compare the fingerprint with a trusted source if the app or update is unexpected.</string>
     <string name="certificates_not_yet_valid_explanation">The certificate validity period has not started. Check the device date and verify the fingerprint before trusting this app.</string>
-    <string name="certificates_current_signers">Current signers</string>
-    <string name="certificates_single_signer">Single signer</string>
     <string name="certificates_multiple_signers">Multiple signers</string>
-    <string name="certificates_single_signer_explanation">This app is currently signed by one certificate. If the developer rotates the signing key again, Android verifies the change against this app\'s trusted signing history.</string>
-    <string name="certificates_multiple_signers_explanation">This app is currently signed by multiple certificates. Android requires updates to use the same signer set.</string>
     <string name="certificates_scheme">Scheme</string>
     <string name="certificates_scheme_v1">v1</string>
     <string name="certificates_scheme_v2">v2</string>
     <string name="certificates_scheme_v3">v3</string>
     <string name="certificates_scheme_v3_1">v3.1</string>
-    <string name="certificates_scheme_explanation">The scheme is the signature format Android used to verify this APK. Newer schemes (v2 and later) also protect the whole file, not just individual entries, so a modern app signed only with v1 is worth a second look. The algorithm below describes how the signing certificate itself was signed, not the APK signing scheme.</string>
-    <string name="certificates_algorithm">Algorithm</string>
     <string name="certificates_algorithm_strong">Strong</string>
     <string name="certificates_algorithm_weak">Weak</string>
     <string name="certificates_algorithm_unknown">Unknown strength</string>
@@ -305,36 +148,16 @@
     <string name="certificates_algorithm_md5_explanation">%1$s uses MD5. MD5 is not collision resistant and is unsafe for signing certificates. New signing certificates should use SHA-256 or stronger.</string>
     <string name="certificates_algorithm_md2_explanation">%1$s uses MD2. MD2 is obsolete and vulnerable to practical attacks, so it is unsafe for signing certificates. New signing certificates should use SHA-256 or stronger.</string>
     <string name="certificates_algorithm_unknown_explanation">The strength of %1$s cannot be assessed from its algorithm name. Key type and size may also affect its security.</string>
-    <string name="certificates_serial">Serial number</string>
-    <string name="certificates_serial_explanation">The certificate issuer assigns this number to identify the certificate. Use it together with the issuer name; it is not a certificate fingerprint.</string>
-    <string name="certificates_certificate_fingerprints">Certificate fingerprints</string>
-    <string name="certificates_public_key_fingerprints">Public key fingerprints</string>
-    <string name="certificates_fingerprint">fingerprint</string>
-    <string name="certificates_sha256">SHA-256</string>
-    <string name="certificates_sha1">SHA-1</string>
-    <string name="certificates_md5">MD5</string>
     <string name="certificates_explain">Explain %1$s</string>
     <string name="requirements_title">Device requirements</string>
-    <string name="requirements_error">Could not read the device requirements of this app.</string>
-    <string name="requirements_empty">This app declares no device requirements.</string>
-    <string name="requirements_section_header">%1$s · %2$d</string>
     <string name="requirements_section_required">Required</string>
     <string name="requirements_section_required_explanation">The app won\'t install without these.</string>
     <string name="requirements_section_optional">Optional</string>
     <string name="requirements_section_optional_explanation">Used when available.</string>
-    <plurals name="requirements_missing_summary">
-        <item quantity="one">%1$d requirement this device cannot meet</item>
-        <item quantity="other">%1$d requirements this device cannot meet</item>
-    </plurals>
     <string name="requirements_missing">Not on this device</string>
     <string name="requirements_missing_version">Needs %1$s · this device has %2$s</string>
     <string name="requirements_open_gl_es">OpenGL ES %1$s</string>
     <string name="requirements_label_with_version">%1$s %2$s</string>
-    <string name="requirements_detail_identifier">Identifier</string>
-    <string name="requirements_detail_necessity">Necessity</string>
-    <string name="requirements_detail_availability">On this device</string>
-    <string name="requirements_detail_version">Version</string>
-    <string name="requirements_detail_version_comparison">%1$s needed · %2$s on this device</string>
     <string name="requirements_availability_available">Available</string>
     <string name="requirements_availability_available_explanation">This device provides it, so the app can use it.</string>
     <string name="requirements_availability_missing">Not available</string>
@@ -417,23 +240,11 @@
     <string name="requirement_backup">System backup</string>
     <string name="requirement_sip_voip">Internet calling</string>
     <string name="requirement_connection_service">Calling app integration</string>
-    <string name="splitapks_title">Split APKs</string>
-    <plurals name="splitapks_heading">
-        <item quantity="one">%1$d split APK installed</item>
-        <item quantity="other">%1$d split APKs installed</item>
-    </plurals>
-    <string name="splitapks_explanation">This app was installed as a base APK plus these additional split APKs, a delivery format Google Play uses to send only the code and resources your device needs.</string>
-    <string name="splitapks_error">Failed to load split APKs</string>
-    <string name="splitapks_empty">This app has no split APKs installed.</string>
     <string name="splitapks_kind_feature">Feature module</string>
     <string name="splitapks_kind_abi">CPU architecture</string>
     <string name="splitapks_kind_density">Screen density</string>
     <string name="splitapks_kind_language">Language</string>
-    <string name="splitapks_detail_type">Type</string>
-    <string name="splitapks_detail_identifier">Identifier</string>
     <string name="splitapks_detail_file_name">File name</string>
-    <string name="splitapks_detail_size">Size</string>
-    <string name="splitapks_detail_path">Full path</string>
     <string name="splitapks_abi_arm64_v8a">ARM64 (64-bit)</string>
     <string name="splitapks_abi_armeabi_v7a">ARM (32-bit)</string>
     <string name="splitapks_abi_armeabi">ARM (legacy, 32-bit)</string>
@@ -450,42 +261,13 @@
     <string name="splitapks_density_xxxhdpi">Extra-extra-extra-high density screens</string>
     <string name="splitapks_density_nodpi">Density-independent resources</string>
     <string name="splitapks_density_anydpi">Any density (vector resources)</string>
-    <string name="nativelibraries_title">Native library files</string>
-    <plurals name="nativelibraries_heading">
-        <item quantity="one">%1$d native library bundled</item>
-        <item quantity="other">%1$d native libraries bundled</item>
-    </plurals>
-    <string name="nativelibraries_explanation">Every distinct native code file this app ships, one row per file name even when the same library is built for multiple processor architectures.</string>
-    <string name="nativelibraries_error">Failed to load native libraries</string>
-    <string name="nativelibraries_empty">This app has no bundled native libraries.</string>
-    <string name="nativelibraries_supported">Supported on this device</string>
-    <string name="nativelibraries_not_supported">Not supported on this device</string>
-    <string name="nativelibraries_not_supported_explanation">None of the processor types this library was built for match what this device supports, so this code likely won\'t run here.</string>
-    <string name="nativelibraries_detail_device_support">On this device</string>
     <string name="nativelibraries_detail_abis">Built for</string>
-    <string name="nativelibraries_detail_total_size">Total size</string>
-    <string name="nativelibraries_detail_section_variants">Per processor type</string>
-    <string name="nativelibraries_detail_variant_source">Bundled in %1$s</string>
     <string name="manifest_title">Android manifest</string>
-    <string name="manifest_error">The manifest could not be read</string>
-    <plurals name="manifest_line_count">
-        <item quantity="one">%1$d line</item>
-        <item quantity="other">%1$d lines</item>
-    </plurals>
-    <plurals name="manifest_base_split_note">
-        <item quantity="one">Shows the base APK manifest. This app has %1$d additional installed split with its own manifest.</item>
-        <item quantity="other">Shows the base APK manifest. This app has %1$d additional installed splits with their own manifests.</item>
-    </plurals>
-    <string name="components_launch">Start this component</string>
-    <string name="components_launch_started">Start request sent — the app decides what happens next.</string>
-    <string name="components_launch_broadcast_sent">Broadcast sent — nothing here reports whether it was handled.</string>
-    <string name="components_launch_failed">The system refused to start this.</string>
     <string name="certificates_validity_on_date_valid">Valid on this date</string>
     <string name="certificates_validity_on_date_expired">Expired on this date</string>
     <string name="certificates_validity_on_date_not_yet">Not yet valid on this date</string>
     <string name="certificates_validity_on_date_valid_explanation">This certificate was within its validity dates on the day Apk Analyzer recorded it.</string>
     <string name="certificates_validity_on_date_expired_explanation">This certificate\'s end date had already passed on the day Apk Analyzer recorded it.</string>
     <string name="certificates_validity_on_date_not_yet_explanation">This certificate\'s start date was still in the future on the day Apk Analyzer recorded it.</string>
-    <string name="app_info_unavailable">This device can\'t open App Info</string>
 </resources>
 

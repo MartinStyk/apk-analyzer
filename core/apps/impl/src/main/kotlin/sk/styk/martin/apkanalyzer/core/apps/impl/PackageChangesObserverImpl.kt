@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apps
+package sk.styk.martin.apkanalyzer.core.apps.impl
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -12,6 +12,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.shareIn
+import sk.styk.martin.apkanalyzer.core.apps.api.PackageChangeAction
+import sk.styk.martin.apkanalyzer.core.apps.api.PackageChangeEvent
+import sk.styk.martin.apkanalyzer.core.apps.api.PackageChangesObserver
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import java.util.concurrent.CopyOnWriteArrayList

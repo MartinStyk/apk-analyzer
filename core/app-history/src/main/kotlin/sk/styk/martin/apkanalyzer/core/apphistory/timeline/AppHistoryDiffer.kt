@@ -10,15 +10,15 @@ import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.NativeLibrary
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.SetChange
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.ValueChange
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.fieldChangesFrom
-import sk.styk.martin.apkanalyzer.core.apps.components.Activity
-import sk.styk.martin.apkanalyzer.core.apps.components.BroadcastReceiver
-import sk.styk.martin.apkanalyzer.core.apps.components.ContentProvider
-import sk.styk.martin.apkanalyzer.core.apps.components.Service
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Feature
-import sk.styk.martin.apkanalyzer.core.apps.model.AppInfo
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraries
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryFile
-import sk.styk.martin.apkanalyzer.core.apps.permissions.Permission
+import sk.styk.martin.apkanalyzer.core.apps.api.components.Activity
+import sk.styk.martin.apkanalyzer.core.apps.api.components.BroadcastReceiver
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ContentProvider
+import sk.styk.martin.apkanalyzer.core.apps.api.components.Service
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.Feature
+import sk.styk.martin.apkanalyzer.core.apps.api.model.AppInfo
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraries
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraryFile
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.Permission
 import javax.inject.Inject
 
 internal class AppHistoryDiffer @Inject constructor() {

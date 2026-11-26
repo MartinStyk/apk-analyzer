@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apps.export
+package sk.styk.martin.apkanalyzer.core.apps.api.export
 
 import android.net.Uri
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference

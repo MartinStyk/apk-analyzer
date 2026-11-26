@@ -19,12 +19,12 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentFlag
-import sk.styk.martin.apkanalyzer.core.apps.components.IntentFilterDataRuleType
-import sk.styk.martin.apkanalyzer.core.apps.components.ProviderPathMatchType
-import sk.styk.martin.apkanalyzer.core.apps.components.explanationRes
-import sk.styk.martin.apkanalyzer.core.apps.components.exportedExplanationRes
-import sk.styk.martin.apkanalyzer.core.apps.components.labelRes
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentFlag
+import sk.styk.martin.apkanalyzer.core.apps.api.components.IntentFilterDataRuleType
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ProviderPathMatchType
+import sk.styk.martin.apkanalyzer.core.apps.api.components.explanationRes
+import sk.styk.martin.apkanalyzer.core.apps.api.components.exportedExplanationRes
+import sk.styk.martin.apkanalyzer.core.apps.api.components.labelRes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.BottomSheet
@@ -32,10 +32,12 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ChangeLinesSection
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.DetailField
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SheetSection
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 @Suppress("CyclomaticComplexMethod")
 @Composable
@@ -71,14 +73,14 @@ internal fun ComponentDetailBottomSheet(
             }
             Spacer(modifier = Modifier.height(12.dp))
             DetailField(
-                label = stringResource(AppsR.string.components_detail_full_name),
+                label = stringResource(R.string.components_detail_full_name),
                 value = item.name,
                 onCopy = onCopy,
             )
 
             ChangeLinesSection(lines = changeLines)
 
-            SheetSection(title = stringResource(AppsR.string.components_detail_section_reachability)) {
+            SheetSection(title = stringResource(DomainR.string.components_detail_section_reachability)) {
                 DetailField(
                     label = stringResource(AppsR.string.components_detail_exported),
                     value = stringResource(if (item.isExported) AppsR.string.components_exported_yes else AppsR.string.components_exported_no),
@@ -113,7 +115,7 @@ internal fun ComponentDetailBottomSheet(
             if (providerDetails != null && providerDetails.pathPermissions.isNotEmpty()) {
                 SheetSection(title = stringResource(AppsR.string.components_detail_section_path_permissions)) {
                     Text(
-                        text = stringResource(AppsR.string.components_detail_path_permissions_explanation),
+                        text = stringResource(DomainR.string.components_detail_path_permissions_explanation),
                         style = AppTheme.typography.bodySmall,
                         color = AppTheme.colors.onSurfaceVariant,
                     )
@@ -121,7 +123,7 @@ internal fun ComponentDetailBottomSheet(
                     providerDetails.pathPermissions.forEachIndexed { index, pathPermission ->
                         if (index > 0) Spacer(modifier = Modifier.height(12.dp))
                         DetailField(
-                            label = stringResource(AppsR.string.components_detail_path_permission_path),
+                            label = stringResource(DomainR.string.components_detail_path_permission_path),
                             value = pathPermission.path,
                             explanation = stringResource(pathPermission.matchType.explanationRes),
                             onCopy = onCopy,
@@ -142,9 +144,9 @@ internal fun ComponentDetailBottomSheet(
 
             val intentFilters = item.intentFilters
             if (!intentFilters.isNullOrEmpty()) {
-                SheetSection(title = stringResource(AppsR.string.components_detail_section_intent_filters)) {
+                SheetSection(title = stringResource(DomainR.string.components_detail_section_intent_filters)) {
                     Text(
-                        text = stringResource(AppsR.string.components_detail_intent_filters_explanation),
+                        text = stringResource(DomainR.string.components_detail_intent_filters_explanation),
                         style = AppTheme.typography.bodySmall,
                         color = AppTheme.colors.onSurfaceVariant,
                     )
@@ -159,13 +161,13 @@ internal fun ComponentDetailBottomSheet(
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = stringResource(AppsR.string.components_detail_intent_filters_open),
+                                text = stringResource(R.string.components_detail_intent_filters_open),
                                 style = AppTheme.typography.titleSmall,
                                 color = AppTheme.colors.onSurface,
                             )
                             Text(
                                 text = pluralStringResource(
-                                    AppsR.plurals.components_intent_filter_count,
+                                    R.plurals.components_intent_filter_count,
                                     intentFilters.size,
                                     intentFilters.size,
                                 ),
@@ -182,9 +184,9 @@ internal fun ComponentDetailBottomSheet(
                     }
                 }
             } else if (intentFilters == null) {
-                SheetSection(title = stringResource(AppsR.string.components_detail_section_intent_filters)) {
+                SheetSection(title = stringResource(DomainR.string.components_detail_section_intent_filters)) {
                     Text(
-                        text = intentFiltersMissingText ?: stringResource(AppsR.string.components_detail_intent_filters_unavailable),
+                        text = intentFiltersMissingText ?: stringResource(DomainR.string.components_detail_intent_filters_unavailable),
                         style = AppTheme.typography.bodyMedium,
                         color = AppTheme.colors.onSurfaceVariant,
                     )
@@ -199,19 +201,19 @@ internal fun ComponentDetailBottomSheet(
                     ) ||
                 (details is ComponentDetails.ProviderDetails && details.authority != null)
             if (hasTypeDetails) {
-                SheetSection(title = stringResource(AppsR.string.components_detail_section_details)) {
+                SheetSection(title = stringResource(DomainR.string.components_detail_section_details)) {
                     when (details) {
                         is ComponentDetails.ActivityDetails -> {
                             if (item.isLauncher) {
                                 DetailField(
                                     label = stringResource(AppsR.string.components_detail_launcher),
-                                    value = stringResource(AppsR.string.components_flag_enabled),
-                                    explanation = stringResource(AppsR.string.components_detail_launcher_explanation),
+                                    value = stringResource(DomainR.string.components_flag_enabled),
+                                    explanation = stringResource(DomainR.string.components_detail_launcher_explanation),
                                     onCopy = onCopy,
                                 )
                             }
                             details.label?.let {
-                                DetailField(label = stringResource(AppsR.string.components_detail_label), value = it, onCopy = onCopy)
+                                DetailField(label = stringResource(DomainR.string.components_detail_label), value = it, onCopy = onCopy)
                             }
                             details.targetActivity?.let {
                                 DetailField(label = stringResource(AppsR.string.components_detail_target_activity), value = it, onCopy = onCopy)
@@ -230,7 +232,7 @@ internal fun ComponentDetailBottomSheet(
                     item.flags.forEach { flag ->
                         DetailField(
                             label = stringResource(flag.labelRes),
-                            value = stringResource(AppsR.string.components_flag_enabled),
+                            value = stringResource(DomainR.string.components_flag_enabled),
                             explanation = stringResource(flag.explanationRes),
                             onCopy = onCopy,
                         )

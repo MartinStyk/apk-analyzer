@@ -10,8 +10,8 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryItem
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryVariant
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraryItem
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraryVariant
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.kilobytes
@@ -26,7 +26,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.InfoSectionLis
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionEmpty
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionLoading
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 @Composable
 internal fun TvNativeLibrariesScreen(
@@ -52,7 +52,7 @@ private fun TvNativeLibrariesContent(
     appReference: AppReference,
     onAction: (TvNativeLibrariesAction) -> Unit,
 ) {
-    val title = stringResource(AppsR.string.nativelibraries_title)
+    val title = stringResource(DomainR.string.nativelibraries_title)
     when (state) {
         TvNativeLibrariesState.Loading -> SectionLoading(
             title = title,
@@ -64,7 +64,7 @@ private fun TvNativeLibrariesContent(
             title = title,
             appName = appName,
             appReference = appReference,
-            message = stringResource(AppsR.string.nativelibraries_error),
+            message = stringResource(DomainR.string.nativelibraries_error),
             onRetry = { onAction(TvNativeLibrariesAction.Retry) },
         )
 
@@ -73,7 +73,7 @@ private fun TvNativeLibrariesContent(
                 title = title,
                 appName = appName,
                 appReference = appReference,
-                message = stringResource(AppsR.string.nativelibraries_empty),
+                message = stringResource(DomainR.string.nativelibraries_empty),
             )
         } else {
             InfoSectionList(
@@ -82,7 +82,7 @@ private fun TvNativeLibrariesContent(
                 appReference = appReference,
                 sections = listOf(
                     InfoSection(
-                        title = pluralStringResource(AppsR.plurals.nativelibraries_heading, state.items.size, state.items.size),
+                        title = pluralStringResource(DomainR.plurals.nativelibraries_heading, state.items.size, state.items.size),
                         rows = state.items.map { libraryRow(it, state.deviceAbis) },
                     ),
                 ),
@@ -94,11 +94,11 @@ private fun TvNativeLibrariesContent(
 @Composable
 private fun libraryRow(item: NativeLibraryItem, deviceAbis: List<String>): InfoRow {
     val support = if (item.isDeviceCompatible) {
-        stringResource(AppsR.string.nativelibraries_supported)
+        stringResource(DomainR.string.nativelibraries_supported)
     } else {
-        stringResource(AppsR.string.nativelibraries_not_supported)
+        stringResource(DomainR.string.nativelibraries_not_supported)
     }
-    val variantsLabel = stringResource(AppsR.string.nativelibraries_detail_section_variants)
+    val variantsLabel = stringResource(DomainR.string.nativelibraries_detail_section_variants)
     val resources = LocalResources.current
     return InfoRow(
         key = item.name,
@@ -106,8 +106,8 @@ private fun libraryRow(item: NativeLibraryItem, deviceAbis: List<String>): InfoR
         value = stringResource(R.string.tv_value_pair, item.abis.joinToString(), item.totalSize.formatted()),
         explanation = listOfNotNull(
             support,
-            stringResource(AppsR.string.nativelibraries_not_supported_explanation).takeUnless { item.isDeviceCompatible },
-            stringResource(AppsR.string.general_info_native_library_device_support, deviceAbis.joinToString()),
+            stringResource(DomainR.string.nativelibraries_not_supported_explanation).takeUnless { item.isDeviceCompatible },
+            stringResource(DomainR.string.general_info_native_library_device_support, deviceAbis.joinToString()),
             variantsLabel + "\n" + item.variants.joinToString(separator = "\n") { it.describe(resources) },
         ).joinToString(separator = "\n\n"),
         highlighted = !item.isDeviceCompatible,
@@ -119,7 +119,7 @@ private fun libraryRow(item: NativeLibraryItem, deviceAbis: List<String>): InfoR
 private fun NativeLibraryVariant.describe(resources: Resources): String = resources.getString(
     R.string.tv_value_pair,
     resources.getString(R.string.tv_value_pair, abi, size.formatted()),
-    resources.getString(AppsR.string.nativelibraries_detail_variant_source, containingApkFileName),
+    resources.getString(DomainR.string.nativelibraries_detail_variant_source, containingApkFileName),
 )
 
 @Preview(device = Devices.TV_1080p, showBackground = true, backgroundColor = 0xFF000000)

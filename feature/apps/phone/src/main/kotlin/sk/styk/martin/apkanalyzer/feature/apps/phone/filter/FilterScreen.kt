@@ -39,11 +39,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterState
-import sk.styk.martin.apkanalyzer.core.apps.filtering.AppSizeRange
-import sk.styk.martin.apkanalyzer.core.apps.filtering.DateRange
-import sk.styk.martin.apkanalyzer.core.apps.filtering.PermissionPreset
-import sk.styk.martin.apkanalyzer.core.apps.filtering.UnusedAppsPeriod
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.AppFilterState
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.AppSizeRange
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.DateRange
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.PermissionPreset
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.UnusedAppsPeriod
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons

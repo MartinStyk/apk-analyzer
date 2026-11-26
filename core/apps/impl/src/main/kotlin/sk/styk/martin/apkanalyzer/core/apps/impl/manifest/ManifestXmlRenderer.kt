@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apps.manifest
+package sk.styk.martin.apkanalyzer.core.apps.impl.manifest
 
 import android.content.res.Resources
 

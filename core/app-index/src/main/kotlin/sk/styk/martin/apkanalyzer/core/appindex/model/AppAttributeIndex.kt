@@ -1,7 +1,7 @@
 package sk.styk.martin.apkanalyzer.core.appindex.model
 
-import sk.styk.martin.apkanalyzer.core.apps.model.AppCategory
-import sk.styk.martin.apkanalyzer.core.apps.signing.Certificate
+import sk.styk.martin.apkanalyzer.core.apps.api.model.AppCategory
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.Certificate
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 

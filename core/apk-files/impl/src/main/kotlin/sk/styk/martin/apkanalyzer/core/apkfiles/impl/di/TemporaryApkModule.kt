@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apkfiles.di
+package sk.styk.martin.apkanalyzer.core.apkfiles.impl.di
 
 import android.app.ActivityManager
 import android.content.Context
@@ -8,8 +8,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import sk.styk.martin.apkanalyzer.core.apkfiles.TemporaryApkManager
-import sk.styk.martin.apkanalyzer.core.apkfiles.TemporaryApkManagerImpl
+import sk.styk.martin.apkanalyzer.core.apkfiles.api.TemporaryApkManager
+import sk.styk.martin.apkanalyzer.core.apkfiles.impl.TemporaryApkManagerImpl
 import javax.inject.Singleton
 
 @Module

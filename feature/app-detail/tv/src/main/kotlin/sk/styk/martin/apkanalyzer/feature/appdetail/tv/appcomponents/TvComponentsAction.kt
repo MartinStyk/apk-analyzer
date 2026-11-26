@@ -1,6 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.tv.appcomponents
 
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentKind
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentKind
 
 internal sealed interface TvComponentsAction {
     data object Retry : TvComponentsAction

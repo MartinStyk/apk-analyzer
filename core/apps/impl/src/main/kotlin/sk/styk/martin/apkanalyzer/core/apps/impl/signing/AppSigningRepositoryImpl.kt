@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apps.signing
+package sk.styk.martin.apkanalyzer.core.apps.impl.signing
 
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
@@ -10,7 +10,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
-import sk.styk.martin.apkanalyzer.core.apps.PackageChangesObserver
+import sk.styk.martin.apkanalyzer.core.apps.api.PackageChangesObserver
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.AppSigning
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.AppSigningRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger

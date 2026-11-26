@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apps.signing
+package sk.styk.martin.apkanalyzer.core.apps.api.signing
 
 data class CertificatePrincipal(
     val name: String? = null,

@@ -4,13 +4,13 @@ import android.content.res.Resources
 import androidx.annotation.StringRes
 import sk.styk.martin.apkanalyzer.core.apphistory.R
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.explanationRes
-import sk.styk.martin.apkanalyzer.core.apps.components.ProviderPathPermission
-import sk.styk.martin.apkanalyzer.core.apps.installsource.labelRes
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ProviderPathPermission
+import sk.styk.martin.apkanalyzer.core.apps.api.installsource.labelRes
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import kotlin.math.abs
 import sk.styk.martin.apkanalyzer.core.apppermissions.R as PermissionsR
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
 
 private const val VISIBLE_LINES = 2
 

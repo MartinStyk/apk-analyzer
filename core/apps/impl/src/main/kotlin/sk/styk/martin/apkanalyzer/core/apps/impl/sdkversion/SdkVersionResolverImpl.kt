@@ -1,6 +1,7 @@
-package sk.styk.martin.apkanalyzer.core.apps.sdkversion
+package sk.styk.martin.apkanalyzer.core.apps.impl.sdkversion
 
-import sk.styk.martin.apkanalyzer.core.apps.R
+import sk.styk.martin.apkanalyzer.core.apps.api.sdkversion.SdkVersionResolver
+import sk.styk.martin.apkanalyzer.core.apps.impl.R
 import sk.styk.martin.apkanalyzer.core.common.resources.ResourcesManager
 import javax.inject.Inject
 

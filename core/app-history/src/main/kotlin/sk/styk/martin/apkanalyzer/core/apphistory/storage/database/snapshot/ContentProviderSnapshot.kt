@@ -1,9 +1,9 @@
 package sk.styk.martin.apkanalyzer.core.apphistory.storage.database.snapshot
 
 import kotlinx.serialization.Serializable
-import sk.styk.martin.apkanalyzer.core.apps.components.ContentProvider
-import sk.styk.martin.apkanalyzer.core.apps.components.ProviderPathMatchType
-import sk.styk.martin.apkanalyzer.core.apps.components.ProviderPathPermission
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ContentProvider
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ProviderPathMatchType
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ProviderPathPermission
 
 @Serializable
 internal data class ContentProviderSnapshot(

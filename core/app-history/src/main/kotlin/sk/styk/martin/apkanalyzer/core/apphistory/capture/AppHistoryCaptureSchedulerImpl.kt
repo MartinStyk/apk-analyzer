@@ -18,8 +18,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.apphistory.restore.AppHistoryRestoreMerger
 import sk.styk.martin.apkanalyzer.core.apphistory.storage.AppHistoryStorageCleanup
-import sk.styk.martin.apkanalyzer.core.apps.PackageChangeAction
-import sk.styk.martin.apkanalyzer.core.apps.PackageChangesObserver
+import sk.styk.martin.apkanalyzer.core.apps.api.PackageChangeAction
+import sk.styk.martin.apkanalyzer.core.apps.api.PackageChangesObserver
 import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationKey
 import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider

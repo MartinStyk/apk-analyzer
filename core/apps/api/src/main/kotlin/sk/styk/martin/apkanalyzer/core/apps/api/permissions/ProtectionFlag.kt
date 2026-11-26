@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apps.permissions
+package sk.styk.martin.apkanalyzer.core.apps.api.permissions
 
 enum class ProtectionFlag {
     Privileged,

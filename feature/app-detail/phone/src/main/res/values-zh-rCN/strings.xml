@@ -246,4 +246,36 @@
     <plurals name="app_history_context">
         <item quantity="other">自 %1$s 起记录 · %2$d 项变化</item>
     </plurals>
+    <string name="components_detail_full_name">全名</string>
+    <string name="components_detail_intent_filters_open">查看意图过滤器</string>
+    <plurals name="components_intent_filter_count">
+        <item quantity="other">%1$d 意图过滤器</item>
+    </plurals>
+    <string name="components_detail_intent_actions_explanation">另一个应用或 Android 要求此组件执行的操作。</string>
+    <string name="components_detail_intent_categories_explanation">此过滤器允许的类别。请求提供的每个类别必须在此列出。</string>
+    <string name="components_detail_intent_data_explanation">此组件声称可以处理的网页地址、文件类型或其他内容。</string>
+    <string name="components_detail_intent_allowed_uri_parts_explanation">此组中的所有详细信息必须匹配，才能允许链接。Android 按照清单顺序评估组。</string>
+    <string name="components_detail_intent_blocked_uri_parts_explanation">这些详细信息定义了一个阻止匹配规则。Android 按照清单顺序与过滤器的其他链接规则一起评估它。</string>
+    <string name="components_detail_intent_activity_priority_explanation">更高的数字可以使此活动优先于其他匹配活动，受 Android 的路由规则限制。</string>
+    <string name="components_detail_intent_receiver_priority_explanation">对于有序广播，更高的数字可以使此接收器更早运行，受 Android 的限制。</string>
+    <string name="components_detail_intent_declared_priority_explanation">清单声明此值，但 Android 不使用它在匹配服务或提供者之间进行选择。</string>
+    <string name="components_detail_intent_order_explanation">当此应用有多个匹配过滤器时，更高的数字被优先考虑。</string>
+    <plurals name="certificates_history_description">
+        <item quantity="other">Android 验证了在当前密钥之前使用过的 %d 个签名密钥。最近使用的上一个密钥优先显示。</item>
+    </plurals>
+    <string name="certificates_details">证书详情</string>
+    <string name="certificates_fingerprint">指纹</string>
+    <plurals name="requirements_missing_summary">
+        <item quantity="other">%1$d 要求该设备无法满足</item>
+    </plurals>
+    <string name="requirements_detail_necessity">必要性</string>
+    <string name="requirements_detail_availability">在此设备上</string>
+    <string name="requirements_detail_version">版本</string>
+    <string name="requirements_detail_version_comparison">%1$s 需要 · %2$s 在此设备上</string>
+    <string name="splitapks_detail_type">类型</string>
+    <string name="splitapks_detail_size">大小</string>
+    <string name="nativelibraries_explanation">此应用程序提供的每个不同的本地代码文件，每个文件名一行，即使同一库为多个处理器架构构建。</string>
+    <string name="nativelibraries_detail_device_support">在此设备上</string>
+    <string name="nativelibraries_detail_total_size">总大小</string>
+    <string name="components_launch">启动此组件</string>
 </resources>

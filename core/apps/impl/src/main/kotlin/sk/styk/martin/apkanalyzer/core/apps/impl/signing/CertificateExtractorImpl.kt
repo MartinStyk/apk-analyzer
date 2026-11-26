@@ -1,7 +1,11 @@
-package sk.styk.martin.apkanalyzer.core.apps.signing
+package sk.styk.martin.apkanalyzer.core.apps.impl.signing
 
 import android.content.pm.PackageInfo
 import android.content.pm.Signature
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.AppSigning
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.Certificate
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificatePrincipal
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.resolveCertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.common.digest.DigestManager
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import java.io.ByteArrayInputStream

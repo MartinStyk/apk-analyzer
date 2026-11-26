@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apps.model
+package sk.styk.martin.apkanalyzer.core.apps.api.model
 
 enum class AppCategory {
     Undefined,

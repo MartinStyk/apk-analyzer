@@ -13,20 +13,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Feature
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.FeatureAvailability
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.RequirementItem
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.availabilityExplanationRes
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.labelRes
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.requirementVersionName
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.Feature
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.FeatureAvailability
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.RequirementItem
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.availabilityExplanationRes
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.labelRes
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.requirementVersionName
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.BottomSheet
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ChangeLinesSection
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.DetailField
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 @Composable
 internal fun RequirementDetailBottomSheet(
@@ -60,12 +62,12 @@ internal fun RequirementDetailBottomSheet(
             Spacer(modifier = Modifier.height(12.dp))
             ChangeLinesSection(lines = changeLines)
             DetailField(
-                label = stringResource(AppsR.string.requirements_detail_identifier),
+                label = stringResource(DomainR.string.requirements_detail_identifier),
                 value = item.identifier,
                 onCopy = onCopy,
             )
             DetailField(
-                label = stringResource(AppsR.string.requirements_detail_necessity),
+                label = stringResource(R.string.requirements_detail_necessity),
                 value = stringResource(if (item.isRequired) AppsR.string.requirements_section_required else AppsR.string.requirements_section_optional),
                 explanation = stringResource(
                     if (item.isRequired) AppsR.string.requirements_section_required_explanation else AppsR.string.requirements_section_optional_explanation,
@@ -74,7 +76,7 @@ internal fun RequirementDetailBottomSheet(
             )
             if (showAvailability) {
                 DetailField(
-                    label = stringResource(AppsR.string.requirements_detail_availability),
+                    label = stringResource(R.string.requirements_detail_availability),
                     value = stringResource(item.availability.labelRes),
                     explanation = stringResource(item.availabilityExplanationRes()),
                     onCopy = onCopy,
@@ -82,7 +84,7 @@ internal fun RequirementDetailBottomSheet(
             }
             item.versionDetail()?.let { versionDetail ->
                 DetailField(
-                    label = stringResource(AppsR.string.requirements_detail_version),
+                    label = stringResource(R.string.requirements_detail_version),
                     value = versionDetail,
                     onCopy = onCopy,
                 )
@@ -101,7 +103,7 @@ private fun RequirementItem.versionDetail(): String? = when (this) {
             deviceVersion == null -> requirementVersionName(name, requiredVersion)
 
             else -> stringResource(
-                AppsR.string.requirements_detail_version_comparison,
+                R.string.requirements_detail_version_comparison,
                 requirementVersionName(name, requiredVersion),
                 requirementVersionName(name, deviceVersion),
             )
@@ -110,7 +112,7 @@ private fun RequirementItem.versionDetail(): String? = when (this) {
 
     is RequirementItem.OpenGlEs -> when (val deviceVersionName = deviceVersionName) {
         null -> versionName
-        else -> stringResource(AppsR.string.requirements_detail_version_comparison, versionName, deviceVersionName)
+        else -> stringResource(R.string.requirements_detail_version_comparison, versionName, deviceVersionName)
     }
 }
 

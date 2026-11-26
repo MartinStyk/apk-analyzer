@@ -1,9 +1,9 @@
 package sk.styk.martin.apkanalyzer.feature.apps.phone.components.quickfilter
 
 import androidx.compose.runtime.Immutable
-import sk.styk.martin.apkanalyzer.core.apps.filtering.ActivityQuickFilter
-import sk.styk.martin.apkanalyzer.core.apps.filtering.QuickFilter
-import sk.styk.martin.apkanalyzer.core.apps.filtering.SourceQuickFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.ActivityQuickFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.QuickFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.SourceQuickFilter
 import sk.styk.martin.apkanalyzer.feature.apps.phone.components.AppDataPermission
 
 @Immutable

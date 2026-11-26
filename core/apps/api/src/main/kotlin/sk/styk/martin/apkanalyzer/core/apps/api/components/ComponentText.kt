@@ -1,7 +1,7 @@
-package sk.styk.martin.apkanalyzer.core.apps.components
+package sk.styk.martin.apkanalyzer.core.apps.api.components
 
 import androidx.annotation.StringRes
-import sk.styk.martin.apkanalyzer.core.apps.R
+import sk.styk.martin.apkanalyzer.core.apps.api.R
 
 @StringRes
 fun exportedExplanationRes(

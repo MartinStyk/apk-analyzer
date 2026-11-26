@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apps.signing
+package sk.styk.martin.apkanalyzer.core.apps.impl.signing
 
 import android.content.pm.PackageInfo
 import android.content.pm.Signature
@@ -9,6 +9,9 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.AppSigning
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificatePrincipal
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.common.digest.DigestManager
 import java.math.BigInteger
 import java.security.KeyPair

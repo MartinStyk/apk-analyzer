@@ -29,7 +29,7 @@ import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseDimension
 import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseSubAttribute
 import sk.styk.martin.apkanalyzer.core.appindex.browse.cardLabelRes
 import sk.styk.martin.apkanalyzer.core.appindex.browse.isCertificateHash
-import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.AppCard

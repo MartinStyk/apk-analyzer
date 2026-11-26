@@ -1,8 +1,8 @@
-package sk.styk.martin.apkanalyzer.core.apps.manifest
+package sk.styk.martin.apkanalyzer.core.apps.impl.manifest
 
 import android.content.res.Resources
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilterKey
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilterKey
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 
 internal interface ComponentManifestParser {

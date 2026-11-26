@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apps.installsource
+package sk.styk.martin.apkanalyzer.core.apps.api.installsource
 
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 

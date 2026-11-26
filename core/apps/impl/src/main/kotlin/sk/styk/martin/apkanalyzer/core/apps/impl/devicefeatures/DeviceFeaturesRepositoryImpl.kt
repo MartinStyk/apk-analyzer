@@ -1,8 +1,10 @@
-package sk.styk.martin.apkanalyzer.core.apps.devicefeatures
+package sk.styk.martin.apkanalyzer.core.apps.impl.devicefeatures
 
 import android.content.pm.FeatureInfo
 import android.content.pm.PackageManager
 import kotlinx.coroutines.withContext
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.DeviceFeatures
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.DeviceFeaturesRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import javax.inject.Inject

@@ -1,56 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string-array name="android_versions">
-        <item>Android 1</item>
-        <item>Android 1.1</item>
-        <item>Android 1.5</item>
-        <item>Android 1.6</item>
-        <item>Android 2.0</item>
-        <item>Android 2.0.1</item>
-        <item>Android 2.1</item>
-        <item>Android 2.2</item>
-        <item>Android 2.3</item>
-        <item>Android 2.3.3</item>
-        <item>Android 3.0</item>
-        <item>Android 3.1</item>
-        <item>Android 3.2</item>
-        <item>Android 4.0</item>
-        <item>Android 4.0.3</item>
-        <item>Android 4.1</item>
-        <item>Android 4.2</item>
-        <item>Android 4.3</item>
-        <item>Android 4.4</item>
-        <item>Android 4.4W</item>
-        <item>Android 5.0</item>
-        <item>Android 5.1.1</item>
-        <item>Android 6.0</item>
-        <item>Android 7.0</item>
-        <item>Android 7.1.2</item>
-        <item>Android 8.0</item>
-        <item>Android 8.1</item>
-        <item>Android 9</item>
-        <item>Android 10</item>
-        <item>Android 11</item>
-        <item>Android 12</item>
-        <item>Android 12L</item>
-        <item>Android 13</item>
-        <item>Android 14</item>
-        <item>Android 15</item>
-        <item>Android 16</item>
-        <item>Android 17</item>
-    </string-array>
-    <string name="app_detail_sdk_version">API %1$d (%2$s)</string>
-    <string name="app_detail_sdk_version_no_label">API %1$d</string>
     <string name="app_detail_unknown">Unbekannt</string>
-    <string name="general_info_title">Allgemeine Informationen</string>
-    <string name="general_info_error">Fehler beim Laden der allgemeinen Informationen</string>
     <string name="general_info_section_identification">Identifikation</string>
     <string name="general_info_section_versioning">Versionierung</string>
     <string name="general_info_section_api_targets">API-Ziele</string>
     <string name="general_info_section_security">Sicherheitseinstellungen</string>
     <string name="general_info_section_installation">Installation &amp; Quelle</string>
     <string name="general_info_section_storage">Speicher &amp; Pfade</string>
-    <string name="general_info_section_native_libraries">Native Bibliotheken</string>
     <string name="general_info_application_name">Anwendungsname</string>
     <string name="general_info_package_name">Package-Name</string>
     <string name="general_info_process_name">Prozessname</string>
@@ -64,12 +20,7 @@
     <string name="general_info_debug_access">Debug-Zugriff</string>
     <string name="general_info_app_data_backup">App-Daten-Backup</string>
     <string name="general_info_unencrypted_traffic">Unverschlüsselter Verkehr standardmäßig</string>
-    <string name="general_info_enabled">Aktiviert</string>
-    <string name="general_info_disabled">Deaktiviert</string>
-    <string name="general_info_allowed">Erlaubt</string>
     <string name="general_info_app_type">App-Typ</string>
-    <string name="general_info_app_type_system">System</string>
-    <string name="general_info_app_type_user">Benutzer</string>
     <string name="general_info_install_source">Installationsquelle</string>
     <string name="general_info_install_source_google_play">Google Play</string>
     <string name="general_info_install_source_samsung_galaxy_store">Samsung Galaxy Store</string>
@@ -93,36 +44,9 @@
     <string name="general_info_install_location">Installationsort</string>
     <string name="general_info_apk_size">APK-Größe</string>
     <string name="general_info_split_apks">Geteilte APKs</string>
-    <plurals name="general_info_split_apks_value">
-        <item quantity="one">Installiert als %1$d geteilte APK</item>
-        <item quantity="other">Installiert als %1$d geteilte APKs</item>
-    </plurals>
     <string name="general_info_total_size">Gesamtgröße</string>
     <string name="general_info_native_library_abis">CPU-Architekturen</string>
-    <string name="general_info_native_library_abis_none">Kein nativer Code</string>
     <string name="general_info_native_library_files">Native Bibliotheksdateien</string>
-    <string name="general_info_native_library_files_none">Keine gebündelt</string>
-    <plurals name="general_info_native_library_file_count">
-        <item quantity="one">%1$d Datei</item>
-        <item quantity="other">%1$d Dateien</item>
-    </plurals>
-    <string name="general_info_rationale_application_name">Das für den Benutzer sichtbare Label der App, wie es auf dem Startbildschirm und im App-Drawer angezeigt wird.</string>
-    <string name="general_info_rationale_package_name">Die eindeutige Kennung für diese App auf dem Gerät. Keine zwei Apps können denselben Paketnamen teilen.</string>
-    <string name="general_info_rationale_process_name">Der Name des Betriebssystemprozesses, in dem die App läuft. Standardmäßig entspricht er dem Paketnamen.</string>
-    <string name="general_info_rationale_uid">Die eindeutige Kennung, die dieser App vom Android-System zugewiesen wurde. Sie bestimmt den Zugriff der App auf Systemressourcen und Dateiberechtigungen.</string>
-    <string name="general_info_rationale_shared_user_id">Diese App erklärt, dass sie unter einer gemeinsamen Identität mit anderen Apps läuft, die mit demselben Schlüssel signiert sind. Apps, die diese Identität teilen, können auf die Daten und Berechtigungen der anderen zugreifen, als wären sie eine einzige App.</string>
-    <string name="general_info_rationale_description">Eine optionale Zusammenfassung, die vom App-Entwickler im Manifest bereitgestellt wird.</string>
-    <string name="general_info_rationale_version_name">Die für Benutzer lesbare Versionszeichenfolge, die angezeigt wird, wie z.B. "2.5.1" oder "Beta 3".</string>
-    <string name="general_info_rationale_version_code">Eine interne Ganzzahl, die mit jeder Veröffentlichung steigt. Das System verwendet sie, um zu bestimmen, ob eine Version neuer ist als eine andere.</string>
-    <string name="general_info_rationale_min_sdk">Das niedrigste Android API-Level, das diese App unterstützt. Geräte, die eine ältere Version ausführen, können sie nicht installieren.</string>
-    <string name="general_info_rationale_target_sdk">Das API-Level, für das die App entworfen und getestet wurde. Es sagt dem System, welche Kompatibilitätsverhalten anzuwenden sind.</string>
-    <string name="general_info_rationale_debug_access_enabled">Entwicklungstools können diese App während der Ausführung inspizieren und steuern. Dies hilft während des Testens, aber veröffentlichte Apps schalten es normalerweise aus, da jeder mit Debugging-Zugriff auf das Gerät zusätzlichen Zugriff auf die App erhält.</string>
-    <string name="general_info_rationale_debug_access_disabled">Entwicklungstools können sich nicht mit dieser App über den normalen App-Debugging-Zugriff von Android verbinden.</string>
-    <string name="general_info_rationale_backup_allowed">Android kann die Daten dieser App in Backups einbeziehen oder sie auf ein anderes Gerät verschieben. Die genauen Daten hängen von den Backup-Regeln der App und der Android-Version ab.</string>
-    <string name="general_info_rationale_backup_blocked">Die App deaktiviert die Android-Cloud-Backup-Funktion. Der Transfer von Gerät zu Gerät kann je nach Android-Version und Gerätehersteller variieren.</string>
-    <string name="general_info_rationale_cleartext_allowed">Die allgemeine Manifest-Einstellung der App erlaubt Netzwerkverbindungen ohne Verschlüsselung. Benutzerdefinierte Netzwerksicherheitsregeln können diese Einstellung überschreiben. Dies beweist nicht, dass die App unverschlüsselte Daten sendet.</string>
-    <string name="general_info_rationale_cleartext_blocked">Die allgemeine Manifest-Einstellung der App deaktiviert Netzwerkverbindungen ohne Verschlüsselung. Benutzerdefinierte Netzwerksicherheitsregeln und einige Netzwerkbibliotheken können sich anders verhalten.</string>
-    <string name="general_info_rationale_app_type">Ob die App eine vorinstallierte System-App oder eine vom Benutzer installierte App ist. System-Apps haben erweiterte Berechtigungen und können nicht vollständig deinstalliert werden.</string>
     <string name="general_info_rationale_install_source_google_play">Diese App wurde über Google Play heruntergeladen und installiert, das Apps vor der Veröffentlichung überprüft.</string>
     <string name="general_info_rationale_install_source_samsung_galaxy_store">Diese App wurde über den Galaxy Store von Samsung heruntergeladen und installiert, dem eigenen App-Store des Herstellers.</string>
     <string name="general_info_rationale_install_source_amazon_appstore">Diese App wurde über den Amazon Appstore heruntergeladen und installiert.</string>
@@ -134,31 +58,12 @@
     <string name="general_info_rationale_install_source_local_install">Diese App wurde direkt von einem verbundenen Computer installiert, typischerweise mit einem Entwickler-Tool wie ADB, anstatt über einen App-Store.</string>
     <string name="general_info_rationale_install_source_system">Diese App war vorinstalliert auf dem Gerät als Teil des Betriebssystems oder der Software des Herstellers.</string>
     <string name="general_info_rationale_install_source_unknown">Android konnte nicht melden, woher diese App installiert wurde. Dies kann nach der Wiederherstellung eines Geräte-Backups oder mit einigen herstellerspezifischen Installern passieren.</string>
-    <string name="general_info_rationale_installer_package">Der Paketname der App, die die Installation durchgeführt hat, wie \"com.android.vending\" für Google Play.</string>
-    <string name="general_info_rationale_install_initiator">Die App, die die Installation gestartet hat, wie ein Browser oder ein Dateimanager für eine sideloaded App oder ein App-Store für eine Store-Installation. Dies kann von dem oben genannten Installer-Paket abweichen.</string>
-    <string name="general_info_rationale_install_originator">Das Paket, das die APK-Datei bereitgestellt hat, wenn Android es separat von der App meldet, die die Installation gestartet hat. Die meisten Installationen lassen dies leer.</string>
-    <string name="general_info_rationale_first_installed">Das Datum und die Uhrzeit, zu der diese App erstmals auf dem Gerät installiert wurde.</string>
-    <string name="general_info_rationale_last_updated">Das Datum und die Uhrzeit des letzten Updates dieser App.</string>
-    <string name="general_info_rationale_last_used">Das ungefähre Datum und die Uhrzeit, zu der diese App zuletzt vom Benutzer geöffnet wurde.</string>
-    <string name="general_info_rationale_apk_directory">Der Dateisystempfad, an dem die APK-Datei auf dem Gerät gespeichert ist.</string>
-    <string name="general_info_rationale_data_directory">Der Dateisystempfad, an dem die App ihre privaten Daten, Datenbanken und gemeinsamen Einstellungen speichert.</string>
-    <string name="general_info_rationale_install_location">Der bevorzugte Speicherort, der vom Entwickler deklariert wurde – interner Speicher, externer Speicher oder automatisch.</string>
-    <string name="general_info_rationale_apk_size">Die kombinierte Größe der installierten APK-Dateien auf der Festplatte, ohne App-Daten, Caches und zur Laufzeit generierte Dateien. Die meisten Apps, die aus dem Google Play Store installiert werden, sind in eine Basis APK und zusätzliche APKs für die Sprache und Bildschirmdichte Ihres Geräts unterteilt; diese Gesamtsumme umfasst alle.</string>
-    <string name="general_info_rationale_total_size">Die kombinierte Größe der APK, App-Daten und zwischengespeicherten Dateien. Erfordert Berechtigungszugriff.</string>
-    <string name="general_info_rationale_native_library_abis">Die Prozessorarten, für die diese App kompilierte native Code enthält, werden aus den eigenen Dateien der APK gelesen, anstatt was dieses Gerät meldet.</string>
-    <string name="general_info_native_library_device_support">Dieses Gerät unterstützt: %1$s.</string>
-    <string name="general_info_native_library_incompatible">Keine dieser Prozessorarten stimmt mit dem überein, was dieses Gerät unterstützt, sodass der native Code dieser App hier wahrscheinlich nicht ausgeführt werden kann.</string>
     <string name="components_title">Komponenten</string>
-    <string name="components_error">Komponenten konnten nicht geladen werden</string>
     <string name="components_type_activities">Activities</string>
     <string name="components_type_services">Services</string>
     <string name="components_type_receivers">Receivers</string>
     <string name="components_type_providers">Providers</string>
-    <string name="components_tag_exported">Exportiert</string>
-    <string name="components_tag_launcher">Launcher</string>
     <string name="components_detail_launcher">Launcher-Bildschirm</string>
-    <string name="components_detail_launcher_explanation">Das öffnet sich, wenn Sie auf das App-Icon tippen.</string>
-    <string name="components_tag_unprotected">Exportiert ohne Berechtigungsprüfung</string>
     <string name="components_flag_stop_with_task">Hört mit der Aufgabe auf</string>
     <string name="components_flag_stop_with_task_explanation">Wird beendet, wenn Sie die App aus den letzten Anwendungen wischen.</string>
     <string name="components_flag_single_user">Einzelner Benutzer</string>
@@ -167,40 +72,6 @@
     <string name="components_flag_isolated_process_explanation">Wird sandboxed ohne eigene Berechtigungen ausgeführt.</string>
     <string name="components_flag_external_service">Externer Dienst</string>
     <string name="components_flag_external_service_explanation">Andere Apps können dies in ihrem eigenen Prozess ausführen.</string>
-    <string name="components_flag_enabled">Ja</string>
-    <string name="components_detail_full_name">Vollständiger Name</string>
-    <string name="components_detail_section_reachability">Erreichbarkeit</string>
-    <string name="components_detail_section_details">Details</string>
-    <string name="components_detail_section_intent_filters">Anfragen, die diese Komponente akzeptiert</string>
-    <string name="components_detail_intent_filters_explanation">Android und andere Apps verwenden diese Deklarationen, um zu entscheiden, welche Anfragen, Links und Inhalte diese Komponente erreichen können.</string>
-    <string name="components_detail_intent_filters_unavailable">Intent filters konnten für diese App nicht gelesen werden.</string>
-    <string name="components_detail_intent_filters_open">Intent-Filter anzeigen</string>
-    <plurals name="components_intent_filter_count">
-        <item quantity="one">%1$d Intent-Filter</item>
-        <item quantity="other">%1$d Intent-Filter</item>
-    </plurals>
-    <string name="components_detail_intent_actions">Aktionen</string>
-    <string name="components_detail_intent_actions_explanation">Was eine andere App oder Android diese Komponente auffordert zu tun.</string>
-    <string name="components_detail_intent_categories">Kategorien</string>
-    <string name="components_detail_intent_categories_explanation">Kategorien, die dieser Filter erlaubt. Jede Kategorie, die von einer Anfrage bereitgestellt wird, muss hier aufgeführt sein.</string>
-    <string name="components_detail_intent_data">Links und Inhalte</string>
-    <string name="components_detail_intent_data_explanation">Die Webadressen, Dateitypen oder anderen Inhalte, die diese Komponente angibt, dass sie verarbeitet werden können.</string>
-    <string name="components_detail_intent_data_rule">%1$s: %2$s</string>
-    <string name="components_detail_intent_allowed_uri_parts">Erlaubte Linkdetails</string>
-    <string name="components_detail_intent_allowed_uri_parts_explanation">Alle Details in dieser Gruppe müssen übereinstimmen, damit die Gruppe einen Link zulässt. Android bewertet Gruppen in der Reihenfolge des Manifests.</string>
-    <string name="components_detail_intent_blocked_uri_parts">Blockierte Linkdetails</string>
-    <string name="components_detail_intent_blocked_uri_parts_explanation">Diese Details definieren eine Blockierungsübereinstimmungsregel. Android bewertet sie zusammen mit den anderen Linkregeln des Filters in der Reihenfolge des Manifests.</string>
-    <string name="components_detail_intent_auto_verify">Verifizierungsanfrage</string>
-    <string name="components_detail_intent_auto_verify_requested">Angefordert</string>
-    <string name="components_detail_intent_auto_verify_explanation">Die App bittet Android zu überprüfen, ob ihre Signaturidentität berechtigt ist, diese Webseitenlinks zu öffnen.</string>
-    <string name="components_detail_intent_activity_priority">Übereinstimmungspriorität</string>
-    <string name="components_detail_intent_activity_priority_explanation">Eine höhere Zahl kann diese Aktivität gegenüber anderen übereinstimmenden Aktivitäten bevorzugen, vorbehaltlich der Routingregeln von Android.</string>
-    <string name="components_detail_intent_receiver_priority">Broadcast-Priorität</string>
-    <string name="components_detail_intent_receiver_priority_explanation">Für geordnete Broadcasts kann eine höhere Zahl bewirken, dass dieser Empfänger früher ausgeführt wird, vorbehaltlich der Grenzen von Android.</string>
-    <string name="components_detail_intent_declared_priority">Deklarierte Priorität</string>
-    <string name="components_detail_intent_declared_priority_explanation">Der Manifest erklärt diesen Wert, aber Android verwendet ihn nicht, um zwischen übereinstimmenden Services oder Providern zu wählen.</string>
-    <string name="components_detail_intent_order">Lieferreihenfolge</string>
-    <string name="components_detail_intent_order_explanation">Eine höhere Zahl wird zuerst berücksichtigt, wenn diese App mehrere übereinstimmende Filter hat.</string>
     <string name="components_intent_data_scheme">Adressschema</string>
     <string name="components_intent_data_host">Host</string>
     <string name="components_intent_data_port">Port</string>
@@ -236,13 +107,10 @@
     <string name="components_detail_permission">Erforderliche Berechtigung</string>
     <string name="components_detail_read_permission">Leseerlaubnis</string>
     <string name="components_detail_write_permission">Schreibberechtigung</string>
-    <string name="components_detail_label">Bezeichnung</string>
     <string name="components_detail_target_activity">Zielaktivität</string>
     <string name="components_detail_parent">Übergeordnete Aktivität</string>
     <string name="components_detail_authority">Berechtigung</string>
     <string name="components_detail_section_path_permissions">Pfadberechtigungen</string>
-    <string name="components_detail_path_permissions_explanation">Regeln für spezifische Pfade unter diesem Provider. Ein Pfad kann den Zugriff über die allgemeinen Lese- und Schreibberechtigungen hinaus gewähren oder entziehen.</string>
-    <string name="components_detail_path_permission_path">Pfad</string>
     <string name="components_detail_path_permission_open">Keine Berechtigung erforderlich</string>
     <string name="components_path_permission_type_literal">Entspricht diesem genauen Pfad</string>
     <string name="components_path_permission_type_prefix">Entspricht diesem Pfad und allem darunter</string>
@@ -250,31 +118,12 @@
     <string name="components_path_permission_type_advanced_glob">Entspricht diesem Pfad unter Verwendung eines erweiterten Platzhaltermusters</string>
     <string name="components_path_permission_type_suffix">Entspricht jedem Pfad, der damit endet</string>
     <string name="certificates_title">Signaturzertifikat</string>
-    <string name="certificates_error">Das Signaturzertifikat konnte nicht geladen werden</string>
-    <string name="certificates_empty">Kein Signaturzertifikat gefunden</string>
-    <string name="certificates_card_position">%1$s (%2$d von %3$d)</string>
-    <string name="certificates_signer_position">Unterzeichner %1$d von %2$d</string>
-    <string name="certificates_current_certificate">Aktuelles Signierungszertifikat</string>
     <string name="certificates_current_certificates">Aktuelle Signierungszertifikate</string>
     <string name="certificates_history">Signierungshistorie</string>
-    <plurals name="certificates_history_description">
-        <item quantity="one">Android hat einen verifizierten Signaturschlüssel verwendet, der vor dem aktuellen Schlüssel verwendet wurde.</item>
-        <item quantity="other">Android hat %d verifizierte Signaturschlüssel verwendet, die vor dem aktuellen Schlüssel verwendet wurden. Der zuletzt verwendete vorherige Schlüssel erscheint zuerst.</item>
-    </plurals>
-    <string name="certificates_original_signing_key">Ursprünglicher Signaturschlüssel</string>
-    <string name="certificates_previous_signing_key">Vorheriger Signaturschlüssel</string>
-    <string name="certificates_debug_title">Debug-Zertifikat</string>
-    <string name="certificates_debug_description">Diese App verwendet den gemeinsam genutzten Debug-Schlüssel von Android anstelle eines privaten Veröffentlichungs-Schlüssels. Das ist normal für Tests, aber nicht für eine veröffentlichte App.</string>
-    <string name="certificates_signer">Unterzeichner</string>
-    <string name="certificates_details">Zertifikatsdetails</string>
     <string name="certificates_organization">Organisation</string>
     <string name="certificates_name">Name</string>
     <string name="certificates_country">Land</string>
     <string name="certificates_issuer">Ausgestellt von</string>
-    <string name="certificates_unknown_signer">Unbekannter Unterzeichner</string>
-    <string name="certificates_self_signed">Selbstsigniert</string>
-    <string name="certificates_self_signed_value">Der Signierer hat dieses Zertifikat ausgestellt</string>
-    <string name="certificates_self_signed_explanation">Selbstsignierte Zertifikate sind normal für Android-Apps. Vergleichen Sie den Fingerabdruck des Zertifikats mit einer vertrauenswürdigen Quelle, wenn Sie den Herausgeber überprüfen müssen.</string>
     <string name="certificates_validity">Gültigkeit</string>
     <string name="certificates_date_range">%1$s bis %2$s</string>
     <string name="certificates_valid">Gültig</string>
@@ -283,18 +132,12 @@
     <string name="certificates_valid_explanation">Das Zertifikat befindet sich innerhalb seines angegebenen Gültigkeitszeitraums.</string>
     <string name="certificates_expired_explanation">Android kann eine installierte App weiterhin akzeptieren, nachdem das Signierungszertifikat abgelaufen ist. Vergleichen Sie den Fingerabdruck mit einer vertrauenswürdigen Quelle, wenn die App oder das Update unerwartet ist.</string>
     <string name="certificates_not_yet_valid_explanation">Der Gültigkeitszeitraum des Zertifikats hat noch nicht begonnen. Überprüfen Sie das Datum des Geräts und verifizieren Sie den Fingerabdruck, bevor Sie dieser App vertrauen.</string>
-    <string name="certificates_current_signers">Aktuelle Unterzeichner</string>
-    <string name="certificates_single_signer">Einzelner Unterzeichner</string>
     <string name="certificates_multiple_signers">Mehrere Unterzeichner</string>
-    <string name="certificates_single_signer_explanation">Diese App ist derzeit mit einem Zertifikat signiert. Wenn der Entwickler den Signaturschlüssel erneut wechselt, überprüft Android die Änderung anhand der vertrauenswürdigen Signierungshistorie dieser App.</string>
-    <string name="certificates_multiple_signers_explanation">Diese App ist derzeit mit mehreren Zertifikaten signiert. Android verlangt, dass Updates denselben Unterzeichner-Satz verwenden.</string>
     <string name="certificates_scheme">Schema</string>
     <string name="certificates_scheme_v1">v1</string>
     <string name="certificates_scheme_v2">v2</string>
     <string name="certificates_scheme_v3">v3</string>
     <string name="certificates_scheme_v3_1">v3.1</string>
-    <string name="certificates_scheme_explanation">Das Schema ist das Signaturformat, das Android verwendet hat, um dieses APK zu verifizieren. Neuere Schemas (v2 und später) schützen auch die gesamte Datei, nicht nur einzelne Einträge, sodass eine moderne App, die nur mit v1 signiert ist, einen zweiten Blick wert ist. Der Algorithmus unten beschreibt, wie das Signierungszertifikat selbst signiert wurde, nicht das APK Signierungsschema.</string>
-    <string name="certificates_algorithm">Algorithmus</string>
     <string name="certificates_algorithm_strong">Stark</string>
     <string name="certificates_algorithm_weak">Schwach</string>
     <string name="certificates_algorithm_unknown">Unbekannte Stärke</string>
@@ -303,36 +146,16 @@
     <string name="certificates_algorithm_md5_explanation">%1$s verwendet MD5. MD5 ist nicht kollisionsresistent und ist unsicher für Signierungszertifikate. Neue Signierungszertifikate sollten SHA-256 oder stärker verwenden.</string>
     <string name="certificates_algorithm_md2_explanation">%1$s verwendet MD2. MD2 ist veraltet und anfällig für praktische Angriffe, sodass es unsicher für Signierungszertifikate ist. Neue Signierungszertifikate sollten SHA-256 oder stärker verwenden.</string>
     <string name="certificates_algorithm_unknown_explanation">Die Stärke von %1$s kann nicht anhand des Algorithmusnamens bewertet werden. Die Art und Größe des Schlüssels können ebenfalls die Sicherheit beeinflussen.</string>
-    <string name="certificates_serial">Seriennummer</string>
-    <string name="certificates_serial_explanation">Der Zertifikatsaussteller weist dieser Nummer zu, um das Zertifikat zu identifizieren. Verwenden Sie sie zusammen mit dem Namen des Ausstellers; es ist kein Fingerabdruck des Zertifikats.</string>
-    <string name="certificates_certificate_fingerprints">Zertifikatsfingerabdrücke</string>
-    <string name="certificates_public_key_fingerprints">Fingerabdrücke des öffentlichen Schlüssels</string>
-    <string name="certificates_fingerprint">Fingerabdruck</string>
-    <string name="certificates_sha256">SHA-256</string>
-    <string name="certificates_sha1">SHA-1</string>
-    <string name="certificates_md5">MD5</string>
     <string name="certificates_explain">Erkläre %1$s</string>
     <string name="requirements_title">Geräteanforderungen</string>
-    <string name="requirements_error">Die Geräteanforderungen dieser App konnten nicht gelesen werden.</string>
-    <string name="requirements_empty">Diese App gibt keine Geräteanforderungen an.</string>
-    <string name="requirements_section_header">%1$s · %2$d</string>
     <string name="requirements_section_required">Erforderlich</string>
     <string name="requirements_section_required_explanation">Die App wird ohne diese nicht installiert.</string>
     <string name="requirements_section_optional">Optional</string>
     <string name="requirements_section_optional_explanation">Verwendet, wenn verfügbar.</string>
-    <plurals name="requirements_missing_summary">
-        <item quantity="one">%1$d Anforderung, die dieses Gerät nicht erfüllen kann</item>
-        <item quantity="other">%1$d Anforderungen, die dieses Gerät nicht erfüllen kann</item>
-    </plurals>
     <string name="requirements_missing">Nicht auf diesem Gerät</string>
     <string name="requirements_missing_version">Benötigt %1$s · dieses Gerät hat %2$s</string>
     <string name="requirements_open_gl_es">OpenGL ES %1$s</string>
     <string name="requirements_label_with_version">%1$s %2$s</string>
-    <string name="requirements_detail_identifier">Identifikator</string>
-    <string name="requirements_detail_necessity">Notwendigkeit</string>
-    <string name="requirements_detail_availability">Auf diesem Gerät</string>
-    <string name="requirements_detail_version">Version</string>
-    <string name="requirements_detail_version_comparison">%1$s benötigt · %2$s auf diesem Gerät</string>
     <string name="requirements_availability_available">Verfügbar</string>
     <string name="requirements_availability_available_explanation">Dieses Gerät stellt es zur Verfügung, sodass die App es verwenden kann.</string>
     <string name="requirements_availability_missing">Nicht verfügbar</string>
@@ -415,23 +238,11 @@
     <string name="requirement_backup">Systembackup</string>
     <string name="requirement_sip_voip">Internetanruf</string>
     <string name="requirement_connection_service">Integration der Anruf-App</string>
-    <string name="splitapks_title">Geteilte APKs</string>
-    <plurals name="splitapks_heading">
-        <item quantity="one">%1$d Split APK installiert</item>
-        <item quantity="other">%1$d Split APKs installiert</item>
-    </plurals>
-    <string name="splitapks_explanation">Diese App wurde als Basis APK installiert, plus diese zusätzlichen Split APKs, ein Lieferformat, das Google Play verwendet, um nur den Code und die Ressourcen zu senden, die Ihr Gerät benötigt.</string>
-    <string name="splitapks_error">Fehler beim Laden des Split APKs</string>
-    <string name="splitapks_empty">Diese App hat keinen Split APKs installiert.</string>
     <string name="splitapks_kind_feature">Funktionsmodul</string>
     <string name="splitapks_kind_abi">CPU-Architektur</string>
     <string name="splitapks_kind_density">Bildschirmdichte</string>
     <string name="splitapks_kind_language">Sprache</string>
-    <string name="splitapks_detail_type">Typ</string>
-    <string name="splitapks_detail_identifier">Identifikator</string>
     <string name="splitapks_detail_file_name">Dateiname</string>
-    <string name="splitapks_detail_size">Größe</string>
-    <string name="splitapks_detail_path">Vollständiger Pfad</string>
     <string name="splitapks_abi_arm64_v8a">ARM64 (64-Bit)</string>
     <string name="splitapks_abi_armeabi_v7a">ARM (32-Bit)</string>
     <string name="splitapks_abi_armeabi">ARM (veraltet, 32-Bit)</string>
@@ -448,41 +259,12 @@
     <string name="splitapks_density_xxxhdpi">Extra-extra-extra-hohe Dichte Bildschirme</string>
     <string name="splitapks_density_nodpi">Dichte-unabhängige Ressourcen</string>
     <string name="splitapks_density_anydpi">Jede Dichte (Vektorressourcen)</string>
-    <string name="nativelibraries_title">Native Bibliotheksdateien</string>
-    <plurals name="nativelibraries_heading">
-        <item quantity="one">%1$d native Bibliothek gebündelt</item>
-        <item quantity="other">%1$d native Bibliotheken gebündelt</item>
-    </plurals>
-    <string name="nativelibraries_explanation">Jede distinct native Code-Datei, die diese App ausliefert, eine Zeile pro Dateiname, selbst wenn dieselbe Bibliothek für mehrere Prozessorarchitekturen erstellt wird.</string>
-    <string name="nativelibraries_error">Fehler beim Laden der nativen Bibliotheken</string>
-    <string name="nativelibraries_empty">Diese App hat keine gebündelten nativen Bibliotheken.</string>
-    <string name="nativelibraries_supported">Unterstützt auf diesem Gerät</string>
-    <string name="nativelibraries_not_supported">Nicht unterstützt auf diesem Gerät</string>
-    <string name="nativelibraries_not_supported_explanation">Keiner der Prozessor-Typen, für die diese Bibliothek erstellt wurde, entspricht dem, was dieses Gerät unterstützt, daher wird dieser Code hier wahrscheinlich nicht ausgeführt.</string>
-    <string name="nativelibraries_detail_device_support">Auf diesem Gerät</string>
     <string name="nativelibraries_detail_abis">Erstellt für</string>
-    <string name="nativelibraries_detail_total_size">Gesamtgröße</string>
-    <string name="nativelibraries_detail_section_variants">Pro Prozessor-Typ</string>
-    <string name="nativelibraries_detail_variant_source">In %1$s gebündelt</string>
     <string name="manifest_title">Android Manifest</string>
-    <string name="manifest_error">Das Manifest konnte nicht gelesen werden</string>
-    <plurals name="manifest_line_count">
-        <item quantity="one">%1$d Zeile</item>
-        <item quantity="other">%1$d Zeilen</item>
-    </plurals>
-    <plurals name="manifest_base_split_note">
-        <item quantity="one">Zeigt das Basis APK Manifest. Diese App hat %1$d zusätzliche installierte Split mit ihrem eigenen Manifest.</item>
-        <item quantity="other">Zeigt das Basis APK Manifest. Diese App hat %1$d zusätzliche installierte Splits mit ihren eigenen Manifests.</item>
-    </plurals>
-    <string name="components_launch">Starte diese Komponente</string>
-    <string name="components_launch_started">Startanforderung gesendet — die App entscheidet, was als Nächstes passiert.</string>
-    <string name="components_launch_broadcast_sent">Broadcast gesendet — hier wird nicht berichtet, ob er verarbeitet wurde.</string>
-    <string name="components_launch_failed">Das System hat sich geweigert, dies zu starten.</string>
     <string name="certificates_validity_on_date_valid">An diesem Tag gültig</string>
     <string name="certificates_validity_on_date_expired">An diesem Tag abgelaufen</string>
     <string name="certificates_validity_on_date_not_yet">An diesem Tag noch nicht gültig</string>
     <string name="certificates_validity_on_date_valid_explanation">Dieses Zertifikat lag an dem Tag, an dem Apk Analyzer es erfasst hat, innerhalb seiner Gültigkeitsdauer.</string>
     <string name="certificates_validity_on_date_expired_explanation">Das Enddatum dieses Zertifikats war an dem Tag, an dem Apk Analyzer es erfasst hat, bereits überschritten.</string>
     <string name="certificates_validity_on_date_not_yet_explanation">Das Startdatum dieses Zertifikats lag an dem Tag, an dem Apk Analyzer es erfasst hat, noch in der Zukunft.</string>
-    <string name="app_info_unavailable">Dieses Gerät kann App-Info nicht öffnen</string>
 </resources>

@@ -1,10 +1,12 @@
-package sk.styk.martin.apkanalyzer.core.apps.manifest
+package sk.styk.martin.apkanalyzer.core.apps.impl.manifest
 
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import kotlinx.coroutines.withContext
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilterKey
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilterKey
+import sk.styk.martin.apkanalyzer.core.apps.api.manifest.ManifestParser
+import sk.styk.martin.apkanalyzer.core.apps.api.manifest.ParsedManifest
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger

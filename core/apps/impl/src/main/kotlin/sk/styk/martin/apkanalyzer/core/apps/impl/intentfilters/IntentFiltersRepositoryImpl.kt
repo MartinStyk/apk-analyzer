@@ -1,9 +1,10 @@
-package sk.styk.martin.apkanalyzer.core.apps.intentfilters
+package sk.styk.martin.apkanalyzer.core.apps.impl.intentfilters
 
-import sk.styk.martin.apkanalyzer.core.apps.PackageChangesObserver
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilterKey
-import sk.styk.martin.apkanalyzer.core.apps.manifest.ManifestParser
+import sk.styk.martin.apkanalyzer.core.apps.api.PackageChangesObserver
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilterKey
+import sk.styk.martin.apkanalyzer.core.apps.api.intentfilters.IntentFiltersRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.manifest.ManifestParser
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppReferenceCacheKey

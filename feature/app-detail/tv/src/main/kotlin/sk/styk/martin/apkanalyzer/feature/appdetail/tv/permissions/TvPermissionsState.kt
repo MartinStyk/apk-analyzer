@@ -3,7 +3,7 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.tv.permissions
 import androidx.compose.runtime.Immutable
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionItem
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionScope
-import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionLevel
 
 @Immutable
 internal data class TvPermissionScopeOption(val scope: PermissionScope, val count: Int)

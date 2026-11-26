@@ -330,4 +330,45 @@
         <item quantity="many">Historia od %1$s · %2$d zmian</item>
         <item quantity="other">Historia od %1$s · %2$d zmiany</item>
     </plurals>
+    <string name="components_detail_full_name">Pełne imię i nazwisko</string>
+    <string name="components_detail_intent_filters_open">Wyświetl filtry intencji</string>
+    <plurals name="components_intent_filter_count">
+        <item quantity="one">%1$d filtr intencji</item>
+        <item quantity="few">%1$d filtry intencji</item>
+        <item quantity="many">%1$d filtrów intencji</item>
+        <item quantity="other">%1$d filtrów intencji</item>
+    </plurals>
+    <string name="components_detail_intent_actions_explanation">Co inna aplikacja lub Android prosi ten komponent o zrobienie.</string>
+    <string name="components_detail_intent_categories_explanation">Kategorie, które ten filtr zezwala. Każda kategoria dostarczona przez żądanie musi być tutaj wymieniona.</string>
+    <string name="components_detail_intent_data_explanation">Adresy internetowe, typy plików lub inne treści, które ten komponent mówi, że może obsługiwać.</string>
+    <string name="components_detail_intent_allowed_uri_parts_explanation">Wszystkie szczegóły w tej grupie muszą pasować, aby grupa mogła zezwolić na link. Android ocenia grupy w kolejności manifestu.</string>
+    <string name="components_detail_intent_blocked_uri_parts_explanation">Te szczegóły definiują regułę dopasowania blokady. Android ocenia je z innymi regułami linków w filtrze w kolejności manifestu.</string>
+    <string name="components_detail_intent_activity_priority_explanation">Wyższa liczba może sprawić, że ta aktywność będzie preferowana nad innymi dopasowanymi aktywnościami, zgodnie z zasadami routingu Androida.</string>
+    <string name="components_detail_intent_receiver_priority_explanation">Dla uporządkowanych nadawania, wyższa liczba może sprawić, że ten odbiornik uruchomi się wcześniej, zgodnie z ograniczeniami Androida.</string>
+    <string name="components_detail_intent_declared_priority_explanation">Manifest deklaruje tę wartość, ale Android nie używa jej do wyboru między dopasowanymi usługami lub dostawcami.</string>
+    <string name="components_detail_intent_order_explanation">Wyższa liczba jest brana pod uwagę jako pierwsza, gdy ta aplikacja ma wiele dopasowanych filtrów.</string>
+    <plurals name="certificates_history_description">
+        <item quantity="one">Android zweryfikował jeden klucz podpisujący używany przed aktualnym kluczem.</item>
+        <item quantity="few">Android zweryfikował %d klucze podpisujące używane przed aktualnym kluczem. Najnowszy używany poprzedni klucz pojawia się jako pierwszy.</item>
+        <item quantity="many">Android zweryfikował %d kluczy podpisujących używanych przed aktualnym kluczem. Najnowszy używany poprzedni klucz pojawia się jako pierwszy.</item>
+        <item quantity="other">Android zweryfikował %d kluczy podpisujących używanych przed aktualnym kluczem. Najnowszy używany poprzedni klucz pojawia się jako pierwszy.</item>
+    </plurals>
+    <string name="certificates_details">Szczegóły certyfikatu</string>
+    <string name="certificates_fingerprint">odcisk palca</string>
+    <plurals name="requirements_missing_summary">
+        <item quantity="one">%1$d wymaganie, którego to urządzenie nie może spełnić</item>
+        <item quantity="few">%1$d wymagania, których to urządzenie nie może spełnić</item>
+        <item quantity="many">%1$d wymagań, których to urządzenie nie może spełnić</item>
+        <item quantity="other">%1$d wymagań, których to urządzenie nie może spełnić</item>
+    </plurals>
+    <string name="requirements_detail_necessity">Konieczność</string>
+    <string name="requirements_detail_availability">Na tym urządzeniu</string>
+    <string name="requirements_detail_version">Wersja</string>
+    <string name="requirements_detail_version_comparison">%1$s wymagane · %2$s na tym urządzeniu</string>
+    <string name="splitapks_detail_type">Typ</string>
+    <string name="splitapks_detail_size">Rozmiar</string>
+    <string name="nativelibraries_explanation">Każdy odrębny plik kodu natywnego, który ta aplikacja dostarcza, jeden wiersz na nazwę pliku, nawet gdy ta sama biblioteka jest budowana dla wielu architektur procesora.</string>
+    <string name="nativelibraries_detail_device_support">Na tym urządzeniu</string>
+    <string name="nativelibraries_detail_total_size">Całkowity rozmiar</string>
+    <string name="components_launch">Uruchom ten komponent</string>
 </resources>

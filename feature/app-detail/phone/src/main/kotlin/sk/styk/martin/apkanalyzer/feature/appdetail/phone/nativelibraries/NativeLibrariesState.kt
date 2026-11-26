@@ -1,7 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone.nativelibraries
 
 import androidx.compose.runtime.Immutable
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryItem
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraryItem
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
 
 @Immutable

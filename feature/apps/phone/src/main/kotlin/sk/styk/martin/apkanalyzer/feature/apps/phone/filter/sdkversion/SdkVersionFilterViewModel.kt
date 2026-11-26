@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
-import sk.styk.martin.apkanalyzer.core.apps.sdkversion.SdkVersionResolver
+import sk.styk.martin.apkanalyzer.core.apps.api.InstalledAppsRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.sdkversion.SdkVersionResolver
 import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.domain.SdkVersionFilterCoordinator
 import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.domain.SdkVersionFilterDraft
 import javax.inject.Inject

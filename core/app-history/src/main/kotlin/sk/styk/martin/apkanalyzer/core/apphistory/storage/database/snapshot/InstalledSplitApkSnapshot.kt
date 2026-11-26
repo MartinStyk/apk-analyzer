@@ -1,8 +1,8 @@
 package sk.styk.martin.apkanalyzer.core.apphistory.storage.database.snapshot
 
 import kotlinx.serialization.Serializable
-import sk.styk.martin.apkanalyzer.core.apps.packaging.InstalledSplitApk
-import sk.styk.martin.apkanalyzer.core.apps.packaging.SplitApkKind
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.InstalledSplitApk
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.SplitApkKind
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
 
 @Serializable

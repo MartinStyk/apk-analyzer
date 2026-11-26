@@ -56,7 +56,8 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SECTION_BACKDR
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionAppHeader
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionLoading
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 @Composable
 internal fun TvManifestScreen(
@@ -94,7 +95,7 @@ private fun TvManifestContent(
             title = title,
             appName = appName,
             appReference = appReference,
-            message = stringResource(AppsR.string.manifest_error),
+            message = stringResource(DomainR.string.manifest_error),
             onRetry = { onAction(TvManifestAction.Retry) },
         )
 
@@ -127,14 +128,14 @@ private fun LoadedContent(
                 appReference = appReference,
             )
             Text(
-                text = pluralStringResource(AppsR.plurals.manifest_line_count, state.lines.size, state.lines.size),
+                text = pluralStringResource(DomainR.plurals.manifest_line_count, state.lines.size, state.lines.size),
                 style = AppTheme.typography.titleMedium,
                 color = AppTheme.colors.onSurfaceVariant,
                 modifier = Modifier.padding(top = 12.dp),
             )
             if (state.additionalInstalledSplits > 0) {
                 Text(
-                    text = pluralStringResource(AppsR.plurals.manifest_base_split_note, state.additionalInstalledSplits, state.additionalInstalledSplits),
+                    text = pluralStringResource(DomainR.plurals.manifest_base_split_note, state.additionalInstalledSplits, state.additionalInstalledSplits),
                     style = AppTheme.typography.bodyLarge,
                     color = AppTheme.colors.onSurfaceVariant,
                 )

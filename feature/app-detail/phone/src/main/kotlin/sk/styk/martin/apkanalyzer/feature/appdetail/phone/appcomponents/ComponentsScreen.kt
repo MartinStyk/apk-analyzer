@@ -36,7 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentFlag
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentFlag
 import sk.styk.martin.apkanalyzer.core.common.util.sendForeignBroadcast
 import sk.styk.martin.apkanalyzer.core.common.util.startForeignActivity
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
@@ -58,7 +58,8 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ListSection
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
 import java.time.Instant
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 @Composable
 internal fun ComponentsScreen(
@@ -91,9 +92,9 @@ internal fun ComponentsScreen(
                         )
                     }
                     val message = when {
-                        result.isFailure -> AppsR.string.components_launch_failed
-                        event.type == ComponentType.Receiver -> AppsR.string.components_launch_broadcast_sent
-                        else -> AppsR.string.components_launch_started
+                        result.isFailure -> DomainR.string.components_launch_failed
+                        event.type == ComponentType.Receiver -> DomainR.string.components_launch_broadcast_sent
+                        else -> DomainR.string.components_launch_started
                     }
                     Toast.makeText(context, message, Toast.LENGTH_LONG).show()
                 }
@@ -134,7 +135,7 @@ private fun ComponentsContent(
 
             is ComponentsState.Error -> SectionError(
                 reason = state.reason,
-                loadFailedMessage = stringResource(AppsR.string.components_error),
+                loadFailedMessage = stringResource(DomainR.string.components_error),
                 onRetry = { onAction(ComponentsAction.Retry) },
             )
 

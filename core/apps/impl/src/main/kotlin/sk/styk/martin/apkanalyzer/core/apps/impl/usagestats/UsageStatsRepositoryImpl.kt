@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apps.usagestats
+package sk.styk.martin.apkanalyzer.core.apps.impl.usagestats
 
 import android.annotation.SuppressLint
 import android.app.AppOpsManager
@@ -14,6 +14,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import sk.styk.martin.apkanalyzer.core.apps.api.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger

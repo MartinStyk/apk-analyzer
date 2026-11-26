@@ -1,6 +1,6 @@
-package sk.styk.martin.apkanalyzer.core.apps
+package sk.styk.martin.apkanalyzer.core.apps.api
 
-import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
+import sk.styk.martin.apkanalyzer.core.apps.api.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 
 class AppDetailRepositoryFake(vararg details: AppDetail) : AppDetailRepository {

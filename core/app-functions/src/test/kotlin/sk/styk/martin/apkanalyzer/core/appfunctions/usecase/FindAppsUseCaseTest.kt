@@ -5,10 +5,10 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import sk.styk.martin.apkanalyzer.core.appfunctions.model.AppSummary
-import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepositoryFake
-import sk.styk.martin.apkanalyzer.core.apps.model.anApp
-import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepositoryFake
-import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepositoryFake
+import sk.styk.martin.apkanalyzer.core.apps.api.InstalledAppsRepositoryFake
+import sk.styk.martin.apkanalyzer.core.apps.api.model.anApp
+import sk.styk.martin.apkanalyzer.core.apps.api.storagestats.StorageStatsRepositoryFake
+import sk.styk.martin.apkanalyzer.core.apps.api.usagestats.UsageStatsRepositoryFake
 import sk.styk.martin.apkanalyzer.core.common.coroutines.TestDispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes

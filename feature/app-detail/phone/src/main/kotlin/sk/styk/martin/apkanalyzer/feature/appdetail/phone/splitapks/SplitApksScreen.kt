@@ -40,10 +40,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.apps.packaging.InstalledSplitApk
-import sk.styk.martin.apkanalyzer.core.apps.packaging.SplitApkKind
-import sk.styk.martin.apkanalyzer.core.apps.packaging.friendlyQualifier
-import sk.styk.martin.apkanalyzer.core.apps.packaging.labelRes
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.InstalledSplitApk
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.SplitApkKind
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.friendlyQualifier
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.labelRes
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
@@ -63,7 +63,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailSe
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
 import java.time.Instant
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 @Composable
 internal fun SplitApksScreen(
@@ -105,7 +105,7 @@ private fun SplitApksContent(
     recordedAt: Instant? = null,
 ) {
     AppDetailSectionScaffold(
-        title = stringResource(AppsR.string.splitapks_title),
+        title = stringResource(DomainR.string.splitapks_title),
         appName = appName,
         onBack = { onAction(SplitApksAction.Back) },
         recordedAt = recordedAt,
@@ -116,7 +116,7 @@ private fun SplitApksContent(
 
             is SplitApksState.Error -> SectionError(
                 reason = state.reason,
-                loadFailedMessage = stringResource(AppsR.string.splitapks_error),
+                loadFailedMessage = stringResource(DomainR.string.splitapks_error),
                 onRetry = { onAction(SplitApksAction.Retry) },
             )
 
@@ -156,13 +156,13 @@ private fun SplitApksLoadedContent(
                 .collapsingHeader(collapsingState),
         ) {
             Text(
-                text = pluralStringResource(AppsR.plurals.splitapks_heading, state.totalCount, state.totalCount),
+                text = pluralStringResource(DomainR.plurals.splitapks_heading, state.totalCount, state.totalCount),
                 style = AppTheme.typography.titleSmall,
                 color = AppTheme.colors.onBackground,
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp),
             )
             Text(
-                text = stringResource(AppsR.string.splitapks_explanation),
+                text = stringResource(DomainR.string.splitapks_explanation),
                 style = AppTheme.typography.bodySmall,
                 color = AppTheme.colors.onSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp),
@@ -277,7 +277,7 @@ private fun EmptySplitApks(
     ) {
         Text(
             text = if (totalCount == 0 || query.isBlank()) {
-                stringResource(AppsR.string.splitapks_empty)
+                stringResource(DomainR.string.splitapks_empty)
             } else {
                 stringResource(R.string.splitapks_empty_query, query)
             },

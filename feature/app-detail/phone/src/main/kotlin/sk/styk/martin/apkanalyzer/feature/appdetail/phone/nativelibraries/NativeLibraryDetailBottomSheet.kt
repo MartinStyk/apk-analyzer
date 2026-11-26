@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryItem
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryVariant
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraryItem
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraryVariant
 import sk.styk.martin.apkanalyzer.core.common.model.kilobytes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
@@ -24,9 +24,11 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.BottomSheet
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ChangeLinesSection
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.DetailField
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 @Composable
 internal fun NativeLibraryDetailBottomSheet(
@@ -65,14 +67,14 @@ internal fun NativeLibraryDetailBottomSheet(
             Spacer(modifier = Modifier.height(12.dp))
             if (showDeviceSupport) {
                 DetailField(
-                    label = stringResource(AppsR.string.nativelibraries_detail_device_support),
+                    label = stringResource(R.string.nativelibraries_detail_device_support),
                     value = stringResource(
-                        if (item.isDeviceCompatible) AppsR.string.nativelibraries_supported else AppsR.string.nativelibraries_not_supported,
+                        if (item.isDeviceCompatible) DomainR.string.nativelibraries_supported else DomainR.string.nativelibraries_not_supported,
                     ),
                     explanation = if (item.isDeviceCompatible) {
                         null
                     } else {
-                        stringResource(AppsR.string.nativelibraries_not_supported_explanation)
+                        stringResource(DomainR.string.nativelibraries_not_supported_explanation)
                     },
                     onCopy = onCopy,
                 )
@@ -83,14 +85,14 @@ internal fun NativeLibraryDetailBottomSheet(
                 onCopy = onCopy,
             )
             DetailField(
-                label = stringResource(AppsR.string.nativelibraries_detail_total_size),
+                label = stringResource(R.string.nativelibraries_detail_total_size),
                 value = item.totalSize.formatted(),
                 onCopy = onCopy,
             )
 
             Column(modifier = Modifier.padding(top = 20.dp)) {
                 Text(
-                    text = stringResource(AppsR.string.nativelibraries_detail_section_variants),
+                    text = stringResource(DomainR.string.nativelibraries_detail_section_variants),
                     style = AppTheme.typography.titleSmall,
                     color = AppTheme.colors.primary,
                 )
@@ -100,7 +102,7 @@ internal fun NativeLibraryDetailBottomSheet(
                     DetailField(
                         label = variant.abi,
                         value = variant.size.formatted(),
-                        explanation = stringResource(AppsR.string.nativelibraries_detail_variant_source, variant.containingApkFileName),
+                        explanation = stringResource(DomainR.string.nativelibraries_detail_variant_source, variant.containingApkFileName),
                         onCopy = onCopy,
                     )
                 }

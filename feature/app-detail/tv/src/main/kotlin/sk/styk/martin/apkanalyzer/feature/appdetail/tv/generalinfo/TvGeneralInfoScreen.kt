@@ -8,9 +8,9 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceChain
-import sk.styk.martin.apkanalyzer.core.apps.installsource.labelRes
-import sk.styk.martin.apkanalyzer.core.apps.installsource.rationaleRes
+import sk.styk.martin.apkanalyzer.core.apps.api.installsource.InstallSourceChain
+import sk.styk.martin.apkanalyzer.core.apps.api.installsource.labelRes
+import sk.styk.martin.apkanalyzer.core.apps.api.installsource.rationaleRes
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
@@ -26,7 +26,8 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionLoading
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.formatTimestamp
 import java.time.Instant
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 @Composable
 internal fun TvGeneralInfoScreen(
@@ -56,7 +57,7 @@ private fun TvGeneralInfoContent(
     onNavigateToSplitApks: () -> Unit,
     onNavigateToNativeLibraries: () -> Unit,
 ) {
-    val title = stringResource(AppsR.string.general_info_title)
+    val title = stringResource(DomainR.string.general_info_title)
     when (state) {
         TvGeneralInfoState.Loading -> SectionLoading(
             title = title,
@@ -68,7 +69,7 @@ private fun TvGeneralInfoContent(
             title = title,
             appName = appName,
             appReference = appReference,
-            message = stringResource(AppsR.string.general_info_error),
+            message = stringResource(DomainR.string.general_info_error),
         )
 
         is TvGeneralInfoState.Loaded -> InfoSectionList(
@@ -97,20 +98,22 @@ private fun identitySections(state: TvGeneralInfoState.Loaded): List<InfoSection
         title = stringResource(AppsR.string.general_info_section_identification),
         icon = ApkAnalyzerIcons.Android,
         rows = listOfNotNull(
-            row("application-name", AppsR.string.general_info_application_name, state.applicationName, AppsR.string.general_info_rationale_application_name),
-            row("package-name", AppsR.string.general_info_package_name, state.packageName.value, AppsR.string.general_info_rationale_package_name),
-            state.processName?.let { row("process-name", AppsR.string.general_info_process_name, it, AppsR.string.general_info_rationale_process_name) },
-            state.uid?.let { row("uid", AppsR.string.general_info_uid, it.toString(), AppsR.string.general_info_rationale_uid) },
-            state.sharedUserId?.let { row("shared-user-id", AppsR.string.general_info_shared_user_id, it, AppsR.string.general_info_rationale_shared_user_id) },
-            state.description?.let { row("description", AppsR.string.general_info_description, it, AppsR.string.general_info_rationale_description) },
+            row("application-name", AppsR.string.general_info_application_name, state.applicationName, DomainR.string.general_info_rationale_application_name),
+            row("package-name", AppsR.string.general_info_package_name, state.packageName.value, DomainR.string.general_info_rationale_package_name),
+            state.processName?.let { row("process-name", AppsR.string.general_info_process_name, it, DomainR.string.general_info_rationale_process_name) },
+            state.uid?.let { row("uid", AppsR.string.general_info_uid, it.toString(), DomainR.string.general_info_rationale_uid) },
+            state.sharedUserId?.let {
+                row("shared-user-id", AppsR.string.general_info_shared_user_id, it, DomainR.string.general_info_rationale_shared_user_id)
+            },
+            state.description?.let { row("description", AppsR.string.general_info_description, it, DomainR.string.general_info_rationale_description) },
         ),
     ),
     InfoSection(
         title = stringResource(AppsR.string.general_info_section_versioning),
         icon = ApkAnalyzerIcons.History,
         rows = listOfNotNull(
-            state.versionName?.let { row("version-name", AppsR.string.general_info_version_name, it, AppsR.string.general_info_rationale_version_name) },
-            row("version-code", AppsR.string.general_info_version_code, state.versionCode.toString(), AppsR.string.general_info_rationale_version_code),
+            state.versionName?.let { row("version-name", AppsR.string.general_info_version_name, it, DomainR.string.general_info_rationale_version_name) },
+            row("version-code", AppsR.string.general_info_version_code, state.versionCode.toString(), DomainR.string.general_info_rationale_version_code),
         ),
     ),
     InfoSection(
@@ -118,10 +121,10 @@ private fun identitySections(state: TvGeneralInfoState.Loaded): List<InfoSection
         icon = ApkAnalyzerIcons.Android,
         rows = listOfNotNull(
             state.minSdkVersion?.let {
-                row("min-sdk", AppsR.string.general_info_min_sdk, sdkText(it, state.minSdkLabel), AppsR.string.general_info_rationale_min_sdk)
+                row("min-sdk", AppsR.string.general_info_min_sdk, sdkText(it, state.minSdkLabel), DomainR.string.general_info_rationale_min_sdk)
             },
             state.targetSdkVersion?.let {
-                row("target-sdk", AppsR.string.general_info_target_sdk, sdkText(it, state.targetSdkLabel), AppsR.string.general_info_rationale_target_sdk)
+                row("target-sdk", AppsR.string.general_info_target_sdk, sdkText(it, state.targetSdkLabel), DomainR.string.general_info_rationale_target_sdk)
             },
         ),
     ),
@@ -132,32 +135,32 @@ private fun identitySections(state: TvGeneralInfoState.Loaded): List<InfoSection
             row(
                 key = "debug-access",
                 label = AppsR.string.general_info_debug_access,
-                value = stringResource(if (state.isDebuggable) AppsR.string.general_info_enabled else AppsR.string.general_info_disabled),
+                value = stringResource(if (state.isDebuggable) DomainR.string.general_info_enabled else DomainR.string.general_info_disabled),
                 explanation = if (state.isDebuggable) {
-                    AppsR.string.general_info_rationale_debug_access_enabled
+                    DomainR.string.general_info_rationale_debug_access_enabled
                 } else {
-                    AppsR.string.general_info_rationale_debug_access_disabled
+                    DomainR.string.general_info_rationale_debug_access_disabled
                 },
                 highlighted = state.isDebuggable,
             ),
             row(
                 key = "backup",
                 label = AppsR.string.general_info_app_data_backup,
-                value = stringResource(if (state.allowsBackup) AppsR.string.general_info_allowed else AppsR.string.general_info_disabled),
+                value = stringResource(if (state.allowsBackup) DomainR.string.general_info_allowed else DomainR.string.general_info_disabled),
                 explanation = if (state.allowsBackup) {
-                    AppsR.string.general_info_rationale_backup_allowed
+                    DomainR.string.general_info_rationale_backup_allowed
                 } else {
-                    AppsR.string.general_info_rationale_backup_blocked
+                    DomainR.string.general_info_rationale_backup_blocked
                 },
             ),
             row(
                 key = "cleartext",
                 label = AppsR.string.general_info_unencrypted_traffic,
-                value = stringResource(if (state.usesCleartextTraffic) AppsR.string.general_info_allowed else AppsR.string.general_info_disabled),
+                value = stringResource(if (state.usesCleartextTraffic) DomainR.string.general_info_allowed else DomainR.string.general_info_disabled),
                 explanation = if (state.usesCleartextTraffic) {
-                    AppsR.string.general_info_rationale_cleartext_allowed
+                    DomainR.string.general_info_rationale_cleartext_allowed
                 } else {
-                    AppsR.string.general_info_rationale_cleartext_blocked
+                    DomainR.string.general_info_rationale_cleartext_blocked
                 },
             ),
         ),
@@ -173,27 +176,27 @@ private fun installationSections(state: TvGeneralInfoState.Loaded): List<InfoSec
             row(
                 key = "app-type",
                 label = AppsR.string.general_info_app_type,
-                value = stringResource(if (state.isSystemApp) AppsR.string.general_info_app_type_system else AppsR.string.general_info_app_type_user),
-                explanation = AppsR.string.general_info_rationale_app_type,
+                value = stringResource(if (state.isSystemApp) DomainR.string.general_info_app_type_system else DomainR.string.general_info_app_type_user),
+                explanation = DomainR.string.general_info_rationale_app_type,
             ),
             row("install-source", AppsR.string.general_info_install_source, stringResource(state.source.labelRes), state.source.rationaleRes),
             state.installSourceChain.installingPackage?.let {
-                row("installer", AppsR.string.general_info_installer_package, it.value, AppsR.string.general_info_rationale_installer_package)
+                row("installer", AppsR.string.general_info_installer_package, it.value, DomainR.string.general_info_rationale_installer_package)
             },
             state.installSourceChain.initiatingPackage?.let {
-                row("initiator", AppsR.string.general_info_install_initiator, it.value, AppsR.string.general_info_rationale_install_initiator)
+                row("initiator", AppsR.string.general_info_install_initiator, it.value, DomainR.string.general_info_rationale_install_initiator)
             },
             state.installSourceChain.originatingPackage?.let {
-                row("originator", AppsR.string.general_info_install_originator, it.value, AppsR.string.general_info_rationale_install_originator)
+                row("originator", AppsR.string.general_info_install_originator, it.value, DomainR.string.general_info_rationale_install_originator)
             },
             state.firstInstallTime?.let {
-                row("first-installed", AppsR.string.general_info_first_installed, formatTimestamp(it), AppsR.string.general_info_rationale_first_installed)
+                row("first-installed", AppsR.string.general_info_first_installed, formatTimestamp(it), DomainR.string.general_info_rationale_first_installed)
             },
             state.lastUpdateTime?.let {
-                row("last-updated", AppsR.string.general_info_last_updated, formatTimestamp(it), AppsR.string.general_info_rationale_last_updated)
+                row("last-updated", AppsR.string.general_info_last_updated, formatTimestamp(it), DomainR.string.general_info_rationale_last_updated)
             },
             state.lastUsedTime?.let {
-                row("last-used", AppsR.string.general_info_last_used, formatTimestamp(it), AppsR.string.general_info_rationale_last_used)
+                row("last-used", AppsR.string.general_info_last_used, formatTimestamp(it), DomainR.string.general_info_rationale_last_used)
             },
         ),
     ),
@@ -201,32 +204,32 @@ private fun installationSections(state: TvGeneralInfoState.Loaded): List<InfoSec
         title = stringResource(AppsR.string.general_info_section_storage),
         icon = ApkAnalyzerIcons.Storage,
         rows = listOfNotNull(
-            state.apkDirectory?.let { row("apk-directory", AppsR.string.general_info_apk_directory, it, AppsR.string.general_info_rationale_apk_directory) },
+            state.apkDirectory?.let { row("apk-directory", AppsR.string.general_info_apk_directory, it, DomainR.string.general_info_rationale_apk_directory) },
             state.dataDirectory?.let {
-                row("data-directory", AppsR.string.general_info_data_directory, it, AppsR.string.general_info_rationale_data_directory)
+                row("data-directory", AppsR.string.general_info_data_directory, it, DomainR.string.general_info_rationale_data_directory)
             },
-            row("install-location", AppsR.string.general_info_install_location, state.installLocation, AppsR.string.general_info_rationale_install_location),
-            row("apk-size", AppsR.string.general_info_apk_size, state.apkSize.formatted(), AppsR.string.general_info_rationale_apk_size),
+            row("install-location", AppsR.string.general_info_install_location, state.installLocation, DomainR.string.general_info_rationale_install_location),
+            row("apk-size", AppsR.string.general_info_apk_size, state.apkSize.formatted(), DomainR.string.general_info_rationale_apk_size),
             state.installedSplitsCount.takeIf { it > 0 }?.let { count ->
                 InfoRow(
                     key = SPLIT_APKS_KEY,
                     label = stringResource(AppsR.string.general_info_split_apks),
-                    value = pluralStringResource(AppsR.plurals.general_info_split_apks_value, count, count),
+                    value = pluralStringResource(DomainR.plurals.general_info_split_apks_value, count, count),
                     explanation = null,
                 )
             },
-            state.totalSize?.let { row("total-size", AppsR.string.general_info_total_size, it.formatted(), AppsR.string.general_info_rationale_total_size) },
+            state.totalSize?.let { row("total-size", AppsR.string.general_info_total_size, it.formatted(), DomainR.string.general_info_rationale_total_size) },
         ),
     ),
     InfoSection(
-        title = stringResource(AppsR.string.general_info_section_native_libraries),
+        title = stringResource(DomainR.string.general_info_section_native_libraries),
         icon = ApkAnalyzerIcons.Memory,
         rows = listOf(
             InfoRow(
                 key = "native-abis",
                 label = stringResource(AppsR.string.general_info_native_library_abis),
                 value = state.nativeLibraryAbis.takeIf { it.isNotEmpty() }?.joinToString()
-                    ?: stringResource(AppsR.string.general_info_native_library_abis_none),
+                    ?: stringResource(DomainR.string.general_info_native_library_abis_none),
                 explanation = nativeAbisExplanation(state),
                 highlighted = state.isNativeLibraryDeviceIncompatible,
             ),
@@ -234,8 +237,8 @@ private fun installationSections(state: TvGeneralInfoState.Loaded): List<InfoSec
                 key = NATIVE_LIBRARIES_KEY,
                 label = stringResource(AppsR.string.general_info_native_library_files),
                 value = state.nativeLibraryCount.takeIf { it > 0 }
-                    ?.let { pluralStringResource(AppsR.plurals.general_info_native_library_file_count, it, it) }
-                    ?: stringResource(AppsR.string.general_info_native_library_files_none),
+                    ?.let { pluralStringResource(DomainR.plurals.general_info_native_library_file_count, it, it) }
+                    ?: stringResource(DomainR.string.general_info_native_library_files_none),
                 explanation = null,
             ),
         ),
@@ -259,16 +262,16 @@ private fun row(
 
 @Composable
 private fun sdkText(version: Int, label: String?): String = if (label != null) {
-    stringResource(AppsR.string.app_detail_sdk_version, version, label)
+    stringResource(DomainR.string.app_detail_sdk_version, version, label)
 } else {
-    stringResource(AppsR.string.app_detail_sdk_version_no_label, version)
+    stringResource(DomainR.string.app_detail_sdk_version_no_label, version)
 }
 
 @Composable
 private fun nativeAbisExplanation(state: TvGeneralInfoState.Loaded): String = listOfNotNull(
-    stringResource(AppsR.string.general_info_rationale_native_library_abis),
-    stringResource(AppsR.string.general_info_native_library_device_support, state.deviceSupportedAbis.joinToString()),
-    stringResource(AppsR.string.general_info_native_library_incompatible).takeIf { state.isNativeLibraryDeviceIncompatible },
+    stringResource(DomainR.string.general_info_rationale_native_library_abis),
+    stringResource(DomainR.string.general_info_native_library_device_support, state.deviceSupportedAbis.joinToString()),
+    stringResource(DomainR.string.general_info_native_library_incompatible).takeIf { state.isNativeLibraryDeviceIncompatible },
 ).joinToString(separator = " ")
 
 private const val SPLIT_APKS_KEY = "split-apks"

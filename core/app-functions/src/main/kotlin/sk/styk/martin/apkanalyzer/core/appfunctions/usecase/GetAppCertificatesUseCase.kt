@@ -2,8 +2,8 @@ package sk.styk.martin.apkanalyzer.core.appfunctions.usecase
 
 import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.appfunctions.model.CertificateSummary
-import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepository
-import sk.styk.martin.apkanalyzer.core.apps.signing.Certificate
+import sk.styk.martin.apkanalyzer.core.apps.api.AppDetailRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.Certificate
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.digest.toFingerprint
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference

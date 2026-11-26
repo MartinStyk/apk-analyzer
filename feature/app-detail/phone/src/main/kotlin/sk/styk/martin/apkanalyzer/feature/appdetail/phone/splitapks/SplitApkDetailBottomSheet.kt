@@ -16,18 +16,20 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.styk.martin.apkanalyzer.core.apps.packaging.InstalledSplitApk
-import sk.styk.martin.apkanalyzer.core.apps.packaging.SplitApkKind
-import sk.styk.martin.apkanalyzer.core.apps.packaging.friendlyQualifier
-import sk.styk.martin.apkanalyzer.core.apps.packaging.labelRes
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.InstalledSplitApk
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.SplitApkKind
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.friendlyQualifier
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.labelRes
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.BottomSheet
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.DetailField
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 @Composable
 internal fun SplitApkDetailBottomSheet(
@@ -59,12 +61,12 @@ internal fun SplitApkDetailBottomSheet(
             }
             Spacer(modifier = Modifier.height(12.dp))
             DetailField(
-                label = stringResource(AppsR.string.splitapks_detail_type),
+                label = stringResource(R.string.splitapks_detail_type),
                 value = stringResource(split.kind.labelRes),
                 onCopy = onCopy,
             )
             DetailField(
-                label = stringResource(AppsR.string.splitapks_detail_identifier),
+                label = stringResource(DomainR.string.splitapks_detail_identifier),
                 value = split.qualifier,
                 onCopy = onCopy,
             )
@@ -74,13 +76,13 @@ internal fun SplitApkDetailBottomSheet(
                 onCopy = onCopy,
             )
             DetailField(
-                label = stringResource(AppsR.string.splitapks_detail_size),
+                label = stringResource(R.string.splitapks_detail_size),
                 value = split.size.formatted(),
                 onCopy = onCopy,
             )
             split.filePath?.let { filePath ->
                 DetailField(
-                    label = stringResource(AppsR.string.splitapks_detail_path),
+                    label = stringResource(DomainR.string.splitapks_detail_path),
                     value = filePath,
                     onCopy = onCopy,
                 )

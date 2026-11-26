@@ -1,9 +1,9 @@
 package sk.styk.martin.apkanalyzer.feature.apps.phone.list
 
 import androidx.compose.runtime.Immutable
-import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterState
-import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
-import sk.styk.martin.apkanalyzer.core.apps.sorting.AppSortType
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.AppFilterState
+import sk.styk.martin.apkanalyzer.core.apps.api.model.InstalledApp
+import sk.styk.martin.apkanalyzer.core.apps.api.sorting.AppSortType
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName

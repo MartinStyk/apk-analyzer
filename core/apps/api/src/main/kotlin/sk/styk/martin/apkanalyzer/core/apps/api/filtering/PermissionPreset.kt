@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apps.filtering
+package sk.styk.martin.apkanalyzer.core.apps.api.filtering
 
 sealed class PermissionPreset(val permissions: Set<String>) {
 

@@ -1,6 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.apps.tv.list
 
-import sk.styk.martin.apkanalyzer.core.apps.sorting.AppSortType
+import sk.styk.martin.apkanalyzer.core.apps.api.sorting.AppSortType
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 
 internal sealed interface TvAppsAction {

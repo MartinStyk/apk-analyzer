@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apps.usagestats
+package sk.styk.martin.apkanalyzer.core.apps.api.usagestats
 
 import kotlinx.coroutines.flow.StateFlow
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName

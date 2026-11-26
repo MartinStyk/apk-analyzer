@@ -1,7 +1,7 @@
-package sk.styk.martin.apkanalyzer.core.apps.signing
+package sk.styk.martin.apkanalyzer.core.apps.api.signing
 
 import androidx.annotation.StringRes
-import sk.styk.martin.apkanalyzer.core.apps.R
+import sk.styk.martin.apkanalyzer.core.apps.api.R
 
 val CertificatePrincipal.displayLine: String?
     get() = listOfNotNull(

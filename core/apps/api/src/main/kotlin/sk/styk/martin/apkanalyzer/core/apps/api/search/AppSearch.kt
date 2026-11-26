@@ -1,6 +1,6 @@
-package sk.styk.martin.apkanalyzer.core.apps.search
+package sk.styk.martin.apkanalyzer.core.apps.api.search
 
-import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
+import sk.styk.martin.apkanalyzer.core.apps.api.model.InstalledApp
 import kotlin.math.min
 
 fun List<InstalledApp>.search(query: String): List<InstalledApp> {

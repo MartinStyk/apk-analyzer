@@ -13,10 +13,10 @@ android {
 }
 
 dependencies {
-    api(projects.core.apps)
+    api(projects.core.apps.api)
     implementation(projects.core.common)
 
-    testImplementation(testFixtures(projects.core.apps))
+    testImplementation(testFixtures(projects.core.apps.api))
     testImplementation(libs.json.schema.validator)
     testImplementation(libs.kotlinx.serialization.json)
 }

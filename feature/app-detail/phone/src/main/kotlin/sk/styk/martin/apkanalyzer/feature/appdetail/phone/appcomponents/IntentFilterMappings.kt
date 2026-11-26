@@ -1,6 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents
 
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilter
 
 internal fun List<ComponentIntentFilter>.toItems() = mapIndexed { index, filter ->
     ComponentIntentFilterItem(

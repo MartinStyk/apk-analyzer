@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apps.devicefeatures
+package sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures
 
 data class DeviceFeatures(val featureVersions: Map<String, Int>, val openGlEsVersion: Int?) {
     val isKnown: Boolean

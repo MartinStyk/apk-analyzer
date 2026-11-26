@@ -1,7 +1,7 @@
-package sk.styk.martin.apkanalyzer.core.apps.intentfilters
+package sk.styk.martin.apkanalyzer.core.apps.api.intentfilters
 
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilterKey
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilterKey
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 
 interface IntentFiltersRepository {

@@ -1,7 +1,7 @@
 package sk.styk.martin.apkanalyzer.core.appexport.column
 
-import sk.styk.martin.apkanalyzer.core.apps.signing.Certificate
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificatePrincipal
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.Certificate
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificatePrincipal
 
 internal fun Certificate.toInventoryValue(): InventoryValue = record(
     "signature_algorithm" to text(signAlgorithm),

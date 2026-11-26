@@ -1,6 +1,6 @@
-package sk.styk.martin.apkanalyzer.core.apps.sorting
+package sk.styk.martin.apkanalyzer.core.apps.api.sorting
 
-import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
+import sk.styk.martin.apkanalyzer.core.apps.api.model.InstalledApp
 import java.text.Collator
 import java.util.Locale
 

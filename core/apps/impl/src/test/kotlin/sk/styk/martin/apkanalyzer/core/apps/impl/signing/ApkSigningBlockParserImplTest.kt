@@ -1,10 +1,11 @@
-package sk.styk.martin.apkanalyzer.core.apps.signing
+package sk.styk.martin.apkanalyzer.core.apps.impl.signing
 
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.SigningSchemeVersion
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 

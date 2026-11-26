@@ -21,9 +21,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.apps.filtering.ActivityQuickFilter
-import sk.styk.martin.apkanalyzer.core.apps.filtering.PermissionPreset
-import sk.styk.martin.apkanalyzer.core.apps.filtering.QuickFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.ActivityQuickFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.PermissionPreset
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.QuickFilter
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.Button

@@ -1,13 +1,14 @@
-package sk.styk.martin.apkanalyzer.core.apps.manifest
+package sk.styk.martin.apkanalyzer.core.apps.impl.manifest
 
 import android.content.res.Resources
 import android.content.res.XmlResourceParser
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilterKey
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentKind
-import sk.styk.martin.apkanalyzer.core.apps.components.IntentFilterDataRule
-import sk.styk.martin.apkanalyzer.core.apps.components.IntentFilterDataRuleType
-import sk.styk.martin.apkanalyzer.core.apps.components.IntentFilterUriRelativeGroup
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilterKey
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentKind
+import sk.styk.martin.apkanalyzer.core.apps.api.components.IntentFilterDataRule
+import sk.styk.martin.apkanalyzer.core.apps.api.components.IntentFilterDataRuleType
+import sk.styk.martin.apkanalyzer.core.apps.api.components.IntentFilterUriRelativeGroup
+import sk.styk.martin.apkanalyzer.core.apps.api.manifest.ManifestParser
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import java.io.FileNotFoundException

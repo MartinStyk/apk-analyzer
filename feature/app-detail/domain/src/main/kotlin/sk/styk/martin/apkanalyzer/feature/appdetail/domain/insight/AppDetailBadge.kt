@@ -1,7 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight
 
-import sk.styk.martin.apkanalyzer.core.apps.AppClassificationThresholds
-import sk.styk.martin.apkanalyzer.core.apps.model.AppInfo
+import sk.styk.martin.apkanalyzer.core.apps.api.AppClassificationThresholds
+import sk.styk.martin.apkanalyzer.core.apps.api.model.AppInfo
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.isOnDevice

@@ -4,7 +4,7 @@ import android.net.Uri
 import kotlinx.coroutines.flow.Flow
 import sk.styk.martin.apkanalyzer.core.appexport.column.InventoryColumn
 import sk.styk.martin.apkanalyzer.core.appexport.format.InventoryFormat
-import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
+import sk.styk.martin.apkanalyzer.core.apps.api.model.InstalledApp
 
 interface InventoryExportManager {
     suspend fun preview(request: InventoryExportRequest): Result<InventoryPreview>

@@ -1,7 +1,11 @@
-package sk.styk.martin.apkanalyzer.core.apps.permissions
+package sk.styk.martin.apkanalyzer.core.apps.impl.permissions
 
 import android.content.pm.PackageManager
 import android.content.pm.PermissionInfo
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.PermissionDefinitionResolver
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.PermissionDetails
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionFlag
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import javax.inject.Inject
 import javax.inject.Singleton

@@ -1,12 +1,12 @@
 package sk.styk.martin.apkanalyzer.core.apphistory.storage.database.snapshot
 
 import kotlinx.serialization.Serializable
-import sk.styk.martin.apkanalyzer.core.apps.permissions.Permission
-import sk.styk.martin.apkanalyzer.core.apps.permissions.PermissionDetails
-import sk.styk.martin.apkanalyzer.core.apps.permissions.Permissions
-import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionFlag
-import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
-import sk.styk.martin.apkanalyzer.core.apps.permissions.UsedPermission
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.Permission
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.PermissionDetails
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.Permissions
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionFlag
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.UsedPermission
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 
 @Serializable

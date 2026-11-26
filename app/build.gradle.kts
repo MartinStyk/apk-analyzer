@@ -38,8 +38,10 @@ baselineProfile {
 dependencies {
     baselineProfile(projects.app.baselineprofile)
 
-    implementation(projects.core.apkFiles)
-    implementation(projects.core.apps)
+    implementation(projects.core.apkFiles.api)
+    implementation(projects.core.apkFiles.impl)
+    implementation(projects.core.apps.api)
+    implementation(projects.core.apps.impl)
     implementation(projects.core.appPermissions)
     implementation(projects.core.appIndex)
     implementation(projects.core.appFunctions)

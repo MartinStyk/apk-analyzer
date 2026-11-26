@@ -1,10 +1,10 @@
-package sk.styk.martin.apkanalyzer.core.apps
+package sk.styk.martin.apkanalyzer.core.apps.api
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
-import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
+import sk.styk.martin.apkanalyzer.core.apps.api.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 
 class InstalledAppsRepositoryFake(vararg apps: InstalledApp) : InstalledAppsRepository {

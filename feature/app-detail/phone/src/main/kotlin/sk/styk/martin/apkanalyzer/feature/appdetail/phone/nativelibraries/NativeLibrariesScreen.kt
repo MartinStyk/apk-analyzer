@@ -33,8 +33,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryItem
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryVariant
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraryItem
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraryVariant
 import sk.styk.martin.apkanalyzer.core.common.model.kilobytes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.SearchBarActive
@@ -53,7 +53,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionErro
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
 import java.time.Instant
 import sk.styk.martin.apkanalyzer.core.apphistory.R as HistoryR
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 @Composable
 internal fun NativeLibrariesScreen(
@@ -95,7 +95,7 @@ private fun NativeLibrariesContent(
     recordedAt: Instant? = null,
 ) {
     AppDetailSectionScaffold(
-        title = stringResource(AppsR.string.nativelibraries_title),
+        title = stringResource(DomainR.string.nativelibraries_title),
         appName = appName,
         onBack = { onAction(NativeLibrariesAction.Back) },
         recordedAt = recordedAt,
@@ -106,7 +106,7 @@ private fun NativeLibrariesContent(
 
             is NativeLibrariesState.Error -> SectionError(
                 reason = state.reason,
-                loadFailedMessage = stringResource(AppsR.string.nativelibraries_error),
+                loadFailedMessage = stringResource(DomainR.string.nativelibraries_error),
                 onRetry = { onAction(NativeLibrariesAction.Retry) },
             )
 
@@ -148,13 +148,13 @@ private fun NativeLibrariesLoadedContent(
                 .collapsingHeader(collapsingState),
         ) {
             Text(
-                text = pluralStringResource(AppsR.plurals.nativelibraries_heading, state.totalCount, state.totalCount),
+                text = pluralStringResource(DomainR.plurals.nativelibraries_heading, state.totalCount, state.totalCount),
                 style = AppTheme.typography.titleSmall,
                 color = AppTheme.colors.onBackground,
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp),
             )
             Text(
-                text = stringResource(AppsR.string.nativelibraries_explanation),
+                text = stringResource(R.string.nativelibraries_explanation),
                 style = AppTheme.typography.bodySmall,
                 color = AppTheme.colors.onSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp),
@@ -219,7 +219,7 @@ private fun EmptyNativeLibraries(
     ) {
         Text(
             text = if (totalCount == 0 || query.isBlank()) {
-                stringResource(AppsR.string.nativelibraries_empty)
+                stringResource(DomainR.string.nativelibraries_empty)
             } else {
                 stringResource(R.string.nativelibraries_empty_query, query)
             },

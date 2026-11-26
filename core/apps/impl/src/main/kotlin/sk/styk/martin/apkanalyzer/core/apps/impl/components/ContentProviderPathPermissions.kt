@@ -1,7 +1,9 @@
-package sk.styk.martin.apkanalyzer.core.apps.components
+package sk.styk.martin.apkanalyzer.core.apps.impl.components
 
 import android.content.pm.PathPermission
 import android.os.PatternMatcher
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ProviderPathMatchType
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ProviderPathPermission
 
 internal fun resolvePathPermissions(pathPermissions: Array<PathPermission>?): List<ProviderPathPermission> = pathPermissions.orEmpty().map {
     ProviderPathPermission(

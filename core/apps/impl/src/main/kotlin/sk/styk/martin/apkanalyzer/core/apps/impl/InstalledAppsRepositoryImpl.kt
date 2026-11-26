@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apps
+package sk.styk.martin.apkanalyzer.core.apps.impl
 
 import android.annotation.SuppressLint
 import android.content.pm.ApplicationInfo
@@ -17,13 +17,15 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
-import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceResolver
-import sk.styk.martin.apkanalyzer.core.apps.installsource.isSystemInstalledApp
-import sk.styk.martin.apkanalyzer.core.apps.installsource.resolveAppInstallSource
-import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
-import sk.styk.martin.apkanalyzer.core.apps.model.resolveAppCategory
-import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepository
-import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.InstalledAppsRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.PackageChangesObserver
+import sk.styk.martin.apkanalyzer.core.apps.api.installsource.resolveAppInstallSource
+import sk.styk.martin.apkanalyzer.core.apps.api.model.InstalledApp
+import sk.styk.martin.apkanalyzer.core.apps.api.storagestats.StorageStatsRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.usagestats.UsageStatsRepository
+import sk.styk.martin.apkanalyzer.core.apps.impl.installsource.InstallSourceResolver
+import sk.styk.martin.apkanalyzer.core.apps.impl.installsource.isSystemInstalledApp
+import sk.styk.martin.apkanalyzer.core.apps.impl.model.resolveAppCategory
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger

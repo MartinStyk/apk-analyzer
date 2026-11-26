@@ -246,4 +246,36 @@
     <plurals name="app_history_context">
         <item quantity="other">Tercatat sejak %1$s · %2$d perubahan</item>
     </plurals>
+    <string name="components_detail_full_name">Nama lengkap</string>
+    <string name="components_detail_intent_filters_open">Lihat filter intent</string>
+    <plurals name="components_intent_filter_count">
+        <item quantity="other">%1$d filter intent</item>
+    </plurals>
+    <string name="components_detail_intent_actions_explanation">Apa yang diminta aplikasi lain atau Android untuk dilakukan oleh komponen ini.</string>
+    <string name="components_detail_intent_categories_explanation">Kategori yang diizinkan oleh filter ini. Setiap kategori yang disediakan oleh permintaan harus dicantumkan di sini.</string>
+    <string name="components_detail_intent_data_explanation">Alamat web, jenis file, atau konten lain yang dapat ditangani oleh komponen ini.</string>
+    <string name="components_detail_intent_allowed_uri_parts_explanation">Semua detail dalam grup ini harus cocok agar grup dapat mengizinkan tautan. Android mengevaluasi grup dalam urutan manifest.</string>
+    <string name="components_detail_intent_blocked_uri_parts_explanation">Detail ini mendefinisikan aturan pencocokan pemblokiran. Android mengevaluasinya dengan aturan tautan lain dari filter dalam urutan manifest.</string>
+    <string name="components_detail_intent_activity_priority_explanation">Angka yang lebih tinggi dapat membuat aktivitas ini lebih disukai dibandingkan aktivitas pencocokan lainnya, tergantung pada aturan pengalihan Android.</string>
+    <string name="components_detail_intent_receiver_priority_explanation">Untuk siaran terurut, angka yang lebih tinggi dapat membuat penerima ini berjalan lebih awal, tergantung pada batasan Android.</string>
+    <string name="components_detail_intent_declared_priority_explanation">Manifest menyatakan nilai ini, tetapi Android tidak menggunakannya untuk memilih antara layanan atau penyedia yang cocok.</string>
+    <string name="components_detail_intent_order_explanation">Angka yang lebih tinggi dianggap pertama ketika aplikasi ini memiliki beberapa filter yang cocok.</string>
+    <plurals name="certificates_history_description">
+        <item quantity="other">Kunci penandatanganan %d yang diverifikasi Android digunakan sebelum kunci saat ini. Kunci sebelumnya yang paling baru digunakan muncul pertama.</item>
+    </plurals>
+    <string name="certificates_details">Detail sertifikat</string>
+    <string name="certificates_fingerprint">sidik jari</string>
+    <plurals name="requirements_missing_summary">
+        <item quantity="other">%1$d persyaratan yang tidak dapat dipenuhi perangkat ini</item>
+    </plurals>
+    <string name="requirements_detail_necessity">Kepentingan</string>
+    <string name="requirements_detail_availability">Di perangkat ini</string>
+    <string name="requirements_detail_version">Versi</string>
+    <string name="requirements_detail_version_comparison">%1$s diperlukan · %2$s di perangkat ini</string>
+    <string name="splitapks_detail_type">Tipe</string>
+    <string name="splitapks_detail_size">Ukuran</string>
+    <string name="nativelibraries_explanation">Setiap file kode native yang berbeda yang dikirimkan aplikasi ini, satu baris per nama file bahkan ketika pustaka yang sama dibangun untuk beberapa arsitektur prosesor.</string>
+    <string name="nativelibraries_detail_device_support">Di perangkat ini</string>
+    <string name="nativelibraries_detail_total_size">Ukuran total</string>
+    <string name="components_launch">Mulai komponen ini</string>
 </resources>

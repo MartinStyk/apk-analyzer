@@ -2,8 +2,8 @@ package sk.styk.martin.apkanalyzer.core.apppermissions.detail
 
 import androidx.annotation.StringRes
 import sk.styk.martin.apkanalyzer.core.apppermissions.R
-import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionFlag
-import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionFlag
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionLevel
 
 @get:StringRes
 val PermissionScope.labelRes: Int

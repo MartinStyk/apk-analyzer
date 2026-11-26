@@ -50,9 +50,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryOverview
-import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificatePrincipal
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
+import sk.styk.martin.apkanalyzer.core.apps.api.model.AppDetail
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificatePrincipal
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
@@ -91,7 +91,8 @@ import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.Date
 import java.util.Locale
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 private const val APK_MIME_TYPE = "application/vnd.android.package-archive"
 private const val ICON_MIME_TYPE = "image/png"
@@ -147,7 +148,7 @@ internal fun AppDetailScreen(
                 is AppDetailEvent.OpenPlayStore -> context.openGooglePlay(event.packageName)
 
                 is AppDetailEvent.OpenAppInfo -> context.openAppSystemPage(event.packageName).onFailure {
-                    Toast.makeText(context, AppsR.string.app_info_unavailable, Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, DomainR.string.app_info_unavailable, Toast.LENGTH_LONG).show()
                 }
 
                 is AppDetailEvent.CreateDocument -> {
@@ -559,10 +560,10 @@ private fun OverviewSection(
                 label = stringResource(R.string.app_detail_target_sdk),
                 value = when {
                     state.targetSdkVersion != null && state.targetSdkLabel != null ->
-                        stringResource(AppsR.string.app_detail_sdk_version, state.targetSdkVersion, state.targetSdkLabel)
+                        stringResource(DomainR.string.app_detail_sdk_version, state.targetSdkVersion, state.targetSdkLabel)
 
                     state.targetSdkVersion != null ->
-                        stringResource(AppsR.string.app_detail_sdk_version_no_label, state.targetSdkVersion)
+                        stringResource(DomainR.string.app_detail_sdk_version_no_label, state.targetSdkVersion)
 
                     else -> stringResource(AppsR.string.app_detail_unknown)
                 },

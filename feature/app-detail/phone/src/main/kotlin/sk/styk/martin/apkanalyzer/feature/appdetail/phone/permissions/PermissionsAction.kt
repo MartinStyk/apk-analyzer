@@ -2,7 +2,7 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.phone.permissions
 
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.GrantState
 import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionScope
-import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionLevel
 
 internal sealed interface PermissionsAction {
     data object Retry : PermissionsAction

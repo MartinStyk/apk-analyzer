@@ -246,4 +246,36 @@
     <plurals name="app_history_context">
         <item quantity="other">自 %1$s 起記錄 · %2$d 項更改</item>
     </plurals>
+    <string name="components_detail_full_name">完整名稱</string>
+    <string name="components_detail_intent_filters_open">查看 Intent 篩選器</string>
+    <plurals name="components_intent_filter_count">
+        <item quantity="other">%1$d 個 Intent 篩選器</item>
+    </plurals>
+    <string name="components_detail_intent_actions_explanation">其他應用程式或 Android 要求這個元件執行的動作。</string>
+    <string name="components_detail_intent_categories_explanation">這個篩選器允許的類別。請求指定的每個類別都必須列在這裏。</string>
+    <string name="components_detail_intent_data_explanation">這個元件宣告可以處理的網址、檔案類型或其他內容。</string>
+    <string name="components_detail_intent_allowed_uri_parts_explanation">連結必須符合這組中的所有條件，才會獲得允許。Android 會按 Manifest 中的順序評估各組條件。</string>
+    <string name="components_detail_intent_blocked_uri_parts_explanation">這些條件定義了封鎖連結的比對規則。Android 會按 Manifest 中的順序，將它與篩選器的其他連結規則一併評估。</string>
+    <string name="components_detail_intent_activity_priority_explanation">數值越高，這個活動越可能優先於其他符合條件的活動，但仍受 Android 的請求分派規則限制。</string>
+    <string name="components_detail_intent_receiver_priority_explanation">對有序廣播而言，數值越高，這個廣播接收器越可能先執行，但仍受 Android 的限制。</string>
+    <string name="components_detail_intent_declared_priority_explanation">Manifest 宣告了這個值，但 Android 不會用它來選擇符合條件的服務或內容供應器。</string>
+    <string name="components_detail_intent_order_explanation">當這個應用程式有多個符合條件的篩選器時，會先考慮數值較高的篩選器。</string>
+    <plurals name="certificates_history_description">
+        <item quantity="other">Android 已驗證在目前金鑰之前使用過的 %d 把簽署金鑰。最近使用過的舊金鑰會排在最前面。</item>
+    </plurals>
+    <string name="certificates_details">證書詳細資料</string>
+    <string name="certificates_fingerprint">指紋</string>
+    <plurals name="requirements_missing_summary">
+        <item quantity="other">這部裝置無法符合 %1$d 項要求</item>
+    </plurals>
+    <string name="requirements_detail_necessity">要求狀態</string>
+    <string name="requirements_detail_availability">這部裝置的支援情況</string>
+    <string name="requirements_detail_version">版本</string>
+    <string name="requirements_detail_version_comparison">需要 %1$s · 這部裝置支援 %2$s</string>
+    <string name="splitapks_detail_type">類型</string>
+    <string name="splitapks_detail_size">大小</string>
+    <string name="nativelibraries_explanation">這個應用程式包含的所有原生程式庫，每個檔案名稱各列一行。同一個程式庫即使有為不同處理器架構編製的版本，也只列一行。</string>
+    <string name="nativelibraries_detail_device_support">這部裝置的支援情況</string>
+    <string name="nativelibraries_detail_total_size">總大小</string>
+    <string name="components_launch">啟動這個元件</string>
 </resources>

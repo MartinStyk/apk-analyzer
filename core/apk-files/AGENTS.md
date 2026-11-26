@@ -2,8 +2,11 @@
 
 ## Purpose and Boundary
 
-Owns temporary APK materialization and cleanup for APKs received through Android content URIs. The
-package is `sk.styk.martin.apkanalyzer.core.apkfiles`.
+Owns temporary APK materialization and cleanup for APKs received through Android content URIs. It is
+split per [core API/impl split](../../docs/app/technical/core-api-impl-split.md): `api`
+(`sk.styk.martin.apkanalyzer.core.apkfiles.api`) holds `TemporaryApkManager` and
+`ApkTooLargeException`; `impl` (`sk.styk.martin.apkanalyzer.core.apkfiles.impl`) holds the internal
+implementation and its Hilt module.
 
 This module owns file lifecycle only. APK parsing and analysis belong in `core:apps`; Activities and
 ViewModels decide when ownership begins and ends.

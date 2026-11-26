@@ -1,8 +1,8 @@
-package sk.styk.martin.apkanalyzer.core.apps.sorting
+package sk.styk.martin.apkanalyzer.core.apps.api.sorting
 
 import io.kotest.matchers.shouldBe
 import org.junit.Test
-import sk.styk.martin.apkanalyzer.core.apps.model.anApp
+import sk.styk.martin.apkanalyzer.core.apps.api.model.anApp
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import java.time.Instant
 import java.util.Locale

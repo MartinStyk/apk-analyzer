@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apps.filtering
+package sk.styk.martin.apkanalyzer.core.apps.api.filtering
 
 enum class UnusedAppsPeriod(val days: Int) {
     ONE_MONTH(30),

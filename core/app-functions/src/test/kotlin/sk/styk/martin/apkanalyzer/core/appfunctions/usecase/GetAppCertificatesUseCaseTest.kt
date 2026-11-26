@@ -6,13 +6,13 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import sk.styk.martin.apkanalyzer.core.appfunctions.model.CertificateSummary
-import sk.styk.martin.apkanalyzer.core.apps.AppDetailRepositoryFake
-import sk.styk.martin.apkanalyzer.core.apps.model.Detail.WhatsApp
-import sk.styk.martin.apkanalyzer.core.apps.model.packageName
-import sk.styk.martin.apkanalyzer.core.apps.signing.AppSigning
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificatePrincipal
-import sk.styk.martin.apkanalyzer.core.apps.signing.GoogleCertificate
-import sk.styk.martin.apkanalyzer.core.apps.signing.WhatsAppCertificate
+import sk.styk.martin.apkanalyzer.core.apps.api.AppDetailRepositoryFake
+import sk.styk.martin.apkanalyzer.core.apps.api.model.Detail.WhatsApp
+import sk.styk.martin.apkanalyzer.core.apps.api.model.packageName
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.AppSigning
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificatePrincipal
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.GoogleCertificate
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.WhatsAppCertificate
 import sk.styk.martin.apkanalyzer.core.common.coroutines.TestDispatcherProvider
 import java.time.Instant
 

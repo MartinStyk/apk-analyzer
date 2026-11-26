@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.core.apps.storagestats
+package sk.styk.martin.apkanalyzer.core.apps.api.storagestats
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

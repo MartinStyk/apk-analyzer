@@ -1,7 +1,7 @@
-package sk.styk.martin.apkanalyzer.core.apps
+package sk.styk.martin.apkanalyzer.core.apps.api
 
 import kotlinx.coroutines.flow.Flow
-import sk.styk.martin.apkanalyzer.core.apps.model.InstalledApp
+import sk.styk.martin.apkanalyzer.core.apps.api.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 
 interface InstalledAppsRepository {

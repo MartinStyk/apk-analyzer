@@ -1,7 +1,7 @@
 package sk.styk.martin.apkanalyzer.core.apphistory.storage.database.snapshot
 
 import kotlinx.serialization.Serializable
-import sk.styk.martin.apkanalyzer.core.apps.components.Service
+import sk.styk.martin.apkanalyzer.core.apps.api.components.Service
 
 @Serializable
 internal data class ServiceSnapshot(

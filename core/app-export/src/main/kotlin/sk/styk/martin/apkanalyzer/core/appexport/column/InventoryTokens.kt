@@ -1,14 +1,14 @@
 package sk.styk.martin.apkanalyzer.core.appexport.column
 
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentKind
-import sk.styk.martin.apkanalyzer.core.apps.components.ProviderPathMatchType
-import sk.styk.martin.apkanalyzer.core.apps.model.AppCategory
-import sk.styk.martin.apkanalyzer.core.apps.model.InstallLocation
-import sk.styk.martin.apkanalyzer.core.apps.packaging.SplitApkKind
-import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionFlag
-import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
-import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeVersion
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentKind
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ProviderPathMatchType
+import sk.styk.martin.apkanalyzer.core.apps.api.model.AppCategory
+import sk.styk.martin.apkanalyzer.core.apps.api.model.InstallLocation
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.SplitApkKind
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionFlag
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateTrustLevel
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.SigningSchemeVersion
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 
 internal val AppCategory.token: String?

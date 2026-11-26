@@ -3,9 +3,9 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight
 import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Build
-import sk.styk.martin.apkanalyzer.core.apps.AppClassificationThresholds
-import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
+import sk.styk.martin.apkanalyzer.core.apps.api.AppClassificationThresholds
+import sk.styk.martin.apkanalyzer.core.apps.api.model.AppDetail
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.common.model.isSideloaded
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.isOnDevice

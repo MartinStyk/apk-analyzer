@@ -1,9 +1,9 @@
 package sk.styk.martin.apkanalyzer.core.appexport.column
 
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Feature
-import sk.styk.martin.apkanalyzer.core.apps.packaging.InstalledSplitApk
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryFile
-import sk.styk.martin.apkanalyzer.core.apps.permissions.Permission
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.Feature
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.InstalledSplitApk
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraryFile
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.Permission
 
 internal fun InstalledSplitApk.toInventoryValue(): InventoryValue = record(
     "file_name" to text(fileName),

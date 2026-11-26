@@ -1,8 +1,8 @@
 package sk.styk.martin.apkanalyzer.core.appindex.browse
 
 import sk.styk.martin.apkanalyzer.core.appindex.model.AppAttributeIndex
-import sk.styk.martin.apkanalyzer.core.apps.permissions.PermissionDefinitionResolver
-import sk.styk.martin.apkanalyzer.core.apps.signing.validityAt
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.PermissionDefinitionResolver
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.validityAt
 import java.time.Instant
 import javax.inject.Inject
 

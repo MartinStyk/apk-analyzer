@@ -1,5 +1,6 @@
-package sk.styk.martin.apkanalyzer.core.apps.signing
+package sk.styk.martin.apkanalyzer.core.apps.impl.signing
 
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.SigningSchemeVersion
 import java.io.RandomAccessFile
 import javax.inject.Inject
 

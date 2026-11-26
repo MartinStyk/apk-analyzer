@@ -330,4 +330,45 @@
         <item quantity="many">Zaznamenáva sa od %1$s · %2$d zmien</item>
         <item quantity="other">Zaznamenáva sa od %1$s · %2$d zmien</item>
     </plurals>
+    <string name="components_detail_full_name">Celé meno</string>
+    <string name="components_detail_intent_filters_open">Zobraziť intent filtre</string>
+    <plurals name="components_intent_filter_count">
+        <item quantity="one">%1$d intent filter</item>
+        <item quantity="few">%1$d intent filtre</item>
+        <item quantity="many">%1$d intent filtrov</item>
+        <item quantity="other">%1$d intent filtrov</item>
+    </plurals>
+    <string name="components_detail_intent_actions_explanation">Čo iná aplikácia alebo Android žiada od tohto komponentu.</string>
+    <string name="components_detail_intent_categories_explanation">Kategórie, ktoré tento filter povoľuje. Každá poskytnutá kategória musí byť uvedená tu.</string>
+    <string name="components_detail_intent_data_explanation">Webové adresy, typy súborov alebo iný obsah, ktorý tento komponent tvrdí, že môže spracovať.</string>
+    <string name="components_detail_intent_allowed_uri_parts_explanation">Všetky podrobnosti v tejto skupine musia zodpovedať, aby skupina povolila odkaz. Android vyhodnocuje skupiny v poradí manifestu.</string>
+    <string name="components_detail_intent_blocked_uri_parts_explanation">Tieto podrobnosti definujú pravidlo na zablokovanie zhody. Android to vyhodnocuje s ostatnými pravidlami odkazu vo filtri v poradí manifestu.</string>
+    <string name="components_detail_intent_activity_priority_explanation">Vyššie číslo môže urobiť túto aktivitu preferovanou pred inými zhodnými aktivitami, v súlade s pravidlami smerovania Androidu.</string>
+    <string name="components_detail_intent_receiver_priority_explanation">Pre usporiadané vysielania môže vyššie číslo spôsobiť, že tento prijímač sa spustí skôr, v súlade s obmedzeniami Androidu.</string>
+    <string name="components_detail_intent_declared_priority_explanation">Manifest vyhlasuje túto hodnotu, ale Android ju nepoužíva na výber medzi zhodnými službami alebo poskytovateľmi.</string>
+    <string name="components_detail_intent_order_explanation">Vyššie číslo sa považuje za prvé, keď má táto aplikácia viacero zhodných filtrov.</string>
+    <plurals name="certificates_history_description">
+        <item quantity="one">Android overil jeden podpisový kľúč použitý pred aktuálnym kľúčom.</item>
+        <item quantity="few">Android overil %d podpisové kľúče použité pred aktuálnym kľúčom. Najnovšie použitý predchádzajúci kľúč sa zobrazuje ako prvý.</item>
+        <item quantity="many">Android overil %d podpisových kľúčov použitých pred aktuálnym kľúčom. Najnovšie použitý predchádzajúci kľúč sa zobrazuje ako prvý.</item>
+        <item quantity="other">Android overil %d podpisových kľúčov použitých pred aktuálnym kľúčom. Najnovšie použitý predchádzajúci kľúč sa zobrazuje ako prvý.</item>
+    </plurals>
+    <string name="certificates_details">Podrobnosti certifikátu</string>
+    <string name="certificates_fingerprint">odtlačok</string>
+    <plurals name="requirements_missing_summary">
+        <item quantity="one">%1$d požiadavka, ktorú toto zariadenie nemôže splniť</item>
+        <item quantity="few">%1$d požiadavky, ktoré toto zariadenie nemôže splniť</item>
+        <item quantity="many">%1$d požiadaviek, ktoré toto zariadenie nemôže splniť</item>
+        <item quantity="other">%1$d požiadaviek, ktoré toto zariadenie nemôže splniť</item>
+    </plurals>
+    <string name="requirements_detail_necessity">Stav</string>
+    <string name="requirements_detail_availability">Na tomto zariadení</string>
+    <string name="requirements_detail_version">Verzia</string>
+    <string name="requirements_detail_version_comparison">%1$s potrebné · %2$s na tomto zariadení</string>
+    <string name="splitapks_detail_type">Typ</string>
+    <string name="splitapks_detail_size">Veľkosť</string>
+    <string name="nativelibraries_explanation">Všetky natívne knižnice, ktoré táto aplikácia obsahuje, jeden riadok na názov súboru, aj keď je tá istá knižnica zostavená pre viacero architektúr procesorov.</string>
+    <string name="nativelibraries_detail_device_support">Na tomto zariadení</string>
+    <string name="nativelibraries_detail_total_size">Celková veľkosť</string>
+    <string name="components_launch">Spustiť tento komponent</string>
 </resources>

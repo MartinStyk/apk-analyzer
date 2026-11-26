@@ -1,7 +1,7 @@
 package sk.styk.martin.apkanalyzer.core.apppermissions.detail
 
-import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionFlag
-import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionFlag
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 
 enum class PermissionScope {

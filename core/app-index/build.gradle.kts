@@ -9,6 +9,6 @@ android {
 
 dependencies {
     implementation(projects.core.appPermissions)
-    implementation(projects.core.apps)
+    implementation(projects.core.apps.api)
     implementation(projects.core.common)
 }
