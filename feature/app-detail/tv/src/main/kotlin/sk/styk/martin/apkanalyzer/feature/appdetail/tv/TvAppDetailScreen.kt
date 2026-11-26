@@ -37,7 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.labelRes
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.labelRes
 import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentKind
 import sk.styk.martin.apkanalyzer.core.apps.api.components.sectionLabelRes
 import sk.styk.martin.apkanalyzer.core.apps.api.model.AppDetail
@@ -78,7 +78,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionLoading
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.formatDate
 import java.time.Instant
-import sk.styk.martin.apkanalyzer.core.apppermissions.R as PermissionsR
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.R as PermissionsR
 import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 

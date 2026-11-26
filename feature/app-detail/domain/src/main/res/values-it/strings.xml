@@ -175,4 +175,6 @@
     <string name="components_launch_broadcast_sent">Broadcast inviato — nulla qui riporta se è stato gestito.</string>
     <string name="components_launch_failed">Il sistema ha rifiutato di avviare questo.</string>
     <string name="app_info_unavailable">Questo dispositivo non può aprire Informazioni sull\'app</string>
+    <string name="permissions_error">Impossibile leggere i permessi di questa app.</string>
+    <string name="permissions_detail_grant_state">Stato di concessione</string>
 </resources>

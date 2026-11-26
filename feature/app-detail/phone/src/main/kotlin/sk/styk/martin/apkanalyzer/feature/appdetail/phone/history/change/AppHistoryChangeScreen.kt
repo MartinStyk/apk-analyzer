@@ -47,9 +47,9 @@ import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.certificateExpl
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.collapsedToTwoLines
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.installSourceTexts
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.label
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionItem
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionScope
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.labelRes
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.PermissionItem
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.PermissionScope
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.labelRes
 import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.DeviceFeatures
 import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.Feature
 import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.label
@@ -112,7 +112,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.phone.requirements.Requireme
 import java.time.Instant
 import kotlin.math.abs
 import sk.styk.martin.apkanalyzer.core.apphistory.R as HistoryR
-import sk.styk.martin.apkanalyzer.core.apppermissions.R as PermissionsR
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.R as PermissionsR
 import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 

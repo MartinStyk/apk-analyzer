@@ -183,4 +183,6 @@
     <string name="components_launch_broadcast_sent">Broadcast odoslaný — nie je známe, či bola požiadavka spracovaná.</string>
     <string name="components_launch_failed">Systém odmietol spustiť komponent.</string>
     <string name="app_info_unavailable">Toto zariadenie nevie otvoriť Informácie o aplikácii</string>
+    <string name="permissions_error">Nepodarilo sa prečítať povolenia tejto aplikácie.</string>
+    <string name="permissions_detail_grant_state">Stav udelenia</string>
 </resources>

@@ -3,8 +3,12 @@
 ## Purpose and Boundary
 
 Aggregates permissions requested across all installed apps into the deduplicated, sorted,
-human-readable device-wide list consumed by permission browsing. The package is
-`sk.styk.martin.apkanalyzer.core.apppermissions`.
+human-readable device-wide list consumed by permission browsing. It is split per
+[core API/impl split](../../docs/app/technical/core-api-impl-split.md): `api`
+(`sk.styk.martin.apkanalyzer.core.apppermissions.api`) holds `DevicePermissionsRepository`,
+`PermissionLabelProvider`, the `detail/` interfaces and models, and their labels; `impl`
+(`sk.styk.martin.apkanalyzer.core.apppermissions.impl`) holds the internal implementations, the
+curated permission labels and descriptions, and the Hilt module.
 
 This differs from `core:apps/permissions`, which models permissions declared or used by one analyzed
 app.

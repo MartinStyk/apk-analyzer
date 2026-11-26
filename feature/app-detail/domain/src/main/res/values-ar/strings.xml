@@ -199,4 +199,6 @@
     <string name="components_launch_broadcast_sent">تم إرسال البث - لا شيء هنا يُبلغ عما إذا تم التعامل معه.</string>
     <string name="components_launch_failed">رفض النظام بدء هذا.</string>
     <string name="app_info_unavailable">لا يمكن لهذا الجهاز فتح معلومات التطبيق</string>
+    <string name="permissions_error">تعذر قراءة أذونات هذا التطبيق.</string>
+    <string name="permissions_detail_grant_state">حالة المنح</string>
 </resources>

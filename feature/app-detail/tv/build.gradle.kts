@@ -9,7 +9,7 @@ android {
 dependencies {
     api(projects.feature.appDetail.api)
     implementation(projects.feature.appDetail.domain)
-    implementation(projects.core.appPermissions)
+    implementation(projects.core.appPermissions.api)
     implementation(projects.core.apps.api)
     implementation(projects.core.common)
     implementation(projects.core.userPreferences)

@@ -175,4 +175,6 @@
     <string name="components_launch_broadcast_sent">Diffusion envoyée — rien ici ne rapporte si elle a été traitée.</string>
     <string name="components_launch_failed">Le système a refusé de démarrer ceci.</string>
     <string name="app_info_unavailable">Cet appareil ne peut pas ouvrir Informations sur l\'application</string>
+    <string name="permissions_error">Impossible de lire les autorisations de cette application.</string>
+    <string name="permissions_detail_grant_state">État de la concession</string>
 </resources>

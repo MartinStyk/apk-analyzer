@@ -159,4 +159,6 @@
     <string name="components_launch_broadcast_sent">ブロードキャストが送信されました — ここには処理されたかどうかを報告するものはありません。</string>
     <string name="components_launch_failed">システムがこれを開始することを拒否しました。</string>
     <string name="app_info_unavailable">このデバイスではアプリ情報を開けません</string>
+    <string name="permissions_error">このアプリの権限を読み取れませんでした。</string>
+    <string name="permissions_detail_grant_state">付与状態</string>
 </resources>

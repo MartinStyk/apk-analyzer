@@ -183,4 +183,6 @@
     <string name="components_launch_broadcast_sent">Відправлено широкомовлення — нічого не повідомляє, чи було це оброблено.</string>
     <string name="components_launch_failed">Система відмовилася запустити це.</string>
     <string name="app_info_unavailable">Цей пристрій не може відкрити «Інформація про програму»</string>
+    <string name="permissions_error">Не вдалося прочитати дозволи цього додатку.</string>
+    <string name="permissions_detail_grant_state">Стан надання</string>
 </resources>

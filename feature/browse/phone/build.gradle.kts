@@ -12,6 +12,6 @@ dependencies {
     implementation(projects.feature.appDetail.api)
     implementation(projects.core.appIndex)
     implementation(projects.core.apps.api)
-    implementation(projects.core.appPermissions)
+    implementation(projects.core.appPermissions.api)
     implementation(projects.core.common)
 }

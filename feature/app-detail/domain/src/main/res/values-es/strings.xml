@@ -175,4 +175,6 @@
     <string name="components_launch_broadcast_sent">Difusión enviada — nada aquí informa si fue manejada.</string>
     <string name="components_launch_failed">El sistema se negó a iniciar esto.</string>
     <string name="app_info_unavailable">Este dispositivo no puede abrir Información de la aplicación</string>
+    <string name="permissions_error">No se pudieron leer los permisos de esta aplicación.</string>
+    <string name="permissions_detail_grant_state">Estado de concesión</string>
 </resources>

@@ -7,7 +7,7 @@ import sk.styk.martin.apkanalyzer.core.appexport.column.InventoryPreset
 import sk.styk.martin.apkanalyzer.core.appexport.format.InventoryFormat
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.InventoryExportStep
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.R
-import sk.styk.martin.apkanalyzer.core.apppermissions.R as AppPermissionsR
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.R as AppPermissionsR
 import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
 
 @Suppress("CyclomaticComplexMethod")

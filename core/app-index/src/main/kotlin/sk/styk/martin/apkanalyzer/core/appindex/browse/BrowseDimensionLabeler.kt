@@ -3,7 +3,7 @@ package sk.styk.martin.apkanalyzer.core.appindex.browse
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import sk.styk.martin.apkanalyzer.core.appindex.R
-import sk.styk.martin.apkanalyzer.core.apppermissions.PermissionLabelProvider
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.PermissionLabelProvider
 import sk.styk.martin.apkanalyzer.core.apps.api.model.AppCategory
 import sk.styk.martin.apkanalyzer.core.apps.api.sdkversion.SdkVersionResolver
 import sk.styk.martin.apkanalyzer.core.common.digest.toFingerprint

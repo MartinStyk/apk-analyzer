@@ -175,4 +175,6 @@
     <string name="components_launch_broadcast_sent">Transmissão enviada — nada aqui relata se foi tratada.</string>
     <string name="components_launch_failed">O sistema se recusou a iniciar isso.</string>
     <string name="app_info_unavailable">Este dispositivo não consegue abrir Informações do aplicativo</string>
+    <string name="permissions_error">Não foi possível ler as permissões deste aplicativo.</string>
+    <string name="permissions_detail_grant_state">Estado de concessão</string>
 </resources>

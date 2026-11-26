@@ -17,7 +17,7 @@ ksp {
 
 dependencies {
     implementation(projects.core.common)
-    implementation(projects.core.appPermissions)
+    implementation(projects.core.appPermissions.api)
     api(projects.core.apps.api)
     implementation(libs.kotlinx.serialization.json)
     testImplementation(testFixtures(projects.core.apps.api))

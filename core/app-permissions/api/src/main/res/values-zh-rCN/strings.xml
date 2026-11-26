@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="permissions_title">权限</string>
+    <string name="permissions_scope_requested">请求的</string>
+    <string name="permissions_scope_defined">由此应用定义</string>
+    <string name="permissions_granted">已授予</string>
+    <string name="permissions_not_granted">未授予</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
+    <string name="permissions_level_dangerous_explanation">在应用可以使用之前，需要您的明确批准。</string>
+    <string name="permissions_level_signature">Signature</string>
+    <string name="permissions_level_signature_explanation">只有使用相同密钥签名的应用才能持有这些。</string>
+    <string name="permissions_level_internal">Internal</string>
+    <string name="permissions_level_internal_explanation">保留给系统，并根据内部规则授予，而不是由您授予。</string>
+    <string name="permissions_level_normal">Normal</string>
+    <string name="permissions_level_normal_explanation">通常在安装时自动授予。单独使用风险较低。</string>
+    <string name="permissions_level_unavailable">详细信息不可用</string>
+    <string name="permissions_level_unavailable_explanation">此设备上没有应用声明这些，因此我们无法显示它们保护的内容。</string>
+    <string name="permissions_flag_privileged">特权系统应用也可以持有此项，无需您的批准。</string>
+    <string name="permissions_flag_appop">这个在设置中也有自己的切换，与权限本身分开。</string>
+    <string name="permissions_flag_instant">即时应用——无需安装即可运行的应用——也可以持有此项。</string>
+    <string name="permissions_flag_development">也可以手动授予以进行开发。</string>
+    <string name="permissions_detail_protection_level">保护级别</string>
+    <string name="permissions_detail_group">权限组</string>
+    <string name="permissions_detail_declared_by">声明方</string>
+    <string name="permissions_detail_extra_rules">额外规则</string>
+    <string name="permissions_grant_dangerous_granted">您允许了此项。您可以在设置中收回它。</string>
+    <string name="permissions_grant_dangerous_not_granted">您尚未允许此项。</string>
+    <string name="permissions_grant_signature_self">此应用程序自行定义此权限。</string>
+    <string name="permissions_grant_signature_granted">此应用程序与定义它的应用程序使用相同的密钥签名。</string>
+    <string name="permissions_grant_signature_granted_privileged">此应用程序与定义它的应用程序使用相同的密钥签名，或作为特权系统应用程序运行。</string>
+    <string name="permissions_grant_signature_not_granted">此应用程序与定义它的应用程序使用不同的密钥签名。</string>
+    <string name="permissions_grant_internal_granted">系统根据其自身规则授予了此项。</string>
+    <string name="permissions_grant_internal_not_granted">系统的规则在此处不授予此项。</string>
+    <string name="permissions_grant_normal_granted">在安装应用程序时自动授予。</string>
+    <string name="permissions_grant_normal_not_granted">安装时未授予 — 通常情况下，应用程序仅在较旧的 Android 版本上请求此项。</string>
+    <string name="permissions_grant_unavailable">此设备上没有应用程序声明此权限，因此无法授予它。</string>
+</resources>

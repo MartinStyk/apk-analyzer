@@ -14,6 +14,6 @@ dependencies {
     implementation(projects.core.apkFiles.api)
     implementation(projects.core.apps.api)
     implementation(projects.core.userPreferences)
-    implementation(projects.core.appPermissions)
+    implementation(projects.core.appPermissions.api)
     implementation(libs.coil.compose)
 }

@@ -8,8 +8,8 @@ import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryInsta
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryVersion
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.SetChange
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.ValueChange
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionItem
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionScope
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.PermissionItem
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.PermissionScope
 import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.RequirementItem
 import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraryItem
 import sk.styk.martin.apkanalyzer.core.apps.api.signing.Certificate

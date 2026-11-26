@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="permissions_title">Permissions</string>
+    <string name="permissions_scope_requested">Запитано</string>
+    <string name="permissions_scope_defined">Визначено цим додатком</string>
+    <string name="permissions_granted">Надано</string>
+    <string name="permissions_not_granted">Не надано</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
+    <string name="permissions_level_dangerous_explanation">Потрібно ваше явне схвалення, перш ніж додаток зможе його використовувати.</string>
+    <string name="permissions_level_signature">Signature</string>
+    <string name="permissions_level_signature_explanation">Тільки додатки, підписані тим же ключем, можуть мати це.</string>
+    <string name="permissions_level_internal">Internal</string>
+    <string name="permissions_level_internal_explanation">Резервується для системи і надається за внутрішніми правилами, а не вами.</string>
+    <string name="permissions_level_normal">Normal</string>
+    <string name="permissions_level_normal_explanation">Зазвичай надається автоматично під час установки. Низький ризик сам по собі.</string>
+    <string name="permissions_level_unavailable">Деталі недоступні</string>
+    <string name="permissions_level_unavailable_explanation">Жоден додаток на цьому пристрої не оголошує це, тому ми не можемо показати, що вони захищають.</string>
+    <string name="permissions_flag_privileged">Привілейовані системні додатки також можуть мати це без вашого схвалення.</string>
+    <string name="permissions_flag_appop">Цей також має свій власний перемикач у Налаштуваннях, окремо від самого дозволу.</string>
+    <string name="permissions_flag_instant">Миттєві додатки — додатки, які працюють без установки — також можуть мати це.</string>
+    <string name="permissions_flag_development">Також може бути надано вручну для розробки.</string>
+    <string name="permissions_detail_protection_level">Рівень захисту</string>
+    <string name="permissions_detail_group">Permission група</string>
+    <string name="permissions_detail_declared_by">Оголошено</string>
+    <string name="permissions_detail_extra_rules">Додаткові правила</string>
+    <string name="permissions_grant_dangerous_granted">Ви це дозволили. Ви можете забрати це в Налаштуваннях.</string>
+    <string name="permissions_grant_dangerous_not_granted">Ви ще не дозволили це.</string>
+    <string name="permissions_grant_signature_self">Цей додаток визначає цей дозвіл самостійно.</string>
+    <string name="permissions_grant_signature_granted">Цей додаток підписаний тим самим ключем, що й додаток, який його визначає.</string>
+    <string name="permissions_grant_signature_granted_privileged">Цей додаток підписаний тим самим ключем, що й додаток, який його визначає, або працює як привілейований системний додаток.</string>
+    <string name="permissions_grant_signature_not_granted">Цей додаток підписаний іншим ключем, ніж додаток, який його визначає.</string>
+    <string name="permissions_grant_internal_granted">Система надала це за своїми власними правилами.</string>
+    <string name="permissions_grant_internal_not_granted">Правила системи не надають це тут.</string>
+    <string name="permissions_grant_normal_granted">Надано автоматично під час встановлення додатка.</string>
+    <string name="permissions_grant_normal_not_granted">Не надано під час встановлення — найчастіше додаток запитує це лише на старіших версіях Android.</string>
+    <string name="permissions_grant_unavailable">Жоден додаток на цьому пристрої не оголошує цей дозвіл, тому нічого не може його надати.</string>
+</resources>

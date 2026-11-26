@@ -167,4 +167,6 @@
     <string name="components_launch_broadcast_sent">Broadcast gesendet — hier wird nicht berichtet, ob er verarbeitet wurde.</string>
     <string name="components_launch_failed">Das System hat sich geweigert, dies zu starten.</string>
     <string name="app_info_unavailable">Dieses Gerät kann App-Info nicht öffnen</string>
+    <string name="permissions_error">Die Berechtigungen dieser App konnten nicht gelesen werden.</string>
+    <string name="permissions_detail_grant_state">Zustand gewähren</string>
 </resources>

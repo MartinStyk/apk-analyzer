@@ -278,4 +278,6 @@
     <string name="nativelibraries_detail_device_support">這部裝置的支援情況</string>
     <string name="nativelibraries_detail_total_size">總大小</string>
     <string name="components_launch">啟動這個元件</string>
+    <string name="permissions_detail_full_name">完整名稱</string>
+    <string name="permissions_detail_section_status">狀態</string>
 </resources>

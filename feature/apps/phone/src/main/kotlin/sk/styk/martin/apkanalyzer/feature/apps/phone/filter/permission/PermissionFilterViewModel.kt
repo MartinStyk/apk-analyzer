@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import sk.styk.martin.apkanalyzer.core.apppermissions.DevicePermissionsRepository
-import sk.styk.martin.apkanalyzer.core.apppermissions.model.DevicePermission
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.DevicePermissionsRepository
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.model.DevicePermission
 import sk.styk.martin.apkanalyzer.core.apps.api.filtering.PermissionPreset
 import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.domain.PermissionFilterCoordinator
 import sk.styk.martin.apkanalyzer.feature.apps.phone.filter.domain.PermissionFilterDraft

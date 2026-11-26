@@ -1,9 +1,9 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone.permissions
 
 import androidx.compose.runtime.Immutable
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.GrantState
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionItem
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionScope
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.GrantState
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.PermissionItem
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.PermissionScope
 import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionLevel
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
 

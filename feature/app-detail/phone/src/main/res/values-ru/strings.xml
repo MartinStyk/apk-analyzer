@@ -371,4 +371,6 @@
     <string name="nativelibraries_detail_device_support">На этом устройстве</string>
     <string name="nativelibraries_detail_total_size">Общий размер</string>
     <string name="components_launch">Запустить этот компонент</string>
+    <string name="permissions_detail_full_name">Полное имя</string>
+    <string name="permissions_detail_section_status">Статус</string>
 </resources>

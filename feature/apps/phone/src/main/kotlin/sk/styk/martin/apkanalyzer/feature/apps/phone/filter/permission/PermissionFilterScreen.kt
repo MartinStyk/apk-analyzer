@@ -36,7 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.apppermissions.model.DevicePermission
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.model.DevicePermission
 import sk.styk.martin.apkanalyzer.core.apps.api.filtering.PermissionPreset
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme

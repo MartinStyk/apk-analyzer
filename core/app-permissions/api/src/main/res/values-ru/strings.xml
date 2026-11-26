@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="permissions_title">Разрешения</string>
+    <string name="permissions_scope_requested">Запрошено</string>
+    <string name="permissions_scope_defined">Определено этим приложением</string>
+    <string name="permissions_granted">Предоставлено</string>
+    <string name="permissions_not_granted">Не предоставлено</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
+    <string name="permissions_level_dangerous_explanation">Требует вашего явного одобрения перед использованием приложением.</string>
+    <string name="permissions_level_signature">Signature</string>
+    <string name="permissions_level_signature_explanation">Только приложения, подписанные тем же ключом, могут это иметь.</string>
+    <string name="permissions_level_internal">Internal</string>
+    <string name="permissions_level_internal_explanation">Резервируется для системы и предоставляется внутренними правилами, а не вами.</string>
+    <string name="permissions_level_normal">Normal</string>
+    <string name="permissions_level_normal_explanation">Обычно предоставляется автоматически при установке. Низкий риск сам по себе.</string>
+    <string name="permissions_level_unavailable">Детали недоступны</string>
+    <string name="permissions_level_unavailable_explanation">На этом устройстве ни одно приложение не заявляет об этом, поэтому мы не можем показать, что они защищают.</string>
+    <string name="permissions_flag_privileged">Привилегированные системные приложения также могут это иметь без вашего одобрения.</string>
+    <string name="permissions_flag_appop">У этого также есть собственный переключатель в Настройках, отдельный от самого разрешения.</string>
+    <string name="permissions_flag_instant">Мгновенные приложения — приложения, которые работают без установки — также могут это иметь.</string>
+    <string name="permissions_flag_development">Также может быть предоставлено вручную для разработки.</string>
+    <string name="permissions_detail_protection_level">Уровень защиты</string>
+    <string name="permissions_detail_group">Группа разрешений</string>
+    <string name="permissions_detail_declared_by">Объявлено</string>
+    <string name="permissions_detail_extra_rules">Дополнительные правила</string>
+    <string name="permissions_grant_dangerous_granted">Вы это разрешили. Вы можете отменить это в Настройках.</string>
+    <string name="permissions_grant_dangerous_not_granted">Вы еще не разрешили это.</string>
+    <string name="permissions_grant_signature_self">Это приложение определяет это разрешение самостоятельно.</string>
+    <string name="permissions_grant_signature_granted">Это приложение подписано тем же ключом, что и приложение, которое его определяет.</string>
+    <string name="permissions_grant_signature_granted_privileged">Это приложение подписано тем же ключом, что и приложение, которое его определяет, или работает как привилегированное системное приложение.</string>
+    <string name="permissions_grant_signature_not_granted">Это приложение подписано другим ключом, чем приложение, которое его определяет.</string>
+    <string name="permissions_grant_internal_granted">Система предоставила это по своим собственным правилам.</string>
+    <string name="permissions_grant_internal_not_granted">Правила системы не предоставляют это здесь.</string>
+    <string name="permissions_grant_normal_granted">Предоставлено автоматически при установке приложения.</string>
+    <string name="permissions_grant_normal_not_granted">Не предоставлено при установке — чаще всего приложение запрашивает это только на старых версиях Android.</string>
+    <string name="permissions_grant_unavailable">На этом устройстве ни одно приложение не заявляет это разрешение, поэтому ничто не может его предоставить.</string>
+</resources>

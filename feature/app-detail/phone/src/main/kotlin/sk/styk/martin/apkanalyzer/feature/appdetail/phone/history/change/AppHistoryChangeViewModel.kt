@@ -23,9 +23,9 @@ import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.ValueChange
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.addedDangerousPermissions
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.fieldChangesFrom
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.hasCertificateChange
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionItem
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionItemMapper
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionScope
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.PermissionItem
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.PermissionItemMapper
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.PermissionScope
 import sk.styk.martin.apkanalyzer.core.apps.api.components.Activity
 import sk.styk.martin.apkanalyzer.core.apps.api.components.BroadcastReceiver
 import sk.styk.martin.apkanalyzer.core.apps.api.components.ContentProvider

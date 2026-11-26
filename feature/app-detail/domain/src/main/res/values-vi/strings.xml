@@ -159,4 +159,6 @@
     <string name="components_launch_broadcast_sent">Phát sóng đã được gửi — không có gì ở đây báo cáo liệu nó có được xử lý hay không.</string>
     <string name="components_launch_failed">Hệ thống từ chối khởi động cái này.</string>
     <string name="app_info_unavailable">Thiết bị này không thể mở Thông tin ứng dụng</string>
+    <string name="permissions_error">Không thể đọc quyền của ứng dụng này.</string>
+    <string name="permissions_detail_grant_state">Trạng thái cấp quyền</string>
 </resources>

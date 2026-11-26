@@ -433,4 +433,6 @@
     <string name="nativelibraries_detail_device_support">على هذا الجهاز</string>
     <string name="nativelibraries_detail_total_size">الحجم الكلي</string>
     <string name="components_launch">ابدأ هذا المكون</string>
+    <string name="permissions_detail_full_name">الاسم الكامل</string>
+    <string name="permissions_detail_section_status">الحالة</string>
 </resources>

@@ -371,4 +371,6 @@
     <string name="nativelibraries_detail_device_support">На цьому пристрої</string>
     <string name="nativelibraries_detail_total_size">Загальний розмір</string>
     <string name="components_launch">Запустіть цей компонент</string>
+    <string name="permissions_detail_full_name">Повне ім\'я</string>
+    <string name="permissions_detail_section_status">Статус</string>
 </resources>

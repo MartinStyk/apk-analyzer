@@ -340,4 +340,6 @@
     <string name="nativelibraries_detail_device_support">Su questo dispositivo</string>
     <string name="nativelibraries_detail_total_size">Dimensione totale</string>
     <string name="components_launch">Avvia questo componente</string>
+    <string name="permissions_detail_full_name">Nome completo</string>
+    <string name="permissions_detail_section_status">Stato</string>
 </resources>

@@ -183,4 +183,6 @@
     <string name="components_launch_broadcast_sent">Zpráva odeslána — nic zde nehlásí, zda byla zpracována.</string>
     <string name="components_launch_failed">Systém odmítl spustit toto.</string>
     <string name="app_info_unavailable">Toto zařízení nedokáže otevřít Informace o aplikaci</string>
+    <string name="permissions_error">Nelze přečíst oprávnění této aplikace.</string>
+    <string name="permissions_detail_grant_state">Stav udělení</string>
 </resources>

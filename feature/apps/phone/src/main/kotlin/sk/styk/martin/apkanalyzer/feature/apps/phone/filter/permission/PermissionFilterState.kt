@@ -1,7 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.apps.phone.filter.permission
 
 import androidx.compose.runtime.Immutable
-import sk.styk.martin.apkanalyzer.core.apppermissions.model.DevicePermission
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.model.DevicePermission
 import sk.styk.martin.apkanalyzer.core.apps.api.filtering.PermissionPreset
 
 @Immutable

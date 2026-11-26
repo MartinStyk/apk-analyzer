@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="permissions_title">Permissions</string>
+    <string name="permissions_scope_requested">Requested</string>
+    <string name="permissions_scope_defined">Defined by this app</string>
+    <string name="permissions_granted">Granted</string>
+    <string name="permissions_not_granted">Not granted</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
+    <string name="permissions_level_dangerous_explanation">Needs your explicit approval before the app can use it.</string>
+    <string name="permissions_level_signature">Signature</string>
+    <string name="permissions_level_signature_explanation">Only apps signed with the same key can hold these.</string>
+    <string name="permissions_level_internal">Internal</string>
+    <string name="permissions_level_internal_explanation">Reserved for the system and granted by internal rules rather than by you.</string>
+    <string name="permissions_level_normal">Normal</string>
+    <string name="permissions_level_normal_explanation">Usually granted automatically at install. Low risk on their own.</string>
+    <string name="permissions_level_unavailable">Details not available</string>
+    <string name="permissions_level_unavailable_explanation">No app on this device declares these, so we can\'t show what they protect.</string>
+    <string name="permissions_flag_privileged">Privileged system apps can hold this too, without your approval.</string>
+    <string name="permissions_flag_appop">This one also has its own toggle in Settings, separate from the permission itself.</string>
+    <string name="permissions_flag_instant">Instant apps — apps that run without being installed — can hold this too.</string>
+    <string name="permissions_flag_development">Can also be granted by hand for development.</string>
+    <string name="permissions_detail_protection_level">Protection level</string>
+    <string name="permissions_detail_group">Permission group</string>
+    <string name="permissions_detail_declared_by">Declared by</string>
+    <string name="permissions_detail_extra_rules">Extra rules</string>
+    <string name="permissions_grant_dangerous_granted">You allowed this. You can take it back in Settings.</string>
+    <string name="permissions_grant_dangerous_not_granted">You haven\'t allowed this yet.</string>
+    <string name="permissions_grant_signature_self">This app defines this permission itself.</string>
+    <string name="permissions_grant_signature_granted">This app is signed with the same key as the app that defines it.</string>
+    <string name="permissions_grant_signature_granted_privileged">This app is signed with the same key as the app that defines it, or runs as a privileged system app.</string>
+    <string name="permissions_grant_signature_not_granted">This app is signed with a different key than the app that defines it.</string>
+    <string name="permissions_grant_internal_granted">The system granted this by its own rules.</string>
+    <string name="permissions_grant_internal_not_granted">The system\'s rules don\'t grant this here.</string>
+    <string name="permissions_grant_normal_granted">Granted automatically when the app was installed.</string>
+    <string name="permissions_grant_normal_not_granted">Not granted at install — most often the app only asks for it on older Android versions.</string>
+    <string name="permissions_grant_unavailable">No app on this device declares this permission, so nothing can grant it.</string>
+</resources>
+

@@ -26,7 +26,7 @@ import sk.styk.martin.apkanalyzer.core.apphistory.capture.AppHistoryCaptureRepos
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.AppHistoryRepository
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryTimeline
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.overview
-import sk.styk.martin.apkanalyzer.core.apppermissions.PermissionLabelProvider
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.PermissionLabelProvider
 import sk.styk.martin.apkanalyzer.core.apps.api.UnparsableApkFileException
 import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.DeviceFeatures
 import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.DeviceFeaturesRepository

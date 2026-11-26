@@ -167,4 +167,6 @@
     <string name="components_launch_broadcast_sent">Broadcast sent — nothing here reports whether it was handled.</string>
     <string name="components_launch_failed">The system refused to start this.</string>
     <string name="app_info_unavailable">This device can\'t open App Info</string>
+    <string name="permissions_error">Could not read the permissions of this app.</string>
+    <string name="permissions_detail_grant_state">Grant state</string>
 </resources>

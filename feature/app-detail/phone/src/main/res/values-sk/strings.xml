@@ -371,4 +371,6 @@
     <string name="nativelibraries_detail_device_support">Na tomto zariadení</string>
     <string name="nativelibraries_detail_total_size">Celková veľkosť</string>
     <string name="components_launch">Spustiť tento komponent</string>
+    <string name="permissions_detail_full_name">Celé meno</string>
+    <string name="permissions_detail_section_status">Stav</string>
 </resources>

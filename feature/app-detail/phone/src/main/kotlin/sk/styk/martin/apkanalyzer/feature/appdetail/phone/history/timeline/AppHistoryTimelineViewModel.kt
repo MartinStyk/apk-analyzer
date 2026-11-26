@@ -21,7 +21,7 @@ import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.hasOnlyUncompar
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.isQuiet
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.recordingSince
 import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.summaryParts
-import sk.styk.martin.apkanalyzer.core.apppermissions.PermissionLabelProvider
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.PermissionLabelProvider
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider

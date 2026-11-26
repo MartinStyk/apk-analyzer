@@ -278,4 +278,6 @@
     <string name="nativelibraries_detail_device_support">在此设备上</string>
     <string name="nativelibraries_detail_total_size">总大小</string>
     <string name="components_launch">启动此组件</string>
+    <string name="permissions_detail_full_name">全名</string>
+    <string name="permissions_detail_section_status">状态</string>
 </resources>

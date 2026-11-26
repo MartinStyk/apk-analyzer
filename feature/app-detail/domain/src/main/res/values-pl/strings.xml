@@ -183,4 +183,6 @@
     <string name="components_launch_broadcast_sent">Wysłano komunikat — nic tutaj nie informuje, czy został obsłużony.</string>
     <string name="components_launch_failed">System odmówił uruchomienia tego.</string>
     <string name="app_info_unavailable">To urządzenie nie może otworzyć ekranu Informacje o aplikacji</string>
+    <string name="permissions_error">Nie można odczytać uprawnień tej aplikacji.</string>
+    <string name="permissions_detail_grant_state">Stan przyznania</string>
 </resources>

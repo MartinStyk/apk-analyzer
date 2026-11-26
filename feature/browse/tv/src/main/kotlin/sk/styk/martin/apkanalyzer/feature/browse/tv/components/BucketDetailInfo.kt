@@ -12,8 +12,8 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseBucketDetail
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.explanationRes
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.labelRes
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.explanationRes
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.labelRes
 import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateValidity
 import sk.styk.martin.apkanalyzer.core.apps.api.signing.displayLine

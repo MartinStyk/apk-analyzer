@@ -159,4 +159,6 @@
     <string name="components_launch_broadcast_sent">已送出廣播，無法得知是否已處理。</string>
     <string name="components_launch_failed">系統拒絕啟動這個元件。</string>
     <string name="app_info_unavailable">這部裝置無法開啟應用程式資訊</string>
+    <string name="permissions_error">無法讀取這個應用程式的權限。</string>
+    <string name="permissions_detail_grant_state">授權狀態</string>
 </resources>

@@ -183,4 +183,6 @@
     <string name="components_launch_broadcast_sent">Широковещательное сообщение отправлено — здесь ничего не сообщает, было ли оно обработано.</string>
     <string name="components_launch_failed">Система отказалась запустить это.</string>
     <string name="app_info_unavailable">Это устройство не может открыть «Информация о приложении»</string>
+    <string name="permissions_error">Не удалось прочитать разрешения этого приложения.</string>
+    <string name="permissions_detail_grant_state">Состояние предоставления</string>
 </resources>

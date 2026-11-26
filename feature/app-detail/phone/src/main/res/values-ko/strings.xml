@@ -278,4 +278,6 @@
     <string name="nativelibraries_detail_device_support">이 장치에서</string>
     <string name="nativelibraries_detail_total_size">총 크기</string>
     <string name="components_launch">이 구성 요소 시작</string>
+    <string name="permissions_detail_full_name">전체 이름</string>
+    <string name="permissions_detail_section_status">상태</string>
 </resources>

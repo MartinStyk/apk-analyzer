@@ -159,4 +159,6 @@
     <string name="components_launch_broadcast_sent">Siaran dikirim — tidak ada yang melaporkan apakah itu ditangani.</string>
     <string name="components_launch_failed">Sistem menolak untuk memulai ini.</string>
     <string name="app_info_unavailable">Perangkat ini tidak dapat membuka Info aplikasi</string>
+    <string name="permissions_error">Tidak dapat membaca izin aplikasi ini.</string>
+    <string name="permissions_detail_grant_state">Status pemberian</string>
 </resources>

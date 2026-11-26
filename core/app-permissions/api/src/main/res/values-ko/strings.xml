@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="permissions_title">권한</string>
+    <string name="permissions_scope_requested">요청됨</string>
+    <string name="permissions_scope_defined">이 앱에 의해 정의됨</string>
+    <string name="permissions_granted">부여됨</string>
+    <string name="permissions_not_granted">부여되지 않음</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
+    <string name="permissions_level_dangerous_explanation">앱이 이를 사용하기 전에 귀하의 명시적인 승인이 필요합니다.</string>
+    <string name="permissions_level_signature">Signature</string>
+    <string name="permissions_level_signature_explanation">같은 키로 서명된 앱만이 이를 보유할 수 있습니다.</string>
+    <string name="permissions_level_internal">Internal</string>
+    <string name="permissions_level_internal_explanation">시스템을 위해 예약되며, 당신이 아닌 내부 규칙에 의해 부여됩니다.</string>
+    <string name="permissions_level_normal">Normal</string>
+    <string name="permissions_level_normal_explanation">보통 설치 시 자동으로 부여됩니다. 단독으로는 위험이 낮습니다.</string>
+    <string name="permissions_level_unavailable">세부정보를 사용할 수 없습니다.</string>
+    <string name="permissions_level_unavailable_explanation">이 장치의 어떤 앱도 이를 선언하지 않으므로, 우리가 보호하는 내용을 보여줄 수 없습니다.</string>
+    <string name="permissions_flag_privileged">특권 시스템 앱도 당신의 승인 없이 이를 보유할 수 있습니다.</string>
+    <string name="permissions_flag_appop">이것은 권한 자체와는 별도로 설정에서 자체 토글을 가지고 있습니다.</string>
+    <string name="permissions_flag_instant">인스턴트 앱 — 설치되지 않고 실행되는 앱 — 도 이를 보유할 수 있습니다.</string>
+    <string name="permissions_flag_development">개발을 위해 수동으로 부여될 수도 있습니다.</string>
+    <string name="permissions_detail_protection_level">보호 수준</string>
+    <string name="permissions_detail_group">권한 그룹</string>
+    <string name="permissions_detail_declared_by">다음에 의해 선언됨</string>
+    <string name="permissions_detail_extra_rules">추가 규칙</string>
+    <string name="permissions_grant_dangerous_granted">당신이 이를 허용했습니다. 설정에서 되돌릴 수 있습니다.</string>
+    <string name="permissions_grant_dangerous_not_granted">아직 이를 허용하지 않았습니다.</string>
+    <string name="permissions_grant_signature_self">이 앱은 이 권한을 자체적으로 정의합니다.</string>
+    <string name="permissions_grant_signature_granted">이 앱은 이를 정의하는 앱과 동일한 키로 서명되었습니다.</string>
+    <string name="permissions_grant_signature_granted_privileged">이 앱은 이를 정의하는 앱과 동일한 키로 서명되었거나, 특권 시스템 앱으로 실행됩니다.</string>
+    <string name="permissions_grant_signature_not_granted">이 앱은 이를 정의하는 앱과 다른 키로 서명되었습니다.</string>
+    <string name="permissions_grant_internal_granted">시스템이 자체 규칙에 따라 이를 부여했습니다.</string>
+    <string name="permissions_grant_internal_not_granted">시스템의 규칙이 여기서 이를 부여하지 않습니다.</string>
+    <string name="permissions_grant_normal_granted">앱이 설치될 때 자동으로 부여됨.</string>
+    <string name="permissions_grant_normal_not_granted">설치 시 부여되지 않음 — 대부분의 경우 앱은 이전 Android 버전에서만 이를 요청합니다.</string>
+    <string name="permissions_grant_unavailable">이 장치의 어떤 앱도 이 권한을 선언하지 않으므로, 이를 부여할 수 있는 것이 없습니다.</string>
+</resources>

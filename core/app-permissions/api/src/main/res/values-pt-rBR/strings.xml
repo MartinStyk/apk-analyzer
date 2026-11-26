@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="permissions_title">Permissões</string>
+    <string name="permissions_scope_requested">Solicitado</string>
+    <string name="permissions_scope_defined">Definido por este aplicativo</string>
+    <string name="permissions_granted">Concedido</string>
+    <string name="permissions_not_granted">Não concedido</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
+    <string name="permissions_level_dangerous_explanation">Precisa da sua aprovação explícita antes que o aplicativo possa usá-lo.</string>
+    <string name="permissions_level_signature">Signature</string>
+    <string name="permissions_level_signature_explanation">Apenas aplicativos assinados com a mesma chave podem ter isso.</string>
+    <string name="permissions_level_internal">Internal</string>
+    <string name="permissions_level_internal_explanation">Reservado para o sistema e concedido por regras internas em vez de por você.</string>
+    <string name="permissions_level_normal">Normal</string>
+    <string name="permissions_level_normal_explanation">Geralmente concedido automaticamente na instalação. Baixo risco por si só.</string>
+    <string name="permissions_level_unavailable">Detalhes não disponíveis</string>
+    <string name="permissions_level_unavailable_explanation">Nenhum aplicativo neste dispositivo declara isso, então não podemos mostrar o que eles protegem.</string>
+    <string name="permissions_flag_privileged">Aplicativos de sistema privilegiados também podem ter isso, sem a sua aprovação.</string>
+    <string name="permissions_flag_appop">Este também tem seu próprio interruptor nas Configurações, separado da permissão em si.</string>
+    <string name="permissions_flag_instant">Aplicativos instantâneos — aplicativos que rodam sem serem instalados — também podem ter isso.</string>
+    <string name="permissions_flag_development">Também pode ser concedido manualmente para desenvolvimento.</string>
+    <string name="permissions_detail_protection_level">Nível de proteção</string>
+    <string name="permissions_detail_group">Grupo de permissões</string>
+    <string name="permissions_detail_declared_by">Declarado por</string>
+    <string name="permissions_detail_extra_rules">Regras extras</string>
+    <string name="permissions_grant_dangerous_granted">Você permitiu isso. Você pode reverter nas Configurações.</string>
+    <string name="permissions_grant_dangerous_not_granted">Você ainda não permitiu isso.</string>
+    <string name="permissions_grant_signature_self">Este aplicativo define essa permissão por conta própria.</string>
+    <string name="permissions_grant_signature_granted">Este aplicativo está assinado com a mesma chave que o aplicativo que a define.</string>
+    <string name="permissions_grant_signature_granted_privileged">Este aplicativo está assinado com a mesma chave que o aplicativo que a define, ou é executado como um aplicativo de sistema privilegiado.</string>
+    <string name="permissions_grant_signature_not_granted">Este aplicativo está assinado com uma chave diferente do aplicativo que a define.</string>
+    <string name="permissions_grant_internal_granted">O sistema concedeu isso por suas próprias regras.</string>
+    <string name="permissions_grant_internal_not_granted">As regras do sistema não concedem isso aqui.</string>
+    <string name="permissions_grant_normal_granted">Concedido automaticamente quando o aplicativo foi instalado.</string>
+    <string name="permissions_grant_normal_not_granted">Não concedido na instalação — na maioria das vezes, o aplicativo só pede isso em versões mais antigas do Android.</string>
+    <string name="permissions_grant_unavailable">Nenhum aplicativo neste dispositivo declara essa permissão, então nada pode concedê-la.</string>
+</resources>

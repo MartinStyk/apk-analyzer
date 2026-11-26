@@ -167,4 +167,6 @@
     <string name="components_launch_broadcast_sent">ब्रॉडकास्ट भेजा गया - यहाँ कुछ भी रिपोर्ट नहीं करता कि इसे संभाला गया या नहीं।</string>
     <string name="components_launch_failed">सिस्टम ने इसे प्रारंभ करने से इनकार कर दिया।</string>
     <string name="app_info_unavailable">यह डिवाइस ऐप जानकारी नहीं खोल सकता</string>
+    <string name="permissions_error">इस ऐप की अनुमतियों को पढ़ा नहीं जा सका।</string>
+    <string name="permissions_detail_grant_state">अनुदान स्थिति</string>
 </resources>

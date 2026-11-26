@@ -278,4 +278,6 @@
     <string name="nativelibraries_detail_device_support">このデバイスで</string>
     <string name="nativelibraries_detail_total_size">合計サイズ</string>
     <string name="components_launch">このコンポーネントを開始</string>
+    <string name="permissions_detail_full_name">フルネーム</string>
+    <string name="permissions_detail_section_status">ステータス</string>
 </resources>

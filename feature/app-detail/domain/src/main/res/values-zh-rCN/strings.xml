@@ -159,4 +159,6 @@
     <string name="components_launch_broadcast_sent">广播已发送——这里没有报告它是否被处理。</string>
     <string name="components_launch_failed">系统拒绝启动此项。</string>
     <string name="app_info_unavailable">此设备无法打开应用信息</string>
+    <string name="permissions_error">无法读取此应用的权限。</string>
+    <string name="permissions_detail_grant_state">授予状态</string>
 </resources>
