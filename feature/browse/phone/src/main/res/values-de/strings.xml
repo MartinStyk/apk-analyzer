@@ -18,4 +18,6 @@
     <string name="browse_algorithm_md2_explanation">%1$s verwendet MD2. MD2 ist veraltet und anfällig für praktische Angriffe, sodass es unsicher für Signierungszertifikate ist. Neue Signierungszertifikate sollten SHA-256 oder stärker verwenden.</string>
     <string name="browse_algorithm_unknown_explanation">Die Stärke von %1$s kann nicht anhand des Algorithmusnamens bewertet werden. Die Art und Größe des Schlüssels können ebenfalls die Sicherheit beeinflussen.</string>
     <string name="browse_bucket_info_content_description">Über %1$s</string>
+    <string name="browse_subtitle_loading">Installierte Apps werden gescannt…</string>
+    <string name="browse_sub_attribute_sheet_title">Gruppieren nach</string>
 </resources>

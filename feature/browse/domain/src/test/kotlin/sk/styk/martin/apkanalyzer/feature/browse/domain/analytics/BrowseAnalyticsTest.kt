@@ -2,7 +2,7 @@ package sk.styk.martin.apkanalyzer.feature.browse.domain.analytics
 
 import io.kotest.matchers.shouldBe
 import org.junit.Test
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseDimension
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseDimension
 import sk.styk.martin.apkanalyzer.core.common.analytics.AnalyticsEvent
 import sk.styk.martin.apkanalyzer.core.common.analytics.AnalyticsParameterName
 import sk.styk.martin.apkanalyzer.core.common.analytics.AnalyticsTrackerFake

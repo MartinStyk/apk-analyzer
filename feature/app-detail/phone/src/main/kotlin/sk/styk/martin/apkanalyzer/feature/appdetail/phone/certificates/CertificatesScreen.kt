@@ -36,16 +36,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificatePrincipal
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateValidity
-import sk.styk.martin.apkanalyzer.core.apps.signing.SignatureAlgorithmAssessment
-import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeVersion
-import sk.styk.martin.apkanalyzer.core.apps.signing.displayLine
-import sk.styk.martin.apkanalyzer.core.apps.signing.explanationRes
-import sk.styk.martin.apkanalyzer.core.apps.signing.labelRes
-import sk.styk.martin.apkanalyzer.core.apps.signing.onRecordedDateExplanationRes
-import sk.styk.martin.apkanalyzer.core.apps.signing.onRecordedDateLabelRes
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificatePrincipal
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateTrustLevel
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateValidity
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.SignatureAlgorithmAssessment
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.SigningSchemeVersion
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.displayLine
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.explanationRes
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.labelRes
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.onRecordedDateExplanationRes
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.onRecordedDateLabelRes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Chip
@@ -72,7 +72,8 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 @Composable
 internal fun CertificatesScreen(
@@ -126,7 +127,7 @@ private fun CertificatesContent(
 
             is CertificatesState.Error -> SectionError(
                 reason = state.reason,
-                loadFailedMessage = stringResource(AppsR.string.certificates_error),
+                loadFailedMessage = stringResource(DomainR.string.certificates_error),
                 onRetry = { onAction(CertificatesAction.Retry) },
             )
 
@@ -155,7 +156,7 @@ private fun LoadedContent(
                 item(key = "current-certificates-header") {
                     CertificateGroupHeader(
                         title = if (state.currentCertificates.size == 1) {
-                            stringResource(AppsR.string.certificates_current_certificate)
+                            stringResource(DomainR.string.certificates_current_certificate)
                         } else {
                             stringResource(AppsR.string.certificates_current_certificates)
                         },
@@ -173,7 +174,7 @@ private fun LoadedContent(
                     signingSchemeVersions = state.signingSchemeVersions,
                     isHistorical = state.isHistorical,
                     label = if (state.currentCertificates.size > 1) {
-                        stringResource(AppsR.string.certificates_signer_position, index + 1, state.currentCertificates.size)
+                        stringResource(DomainR.string.certificates_signer_position, index + 1, state.currentCertificates.size)
                     } else {
                         null
                     },
@@ -186,7 +187,7 @@ private fun LoadedContent(
                     CertificateGroupHeader(
                         title = stringResource(AppsR.string.certificates_history),
                         description = pluralStringResource(
-                            AppsR.plurals.certificates_history_description,
+                            R.plurals.certificates_history_description,
                             state.pastCertificates.size,
                             state.pastCertificates.size,
                         ),
@@ -199,9 +200,9 @@ private fun LoadedContent(
                 key = { _, certificate -> certificate.certificateHashSha256 },
             ) { index, certificate ->
                 val role = if (index == state.pastCertificates.lastIndex) {
-                    stringResource(AppsR.string.certificates_original_signing_key)
+                    stringResource(DomainR.string.certificates_original_signing_key)
                 } else {
-                    stringResource(AppsR.string.certificates_previous_signing_key)
+                    stringResource(DomainR.string.certificates_previous_signing_key)
                 }
                 CertificateCard(
                     certificate = certificate,
@@ -209,7 +210,7 @@ private fun LoadedContent(
                     label = if (state.pastCertificates.size == 1) {
                         role
                     } else {
-                        stringResource(AppsR.string.certificates_card_position, role, index + 1, state.pastCertificates.size)
+                        stringResource(DomainR.string.certificates_card_position, role, index + 1, state.pastCertificates.size)
                     },
                     onCopy = { label, value -> onAction(CertificatesAction.CopyValue(label, value)) },
                     onShowRationale = { rationaleRow = it },
@@ -238,12 +239,12 @@ private fun CertificateCard(
     signingSchemeVersions: List<SigningSchemeVersion>? = null,
     isHistorical: Boolean = false,
 ) {
-    val serialLabel = stringResource(AppsR.string.certificates_serial)
-    val selfSignedLabel = stringResource(AppsR.string.certificates_self_signed)
+    val serialLabel = stringResource(DomainR.string.certificates_serial)
+    val selfSignedLabel = stringResource(DomainR.string.certificates_self_signed)
     val selfSignedInfo = InfoRow(
         label = selfSignedLabel,
-        value = stringResource(AppsR.string.certificates_self_signed_value),
-        rationale = stringResource(AppsR.string.certificates_self_signed_explanation),
+        value = stringResource(DomainR.string.certificates_self_signed_value),
+        rationale = stringResource(DomainR.string.certificates_self_signed_explanation),
     )
 
     Column(
@@ -261,13 +262,13 @@ private fun CertificateCard(
         if (certificate.trustLevel == CertificateTrustLevel.Debug) {
             InfoCard(
                 icon = ApkAnalyzerIcons.Warning,
-                title = stringResource(AppsR.string.certificates_debug_title),
-                body = stringResource(AppsR.string.certificates_debug_description),
+                title = stringResource(DomainR.string.certificates_debug_title),
+                body = stringResource(DomainR.string.certificates_debug_description),
                 tone = InfoCardTone.Warning,
             )
         }
         SectionCard(
-            title = stringResource(AppsR.string.certificates_signer),
+            title = stringResource(DomainR.string.certificates_signer),
             status = selfSignedLabel.takeIf { certificate.isSelfSigned },
             onClickStatus = { onShowRationale(selfSignedInfo) }.takeIf { certificate.isSelfSigned },
             onLongClickStatus = { onCopy(selfSignedLabel, selfSignedLabel) }.takeIf { certificate.isSelfSigned },
@@ -277,7 +278,7 @@ private fun CertificateCard(
                 onCopy = onCopy,
             )
         }
-        SectionCard(title = stringResource(AppsR.string.certificates_details)) {
+        SectionCard(title = stringResource(R.string.certificates_details)) {
             ValiditySection(
                 certificate = certificate,
                 isHistorical = isHistorical,
@@ -305,11 +306,11 @@ private fun CertificateCard(
                 label = serialLabel,
                 value = certificate.serialNumber,
                 onCopy = onCopy,
-                rationale = stringResource(AppsR.string.certificates_serial_explanation),
+                rationale = stringResource(DomainR.string.certificates_serial_explanation),
                 onShowRationale = onShowRationale,
             )
         }
-        SectionCard(title = stringResource(AppsR.string.certificates_certificate_fingerprints)) {
+        SectionCard(title = stringResource(DomainR.string.certificates_certificate_fingerprints)) {
             FingerprintSection(
                 certificate = certificate,
                 onCopy = onCopy,
@@ -368,7 +369,7 @@ private fun SignerSection(
         if (subjectFields.isEmpty()) {
             InfoFact(
                 label = stringResource(AppsR.string.certificates_name),
-                value = stringResource(AppsR.string.certificates_unknown_signer),
+                value = stringResource(DomainR.string.certificates_unknown_signer),
                 onCopy = onCopy,
             )
         } else {
@@ -379,7 +380,7 @@ private fun SignerSection(
         if (!certificate.isSelfSigned) {
             InfoFact(
                 label = stringResource(AppsR.string.certificates_issuer),
-                value = certificate.issuer.displayLine ?: stringResource(AppsR.string.certificates_unknown_signer),
+                value = certificate.issuer.displayLine ?: stringResource(DomainR.string.certificates_unknown_signer),
                 onCopy = onCopy,
             )
         }
@@ -491,17 +492,17 @@ private fun SigningSection(
     val signerState = if (hasMultipleSigners) {
         stringResource(AppsR.string.certificates_multiple_signers)
     } else {
-        stringResource(AppsR.string.certificates_single_signer)
+        stringResource(DomainR.string.certificates_single_signer)
     }
     val signerRationale = if (hasMultipleSigners) {
-        stringResource(AppsR.string.certificates_multiple_signers_explanation)
+        stringResource(DomainR.string.certificates_multiple_signers_explanation)
     } else {
-        stringResource(AppsR.string.certificates_single_signer_explanation)
+        stringResource(DomainR.string.certificates_single_signer_explanation)
     }
 
     Column(modifier = modifier.fillMaxWidth()) {
         InfoFact(
-            label = stringResource(AppsR.string.certificates_current_signers),
+            label = stringResource(DomainR.string.certificates_current_signers),
             value = signerState,
             rationale = signerRationale,
             onShowRationale = onShowRationale,
@@ -537,7 +538,7 @@ private fun SchemeFact(
         label = label,
         value = value,
         onCopy = onCopy,
-        rationale = stringResource(AppsR.string.certificates_scheme_explanation),
+        rationale = stringResource(DomainR.string.certificates_scheme_explanation),
         onShowRationale = onShowRationale,
         modifier = modifier,
     )
@@ -594,7 +595,7 @@ private fun AlgorithmFact(
     onCopy: (label: String, value: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val label = stringResource(AppsR.string.certificates_algorithm)
+    val label = stringResource(DomainR.string.certificates_algorithm)
     val assessmentLabel = stringResource(assessment.labelRes)
     val rationale = stringResource(assessment.explanationRes, algorithm)
     val algorithmInfo = InfoRow(label, algorithm, rationale)
@@ -657,7 +658,7 @@ private fun FingerprintSection(
     modifier: Modifier = Modifier,
 ) {
     var publicKeyExpanded by rememberSaveable(certificate.certificateHashSha256) { mutableStateOf(false) }
-    val copyDescription = stringResource(R.string.certificates_copy, stringResource(AppsR.string.certificates_fingerprint))
+    val copyDescription = stringResource(R.string.certificates_copy, stringResource(R.string.certificates_fingerprint))
 
     Column(modifier = modifier.fillMaxWidth()) {
         FingerprintBoxes(
@@ -677,7 +678,7 @@ private fun FingerprintSection(
                 .heightIn(min = 48.dp),
         ) {
             Text(
-                text = stringResource(AppsR.string.certificates_public_key_fingerprints),
+                text = stringResource(DomainR.string.certificates_public_key_fingerprints),
                 style = AppTheme.typography.titleSmall,
                 color = AppTheme.colors.onSurface,
                 modifier = Modifier.weight(1f),
@@ -717,9 +718,9 @@ private fun FingerprintBoxes(
     onCopy: (label: String, value: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val sha256Label = stringResource(AppsR.string.certificates_sha256)
-    val sha1Label = stringResource(AppsR.string.certificates_sha1)
-    val md5Label = stringResource(AppsR.string.certificates_md5)
+    val sha256Label = stringResource(DomainR.string.certificates_sha256)
+    val sha1Label = stringResource(DomainR.string.certificates_sha1)
+    val md5Label = stringResource(DomainR.string.certificates_md5)
 
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -763,7 +764,7 @@ private fun EmptyContent(modifier: Modifier = Modifier) {
         )
         Spacer(modifier = Modifier.height(12.dp))
         Text(
-            text = stringResource(AppsR.string.certificates_empty),
+            text = stringResource(DomainR.string.certificates_empty),
             style = AppTheme.typography.bodyLarge,
             color = AppTheme.colors.onBackground,
         )

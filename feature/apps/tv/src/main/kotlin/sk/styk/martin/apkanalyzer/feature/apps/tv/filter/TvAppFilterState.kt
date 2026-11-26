@@ -1,9 +1,9 @@
 package sk.styk.martin.apkanalyzer.feature.apps.tv.filter
 
 import androidx.compose.runtime.Immutable
-import sk.styk.martin.apkanalyzer.core.apps.filtering.ActivityQuickFilter
-import sk.styk.martin.apkanalyzer.core.apps.filtering.PermissionPreset
-import sk.styk.martin.apkanalyzer.core.apps.filtering.QuickFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.ActivityQuickFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.PermissionPreset
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.QuickFilter
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 
 @Immutable

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_history_signing_method_changed">签名方式已更改</string>
+    <string name="app_history_reinstalled">已移除并重新安装</string>
+    <string name="app_history_new_device">在新设备上继续</string>
+    <string name="app_history_version">版本 %1$s</string>
+    <string name="app_history_version_with_code">%1$s (%2$d)</string>
+    <string name="app_history_value_change">%1$s → %2$s</string>
+    <string name="app_history_summary_join">%1$s · %2$s</string>
+    <string name="app_history_summary_permission_added_single">已添加权限：%1$s</string>
+    <string name="app_history_summary_source">安装来源已更改为 %1$s</string>
+    <string name="app_history_summary_debug_on">调试已开启</string>
+    <string name="app_history_summary_debug_off">调试已关闭</string>
+    <string name="app_history_summary_backup_on">应用数据备份已开启</string>
+    <string name="app_history_summary_backup_off">应用数据备份已关闭</string>
+    <string name="app_history_summary_cleartext_on">允许未加密流量</string>
+    <string name="app_history_summary_cleartext_off">已阻止未加密流量</string>
+    <string name="app_history_summary_target_sdk">Target SDK %1$s → %2$s</string>
+    <string name="app_history_summary_min_sdk">Min SDK %1$s → %2$s</string>
+    <string name="app_history_summary_size_up">大小 +%1$s</string>
+    <string name="app_history_summary_size_down">大小 −%1$s</string>
+    <string name="app_history_field_change">%1$s: %2$s → %3$s</string>
+    <string name="app_history_field_added">%1$s：已添加</string>
+    <string name="app_history_field_removed">%1$s：已移除</string>
+    <string name="app_history_certificate_updated_explanation">只有旧密钥批准后，Android 才接受使用不同证书的更新，因此这通常是开发者有计划的密钥更换。</string>
+    <string name="app_history_certificate_new_copy_explanation">此副本使用的证书与之前记录的不同。请确认它来自你信任的来源。</string>
+    <plurals name="app_history_summary_more">
+        <item quantity="other">另有 %1$d 项</item>
+    </plurals>
+    <plurals name="app_history_summary_permission_added_named">
+        <item quantity="other">已添加 %1$s 及另外 %2$d 项权限</item>
+    </plurals>
+    <plurals name="app_history_summary_permissions_removed">
+        <item quantity="other">已移除 %1$d 项权限</item>
+    </plurals>
+    <plurals name="app_history_summary_defined_permissions">
+        <item quantity="other">此应用定义的 %1$d 项权限已更改</item>
+    </plurals>
+    <plurals name="app_history_summary_components_added">
+        <item quantity="other">已添加 %1$d 个组件</item>
+    </plurals>
+    <plurals name="app_history_summary_components_removed">
+        <item quantity="other">已移除 %1$d 个组件</item>
+    </plurals>
+    <plurals name="app_history_summary_components_changed">
+        <item quantity="other">已更改 %1$d 个组件</item>
+    </plurals>
+    <plurals name="app_history_summary_native_added">
+        <item quantity="other">已添加 %1$d 个本地库</item>
+    </plurals>
+    <plurals name="app_history_summary_native_removed">
+        <item quantity="other">已移除 %1$d 个本地库</item>
+    </plurals>
+    <plurals name="app_history_summary_native_changed">
+        <item quantity="other">已更改 %1$d 个本地库</item>
+    </plurals>
+    <string name="app_history_size_change_up">%1$s → %2$s (+%3$s)</string>
+    <string name="app_history_size_change_down">%1$s → %2$s (−%3$s)</string>
+    <string name="app_history_field_value">%1$s: %2$s</string>
+    <string name="app_history_rule_added">%1$s · 已添加：%2$s</string>
+    <string name="app_history_rule_removed">%1$s · 已移除：%2$s</string>
+    <string name="app_history_path_rule">%1$s（读取：%2$s，写入：%3$s）</string>
+    <string name="app_history_summary_requirements">设备要求已更改</string>
+</resources>

@@ -66,7 +66,7 @@ follow-up commit instead of gating local iteration on them.
 | When | Run |
 |---|---|
 | Iterating on one module | `./gradlew :feature:apps:phone:compileDebugKotlin` |
-| Writing or changing a class with unit tests | `./gradlew :core:apps:testDebugUnitTest` |
+| Writing or changing a class with unit tests | `./gradlew :core:apps:impl:testDebugUnitTest` |
 | Before committing | `./gradlew spotlessApply` — the only gate required locally |
 | Changing a rule in `build-logic/detekt-rules` | `./gradlew -p build-logic :detekt-rules:test` |
 | Whole-app check (what CI gates on — don't run this locally unless debugging a CI failure) | `./gradlew spotlessCheck detektDebug :build-logic:convention:detektMain :build-logic:detekt-rules:detektMain lintDebug testDebugUnitTest :build-logic:detekt-rules:test :app:assembleDebug :tv:assembleDebug validateArchitecture` |
@@ -110,10 +110,12 @@ Modules live under `app/`, `tv/`, `core/<name>/`, and `feature/<name>/{api,domai
   as `phone`, but it never depends on its sibling `phone`. Logic both need moves to the feature's
   `domain` when it is about this feature, or to `core` when it is a domain rule other features use.
 * `core/*` — may depend on other `core` modules. **Never** depends on a `feature` module.
-* A core domain module split into `core/<name>/api` and an implementation submodule (`impl`, or one
-  per implementation such as `play`/`noop`) is consumed through `api` only; only the app shells
-  depend on the implementation, so everything at its top level is `private` or `internal`. See
-  [core API/impl split](docs/app/technical/core-api-impl-split.md).
+* Every core domain module is split into `core/<name>/api` (applies `apkanalyzer.core.api`) and an
+  implementation submodule (`impl`, or one per implementation such as `play`/`noop`, applying
+  `apkanalyzer.core.impl`). Everything else consumes it
+  through `api` only; only the app shells depend on the implementation, so everything at its top
+  level is `private` or `internal`. `design-system`, `common`, `navigation`, and `app-functions` stay
+  single modules. See [core API/impl split](docs/app/technical/core-api-impl-split.md).
 * A feature never depends on another feature's `phone` or `tv`. Cross-feature navigation goes through the
   target's `api` module.
 * `app` — wiring only: the launcher Activity, the external-APK document Activity, nav hosts, and
@@ -125,10 +127,10 @@ Modules live under `app/`, `tv/`, `core/<name>/`, and `feature/<name>/{api,domai
 * `site/` — not a module: the public website the `Pages` workflow publishes to GitHub Pages from
   `develop`. Its pages are a user-facing contract; see
   [`core/app-export/AGENTS.md`](core/app-export/AGENTS.md#published-reference).
-* Declare dependencies with typesafe accessors (`projects.core.appPermissions`), never
-  `project(":core:app-permissions")`. Apply plugins with `alias(libs.plugins.apkanalyzer.*)`.
-* A module's package matches its directory with hyphens removed: `core/user-preferences` →
-  `core.userpreferences`, `feature/app-detail/phone` → `feature.appdetail.phone`. `app` uses the root
+* Declare dependencies with typesafe accessors (`projects.core.appPermissions.api`), never
+  `project(":core:app-permissions:api")`. Apply plugins with `alias(libs.plugins.apkanalyzer.*)`.
+* A module's package matches its directory with hyphens removed: `core/user-preferences/api` →
+  `core.userpreferences.api`, `feature/app-detail/phone` → `feature.appdetail.phone`. `app` uses the root
   package `sk.styk.martin.apkanalyzer` with no suffix.
 ## Architecture
 

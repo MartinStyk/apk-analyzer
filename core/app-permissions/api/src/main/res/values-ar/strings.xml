@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="permissions_title">الأذونات</string>
+    <string name="permissions_scope_requested">مطلوب</string>
+    <string name="permissions_scope_defined">محدد بواسطة هذا التطبيق</string>
+    <string name="permissions_granted">ممنوح</string>
+    <string name="permissions_not_granted">غير ممنوح</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
+    <string name="permissions_level_dangerous_explanation">يحتاج إلى موافقتك الصريحة قبل أن يتمكن التطبيق من استخدامه.</string>
+    <string name="permissions_level_signature">Signature</string>
+    <string name="permissions_level_signature_explanation">يمكن فقط للتطبيقات الموقعة بنفس المفتاح أن تحتفظ بهذه.</string>
+    <string name="permissions_level_internal">Internal</string>
+    <string name="permissions_level_internal_explanation">محجوز للنظام وممنوح وفقًا لقواعد داخلية بدلاً من قبلك.</string>
+    <string name="permissions_level_normal">Normal</string>
+    <string name="permissions_level_normal_explanation">عادة ما يتم منحه تلقائيًا عند التثبيت. خطر منخفض بمفرده.</string>
+    <string name="permissions_level_unavailable">التفاصيل غير متاحة</string>
+    <string name="permissions_level_unavailable_explanation">لا يوجد تطبيق على هذا الجهاز يعلن عن هذه، لذا لا يمكننا عرض ما تحميه.</string>
+    <string name="permissions_flag_privileged">يمكن أن تحتفظ التطبيقات النظامية المميزة بهذا أيضًا، دون موافقتك.</string>
+    <string name="permissions_flag_appop">هذا أيضًا لديه مفتاح خاص به في الإعدادات، منفصل عن الإذن نفسه.</string>
+    <string name="permissions_flag_instant">التطبيقات الفورية - التطبيقات التي تعمل دون تثبيتها - يمكن أن تحتفظ بهذا أيضًا.</string>
+    <string name="permissions_flag_development">يمكن أيضًا منحه يدويًا للتطوير.</string>
+    <string name="permissions_detail_protection_level">مستوى الحماية</string>
+    <string name="permissions_detail_group">مجموعة الإذن</string>
+    <string name="permissions_detail_declared_by">معلن من قبل</string>
+    <string name="permissions_detail_extra_rules">قواعد إضافية</string>
+    <string name="permissions_grant_dangerous_granted">لقد سمحت بذلك. يمكنك سحبه في الإعدادات.</string>
+    <string name="permissions_grant_dangerous_not_granted">لم تسمح بذلك بعد.</string>
+    <string name="permissions_grant_signature_self">هذا التطبيق يعرف هذا الإذن بنفسه.</string>
+    <string name="permissions_grant_signature_granted">هذا التطبيق موقّع بنفس المفتاح الذي يوقّع به التطبيق الذي يعرفه.</string>
+    <string name="permissions_grant_signature_granted_privileged">هذا التطبيق موقّع بنفس المفتاح الذي يوقّع به التطبيق الذي يعرفه، أو يعمل كتطبيق نظام مميز.</string>
+    <string name="permissions_grant_signature_not_granted">هذا التطبيق موقّع بمفتاح مختلف عن التطبيق الذي يعرفه.</string>
+    <string name="permissions_grant_internal_granted">النظام منح هذا وفقًا لقواعده الخاصة.</string>
+    <string name="permissions_grant_internal_not_granted">قواعد النظام لا تمنح هذا هنا.</string>
+    <string name="permissions_grant_normal_granted">تم منحه تلقائيًا عند تثبيت التطبيق.</string>
+    <string name="permissions_grant_normal_not_granted">لم يتم منحه عند التثبيت - غالبًا ما يطلب التطبيق ذلك فقط في إصدارات أندرويد القديمة.</string>
+    <string name="permissions_grant_unavailable">لا يوجد تطبيق على هذا الجهاز يعلن عن هذا الإذن، لذا لا يمكن منح أي شيء.</string>
+</resources>

@@ -18,4 +18,6 @@
     <string name="browse_algorithm_md2_explanation">%1$s використовує MD2. MD2 застарілий і вразливий до практичних атак, тому він небезпечний для сертифікатів підпису. Нові сертифікати підпису повинні використовувати SHA-256 або сильніші.</string>
     <string name="browse_algorithm_unknown_explanation">Силу %1$s не можна оцінити за його назвою алгоритму. Тип і розмір ключа також можуть впливати на його безпеку.</string>
     <string name="browse_bucket_info_content_description">Про %1$s</string>
+    <string name="browse_subtitle_loading">Сканування встановлених додатків…</string>
+    <string name="browse_sub_attribute_sheet_title">Групувати за</string>
 </resources>

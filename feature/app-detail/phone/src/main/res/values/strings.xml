@@ -289,4 +289,74 @@
         <item quantity="one">Recording since %1$s · %2$d change</item>
         <item quantity="other">Recording since %1$s · %2$d changes</item>
     </plurals>
+    <string name="components_detail_full_name">Full name</string>
+    <string name="components_detail_intent_filters_open">View intent filters</string>
+    <plurals name="components_intent_filter_count">
+        <item quantity="one">%1$d intent filter</item>
+        <item quantity="other">%1$d intent filters</item>
+    </plurals>
+    <string name="components_detail_intent_actions_explanation">What another app or Android asks this component to do.</string>
+    <string name="components_detail_intent_categories_explanation">Categories this filter permits. Every category supplied by a request must be listed here.</string>
+    <string name="components_detail_intent_data_explanation">The web addresses, file types, or other content this component says it can handle.</string>
+    <string name="components_detail_intent_allowed_uri_parts_explanation">All details in this group must match for the group to allow a link. Android evaluates groups in manifest order.</string>
+    <string name="components_detail_intent_blocked_uri_parts_explanation">These details define a blocking match rule. Android evaluates it with the filter\'s other link rules in manifest order.</string>
+    <string name="components_detail_intent_activity_priority_explanation">A higher number can make this activity preferred over other matching activities, subject to Android\'s routing rules.</string>
+    <string name="components_detail_intent_receiver_priority_explanation">For ordered broadcasts, a higher number can make this receiver run earlier, subject to Android\'s limits.</string>
+    <string name="components_detail_intent_declared_priority_explanation">The manifest declares this value, but Android does not use it to choose between matching services or providers.</string>
+    <string name="components_detail_intent_order_explanation">A higher number is considered first when this app has multiple matching filters.</string>
+    <plurals name="certificates_history_description">
+        <item quantity="one">Android verified one signing key used before the current key.</item>
+        <item quantity="other">Android verified %d signing keys used before the current key. The most recently used previous key appears first.</item>
+    </plurals>
+    <string name="certificates_details">Certificate details</string>
+    <string name="certificates_fingerprint">fingerprint</string>
+    <plurals name="requirements_missing_summary">
+        <item quantity="one">%1$d requirement this device cannot meet</item>
+        <item quantity="other">%1$d requirements this device cannot meet</item>
+    </plurals>
+    <string name="requirements_detail_necessity">Necessity</string>
+    <string name="requirements_detail_availability">On this device</string>
+    <string name="requirements_detail_version">Version</string>
+    <string name="requirements_detail_version_comparison">%1$s needed · %2$s on this device</string>
+    <string name="splitapks_detail_type">Type</string>
+    <string name="splitapks_detail_size">Size</string>
+    <string name="nativelibraries_explanation">Every distinct native code file this app ships, one row per file name even when the same library is built for multiple processor architectures.</string>
+    <string name="nativelibraries_detail_device_support">On this device</string>
+    <string name="nativelibraries_detail_total_size">Total size</string>
+    <string name="components_launch">Start this component</string>
+    <string name="permissions_detail_full_name">Full name</string>
+    <string name="permissions_detail_section_status">Status</string>
+    <string name="app_history_first_recorded">First recorded</string>
+    <string name="app_history_certificate_changed">Signing certificate changed</string>
+    <string name="app_history_same_version">Same version, new build</string>
+    <string name="app_history_older_version">Older version</string>
+    <string name="app_history_uncomparable_only">Some details couldn\'t be compared</string>
+    <string name="app_history_delta_up" translatable="false">+%1$s</string>
+    <string name="app_history_delta_down" translatable="false">−%1$s</string>
+    <string name="app_history_when_updated">Updated %1$s</string>
+    <string name="app_history_when_reinstalled">Installed again %1$s</string>
+    <string name="app_history_when_recorded">Recorded %1$s</string>
+    <string name="app_history_when_with_recorded">%1$s · recorded %2$s</string>
+    <string name="app_history_changes_heading">Changes between these versions</string>
+    <string name="app_history_device_note">Some differences can come from the device, not the app.</string>
+    <string name="app_history_empty_diff">No differences in what Apk Analyzer compares</string>
+    <string name="app_history_uncomparable_label">Couldn\'t compare</string>
+    <string name="app_history_uncomparable_explanation">This information wasn\'t fully recorded for one of these versions, so we can\'t say whether it changed.</string>
+    <string name="app_history_before">Before</string>
+    <string name="app_history_after">After</string>
+    <string name="app_history_category_signing">Signing</string>
+    <string name="app_history_category_permissions">Permissions</string>
+    <string name="app_history_category_install_source">Install source</string>
+    <string name="app_history_category_settings">App settings</string>
+    <string name="app_history_category_android_versions">Android versions</string>
+    <string name="app_history_category_components">Components</string>
+    <string name="app_history_category_native">Native libraries</string>
+    <string name="app_history_category_size">Size</string>
+    <string name="app_history_category_signing_method">Signing method</string>
+    <string name="app_history_group_added">Added</string>
+    <string name="app_history_group_removed">Removed</string>
+    <string name="app_history_group_changed">Changed</string>
+    <string name="app_history_signer_explanation">The organization or person named in this signing certificate. Anyone can write any name here, so the fingerprint below is what identifies the key.</string>
+    <string name="app_history_not_recorded">Not recorded for this version</string>
+    <string name="app_history_not_recorded_explanation">Apk Analyzer couldn\'t record this for this version, so we can\'t say what it contained.</string>
 </resources>

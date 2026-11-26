@@ -27,13 +27,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Feature
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.FeatureAvailability
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.RequirementItem
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.RequirementSection
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.explanationRes
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.label
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.labelRes
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.Feature
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.FeatureAvailability
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.RequirementItem
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.RequirementSection
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.explanationRes
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.label
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.labelRes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.InfoCard
@@ -49,7 +49,8 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ListSection
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
 import java.time.Instant
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 @Composable
 internal fun RequirementsScreen(
@@ -103,7 +104,7 @@ private fun RequirementsContent(
 
             is RequirementsState.Error -> SectionError(
                 reason = state.reason,
-                loadFailedMessage = stringResource(AppsR.string.requirements_error),
+                loadFailedMessage = stringResource(DomainR.string.requirements_error),
                 onRetry = { onAction(RequirementsAction.Retry) },
             )
 
@@ -138,7 +139,7 @@ private fun LoadedContent(
                 InfoCard(
                     icon = ApkAnalyzerIcons.Warning,
                     title = null,
-                    body = pluralStringResource(AppsR.plurals.requirements_missing_summary, state.missingRequiredCount, state.missingRequiredCount),
+                    body = pluralStringResource(R.plurals.requirements_missing_summary, state.missingRequiredCount, state.missingRequiredCount),
                     tone = InfoCardTone.Warning,
                     modifier = Modifier.padding(top = 16.dp),
                 )
@@ -148,7 +149,7 @@ private fun LoadedContent(
             item(key = section.isRequired) {
                 ListSectionHeader(
                     title = stringResource(
-                        AppsR.string.requirements_section_header,
+                        DomainR.string.requirements_section_header,
                         stringResource(section.labelRes).uppercase(),
                         section.requirements.size,
                     ),
@@ -187,7 +188,7 @@ private fun EmptyContent(modifier: Modifier = Modifier) {
             .padding(horizontal = 32.dp),
     ) {
         Text(
-            text = stringResource(AppsR.string.requirements_empty),
+            text = stringResource(DomainR.string.requirements_empty),
             style = AppTheme.typography.bodyLarge,
             color = AppTheme.colors.onBackground,
             textAlign = TextAlign.Center,

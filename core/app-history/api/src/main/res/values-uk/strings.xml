@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_history_signing_method_changed">Спосіб підпису змінився</string>
+    <string name="app_history_reinstalled">Видалено й установлено знову</string>
+    <string name="app_history_new_device">Продовжено на новому пристрої</string>
+    <string name="app_history_version">Версія %1$s</string>
+    <string name="app_history_version_with_code">%1$s (%2$d)</string>
+    <string name="app_history_value_change">%1$s → %2$s</string>
+    <string name="app_history_summary_join">%1$s · %2$s</string>
+    <string name="app_history_summary_permission_added_single">Додано дозвіл: %1$s</string>
+    <string name="app_history_summary_source">Джерело встановлення змінено на %1$s</string>
+    <string name="app_history_summary_debug_on">Налагодження ввімкнено</string>
+    <string name="app_history_summary_debug_off">Налагодження вимкнено</string>
+    <string name="app_history_summary_backup_on">Резервне копіювання даних увімкнено</string>
+    <string name="app_history_summary_backup_off">Резервне копіювання даних вимкнено</string>
+    <string name="app_history_summary_cleartext_on">Незашифрований трафік дозволено</string>
+    <string name="app_history_summary_cleartext_off">Незашифрований трафік заблоковано</string>
+    <string name="app_history_summary_target_sdk">Target SDK %1$s → %2$s</string>
+    <string name="app_history_summary_min_sdk">Min SDK %1$s → %2$s</string>
+    <string name="app_history_summary_size_up">Розмір +%1$s</string>
+    <string name="app_history_summary_size_down">Розмір −%1$s</string>
+    <string name="app_history_field_change">%1$s: %2$s → %3$s</string>
+    <string name="app_history_field_added">%1$s: додано</string>
+    <string name="app_history_field_removed">%1$s: видалено</string>
+    <string name="app_history_certificate_updated_explanation">Android приймає оновлення з іншим сертифікатом, лише якщо його схвалив старий ключ, тому зазвичай це запланована зміна ключа розробником.</string>
+    <string name="app_history_certificate_new_copy_explanation">Цю копію підписано іншим сертифікатом, ніж зафіксований раніше. Перевірте, чи вона з надійного джерела.</string>
+    <plurals name="app_history_summary_more">
+        <item quantity="one">і ще %1$d</item>
+        <item quantity="few">і ще %1$d</item>
+        <item quantity="many">і ще %1$d</item>
+        <item quantity="other">і ще %1$d</item>
+    </plurals>
+    <plurals name="app_history_summary_permission_added_named">
+        <item quantity="one">Додано: %1$s і ще %2$d дозвіл</item>
+        <item quantity="few">Додано: %1$s і ще %2$d дозволи</item>
+        <item quantity="many">Додано: %1$s і ще %2$d дозволів</item>
+        <item quantity="other">Додано: %1$s і ще %2$d дозволу</item>
+    </plurals>
+    <plurals name="app_history_summary_permissions_removed">
+        <item quantity="one">Видалено %1$d дозвіл</item>
+        <item quantity="few">Видалено %1$d дозволи</item>
+        <item quantity="many">Видалено %1$d дозволів</item>
+        <item quantity="other">Видалено %1$d дозволу</item>
+    </plurals>
+    <plurals name="app_history_summary_defined_permissions">
+        <item quantity="one">Змінено %1$d дозвіл, визначений застосунком</item>
+        <item quantity="few">Змінено %1$d дозволи, визначені застосунком</item>
+        <item quantity="many">Змінено %1$d дозволів, визначених застосунком</item>
+        <item quantity="other">Змінено %1$d дозволу, визначеного застосунком</item>
+    </plurals>
+    <plurals name="app_history_summary_components_added">
+        <item quantity="one">Додано %1$d компонент</item>
+        <item quantity="few">Додано %1$d компоненти</item>
+        <item quantity="many">Додано %1$d компонентів</item>
+        <item quantity="other">Додано %1$d компонента</item>
+    </plurals>
+    <plurals name="app_history_summary_components_removed">
+        <item quantity="one">Видалено %1$d компонент</item>
+        <item quantity="few">Видалено %1$d компоненти</item>
+        <item quantity="many">Видалено %1$d компонентів</item>
+        <item quantity="other">Видалено %1$d компонента</item>
+    </plurals>
+    <plurals name="app_history_summary_components_changed">
+        <item quantity="one">Змінено %1$d компонент</item>
+        <item quantity="few">Змінено %1$d компоненти</item>
+        <item quantity="many">Змінено %1$d компонентів</item>
+        <item quantity="other">Змінено %1$d компонента</item>
+    </plurals>
+    <plurals name="app_history_summary_native_added">
+        <item quantity="one">Додано %1$d рідну бібліотеку</item>
+        <item quantity="few">Додано %1$d рідні бібліотеки</item>
+        <item quantity="many">Додано %1$d рідних бібліотек</item>
+        <item quantity="other">Додано %1$d рідної бібліотеки</item>
+    </plurals>
+    <plurals name="app_history_summary_native_removed">
+        <item quantity="one">Видалено %1$d рідну бібліотеку</item>
+        <item quantity="few">Видалено %1$d рідні бібліотеки</item>
+        <item quantity="many">Видалено %1$d рідних бібліотек</item>
+        <item quantity="other">Видалено %1$d рідної бібліотеки</item>
+    </plurals>
+    <plurals name="app_history_summary_native_changed">
+        <item quantity="one">Змінено %1$d рідну бібліотеку</item>
+        <item quantity="few">Змінено %1$d рідні бібліотеки</item>
+        <item quantity="many">Змінено %1$d рідних бібліотек</item>
+        <item quantity="other">Змінено %1$d рідної бібліотеки</item>
+    </plurals>
+    <string name="app_history_size_change_up">%1$s → %2$s (+%3$s)</string>
+    <string name="app_history_size_change_down">%1$s → %2$s (−%3$s)</string>
+    <string name="app_history_field_value">%1$s: %2$s</string>
+    <string name="app_history_rule_added">%1$s · додано: %2$s</string>
+    <string name="app_history_rule_removed">%1$s · видалено: %2$s</string>
+    <string name="app_history_path_rule">%1$s (читання: %2$s, запис: %3$s)</string>
+    <string name="app_history_summary_requirements">Змінилися вимоги до пристрою</string>
+</resources>

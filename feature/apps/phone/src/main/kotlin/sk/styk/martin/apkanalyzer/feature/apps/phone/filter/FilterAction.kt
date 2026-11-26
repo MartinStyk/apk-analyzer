@@ -1,9 +1,9 @@
 package sk.styk.martin.apkanalyzer.feature.apps.phone.filter
 
-import sk.styk.martin.apkanalyzer.core.apps.filtering.AppSizeRange
-import sk.styk.martin.apkanalyzer.core.apps.filtering.DateRange
-import sk.styk.martin.apkanalyzer.core.apps.filtering.PermissionPreset
-import sk.styk.martin.apkanalyzer.core.apps.filtering.UnusedAppsPeriod
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.AppSizeRange
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.DateRange
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.PermissionPreset
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.UnusedAppsPeriod
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 
 sealed interface FilterAction {

@@ -11,15 +11,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseBucketDetail
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.explanationRes
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.labelRes
-import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateValidity
-import sk.styk.martin.apkanalyzer.core.apps.signing.displayLine
-import sk.styk.martin.apkanalyzer.core.apps.signing.explanationRes
-import sk.styk.martin.apkanalyzer.core.apps.signing.isWeak
-import sk.styk.martin.apkanalyzer.core.apps.signing.labelRes
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseBucketDetail
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.explanationRes
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.labelRes
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateValidity
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.displayLine
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.explanationRes
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.isWeak
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.labelRes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.Tag
@@ -27,8 +27,8 @@ import sk.styk.martin.apkanalyzer.core.designsystem.tv.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.theme.ApkAnalyzerTvTheme
 import java.text.DateFormat
 import java.util.Date
-import sk.styk.martin.apkanalyzer.core.appindex.R as AppIndexR
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.browse.domain.R as BrowseDomainR
 
 @Composable
 internal fun BucketDetailInfo(detail: BrowseBucketDetail, modifier: Modifier = Modifier) {
@@ -64,7 +64,7 @@ private fun CertificateInfo(detail: BrowseBucketDetail.Certificate, modifier: Mo
                 icon = if (detail.algorithmAssessment.isWeak) ApkAnalyzerIcons.Warning else ApkAnalyzerIcons.VerifiedShield,
             )
             if (detail.isSelfSigned) {
-                Tag(label = stringResource(AppIndexR.string.browse_certificate_self_signed))
+                Tag(label = stringResource(BrowseDomainR.string.browse_certificate_self_signed))
             }
         }
         detail.subject.organization?.let { InfoField(label = stringResource(AppsR.string.certificates_organization), value = it) }
@@ -86,7 +86,7 @@ private fun CertificateInfo(detail: BrowseBucketDetail.Certificate, modifier: Mo
         }
         InfoText(text = stringResource(detail.algorithmAssessment.explanationRes, detail.algorithm))
         if (detail.isSelfSigned) {
-            InfoText(text = stringResource(AppIndexR.string.browse_certificate_self_signed_explanation))
+            InfoText(text = stringResource(BrowseDomainR.string.browse_certificate_self_signed_explanation))
         }
     }
 }

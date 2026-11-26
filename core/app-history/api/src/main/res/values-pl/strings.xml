@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_history_signing_method_changed">Metoda podpisu się zmieniła</string>
+    <string name="app_history_reinstalled">Usunięto i zainstalowano ponownie</string>
+    <string name="app_history_new_device">Kontynuacja na nowym urządzeniu</string>
+    <string name="app_history_version">Wersja %1$s</string>
+    <string name="app_history_version_with_code">%1$s (%2$d)</string>
+    <string name="app_history_value_change">%1$s → %2$s</string>
+    <string name="app_history_summary_join">%1$s · %2$s</string>
+    <string name="app_history_summary_permission_added_single">Dodano uprawnienie: %1$s</string>
+    <string name="app_history_summary_source">Źródło instalacji zmieniono na %1$s</string>
+    <string name="app_history_summary_debug_on">Debugowanie włączone</string>
+    <string name="app_history_summary_debug_off">Debugowanie wyłączone</string>
+    <string name="app_history_summary_backup_on">Kopia danych aplikacji włączona</string>
+    <string name="app_history_summary_backup_off">Kopia danych aplikacji wyłączona</string>
+    <string name="app_history_summary_cleartext_on">Ruch nieszyfrowany dozwolony</string>
+    <string name="app_history_summary_cleartext_off">Ruch nieszyfrowany zablokowany</string>
+    <string name="app_history_summary_target_sdk">Target SDK %1$s → %2$s</string>
+    <string name="app_history_summary_min_sdk">Min SDK %1$s → %2$s</string>
+    <string name="app_history_summary_size_up">Rozmiar +%1$s</string>
+    <string name="app_history_summary_size_down">Rozmiar −%1$s</string>
+    <string name="app_history_field_change">%1$s: %2$s → %3$s</string>
+    <string name="app_history_field_added">%1$s: dodano</string>
+    <string name="app_history_field_removed">%1$s: usunięto</string>
+    <string name="app_history_certificate_updated_explanation">Android akceptuje aktualizację z innym certyfikatem tylko wtedy, gdy zatwierdził ją stary klucz, więc zwykle jest to planowana zmiana klucza przez dewelopera.</string>
+    <string name="app_history_certificate_new_copy_explanation">Ta kopia jest podpisana innym certyfikatem niż odnotowany wcześniej. Sprawdź, czy pochodzi z zaufanego źródła.</string>
+    <plurals name="app_history_summary_more">
+        <item quantity="one">i %1$d więcej</item>
+        <item quantity="few">i %1$d więcej</item>
+        <item quantity="many">i %1$d więcej</item>
+        <item quantity="other">i %1$d więcej</item>
+    </plurals>
+    <plurals name="app_history_summary_permission_added_named">
+        <item quantity="one">Dodano: %1$s i %2$d inne uprawnienie</item>
+        <item quantity="few">Dodano: %1$s i %2$d inne uprawnienia</item>
+        <item quantity="many">Dodano: %1$s i %2$d innych uprawnień</item>
+        <item quantity="other">Dodano: %1$s i %2$d innego uprawnienia</item>
+    </plurals>
+    <plurals name="app_history_summary_permissions_removed">
+        <item quantity="one">Usunięto %1$d uprawnienie</item>
+        <item quantity="few">Usunięto %1$d uprawnienia</item>
+        <item quantity="many">Usunięto %1$d uprawnień</item>
+        <item quantity="other">Usunięto %1$d uprawnienia</item>
+    </plurals>
+    <plurals name="app_history_summary_defined_permissions">
+        <item quantity="one">Zmieniono %1$d uprawnienie zdefiniowane przez tę aplikację</item>
+        <item quantity="few">Zmieniono %1$d uprawnienia zdefiniowane przez tę aplikację</item>
+        <item quantity="many">Zmieniono %1$d uprawnień zdefiniowanych przez tę aplikację</item>
+        <item quantity="other">Zmieniono %1$d uprawnienia zdefiniowanego przez tę aplikację</item>
+    </plurals>
+    <plurals name="app_history_summary_components_added">
+        <item quantity="one">Dodano %1$d komponent</item>
+        <item quantity="few">Dodano %1$d komponenty</item>
+        <item quantity="many">Dodano %1$d komponentów</item>
+        <item quantity="other">Dodano %1$d komponentu</item>
+    </plurals>
+    <plurals name="app_history_summary_components_removed">
+        <item quantity="one">Usunięto %1$d komponent</item>
+        <item quantity="few">Usunięto %1$d komponenty</item>
+        <item quantity="many">Usunięto %1$d komponentów</item>
+        <item quantity="other">Usunięto %1$d komponentu</item>
+    </plurals>
+    <plurals name="app_history_summary_components_changed">
+        <item quantity="one">Zmieniono %1$d komponent</item>
+        <item quantity="few">Zmieniono %1$d komponenty</item>
+        <item quantity="many">Zmieniono %1$d komponentów</item>
+        <item quantity="other">Zmieniono %1$d komponentu</item>
+    </plurals>
+    <plurals name="app_history_summary_native_added">
+        <item quantity="one">Dodano %1$d bibliotekę natywną</item>
+        <item quantity="few">Dodano %1$d biblioteki natywne</item>
+        <item quantity="many">Dodano %1$d bibliotek natywnych</item>
+        <item quantity="other">Dodano %1$d biblioteki natywnej</item>
+    </plurals>
+    <plurals name="app_history_summary_native_removed">
+        <item quantity="one">Usunięto %1$d bibliotekę natywną</item>
+        <item quantity="few">Usunięto %1$d biblioteki natywne</item>
+        <item quantity="many">Usunięto %1$d bibliotek natywnych</item>
+        <item quantity="other">Usunięto %1$d biblioteki natywnej</item>
+    </plurals>
+    <plurals name="app_history_summary_native_changed">
+        <item quantity="one">Zmieniono %1$d bibliotekę natywną</item>
+        <item quantity="few">Zmieniono %1$d biblioteki natywne</item>
+        <item quantity="many">Zmieniono %1$d bibliotek natywnych</item>
+        <item quantity="other">Zmieniono %1$d biblioteki natywnej</item>
+    </plurals>
+    <string name="app_history_size_change_up">%1$s → %2$s (+%3$s)</string>
+    <string name="app_history_size_change_down">%1$s → %2$s (−%3$s)</string>
+    <string name="app_history_field_value">%1$s: %2$s</string>
+    <string name="app_history_rule_added">%1$s · dodano: %2$s</string>
+    <string name="app_history_rule_removed">%1$s · usunięto: %2$s</string>
+    <string name="app_history_path_rule">%1$s (odczyt: %2$s, zapis: %3$s)</string>
+    <string name="app_history_summary_requirements">Zmieniły się wymagania sprzętowe</string>
+</resources>

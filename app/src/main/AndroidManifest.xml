@@ -12,7 +12,7 @@
     <application
         android:name=".ApkAnalyzer"
         android:allowBackup="true"
-        android:backupAgent="sk.styk.martin.apkanalyzer.core.apphistory.restore.AppHistoryBackupAgent"
+        android:backupAgent="sk.styk.martin.apkanalyzer.core.apphistory.impl.restore.AppHistoryBackupAgent"
         android:fullBackupOnly="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"

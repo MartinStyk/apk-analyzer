@@ -1,8 +1,8 @@
 package sk.styk.martin.apkanalyzer.feature.browse.phone.options
 
 import androidx.compose.runtime.Immutable
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseOption
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseSubAttribute
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseOption
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseSubAttribute
 
 @Immutable
 internal sealed interface BrowseOptionsState {

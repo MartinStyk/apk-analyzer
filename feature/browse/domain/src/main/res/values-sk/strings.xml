@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="browse_subtitle">
+        <item quantity="one">Zobraziť %1$d aplikáciu nainštalovanú na tomto zariadení</item>
+        <item quantity="few">Zobraziť %1$d aplikácie nainštalované na tomto zariadení</item>
+        <item quantity="many">Zobraziť %1$d nainštalovaných aplikácií na tomto zariadení</item>
+        <item quantity="other">Zobraziť %1$d nainštalovaných aplikácií na tomto zariadení</item>
+    </plurals>
+    <plurals name="browse_dimension_option_count">
+        <item quantity="one">%1$d možnosť</item>
+        <item quantity="few">%1$d možnosti</item>
+        <item quantity="many">%1$d možností</item>
+        <item quantity="other">%1$d možností</item>
+    </plurals>
+    <string name="browse_certificate_self_signed">Self-signed</string>
+    <string name="browse_certificate_self_signed_explanation">Self-signed certifikáty sú bežné pre Android aplikácie. Porovnajte odtlačok certifikátu s dôveryhodným zdrojom, keď potrebujete overiť vydavateľa.</string>
+    <plurals name="browse_options_filter_hint">
+        <item quantity="one">Filtrovať %1$d možnosť</item>
+        <item quantity="few">Filtrovať %1$d možnosti</item>
+        <item quantity="many">Filtrovať %1$d možností</item>
+        <item quantity="other">Filtrovať %1$d možností</item>
+    </plurals>
+    <string name="browse_options_empty_query">Žiadne možnosti nezodpovedajú „%1$s“</string>
+    <plurals name="browse_apps_count">
+        <item quantity="one">%1$d aplikácia</item>
+        <item quantity="few">%1$d aplikácie</item>
+        <item quantity="many">%1$d aplikácií</item>
+        <item quantity="other">%1$d aplikácií</item>
+    </plurals>
+    <plurals name="browse_apps_filter_hint">
+        <item quantity="one">Filtrovať %1$d aplikáciu</item>
+        <item quantity="few">Filtrovať %1$d aplikácie</item>
+        <item quantity="many">Filtrovať %1$d aplikácií</item>
+        <item quantity="other">Filtrovať %1$d aplikácií</item>
+    </plurals>
+    <string name="browse_apps_empty_query">Žiadne aplikácie nezodpovedajú “%1$s”</string>
+</resources>

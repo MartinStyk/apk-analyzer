@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="browse_sdk_unknown">API 級別 %1$s</string>
+    <string name="browse_api_level">API %1$s</string>
+    <string name="browse_source_google_play">Google Play</string>
+    <string name="browse_source_samsung_galaxy_store">Samsung Galaxy Store</string>
+    <string name="browse_source_amazon_appstore">Amazon Appstore</string>
+    <string name="browse_source_huawei_app_gallery">Huawei AppGallery</string>
+    <string name="browse_source_xiaomi_get_apps">Xiaomi GetApps</string>
+    <string name="browse_source_fdroid">F-Droid</string>
+    <string name="browse_source_aurora_store">Aurora Store</string>
+    <string name="browse_source_sideloaded">從檔案安裝</string>
+    <string name="browse_source_local_install">透過電腦安裝</string>
+    <string name="browse_source_system">系統</string>
+    <string name="browse_source_unknown">不明來源</string>
+    <string name="browse_country_unknown">不明國家</string>
+    <string name="browse_category_undefined">未分類</string>
+    <string name="browse_category_game">遊戲</string>
+    <string name="browse_category_audio">音訊</string>
+    <string name="browse_category_video">影片</string>
+    <string name="browse_category_image">圖片</string>
+    <string name="browse_category_social">社交</string>
+    <string name="browse_category_news">新聞與雜誌</string>
+    <string name="browse_category_maps">地圖與導航</string>
+    <string name="browse_category_productivity">生產力工具</string>
+    <string name="browse_category_accessibility">無障礙功能</string>
+</resources>

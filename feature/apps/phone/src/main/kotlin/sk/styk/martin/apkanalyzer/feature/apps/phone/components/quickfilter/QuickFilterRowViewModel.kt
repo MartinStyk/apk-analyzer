@@ -9,10 +9,10 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
-import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterRepository
-import sk.styk.martin.apkanalyzer.core.apps.filtering.QuickFilter
-import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepository
-import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.AppFilterRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.QuickFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.storagestats.StorageStatsRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.feature.apps.phone.components.AppDataPermission
 import javax.inject.Inject
 

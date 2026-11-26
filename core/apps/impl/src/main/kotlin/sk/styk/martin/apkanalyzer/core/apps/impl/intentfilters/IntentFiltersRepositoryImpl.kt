@@ -1,0 +1,65 @@
+package sk.styk.martin.apkanalyzer.core.apps.impl.intentfilters
+
+import sk.styk.martin.apkanalyzer.core.apps.api.PackageChangesObserver
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilterKey
+import sk.styk.martin.apkanalyzer.core.apps.api.intentfilters.IntentFiltersRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.manifest.ManifestParser
+import sk.styk.martin.apkanalyzer.core.common.logger.Logger
+import sk.styk.martin.apkanalyzer.core.common.model.AppReference
+import sk.styk.martin.apkanalyzer.core.common.model.AppReferenceCacheKey
+import sk.styk.martin.apkanalyzer.core.common.model.toCacheKey
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTrace
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
+import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
+import sk.styk.martin.apkanalyzer.core.common.performance.analysisMode
+import sk.styk.martin.apkanalyzer.core.common.performance.analysisModeAttribute
+import sk.styk.martin.apkanalyzer.core.common.performance.outcome
+import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
+import java.util.concurrent.ConcurrentHashMap
+import javax.inject.Inject
+import javax.inject.Singleton
+
+private const val TAG = "IntentFiltersRepositoryImpl"
+private const val CACHE_HIT_ATTRIBUTE = "cache_hit"
+
+@Singleton
+internal class IntentFiltersRepositoryImpl @Inject constructor(
+    private val manifestParser: ManifestParser,
+    packageChangesObserver: PackageChangesObserver,
+    private val performanceTracker: PerformanceTracker,
+) : IntentFiltersRepository {
+
+    private val cache = ConcurrentHashMap<AppReferenceCacheKey, Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>>()
+
+    init {
+        packageChangesObserver.runBeforeNotifying {
+            Logger.d(TAG, "Package change detected, clearing cache")
+            cache.clear()
+        }
+    }
+
+    override suspend fun componentIntentFilters(reference: AppReference): Result<Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>> =
+        performanceTracker.startCancellableTrace("intent_filters_load") {
+            analysisMode = reference.analysisModeAttribute
+            loadComponentIntentFilters(reference)
+        }
+
+    private suspend fun PerformanceTrace.loadComponentIntentFilters(
+        reference: AppReference,
+    ): Result<Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>> {
+        val cacheKey = reference.toCacheKey()
+        cache[cacheKey]?.let {
+            markCacheHit()
+            outcome = TraceOutcome.Success
+            return Result.success(it)
+        }
+        return manifestParser.componentIntentFilters(reference)
+            .onSuccess { cache[cacheKey] = it }
+            .also { outcome = if (it.isSuccess) TraceOutcome.Success else TraceOutcome.Error }
+    }
+
+    private fun PerformanceTrace.markCacheHit() {
+        this[CACHE_HIT_ATTRIBUTE] = true.toString()
+    }
+}

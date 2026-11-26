@@ -37,11 +37,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.labelRes
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentKind
-import sk.styk.martin.apkanalyzer.core.apps.components.sectionLabelRes
-import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
-import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.labelRes
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentKind
+import sk.styk.martin.apkanalyzer.core.apps.api.components.sectionLabelRes
+import sk.styk.martin.apkanalyzer.core.apps.api.model.AppDetail
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
@@ -78,8 +78,9 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionLoading
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.formatDate
 import java.time.Instant
-import sk.styk.martin.apkanalyzer.core.apppermissions.R as PermissionsR
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.R as PermissionsR
+import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 @Composable
 internal fun TvAppDetailScreen(
@@ -101,7 +102,7 @@ internal fun TvAppDetailScreen(
         viewModel.events.collect { event ->
             when (event) {
                 is TvAppDetailEvent.OpenAppInfo -> context.openAppSystemPage(event.packageName).onFailure {
-                    Toast.makeText(context, AppsR.string.app_info_unavailable, Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, DomainR.string.app_info_unavailable, Toast.LENGTH_LONG).show()
                 }
 
                 is TvAppDetailEvent.OpenPlayStore -> context.openGooglePlay(event.packageName)
@@ -308,7 +309,7 @@ private fun GeneralInfoCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    SectionCard(onClick = onClick, title = stringResource(AppsR.string.general_info_title), icon = ApkAnalyzerIcons.Info, modifier = modifier) {
+    SectionCard(onClick = onClick, title = stringResource(DomainR.string.general_info_title), icon = ApkAnalyzerIcons.Info, modifier = modifier) {
         FactLine(label = stringResource(R.string.tv_app_detail_stat_version), value = state.versionName ?: state.versionCode.toString())
         FactLine(
             label = stringResource(R.string.tv_app_detail_stat_target),
@@ -428,9 +429,9 @@ private fun CertificatesCard(
             }
             Text(
                 text = when {
-                    state.isDebugSigned -> stringResource(AppsR.string.certificates_debug_title)
+                    state.isDebugSigned -> stringResource(DomainR.string.certificates_debug_title)
                     state.signerName != null -> stringResource(R.string.tv_app_detail_signed_by, state.signerName)
-                    else -> stringResource(AppsR.string.certificates_unknown_signer)
+                    else -> stringResource(DomainR.string.certificates_unknown_signer)
                 },
                 style = AppTheme.typography.titleSmall,
                 maxLines = 1,

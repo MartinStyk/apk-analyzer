@@ -1,10 +1,10 @@
 package sk.styk.martin.apkanalyzer.feature.appexport.phone
 
 import androidx.compose.runtime.Immutable
-import sk.styk.martin.apkanalyzer.core.appexport.column.InventoryColumn
-import sk.styk.martin.apkanalyzer.core.appexport.column.InventoryColumnShape
-import sk.styk.martin.apkanalyzer.core.appexport.column.InventoryPreset
-import sk.styk.martin.apkanalyzer.core.appexport.format.InventoryFormat
+import sk.styk.martin.apkanalyzer.core.appexport.api.column.InventoryColumn
+import sk.styk.martin.apkanalyzer.core.appexport.api.column.InventoryColumnShape
+import sk.styk.martin.apkanalyzer.core.appexport.api.column.InventoryPreset
+import sk.styk.martin.apkanalyzer.core.appexport.api.format.InventoryFormat
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.apps.AppSelectionState
 
 enum class InventoryExportStep {

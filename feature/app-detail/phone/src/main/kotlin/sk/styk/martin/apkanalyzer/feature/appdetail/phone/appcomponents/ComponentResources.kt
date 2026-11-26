@@ -5,7 +5,7 @@ import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
 
 internal val ComponentType.icon: ImageVector
     get() = when (this) {

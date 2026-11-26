@@ -1,7 +1,8 @@
 # Core API/Impl Split and Entitlements
 
-**Status:** Proposed. Nothing is built yet. `core:entitlements` is the first module with this shape;
-existing core domain modules move to it one at a time afterwards.
+**Status:** Implemented for the existing core domain modules (`apps`, `app-permissions`,
+`app-index`, `app-history`, `app-export`, `apk-files`, `ai-insights`, `user-preferences`), with the
+convention plugins and `validateArchitecture` checks. `core:entitlements` is not built yet.
 **Scope:** How a core domain module splits into an `api` and an implementation module, where models,
 resources, and top-level functions go, how the split is enforced, and how `core:entitlements` swaps
 its Google Play Billing implementation for a no-op one per build type. Does not cover the
@@ -11,8 +12,9 @@ entitlement product design: what is paid, pricing, or the purchase UI.
 
 * Google Play Billing has to be optional. Release builds ship without it for now, so every consumer
   of entitlements must compile against a contract and never against the billing implementation.
-* Today the only boundary inside a core module is `internal`. A split makes it structural: a feature
-  cannot reach an implementation class because the module isn't on its classpath.
+* Before the split the only boundary inside a core module was `internal`. The split makes it
+  structural: a feature cannot reach an implementation class because the module isn't on its
+  classpath.
 * It mirrors `feature/*/api`, which already lets features depend on each other's contract only.
 
 ## Module Shape
@@ -56,7 +58,7 @@ These stay single modules:
 * Models: `@Serializable` data classes, sealed interfaces, enums.
 * Constants consumers need, in an `object`.
 * Pure top-level extensions on `api` models that need no dependency, no `Context`, and could never
-  have a second implementation — they define what the model means. Today's examples in `core:apps`:
+  have a second implementation — they define what the model means. Examples in `core:apps`:
   `isLaunchable`, `hasUnguardedPathPermission`, `isExternallyReachableWithoutPermission`.
 * `testFixtures` with a fake for every interface, so feature and domain tests never depend on an
   implementation module.
@@ -85,10 +87,10 @@ A string lives in the lowest module that needs it:
   the contract.
 * **Strings only the implementation uses go in the implementation module**, such as notification
   titles or worker channel names.
-* **Feature copy currently parked in a core module moves to the feature.** `core:apps` today holds
-  screen copy such as `app_detail_sdk_version` and `app_info_unavailable`, which `feature:app-detail`
-  reads through `AppsR`. Splitting a module is the point at which this is sorted out. When the phone
-  and TV modules both need the same copy, follow the existing rule for shared feature logic.
+* **Feature copy lives in the feature, not in a core module.** A string only one feature shows goes
+  to that feature: its `domain` module when phone and TV both show it (as `feature:app-detail` and
+  `feature:browse` do), its `phone` or `tv` module otherwise. A string several features or a core
+  module show stays with the `api` model it labels.
 
 Moving a string between modules moves it in every `values-<locale>/strings.xml` as well; the
 `translate-strings` skill covers keeping locale key sets aligned.
@@ -166,12 +168,19 @@ The product design decides the actual entitlements. The shape to keep:
 
 ## Enforcement
 
-* **Convention plugins.** `apkanalyzer.core.api` configures an Android library with serialization
-  and `testFixtures`, and no Hilt or Compose. `apkanalyzer.core.impl` adds Hilt. Each module applies
-  one or the other, never both.
-* **`validateArchitecture`.** New checks for the dependency rules above: an `api` module only on
-  `api` modules and `core:common`; nothing but the app shells on an implementation module; an
-  `api` module never applies the Hilt plugin.
+* **Convention plugins.** Built. `apkanalyzer.core.api` configures an Android library with the
+  coroutines and serialization runtimes and `testFixtures`, and no Hilt or Compose. An `api` module
+  with `@StringRes` labels adds `androidx-core-ktx` for the annotation. `apkanalyzer.core.impl` adds
+  Hilt. Each module applies one or the other, never both.
+* **`validateArchitecture`.** Built: A7 keeps an `api` module on `api` modules and `core:common`, A8
+  keeps implementation modules off everything but the app shells, and B6/B7 check which convention
+  each side applies, so an `api` module never gets Hilt.
+* **The `api` classpath and `ForbiddenImport/CoreApiPlatformAccess`.** Hilt, Room, WorkManager, and
+  Compose are not on an `api` module's classpath, so the compiler rejects them. The Android framework
+  always is, so a second, path-scoped instance of detekt's `ForbiddenImport` rejects every `android.*`
+  and `androidx.*` import in `api` main and test-fixture sources except `android.net.Uri` (a value in
+  contracts), `android.content.res.Resources` (resolving labels), and `androidx.annotation.*`.
+  Mapping a platform value such as a `PackageInfo` flag to an `api` model belongs in `impl`.
 * **A detekt rule in `build-logic/detekt-rules`.** Built: `ImplModuleVisibility` reports any public
   top-level declaration in a nested core module other than `api` and `design-system`, so every new
   implementation module (`impl`, `play`, `noop`) is covered without a config change.
@@ -180,16 +189,23 @@ The product design decides the actual entitlements. The shape to keep:
 
 ## Migration
 
-1. Build `core:entitlements` with this shape. It is new, so nothing moves.
-2. Add the convention plugins and the `validateArchitecture` and detekt checks, scoped to modules
-   that have split.
-3. Migrate existing modules one at a time, smallest consumer surface first: `user-preferences`,
-   `app-permissions`, `app-index`, `apk-files`, `ai-insights`, `app-export`, `app-history`, then
-   `apps` last — it is the largest and carries the most feature copy in its strings.
+1. Done: the convention plugins and the `validateArchitecture` and detekt checks.
+2. Done: the existing modules, in dependency order (`apk-files`, `apps`, `app-permissions`,
+   `app-index`, `user-preferences`, `ai-insights`, `app-export`, `app-history`), so each module's
+   `api` only ever depended on modules that had already split.
+3. Build `core:entitlements` with this shape. It is new, so nothing moves.
 
 Migrating one module means: create `api`, move interfaces, models, labels, and pure extensions into
 it, rename the remaining module to `impl` and make it `internal`, repoint consumers' imports and
-dependencies to `api`, and add the `impl` dependency to the app shells.
+dependencies to `api`, and add the `impl` dependency to the app shells that use it (TV ships
+neither `ai-insights` nor `app-export`).
+
+Moving a class to a new package is not free for anything Android stores by name. Room's exported
+schema directory is named after the database class and moves with it. WorkManager persists the
+worker class name, so `core:app-history` enqueues its periodic worker with
+`ExistingPeriodicWorkPolicy.UPDATE`, which rewrites already-enqueued work to the new class. The
+backup agent is named in the app manifest. Polymorphic serialized blobs use explicit `@SerialName`
+values, so they are unaffected.
 
 ## Open Questions
 

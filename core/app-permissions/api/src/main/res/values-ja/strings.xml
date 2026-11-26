@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="permissions_title">権限</string>
+    <string name="permissions_scope_requested">要求された</string>
+    <string name="permissions_scope_defined">このアプリによって定義された</string>
+    <string name="permissions_granted">付与済み</string>
+    <string name="permissions_not_granted">未付与</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
+    <string name="permissions_level_dangerous_explanation">アプリが使用する前に明示的な承認が必要です。</string>
+    <string name="permissions_level_signature">Signature</string>
+    <string name="permissions_level_signature_explanation">同じキーで署名されたアプリのみがこれを保持できます。</string>
+    <string name="permissions_level_internal">Internal</string>
+    <string name="permissions_level_internal_explanation">システムのために予約されており、あなたによってではなく内部のルールによって付与されます。</string>
+    <string name="permissions_level_normal">Normal</string>
+    <string name="permissions_level_normal_explanation">通常、インストール時に自動的に付与されます。単独ではリスクが低いです。</string>
+    <string name="permissions_level_unavailable">詳細は利用できません</string>
+    <string name="permissions_level_unavailable_explanation">このデバイス上のアプリはこれを宣言していないため、保護しているものを表示できません。</string>
+    <string name="permissions_flag_privileged">特権システムアプリも、あなたの承認なしにこれを保持できます。</string>
+    <string name="permissions_flag_appop">これには、権限自体とは別に設定で独自のトグルもあります。</string>
+    <string name="permissions_flag_instant">インストールされずに実行されるアプリであるインスタントアプリも、これを保持できます。</string>
+    <string name="permissions_flag_development">開発のために手動で付与することもできます。</string>
+    <string name="permissions_detail_protection_level">保護レベル</string>
+    <string name="permissions_detail_group">権限グループ</string>
+    <string name="permissions_detail_declared_by">によって宣言されました</string>
+    <string name="permissions_detail_extra_rules">追加のルール</string>
+    <string name="permissions_grant_dangerous_granted">これを許可しました。設定で取り消すことができます。</string>
+    <string name="permissions_grant_dangerous_not_granted">まだこれを許可していません。</string>
+    <string name="permissions_grant_signature_self">このアプリはこの権限を自ら定義しています。</string>
+    <string name="permissions_grant_signature_granted">このアプリはそれを定義するアプリと同じキーで署名されています。</string>
+    <string name="permissions_grant_signature_granted_privileged">このアプリはそれを定義するアプリと同じキーで署名されているか、特権システムアプリとして実行されています。</string>
+    <string name="permissions_grant_signature_not_granted">このアプリはそれを定義するアプリとは異なるキーで署名されています。</string>
+    <string name="permissions_grant_internal_granted">システムが独自のルールでこれを付与しました。</string>
+    <string name="permissions_grant_internal_not_granted">システムのルールはここでこれを付与しません。</string>
+    <string name="permissions_grant_normal_granted">アプリがインストールされたときに自動的に付与されました。</string>
+    <string name="permissions_grant_normal_not_granted">インストール時に付与されていません — 最も一般的には、アプリは古いAndroidバージョンでのみこれを要求します。</string>
+    <string name="permissions_grant_unavailable">このデバイス上のアプリはこの権限を宣言していないため、何も付与できません。</string>
+</resources>

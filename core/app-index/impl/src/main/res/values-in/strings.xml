@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="browse_sdk_unknown">Tingkat API %1$s</string>
+    <string name="browse_api_level">API %1$s</string>
+    <string name="browse_source_google_play">Google Play</string>
+    <string name="browse_source_samsung_galaxy_store">Samsung Galaxy Store</string>
+    <string name="browse_source_amazon_appstore">Amazon Appstore</string>
+    <string name="browse_source_huawei_app_gallery">Huawei AppGallery</string>
+    <string name="browse_source_xiaomi_get_apps">Xiaomi GetApps</string>
+    <string name="browse_source_fdroid">F-Droid</string>
+    <string name="browse_source_aurora_store">Aurora Store</string>
+    <string name="browse_source_sideloaded">Diinstal dari file</string>
+    <string name="browse_source_local_install">Diinstal melalui komputer</string>
+    <string name="browse_source_system">Sistem</string>
+    <string name="browse_source_unknown">Tidak diketahui</string>
+    <string name="browse_country_unknown">Negara tidak diketahui</string>
+    <string name="browse_category_undefined">Tidak terklasifikasi</string>
+    <string name="browse_category_game">Permainan</string>
+    <string name="browse_category_audio">Audio</string>
+    <string name="browse_category_video">Video</string>
+    <string name="browse_category_image">Gambar</string>
+    <string name="browse_category_social">Sosial</string>
+    <string name="browse_category_news">Berita &amp; majalah</string>
+    <string name="browse_category_maps">Peta &amp; navigasi</string>
+    <string name="browse_category_productivity">Produktivitas</string>
+    <string name="browse_category_accessibility">Aksesibilitas</string>
+</resources>

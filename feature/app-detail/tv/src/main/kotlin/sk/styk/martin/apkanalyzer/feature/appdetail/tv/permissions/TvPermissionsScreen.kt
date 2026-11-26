@@ -17,14 +17,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.GrantState
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionItem
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionScope
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.explanationRes
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.grantExplanationRes
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.labelRes
-import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionFlag
-import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.GrantState
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.PermissionItem
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.PermissionScope
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.explanationRes
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.grantExplanationRes
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.labelRes
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionFlag
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.permissionIcon
@@ -44,7 +44,8 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.ListSectionHea
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.PaneField
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionLoading
-import sk.styk.martin.apkanalyzer.core.apppermissions.R as PermissionsR
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.R as PermissionsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 @Composable
 internal fun TvPermissionsScreen(
@@ -83,7 +84,7 @@ private fun TvPermissionsContent(
             title = title,
             appName = appName,
             appReference = appReference,
-            message = stringResource(PermissionsR.string.permissions_error),
+            message = stringResource(DomainR.string.permissions_error),
             onRetry = { onAction(TvPermissionsAction.Retry) },
         )
 
@@ -189,7 +190,7 @@ private fun PermissionPane(item: PermissionItem, modifier: Modifier = Modifier) 
     ) {
         item.grantState?.let { grantState ->
             PaneField(
-                label = stringResource(PermissionsR.string.permissions_detail_grant_state),
+                label = stringResource(DomainR.string.permissions_detail_grant_state),
                 value = stringResource(grantState.labelRes),
                 explanation = item.grantExplanationRes?.let { stringResource(it) },
                 valueColor = if (item.isGrantedDangerous) AppTheme.colors.warning else AppTheme.colors.onSurface,

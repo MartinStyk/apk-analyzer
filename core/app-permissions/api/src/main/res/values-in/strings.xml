@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="permissions_title">Izin</string>
+    <string name="permissions_scope_requested">Diminta</string>
+    <string name="permissions_scope_defined">Didefinisikan oleh aplikasi ini</string>
+    <string name="permissions_granted">Diberikan</string>
+    <string name="permissions_not_granted">Tidak diberikan</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
+    <string name="permissions_level_dangerous_explanation">Memerlukan persetujuan eksplisit Anda sebelum aplikasi dapat menggunakannya.</string>
+    <string name="permissions_level_signature">Signature</string>
+    <string name="permissions_level_signature_explanation">Hanya aplikasi yang ditandatangani dengan kunci yang sama yang dapat memegang ini.</string>
+    <string name="permissions_level_internal">Internal</string>
+    <string name="permissions_level_internal_explanation">Dikhususkan untuk sistem dan diberikan oleh aturan internal daripada oleh Anda.</string>
+    <string name="permissions_level_normal">Normal</string>
+    <string name="permissions_level_normal_explanation">Biasanya diberikan secara otomatis saat instalasi. Risiko rendah sendiri.</string>
+    <string name="permissions_level_unavailable">Detail tidak tersedia</string>
+    <string name="permissions_level_unavailable_explanation">Tidak ada aplikasi di perangkat ini yang menyatakan ini, jadi kami tidak dapat menunjukkan apa yang mereka lindungi.</string>
+    <string name="permissions_flag_privileged">Aplikasi sistem yang memiliki hak istimewa juga dapat memegang ini, tanpa persetujuan Anda.</string>
+    <string name="permissions_flag_appop">Yang ini juga memiliki toggle sendiri di Pengaturan, terpisah dari izin itu sendiri.</string>
+    <string name="permissions_flag_instant">Aplikasi instan — aplikasi yang berjalan tanpa diinstal — juga dapat memegang ini.</string>
+    <string name="permissions_flag_development">Juga dapat diberikan secara manual untuk pengembangan.</string>
+    <string name="permissions_detail_protection_level">Tingkat perlindungan</string>
+    <string name="permissions_detail_group">Grup izin</string>
+    <string name="permissions_detail_declared_by">Dideklarasikan oleh</string>
+    <string name="permissions_detail_extra_rules">Aturan tambahan</string>
+    <string name="permissions_grant_dangerous_granted">Anda mengizinkan ini. Anda dapat mencabutnya di Pengaturan.</string>
+    <string name="permissions_grant_dangerous_not_granted">Anda belum mengizinkan ini.</string>
+    <string name="permissions_grant_signature_self">Aplikasi ini mendefinisikan izin ini sendiri.</string>
+    <string name="permissions_grant_signature_granted">Aplikasi ini ditandatangani dengan kunci yang sama dengan aplikasi yang mendefinisikannya.</string>
+    <string name="permissions_grant_signature_granted_privileged">Aplikasi ini ditandatangani dengan kunci yang sama dengan aplikasi yang mendefinisikannya, atau berjalan sebagai aplikasi sistem yang memiliki hak istimewa.</string>
+    <string name="permissions_grant_signature_not_granted">Aplikasi ini ditandatangani dengan kunci yang berbeda dari aplikasi yang mendefinisikannya.</string>
+    <string name="permissions_grant_internal_granted">Sistem memberikan ini berdasarkan aturannya sendiri.</string>
+    <string name="permissions_grant_internal_not_granted">Aturan sistem tidak memberikan ini di sini.</string>
+    <string name="permissions_grant_normal_granted">Diberikan secara otomatis saat aplikasi diinstal.</string>
+    <string name="permissions_grant_normal_not_granted">Tidak diberikan saat instalasi — paling sering aplikasi hanya meminta ini di versi Android yang lebih lama.</string>
+    <string name="permissions_grant_unavailable">Tidak ada aplikasi di perangkat ini yang mendeklarasikan izin ini, jadi tidak ada yang dapat memberikannya.</string>
+</resources>

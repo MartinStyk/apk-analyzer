@@ -1,0 +1,27 @@
+package sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.database.snapshot
+
+import kotlinx.serialization.Serializable
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraryFile
+import sk.styk.martin.apkanalyzer.core.common.model.bytes
+
+@Serializable
+internal data class NativeLibraryFileSnapshot(
+    val name: String,
+    val abi: String,
+    val size: Long,
+    val containingApkFileName: String,
+)
+
+internal fun NativeLibraryFile.toSnapshot() = NativeLibraryFileSnapshot(
+    name = name,
+    abi = abi,
+    size = size.bytes,
+    containingApkFileName = containingApkFileName,
+)
+
+internal fun NativeLibraryFileSnapshot.toDomain() = NativeLibraryFile(
+    name = name,
+    abi = abi,
+    size = size.bytes,
+    containingApkFileName = containingApkFileName,
+)

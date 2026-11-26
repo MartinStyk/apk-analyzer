@@ -11,18 +11,18 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
-import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
-import sk.styk.martin.apkanalyzer.core.apps.filtering.AppFilterRepository
-import sk.styk.martin.apkanalyzer.core.apps.filtering.filterBy
-import sk.styk.martin.apkanalyzer.core.apps.sorting.AppSortType
-import sk.styk.martin.apkanalyzer.core.apps.sorting.comparator
-import sk.styk.martin.apkanalyzer.core.apps.storagestats.StorageStatsRepository
-import sk.styk.martin.apkanalyzer.core.apps.usagestats.UsageStatsRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.InstalledAppsRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.AppFilterRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.filterBy
+import sk.styk.martin.apkanalyzer.core.apps.api.sorting.AppSortType
+import sk.styk.martin.apkanalyzer.core.apps.api.sorting.comparator
+import sk.styk.martin.apkanalyzer.core.apps.api.storagestats.StorageStatsRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationKey
 import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.combine
-import sk.styk.martin.apkanalyzer.core.userpreferences.recentlyviewed.RecentlyViewedAppsRepository
+import sk.styk.martin.apkanalyzer.core.userpreferences.api.recentlyviewed.RecentlyViewedAppsRepository
 import sk.styk.martin.apkanalyzer.feature.apps.phone.components.AppDataPermission
 import javax.inject.Inject
 

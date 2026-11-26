@@ -1,10 +1,10 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.domain
 
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilterKey
-import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraries
-import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeVersion
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilterKey
+import sk.styk.martin.apkanalyzer.core.apps.api.model.AppDetail
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraries
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.SigningSchemeVersion
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 
 interface AppDetailSectionRepository {

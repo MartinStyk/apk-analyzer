@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="permissions_title">Povolenia</string>
+    <string name="permissions_scope_requested">Požadované</string>
+    <string name="permissions_scope_defined">Definované touto aplikáciou</string>
+    <string name="permissions_granted">Povolené</string>
+    <string name="permissions_not_granted">Nepovolené</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
+    <string name="permissions_level_dangerous_explanation">Potrebuje vaše výslovné schválenie predtým, ako ho aplikácia môže použiť.</string>
+    <string name="permissions_level_signature">Signature</string>
+    <string name="permissions_level_signature_explanation">Iba aplikácie podpísané rovnakým kľúčom môžu mať tieto.</string>
+    <string name="permissions_level_internal">Internal</string>
+    <string name="permissions_level_internal_explanation">Vyhradené pre systém a udelené internými pravidlami, nie vami.</string>
+    <string name="permissions_level_normal">Normal</string>
+    <string name="permissions_level_normal_explanation">Zvyčajne udelené automaticky pri inštalácii. Nízke riziko samostatne.</string>
+    <string name="permissions_level_unavailable">Podrobnosti nie sú k dispozícii</string>
+    <string name="permissions_level_unavailable_explanation">Žiadna aplikácia na tomto zariadení tieto nevyhlasuje, takže nemôžeme zobraziť, čo chránia.</string>
+    <string name="permissions_flag_privileged">Privilegované systémové aplikácie môžu mať toto tiež, bez vášho schválenia.</string>
+    <string name="permissions_flag_appop">Toto má tiež svoj vlastný prepínač v Nastaveniach, oddelený od samotného povolenia.</string>
+    <string name="permissions_flag_instant">Aplikácie, ktoré bežia bez inštalácie môžu vyžadovať toto povolenie.</string>
+    <string name="permissions_flag_development">Môže byť udelené ručne na vývoj.</string>
+    <string name="permissions_detail_protection_level">Úroveň ochrany</string>
+    <string name="permissions_detail_group">Skupina povolení</string>
+    <string name="permissions_detail_declared_by">Deklarované</string>
+    <string name="permissions_detail_extra_rules">Extra pravidlá</string>
+    <string name="permissions_grant_dangerous_granted">Toto povolenie ste povolili. Môžete to zmeniť v Nastaveniach.</string>
+    <string name="permissions_grant_dangerous_not_granted">Toto povolenie ste neudelili.</string>
+    <string name="permissions_grant_signature_self">Táto aplikácia definuje toto povolenie sama.</string>
+    <string name="permissions_grant_signature_granted">Táto aplikácia je podpísaná rovnakým kľúčom ako aplikácia, ktorá ho definuje.</string>
+    <string name="permissions_grant_signature_granted_privileged">Táto aplikácia je podpísaná rovnakým kľúčom ako aplikácia, ktorá ho definuje, alebo beží ako privilegovaná systémová aplikácia.</string>
+    <string name="permissions_grant_signature_not_granted">Táto aplikácia je podpísaná iným kľúčom ako aplikácia, ktorá dané povolenie definuje.</string>
+    <string name="permissions_grant_internal_granted">Povolené systémom podľa jeho vlastných pravidiel.</string>
+    <string name="permissions_grant_internal_not_granted">Nepovolené pravidlami systému.</string>
+    <string name="permissions_grant_normal_granted">Povolené automaticky pri inštalácii aplikácie.</string>
+    <string name="permissions_grant_normal_not_granted">Nepovolené pri inštalácii — pravdepodobne aplikácia o toto povolenie žiada iba na starších verziách Androidu.</string>
+    <string name="permissions_grant_unavailable">Žiadna aplikácia na tomto zariadení nevyžaduje toto povolenie, takže nič ho nemôže povoliť.</string>
+</resources>

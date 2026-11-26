@@ -3,10 +3,11 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.phone
 import android.content.Context
 import androidx.annotation.PluralsRes
 import dagger.hilt.android.qualifiers.ApplicationContext
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import javax.inject.Inject
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 internal class AppSummaryTextFormatterImpl @Inject constructor(@ApplicationContext private val context: Context) : AppSummaryTextFormatter {
 
@@ -33,13 +34,13 @@ internal class AppSummaryTextFormatterImpl @Inject constructor(@ApplicationConte
 
     private fun AppDetailState.Loaded.minSdkSummary(): String? = when {
         minSdkLabel != null -> minSdkLabel
-        minSdkVersion != null -> context.getString(AppsR.string.app_detail_sdk_version_no_label, minSdkVersion)
+        minSdkVersion != null -> context.getString(DomainR.string.app_detail_sdk_version_no_label, minSdkVersion)
         else -> null
     }
 
     private fun AppDetailState.Loaded.targetSdkSummary(): String? = when {
         targetSdkLabel != null -> targetSdkLabel
-        targetSdkVersion != null -> context.getString(AppsR.string.app_detail_sdk_version_no_label, targetSdkVersion)
+        targetSdkVersion != null -> context.getString(DomainR.string.app_detail_sdk_version_no_label, targetSdkVersion)
         else -> null
     }
 
@@ -61,7 +62,7 @@ internal class AppSummaryTextFormatterImpl @Inject constructor(@ApplicationConte
         val cert = certificate ?: return null
         return when (cert.trustLevel) {
             CertificateTrustLevel.Debug -> context.getString(R.string.app_detail_certificate_debug)
-            CertificateTrustLevel.Valid -> cert.signerDisplayName ?: context.getString(AppsR.string.certificates_self_signed)
+            CertificateTrustLevel.Valid -> cert.signerDisplayName ?: context.getString(DomainR.string.certificates_self_signed)
         }
     }
 

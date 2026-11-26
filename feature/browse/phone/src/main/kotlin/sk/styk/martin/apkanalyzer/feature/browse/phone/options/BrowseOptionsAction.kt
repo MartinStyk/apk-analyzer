@@ -1,7 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.browse.phone.options
 
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseOption
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseSubAttribute
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseOption
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseSubAttribute
 
 internal sealed interface BrowseOptionsAction {
     data class ChangeQuery(val query: String) : BrowseOptionsAction

@@ -3,9 +3,9 @@ package sk.styk.martin.apkanalyzer.feature.appexport.phone.columns
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import sk.styk.martin.apkanalyzer.core.appexport.column.InventoryColumn
-import sk.styk.martin.apkanalyzer.core.appexport.column.InventoryColumnGroup
-import sk.styk.martin.apkanalyzer.core.appexport.column.InventoryPreset
+import sk.styk.martin.apkanalyzer.core.appexport.api.column.InventoryColumn
+import sk.styk.martin.apkanalyzer.core.appexport.api.column.InventoryColumnGroup
+import sk.styk.martin.apkanalyzer.core.appexport.api.column.InventoryPreset
 
 internal class ColumnSelection {
 

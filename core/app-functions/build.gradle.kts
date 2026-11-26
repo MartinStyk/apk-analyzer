@@ -15,8 +15,8 @@ android {
 
 dependencies {
     implementation(projects.core.common)
-    implementation(projects.core.apps)
+    implementation(projects.core.apps.api)
 
-    testImplementation(testFixtures(projects.core.apps))
+    testImplementation(testFixtures(projects.core.apps.api))
     testImplementation(testFixtures(projects.core.common))
 }

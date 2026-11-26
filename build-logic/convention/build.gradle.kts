@@ -47,6 +47,14 @@ gradlePlugin {
             id = "apkanalyzer.library"
             implementationClass = "sk.styk.martin.apkanalyzer.LibraryPlugin"
         }
+        register("apkanalyzer.core.api") {
+            id = "apkanalyzer.core.api"
+            implementationClass = "sk.styk.martin.apkanalyzer.CoreApiPlugin"
+        }
+        register("apkanalyzer.core.impl") {
+            id = "apkanalyzer.core.impl"
+            implementationClass = "sk.styk.martin.apkanalyzer.CoreImplPlugin"
+        }
         register("apkanalyzer.feature.api") {
             id = "apkanalyzer.feature.api"
             implementationClass = "sk.styk.martin.apkanalyzer.FeatureApiPlugin"

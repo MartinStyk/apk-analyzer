@@ -24,10 +24,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseDimension
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseOption
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseSubAttribute
-import sk.styk.martin.apkanalyzer.core.appindex.browse.titleRes
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseDimension
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseOption
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseSubAttribute
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.titleRes
 import sk.styk.martin.apkanalyzer.core.common.digest.toFingerprint
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
@@ -43,8 +43,8 @@ import sk.styk.martin.apkanalyzer.core.designsystem.tv.focus.rememberRestorableF
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.focus.restorableFocus
 import sk.styk.martin.apkanalyzer.core.designsystem.tv.theme.ApkAnalyzerTvTheme
 import sk.styk.martin.apkanalyzer.feature.browse.tv.components.BrowseLoading
-import sk.styk.martin.apkanalyzer.core.appindex.R as AppIndexR
 import sk.styk.martin.apkanalyzer.feature.browse.api.R as BrowseApiR
+import sk.styk.martin.apkanalyzer.feature.browse.domain.R as BrowseDomainR
 
 @Composable
 internal fun TvBrowseScreen(
@@ -97,7 +97,7 @@ private fun LoadedContent(state: TvBrowseState.Loaded, onAction: (TvBrowseAction
             Column(modifier = Modifier.padding(horizontal = HorizontalPadding)) {
                 Text(text = stringResource(BrowseApiR.string.browse), style = AppTheme.typography.headlineSmall)
                 Text(
-                    text = pluralStringResource(AppIndexR.plurals.browse_subtitle, state.totalApps, state.totalApps),
+                    text = pluralStringResource(BrowseDomainR.plurals.browse_subtitle, state.totalApps, state.totalApps),
                     style = AppTheme.typography.bodyMedium,
                     color = AppTheme.colors.onSurfaceVariant,
                 )
@@ -123,7 +123,7 @@ private fun DimensionRow(
         ) {
             SectionHeader(text = stringResource(row.dimension.titleRes))
             Text(
-                text = pluralStringResource(AppIndexR.plurals.browse_dimension_option_count, row.optionCount, row.optionCount),
+                text = pluralStringResource(BrowseDomainR.plurals.browse_dimension_option_count, row.optionCount, row.optionCount),
                 style = AppTheme.typography.bodyMedium,
                 color = AppTheme.colors.onSurfaceVariant,
             )
@@ -152,7 +152,7 @@ private fun DimensionRow(
                         .size(width = SeeAllWidth, height = TileHeight),
                 ) {
                     Text(
-                        text = pluralStringResource(AppIndexR.plurals.browse_dimension_option_count, row.optionCount, row.optionCount),
+                        text = pluralStringResource(BrowseDomainR.plurals.browse_dimension_option_count, row.optionCount, row.optionCount),
                         style = AppTheme.typography.bodyMedium,
                         color = AppTheme.colors.onSurfaceVariant,
                     )
@@ -190,7 +190,7 @@ private fun OptionTile(
                 }
             }
             Text(
-                text = pluralStringResource(AppIndexR.plurals.browse_apps_count, rowOption.option.count, rowOption.option.count),
+                text = pluralStringResource(BrowseDomainR.plurals.browse_apps_count, rowOption.option.count, rowOption.option.count),
                 style = AppTheme.typography.labelLarge,
                 color = AppTheme.colors.primary,
             )

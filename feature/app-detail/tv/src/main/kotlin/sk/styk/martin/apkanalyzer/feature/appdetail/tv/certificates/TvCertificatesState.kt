@@ -1,9 +1,9 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.tv.certificates
 
 import androidx.compose.runtime.Immutable
-import sk.styk.martin.apkanalyzer.core.apps.signing.Certificate
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateValidity
-import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeVersion
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.Certificate
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateValidity
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.SigningSchemeVersion
 
 @Immutable
 internal data class TvCertificate(val certificate: Certificate, val validity: CertificateValidity)

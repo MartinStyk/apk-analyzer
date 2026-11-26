@@ -18,4 +18,6 @@
     <string name="browse_algorithm_md2_explanation">%1$s MD2 kullanır. MD2 modası geçmiş ve pratik saldırılara karşı savunmasızdır, bu nedenle imzalama sertifikaları için güvensizdir. Yeni imzalama sertifikaları SHA-256 veya daha güçlü olmalıdır.</string>
     <string name="browse_algorithm_unknown_explanation">%1$s\'nın gücü algoritma adından değerlendirilemez. Anahtar türü ve boyutu da güvenliğini etkileyebilir.</string>
     <string name="browse_bucket_info_content_description">%1$s hakkında</string>
+    <string name="browse_subtitle_loading">Yüklenmiş uygulamalar taranıyor…</string>
+    <string name="browse_sub_attribute_sheet_title">Grupla</string>
 </resources>

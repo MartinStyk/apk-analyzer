@@ -34,14 +34,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseBucketDetail
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseDimension
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseOption
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseSubAttribute
-import sk.styk.martin.apkanalyzer.core.appindex.browse.cardLabelRes
-import sk.styk.martin.apkanalyzer.core.appindex.browse.isSearchable
-import sk.styk.martin.apkanalyzer.core.appindex.browse.titleRes
-import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseBucketDetail
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseDimension
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseOption
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseSubAttribute
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.cardLabelRes
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.isSearchable
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.titleRes
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.common.digest.toFingerprint
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
@@ -67,7 +67,8 @@ import sk.styk.martin.apkanalyzer.feature.browse.tv.components.BrowseLoading
 import sk.styk.martin.apkanalyzer.feature.browse.tv.components.BrowseSearch
 import sk.styk.martin.apkanalyzer.feature.browse.tv.components.BucketDetailInfo
 import sk.styk.martin.apkanalyzer.feature.browse.tv.icon
-import sk.styk.martin.apkanalyzer.core.appindex.R as AppIndexR
+import sk.styk.martin.apkanalyzer.core.appindex.api.R as AppIndexR
+import sk.styk.martin.apkanalyzer.feature.browse.domain.R as BrowseDomainR
 
 @Composable
 internal fun TvBrowseOptionsScreen(
@@ -120,13 +121,13 @@ private fun LoadedContent(
         BrowseHeader(
             icon = dimension.icon,
             title = stringResource(dimension.titleRes),
-            subtitle = pluralStringResource(AppIndexR.plurals.browse_dimension_option_count, state.totalOptions, state.totalOptions),
+            subtitle = pluralStringResource(BrowseDomainR.plurals.browse_dimension_option_count, state.totalOptions, state.totalOptions),
         ) {
             if (dimension.isSearchable) {
                 BrowseSearch(
                     query = state.query,
                     onQueryChange = { onAction(TvBrowseOptionsAction.ChangeQuery(it)) },
-                    placeholder = pluralStringResource(AppIndexR.plurals.browse_options_filter_hint, state.totalOptions, state.totalOptions),
+                    placeholder = pluralStringResource(BrowseDomainR.plurals.browse_options_filter_hint, state.totalOptions, state.totalOptions),
                     modifier = Modifier
                         .restorableFocus(focus, SEARCH_KEY)
                         .focusProperties { down = listFocusRequester },
@@ -206,7 +207,7 @@ private fun OptionList(
         if (state.options.isEmpty()) {
             item(key = EMPTY_KEY) {
                 Text(
-                    text = stringResource(AppIndexR.string.browse_options_empty_query, state.query),
+                    text = stringResource(BrowseDomainR.string.browse_options_empty_query, state.query),
                     style = AppTheme.typography.titleMedium,
                     color = AppTheme.colors.onSurfaceVariant,
                     modifier = Modifier.padding(16.dp),
@@ -245,7 +246,7 @@ private fun OptionPreview(
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
-                    text = pluralStringResource(AppIndexR.plurals.browse_apps_count, preview.totalApps, preview.totalApps),
+                    text = pluralStringResource(BrowseDomainR.plurals.browse_apps_count, preview.totalApps, preview.totalApps),
                     style = AppTheme.typography.bodyMedium,
                     color = AppTheme.colors.primary,
                 )
@@ -308,7 +309,7 @@ private fun BrowseOption.title(): String = when (this) {
 
 @Composable
 private fun BrowseOption.summary(): String {
-    val apps = pluralStringResource(AppIndexR.plurals.browse_apps_count, count, count)
+    val apps = pluralStringResource(BrowseDomainR.plurals.browse_apps_count, count, count)
     return when (this) {
         is BrowseOption.CertificateHash -> stringResource(
             R.string.tv_browse_label_list,

@@ -14,8 +14,8 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import sk.styk.martin.apkanalyzer.core.apps.manifest.ManifestParser
-import sk.styk.martin.apkanalyzer.core.apps.manifest.ParsedManifest
+import sk.styk.martin.apkanalyzer.core.apps.api.manifest.ManifestParser
+import sk.styk.martin.apkanalyzer.core.apps.api.manifest.ParsedManifest
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.liveReference

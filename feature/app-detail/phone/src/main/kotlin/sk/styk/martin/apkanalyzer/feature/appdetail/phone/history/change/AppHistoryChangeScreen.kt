@@ -35,34 +35,34 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryChangeDirection
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryEntry
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryFieldChange
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryInstallSource
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryItemField
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryVersion
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.SetChange
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.ValueChange
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.certificateExplanationRes
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.collapsedToTwoLines
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.installSourceTexts
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.label
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionItem
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.PermissionScope
-import sk.styk.martin.apkanalyzer.core.apppermissions.detail.labelRes
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.DeviceFeatures
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.Feature
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.label
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.toRequirementItem
-import sk.styk.martin.apkanalyzer.core.apps.installsource.rationaleRes
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryItem
-import sk.styk.martin.apkanalyzer.core.apps.packaging.NativeLibraryVariant
-import sk.styk.martin.apkanalyzer.core.apps.permissions.ProtectionLevel
-import sk.styk.martin.apkanalyzer.core.apps.signing.Certificate
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificatePrincipal
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
-import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeVersion
-import sk.styk.martin.apkanalyzer.core.apps.signing.labelRes
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryChangeDirection
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryEntry
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryFieldChange
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryInstallSource
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryItemField
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryVersion
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.SetChange
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.ValueChange
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.certificateExplanationRes
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.collapsedToTwoLines
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.installSourceTexts
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.label
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.PermissionItem
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.PermissionScope
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.labelRes
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.DeviceFeatures
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.Feature
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.label
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.toRequirementItem
+import sk.styk.martin.apkanalyzer.core.apps.api.installsource.rationaleRes
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraryItem
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraryVariant
+import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.Certificate
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificatePrincipal
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateTrustLevel
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.SigningSchemeVersion
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.labelRes
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
@@ -111,9 +111,10 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.phone.requirements.Requireme
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.requirements.RequirementRow
 import java.time.Instant
 import kotlin.math.abs
-import sk.styk.martin.apkanalyzer.core.apphistory.R as HistoryR
-import sk.styk.martin.apkanalyzer.core.apppermissions.R as PermissionsR
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.core.apphistory.api.R as HistoryR
+import sk.styk.martin.apkanalyzer.core.apppermissions.api.R as PermissionsR
+import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 private const val COLLAPSED_GROUP_SIZE = 5
 
@@ -200,7 +201,7 @@ private val AppHistoryChangeState.Loaded.eventTitleRes: Int
     get() = when (kind) {
         AppHistoryEntry.Change.Kind.Reinstalled -> HistoryR.string.app_history_reinstalled
         AppHistoryEntry.Change.Kind.NewDevice -> HistoryR.string.app_history_new_device
-        AppHistoryEntry.Change.Kind.Updated -> versionTag?.labelRes ?: HistoryR.string.app_history_changes_heading
+        AppHistoryEntry.Change.Kind.Updated -> versionTag?.labelRes ?: R.string.app_history_changes_heading
     }
 
 @Composable
@@ -211,14 +212,14 @@ private fun AppHistoryChangeState.Loaded.whenLine(): String {
     val recordedDate = remember(capturedAt) { capturedAt.historyDate() }
     val isSameDay = timestamp.isSameDayAs(capturedAt)
     return when (kind) {
-        AppHistoryEntry.Change.Kind.NewDevice -> stringResource(HistoryR.string.app_history_when_recorded, recordedDate)
+        AppHistoryEntry.Change.Kind.NewDevice -> stringResource(R.string.app_history_when_recorded, recordedDate)
 
         AppHistoryEntry.Change.Kind.Updated, AppHistoryEntry.Change.Kind.Reinstalled -> {
             val primary = stringResource(
-                if (kind == AppHistoryEntry.Change.Kind.Updated) HistoryR.string.app_history_when_updated else HistoryR.string.app_history_when_reinstalled,
+                if (kind == AppHistoryEntry.Change.Kind.Updated) R.string.app_history_when_updated else R.string.app_history_when_reinstalled,
                 date,
             )
-            if (isSameDay) primary else stringResource(HistoryR.string.app_history_when_with_recorded, primary, recordedDate)
+            if (isSameDay) primary else stringResource(R.string.app_history_when_with_recorded, primary, recordedDate)
         }
     }
 }
@@ -285,7 +286,7 @@ private fun ChangeHeader(state: AppHistoryChangeState.Loaded, modifier: Modifier
     Column(modifier = modifier.fillMaxWidth()) {
         if (state.hasNoChanges) {
             Text(
-                text = stringResource(HistoryR.string.app_history_empty_diff),
+                text = stringResource(R.string.app_history_empty_diff),
                 style = AppTheme.typography.bodyMedium,
                 color = AppTheme.colors.onSurfaceVariant,
                 modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = 16.dp),
@@ -304,7 +305,7 @@ private fun ChangeHeader(state: AppHistoryChangeState.Loaded, modifier: Modifier
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
-                    text = stringResource(HistoryR.string.app_history_device_note),
+                    text = stringResource(R.string.app_history_device_note),
                     style = AppTheme.typography.bodySmall,
                     color = AppTheme.colors.onSurfaceVariant,
                 )
@@ -327,12 +328,12 @@ private fun LazyListScope.section(
         is HistoryChangeSection.WorthKnowing -> worthKnowing(section = section, kind = kind, onSelectRow = onSelectRow, onCopy = onCopy)
 
         is HistoryChangeSection.Signing -> {
-            categoryHeader(key = "signing", titleRes = HistoryR.string.app_history_category_signing)
+            categoryHeader(key = "signing", titleRes = R.string.app_history_category_signing)
             if (section.certificatesBefore != null && section.certificatesAfter != null) {
                 if (section.certificatesBefore.isNotEmpty()) {
                     item(key = "certificates-before") {
                         CertificatesCard(
-                            titleRes = HistoryR.string.app_history_before,
+                            titleRes = R.string.app_history_before,
                             certificates = section.certificatesBefore,
                             onShowRationale = onShowRationale,
                             onCopy = onCopy,
@@ -342,7 +343,7 @@ private fun LazyListScope.section(
                 if (section.certificatesAfter.isNotEmpty()) {
                     item(key = "certificates-after") {
                         CertificatesCard(
-                            titleRes = HistoryR.string.app_history_after,
+                            titleRes = R.string.app_history_after,
                             certificates = section.certificatesAfter,
                             onShowRationale = onShowRationale,
                             onCopy = onCopy,
@@ -355,7 +356,7 @@ private fun LazyListScope.section(
                     ValueRow(
                         label = stringResource(AppsR.string.certificates_scheme),
                         value = schemes.schemeChangeText(),
-                        rationale = stringResource(AppsR.string.certificates_scheme_explanation),
+                        rationale = stringResource(DomainR.string.certificates_scheme_explanation),
                         onShowRationale = onShowRationale,
                         onCopy = onCopy,
                     )
@@ -369,7 +370,7 @@ private fun LazyListScope.section(
         }
 
         is HistoryChangeSection.InstallSource -> {
-            categoryHeader(key = "install-source", titleRes = HistoryR.string.app_history_category_install_source)
+            categoryHeader(key = "install-source", titleRes = R.string.app_history_category_install_source)
             item(key = "install-source-row") {
                 ChangedRow(
                     label = stringResource(AppsR.string.general_info_install_source),
@@ -382,7 +383,7 @@ private fun LazyListScope.section(
         }
 
         is HistoryChangeSection.AppSettings -> {
-            categoryHeader(key = "settings", titleRes = HistoryR.string.app_history_category_settings)
+            categoryHeader(key = "settings", titleRes = R.string.app_history_category_settings)
             listOf(AppSetting.Debug to section.debuggable, AppSetting.Backup to section.backup, AppSetting.Cleartext to section.cleartext)
                 .forEach { (setting, change) ->
                     change?.let {
@@ -394,31 +395,31 @@ private fun LazyListScope.section(
         }
 
         is HistoryChangeSection.AndroidVersions -> {
-            categoryHeader(key = "android-versions", titleRes = HistoryR.string.app_history_category_android_versions)
+            categoryHeader(key = "android-versions", titleRes = R.string.app_history_category_android_versions)
             section.minSdk?.let { change ->
                 item(key = "min-sdk") {
-                    SdkRow(AppsR.string.general_info_min_sdk, AppsR.string.general_info_rationale_min_sdk, change, onShowRationale, onCopy)
+                    SdkRow(AppsR.string.general_info_min_sdk, DomainR.string.general_info_rationale_min_sdk, change, onShowRationale, onCopy)
                 }
             }
             section.targetSdk?.let { change ->
                 item(key = "target-sdk") {
-                    SdkRow(AppsR.string.general_info_target_sdk, AppsR.string.general_info_rationale_target_sdk, change, onShowRationale, onCopy)
+                    SdkRow(AppsR.string.general_info_target_sdk, DomainR.string.general_info_rationale_target_sdk, change, onShowRationale, onCopy)
                 }
             }
         }
 
         is HistoryChangeSection.Size -> {
-            categoryHeader(key = "size", titleRes = HistoryR.string.app_history_category_size)
+            categoryHeader(key = "size", titleRes = R.string.app_history_category_size)
             item(key = "size-row") {
                 val delta = section.change.after.bytes - section.change.before.bytes
                 ChangedRow(
                     label = stringResource(AppsR.string.general_info_apk_size),
                     change = ValueChange(section.change.before.formatted(), section.change.after.formatted()),
                     diff = stringResource(
-                        if (delta >= 0) HistoryR.string.app_history_delta_up else HistoryR.string.app_history_delta_down,
+                        if (delta >= 0) R.string.app_history_delta_up else R.string.app_history_delta_down,
                         abs(delta).bytes.formatted(),
                     ),
-                    rationale = stringResource(AppsR.string.general_info_rationale_apk_size),
+                    rationale = stringResource(DomainR.string.general_info_rationale_apk_size),
                     onShowRationale = onShowRationale,
                     onCopy = onCopy,
                 )
@@ -438,7 +439,7 @@ private fun LazyListScope.worthKnowing(
         item(key = "worth-knowing-certificate") {
             InfoCard(
                 icon = ApkAnalyzerIcons.Warning,
-                title = stringResource(HistoryR.string.app_history_certificate_changed),
+                title = stringResource(R.string.app_history_certificate_changed),
                 body = stringResource(kind.certificateExplanationRes),
                 tone = InfoCardTone.Warning,
                 modifier = Modifier.padding(bottom = 6.dp),
@@ -488,9 +489,9 @@ private val HistoryChangeSection.Grouped.categoryKey: String
 
 private val HistoryChangeSection.Grouped.titleRes: Int
     get() = when (this) {
-        is HistoryChangeSection.Permissions -> HistoryR.string.app_history_category_permissions
-        is HistoryChangeSection.Components -> HistoryR.string.app_history_category_components
-        is HistoryChangeSection.NativeLibraries -> HistoryR.string.app_history_category_native
+        is HistoryChangeSection.Permissions -> R.string.app_history_category_permissions
+        is HistoryChangeSection.Components -> R.string.app_history_category_components
+        is HistoryChangeSection.NativeLibraries -> R.string.app_history_category_native
         is HistoryChangeSection.Requirements -> AppsR.string.requirements_title
     }
 
@@ -503,24 +504,24 @@ private enum class AppSetting(
 ) {
     Debug(
         labelRes = AppsR.string.general_info_debug_access,
-        onValueRes = AppsR.string.general_info_enabled,
-        offValueRes = AppsR.string.general_info_disabled,
-        onRationaleRes = AppsR.string.general_info_rationale_debug_access_enabled,
-        offRationaleRes = AppsR.string.general_info_rationale_debug_access_disabled,
+        onValueRes = DomainR.string.general_info_enabled,
+        offValueRes = DomainR.string.general_info_disabled,
+        onRationaleRes = DomainR.string.general_info_rationale_debug_access_enabled,
+        offRationaleRes = DomainR.string.general_info_rationale_debug_access_disabled,
     ),
     Backup(
         labelRes = AppsR.string.general_info_app_data_backup,
-        onValueRes = AppsR.string.general_info_allowed,
-        offValueRes = AppsR.string.general_info_disabled,
-        onRationaleRes = AppsR.string.general_info_rationale_backup_allowed,
-        offRationaleRes = AppsR.string.general_info_rationale_backup_blocked,
+        onValueRes = DomainR.string.general_info_allowed,
+        offValueRes = DomainR.string.general_info_disabled,
+        onRationaleRes = DomainR.string.general_info_rationale_backup_allowed,
+        offRationaleRes = DomainR.string.general_info_rationale_backup_blocked,
     ),
     Cleartext(
         labelRes = AppsR.string.general_info_unencrypted_traffic,
-        onValueRes = AppsR.string.general_info_allowed,
-        offValueRes = AppsR.string.general_info_disabled,
-        onRationaleRes = AppsR.string.general_info_rationale_cleartext_allowed,
-        offRationaleRes = AppsR.string.general_info_rationale_cleartext_blocked,
+        onValueRes = DomainR.string.general_info_allowed,
+        offValueRes = DomainR.string.general_info_disabled,
+        onRationaleRes = DomainR.string.general_info_rationale_cleartext_allowed,
+        offRationaleRes = DomainR.string.general_info_rationale_cleartext_blocked,
     ),
 }
 
@@ -580,9 +581,9 @@ private fun LazyListScope.groups(
 private fun HistoryChangeGroup.headerText(): String {
     val kindText = stringResource(
         when (kind) {
-            AppHistoryChangeDirection.Added -> HistoryR.string.app_history_group_added
-            AppHistoryChangeDirection.Removed -> HistoryR.string.app_history_group_removed
-            AppHistoryChangeDirection.Changed -> HistoryR.string.app_history_group_changed
+            AppHistoryChangeDirection.Added -> R.string.app_history_group_added
+            AppHistoryChangeDirection.Removed -> R.string.app_history_group_removed
+            AppHistoryChangeDirection.Changed -> R.string.app_history_group_changed
         },
     ).uppercase()
     return when (val scope = scope) {
@@ -652,9 +653,9 @@ private fun InsightGroup(
             if (kind ==
                 AppHistoryChangeDirection.Added
             ) {
-                HistoryR.string.app_history_group_added
+                R.string.app_history_group_added
             } else {
-                HistoryR.string.app_history_group_removed
+                R.string.app_history_group_removed
             },
         ).uppercase(),
         insights.size,
@@ -802,8 +803,8 @@ private fun SdkRow(
 
 @Composable
 private fun HistorySdkLevel.text(): String = when {
-    version != null && label != null -> stringResource(AppsR.string.app_detail_sdk_version, version, label)
-    version != null -> stringResource(AppsR.string.app_detail_sdk_version_no_label, version)
+    version != null && label != null -> stringResource(DomainR.string.app_detail_sdk_version, version, label)
+    version != null -> stringResource(DomainR.string.app_detail_sdk_version_no_label, version)
     else -> stringResource(AppsR.string.app_detail_unknown)
 }
 
@@ -825,7 +826,7 @@ private fun CertificatesCard(
         modifier = Modifier.padding(bottom = 6.dp),
     ) {
         certificates.forEach { certificate ->
-            val signerRationale = stringResource(HistoryR.string.app_history_signer_explanation)
+            val signerRationale = stringResource(R.string.app_history_signer_explanation)
             val organization = certificate.subject.organization?.takeIf { it.isNotBlank() }
             val name = certificate.subject.name?.takeIf { it.isNotBlank() }
             organization?.let {
@@ -840,13 +841,13 @@ private fun CertificatesCard(
             if (name != null || organization == null) {
                 InfoRowItem(
                     label = stringResource(AppsR.string.certificates_name),
-                    value = name ?: stringResource(AppsR.string.certificates_unknown_signer),
+                    value = name ?: stringResource(DomainR.string.certificates_unknown_signer),
                     rationale = signerRationale,
                     onShowRationale = onShowRationale,
                     onCopy = onCopy,
                 )
             }
-            val hashLabel = stringResource(AppsR.string.certificates_sha256)
+            val hashLabel = stringResource(DomainR.string.certificates_sha256)
             LabeledHashBox(
                 label = hashLabel,
                 value = certificate.certificateHashSha256,
@@ -864,13 +865,13 @@ private fun UncomparableFooter(
     onCopy: (String, String) -> Unit,
 ) {
     val categories = listOfNotNull(
-        stringResource(HistoryR.string.app_history_category_native).takeIf { state.isNativeLibrariesUncomparable },
-        stringResource(HistoryR.string.app_history_category_signing_method).takeIf { state.isSigningMethodUncomparable },
+        stringResource(R.string.app_history_category_native).takeIf { state.isNativeLibrariesUncomparable },
+        stringResource(R.string.app_history_category_signing_method).takeIf { state.isSigningMethodUncomparable },
     ).joinToString(", ")
     ValueRow(
-        label = stringResource(HistoryR.string.app_history_uncomparable_label),
+        label = stringResource(R.string.app_history_uncomparable_label),
         value = categories,
-        rationale = stringResource(HistoryR.string.app_history_uncomparable_explanation),
+        rationale = stringResource(R.string.app_history_uncomparable_explanation),
         onShowRationale = onShowRationale,
         onCopy = onCopy,
     )

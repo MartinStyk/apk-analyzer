@@ -13,11 +13,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import sk.styk.martin.apkanalyzer.core.apps.InstalledAppsRepository
-import sk.styk.martin.apkanalyzer.core.apps.search.search
+import sk.styk.martin.apkanalyzer.core.apps.api.InstalledAppsRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.search.search
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
-import sk.styk.martin.apkanalyzer.core.userpreferences.searchhistory.SearchHistoryRepository
+import sk.styk.martin.apkanalyzer.core.userpreferences.api.searchhistory.SearchHistoryRepository
 import sk.styk.martin.apkanalyzer.feature.apps.tv.components.toTvAppItem
 import javax.inject.Inject
 

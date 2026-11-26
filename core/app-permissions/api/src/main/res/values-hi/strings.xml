@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="permissions_title">Permissions</string>
+    <string name="permissions_scope_requested">अनुरोधित</string>
+    <string name="permissions_scope_defined">इस ऐप द्वारा परिभाषित</string>
+    <string name="permissions_granted">अनुमति दी गई</string>
+    <string name="permissions_not_granted">अनुमति नहीं दी गई</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
+    <string name="permissions_level_dangerous_explanation">ऐप के उपयोग से पहले आपकी स्पष्ट स्वीकृति की आवश्यकता है।</string>
+    <string name="permissions_level_signature">Signature</string>
+    <string name="permissions_level_signature_explanation">केवल वही ऐप्स जो समान कुंजी से हस्ताक्षरित हैं, इन्हें रख सकते हैं।</string>
+    <string name="permissions_level_internal">Internal</string>
+    <string name="permissions_level_internal_explanation">सिस्टम के लिए आरक्षित और आंतरिक नियमों द्वारा दी गई, न कि आपके द्वारा।</string>
+    <string name="permissions_level_normal">Normal</string>
+    <string name="permissions_level_normal_explanation">आमतौर पर इंस्टॉल पर स्वचालित रूप से दी जाती है। अपने आप में कम जोखिम।</string>
+    <string name="permissions_level_unavailable">विवरण उपलब्ध नहीं है</string>
+    <string name="permissions_level_unavailable_explanation">इस डिवाइस पर कोई ऐप इनकी घोषणा नहीं करता, इसलिए हम नहीं दिखा सकते कि ये क्या सुरक्षा करते हैं।</string>
+    <string name="permissions_flag_privileged">विशेषाधिकार प्राप्त सिस्टम ऐप्स भी इसे बिना आपकी स्वीकृति के रख सकते हैं।</string>
+    <string name="permissions_flag_appop">इसमें सेटिंग्स में अपना टॉगल भी है, जो अनुमति से अलग है।</string>
+    <string name="permissions_flag_instant">इंस्टेंट ऐप्स - ऐप्स जो बिना इंस्टॉल किए चलते हैं - इसे भी रख सकते हैं।</string>
+    <string name="permissions_flag_development">विकास के लिए इसे हाथ से भी दिया जा सकता है।</string>
+    <string name="permissions_detail_protection_level">सुरक्षा स्तर</string>
+    <string name="permissions_detail_group">Permission समूह</string>
+    <string name="permissions_detail_declared_by">द्वारा घोषित</string>
+    <string name="permissions_detail_extra_rules">अतिरिक्त नियम</string>
+    <string name="permissions_grant_dangerous_granted">आपने इसे अनुमति दी है। आप इसे सेटिंग्स में वापस ले सकते हैं।</string>
+    <string name="permissions_grant_dangerous_not_granted">आपने अभी तक इसे अनुमति नहीं दी है।</string>
+    <string name="permissions_grant_signature_self">यह ऐप इस अनुमति को स्वयं परिभाषित करता है।</string>
+    <string name="permissions_grant_signature_granted">यह ऐप उसी कुंजी से हस्ताक्षरित है जैसे कि ऐप जो इसे परिभाषित करता है।</string>
+    <string name="permissions_grant_signature_granted_privileged">यह ऐप उसी कुंजी से हस्ताक्षरित है जैसे कि ऐप जो इसे परिभाषित करता है, या एक विशेषाधिकार प्राप्त सिस्टम ऐप के रूप में चलता है।</string>
+    <string name="permissions_grant_signature_not_granted">यह ऐप उस ऐप की तुलना में एक अलग कुंजी से हस्ताक्षरित है जो इसे परिभाषित करता है।</string>
+    <string name="permissions_grant_internal_granted">सिस्टम ने इसे अपने नियमों द्वारा प्रदान किया।</string>
+    <string name="permissions_grant_internal_not_granted">सिस्टम के नियम यहां इसे प्रदान नहीं करते।</string>
+    <string name="permissions_grant_normal_granted">जब ऐप स्थापित किया गया था तो स्वचालित रूप से प्रदान किया गया।</string>
+    <string name="permissions_grant_normal_not_granted">स्थापना पर प्रदान नहीं किया गया - अक्सर ऐप केवल पुराने Android संस्करणों पर इसके लिए पूछता है।</string>
+    <string name="permissions_grant_unavailable">इस डिवाइस पर कोई ऐप इस अनुमति की घोषणा नहीं करता है, इसलिए कुछ भी इसे प्रदान नहीं कर सकता।</string>
+</resources>

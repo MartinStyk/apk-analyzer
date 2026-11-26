@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="browse_sdk_unknown">API level %1$s</string>
+    <string name="browse_api_level">API %1$s</string>
+    <string name="browse_source_google_play">Google Play</string>
+    <string name="browse_source_samsung_galaxy_store">Samsung Galaxy Store</string>
+    <string name="browse_source_amazon_appstore">Amazon Appstore</string>
+    <string name="browse_source_huawei_app_gallery">Huawei AppGallery</string>
+    <string name="browse_source_xiaomi_get_apps">Xiaomi GetApps</string>
+    <string name="browse_source_fdroid">F-Droid</string>
+    <string name="browse_source_aurora_store">Aurora Store</string>
+    <string name="browse_source_sideloaded">Nainštalované zo súboru</string>
+    <string name="browse_source_local_install">Nainštalované cez počítač</string>
+    <string name="browse_source_system">Systém</string>
+    <string name="browse_source_unknown">Neznáme</string>
+    <string name="browse_country_unknown">Neznáma krajina</string>
+    <string name="browse_category_undefined">Nekategorizované</string>
+    <string name="browse_category_game">Hry</string>
+    <string name="browse_category_audio">Audio</string>
+    <string name="browse_category_video">Video</string>
+    <string name="browse_category_image">Obrázok</string>
+    <string name="browse_category_social">Sociálne</string>
+    <string name="browse_category_news">Správy a časopisy</string>
+    <string name="browse_category_maps">Mapy a navigácia</string>
+    <string name="browse_category_productivity">Produktivita</string>
+    <string name="browse_category_accessibility">Prístupnosť</string>
+</resources>

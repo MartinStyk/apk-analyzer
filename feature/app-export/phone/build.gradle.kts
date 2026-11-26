@@ -9,8 +9,8 @@ android {
 dependencies {
     api(projects.feature.appExport.api)
     implementation(projects.feature.apps.api)
-    implementation(projects.core.appExport)
-    implementation(projects.core.appPermissions)
-    implementation(projects.core.apps)
+    implementation(projects.core.appExport.api)
+    implementation(projects.core.appPermissions.api)
+    implementation(projects.core.apps.api)
     implementation(projects.core.common)
 }

@@ -3,8 +3,13 @@
 ## Purpose and Boundary
 
 Custom installed-app inventory export: the caller picks apps and columns, and this module writes
-them as CSV or JSON to a document the user chose or to a share file it creates. The package is
-`sk.styk.martin.apkanalyzer.core.appexport`.
+them as CSV or JSON to a document the user chose or to a share file it creates. It is split per
+[core API/impl split](../../docs/app/technical/core-api-impl-split.md): `api`
+(`sk.styk.martin.apkanalyzer.core.appexport.api`) holds `InventoryExportManager` with its request,
+destination, preview, and progress types, the column catalog, presets, `InventoryDataSource`,
+`InventoryFormat`, and `InventoryExportPreferences`; `impl`
+(`sk.styk.martin.apkanalyzer.core.appexport.impl`) holds the rest, all `internal`. Both modules use
+the package map below.
 
 It is a consumer of public `core:apps` repositories (`InstalledAppsRepository`, `AppDetailRepository`,
 `AppSigningRepository`) and owns no `PackageManager` access. Single-app APK and icon export stays in
@@ -13,8 +18,8 @@ through a scoped `AppFilterRepositories` repository from `core:apps`.
 
 ## Package Map
 
-* Root: the public API (`InventoryExportManager`, request, destination, preview, progress) and the
-  manager implementation, which only orchestrates the packages below.
+* Root: the public API (`InventoryExportManager`, request, destination, preview, progress) in `api`
+  and the manager implementation in `impl`, which only orchestrates the packages below.
 * `column/`: the column catalog (`InventoryColumn`, group, shape), `InventoryPreset`, `InventoryValue`,
   and the mappers that turn loaded app data into a column's value. A column's definition and its
   value mapping live together.

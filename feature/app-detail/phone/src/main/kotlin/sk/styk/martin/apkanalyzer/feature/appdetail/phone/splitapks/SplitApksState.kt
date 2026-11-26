@@ -1,7 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone.splitapks
 
 import androidx.compose.runtime.Immutable
-import sk.styk.martin.apkanalyzer.core.apps.packaging.InstalledSplitApk
+import sk.styk.martin.apkanalyzer.core.apps.api.packaging.InstalledSplitApk
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
 
 @Immutable

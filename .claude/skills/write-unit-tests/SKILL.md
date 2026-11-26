@@ -6,7 +6,7 @@ description: Use when writing or changing unit tests, fakes, or test fixtures in
 # Write Unit Tests
 
 Every test in this repo looks the same. Copy the shape of
-[`CertificateExtractorImplTest`](../../../core/apps/src/test/kotlin/sk/styk/martin/apkanalyzer/core/apps/signing/CertificateExtractorImplTest.kt).
+[`CertificateExtractorImplTest`](../../../core/apps/impl/src/test/kotlin/sk/styk/martin/apkanalyzer/core/apps/impl/signing/CertificateExtractorImplTest.kt).
 
 ```kotlin
 class CertificateExtractorImplTest {
@@ -71,7 +71,7 @@ crashed in production this way), and platform implementations can format values 
 
 Android classes are stubs in a plain JVM test, and their static fields are null. When the code under
 test really needs one, run that class with Robolectric, as
-[`JsonInventoryWriterTest`](../../../core/app-export/src/test/kotlin/sk/styk/martin/apkanalyzer/core/appexport/format/JsonInventoryWriterTest.kt)
+[`JsonInventoryWriterTest`](../../../core/app-export/impl/src/test/kotlin/sk/styk/martin/apkanalyzer/core/appexport/impl/format/JsonInventoryWriterTest.kt)
 does with `@RunWith(RobolectricTestRunner::class)`. The plugin passes `TARGET_SDK` to Robolectric, so
 don't set an SDK with `@Config`. Everything else stays a plain JVM test, because Robolectric is slower
 and downloads an Android runtime. `core:app-functions` error paths have no unit tests yet.
@@ -99,7 +99,7 @@ without coroutines because of the repo-wide opt-in flags, so the plugin adds the
 A module uses another module's fakes and fixtures with
 `testImplementation(testFixtures(projects.core.common))`. A module sees its own automatically.
 
-Run one module's tests with `./gradlew :core:apps:testDebugUnitTest`.
+Run one module's tests with `./gradlew :core:apps:impl:testDebugUnitTest`.
 
 ## Test Shape
 

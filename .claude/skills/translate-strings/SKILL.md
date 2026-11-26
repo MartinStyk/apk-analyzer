@@ -174,15 +174,15 @@ multiple reviewers (human or agent) are available.
    given language, check what Android's own Settings app uses for that locale rather than guessing.
 6. **Check key parity** between the base file and the locale file you touched:
    ```bash
-   base=core/apps/src/main/res/values/strings.xml
-   target=core/apps/src/main/res/values-es/strings.xml
+   base=core/apps/api/src/main/res/values/strings.xml
+   target=core/apps/api/src/main/res/values-es/strings.xml
    diff <(grep -oE 'name="[a-zA-Z0-9_]+"' "$base" | sort -u) \
         <(grep -oE 'name="[a-zA-Z0-9_]+"' "$target" | sort -u)
    ```
    Any line in the diff is a missing or extra key in the target locale.
 7. **Validate the XML is well-formed** (PowerShell, no extra tooling needed):
    ```powershell
-   [xml] (Get-Content "core/apps/src/main/res/values-es/strings.xml" -Raw) | Out-Null
+   [xml] (Get-Content "core/apps/api/src/main/res/values-es/strings.xml" -Raw) | Out-Null
    ```
    Throws on malformed XML (unescaped `&`, unclosed tags, etc.).
 

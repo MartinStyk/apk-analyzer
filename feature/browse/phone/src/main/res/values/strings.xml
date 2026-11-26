@@ -24,4 +24,6 @@
     <string name="browse_bucket_info_content_description">About %1$s</string>
 
 
+    <string name="browse_subtitle_loading">Scanning installed apps…</string>
+    <string name="browse_sub_attribute_sheet_title">Group by</string>
 </resources>

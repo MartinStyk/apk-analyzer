@@ -2,9 +2,9 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents
 
 import androidx.compose.runtime.Immutable
 import kotlinx.serialization.Serializable
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentFlag
-import sk.styk.martin.apkanalyzer.core.apps.components.IntentFilterDataRuleType
-import sk.styk.martin.apkanalyzer.core.apps.components.ProviderPathMatchType
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentFlag
+import sk.styk.martin.apkanalyzer.core.apps.api.components.IntentFilterDataRuleType
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ProviderPathMatchType
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
 
 @Serializable

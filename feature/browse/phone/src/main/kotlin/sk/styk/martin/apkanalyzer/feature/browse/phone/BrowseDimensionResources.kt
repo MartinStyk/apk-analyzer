@@ -3,9 +3,9 @@ package sk.styk.martin.apkanalyzer.feature.browse.phone
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseDimension
-import sk.styk.martin.apkanalyzer.core.appindex.browse.subtitleRes
-import sk.styk.martin.apkanalyzer.core.appindex.browse.titleRes
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseDimension
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.subtitleRes
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.titleRes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 
 internal fun BrowseDimension.icon(): ImageVector = when (this) {

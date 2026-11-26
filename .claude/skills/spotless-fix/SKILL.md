@@ -18,7 +18,7 @@ Fix a specific module:
 
 # Examples:
 ./gradlew :app:spotlessApply
-./gradlew :core:apps:spotlessApply
+./gradlew :core:apps:impl:spotlessApply
 ./gradlew :core:design-system:phone:spotlessApply
 ./gradlew :feature:apps:phone:spotlessApply
 ./gradlew :feature:app-detail:phone:spotlessApply

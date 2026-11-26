@@ -1,8 +1,8 @@
 package sk.styk.martin.apkanalyzer.feature.apps.phone.components.quickfilter
 
-import sk.styk.martin.apkanalyzer.core.apps.filtering.ActivityQuickFilter
-import sk.styk.martin.apkanalyzer.core.apps.filtering.QuickFilter
-import sk.styk.martin.apkanalyzer.core.apps.filtering.SourceQuickFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.ActivityQuickFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.QuickFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.filtering.SourceQuickFilter
 import sk.styk.martin.apkanalyzer.feature.apps.phone.components.AppDataPermission
 
 sealed interface QuickFilterRowAction {

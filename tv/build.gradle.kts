@@ -23,12 +23,19 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.appHistory)
-    implementation(projects.core.apps)
+    implementation(projects.core.apps.api)
+    implementation(projects.core.apps.impl)
+    implementation(projects.core.appHistory.api)
+    implementation(projects.core.appHistory.impl)
+    implementation(projects.core.userPreferences.api)
+    implementation(projects.core.userPreferences.impl)
+    implementation(projects.core.appIndex.api)
+    implementation(projects.core.appIndex.impl)
+    implementation(projects.core.appPermissions.api)
+    implementation(projects.core.appPermissions.impl)
     implementation(projects.core.common)
     implementation(projects.core.designSystem.tv)
     implementation(projects.core.navigation)
-    implementation(projects.core.userPreferences)
 
     implementation(projects.feature.apps.tv)
     implementation(projects.feature.appDetail.tv)

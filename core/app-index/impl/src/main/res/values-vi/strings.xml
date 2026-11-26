@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="browse_sdk_unknown">Cấp API %1$s</string>
+    <string name="browse_api_level">API %1$s</string>
+    <string name="browse_source_google_play">Google Play</string>
+    <string name="browse_source_samsung_galaxy_store">Cửa hàng Samsung Galaxy</string>
+    <string name="browse_source_amazon_appstore">Cửa hàng ứng dụng Amazon</string>
+    <string name="browse_source_huawei_app_gallery">Huawei AppGallery</string>
+    <string name="browse_source_xiaomi_get_apps">Xiaomi GetApps</string>
+    <string name="browse_source_fdroid">F-Droid</string>
+    <string name="browse_source_aurora_store">Cửa hàng Aurora</string>
+    <string name="browse_source_sideloaded">Cài đặt từ tệp</string>
+    <string name="browse_source_local_install">Cài đặt qua máy tính</string>
+    <string name="browse_source_system">Hệ thống</string>
+    <string name="browse_source_unknown">Không xác định</string>
+    <string name="browse_country_unknown">Quốc gia không xác định</string>
+    <string name="browse_category_undefined">Chưa phân loại</string>
+    <string name="browse_category_game">Trò chơi</string>
+    <string name="browse_category_audio">Âm thanh</string>
+    <string name="browse_category_video">Video</string>
+    <string name="browse_category_image">Hình ảnh</string>
+    <string name="browse_category_social">Xã hội</string>
+    <string name="browse_category_news">Tin tức &amp; tạp chí</string>
+    <string name="browse_category_maps">Bản đồ &amp; điều hướng</string>
+    <string name="browse_category_productivity">Năng suất</string>
+    <string name="browse_category_accessibility">Trợ năng</string>
+</resources>

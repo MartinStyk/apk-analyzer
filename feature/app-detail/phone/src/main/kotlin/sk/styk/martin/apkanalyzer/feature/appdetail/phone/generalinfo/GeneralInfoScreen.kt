@@ -23,9 +23,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.apps.installsource.InstallSourceChain
-import sk.styk.martin.apkanalyzer.core.apps.installsource.labelRes
-import sk.styk.martin.apkanalyzer.core.apps.installsource.rationaleRes
+import sk.styk.martin.apkanalyzer.core.apps.api.installsource.InstallSourceChain
+import sk.styk.martin.apkanalyzer.core.apps.api.installsource.labelRes
+import sk.styk.martin.apkanalyzer.core.apps.api.installsource.rationaleRes
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
@@ -46,8 +46,8 @@ import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.Date
 import java.util.Locale
-import sk.styk.martin.apkanalyzer.core.apphistory.R as HistoryR
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 @Composable
 internal fun GeneralInfoScreen(
@@ -96,7 +96,7 @@ private fun GeneralInfoContent(
     recordedAt: Instant? = null,
 ) {
     AppDetailSectionScaffold(
-        title = stringResource(AppsR.string.general_info_title),
+        title = stringResource(DomainR.string.general_info_title),
         appName = appName,
         onBack = onBack,
         recordedAt = recordedAt,
@@ -107,7 +107,7 @@ private fun GeneralInfoContent(
 
             is GeneralInfoState.Error -> SectionError(
                 reason = state.reason,
-                loadFailedMessage = stringResource(AppsR.string.general_info_error),
+                loadFailedMessage = stringResource(DomainR.string.general_info_error),
                 onRetry = { onAction(GeneralInfoAction.Retry) },
             )
 
@@ -143,14 +143,14 @@ private fun LoadedContent(
             InfoRowItem(
                 label = stringResource(AppsR.string.general_info_application_name),
                 value = state.applicationName,
-                rationale = stringResource(AppsR.string.general_info_rationale_application_name),
+                rationale = stringResource(DomainR.string.general_info_rationale_application_name),
                 onShowRationale = { rationaleRow = it },
                 onCopy = onCopy,
             )
             InfoRowItem(
                 label = stringResource(AppsR.string.general_info_package_name),
                 value = state.packageName.value,
-                rationale = stringResource(AppsR.string.general_info_rationale_package_name),
+                rationale = stringResource(DomainR.string.general_info_rationale_package_name),
                 onShowRationale = { rationaleRow = it },
                 onCopy = onCopy,
             )
@@ -158,7 +158,7 @@ private fun LoadedContent(
                 InfoRowItem(
                     label = stringResource(AppsR.string.general_info_process_name),
                     value = value,
-                    rationale = stringResource(AppsR.string.general_info_rationale_process_name),
+                    rationale = stringResource(DomainR.string.general_info_rationale_process_name),
                     onShowRationale = { rationaleRow = it },
                     onCopy = onCopy,
                 )
@@ -167,7 +167,7 @@ private fun LoadedContent(
                 InfoRowItem(
                     label = stringResource(AppsR.string.general_info_uid),
                     value = value.toString(),
-                    rationale = stringResource(AppsR.string.general_info_rationale_uid),
+                    rationale = stringResource(DomainR.string.general_info_rationale_uid),
                     onShowRationale = { rationaleRow = it },
                     onCopy = onCopy,
                 )
@@ -176,7 +176,7 @@ private fun LoadedContent(
                 InfoRowItem(
                     label = stringResource(AppsR.string.general_info_shared_user_id),
                     value = value,
-                    rationale = stringResource(AppsR.string.general_info_rationale_shared_user_id),
+                    rationale = stringResource(DomainR.string.general_info_rationale_shared_user_id),
                     onShowRationale = { rationaleRow = it },
                     onCopy = onCopy,
                 )
@@ -185,7 +185,7 @@ private fun LoadedContent(
                 InfoRowItem(
                     label = stringResource(AppsR.string.general_info_description),
                     value = value,
-                    rationale = stringResource(AppsR.string.general_info_rationale_description),
+                    rationale = stringResource(DomainR.string.general_info_rationale_description),
                     onShowRationale = { rationaleRow = it },
                     onCopy = onCopy,
                 )
@@ -197,7 +197,7 @@ private fun LoadedContent(
                 InfoRowItem(
                     label = stringResource(AppsR.string.general_info_version_name),
                     value = value,
-                    rationale = stringResource(AppsR.string.general_info_rationale_version_name),
+                    rationale = stringResource(DomainR.string.general_info_rationale_version_name),
                     onShowRationale = { rationaleRow = it },
                     onCopy = onCopy,
                 )
@@ -205,7 +205,7 @@ private fun LoadedContent(
             InfoRowItem(
                 label = stringResource(AppsR.string.general_info_version_code),
                 value = state.versionCode.toString(),
-                rationale = stringResource(AppsR.string.general_info_rationale_version_code),
+                rationale = stringResource(DomainR.string.general_info_rationale_version_code),
                 onShowRationale = { rationaleRow = it },
                 onCopy = onCopy,
             )
@@ -214,28 +214,28 @@ private fun LoadedContent(
         SectionCard(title = stringResource(AppsR.string.general_info_section_api_targets)) {
             state.minSdkVersion?.let { version ->
                 val value = if (state.minSdkLabel != null) {
-                    stringResource(AppsR.string.app_detail_sdk_version, version, state.minSdkLabel)
+                    stringResource(DomainR.string.app_detail_sdk_version, version, state.minSdkLabel)
                 } else {
-                    stringResource(AppsR.string.app_detail_sdk_version_no_label, version)
+                    stringResource(DomainR.string.app_detail_sdk_version_no_label, version)
                 }
                 InfoRowItem(
                     label = stringResource(AppsR.string.general_info_min_sdk),
                     value = value,
-                    rationale = stringResource(AppsR.string.general_info_rationale_min_sdk),
+                    rationale = stringResource(DomainR.string.general_info_rationale_min_sdk),
                     onShowRationale = { rationaleRow = it },
                     onCopy = onCopy,
                 )
             }
             state.targetSdkVersion?.let { version ->
                 val value = if (state.targetSdkLabel != null) {
-                    stringResource(AppsR.string.app_detail_sdk_version, version, state.targetSdkLabel)
+                    stringResource(DomainR.string.app_detail_sdk_version, version, state.targetSdkLabel)
                 } else {
-                    stringResource(AppsR.string.app_detail_sdk_version_no_label, version)
+                    stringResource(DomainR.string.app_detail_sdk_version_no_label, version)
                 }
                 InfoRowItem(
                     label = stringResource(AppsR.string.general_info_target_sdk),
                     value = value,
-                    rationale = stringResource(AppsR.string.general_info_rationale_target_sdk),
+                    rationale = stringResource(DomainR.string.general_info_rationale_target_sdk),
                     onShowRationale = { rationaleRow = it },
                     onCopy = onCopy,
                 )
@@ -252,11 +252,11 @@ private fun LoadedContent(
             InfoRowItem(
                 label = stringResource(AppsR.string.general_info_app_type),
                 value = if (state.isSystemApp) {
-                    stringResource(AppsR.string.general_info_app_type_system)
+                    stringResource(DomainR.string.general_info_app_type_system)
                 } else {
-                    stringResource(AppsR.string.general_info_app_type_user)
+                    stringResource(DomainR.string.general_info_app_type_user)
                 },
-                rationale = stringResource(AppsR.string.general_info_rationale_app_type),
+                rationale = stringResource(DomainR.string.general_info_rationale_app_type),
                 onShowRationale = { rationaleRow = it },
                 onCopy = onCopy,
             )
@@ -271,7 +271,7 @@ private fun LoadedContent(
                 InfoRowItem(
                     label = stringResource(AppsR.string.general_info_installer_package),
                     value = value.value,
-                    rationale = stringResource(AppsR.string.general_info_rationale_installer_package),
+                    rationale = stringResource(DomainR.string.general_info_rationale_installer_package),
                     onShowRationale = { rationaleRow = it },
                     onCopy = onCopy,
                 )
@@ -280,7 +280,7 @@ private fun LoadedContent(
                 InfoRowItem(
                     label = stringResource(AppsR.string.general_info_install_initiator),
                     value = value.value,
-                    rationale = stringResource(AppsR.string.general_info_rationale_install_initiator),
+                    rationale = stringResource(DomainR.string.general_info_rationale_install_initiator),
                     onShowRationale = { rationaleRow = it },
                     onCopy = onCopy,
                 )
@@ -289,7 +289,7 @@ private fun LoadedContent(
                 InfoRowItem(
                     label = stringResource(AppsR.string.general_info_install_originator),
                     value = value.value,
-                    rationale = stringResource(AppsR.string.general_info_rationale_install_originator),
+                    rationale = stringResource(DomainR.string.general_info_rationale_install_originator),
                     onShowRationale = { rationaleRow = it },
                     onCopy = onCopy,
                 )
@@ -298,7 +298,7 @@ private fun LoadedContent(
                 InfoRowItem(
                     label = stringResource(AppsR.string.general_info_first_installed),
                     value = formatTimestamp(instant),
-                    rationale = stringResource(AppsR.string.general_info_rationale_first_installed),
+                    rationale = stringResource(DomainR.string.general_info_rationale_first_installed),
                     onShowRationale = { rationaleRow = it },
                     onCopy = onCopy,
                 )
@@ -307,7 +307,7 @@ private fun LoadedContent(
                 InfoRowItem(
                     label = stringResource(AppsR.string.general_info_last_updated),
                     value = formatTimestamp(instant),
-                    rationale = stringResource(AppsR.string.general_info_rationale_last_updated),
+                    rationale = stringResource(DomainR.string.general_info_rationale_last_updated),
                     onShowRationale = { rationaleRow = it },
                     onCopy = onCopy,
                 )
@@ -316,7 +316,7 @@ private fun LoadedContent(
                 InfoRowItem(
                     label = stringResource(AppsR.string.general_info_last_used),
                     value = formatTimestamp(instant),
-                    rationale = stringResource(AppsR.string.general_info_rationale_last_used),
+                    rationale = stringResource(DomainR.string.general_info_rationale_last_used),
                     onShowRationale = { rationaleRow = it },
                     onCopy = onCopy,
                 )
@@ -328,7 +328,7 @@ private fun LoadedContent(
                 InfoRowItem(
                     label = stringResource(AppsR.string.general_info_apk_directory),
                     value = value,
-                    rationale = stringResource(AppsR.string.general_info_rationale_apk_directory),
+                    rationale = stringResource(DomainR.string.general_info_rationale_apk_directory),
                     onShowRationale = { rationaleRow = it },
                     onCopy = onCopy,
                 )
@@ -337,7 +337,7 @@ private fun LoadedContent(
                 InfoRowItem(
                     label = stringResource(AppsR.string.general_info_data_directory),
                     value = value,
-                    rationale = stringResource(AppsR.string.general_info_rationale_data_directory),
+                    rationale = stringResource(DomainR.string.general_info_rationale_data_directory),
                     onShowRationale = { rationaleRow = it },
                     onCopy = onCopy,
                 )
@@ -345,14 +345,14 @@ private fun LoadedContent(
             InfoRowItem(
                 label = stringResource(AppsR.string.general_info_install_location),
                 value = state.installLocation,
-                rationale = stringResource(AppsR.string.general_info_rationale_install_location),
+                rationale = stringResource(DomainR.string.general_info_rationale_install_location),
                 onShowRationale = { rationaleRow = it },
                 onCopy = onCopy,
             )
             InfoRowItem(
                 label = stringResource(AppsR.string.general_info_apk_size),
                 value = state.apkSize.formatted(),
-                rationale = stringResource(AppsR.string.general_info_rationale_apk_size),
+                rationale = stringResource(DomainR.string.general_info_rationale_apk_size),
                 onShowRationale = { rationaleRow = it },
                 onCopy = onCopy,
             )
@@ -360,7 +360,7 @@ private fun LoadedContent(
                 NavigableInfoRowItem(
                     label = stringResource(AppsR.string.general_info_split_apks),
                     value = pluralStringResource(
-                        AppsR.plurals.general_info_split_apks_value,
+                        DomainR.plurals.general_info_split_apks_value,
                         state.installedSplitsCount,
                         state.installedSplitsCount,
                     ),
@@ -372,7 +372,7 @@ private fun LoadedContent(
                 InfoRowItem(
                     label = stringResource(AppsR.string.general_info_total_size),
                     value = size.formatted(),
-                    rationale = stringResource(AppsR.string.general_info_rationale_total_size),
+                    rationale = stringResource(DomainR.string.general_info_rationale_total_size),
                     onShowRationale = { rationaleRow = it },
                     onCopy = onCopy,
                 )
@@ -412,16 +412,16 @@ private fun SecuritySettingsSection(
             label = stringResource(AppsR.string.general_info_debug_access),
             value = stringResource(
                 if (state.isDebuggable) {
-                    AppsR.string.general_info_enabled
+                    DomainR.string.general_info_enabled
                 } else {
-                    AppsR.string.general_info_disabled
+                    DomainR.string.general_info_disabled
                 },
             ),
             rationale = stringResource(
                 if (state.isDebuggable) {
-                    AppsR.string.general_info_rationale_debug_access_enabled
+                    DomainR.string.general_info_rationale_debug_access_enabled
                 } else {
-                    AppsR.string.general_info_rationale_debug_access_disabled
+                    DomainR.string.general_info_rationale_debug_access_disabled
                 },
             ),
             onShowRationale = onShowRationale,
@@ -431,16 +431,16 @@ private fun SecuritySettingsSection(
             label = stringResource(AppsR.string.general_info_app_data_backup),
             value = stringResource(
                 if (state.allowsBackup) {
-                    AppsR.string.general_info_allowed
+                    DomainR.string.general_info_allowed
                 } else {
-                    AppsR.string.general_info_disabled
+                    DomainR.string.general_info_disabled
                 },
             ),
             rationale = stringResource(
                 if (state.allowsBackup) {
-                    AppsR.string.general_info_rationale_backup_allowed
+                    DomainR.string.general_info_rationale_backup_allowed
                 } else {
-                    AppsR.string.general_info_rationale_backup_blocked
+                    DomainR.string.general_info_rationale_backup_blocked
                 },
             ),
             onShowRationale = onShowRationale,
@@ -450,16 +450,16 @@ private fun SecuritySettingsSection(
             label = stringResource(AppsR.string.general_info_unencrypted_traffic),
             value = stringResource(
                 if (state.usesCleartextTraffic) {
-                    AppsR.string.general_info_allowed
+                    DomainR.string.general_info_allowed
                 } else {
-                    AppsR.string.general_info_disabled
+                    DomainR.string.general_info_disabled
                 },
             ),
             rationale = stringResource(
                 if (state.usesCleartextTraffic) {
-                    AppsR.string.general_info_rationale_cleartext_allowed
+                    DomainR.string.general_info_rationale_cleartext_allowed
                 } else {
-                    AppsR.string.general_info_rationale_cleartext_blocked
+                    DomainR.string.general_info_rationale_cleartext_blocked
                 },
             ),
             onShowRationale = onShowRationale,
@@ -477,14 +477,14 @@ private fun NativeLibrariesSection(
     modifier: Modifier = Modifier,
 ) {
     SectionCard(
-        title = stringResource(AppsR.string.general_info_section_native_libraries),
+        title = stringResource(DomainR.string.general_info_section_native_libraries),
         modifier = modifier,
     ) {
         if (!state.isNativeLibrariesRecorded) {
             InfoRowItem(
                 label = stringResource(AppsR.string.general_info_native_library_abis),
-                value = stringResource(HistoryR.string.app_history_not_recorded),
-                rationale = stringResource(HistoryR.string.app_history_not_recorded_explanation),
+                value = stringResource(R.string.app_history_not_recorded),
+                rationale = stringResource(R.string.app_history_not_recorded_explanation),
                 onShowRationale = onShowRationale,
                 onCopy = onCopy,
             )
@@ -493,22 +493,22 @@ private fun NativeLibrariesSection(
         val abisValue = if (state.nativeLibraryAbis.isNotEmpty()) {
             state.nativeLibraryAbis.joinToString()
         } else {
-            stringResource(AppsR.string.general_info_native_library_abis_none)
+            stringResource(DomainR.string.general_info_native_library_abis_none)
         }
         val abisRationale = buildString {
-            append(stringResource(AppsR.string.general_info_rationale_native_library_abis))
+            append(stringResource(DomainR.string.general_info_rationale_native_library_abis))
             if (state.deviceSupportedAbis.isNotEmpty()) {
                 append(' ')
                 append(
                     stringResource(
-                        AppsR.string.general_info_native_library_device_support,
+                        DomainR.string.general_info_native_library_device_support,
                         state.deviceSupportedAbis.joinToString(),
                     ),
                 )
             }
             if (state.isNativeLibraryDeviceIncompatible) {
                 append(' ')
-                append(stringResource(AppsR.string.general_info_native_library_incompatible))
+                append(stringResource(DomainR.string.general_info_native_library_incompatible))
             }
         }
         InfoRowItem(
@@ -521,9 +521,9 @@ private fun NativeLibrariesSection(
 
         val fileCount = state.nativeLibraryNames.size
         val filesValue = if (fileCount > 0) {
-            pluralStringResource(AppsR.plurals.general_info_native_library_file_count, fileCount, fileCount)
+            pluralStringResource(DomainR.plurals.general_info_native_library_file_count, fileCount, fileCount)
         } else {
-            stringResource(AppsR.string.general_info_native_library_files_none)
+            stringResource(DomainR.string.general_info_native_library_files_none)
         }
         NavigableInfoRowItem(
             label = stringResource(AppsR.string.general_info_native_library_files),

@@ -12,9 +12,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.DeviceFeatures
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.DeviceFeaturesRepository
-import sk.styk.martin.apkanalyzer.core.apps.devicefeatures.requirements
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.DeviceFeatures
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.DeviceFeaturesRepository
+import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.requirements
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider

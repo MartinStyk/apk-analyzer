@@ -18,4 +18,6 @@
     <string name="browse_algorithm_md2_explanation">%1$s MD2 का उपयोग करता है। MD2 अप्रचलित है और व्यावहारिक हमलों के प्रति संवेदनशील है, इसलिए यह हस्ताक्षर प्रमाणपत्रों के लिए असुरक्षित है। नए हस्ताक्षर प्रमाणपत्रों को SHA-256 या मजबूत का उपयोग करना चाहिए।</string>
     <string name="browse_algorithm_unknown_explanation">%1$s की ताकत उसके एल्गोरिदम नाम से आंकी नहीं जा सकती। कुंजी का प्रकार और आकार भी इसकी सुरक्षा को प्रभावित कर सकता है।</string>
     <string name="browse_bucket_info_content_description">%1$s के बारे में</string>
+    <string name="browse_subtitle_loading">स्थापित ऐप्स को स्कैन कर रहे हैं…</string>
+    <string name="browse_sub_attribute_sheet_title">समूह द्वारा</string>
 </resources>

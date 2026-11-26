@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="browse_dimension_permission_title">Permissions</string>
+    <string name="browse_dimension_permission_subtitle">Voir quelles applications utilisent une permission donnée</string>
+    <string name="browse_dimension_certificate_title">Certificat de signature</string>
+    <string name="browse_dimension_certificate_subtitle">Grouper les applications par identité de signataire, nom de l\'éditeur ou pays</string>
+    <string name="browse_dimension_target_sdk_title">Version Android cible</string>
+    <string name="browse_dimension_target_sdk_subtitle">Voir pour quelle version Android chaque application a été construite</string>
+    <string name="browse_dimension_min_sdk_title">Version Android minimale</string>
+    <string name="browse_dimension_min_sdk_subtitle">Voir la plus ancienne version Android que chaque application prend encore en charge</string>
+    <string name="browse_dimension_install_source_title">Source d\'installation</string>
+    <string name="browse_dimension_install_source_subtitle">Voir d\'où provient chaque application</string>
+    <string name="browse_dimension_shared_user_id_title">Identité partagée</string>
+    <string name="browse_dimension_shared_user_id_subtitle">Trouver des applications qui fonctionnent sous la même identité d\'appareil et peuvent accéder aux données des autres</string>
+    <string name="browse_dimension_app_category_title">Catégorie d\'application</string>
+    <string name="browse_dimension_app_category_subtitle">Voir quel type d\'application chacun déclare être</string>
+    <string name="browse_signer_unknown">Signataire inconnu</string>
+    <string name="browse_certificate_attribute_sha256">Identité (SHA-256)</string>
+    <string name="browse_certificate_attribute_sha1">Identité (SHA-1)</string>
+    <string name="browse_certificate_attribute_md5">Identité (MD5)</string>
+    <string name="browse_certificate_attribute_organization">Nom de l\'éditeur</string>
+    <string name="browse_certificate_attribute_country">Pays</string>
+    <string name="browse_certificate_hash_sha256">SHA-256</string>
+    <string name="browse_certificate_hash_sha1">SHA-1</string>
+    <string name="browse_certificate_hash_md5">MD5</string>
+</resources>

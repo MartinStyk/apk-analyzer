@@ -9,8 +9,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import sk.styk.martin.apkanalyzer.core.aiinsights.ai.AiAvailability
-import sk.styk.martin.apkanalyzer.core.aiinsights.appdescription.AppAiDescriptionRepository
+import sk.styk.martin.apkanalyzer.core.aiinsights.api.ai.AiAvailability
+import sk.styk.martin.apkanalyzer.core.aiinsights.api.appdescription.AppAiDescriptionRepository
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 
 @HiltViewModel(assistedFactory = AiSummaryViewModel.Factory::class)

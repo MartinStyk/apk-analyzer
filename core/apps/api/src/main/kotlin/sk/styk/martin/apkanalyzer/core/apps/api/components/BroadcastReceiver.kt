@@ -1,0 +1,13 @@
+package sk.styk.martin.apkanalyzer.core.apps.api.components
+
+data class BroadcastReceiver(
+    val name: String,
+    val permission: String? = null,
+    val isExported: Boolean = false,
+)
+
+val BroadcastReceiver.isExternallyReachableWithoutPermission: Boolean
+    get() = isExported && permission.isNullOrBlank()
+
+val BroadcastReceiver.isLaunchable: Boolean
+    get() = isExported && permission.isNullOrBlank()

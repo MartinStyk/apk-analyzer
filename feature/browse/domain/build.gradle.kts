@@ -6,13 +6,11 @@ plugins {
 
 android {
     namespace = "sk.styk.martin.apkanalyzer.feature.browse.domain"
-
-    androidResources.enable = false
 }
 
 dependencies {
     api(projects.feature.browse.api)
-    implementation(projects.core.appIndex)
+    implementation(projects.core.appIndex.api)
     implementation(projects.core.common)
 
     testImplementation(testFixtures(projects.core.common))

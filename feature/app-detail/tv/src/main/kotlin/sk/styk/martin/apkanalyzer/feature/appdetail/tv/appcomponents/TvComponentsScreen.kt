@@ -25,15 +25,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentFlag
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilter
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentKind
-import sk.styk.martin.apkanalyzer.core.apps.components.IntentFilterDataRule
-import sk.styk.martin.apkanalyzer.core.apps.components.IntentFilterDataRuleType
-import sk.styk.martin.apkanalyzer.core.apps.components.explanationRes
-import sk.styk.martin.apkanalyzer.core.apps.components.exportedExplanationRes
-import sk.styk.martin.apkanalyzer.core.apps.components.labelRes
-import sk.styk.martin.apkanalyzer.core.apps.components.sectionLabelRes
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentFlag
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilter
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentKind
+import sk.styk.martin.apkanalyzer.core.apps.api.components.IntentFilterDataRule
+import sk.styk.martin.apkanalyzer.core.apps.api.components.IntentFilterDataRuleType
+import sk.styk.martin.apkanalyzer.core.apps.api.components.explanationRes
+import sk.styk.martin.apkanalyzer.core.apps.api.components.exportedExplanationRes
+import sk.styk.martin.apkanalyzer.core.apps.api.components.labelRes
+import sk.styk.martin.apkanalyzer.core.apps.api.components.sectionLabelRes
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.util.sendForeignBroadcast
@@ -59,7 +59,8 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.PaneField
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.PaneSection
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionLoading
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 @Composable
 internal fun TvComponentsScreen(
@@ -84,9 +85,9 @@ internal fun TvComponentsScreen(
                         )
                     }
                     val message = when {
-                        result.isFailure -> AppsR.string.components_launch_failed
-                        event.kind == ComponentKind.Receiver -> AppsR.string.components_launch_broadcast_sent
-                        else -> AppsR.string.components_launch_started
+                        result.isFailure -> DomainR.string.components_launch_failed
+                        event.kind == ComponentKind.Receiver -> DomainR.string.components_launch_broadcast_sent
+                        else -> DomainR.string.components_launch_started
                     }
                     Toast.makeText(context, message, Toast.LENGTH_LONG).show()
                 }
@@ -120,7 +121,7 @@ private fun TvComponentsContent(
             title = title,
             appName = appName,
             appReference = appReference,
-            message = stringResource(AppsR.string.components_error),
+            message = stringResource(DomainR.string.components_error),
             onRetry = { onAction(TvComponentsAction.Retry) },
         )
 
@@ -223,7 +224,7 @@ private fun ComponentPane(item: TvComponentItem, modifier: Modifier = Modifier) 
         modifier = modifier,
     ) {
         if (item.isLaunchable) LaunchHint()
-        PaneSection(title = stringResource(AppsR.string.components_detail_section_reachability)) {
+        PaneSection(title = stringResource(DomainR.string.components_detail_section_reachability)) {
             PaneField(
                 label = stringResource(AppsR.string.components_detail_exported),
                 value = stringResource(if (item.isExported) AppsR.string.components_exported_yes else AppsR.string.components_exported_no),
@@ -237,12 +238,12 @@ private fun ComponentPane(item: TvComponentItem, modifier: Modifier = Modifier) 
         if (item.pathPermissions.isNotEmpty()) {
             PaneSection(
                 title = stringResource(AppsR.string.components_detail_section_path_permissions),
-                explanation = stringResource(AppsR.string.components_detail_path_permissions_explanation),
+                explanation = stringResource(DomainR.string.components_detail_path_permissions_explanation),
             ) {
                 val open = stringResource(AppsR.string.components_detail_path_permission_open)
                 item.pathPermissions.forEach { pathPermission ->
                     PaneField(
-                        label = stringResource(AppsR.string.components_detail_path_permission_path),
+                        label = stringResource(DomainR.string.components_detail_path_permission_path),
                         value = pathPermission.path,
                         explanation = stringResource(pathPermission.matchType.explanationRes),
                     )
@@ -253,22 +254,22 @@ private fun ComponentPane(item: TvComponentItem, modifier: Modifier = Modifier) 
         }
         IntentFiltersSection(intentFilters = item.intentFilters, kind = item.kind)
         if (item.hasTypeDetails) {
-            PaneSection(title = stringResource(AppsR.string.components_detail_section_details)) {
+            PaneSection(title = stringResource(DomainR.string.components_detail_section_details)) {
                 if (item.isLauncher) {
                     PaneField(
                         label = stringResource(AppsR.string.components_detail_launcher),
-                        value = stringResource(AppsR.string.components_flag_enabled),
-                        explanation = stringResource(AppsR.string.components_detail_launcher_explanation),
+                        value = stringResource(DomainR.string.components_flag_enabled),
+                        explanation = stringResource(DomainR.string.components_detail_launcher_explanation),
                     )
                 }
-                item.label?.let { PaneField(label = stringResource(AppsR.string.components_detail_label), value = it) }
+                item.label?.let { PaneField(label = stringResource(DomainR.string.components_detail_label), value = it) }
                 item.targetActivity?.let { PaneField(label = stringResource(AppsR.string.components_detail_target_activity), value = it) }
                 item.parentName?.let { PaneField(label = stringResource(AppsR.string.components_detail_parent), value = it) }
                 item.authority?.let { PaneField(label = stringResource(AppsR.string.components_detail_authority), value = it) }
                 item.flags.forEach { flag ->
                     PaneField(
                         label = stringResource(flag.labelRes),
-                        value = stringResource(AppsR.string.components_flag_enabled),
+                        value = stringResource(DomainR.string.components_flag_enabled),
                         explanation = stringResource(flag.explanationRes),
                     )
                 }
@@ -288,17 +289,17 @@ private fun LaunchHint() {
 @Composable
 private fun IntentFiltersSection(intentFilters: List<ComponentIntentFilter>?, kind: ComponentKind) {
     when {
-        intentFilters == null -> PaneSection(title = stringResource(AppsR.string.components_detail_section_intent_filters)) {
+        intentFilters == null -> PaneSection(title = stringResource(DomainR.string.components_detail_section_intent_filters)) {
             Text(
-                text = stringResource(AppsR.string.components_detail_intent_filters_unavailable),
+                text = stringResource(DomainR.string.components_detail_intent_filters_unavailable),
                 style = AppTheme.typography.bodyMedium,
                 color = AppTheme.colors.onSurfaceVariant,
             )
         }
 
         intentFilters.isNotEmpty() -> PaneSection(
-            title = stringResource(AppsR.string.components_detail_section_intent_filters),
-            explanation = stringResource(AppsR.string.components_detail_intent_filters_explanation),
+            title = stringResource(DomainR.string.components_detail_section_intent_filters),
+            explanation = stringResource(DomainR.string.components_detail_intent_filters_explanation),
         ) {
             intentFilters.forEachIndexed { index, filter ->
                 IntentFilterBlock(index = index, filter = filter, kind = kind)
@@ -317,23 +318,27 @@ private fun IntentFilterBlock(
         Text(text = stringResource(R.string.tv_components_intent_filter_title, index + 1), style = AppTheme.typography.titleSmall)
         if (filter.actions.isNotEmpty()) {
             PaneField(
-                label = stringResource(AppsR.string.components_detail_intent_actions),
+                label = stringResource(DomainR.string.components_detail_intent_actions),
                 value = filter.actions.joinToString(separator = "\n") { it.removePrefix(FRAMEWORK_ACTION_PREFIX) },
             )
         }
         if (filter.categories.isNotEmpty()) {
             PaneField(
-                label = stringResource(AppsR.string.components_detail_intent_categories),
+                label = stringResource(DomainR.string.components_detail_intent_categories),
                 value = filter.categories.joinToString(separator = "\n") { it.removePrefix(FRAMEWORK_CATEGORY_PREFIX) },
             )
         }
         if (filter.dataRules.isNotEmpty()) {
-            PaneField(label = stringResource(AppsR.string.components_detail_intent_data), value = dataRulesText(filter.dataRules))
+            PaneField(label = stringResource(DomainR.string.components_detail_intent_data), value = dataRulesText(filter.dataRules))
         }
         filter.uriRelativeGroups.forEach { group ->
             PaneField(
                 label = stringResource(
-                    if (group.isAllowed) AppsR.string.components_detail_intent_allowed_uri_parts else AppsR.string.components_detail_intent_blocked_uri_parts,
+                    if (group.isAllowed) {
+                        DomainR.string.components_detail_intent_allowed_uri_parts
+                    } else {
+                        DomainR.string.components_detail_intent_blocked_uri_parts
+                    },
                 ),
                 value = dataRulesText(group.dataRules),
             )
@@ -342,22 +347,22 @@ private fun IntentFilterBlock(
             PaneField(
                 label = stringResource(
                     when (kind) {
-                        ComponentKind.Activity -> AppsR.string.components_detail_intent_activity_priority
-                        ComponentKind.Receiver -> AppsR.string.components_detail_intent_receiver_priority
-                        ComponentKind.Service, ComponentKind.Provider -> AppsR.string.components_detail_intent_declared_priority
+                        ComponentKind.Activity -> DomainR.string.components_detail_intent_activity_priority
+                        ComponentKind.Receiver -> DomainR.string.components_detail_intent_receiver_priority
+                        ComponentKind.Service, ComponentKind.Provider -> DomainR.string.components_detail_intent_declared_priority
                     },
                 ),
                 value = filter.priority.toString(),
             )
         }
         if (filter.order != 0) {
-            PaneField(label = stringResource(AppsR.string.components_detail_intent_order), value = filter.order.toString())
+            PaneField(label = stringResource(DomainR.string.components_detail_intent_order), value = filter.order.toString())
         }
         if (filter.isAutoVerify) {
             PaneField(
-                label = stringResource(AppsR.string.components_detail_intent_auto_verify),
-                value = stringResource(AppsR.string.components_detail_intent_auto_verify_requested),
-                explanation = stringResource(AppsR.string.components_detail_intent_auto_verify_explanation),
+                label = stringResource(DomainR.string.components_detail_intent_auto_verify),
+                value = stringResource(DomainR.string.components_detail_intent_auto_verify_requested),
+                explanation = stringResource(DomainR.string.components_detail_intent_auto_verify_explanation),
             )
         }
     }
@@ -367,15 +372,15 @@ private fun IntentFilterBlock(
 private fun dataRulesText(rules: List<IntentFilterDataRule>): String {
     val resources = LocalResources.current
     return rules.joinToString(separator = "\n") { rule ->
-        resources.getString(AppsR.string.components_detail_intent_data_rule, resources.getString(rule.type.labelRes), rule.value)
+        resources.getString(DomainR.string.components_detail_intent_data_rule, resources.getString(rule.type.labelRes), rule.value)
     }
 }
 
 @Composable
 private fun TvComponentItem.summary(): String = when {
-    isLauncher -> stringResource(AppsR.string.components_tag_launcher)
-    isUnprotected -> stringResource(AppsR.string.components_tag_unprotected)
-    isExported -> stringResource(AppsR.string.components_tag_exported)
+    isLauncher -> stringResource(DomainR.string.components_tag_launcher)
+    isUnprotected -> stringResource(DomainR.string.components_tag_unprotected)
+    isExported -> stringResource(DomainR.string.components_tag_exported)
     else -> name.substringBeforeLast('.', missingDelimiterValue = name)
 }
 

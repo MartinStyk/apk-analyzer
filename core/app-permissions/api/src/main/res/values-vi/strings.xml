@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="permissions_title">Quyền</string>
+    <string name="permissions_scope_requested">Yêu cầu</string>
+    <string name="permissions_scope_defined">Được định nghĩa bởi ứng dụng này</string>
+    <string name="permissions_granted">Đã cấp</string>
+    <string name="permissions_not_granted">Chưa được cấp</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
+    <string name="permissions_level_dangerous_explanation">Cần sự chấp thuận rõ ràng của bạn trước khi ứng dụng có thể sử dụng nó.</string>
+    <string name="permissions_level_signature">Signature</string>
+    <string name="permissions_level_signature_explanation">Chỉ có các ứng dụng được ký bằng cùng một khóa mới có thể giữ những điều này.</string>
+    <string name="permissions_level_internal">Internal</string>
+    <string name="permissions_level_internal_explanation">Dành riêng cho hệ thống và được cấp theo các quy tắc nội bộ chứ không phải bởi bạn.</string>
+    <string name="permissions_level_normal">Normal</string>
+    <string name="permissions_level_normal_explanation">Thường được cấp tự động khi cài đặt. Rủi ro thấp khi tự nó.</string>
+    <string name="permissions_level_unavailable">Chi tiết không có sẵn</string>
+    <string name="permissions_level_unavailable_explanation">Không có ứng dụng nào trên thiết bị này khai báo những điều này, vì vậy chúng tôi không thể hiển thị những gì chúng bảo vệ.</string>
+    <string name="permissions_flag_privileged">Các ứng dụng hệ thống đặc quyền cũng có thể giữ điều này, mà không cần sự chấp thuận của bạn.</string>
+    <string name="permissions_flag_appop">Cái này cũng có công tắc riêng trong Cài đặt, tách biệt với quyền truy cập chính nó.</string>
+    <string name="permissions_flag_instant">Ứng dụng tức thì — ứng dụng chạy mà không cần cài đặt — cũng có thể giữ điều này.</string>
+    <string name="permissions_flag_development">Cũng có thể được cấp bằng tay cho phát triển.</string>
+    <string name="permissions_detail_protection_level">Cấp độ bảo vệ</string>
+    <string name="permissions_detail_group">Nhóm quyền</string>
+    <string name="permissions_detail_declared_by">Được khai báo bởi</string>
+    <string name="permissions_detail_extra_rules">Quy tắc bổ sung</string>
+    <string name="permissions_grant_dangerous_granted">Bạn đã cho phép điều này. Bạn có thể lấy lại trong Cài đặt.</string>
+    <string name="permissions_grant_dangerous_not_granted">Bạn chưa cho phép điều này.</string>
+    <string name="permissions_grant_signature_self">Ứng dụng này tự định nghĩa quyền này.</string>
+    <string name="permissions_grant_signature_granted">Ứng dụng này được ký bằng cùng một khóa với ứng dụng định nghĩa nó.</string>
+    <string name="permissions_grant_signature_granted_privileged">Ứng dụng này được ký bằng cùng một khóa với ứng dụng định nghĩa nó, hoặc chạy như một ứng dụng hệ thống có đặc quyền.</string>
+    <string name="permissions_grant_signature_not_granted">Ứng dụng này được ký bằng một khóa khác với ứng dụng định nghĩa nó.</string>
+    <string name="permissions_grant_internal_granted">Hệ thống đã cấp quyền này theo quy tắc của chính nó.</string>
+    <string name="permissions_grant_internal_not_granted">Quy tắc của hệ thống không cấp quyền này ở đây.</string>
+    <string name="permissions_grant_normal_granted">Được cấp tự động khi ứng dụng được cài đặt.</string>
+    <string name="permissions_grant_normal_not_granted">Không được cấp khi cài đặt — thường thì ứng dụng chỉ yêu cầu điều này trên các phiên bản Android cũ hơn.</string>
+    <string name="permissions_grant_unavailable">Không có ứng dụng nào trên thiết bị này khai báo quyền này, vì vậy không có gì có thể cấp quyền.</string>
+</resources>

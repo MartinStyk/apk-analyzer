@@ -1,9 +1,9 @@
 package sk.styk.martin.apkanalyzer.feature.browse.tv.options
 
 import androidx.compose.runtime.Immutable
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseBucketDetail
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseOption
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseSubAttribute
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseBucketDetail
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseOption
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseSubAttribute
 import sk.styk.martin.apkanalyzer.feature.browse.tv.apps.TvBrowseAppItem
 
 @Immutable

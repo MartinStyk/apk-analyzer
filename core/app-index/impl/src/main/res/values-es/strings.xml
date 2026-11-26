@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="browse_sdk_unknown">Nivel de API %1$s</string>
+    <string name="browse_api_level">API %1$s</string>
+    <string name="browse_source_google_play">Google Play</string>
+    <string name="browse_source_samsung_galaxy_store">Samsung Galaxy Store</string>
+    <string name="browse_source_amazon_appstore">Amazon Appstore</string>
+    <string name="browse_source_huawei_app_gallery">Huawei AppGallery</string>
+    <string name="browse_source_xiaomi_get_apps">Xiaomi GetApps</string>
+    <string name="browse_source_fdroid">F-Droid</string>
+    <string name="browse_source_aurora_store">Aurora Store</string>
+    <string name="browse_source_sideloaded">Instalado desde un archivo</string>
+    <string name="browse_source_local_install">Instalado a través de la computadora</string>
+    <string name="browse_source_system">Sistema</string>
+    <string name="browse_source_unknown">Desconocido</string>
+    <string name="browse_country_unknown">País desconocido</string>
+    <string name="browse_category_undefined">Sin categorizar</string>
+    <string name="browse_category_game">Juegos</string>
+    <string name="browse_category_audio">Audio</string>
+    <string name="browse_category_video">Video</string>
+    <string name="browse_category_image">Imagen</string>
+    <string name="browse_category_social">Social</string>
+    <string name="browse_category_news">Noticias y revistas</string>
+    <string name="browse_category_maps">Mapas y navegación</string>
+    <string name="browse_category_productivity">Productividad</string>
+    <string name="browse_category_accessibility">Accesibilidad</string>
+</resources>

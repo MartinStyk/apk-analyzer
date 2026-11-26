@@ -44,6 +44,11 @@ has its own feature screens and its own design-system variant.
   system.** It never depends on its sibling `phone` module; logic both need moves to `core` when the
   second consumer appears.
 * **`core/*` may depend on other `core` modules, never on a `feature`.**
+* **Core domain modules are split into `api` and an implementation (`impl`).** Features, feature
+  `domain` modules, and other core modules depend on `core/<name>/api` only; only `app` and `tv` depend
+  on `core/<name>/impl`, which keeps everything `internal`. `design-system`, `common`, `navigation`, and
+  `app-functions` stay single modules. See
+  [core API/impl split](../app/technical/core-api-impl-split.md).
 * **`app` is wiring only** — the launcher Activity, the external-APK document Activity, nav hosts,
   and app-scoped Hilt bindings. No feature logic lands here.
 * **`tv` is wiring only too** — the `LEANBACK_LAUNCHER` Activity, the TV nav host, and the TV
@@ -51,8 +56,8 @@ has its own feature screens and its own design-system variant.
   and `tv` modules; never on `app`, `:core:design-system:phone`, Material 3, a feature `phone`
   module, or a phone-only core module. Phone code never depends on TV modules either. See
   [`tv/AGENTS.md`](../../tv/AGENTS.md).
-* A module's package matches its directory with hyphens removed: `core/user-preferences` →
-  `core.userpreferences`, `feature/app-detail/phone` → `feature.appdetail.phone`.
+* A module's package matches its directory with hyphens removed: `core/user-preferences/api` →
+  `core.userpreferences.api`, `feature/app-detail/phone` → `feature.appdetail.phone`.
 
 ## Module ownership
 
@@ -120,9 +125,9 @@ files; models declared alongside the interface may stay in the interface file.
 
 * **Interface methods never throw.** They return `Result<T>`, a nullable `T?`, or an empty
   collection — see
-  [`AppDetailRepository`](../../core/apps/src/main/kotlin/sk/styk/martin/apkanalyzer/core/apps/AppDetailRepository.kt)
+  [`AppDetailRepository`](../../core/apps/api/src/main/kotlin/sk/styk/martin/apkanalyzer/core/apps/api/AppDetailRepository.kt)
   and
-  [`AppExportManager`](../../core/apps/src/main/kotlin/sk/styk/martin/apkanalyzer/core/apps/export/AppExportManager.kt).
+  [`AppExportManager`](../../core/apps/api/src/main/kotlin/sk/styk/martin/apkanalyzer/core/apps/api/export/AppExportManager.kt).
 * **Dispatchers are injected**, never hardcoded: inject `DispatcherProvider` and switch with
   `flowOn(dispatcherProvider.default())` or `withContext(dispatcherProvider.io())`.
 * Constructor injection is preferred over module `@Provides`; a `@Provides` function is for platform

@@ -17,8 +17,8 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentIntentFilterKey
-import sk.styk.martin.apkanalyzer.core.apps.components.ComponentKind
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilterKey
+import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentKind
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider

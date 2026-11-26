@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="browse_subtitle">
+        <item quantity="other">探索這台裝置上已安裝的 %1$d 個應用程式</item>
+    </plurals>
+    <plurals name="browse_dimension_option_count">
+        <item quantity="other">%1$d 個選項</item>
+    </plurals>
+    <string name="browse_certificate_self_signed">自我簽署</string>
+    <string name="browse_certificate_self_signed_explanation">Android 應用程式使用自我簽署憑證很常見。需要確認發布者時，請將憑證指紋與可信任來源提供的指紋比較。</string>
+    <plurals name="browse_options_filter_hint">
+        <item quantity="other">篩選 %1$d 個選項</item>
+    </plurals>
+    <string name="browse_options_empty_query">沒有符合「%1$s」的選項</string>
+    <plurals name="browse_apps_count">
+        <item quantity="other">%1$d 個應用程式</item>
+    </plurals>
+    <plurals name="browse_apps_filter_hint">
+        <item quantity="other">篩選 %1$d 個應用程式</item>
+    </plurals>
+    <string name="browse_apps_empty_query">沒有符合「%1$s」的應用程式</string>
+</resources>

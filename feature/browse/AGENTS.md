@@ -21,6 +21,8 @@ Both `phone` and `tv` share the same layout:
 * `navigation/` owns internal option and bucket destinations.
 
 `domain/analytics/` owns the shared browse events and their mapping to tracked names and parameters.
+`domain`'s `res/` holds the screen copy phone and TV both show (counts, filter hints, empty-search
+text, the self-signed explanation).
 Phone and TV track tab opens, dimension selection, and category selection through the same injected
 tracker. TV's direct hub-to-category tiles track category selection without inventing a dimension
 screen visit; focus-driven previews do not emit selection events.

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="browse_dimension_permission_title">權限</string>
+    <string name="browse_dimension_permission_subtitle">查看哪些應用程式使用特定權限</string>
+    <string name="browse_dimension_certificate_title">簽署憑證</string>
+    <string name="browse_dimension_certificate_subtitle">依簽署者身分、發布者名稱或國家將應用程式分組</string>
+    <string name="browse_dimension_target_sdk_title">目標 Android 版本</string>
+    <string name="browse_dimension_target_sdk_subtitle">查看各應用程式針對哪個 Android 版本開發</string>
+    <string name="browse_dimension_min_sdk_title">最低 Android 版本</string>
+    <string name="browse_dimension_min_sdk_subtitle">查看各應用程式支援的最舊 Android 版本</string>
+    <string name="browse_dimension_install_source_title">安裝來源</string>
+    <string name="browse_dimension_install_source_subtitle">查看各應用程式的來源</string>
+    <string name="browse_dimension_shared_user_id_title">共用身分</string>
+    <string name="browse_dimension_shared_user_id_subtitle">找出以相同使用者身分執行、可互相存取資料的應用程式</string>
+    <string name="browse_dimension_app_category_title">應用程式類別</string>
+    <string name="browse_dimension_app_category_subtitle">查看各應用程式宣告的類別</string>
+    <string name="browse_signer_unknown">不明簽署者</string>
+    <string name="browse_certificate_attribute_sha256">身分識別 (SHA-256)</string>
+    <string name="browse_certificate_attribute_sha1">身分識別 (SHA-1)</string>
+    <string name="browse_certificate_attribute_md5">身分識別 (MD5)</string>
+    <string name="browse_certificate_attribute_organization">發布者名稱</string>
+    <string name="browse_certificate_attribute_country">國家</string>
+    <string name="browse_certificate_hash_sha256">SHA-256</string>
+    <string name="browse_certificate_hash_sha1">SHA-1</string>
+    <string name="browse_certificate_hash_md5">MD5</string>
+</resources>

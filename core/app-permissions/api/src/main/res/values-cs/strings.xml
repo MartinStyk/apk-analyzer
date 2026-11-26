@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="permissions_title">Permissions</string>
+    <string name="permissions_scope_requested">Požadováno</string>
+    <string name="permissions_scope_defined">Definováno touto aplikací</string>
+    <string name="permissions_granted">Přiděleno</string>
+    <string name="permissions_not_granted">Nepřiděleno</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
+    <string name="permissions_level_dangerous_explanation">Vyžaduje váš výslovný souhlas, než jej aplikace může použít.</string>
+    <string name="permissions_level_signature">Signature</string>
+    <string name="permissions_level_signature_explanation">Pouze aplikace podepsané stejným klíčem mohou mít tyto.</string>
+    <string name="permissions_level_internal">Internal</string>
+    <string name="permissions_level_internal_explanation">Vyhrazeno pro systém a přiděleno interními pravidly spíše než vámi.</string>
+    <string name="permissions_level_normal">Normal</string>
+    <string name="permissions_level_normal_explanation">Obvykle přiděleno automaticky při instalaci. Nízké riziko samostatně.</string>
+    <string name="permissions_level_unavailable">Podrobnosti nejsou k dispozici</string>
+    <string name="permissions_level_unavailable_explanation">Žádná aplikace na tomto zařízení tyto nevyhlašuje, takže nemůžeme ukázat, co chrání.</string>
+    <string name="permissions_flag_privileged">Privilegované systémové aplikace mohou mít toto také, bez vašeho souhlasu.</string>
+    <string name="permissions_flag_appop">Toto má také svůj vlastní přepínač v Nastavení, odděleně od samotného oprávnění.</string>
+    <string name="permissions_flag_instant">Okamžité aplikace — aplikace, které běží bez instalace — mohou mít toto také.</string>
+    <string name="permissions_flag_development">Může být také přiděleno ručně pro vývoj.</string>
+    <string name="permissions_detail_protection_level">Úroveň ochrany</string>
+    <string name="permissions_detail_group">Permission skupina</string>
+    <string name="permissions_detail_declared_by">Vyhlášeno</string>
+    <string name="permissions_detail_extra_rules">Další pravidla</string>
+    <string name="permissions_grant_dangerous_granted">Toto jste povolili. Můžete to vzít zpět v Nastavení.</string>
+    <string name="permissions_grant_dangerous_not_granted">Toto jste ještě nepovolili.</string>
+    <string name="permissions_grant_signature_self">Tato aplikace toto oprávnění definuje sama.</string>
+    <string name="permissions_grant_signature_granted">Tato aplikace je podepsána stejným klíčem jako aplikace, která ji definuje.</string>
+    <string name="permissions_grant_signature_granted_privileged">Tato aplikace je podepsána stejným klíčem jako aplikace, která ji definuje, nebo běží jako privilegovaná systémová aplikace.</string>
+    <string name="permissions_grant_signature_not_granted">Tato aplikace je podepsána jiným klíčem než aplikace, která ji definuje.</string>
+    <string name="permissions_grant_internal_granted">Systém to udělil podle svých vlastních pravidel.</string>
+    <string name="permissions_grant_internal_not_granted">Pravidla systému to zde nepovolují.</string>
+    <string name="permissions_grant_normal_granted">Automaticky uděleno při instalaci aplikace.</string>
+    <string name="permissions_grant_normal_not_granted">Nepovoleno při instalaci — nejčastěji aplikace o to žádá pouze na starších verzích Androidu.</string>
+    <string name="permissions_grant_unavailable">Žádná aplikace na tomto zařízení neprohlašuje toto oprávnění, takže nic to nemůže udělit.</string>
+</resources>

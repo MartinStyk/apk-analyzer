@@ -1,6 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.browse.domain.analytics
 
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseDimension
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseDimension
 
 sealed interface BrowseAnalyticsEvent {
     data object TabOpened : BrowseAnalyticsEvent

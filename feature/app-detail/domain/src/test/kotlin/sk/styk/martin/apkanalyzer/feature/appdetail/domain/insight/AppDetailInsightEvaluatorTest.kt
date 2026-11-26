@@ -4,10 +4,10 @@ import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.shouldBe
 import org.junit.Test
-import sk.styk.martin.apkanalyzer.core.apps.model.AppDetail
-import sk.styk.martin.apkanalyzer.core.apps.model.Detail.WhatsApp
-import sk.styk.martin.apkanalyzer.core.apps.signing.AppSigning
-import sk.styk.martin.apkanalyzer.core.apps.signing.WhatsAppCertificate
+import sk.styk.martin.apkanalyzer.core.apps.api.model.AppDetail
+import sk.styk.martin.apkanalyzer.core.apps.api.model.Detail.WhatsApp
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.AppSigning
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.WhatsAppCertificate
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import java.time.Instant
 

@@ -18,4 +18,6 @@
     <string name="browse_algorithm_md2_explanation">%1$s использует MD2. MD2 устарел и уязвим для практических атак, поэтому он небезопасен для сертификатов подписи. Новые сертификаты подписи должны использовать SHA-256 или более сильные.</string>
     <string name="browse_algorithm_unknown_explanation">Сила %1$s не может быть оценена по его названию алгоритма. Тип и размер ключа также могут повлиять на его безопасность.</string>
     <string name="browse_bucket_info_content_description">О %1$s</string>
+    <string name="browse_subtitle_loading">Сканирование установленных приложений…</string>
+    <string name="browse_sub_attribute_sheet_title">Группировать по</string>
 </resources>

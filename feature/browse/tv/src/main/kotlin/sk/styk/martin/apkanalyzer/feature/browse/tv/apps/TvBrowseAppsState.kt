@@ -1,7 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.browse.tv.apps
 
 import androidx.compose.runtime.Immutable
-import sk.styk.martin.apkanalyzer.core.appindex.browse.BrowseBucketDetail
+import sk.styk.martin.apkanalyzer.core.appindex.api.browse.BrowseBucketDetail
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 
 @Immutable

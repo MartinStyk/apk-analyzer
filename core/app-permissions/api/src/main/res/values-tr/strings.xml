@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="permissions_title">İzinler</string>
+    <string name="permissions_scope_requested">Talep Edilen</string>
+    <string name="permissions_scope_defined">Bu uygulama tarafından tanımlanan</string>
+    <string name="permissions_granted">Verildi</string>
+    <string name="permissions_not_granted">Verilmedi</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
+    <string name="permissions_level_dangerous_explanation">Uygulamanın bunu kullanabilmesi için açık onayınızı gerektirir.</string>
+    <string name="permissions_level_signature">Signature</string>
+    <string name="permissions_level_signature_explanation">Aynı anahtar ile imzalanmış uygulamalar bunları tutabilir.</string>
+    <string name="permissions_level_internal">Internal</string>
+    <string name="permissions_level_internal_explanation">Sistem için ayrılmıştır ve sizin tarafınızdan değil, dahili kurallara göre verilir.</string>
+    <string name="permissions_level_normal">Normal</string>
+    <string name="permissions_level_normal_explanation">Genellikle kurulumda otomatik olarak verilir. Kendi başlarına düşük risk taşırlar.</string>
+    <string name="permissions_level_unavailable">Detaylar mevcut değil</string>
+    <string name="permissions_level_unavailable_explanation">Bu cihazda bu izinleri beyan eden hiçbir uygulama yok, bu yüzden korudukları şeyleri gösteremiyoruz.</string>
+    <string name="permissions_flag_privileged">Ayrıca, onayınız olmadan ayrıcalıklı sistem uygulamaları da bunu tutabilir.</string>
+    <string name="permissions_flag_appop">Bu, izinle ayrı olan Ayarlar\'da kendi anahtarına da sahiptir.</string>
+    <string name="permissions_flag_instant">Anlık uygulamalar - kurulum olmadan çalışan uygulamalar - bunu da tutabilir.</string>
+    <string name="permissions_flag_development">Geliştirme için elle de verilebilir.</string>
+    <string name="permissions_detail_protection_level">Koruma seviyesi</string>
+    <string name="permissions_detail_group">İzin grubu</string>
+    <string name="permissions_detail_declared_by">Tarafından beyan edilmiştir</string>
+    <string name="permissions_detail_extra_rules">Ekstra kurallar</string>
+    <string name="permissions_grant_dangerous_granted">Bunu izin verdiniz. Ayarlardan geri alabilirsiniz.</string>
+    <string name="permissions_grant_dangerous_not_granted">Buna henüz izin vermediniz.</string>
+    <string name="permissions_grant_signature_self">Bu uygulama bu izni kendisi tanımlar.</string>
+    <string name="permissions_grant_signature_granted">Bu uygulama, bunu tanımlayan uygulama ile aynı anahtar ile imzalanmıştır.</string>
+    <string name="permissions_grant_signature_granted_privileged">Bu uygulama, bunu tanımlayan uygulama ile aynı anahtar ile imzalanmıştır veya ayrıcalıklı bir sistem uygulaması olarak çalışır.</string>
+    <string name="permissions_grant_signature_not_granted">Bu uygulama, bunu tanımlayan uygulama ile farklı bir anahtar ile imzalanmıştır.</string>
+    <string name="permissions_grant_internal_granted">Sistem bunu kendi kurallarına göre verdi.</string>
+    <string name="permissions_grant_internal_not_granted">Sistemin kuralları burada bunu vermez.</string>
+    <string name="permissions_grant_normal_granted">Uygulama yüklendiğinde otomatik olarak verildi.</string>
+    <string name="permissions_grant_normal_not_granted">Yükleme sırasında verilmedi — en sık, uygulama yalnızca eski Android sürümlerinde bunu ister.</string>
+    <string name="permissions_grant_unavailable">Bu cihazda bu izni beyan eden hiçbir uygulama yok, bu yüzden bunu verecek hiçbir şey yok.</string>
+</resources>

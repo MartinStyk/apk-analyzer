@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="browse_sdk_unknown">API स्तर %1$s</string>
+    <string name="browse_api_level">API %1$s</string>
+    <string name="browse_source_google_play">गूगल प्ले</string>
+    <string name="browse_source_samsung_galaxy_store">सैमसंग गैलेक्सी स्टोर</string>
+    <string name="browse_source_amazon_appstore">अमेज़न ऐपस्टोर</string>
+    <string name="browse_source_huawei_app_gallery">हुआवेई ऐपगैलरी</string>
+    <string name="browse_source_xiaomi_get_apps">शियाओमी गेटऐप्स</string>
+    <string name="browse_source_fdroid">F-Droid</string>
+    <string name="browse_source_aurora_store">Aurora Store</string>
+    <string name="browse_source_sideloaded">एक फ़ाइल से स्थापित</string>
+    <string name="browse_source_local_install">कंप्यूटर के माध्यम से स्थापित</string>
+    <string name="browse_source_system">सिस्टम</string>
+    <string name="browse_source_unknown">अज्ञात</string>
+    <string name="browse_country_unknown">अज्ञात देश</string>
+    <string name="browse_category_undefined">श्रेणीबद्ध नहीं</string>
+    <string name="browse_category_game">खेल</string>
+    <string name="browse_category_audio">ऑडियो</string>
+    <string name="browse_category_video">वीडियो</string>
+    <string name="browse_category_image">छवि</string>
+    <string name="browse_category_social">सामाजिक</string>
+    <string name="browse_category_news">समाचार और पत्रिकाएँ</string>
+    <string name="browse_category_maps">मानचित्र और नेविगेशन</string>
+    <string name="browse_category_productivity">उत्पादकता</string>
+    <string name="browse_category_accessibility">सुलभता</string>
+</resources>

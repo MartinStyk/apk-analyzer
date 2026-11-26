@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="browse_dimension_permission_title">İzinler</string>
+    <string name="browse_dimension_permission_subtitle">Hangi uygulamaların belirli bir izni kullandığını görün</string>
+    <string name="browse_dimension_certificate_title">İmza sertifikası</string>
+    <string name="browse_dimension_certificate_subtitle">Uygulamaları imza kimliği, yayıncı adı veya ülkeye göre gruplandırın</string>
+    <string name="browse_dimension_target_sdk_title">Hedef Android sürümü</string>
+    <string name="browse_dimension_target_sdk_subtitle">Her uygulamanın hangi Android sürümü için oluşturulduğunu görün</string>
+    <string name="browse_dimension_min_sdk_title">Minimum Android sürümü</string>
+    <string name="browse_dimension_min_sdk_subtitle">Her uygulamanın hala desteklediği en eski Android sürümünü görün</string>
+    <string name="browse_dimension_install_source_title">Kurulum kaynağı</string>
+    <string name="browse_dimension_install_source_subtitle">Her uygulamanın nereden geldiğini görün</string>
+    <string name="browse_dimension_shared_user_id_title">Paylaşılan kimlik</string>
+    <string name="browse_dimension_shared_user_id_subtitle">Aynı cihaz kimliği altında çalışan ve birbirlerinin verilerine erişebilen uygulamaları bulun</string>
+    <string name="browse_dimension_app_category_title">Uygulama kategorisi</string>
+    <string name="browse_dimension_app_category_subtitle">Her birinin kendisini ne tür bir uygulama olarak tanımladığını görün</string>
+    <string name="browse_signer_unknown">Bilinmeyen imzalayan</string>
+    <string name="browse_certificate_attribute_sha256">Kimlik (SHA-256)</string>
+    <string name="browse_certificate_attribute_sha1">Kimlik (SHA-1)</string>
+    <string name="browse_certificate_attribute_md5">Kimlik (MD5)</string>
+    <string name="browse_certificate_attribute_organization">Yayıncı adı</string>
+    <string name="browse_certificate_attribute_country">Ülke</string>
+    <string name="browse_certificate_hash_sha256">SHA-256</string>
+    <string name="browse_certificate_hash_sha1">SHA-1</string>
+    <string name="browse_certificate_hash_md5">MD5</string>
+</resources>

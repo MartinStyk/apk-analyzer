@@ -22,12 +22,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.styk.martin.apkanalyzer.core.apphistory.timeline.model.AppHistoryChangeDirection
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryChangeDirection
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
-import sk.styk.martin.apkanalyzer.core.apphistory.R as HistoryR
+import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
 
 internal fun TextStyle.markedBy(marker: AppHistoryChangeDirection?): TextStyle =
     if (marker == AppHistoryChangeDirection.Removed) copy(textDecoration = TextDecoration.LineThrough) else this
@@ -57,9 +57,9 @@ private fun ChangeBadge(marker: AppHistoryChangeDirection, modifier: Modifier = 
         marker = marker,
         contentDescription = stringResource(
             when (marker) {
-                AppHistoryChangeDirection.Added -> HistoryR.string.app_history_group_added
-                AppHistoryChangeDirection.Removed -> HistoryR.string.app_history_group_removed
-                AppHistoryChangeDirection.Changed -> HistoryR.string.app_history_group_changed
+                AppHistoryChangeDirection.Added -> R.string.app_history_group_added
+                AppHistoryChangeDirection.Removed -> R.string.app_history_group_removed
+                AppHistoryChangeDirection.Changed -> R.string.app_history_group_changed
             },
         ),
         modifier = modifier

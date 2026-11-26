@@ -7,15 +7,15 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.apps.signing.Certificate
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificatePrincipal
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateTrustLevel
-import sk.styk.martin.apkanalyzer.core.apps.signing.CertificateValidity
-import sk.styk.martin.apkanalyzer.core.apps.signing.SigningSchemeVersion
-import sk.styk.martin.apkanalyzer.core.apps.signing.displayLine
-import sk.styk.martin.apkanalyzer.core.apps.signing.explanationRes
-import sk.styk.martin.apkanalyzer.core.apps.signing.isWeak
-import sk.styk.martin.apkanalyzer.core.apps.signing.labelRes
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.Certificate
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificatePrincipal
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateTrustLevel
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateValidity
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.SigningSchemeVersion
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.displayLine
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.explanationRes
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.isWeak
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.labelRes
 import sk.styk.martin.apkanalyzer.core.common.digest.toFingerprint
 import sk.styk.martin.apkanalyzer.core.common.model.AppReference
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
@@ -33,7 +33,8 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.SectionLoading
 import sk.styk.martin.apkanalyzer.feature.appdetail.tv.components.formatDate
 import java.time.Instant
-import sk.styk.martin.apkanalyzer.core.apps.R as AppsR
+import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
+import sk.styk.martin.apkanalyzer.feature.appdetail.domain.R as DomainR
 
 @Composable
 internal fun TvCertificatesScreen(
@@ -71,7 +72,7 @@ private fun TvCertificatesContent(
             title = title,
             appName = appName,
             appReference = appReference,
-            message = stringResource(AppsR.string.certificates_error),
+            message = stringResource(DomainR.string.certificates_error),
             onRetry = { onAction(TvCertificatesAction.Retry) },
         )
 
@@ -80,7 +81,7 @@ private fun TvCertificatesContent(
                 title = title,
                 appName = appName,
                 appReference = appReference,
-                message = stringResource(AppsR.string.certificates_empty),
+                message = stringResource(DomainR.string.certificates_empty),
             )
         } else {
             InfoSectionList(
@@ -101,9 +102,9 @@ private fun certificateSections(state: TvCertificatesState.Loaded): List<InfoSec
                 icon = ApkAnalyzerIcons.VerifiedShield,
                 title = when {
                     state.currentCertificates.size > 1 ->
-                        stringResource(AppsR.string.certificates_signer_position, index + 1, state.currentCertificates.size)
+                        stringResource(DomainR.string.certificates_signer_position, index + 1, state.currentCertificates.size)
 
-                    else -> stringResource(AppsR.string.certificates_current_certificate)
+                    else -> stringResource(DomainR.string.certificates_current_certificate)
                 },
                 rows = certificateRows(
                     keyPrefix = "current-$index",
@@ -116,9 +117,9 @@ private fun certificateSections(state: TvCertificatesState.Loaded): List<InfoSec
     state.pastCertificates.forEachIndexed { index, item ->
         val role = stringResource(
             if (index == state.pastCertificates.lastIndex) {
-                AppsR.string.certificates_original_signing_key
+                DomainR.string.certificates_original_signing_key
             } else {
-                AppsR.string.certificates_previous_signing_key
+                DomainR.string.certificates_previous_signing_key
             },
         )
         add(
@@ -127,7 +128,7 @@ private fun certificateSections(state: TvCertificatesState.Loaded): List<InfoSec
                 title = if (state.pastCertificates.size == 1) {
                     role
                 } else {
-                    stringResource(AppsR.string.certificates_card_position, role, index + 1, state.pastCertificates.size)
+                    stringResource(DomainR.string.certificates_card_position, role, index + 1, state.pastCertificates.size)
                 },
                 rows = certificateRows(
                     keyPrefix = "past-$index",
@@ -143,10 +144,10 @@ private fun certificateSections(state: TvCertificatesState.Loaded): List<InfoSec
 private fun TvCertificatesState.Loaded.signingFacts(): List<InfoRow> = listOfNotNull(
     InfoRow(
         key = "signers",
-        label = stringResource(AppsR.string.certificates_current_signers),
-        value = stringResource(if (hasMultipleSigners) AppsR.string.certificates_multiple_signers else AppsR.string.certificates_single_signer),
+        label = stringResource(DomainR.string.certificates_current_signers),
+        value = stringResource(if (hasMultipleSigners) AppsR.string.certificates_multiple_signers else DomainR.string.certificates_single_signer),
         explanation = stringResource(
-            if (hasMultipleSigners) AppsR.string.certificates_multiple_signers_explanation else AppsR.string.certificates_single_signer_explanation,
+            if (hasMultipleSigners) DomainR.string.certificates_multiple_signers_explanation else DomainR.string.certificates_single_signer_explanation,
         ),
     ),
     signingSchemeVersions?.takeIf { it.isNotEmpty() }?.let { versions ->
@@ -154,7 +155,7 @@ private fun TvCertificatesState.Loaded.signingFacts(): List<InfoRow> = listOfNot
             key = "scheme",
             label = stringResource(AppsR.string.certificates_scheme),
             value = versions.map { stringResource(it.labelRes) }.joinToString(", "),
-            explanation = stringResource(AppsR.string.certificates_scheme_explanation),
+            explanation = stringResource(DomainR.string.certificates_scheme_explanation),
         )
     },
 )
@@ -173,9 +174,9 @@ private fun certificateRows(
             add(
                 InfoRow(
                     key = "$keyPrefix:debug",
-                    label = stringResource(AppsR.string.certificates_signer),
-                    value = stringResource(AppsR.string.certificates_debug_title),
-                    explanation = stringResource(AppsR.string.certificates_debug_description),
+                    label = stringResource(DomainR.string.certificates_signer),
+                    value = stringResource(DomainR.string.certificates_debug_title),
+                    explanation = stringResource(DomainR.string.certificates_debug_description),
                     highlighted = true,
                 ),
             )
@@ -187,16 +188,16 @@ private fun certificateRows(
         )
         addAll(
             subjectRows.ifEmpty {
-                listOf(plainRow("$keyPrefix:name", AppsR.string.certificates_name, stringResource(AppsR.string.certificates_unknown_signer)))
+                listOf(plainRow("$keyPrefix:name", AppsR.string.certificates_name, stringResource(DomainR.string.certificates_unknown_signer)))
             },
         )
         if (certificate.isSelfSigned) {
             add(
                 InfoRow(
                     key = "$keyPrefix:self-signed",
-                    label = stringResource(AppsR.string.certificates_self_signed),
-                    value = stringResource(AppsR.string.certificates_self_signed_value),
-                    explanation = stringResource(AppsR.string.certificates_self_signed_explanation),
+                    label = stringResource(DomainR.string.certificates_self_signed),
+                    value = stringResource(DomainR.string.certificates_self_signed_value),
+                    explanation = stringResource(DomainR.string.certificates_self_signed_explanation),
                 ),
             )
         } else {
@@ -204,7 +205,7 @@ private fun certificateRows(
                 plainRow(
                     "$keyPrefix:issuer",
                     AppsR.string.certificates_issuer,
-                    certificate.issuer.displayLine ?: stringResource(AppsR.string.certificates_unknown_signer),
+                    certificate.issuer.displayLine ?: stringResource(DomainR.string.certificates_unknown_signer),
                 ),
             )
         }
@@ -228,7 +229,7 @@ private fun certificateRows(
         add(
             InfoRow(
                 key = "$keyPrefix:algorithm",
-                label = stringResource(AppsR.string.certificates_algorithm),
+                label = stringResource(DomainR.string.certificates_algorithm),
                 value = stringResource(R.string.tv_value_pair, certificate.signAlgorithm, stringResource(assessment.labelRes)),
                 explanation = stringResource(assessment.explanationRes, certificate.signAlgorithm),
                 highlighted = assessment.isWeak,
@@ -239,15 +240,15 @@ private fun certificateRows(
         add(
             InfoRow(
                 key = "$keyPrefix:serial",
-                label = stringResource(AppsR.string.certificates_serial),
+                label = stringResource(DomainR.string.certificates_serial),
                 value = certificate.serialNumber,
-                explanation = stringResource(AppsR.string.certificates_serial_explanation),
+                explanation = stringResource(DomainR.string.certificates_serial_explanation),
             ),
         )
         addAll(
-            fingerprintRows("$keyPrefix:certificate", AppsR.string.certificates_certificate_fingerprints, certificate.certificateHashes()),
+            fingerprintRows("$keyPrefix:certificate", DomainR.string.certificates_certificate_fingerprints, certificate.certificateHashes()),
         )
-        addAll(fingerprintRows("$keyPrefix:public-key", AppsR.string.certificates_public_key_fingerprints, certificate.publicKeyHashes()))
+        addAll(fingerprintRows("$keyPrefix:public-key", DomainR.string.certificates_public_key_fingerprints, certificate.publicKeyHashes()))
     }
 }
 
@@ -272,15 +273,15 @@ private fun fingerprintRows(
 }
 
 private fun Certificate.certificateHashes() = listOf(
-    AppsR.string.certificates_sha256 to certificateHashSha256,
-    AppsR.string.certificates_sha1 to certificateHashSha1,
-    AppsR.string.certificates_md5 to certificateHashMd5,
+    DomainR.string.certificates_sha256 to certificateHashSha256,
+    DomainR.string.certificates_sha1 to certificateHashSha1,
+    DomainR.string.certificates_md5 to certificateHashMd5,
 )
 
 private fun Certificate.publicKeyHashes() = listOf(
-    AppsR.string.certificates_sha256 to publicKeySha256,
-    AppsR.string.certificates_sha1 to publicKeySha1,
-    AppsR.string.certificates_md5 to publicKeyMd5,
+    DomainR.string.certificates_sha256 to publicKeySha256,
+    DomainR.string.certificates_sha1 to publicKeySha1,
+    DomainR.string.certificates_md5 to publicKeyMd5,
 )
 
 @Composable

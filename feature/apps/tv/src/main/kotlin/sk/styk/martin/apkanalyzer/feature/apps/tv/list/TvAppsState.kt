@@ -1,7 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.apps.tv.list
 
 import androidx.compose.runtime.Immutable
-import sk.styk.martin.apkanalyzer.core.apps.sorting.AppSortType
+import sk.styk.martin.apkanalyzer.core.apps.api.sorting.AppSortType
 import sk.styk.martin.apkanalyzer.feature.apps.tv.components.TvAppItem
 
 @Immutable

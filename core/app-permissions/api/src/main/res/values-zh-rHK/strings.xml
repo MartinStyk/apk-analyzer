@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="permissions_title">權限</string>
+    <string name="permissions_scope_requested">要求的權限</string>
+    <string name="permissions_scope_defined">由此應用程式定義</string>
+    <string name="permissions_granted">已授予</string>
+    <string name="permissions_not_granted">未授予</string>
+    <string name="permissions_level_dangerous">危險</string>
+    <string name="permissions_level_dangerous_explanation">應用程式必須先取得你的明確同意，才能使用這些權限。</string>
+    <string name="permissions_level_signature">簽署</string>
+    <string name="permissions_level_signature_explanation">只有以相同密鑰簽署的應用程式，才能取得這些權限。</string>
+    <string name="permissions_level_internal">內部</string>
+    <string name="permissions_level_internal_explanation">這些權限只供系統使用，由系統按內部規則授予，而非由你決定。</string>
+    <string name="permissions_level_normal">一般</string>
+    <string name="permissions_level_normal_explanation">通常在安裝時自動授予，這些權限本身的風險較低。</string>
+    <string name="permissions_level_unavailable">沒有詳細資料</string>
+    <string name="permissions_level_unavailable_explanation">這部裝置上沒有應用程式宣告這些權限，因此無法顯示它們保護甚麼。</string>
+    <string name="permissions_flag_privileged">享有特權的系統應用程式也能取得這項權限，毋須你的同意。</string>
+    <string name="permissions_flag_appop">除了權限本身，這項功能在「設定」中還有獨立的開關。</string>
+    <string name="permissions_flag_instant">毋須安裝即可執行的即時應用程式，也能取得這項權限。</string>
+    <string name="permissions_flag_development">也可為開發用途手動授予這項權限。</string>
+    <string name="permissions_detail_protection_level">保護級別</string>
+    <string name="permissions_detail_group">權限群組</string>
+    <string name="permissions_detail_declared_by">宣告者</string>
+    <string name="permissions_detail_extra_rules">額外規則</string>
+    <string name="permissions_grant_dangerous_granted">你已授予這項權限，可在「設定」中撤銷。</string>
+    <string name="permissions_grant_dangerous_not_granted">你尚未授予這項權限。</string>
+    <string name="permissions_grant_signature_self">這項權限由此應用程式自行定義。</string>
+    <string name="permissions_grant_signature_granted">此應用程式與定義這項權限的應用程式使用相同的簽署密鑰。</string>
+    <string name="permissions_grant_signature_granted_privileged">此應用程式與定義這項權限的應用程式使用相同的簽署密鑰，或以享有特權的系統應用程式身分執行。</string>
+    <string name="permissions_grant_signature_not_granted">此應用程式與定義這項權限的應用程式使用不同的簽署密鑰。</string>
+    <string name="permissions_grant_internal_granted">系統已按自身規則授予這項權限。</string>
+    <string name="permissions_grant_internal_not_granted">系統規則不允許此應用程式取得這項權限。</string>
+    <string name="permissions_grant_normal_granted">安裝應用程式時已自動授予這項權限。</string>
+    <string name="permissions_grant_normal_not_granted">安裝時未授予，通常是因為應用程式只在較舊的 Android 版本上要求這項權限。</string>
+    <string name="permissions_grant_unavailable">這部裝置上沒有應用程式宣告這項權限，因此無法授予。</string>
+</resources>

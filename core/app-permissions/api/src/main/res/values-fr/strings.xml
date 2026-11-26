@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="permissions_title">Permissions</string>
+    <string name="permissions_scope_requested">Demandé</string>
+    <string name="permissions_scope_defined">Défini par cette application</string>
+    <string name="permissions_granted">Accordé</string>
+    <string name="permissions_not_granted">Non accordé</string>
+    <string name="permissions_level_dangerous">Dangerous</string>
+    <string name="permissions_level_dangerous_explanation">Nécessite votre approbation explicite avant que l\'application puisse l\'utiliser.</string>
+    <string name="permissions_level_signature">Signature</string>
+    <string name="permissions_level_signature_explanation">Seules les applications signées avec la même clé peuvent détenir celles-ci.</string>
+    <string name="permissions_level_internal">Internal</string>
+    <string name="permissions_level_internal_explanation">Réservé au système et accordé par des règles internes plutôt que par vous.</string>
+    <string name="permissions_level_normal">Normal</string>
+    <string name="permissions_level_normal_explanation">Généralement accordé automatiquement lors de l\'installation. Risque faible en soi.</string>
+    <string name="permissions_level_unavailable">Détails non disponibles</string>
+    <string name="permissions_level_unavailable_explanation">Aucune application sur cet appareil ne déclare celles-ci, donc nous ne pouvons pas montrer ce qu\'elles protègent.</string>
+    <string name="permissions_flag_privileged">Les applications système privilégiées peuvent également détenir cela, sans votre approbation.</string>
+    <string name="permissions_flag_appop">Celle-ci a également son propre interrupteur dans les Paramètres, séparé de la permission elle-même.</string>
+    <string name="permissions_flag_instant">Applications instantanées — applications qui s\'exécutent sans être installées — peuvent également détenir cela.</string>
+    <string name="permissions_flag_development">Peut également être accordé manuellement pour le développement.</string>
+    <string name="permissions_detail_protection_level">Niveau de protection</string>
+    <string name="permissions_detail_group">Groupe de permission</string>
+    <string name="permissions_detail_declared_by">Déclaré par</string>
+    <string name="permissions_detail_extra_rules">Règles supplémentaires</string>
+    <string name="permissions_grant_dangerous_granted">Vous avez autorisé cela. Vous pouvez le retirer dans les Paramètres.</string>
+    <string name="permissions_grant_dangerous_not_granted">Vous n\'avez pas encore autorisé cela.</string>
+    <string name="permissions_grant_signature_self">Cette application définit elle-même cette permission.</string>
+    <string name="permissions_grant_signature_granted">Cette application est signée avec la même clé que l\'application qui la définit.</string>
+    <string name="permissions_grant_signature_granted_privileged">Cette application est signée avec la même clé que l\'application qui la définit, ou fonctionne en tant qu\'application système privilégiée.</string>
+    <string name="permissions_grant_signature_not_granted">Cette application est signée avec une clé différente de celle de l\'application qui la définit.</string>
+    <string name="permissions_grant_internal_granted">Le système a accordé cela selon ses propres règles.</string>
+    <string name="permissions_grant_internal_not_granted">Les règles du système ne l\'accordent pas ici.</string>
+    <string name="permissions_grant_normal_granted">Accordé automatiquement lors de l\'installation de l\'application.</string>
+    <string name="permissions_grant_normal_not_granted">Non accordé à l\'installation — le plus souvent, l\'application ne le demande que sur les anciennes versions d\'Android.</string>
+    <string name="permissions_grant_unavailable">Aucune application sur cet appareil ne déclare cette permission, donc rien ne peut l\'accorder.</string>
+</resources>
