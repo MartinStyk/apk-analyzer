@@ -22,6 +22,7 @@ import androidx.compose.foundation.gestures.anchoredDraggable
 import androidx.compose.foundation.gestures.animateTo
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -48,11 +49,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -68,16 +73,24 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.R
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import kotlin.math.roundToInt
 
-private val NavigationPillHeight: Dp = 64.dp
 private val NavigationPillMargin: Dp = 16.dp
 private val NavigationPillItemPadding: Dp = 4.dp
-private val NavigationPillItemSpacing: Dp = 2.dp
-private val NavigationPillItemHorizontalPadding: Dp = 12.dp
-private val NavigationPillIconSize: Dp = 22.dp
 private val NavigationPillElevation: Dp = 8.dp
 private val NavigationPillBorderWidth: Dp = 1.dp
 
-val navigationBarContentPadding: Dp = NavigationPillHeight + NavigationPillMargin
+private val InlinePillHeight: Dp = 56.dp
+private val InlineItemSpacing: Dp = 8.dp
+private val InlineItemHorizontalPadding: Dp = 16.dp
+private val InlineIconSize: Dp = 20.dp
+
+private val StackedPillHeight: Dp = 64.dp
+private val StackedItemSpacing: Dp = 2.dp
+private val StackedItemHorizontalPadding: Dp = 12.dp
+private val StackedIconSize: Dp = 22.dp
+
+val navigationBarContentPadding: Dp = StackedPillHeight + NavigationPillMargin
+
+private enum class NavigationPillLayout { Inline, Stacked }
 
 @Stable
 data class NavigationBarItem(
@@ -99,7 +112,7 @@ fun NavigationBar(
         isVisible = isVisible,
         modifier = modifier.fillMaxWidth(),
     ) {
-        Box(
+        BoxWithConstraints(
             modifier = Modifier
                 .fillMaxWidth()
                 .navigationBarsPadding()
@@ -112,6 +125,7 @@ fun NavigationBar(
         ) {
             NavigationPill(
                 items = items,
+                layout = rememberNavigationPillLayout(items = items, availableWidth = maxWidth),
                 selectedKey = selectedKey,
                 onSelectKey = onSelectKey,
             )
@@ -120,8 +134,26 @@ fun NavigationBar(
 }
 
 @Composable
+private fun rememberNavigationPillLayout(items: List<NavigationBarItem>, availableWidth: Dp): NavigationPillLayout {
+    val textMeasurer = rememberTextMeasurer()
+    val labelStyle = AppTheme.typography.labelLarge
+    val density = LocalDensity.current
+    val labels = items.map { stringResource(it.title) }
+    return remember(labels, labelStyle, density, availableWidth) {
+        val widestLabel = labels.maxOfOrNull { label ->
+            textMeasurer.measure(text = label, style = labelStyle, maxLines = 1, softWrap = false).size.width
+        } ?: 0
+        val widestItem = with(density) { widestLabel.toDp() } +
+            InlineIconSize + InlineItemSpacing + InlineItemHorizontalPadding * 2
+        val inlinePillWidth = widestItem * items.size + NavigationPillItemPadding * 2
+        if (inlinePillWidth <= availableWidth) NavigationPillLayout.Inline else NavigationPillLayout.Stacked
+    }
+}
+
+@Composable
 private fun NavigationPill(
     items: List<NavigationBarItem>,
+    layout: NavigationPillLayout,
     selectedKey: NavKey,
     onSelectKey: (NavKey) -> Unit,
     modifier: Modifier = Modifier,
@@ -154,7 +186,12 @@ private fun NavigationPill(
     Box(
         modifier = modifier
             .width(IntrinsicSize.Max)
-            .height(NavigationPillHeight)
+            .height(
+                when (layout) {
+                    NavigationPillLayout.Inline -> InlinePillHeight
+                    NavigationPillLayout.Stacked -> StackedPillHeight
+                },
+            )
             .shadow(elevation = NavigationPillElevation, shape = CircleShape)
             .background(color = AppTheme.colors.surfaceVariant, shape = CircleShape)
             .border(width = NavigationPillBorderWidth, color = AppTheme.colors.pillBorder, shape = CircleShape)
@@ -190,6 +227,7 @@ private fun NavigationPill(
             items.forEachIndexed { index, item ->
                 NavigationPillItem(
                     item = item,
+                    layout = layout,
                     isSelected = index == activeIndex,
                     onClick = { onSelectKey(item.navKey) },
                     modifier = Modifier
@@ -204,6 +242,7 @@ private fun NavigationPill(
 @Composable
 private fun NavigationPillItem(
     item: NavigationBarItem,
+    layout: NavigationPillLayout,
     isSelected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -212,32 +251,62 @@ private fun NavigationPillItem(
         targetValue = if (isSelected) AppTheme.colors.primary else AppTheme.colors.onSurfaceVariant,
         animationSpec = tween(durationMillis = NAV_DURATION_STANDARD),
     )
+    val itemModifier = modifier
+        .clip(CircleShape)
+        .selectable(
+            selected = isSelected,
+            role = Role.Tab,
+            onClick = onClick,
+        )
 
-    Column(
-        modifier = modifier
-            .clip(CircleShape)
-            .selectable(
-                selected = isSelected,
-                role = Role.Tab,
-                onClick = onClick,
-            )
-            .padding(horizontal = NavigationPillItemHorizontalPadding),
-        verticalArrangement = Arrangement.spacedBy(NavigationPillItemSpacing, Alignment.CenterVertically),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Icon(
-            imageVector = if (isSelected) item.selectedIcon else item.unselectedIcon,
-            tint = contentColor,
-            modifier = Modifier.size(NavigationPillIconSize),
-        )
-        Text(
-            text = stringResource(item.title),
-            style = AppTheme.typography.labelMedium,
-            color = contentColor,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
+    when (layout) {
+        NavigationPillLayout.Inline -> Row(
+            modifier = itemModifier.padding(horizontal = InlineItemHorizontalPadding),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(InlineItemSpacing, Alignment.CenterHorizontally),
+        ) {
+            NavigationPillIcon(item = item, isSelected = isSelected, contentColor = contentColor, size = InlineIconSize)
+            NavigationPillLabel(item = item, contentColor = contentColor, style = AppTheme.typography.labelLarge)
+        }
+
+        NavigationPillLayout.Stacked -> Column(
+            modifier = itemModifier.padding(horizontal = StackedItemHorizontalPadding),
+            verticalArrangement = Arrangement.spacedBy(StackedItemSpacing, Alignment.CenterVertically),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            NavigationPillIcon(item = item, isSelected = isSelected, contentColor = contentColor, size = StackedIconSize)
+            NavigationPillLabel(item = item, contentColor = contentColor, style = AppTheme.typography.labelMedium)
+        }
     }
+}
+
+@Composable
+private fun NavigationPillIcon(
+    item: NavigationBarItem,
+    isSelected: Boolean,
+    contentColor: Color,
+    size: Dp,
+) {
+    Icon(
+        imageVector = if (isSelected) item.selectedIcon else item.unselectedIcon,
+        tint = contentColor,
+        modifier = Modifier.size(size),
+    )
+}
+
+@Composable
+private fun NavigationPillLabel(
+    item: NavigationBarItem,
+    contentColor: Color,
+    style: TextStyle,
+) {
+    Text(
+        text = stringResource(item.title),
+        style = style,
+        color = contentColor,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+    )
 }
 
 @Composable
