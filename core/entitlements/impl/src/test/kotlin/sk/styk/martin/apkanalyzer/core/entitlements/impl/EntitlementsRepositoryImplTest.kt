@@ -219,7 +219,7 @@ class EntitlementsRepositoryImplTest {
 
         val refreshed = repository.refresh()
 
-        refreshed shouldBe setOf(Entitlement.Pro)
+        refreshed.getOrNull() shouldBe setOf(Entitlement.Pro)
         entitlements shouldBe listOf(emptySet(), setOf(Entitlement.Pro))
     }
 
@@ -229,7 +229,7 @@ class EntitlementsRepositoryImplTest {
 
         val refreshed = repository.refresh()
 
-        refreshed shouldBe null
+        refreshed.isFailure shouldBe true
     }
 
     @Test

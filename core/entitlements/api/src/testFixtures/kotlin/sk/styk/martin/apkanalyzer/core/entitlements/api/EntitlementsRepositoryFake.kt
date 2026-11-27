@@ -33,7 +33,7 @@ class EntitlementsRepositoryFake(vararg entitlements: Entitlement) : Entitlement
         return purchaseResult
     }
 
-    var isPlayReachable: Boolean = true
+    var refreshFailure: Throwable? = null
 
-    override suspend fun refresh(): Set<Entitlement>? = owned.value.takeIf { isPlayReachable }
+    override suspend fun refresh(): Result<Set<Entitlement>> = refreshFailure?.let { Result.failure(it) } ?: Result.success(owned.value)
 }

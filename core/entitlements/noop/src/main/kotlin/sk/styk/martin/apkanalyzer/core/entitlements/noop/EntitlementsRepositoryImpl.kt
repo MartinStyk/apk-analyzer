@@ -17,5 +17,5 @@ internal class EntitlementsRepositoryImpl @Inject constructor() : EntitlementsRe
 
     override suspend fun purchase(activity: Activity, offer: Offer): PurchaseResult = PurchaseResult.Failed
 
-    override suspend fun refresh(): Set<Entitlement> = Entitlement.entries.toSet()
+    override suspend fun refresh(): Result<Set<Entitlement>> = Result.success(Entitlement.entries.toSet())
 }

@@ -31,6 +31,7 @@ import sk.styk.martin.apkanalyzer.core.entitlements.api.EntitlementsRepository
 import sk.styk.martin.apkanalyzer.core.entitlements.api.Offer
 import sk.styk.martin.apkanalyzer.core.entitlements.api.PurchaseResult
 import sk.styk.martin.apkanalyzer.core.entitlements.impl.billing.BillingConnection
+import sk.styk.martin.apkanalyzer.core.entitlements.impl.billing.BillingUnavailableException
 import sk.styk.martin.apkanalyzer.core.entitlements.impl.billing.PurchaseUpdate
 import sk.styk.martin.apkanalyzer.core.entitlements.impl.billing.PurchaseUpdates
 import javax.inject.Inject
@@ -47,7 +48,7 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
 
     override fun entitlements(): Flow<Set<Entitlement>> = purchaseUpdates.updates
         .onSubscription { emit(PurchaseUpdate.Refresh) }
-        .map { update -> update.owned ?: queryOwnedEntitlements() }
+        .map { update -> update.owned ?: queryOwnedEntitlements().getOrNull() }
         .keepingLastKnown()
         .distinctUntilChanged()
 
@@ -85,19 +86,19 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun refresh(): Set<Entitlement>? = queryOwnedEntitlements()?.also { purchaseUpdates.publish(it) }
+    override suspend fun refresh(): Result<Set<Entitlement>> = queryOwnedEntitlements().onSuccess { purchaseUpdates.publish(it) }
 
-    private suspend fun queryOwnedEntitlements(): Set<Entitlement>? {
-        if (!billingConnection.connect()) return null
+    private suspend fun queryOwnedEntitlements(): Result<Set<Entitlement>> {
+        if (!billingConnection.connect()) return Result.failure(BillingUnavailableException())
         val params = QueryPurchasesParams.newBuilder().setProductType(ProductType.INAPP).build()
         val result = billingClient.queryPurchasesAsync(params)
         if (result.billingResult.responseCode != BillingResponseCode.OK) {
             Logger.w(TAG, "Querying purchases failed with response code ${result.billingResult.responseCode}")
-            return null
+            return Result.failure(BillingUnavailableException(result.billingResult.responseCode))
         }
         val purchased = result.purchasesList.filter { it.purchaseState == Purchase.PurchaseState.PURCHASED }
         purchased.forEach { acknowledge(it) }
-        return purchased.flatMap { it.products }.mapNotNull(::entitlementOf).toSet()
+        return Result.success(purchased.flatMap { it.products }.mapNotNull(::entitlementOf).toSet())
     }
 
     private suspend fun queryOffers(): List<Offer> = queryProductDetails().mapNotNull { details ->

@@ -87,12 +87,10 @@ internal class ProViewModel @AssistedInject constructor(
         if (state.value.status.blocksActions) return
         state.update { it.copy(status = ProStatus.Restoring) }
         viewModelScope.launch {
-            val owned = entitlementsRepository.refresh()
-            val outcome = when {
-                owned == null -> RestoreOutcome.Failed
-                Entitlement.Pro in owned -> RestoreOutcome.Restored
-                else -> RestoreOutcome.NothingFound
-            }
+            val outcome = entitlementsRepository.refresh().fold(
+                onSuccess = { owned -> if (Entitlement.Pro in owned) RestoreOutcome.Restored else RestoreOutcome.NothingFound },
+                onFailure = { RestoreOutcome.Failed },
+            )
             analytics.track(ProAnalyticsEvent.RestoreFinished(reason, outcome))
             when (outcome) {
                 RestoreOutcome.Restored -> close()
