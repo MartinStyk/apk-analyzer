@@ -2,4 +2,5 @@
 <resources>
     <string name="content_description_back">वापस</string>
     <string name="content_description_selected">चयनित</string>
+    <string name="content_description_pro">Pro का हिस्सा</string>
 </resources>

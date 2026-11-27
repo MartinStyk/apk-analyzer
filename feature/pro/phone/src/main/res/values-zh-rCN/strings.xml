@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="pro_headline_export">
+        <item quantity="other">导出 %d 个应用的全部详细信息</item>
+    </plurals>
+    <plurals name="pro_headline_what_changed">
+        <item quantity="other">查看另外 %d 个应用的变化</item>
+    </plurals>
+    <string name="pro_feature_export">一次导出多个应用的权限、证书、组件等信息</string>
+    <string name="pro_feature_what_changed">在一个列表中查看设备上的所有应用变化</string>
+    <string name="pro_supporter">支持一款独立的开源应用。现在免费的功能将永远免费。</string>
+    <string name="pro_unlock">解锁 Pro · %s</string>
+    <string name="pro_one_time">一次性购买，无需订阅。</string>
+    <string name="pro_restore">恢复购买</string>
+    <string name="pro_unavailable">需要在此设备上安装 Google Play 才能购买。</string>
+    <string name="pro_failed">无法连接到 Google Play。请重试。</string>
+    <string name="pro_pending">购买待处理</string>
+    <string name="pro_pending_body">Google Play 正在等待你付款。付款完成后，Pro 会立即解锁。</string>
+    <string name="pro_restore_nothing">未找到此 Google 账号的 Pro 购买记录。</string>
+</resources>

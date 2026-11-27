@@ -19,9 +19,9 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
@@ -30,6 +30,7 @@ import sk.styk.martin.apkanalyzer.core.entitlements.api.Entitlement
 import sk.styk.martin.apkanalyzer.core.entitlements.api.EntitlementsRepository
 import sk.styk.martin.apkanalyzer.core.entitlements.api.Offer
 import sk.styk.martin.apkanalyzer.core.entitlements.api.PurchaseResult
+import sk.styk.martin.apkanalyzer.core.entitlements.api.RefreshResult
 import sk.styk.martin.apkanalyzer.core.entitlements.impl.billing.BillingConnection
 import sk.styk.martin.apkanalyzer.core.entitlements.impl.billing.PurchaseUpdate
 import sk.styk.martin.apkanalyzer.core.entitlements.impl.billing.PurchaseUpdates
@@ -45,10 +46,19 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
     private val dispatcherProvider: DispatcherProvider,
 ) : EntitlementsRepository {
 
-    override fun entitlements(): Flow<Set<Entitlement>> = purchaseUpdates.updates
-        .onSubscription { emit(PurchaseUpdate.Refresh) }
-        .map { queryOwnedEntitlements() }
-        .distinctUntilChanged()
+    override fun entitlements(): Flow<Set<Entitlement>> = flow {
+        var owned = emptySet<Entitlement>()
+        purchaseUpdates.updates
+            .onSubscription { emit(PurchaseUpdate.Refresh) }
+            .collect { update ->
+                owned = when (update) {
+                    is PurchaseUpdate.Known -> update.owned
+                    PurchaseUpdate.Refresh -> queryOwnedEntitlements().ownedOr(owned)
+                    is PurchaseUpdate.FromPlay -> queryOwnedEntitlements().ownedOr(owned + update.purchasedEntitlements)
+                }
+                emit(owned)
+            }
+    }.distinctUntilChanged()
 
     override fun offers(): Flow<List<Offer>> = combine(
         flow { emit(queryOffers()) },
@@ -67,7 +77,7 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
             .build()
         return coroutineScope {
             val update = async(start = CoroutineStart.UNDISPATCHED) {
-                purchaseUpdates.updates.first { it.concerns(offer.entitlement) }
+                purchaseUpdates.updates.filterIsInstance<PurchaseUpdate.FromPlay>().first { it.concerns(offer.entitlement) }
             }
             val launchResult = withContext(dispatcherProvider.main()) {
                 billingClient.launchBillingFlow(activity, params)
@@ -77,25 +87,26 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
             } else {
                 update.cancel()
                 if (launchResult.responseCode == BillingResponseCode.ITEM_ALREADY_OWNED) {
-                    queryOwnedEntitlements()
-                    purchaseUpdates.refresh()
+                    refresh()
                 }
                 purchaseResultOf(launchResult.responseCode)
             }
         }
     }
 
-    private suspend fun queryOwnedEntitlements(): Set<Entitlement> {
-        if (!billingConnection.connect()) return emptySet()
+    override suspend fun refresh(): RefreshResult = queryOwnedEntitlements().also { if (it is RefreshResult.Refreshed) purchaseUpdates.publish(it.owned) }
+
+    private suspend fun queryOwnedEntitlements(): RefreshResult {
+        if (!billingConnection.connect()) return RefreshResult.Failed
         val params = QueryPurchasesParams.newBuilder().setProductType(ProductType.INAPP).build()
         val result = billingClient.queryPurchasesAsync(params)
         if (result.billingResult.responseCode != BillingResponseCode.OK) {
             Logger.w(TAG, "Querying purchases failed with response code ${result.billingResult.responseCode}")
-            return emptySet()
+            return RefreshResult.Failed
         }
         val purchased = result.purchasesList.filter { it.purchaseState == Purchase.PurchaseState.PURCHASED }
         purchased.forEach { acknowledge(it) }
-        return purchased.flatMap { it.products }.mapNotNull(::entitlementOf).toSet()
+        return RefreshResult.Refreshed(purchased.flatMap { it.products }.mapNotNull(::entitlementOf).toSet())
     }
 
     private suspend fun queryOffers(): List<Offer> = queryProductDetails().mapNotNull { details ->
@@ -120,7 +131,7 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
         return result.productDetailsList.orEmpty()
     }
 
-    private suspend fun purchaseResultOf(update: PurchaseUpdate, entitlement: Entitlement): PurchaseResult {
+    private suspend fun purchaseResultOf(update: PurchaseUpdate.FromPlay, entitlement: Entitlement): PurchaseResult {
         if (update.responseCode != BillingResponseCode.OK) return purchaseResultOf(update.responseCode)
         val purchase = update.purchases.firstOrNull { entitlement.productId in it.products } ?: return PurchaseResult.Failed
         return when (purchase.purchaseState) {
@@ -156,7 +167,19 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
     }
 }
 
-private fun PurchaseUpdate.concerns(entitlement: Entitlement): Boolean =
+private fun RefreshResult.ownedOr(fallback: Set<Entitlement>): Set<Entitlement> = when (this) {
+    is RefreshResult.Refreshed -> owned
+    RefreshResult.Failed -> fallback
+}
+
+private val PurchaseUpdate.FromPlay.purchasedEntitlements: Set<Entitlement>
+    get() = if (responseCode == BillingResponseCode.OK) {
+        purchases.filter { it.purchaseState == Purchase.PurchaseState.PURCHASED }.flatMap { it.products }.mapNotNull(::entitlementOf).toSet()
+    } else {
+        emptySet()
+    }
+
+private fun PurchaseUpdate.FromPlay.concerns(entitlement: Entitlement): Boolean =
     responseCode != BillingResponseCode.OK || purchases.any { entitlement.productId in it.products }
 
 private val Entitlement.productId: String

@@ -28,6 +28,7 @@ import sk.styk.martin.apkanalyzer.core.common.coroutines.TestDispatcherProvider
 import sk.styk.martin.apkanalyzer.core.entitlements.api.Entitlement
 import sk.styk.martin.apkanalyzer.core.entitlements.api.Offer
 import sk.styk.martin.apkanalyzer.core.entitlements.api.PurchaseResult
+import sk.styk.martin.apkanalyzer.core.entitlements.api.RefreshResult
 import sk.styk.martin.apkanalyzer.core.entitlements.impl.billing.BillingConnection
 import sk.styk.martin.apkanalyzer.core.entitlements.impl.billing.PurchaseUpdates
 
@@ -88,6 +89,34 @@ class EntitlementsRepositoryImplTest {
         backgroundScope.launch(dispatcherProvider.default()) { repository.entitlements().toList(entitlements) }
 
         billingClient.givenPurchases(aProPurchase())
+        purchaseUpdates.onPurchasesUpdated(aBillingResult(BillingResponseCode.OK), listOf(aProPurchase()))
+
+        entitlements shouldBe listOf(emptySet(), setOf(Entitlement.Pro))
+    }
+
+    @Test
+    fun `Given Pro is owned When a later purchase query fails Then Pro is kept`() = runTest {
+        billingClient.givenPurchases(aProPurchase())
+        val entitlements = mutableListOf<Set<Entitlement>>()
+        backgroundScope.launch(dispatcherProvider.default()) { repository.entitlements().toList(entitlements) }
+        every { billingClient.queryPurchasesAsync(any(), any()) } answers {
+            secondArg<PurchasesResponseListener>().onQueryPurchasesResponse(aBillingResult(BillingResponseCode.SERVICE_UNAVAILABLE), emptyList())
+        }
+
+        purchaseUpdates.refresh()
+
+        entitlements shouldBe listOf(setOf(Entitlement.Pro))
+    }
+
+    @Test
+    fun `Given Play confirms a purchase When the ownership query then fails Then observers are granted Pro`() = runTest {
+        billingClient.givenPurchases()
+        val entitlements = mutableListOf<Set<Entitlement>>()
+        backgroundScope.launch(dispatcherProvider.default()) { repository.entitlements().toList(entitlements) }
+        every { billingClient.queryPurchasesAsync(any(), any()) } answers {
+            secondArg<PurchasesResponseListener>().onQueryPurchasesResponse(aBillingResult(BillingResponseCode.SERVICE_UNAVAILABLE), emptyList())
+        }
+
         purchaseUpdates.onPurchasesUpdated(aBillingResult(BillingResponseCode.OK), listOf(aProPurchase()))
 
         entitlements shouldBe listOf(emptySet(), setOf(Entitlement.Pro))
@@ -190,6 +219,32 @@ class EntitlementsRepositoryImplTest {
         repository.purchase(activity, Offer(Entitlement.Pro, "€4.99"))
 
         entitlements shouldBe listOf(emptySet(), setOf(Entitlement.Pro))
+    }
+
+    @Test
+    fun `Given Pro was bought elsewhere When refreshing Then Pro is returned and observers are granted Pro`() = runTest {
+        billingClient.givenPurchases()
+        val entitlements = mutableListOf<Set<Entitlement>>()
+        backgroundScope.launch(dispatcherProvider.default()) { repository.entitlements().toList(entitlements) }
+        every { billingClient.queryPurchasesAsync(any(), any()) } answers {
+            secondArg<PurchasesResponseListener>().onQueryPurchasesResponse(aBillingResult(BillingResponseCode.OK), listOf(aProPurchase()))
+        } andThenAnswer {
+            secondArg<PurchasesResponseListener>().onQueryPurchasesResponse(aBillingResult(BillingResponseCode.SERVICE_UNAVAILABLE), emptyList())
+        }
+
+        val refreshed = repository.refresh()
+
+        refreshed shouldBe RefreshResult.Refreshed(setOf(Entitlement.Pro))
+        entitlements shouldBe listOf(emptySet(), setOf(Entitlement.Pro))
+    }
+
+    @Test
+    fun `Given Play cannot be reached When refreshing Then the refresh fails`() = runTest {
+        billingClient.givenBillingUnavailable()
+
+        val refreshed = repository.refresh()
+
+        refreshed shouldBe RefreshResult.Failed
     }
 
     @Test

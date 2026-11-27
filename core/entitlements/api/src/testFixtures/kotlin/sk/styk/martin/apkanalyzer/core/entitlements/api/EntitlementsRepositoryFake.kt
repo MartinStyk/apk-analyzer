@@ -32,4 +32,8 @@ class EntitlementsRepositoryFake(vararg entitlements: Entitlement) : Entitlement
         }
         return purchaseResult
     }
+
+    var refreshFails: Boolean = false
+
+    override suspend fun refresh(): RefreshResult = if (refreshFails) RefreshResult.Failed else RefreshResult.Refreshed(owned.value)
 }

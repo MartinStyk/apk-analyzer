@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="pro_headline_export">
+        <item quantity="one">Exporte todos os detalhes de %d app</item>
+        <item quantity="many">Exporte todos os detalhes de %d apps</item>
+        <item quantity="other">Exporte todos os detalhes de %d apps</item>
+    </plurals>
+    <plurals name="pro_headline_what_changed">
+        <item quantity="one">Veja o que mudou em mais %d app</item>
+        <item quantity="many">Veja o que mudou em mais %d apps</item>
+        <item quantity="other">Veja o que mudou em mais %d apps</item>
+    </plurals>
+    <string name="pro_feature_export">Exporte permissões, certificados, componentes e muito mais de vários apps de uma só vez</string>
+    <string name="pro_feature_what_changed">Veja todas as alterações de apps do seu dispositivo em uma única lista</string>
+    <string name="pro_supporter">Apoie um app independente e de código aberto. Tudo o que é gratuito hoje continua gratuito.</string>
+    <string name="pro_unlock">Desbloquear Pro · %s</string>
+    <string name="pro_one_time">Compra única. Sem assinatura.</string>
+    <string name="pro_restore">Restaurar compra</string>
+    <string name="pro_unavailable">As compras exigem o Google Play neste dispositivo.</string>
+    <string name="pro_failed">Não foi possível acessar o Google Play. Tente novamente.</string>
+    <string name="pro_pending">Compra pendente</string>
+    <string name="pro_pending_body">O Google Play está aguardando seu pagamento. O Pro é desbloqueado assim que ele for aprovado.</string>
+    <string name="pro_restore_nothing">Nenhuma compra do Pro encontrada para esta Conta do Google.</string>
+</resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="pro_headline_export">
+        <item quantity="other">Xuất mọi chi tiết của %d ứng dụng</item>
+    </plurals>
+    <plurals name="pro_headline_what_changed">
+        <item quantity="other">Xem những gì đã thay đổi ở %d ứng dụng khác</item>
+    </plurals>
+    <string name="pro_feature_export">Xuất quyền, chứng chỉ, thành phần và nhiều thông tin khác của nhiều ứng dụng cùng lúc</string>
+    <string name="pro_feature_what_changed">Xem mọi thay đổi của ứng dụng trên thiết bị trong một danh sách</string>
+    <string name="pro_supporter">Ủng hộ một ứng dụng độc lập, mã nguồn mở. Mọi thứ miễn phí hôm nay sẽ luôn miễn phí.</string>
+    <string name="pro_unlock">Mở khóa Pro · %s</string>
+    <string name="pro_one_time">Mua một lần. Không cần gói thuê bao.</string>
+    <string name="pro_restore">Khôi phục giao dịch mua</string>
+    <string name="pro_unavailable">Cần có Google Play trên thiết bị này để mua hàng.</string>
+    <string name="pro_failed">Không thể kết nối với Google Play. Hãy thử lại.</string>
+    <string name="pro_pending">Đang chờ thanh toán</string>
+    <string name="pro_pending_body">Google Play đang chờ bạn thanh toán. Pro sẽ được mở khóa ngay khi thanh toán hoàn tất.</string>
+    <string name="pro_restore_nothing">Không tìm thấy giao dịch mua Pro nào cho Tài khoản Google này.</string>
+</resources>

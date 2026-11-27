@@ -2,4 +2,5 @@
 <resources>
     <string name="content_description_back">رجوع</string>
     <string name="content_description_selected">محدد</string>
+    <string name="content_description_pro">جزء من Pro</string>
 </resources>

@@ -10,6 +10,8 @@ interface EntitlementsRepository {
     fun offers(): Flow<List<Offer>>
 
     suspend fun purchase(activity: Activity, offer: Offer): PurchaseResult
+
+    suspend fun refresh(): RefreshResult
 }
 
 @Serializable
@@ -28,4 +30,10 @@ sealed interface PurchaseResult {
     data object Cancelled : PurchaseResult
 
     data object Failed : PurchaseResult
+}
+
+sealed interface RefreshResult {
+    data class Refreshed(val owned: Set<Entitlement>) : RefreshResult
+
+    data object Failed : RefreshResult
 }

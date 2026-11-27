@@ -19,6 +19,7 @@ import androidx.navigation3.ui.NavDisplay
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.NavigationBar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.LocalSharedTransitionScope
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.navigation.BottomSheetSceneStrategy
 import sk.styk.martin.apkanalyzer.core.navigation.Navigator
 import sk.styk.martin.apkanalyzer.core.navigation.rememberNavigationState
 import sk.styk.martin.apkanalyzer.core.navigation.toEntries
@@ -27,6 +28,7 @@ import sk.styk.martin.apkanalyzer.feature.appexport.phone.navigation.inventoryEx
 import sk.styk.martin.apkanalyzer.feature.apps.api.AppsNavKey
 import sk.styk.martin.apkanalyzer.feature.apps.phone.navigation.appEntries
 import sk.styk.martin.apkanalyzer.feature.browse.phone.navigation.browseEntries
+import sk.styk.martin.apkanalyzer.feature.pro.phone.navigation.proEntries
 import sk.styk.martin.apkanalyzer.feature.settings.phone.navigation.settingsEntries
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.navigation.whatChangedEntries
 import sk.styk.martin.apkanalyzer.ui.navigation.TOP_LEVEL_KEYS
@@ -61,12 +63,14 @@ internal fun ApkAnalyzerApp(isWhatChangedEnabled: Boolean, onBackAtRoot: () -> U
                         inventoryExportEntries(navigator)
                         settingsEntries(navigator)
                         whatChangedEntries(navigator)
+                        proEntries(navigator)
                     }
                     NavDisplay(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(paddings),
                         entries = navigationState.toEntries(entryProvider),
+                        sceneStrategies = listOf(BottomSheetSceneStrategy()),
                         onBack = navigator::goBack,
                     )
                 }

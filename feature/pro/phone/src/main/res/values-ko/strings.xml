@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="pro_headline_export">
+        <item quantity="other">앱 %d개의 모든 세부정보 내보내기</item>
+    </plurals>
+    <plurals name="pro_headline_what_changed">
+        <item quantity="other">앱 %d개에서 바뀐 내용 더 보기</item>
+    </plurals>
+    <string name="pro_feature_export">여러 앱의 권한, 인증서, 구성요소 등을 한 번에 내보낼 수 있습니다</string>
+    <string name="pro_feature_what_changed">기기의 모든 앱 변경사항을 하나의 목록에서 확인할 수 있습니다</string>
+    <string name="pro_supporter">독립 오픈소스 앱을 후원하세요. 지금 무료인 기능은 앞으로도 무료입니다.</string>
+    <string name="pro_unlock">Pro 잠금 해제 · %s</string>
+    <string name="pro_one_time">1회 구매. 구독 없음.</string>
+    <string name="pro_restore">구매 복원</string>
+    <string name="pro_unavailable">구매하려면 이 기기에 Google Play가 있어야 합니다.</string>
+    <string name="pro_failed">Google Play에 연결할 수 없습니다. 다시 시도하세요.</string>
+    <string name="pro_pending">구매 대기 중</string>
+    <string name="pro_pending_body">Google Play에서 결제를 기다리고 있습니다. 결제가 완료되면 바로 Pro가 잠금 해제됩니다.</string>
+    <string name="pro_restore_nothing">이 Google 계정에서 Pro 구매 내역을 찾을 수 없습니다.</string>
+</resources>

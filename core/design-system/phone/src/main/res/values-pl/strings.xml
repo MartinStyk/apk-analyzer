@@ -2,4 +2,5 @@
 <resources>
     <string name="content_description_back">Wstecz</string>
     <string name="content_description_selected">Wybrane</string>
+    <string name="content_description_pro">Część Pro</string>
 </resources>

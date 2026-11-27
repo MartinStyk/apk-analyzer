@@ -2,4 +2,5 @@
 <resources>
     <string name="content_description_back">返回</string>
     <string name="content_description_selected">已選取</string>
+    <string name="content_description_pro">Pro 版功能</string>
 </resources>

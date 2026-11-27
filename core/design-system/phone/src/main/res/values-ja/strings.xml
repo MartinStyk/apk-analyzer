@@ -2,4 +2,5 @@
 <resources>
     <string name="content_description_back">戻る</string>
     <string name="content_description_selected">選択済み</string>
+    <string name="content_description_pro">Pro の機能</string>
 </resources>

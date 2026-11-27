@@ -2,4 +2,6 @@
 <resources>
     <string name="content_description_back">Back</string>
     <string name="content_description_selected">Selected</string>
+    <string name="content_description_pro">Part of Pro</string>
+    <string name="pro_badge" translatable="false">Pro</string>
 </resources>

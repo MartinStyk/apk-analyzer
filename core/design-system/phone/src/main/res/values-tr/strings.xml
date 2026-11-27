@@ -2,4 +2,5 @@
 <resources>
     <string name="content_description_back">Geri</string>
     <string name="content_description_selected">Seçili</string>
+    <string name="content_description_pro">Pro kapsamında</string>
 </resources>
