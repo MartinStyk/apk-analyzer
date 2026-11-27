@@ -63,10 +63,12 @@ data class InventoryExportState(
     val canExport: Boolean
         get() = apps.summary.hasSelection && exportedColumnCount > 0
 
-    val requiresPro: Boolean
-        get() = proOwnership == ProOwnership.NotOwned &&
-            apps.summary.selectedCount > 1 &&
+    val exportNeedsPro: Boolean
+        get() = apps.summary.selectedCount > 1 &&
             exportedColumns.any { it !in InventoryPreset.Basics.columns }
+
+    val requiresPro: Boolean
+        get() = exportNeedsPro && proOwnership == ProOwnership.NotOwned
 
     val canProceed: Boolean
         get() = when (step) {

@@ -68,7 +68,8 @@ app, opened from the app detail summary sheet). Implementation code uses the pac
   `InventoryPreset.Basics`, Pro known not owned) is the one predicate behind the Export step's Pro notice,
   the Save/Share gate, and opening `ProNavKey(PaywallReason.Export)`. Ownership (`ProOwnership`) is
   collected for the ViewModel's lifetime, so it doesn't reset when the screen leaves and returns; while
-  it is `Unknown` the notice stays hidden and Save/Share wait for it. Save and Share check it before
+  it is `Unknown` the notice stays hidden and Save/Share wait for it, but only for an export that may
+  need Pro (`exportNeedsPro`); Basics-only and one-app exports never wait. Save and Share check it before
   the document picker opens; choosing apps, columns, and the preview stay free. The notice's "Export
   Basics instead" resets the columns to Basics. Nothing resumes after a purchase: the notice
   disappears once `entitlements()` holds Pro and the user taps Save or Share again.

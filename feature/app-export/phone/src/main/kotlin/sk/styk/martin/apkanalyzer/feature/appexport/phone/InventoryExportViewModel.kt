@@ -221,7 +221,7 @@ internal class InventoryExportViewModel @AssistedInject constructor(
     private fun onExportRequest(action: InventoryExportAction.ExportRequestAction) {
         if (exportRequestJob?.isActive == true) return
         exportRequestJob = viewModelScope.launch {
-            val current = state.first { it.proOwnership != ProOwnership.Unknown }
+            val current = state.first { !it.exportNeedsPro || it.proOwnership != ProOwnership.Unknown }
             when {
                 !current.canExport -> Unit
 
