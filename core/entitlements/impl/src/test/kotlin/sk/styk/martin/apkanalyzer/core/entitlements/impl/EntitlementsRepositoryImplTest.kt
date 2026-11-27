@@ -28,6 +28,7 @@ import sk.styk.martin.apkanalyzer.core.common.coroutines.TestDispatcherProvider
 import sk.styk.martin.apkanalyzer.core.entitlements.api.Entitlement
 import sk.styk.martin.apkanalyzer.core.entitlements.api.Offer
 import sk.styk.martin.apkanalyzer.core.entitlements.api.PurchaseResult
+import sk.styk.martin.apkanalyzer.core.entitlements.api.RefreshResult
 import sk.styk.martin.apkanalyzer.core.entitlements.impl.billing.BillingConnection
 import sk.styk.martin.apkanalyzer.core.entitlements.impl.billing.PurchaseUpdates
 
@@ -219,7 +220,7 @@ class EntitlementsRepositoryImplTest {
 
         val refreshed = repository.refresh()
 
-        refreshed.getOrNull() shouldBe setOf(Entitlement.Pro)
+        refreshed shouldBe RefreshResult.Refreshed(setOf(Entitlement.Pro))
         entitlements shouldBe listOf(emptySet(), setOf(Entitlement.Pro))
     }
 
@@ -229,7 +230,7 @@ class EntitlementsRepositoryImplTest {
 
         val refreshed = repository.refresh()
 
-        refreshed.isFailure shouldBe true
+        refreshed shouldBe RefreshResult.Failed
     }
 
     @Test

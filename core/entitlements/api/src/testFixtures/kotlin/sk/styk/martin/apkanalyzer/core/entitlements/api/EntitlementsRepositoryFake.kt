@@ -33,7 +33,7 @@ class EntitlementsRepositoryFake(vararg entitlements: Entitlement) : Entitlement
         return purchaseResult
     }
 
-    var refreshFailure: Throwable? = null
+    var refreshFails: Boolean = false
 
-    override suspend fun refresh(): Result<Set<Entitlement>> = refreshFailure?.let { Result.failure(it) } ?: Result.success(owned.value)
+    override suspend fun refresh(): RefreshResult = if (refreshFails) RefreshResult.Failed else RefreshResult.Refreshed(owned.value)
 }

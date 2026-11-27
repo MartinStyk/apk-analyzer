@@ -7,6 +7,7 @@ import sk.styk.martin.apkanalyzer.core.entitlements.api.Entitlement
 import sk.styk.martin.apkanalyzer.core.entitlements.api.EntitlementsRepository
 import sk.styk.martin.apkanalyzer.core.entitlements.api.Offer
 import sk.styk.martin.apkanalyzer.core.entitlements.api.PurchaseResult
+import sk.styk.martin.apkanalyzer.core.entitlements.api.RefreshResult
 import javax.inject.Inject
 
 internal class EntitlementsRepositoryImpl @Inject constructor() : EntitlementsRepository {
@@ -17,5 +18,5 @@ internal class EntitlementsRepositoryImpl @Inject constructor() : EntitlementsRe
 
     override suspend fun purchase(activity: Activity, offer: Offer): PurchaseResult = PurchaseResult.Failed
 
-    override suspend fun refresh(): Result<Set<Entitlement>> = Result.success(Entitlement.entries.toSet())
+    override suspend fun refresh(): RefreshResult = RefreshResult.Refreshed(Entitlement.entries.toSet())
 }

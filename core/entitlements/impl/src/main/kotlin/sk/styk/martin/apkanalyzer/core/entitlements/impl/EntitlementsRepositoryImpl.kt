@@ -31,8 +31,8 @@ import sk.styk.martin.apkanalyzer.core.entitlements.api.Entitlement
 import sk.styk.martin.apkanalyzer.core.entitlements.api.EntitlementsRepository
 import sk.styk.martin.apkanalyzer.core.entitlements.api.Offer
 import sk.styk.martin.apkanalyzer.core.entitlements.api.PurchaseResult
+import sk.styk.martin.apkanalyzer.core.entitlements.api.RefreshResult
 import sk.styk.martin.apkanalyzer.core.entitlements.impl.billing.BillingConnection
-import sk.styk.martin.apkanalyzer.core.entitlements.impl.billing.BillingUnavailableException
 import sk.styk.martin.apkanalyzer.core.entitlements.impl.billing.PurchaseUpdate
 import sk.styk.martin.apkanalyzer.core.entitlements.impl.billing.PurchaseUpdates
 import javax.inject.Inject
@@ -51,7 +51,7 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
         .onSubscription { emit(PurchaseUpdate.Refresh) }
         .map { update ->
             when (update) {
-                is PurchaseUpdate.Known -> Result.success(update.owned)
+                is PurchaseUpdate.Known -> RefreshResult.Refreshed(update.owned)
                 is PurchaseUpdate.FromPlay, PurchaseUpdate.Refresh -> queryOwnedEntitlements()
             }
         }
@@ -92,19 +92,19 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun refresh(): Result<Set<Entitlement>> = queryOwnedEntitlements().onSuccess { purchaseUpdates.publish(it) }
+    override suspend fun refresh(): RefreshResult = queryOwnedEntitlements().also { if (it is RefreshResult.Refreshed) purchaseUpdates.publish(it.owned) }
 
-    private suspend fun queryOwnedEntitlements(): Result<Set<Entitlement>> {
-        if (!billingConnection.connect()) return Result.failure(BillingUnavailableException("Google Play could not be reached"))
+    private suspend fun queryOwnedEntitlements(): RefreshResult {
+        if (!billingConnection.connect()) return RefreshResult.Failed
         val params = QueryPurchasesParams.newBuilder().setProductType(ProductType.INAPP).build()
         val result = billingClient.queryPurchasesAsync(params)
         if (result.billingResult.responseCode != BillingResponseCode.OK) {
             Logger.w(TAG, "Querying purchases failed with response code ${result.billingResult.responseCode}")
-            return Result.failure(BillingUnavailableException("Querying purchases failed with response code ${result.billingResult.responseCode}"))
+            return RefreshResult.Failed
         }
         val purchased = result.purchasesList.filter { it.purchaseState == Purchase.PurchaseState.PURCHASED }
         purchased.forEach { acknowledge(it) }
-        return Result.success(purchased.flatMap { it.products }.mapNotNull(::entitlementOf).toSet())
+        return RefreshResult.Refreshed(purchased.flatMap { it.products }.mapNotNull(::entitlementOf).toSet())
     }
 
     private suspend fun queryOffers(): List<Offer> = queryProductDetails().mapNotNull { details ->
@@ -165,10 +165,10 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
     }
 }
 
-private fun Flow<Result<Set<Entitlement>>>.keepingLastKnown(): Flow<Set<Entitlement>> = flow {
+private fun Flow<RefreshResult>.keepingLastKnown(): Flow<Set<Entitlement>> = flow {
     var lastKnown = emptySet<Entitlement>()
     collect { queried ->
-        queried.onSuccess { lastKnown = it }
+        if (queried is RefreshResult.Refreshed) lastKnown = queried.owned
         emit(lastKnown)
     }
 }

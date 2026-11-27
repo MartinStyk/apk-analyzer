@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.entitlements.api.Entitlement
 import sk.styk.martin.apkanalyzer.core.entitlements.api.EntitlementsRepository
 import sk.styk.martin.apkanalyzer.core.entitlements.api.PurchaseResult
+import sk.styk.martin.apkanalyzer.core.entitlements.api.RefreshResult
 import sk.styk.martin.apkanalyzer.feature.pro.api.PaywallReason
 import sk.styk.martin.apkanalyzer.feature.pro.phone.analytics.ProAnalytics
 import sk.styk.martin.apkanalyzer.feature.pro.phone.analytics.ProAnalyticsEvent
@@ -84,10 +85,10 @@ internal class ProViewModel @AssistedInject constructor(
         if (state.value.status.blocksActions) return
         state.update { it.copy(status = ProStatus.Restoring) }
         viewModelScope.launch {
-            val outcome = entitlementsRepository.refresh().fold(
-                onSuccess = { owned -> if (Entitlement.Pro in owned) RestoreOutcome.Restored else RestoreOutcome.NothingFound },
-                onFailure = { RestoreOutcome.Failed },
-            )
+            val outcome = when (val refreshed = entitlementsRepository.refresh()) {
+                is RefreshResult.Refreshed -> if (Entitlement.Pro in refreshed.owned) RestoreOutcome.Restored else RestoreOutcome.NothingFound
+                RefreshResult.Failed -> RestoreOutcome.Failed
+            }
             analytics.track(ProAnalyticsEvent.RestoreFinished(reason, outcome))
             when (outcome) {
                 RestoreOutcome.Restored -> close()

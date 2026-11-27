@@ -8,7 +8,7 @@ with two implementations:
 
 | Module | Package | Holds |
 |---|---|---|
-| `api` | `core.entitlements.api` | `EntitlementsRepository`, `Entitlement`, `Offer`, `PurchaseResult`, and `EntitlementsRepositoryFake` in `testFixtures` |
+| `api` | `core.entitlements.api` | `EntitlementsRepository`, `Entitlement`, `Offer`, `PurchaseResult`, `RefreshResult`, and `EntitlementsRepositoryFake` in `testFixtures` |
 | `impl` | `core.entitlements.impl` | The Google Play Billing implementation. The only module with the billing library |
 | `noop` | `core.entitlements.noop` | Grants every entitlement and offers nothing for sale |
 
@@ -32,8 +32,8 @@ once the product exists in Play Console.
   calls it with the `Activity` it already has, passed through a ViewModel action that never stores
   it.
   `android.app.Activity` is allowed in `api` by `ForbiddenImport/CoreApiPlatformAccess` for this.
-* `refresh()` re-reads purchases from Play and returns what the user now owns as a `Result`, which
-  fails when Play could not be reached. A successful result is handed to active `entitlements()` collectors
+* `refresh()` re-reads purchases from Play and returns what the user now owns as `RefreshResult.Refreshed`, or
+  `RefreshResult.Failed` when Play could not be reached. A successful result is handed to active `entitlements()` collectors
   directly, so they unlock without another Play query. "Restore purchase" calls it.
 * Nothing throws. Every billing failure, including `BILLING_UNAVAILABLE` on a sideloaded debug build,
   becomes an empty set, an empty list, or `PurchaseResult.Failed`. The one exception: once an
