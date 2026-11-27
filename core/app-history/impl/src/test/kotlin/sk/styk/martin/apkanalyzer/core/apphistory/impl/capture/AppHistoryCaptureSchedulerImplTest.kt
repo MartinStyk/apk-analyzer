@@ -169,7 +169,7 @@ class AppHistoryCaptureSchedulerImplTest {
         scheduler.start()
         runCurrent()
 
-        configuration[ConfigurationKey.AppHistoryDisplayEnabled] = true
+        configuration[ConfigurationKey.WhatChangedTabEnabled] = true
         runCurrent()
 
         packageChanges.subscriberCount shouldBe 1

@@ -27,7 +27,7 @@ internal class ApkAnalyzerViewModel @Inject constructor(
         combine(
             persistenceRepository.observe(Key.ColorScheme),
             persistenceRepository.observe(Key.HexFingerprintFormat),
-            configurationRepository.observe(ConfigurationKey.AppHistoryDisplayEnabled),
+            configurationRepository.observe(ConfigurationKey.WhatChangedTabEnabled),
         ) { scheme, fingerprintFormat, isWhatChangedEnabled ->
             ApkAnalyzerState.Data(
                 colorAppScheme = scheme,

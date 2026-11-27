@@ -52,4 +52,6 @@
     <string name="what_changed_certificate_changed">서명 인증서가 변경됨</string>
     <string name="what_changed_first_recorded">처음 기록됨</string>
     <string name="what_changed_uncomparable_only">일부 정보를 비교할 수 없음</string>
+    <string name="what_changed_locked_row">잠긴 앱 변경사항, Pro 기능</string>
+    <string name="what_changed_locked_click_label">Pro로 잠금 해제</string>
 </resources>

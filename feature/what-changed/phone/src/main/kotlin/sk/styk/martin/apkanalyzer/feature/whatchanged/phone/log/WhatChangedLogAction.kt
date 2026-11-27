@@ -11,5 +11,7 @@ internal sealed interface WhatChangedLogAction {
 
     data class OpenItem(val item: AppChangeItem) : WhatChangedLogAction
 
+    data object OpenLocked : WhatChangedLogAction
+
     data class CopyItem(val label: String, val value: String) : WhatChangedLogAction
 }

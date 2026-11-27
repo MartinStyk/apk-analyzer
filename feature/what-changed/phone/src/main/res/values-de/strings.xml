@@ -56,4 +56,6 @@
     <string name="what_changed_certificate_changed">Signaturzertifikat geändert</string>
     <string name="what_changed_first_recorded">Erstmals erfasst</string>
     <string name="what_changed_uncomparable_only">Einige Angaben ließen sich nicht vergleichen</string>
+    <string name="what_changed_locked_row">Gesperrte App-Änderung, Teil von Pro</string>
+    <string name="what_changed_locked_click_label">Mit Pro freischalten</string>
 </resources>

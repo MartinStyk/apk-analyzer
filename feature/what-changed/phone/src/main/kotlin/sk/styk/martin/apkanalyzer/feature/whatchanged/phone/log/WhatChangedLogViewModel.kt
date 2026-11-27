@@ -8,7 +8,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.AppHistoryRepository
@@ -18,6 +17,8 @@ import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.allEntries
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.access.WhatChangedAccessPolicy
+import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.access.toLockableRow
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppChangeItem
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppChangeItemMapper
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppChangeKind
@@ -28,6 +29,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class WhatChangedLogViewModel @Inject constructor(
     private val appHistoryRepository: AppHistoryRepository,
+    private val accessPolicy: WhatChangedAccessPolicy,
     private val itemMapper: AppChangeItemMapper,
     private val clipboardManager: ClipboardManager,
     private val dispatcherProvider: DispatcherProvider,
@@ -63,6 +65,10 @@ internal class WhatChangedLogViewModel @Inject constructor(
                 },
             )
 
+            WhatChangedLogAction.OpenLocked -> (state.value as? WhatChangedLogState.Loaded)?.let {
+                sendEvent(WhatChangedLogEvent.NavigateToPaywall(it.lockedAppCount))
+            }
+
             is WhatChangedLogAction.CopyItem -> {
                 if (clipboardManager.copy(action.label, action.value) == CopyResult.FeedbackNotShown) {
                     sendEvent(WhatChangedLogEvent.ShowCopiedFeedback)
@@ -75,9 +81,12 @@ internal class WhatChangedLogViewModel @Inject constructor(
         loadJob?.cancel()
         state.value = WhatChangedLogState.Loading
         loadJob = viewModelScope.launch(dispatcherProvider.default()) {
-            combine(appHistoryRepository.deviceTimeline().map { it.toItems() }, selectedFilters) { items, filters ->
-                items?.toState(filters) ?: WhatChangedLogState.Error
-            }.collect { state.value = it }
+            combine(
+                appHistoryRepository.deviceTimeline(),
+                accessPolicy.hasPro(),
+            ) { timeline, hasPro -> timeline.toEntries(hasPro) }
+                .combine(selectedFilters) { entries, filters -> entries?.toState(filters) ?: WhatChangedLogState.Error }
+                .collect { state.value = it }
         }
     }
 
@@ -85,29 +94,41 @@ internal class WhatChangedLogViewModel @Inject constructor(
         viewModelScope.launch { eventChannel.send(event) }
     }
 
-    private fun AppHistoryDeviceTimeline.toItems(): List<AppChangeItem>? = when (this) {
+    private fun AppHistoryDeviceTimeline.toEntries(hasPro: Boolean): List<LogEntry>? = when (this) {
         AppHistoryDeviceTimeline.Unavailable -> null
-        is AppHistoryDeviceTimeline.Available -> allEntries.map { itemMapper.map(it.packageName, it.applicationName, it.entry) }
+
+        is AppHistoryDeviceTimeline.Available -> {
+            val access = accessPolicy.accessTo(this, hasPro)
+            allEntries.map {
+                LogEntry(
+                    item = itemMapper.map(it.packageName, it.applicationName, it.entry),
+                    isReadable = access.canRead(it.packageName, it.entry),
+                )
+            }
+        }
     }
 }
 
-private fun List<AppChangeItem>.toState(selectedFilters: Set<LogFilter>): WhatChangedLogState {
+private data class LogEntry(val item: AppChangeItem, val isReadable: Boolean)
+
+private fun List<LogEntry>.toState(selectedFilters: Set<LogFilter>): WhatChangedLogState {
     if (isEmpty()) return WhatChangedLogState.Empty
     val available = availableFilters()
     val activeFilters = selectedFilters.intersect(available.toSet())
     val zone = ZoneId.systemDefault()
     return WhatChangedLogState.Loaded(
-        months = filter { it.matches(activeFilters) }
-            .groupBy { YearMonth.from(it.date.atZone(zone)) }
-            .map { (month, items) -> AppChangeMonth(month, items) },
+        months = filter { it.item.matches(activeFilters) }
+            .groupBy { YearMonth.from(it.item.date.atZone(zone)) }
+            .map { (month, entries) -> AppChangeMonth(month, entries.map { it.item.toLockableRow(it.item.key, it.isReadable) }) },
         filters = available,
         selectedFilters = activeFilters,
+        lockedAppCount = filterNot { it.isReadable }.distinctBy { it.item.packageName }.size,
     )
 }
 
-private fun List<AppChangeItem>.availableFilters(): List<LogFilter> {
-    val categories = flatMapTo(mutableSetOf()) { it.categories }
-    val hasAttention = any { it.needsAttention }
+private fun List<LogEntry>.availableFilters(): List<LogFilter> {
+    val categories = flatMapTo(mutableSetOf()) { it.item.categories }
+    val hasAttention = any { it.item.needsAttention }
     return buildList {
         if (hasAttention) add(LogFilter.NeedsAttention)
         AppHistoryChangeCategory.entries

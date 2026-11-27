@@ -19,7 +19,8 @@ class ConfigurationRepositoryFake(vararg enabledKeys: ConfigurationKey<Boolean>)
     @Suppress("UNCHECKED_CAST")
     private fun <T : Any> resolve(key: ConfigurationKey<T>, enabled: Set<ConfigurationKey<Boolean>>): T = when (key) {
         ConfigurationKey.InventoryExportEnabled -> ConfigurationKey.InventoryExportEnabled in enabled
-        ConfigurationKey.AppHistoryDisplayEnabled -> ConfigurationKey.AppHistoryDisplayEnabled in enabled
+        ConfigurationKey.WhatChangedTabEnabled -> ConfigurationKey.WhatChangedTabEnabled in enabled
+        ConfigurationKey.AppDetailHistoryEnabled -> ConfigurationKey.AppDetailHistoryEnabled in enabled
         ConfigurationKey.AppHistoryRecordingEnabled -> ConfigurationKey.AppHistoryRecordingEnabled in enabled
     } as T
 }

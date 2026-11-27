@@ -57,4 +57,6 @@
     <string name="what_changed_certificate_changed">Signing certificate changed</string>
     <string name="what_changed_first_recorded">First recorded</string>
     <string name="what_changed_uncomparable_only">Some details couldn\'t be compared</string>
+    <string name="what_changed_locked_row">Locked app change, part of Pro</string>
+    <string name="what_changed_locked_click_label">Unlock with Pro</string>
 </resources>

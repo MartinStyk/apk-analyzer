@@ -60,4 +60,6 @@
     <string name="what_changed_certificate_changed">Cambió el certificado de firma</string>
     <string name="what_changed_first_recorded">Primer registro</string>
     <string name="what_changed_uncomparable_only">No se pudieron comparar algunos datos</string>
+    <string name="what_changed_locked_row">Cambio de app bloqueado, incluido en Pro</string>
+    <string name="what_changed_locked_click_label">Desbloquear con Pro</string>
 </resources>

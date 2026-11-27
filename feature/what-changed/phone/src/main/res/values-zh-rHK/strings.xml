@@ -52,4 +52,6 @@
     <string name="what_changed_certificate_changed">簽署證書已更改</string>
     <string name="what_changed_first_recorded">首次記錄</string>
     <string name="what_changed_uncomparable_only">部分資料無法比較</string>
+    <string name="what_changed_locked_row">已鎖定的應用程式變更，Pro 版功能</string>
+    <string name="what_changed_locked_click_label">使用 Pro 版解鎖</string>
 </resources>

@@ -32,6 +32,9 @@ import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.settings.Key
 import sk.styk.martin.apkanalyzer.core.common.settings.PersistenceRepository
+import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.access.LockableRow
+import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.access.WhatChangedAccessPolicy
+import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.access.toLockableRow
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppChangeItem
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppChangeItemMapper
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppChangeKind
@@ -44,6 +47,7 @@ internal class WhatChangedViewModel @Inject constructor(
     private val installedAppsRepository: InstalledAppsRepository,
     private val persistenceRepository: PersistenceRepository,
     private val visitTracker: WhatChangedVisitTracker,
+    private val accessPolicy: WhatChangedAccessPolicy,
     private val itemMapper: AppChangeItemMapper,
     private val clipboardManager: ClipboardManager,
     private val dispatcherProvider: DispatcherProvider,
@@ -80,6 +84,10 @@ internal class WhatChangedViewModel @Inject constructor(
 
             is WhatChangedAction.OpenAppHistory -> sendEvent(WhatChangedEvent.NavigateToAppHistory(action.packageName, action.appName))
 
+            WhatChangedAction.OpenLocked -> (state.value as? WhatChangedState.Loaded)?.let {
+                sendEvent(WhatChangedEvent.NavigateToPaywall(it.lockedAppCount))
+            }
+
             is WhatChangedAction.CopyItem -> {
                 if (clipboardManager.copy(action.label, action.value) == CopyResult.FeedbackNotShown) {
                     sendEvent(WhatChangedEvent.ShowCopiedFeedback)
@@ -97,8 +105,9 @@ internal class WhatChangedViewModel @Inject constructor(
                 appHistoryRepository.deviceTimeline(),
                 installedAppsRepository.apps().map { apps -> apps.mapTo(HashSet()) { it.packageName } }.distinctUntilChanged(),
                 selectedRange.filterNotNull(),
-            ) { timeline, installed, range ->
-                timeline.toState(range = range, previousVisit = previousVisit, installed = installed)
+                accessPolicy.hasPro(),
+            ) { timeline, installed, range, hasPro ->
+                timeline.toState(range = range, previousVisit = previousVisit, installed = installed, hasPro = hasPro)
             }.collect { state.value = it }
         }
     }
@@ -111,32 +120,52 @@ internal class WhatChangedViewModel @Inject constructor(
         range: WhatChangedRange,
         previousVisit: Instant?,
         installed: Set<PackageName>,
+        hasPro: Boolean,
     ): WhatChangedState = when (this) {
         AppHistoryDeviceTimeline.Unavailable -> WhatChangedState.Error
-        is AppHistoryDeviceTimeline.Available -> toLoadedState(range, previousVisit, installed) ?: WhatChangedState.Empty
+        is AppHistoryDeviceTimeline.Available -> toLoadedState(range, previousVisit, installed, hasPro) ?: WhatChangedState.Empty
     }
 
     private fun AppHistoryDeviceTimeline.Available.toLoadedState(
         range: WhatChangedRange,
         previousVisit: Instant?,
         installed: Set<PackageName>,
+        hasPro: Boolean,
     ): WhatChangedState.Loaded? {
         val recordingSince = recordingSince ?: return null
         val since = range.since(now = Instant.now(), previousVisit = previousVisit, recordingSince = recordingSince)
         val summary = summarySince(since)
+        val access = accessPolicy.accessTo(this, hasPro)
+        val lockedApps = mutableSetOf<PackageName>()
+        fun <T> T.gated(
+            packageName: PackageName,
+            key: String,
+            isReadable: Boolean,
+        ): LockableRow<T> {
+            if (!isReadable) lockedApps += packageName
+            return toLockableRow(key, isReadable)
+        }
+        val needsAttention = summary.needsAttention.map { attention ->
+            val change = attention.change
+            val item = itemMapper.map(change.packageName, change.applicationName, change.change, revertedAt = attention.revertedAt)
+            item.gated(change.packageName, item.key, access.canRead(change.packageName, change.change))
+        }
+        val changedApps = summary.changedApps.map { app ->
+            app.toItem().gated(app.packageName, app.packageName.value, access.canRead(app))
+        }
+        val uninstalledApps = apps.filter { it.packageName !in installed }
+            .sortedByDescending { app -> app.entries.firstOrNull()?.occurredAt }
+            .map { app -> app.toUninstalledItem().gated(app.packageName, app.packageName.value, access.canReadApp(app.packageName)) }
         return WhatChangedState.Loaded(
             range = range,
             since = since,
             updateCount = summary.updateCount,
             newAppCount = summary.newAppCount,
             lastChangeAt = latestChange?.change?.timestamp?.takeIf { summary.changedApps.isEmpty() && it < since },
-            needsAttention = summary.needsAttention.map { item ->
-                itemMapper.map(item.change.packageName, item.change.applicationName, item.change.change, revertedAt = item.revertedAt)
-            },
-            changedApps = summary.changedApps.map { it.toItem() },
-            uninstalledApps = apps.filter { it.packageName !in installed }
-                .sortedByDescending { app -> app.entries.firstOrNull()?.occurredAt }
-                .map { it.toUninstalledItem() },
+            needsAttention = needsAttention,
+            changedApps = changedApps,
+            uninstalledApps = uninstalledApps,
+            lockedAppCount = lockedApps.size,
         )
     }
 

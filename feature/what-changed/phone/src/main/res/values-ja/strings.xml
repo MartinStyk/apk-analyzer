@@ -52,4 +52,6 @@
     <string name="what_changed_certificate_changed">署名証明書が変更されました</string>
     <string name="what_changed_first_recorded">最初の記録</string>
     <string name="what_changed_uncomparable_only">一部の情報を比較できませんでした</string>
+    <string name="what_changed_locked_row">ロックされたアプリの変更（Pro の機能）</string>
+    <string name="what_changed_locked_click_label">Pro でロック解除</string>
 </resources>

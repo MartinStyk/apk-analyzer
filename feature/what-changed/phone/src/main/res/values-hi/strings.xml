@@ -56,4 +56,6 @@
     <string name="what_changed_certificate_changed">साइनिंग प्रमाणपत्र बदल गया</string>
     <string name="what_changed_first_recorded">पहली बार दर्ज</string>
     <string name="what_changed_uncomparable_only">कुछ जानकारी की तुलना नहीं हो सकी</string>
+    <string name="what_changed_locked_row">लॉक किया गया ऐप बदलाव, Pro का हिस्सा</string>
+    <string name="what_changed_locked_click_label">Pro से अनलॉक करें</string>
 </resources>

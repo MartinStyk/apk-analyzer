@@ -94,7 +94,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
     private val historyStatus: StateFlow<AppDetailHistoryStatus> = appDetailInput.installedPackage
         ?.let { installedPackage ->
-            configurationRepository.observe(ConfigurationKey.AppHistoryDisplayEnabled).flatMapLatest { isEnabled ->
+            configurationRepository.observe(ConfigurationKey.AppDetailHistoryEnabled).flatMapLatest { isEnabled ->
                 if (isEnabled) {
                     appHistoryRepository.timeline(installedPackage).map { it.toHistoryStatus() }
                 } else {

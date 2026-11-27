@@ -72,4 +72,6 @@
     <string name="what_changed_certificate_changed">تغيّرت شهادة التوقيع</string>
     <string name="what_changed_first_recorded">أول رصد</string>
     <string name="what_changed_uncomparable_only">تعذّرت مقارنة بعض التفاصيل</string>
+    <string name="what_changed_locked_row">تغيير تطبيق مقفل، جزء من Pro</string>
+    <string name="what_changed_locked_click_label">فتح القفل باستخدام Pro</string>
 </resources>
