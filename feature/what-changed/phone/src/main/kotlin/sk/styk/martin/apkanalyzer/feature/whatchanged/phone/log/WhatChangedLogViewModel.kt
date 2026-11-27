@@ -84,9 +84,13 @@ internal class WhatChangedLogViewModel @Inject constructor(
             combine(
                 appHistoryRepository.deviceTimeline(),
                 accessPolicy.hasPro(),
-            ) { timeline, hasPro -> timeline.toEntries(hasPro) }
-                .combine(selectedFilters) { entries, filters -> entries?.toState(filters) ?: WhatChangedLogState.Error }
-                .collect { state.value = it }
+                selectedFilters,
+            ) { timeline, hasPro, filters ->
+                when (timeline) {
+                    AppHistoryDeviceTimeline.Unavailable -> WhatChangedLogState.Error
+                    is AppHistoryDeviceTimeline.Available -> timeline.toEntries(hasPro).toState(filters)
+                }
+            }.collect { state.value = it }
         }
     }
 
@@ -94,17 +98,13 @@ internal class WhatChangedLogViewModel @Inject constructor(
         viewModelScope.launch { eventChannel.send(event) }
     }
 
-    private fun AppHistoryDeviceTimeline.toEntries(hasPro: Boolean): List<LogEntry>? = when (this) {
-        AppHistoryDeviceTimeline.Unavailable -> null
-
-        is AppHistoryDeviceTimeline.Available -> {
-            val access = accessPolicy.accessTo(this, hasPro)
-            allEntries.map {
-                LogEntry(
-                    item = itemMapper.map(it.packageName, it.applicationName, it.entry),
-                    isReadable = access.canRead(it.packageName, it.entry),
-                )
-            }
+    private fun AppHistoryDeviceTimeline.Available.toEntries(hasPro: Boolean): List<LogEntry> {
+        val access = accessPolicy.accessTo(this, hasPro)
+        return allEntries.map {
+            LogEntry(
+                item = itemMapper.map(it.packageName, it.applicationName, it.entry),
+                isReadable = access.canRead(it.packageName, it.entry),
+            )
         }
     }
 }
