@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
@@ -47,16 +46,19 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
     private val dispatcherProvider: DispatcherProvider,
 ) : EntitlementsRepository {
 
-    override fun entitlements(): Flow<Set<Entitlement>> = purchaseUpdates.updates
-        .onSubscription { emit(PurchaseUpdate.Refresh) }
-        .map { update ->
-            when (update) {
-                is PurchaseUpdate.Known -> RefreshResult.Refreshed(update.owned)
-                is PurchaseUpdate.FromPlay, PurchaseUpdate.Refresh -> queryOwnedEntitlements()
+    override fun entitlements(): Flow<Set<Entitlement>> = flow {
+        var owned = emptySet<Entitlement>()
+        purchaseUpdates.updates
+            .onSubscription { emit(PurchaseUpdate.Refresh) }
+            .collect { update ->
+                owned = when (update) {
+                    is PurchaseUpdate.Known -> update.owned
+                    PurchaseUpdate.Refresh -> queryOwnedEntitlements().ownedOr(owned)
+                    is PurchaseUpdate.FromPlay -> queryOwnedEntitlements().ownedOr(owned + update.purchasedEntitlements)
+                }
+                emit(owned)
             }
-        }
-        .keepingLastKnown()
-        .distinctUntilChanged()
+    }.distinctUntilChanged()
 
     override fun offers(): Flow<List<Offer>> = combine(
         flow { emit(queryOffers()) },
@@ -165,13 +167,17 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
     }
 }
 
-private fun Flow<RefreshResult>.keepingLastKnown(): Flow<Set<Entitlement>> = flow {
-    var lastKnown = emptySet<Entitlement>()
-    collect { queried ->
-        if (queried is RefreshResult.Refreshed) lastKnown = queried.owned
-        emit(lastKnown)
-    }
+private fun RefreshResult.ownedOr(fallback: Set<Entitlement>): Set<Entitlement> = when (this) {
+    is RefreshResult.Refreshed -> owned
+    RefreshResult.Failed -> fallback
 }
+
+private val PurchaseUpdate.FromPlay.purchasedEntitlements: Set<Entitlement>
+    get() = if (responseCode == BillingResponseCode.OK) {
+        purchases.filter { it.purchaseState == Purchase.PurchaseState.PURCHASED }.flatMap { it.products }.mapNotNull(::entitlementOf).toSet()
+    } else {
+        emptySet()
+    }
 
 private fun PurchaseUpdate.FromPlay.concerns(entitlement: Entitlement): Boolean =
     responseCode != BillingResponseCode.OK || purchases.any { entitlement.productId in it.products }
