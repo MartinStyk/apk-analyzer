@@ -82,7 +82,7 @@ private fun ProContent(
             Text(
                 text = stringResource(R.string.pro_title),
                 style = AppTheme.typography.titleMedium,
-                color = AppTheme.colors.primary,
+                color = AppTheme.colors.pro,
             )
             Text(
                 text = headline(state.reason),
@@ -169,6 +169,8 @@ private fun PurchaseArea(
                     text = stringResource(R.string.pro_unlock, offer.offer.formattedPrice),
                     onClick = onUnlock,
                     enabled = !state.status.blocksActions,
+                    containerColor = AppTheme.colors.proContainer,
+                    contentColor = AppTheme.colors.pro,
                     modifier = Modifier.fillMaxWidth(),
                 )
             }

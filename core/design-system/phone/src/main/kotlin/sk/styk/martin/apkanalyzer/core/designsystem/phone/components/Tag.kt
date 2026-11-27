@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,14 +25,15 @@ fun Tag(
     modifier: Modifier = Modifier,
     icon: ImageVector? = null,
     highlighted: Boolean = false,
+    contentColor: Color = if (highlighted) AppTheme.colors.onSecondaryContainer else AppTheme.colors.onSurfaceVariant,
+    containerColor: Color = if (highlighted) AppTheme.colors.secondaryContainer else AppTheme.colors.surfaceVariant,
 ) {
-    val contentColor = if (highlighted) AppTheme.colors.onSecondaryContainer else AppTheme.colors.onSurfaceVariant
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         modifier = modifier
             .clip(Shapes.CardShape)
-            .background(if (highlighted) AppTheme.colors.secondaryContainer else AppTheme.colors.surfaceVariant)
+            .background(containerColor)
             .padding(horizontal = 6.dp, vertical = 2.dp),
     ) {
         if (icon != null) {

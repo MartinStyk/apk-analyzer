@@ -7,6 +7,7 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.tooling.preview.Preview
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
+import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.R
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 
@@ -16,15 +17,24 @@ fun ProBadge(modifier: Modifier = Modifier) {
     Tag(
         text = stringResource(R.string.pro_badge),
         icon = ApkAnalyzerIcons.Lock,
-        highlighted = true,
+        contentColor = AppTheme.colors.pro,
+        containerColor = AppTheme.colors.proContainer,
         modifier = modifier.clearAndSetSemantics { contentDescription = description },
     )
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun ProBadgePreview() {
-    ApkAnalyzerTheme {
+    ApkAnalyzerTheme(isDarkTheme = false) {
+        ProBadge()
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFF161618)
+@Composable
+private fun ProBadgeDarkPreview() {
+    ApkAnalyzerTheme(isDarkTheme = true) {
         ProBadge()
     }
 }
