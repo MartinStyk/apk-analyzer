@@ -135,7 +135,7 @@ internal class WhatChangedViewModel @Inject constructor(
         val recordingSince = recordingSince ?: return null
         val since = range.since(now = Instant.now(), previousVisit = previousVisit, recordingSince = recordingSince)
         val summary = summarySince(since)
-        val access = accessPolicy.accessTo(this, hasPro)
+        val access = accessPolicy.accessTo(hasPro)
         val lockedApps = mutableSetOf<PackageName>()
         fun <T> T.gated(
             packageName: PackageName,
@@ -145,17 +145,17 @@ internal class WhatChangedViewModel @Inject constructor(
             if (!isReadable) lockedApps += packageName
             return toLockableRow(key, isReadable)
         }
-        val needsAttention = summary.needsAttention.map { attention ->
+        val needsAttention = summary.needsAttention.mapIndexed { index, attention ->
             val change = attention.change
             val item = itemMapper.map(change.packageName, change.applicationName, change.change, revertedAt = attention.revertedAt)
-            item.gated(change.packageName, item.key, access.canRead(change.packageName, change.change))
+            item.gated(change.packageName, item.key, access.canReadSectionRow(index, change.change))
         }
-        val changedApps = summary.changedApps.map { app ->
-            app.toItem().gated(app.packageName, app.packageName.value, access.canRead(app))
+        val changedApps = summary.changedApps.mapIndexed { index, app ->
+            app.toItem().gated(app.packageName, app.packageName.value, access.canReadSectionRow(index, app))
         }
         val uninstalledApps = apps.filter { it.packageName !in installed }
             .sortedByDescending { app -> app.entries.firstOrNull()?.occurredAt }
-            .map { app -> app.toUninstalledItem().gated(app.packageName, app.packageName.value, access.canReadApp(app.packageName)) }
+            .mapIndexed { index, app -> app.toUninstalledItem().gated(app.packageName, app.packageName.value, access.canReadSectionRow(index)) }
         return WhatChangedState.Loaded(
             range = range,
             since = since,
