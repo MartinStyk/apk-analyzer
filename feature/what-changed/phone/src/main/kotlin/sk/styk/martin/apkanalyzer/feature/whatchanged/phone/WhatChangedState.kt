@@ -19,7 +19,7 @@ internal sealed interface WhatChangedState {
         val since: Instant,
         val updateCount: Int,
         val newAppCount: Int,
-        val latestChange: AppChangeItem?,
+        val lastChangeAt: Instant?,
         val needsAttention: List<AppChangeItem>,
         val changedApps: List<ChangedAppItem>,
         val uninstalledApps: List<UninstalledAppItem>,

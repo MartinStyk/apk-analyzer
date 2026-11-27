@@ -9,8 +9,7 @@
     <string name="what_changed_range_all_time">Sepanjang waktu</string>
     <string name="what_changed_since">Sejak %1$s</string>
     <string name="what_changed_nothing_since">Tidak ada perubahan sejak %1$s</string>
-    <string name="what_changed_nothing_hint">Pilih rentang yang lebih panjang untuk melihat perubahan lama.</string>
-    <string name="what_changed_section_latest">Perubahan terbaru</string>
+    <string name="what_changed_last_change_hint">Perubahan terakhir pada %1$s. Pilih rentang yang lebih panjang untuk melihatnya.</string>
     <string name="what_changed_section_attention">Perlu perhatian</string>
     <string name="what_changed_section_changed_apps">Aplikasi yang berubah</string>
     <string name="what_changed_section_uninstalled">Tidak terinstal lagi</string>

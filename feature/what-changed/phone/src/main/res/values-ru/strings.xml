@@ -9,8 +9,7 @@
     <string name="what_changed_range_all_time">За всё время</string>
     <string name="what_changed_since">С %1$s</string>
     <string name="what_changed_nothing_since">Нет изменений с %1$s</string>
-    <string name="what_changed_nothing_hint">Выберите период подлиннее, чтобы увидеть более ранние изменения.</string>
-    <string name="what_changed_section_latest">Последнее изменение</string>
+    <string name="what_changed_last_change_hint">Последнее изменение было %1$s. Выберите период подлиннее, чтобы увидеть его.</string>
     <string name="what_changed_section_attention">Требует внимания</string>
     <string name="what_changed_section_changed_apps">Изменённые приложения</string>
     <string name="what_changed_section_uninstalled">Больше не установлены</string>

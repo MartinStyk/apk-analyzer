@@ -9,8 +9,7 @@
     <string name="what_changed_range_all_time">शुरू से अब तक</string>
     <string name="what_changed_since">%1$s से</string>
     <string name="what_changed_nothing_since">%1$s से कोई बदलाव नहीं</string>
-    <string name="what_changed_nothing_hint">पुराने बदलाव देखने के लिए लंबी अवधि चुनें।</string>
-    <string name="what_changed_section_latest">ताज़ा बदलाव</string>
+    <string name="what_changed_last_change_hint">पिछला बदलाव %1$s को हुआ था। इसे देखने के लिए लंबी अवधि चुनें।</string>
     <string name="what_changed_section_attention">ध्यान देने लायक</string>
     <string name="what_changed_section_changed_apps">बदले गए ऐप</string>
     <string name="what_changed_section_uninstalled">अब इंस्टॉल नहीं हैं</string>

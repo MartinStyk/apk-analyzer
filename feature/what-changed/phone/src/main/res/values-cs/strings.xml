@@ -9,8 +9,7 @@
     <string name="what_changed_range_all_time">Celé období</string>
     <string name="what_changed_since">Od %1$s</string>
     <string name="what_changed_nothing_since">Žádné změny od %1$s</string>
-    <string name="what_changed_nothing_hint">Pokud chcete vidět starší změny, vyberte delší období.</string>
-    <string name="what_changed_section_latest">Poslední změna</string>
+    <string name="what_changed_last_change_hint">Poslední změna proběhla %1$s. Pokud ji chcete vidět, vyberte delší období.</string>
     <string name="what_changed_section_attention">Vyžaduje pozornost</string>
     <string name="what_changed_section_changed_apps">Změněné aplikace</string>
     <string name="what_changed_section_uninstalled">Už nejsou nainstalované</string>

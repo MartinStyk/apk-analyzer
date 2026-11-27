@@ -129,9 +129,7 @@ internal class WhatChangedViewModel @Inject constructor(
             since = since,
             updateCount = summary.updateCount,
             newAppCount = summary.newAppCount,
-            latestChange = latestChange
-                ?.takeIf { summary.changedApps.isEmpty() }
-                ?.let { itemMapper.map(it.packageName, it.applicationName, it.change) },
+            lastChangeAt = latestChange?.change?.timestamp?.takeIf { summary.changedApps.isEmpty() && it < since },
             needsAttention = summary.needsAttention.map { item ->
                 itemMapper.map(item.change.packageName, item.change.applicationName, item.change.change, revertedAt = item.revertedAt)
             },

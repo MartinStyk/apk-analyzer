@@ -26,8 +26,9 @@ package `sk.styk.martin.apkanalyzer.feature.whatchanged.phone`. There is no TV m
   needs-attention, revert dates. The ViewModels only choose the range and map to UI models; never
   recompute "needs attention" or a count here, or the tab and the per-app timeline will disagree.
 * **The range filters the summary, Needs attention and Changed apps.** No longer installed and the
-  full log always cover all recorded history. Latest change appears only when the range has no
-  changed apps: otherwise it would repeat the first Changed apps or Needs attention row.
+  full log always cover all recorded history. There is no "Latest change" section: it only repeated
+  rows already listed. An empty range names the date of the last change instead, so the user knows
+  how far to widen it. The roadmap's free sample card (`HI-06`) comes back with the Pro gate.
 * **"Since last visit" means the previous app run that opened the tab.** `WhatChangedVisitTracker`
   reads and replaces the stored visit once per process, so reopening the tab in the same run never
   moves the start. Never visited means all recorded history. There is no 7-day floor, so "No changes

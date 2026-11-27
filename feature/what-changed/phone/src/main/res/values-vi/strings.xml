@@ -9,8 +9,7 @@
     <string name="what_changed_range_all_time">Toàn bộ thời gian</string>
     <string name="what_changed_since">Từ %1$s</string>
     <string name="what_changed_nothing_since">Không có thay đổi từ %1$s</string>
-    <string name="what_changed_nothing_hint">Chọn khoảng thời gian dài hơn để xem các thay đổi cũ hơn.</string>
-    <string name="what_changed_section_latest">Thay đổi mới nhất</string>
+    <string name="what_changed_last_change_hint">Thay đổi gần nhất là vào %1$s. Chọn khoảng thời gian dài hơn để xem.</string>
     <string name="what_changed_section_attention">Cần chú ý</string>
     <string name="what_changed_section_changed_apps">Ứng dụng đã thay đổi</string>
     <string name="what_changed_section_uninstalled">Không còn được cài đặt</string>

@@ -43,7 +43,6 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.TextButton
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.navigationBarContentPadding
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.format.historyDate
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.lazylist.ListItemPosition
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.lazylist.itemsPositioned
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
@@ -143,17 +142,6 @@ private fun LoadedContent(
         item(key = "summary") {
             Summary(state = state)
         }
-        state.latestChange?.let { latest ->
-            item(key = "latest-header") { ListSectionHeader(title = stringResource(R.string.what_changed_section_latest).uppercase(locale)) }
-            item(key = "latest-${latest.key}") {
-                AppChangeRow(
-                    item = latest,
-                    position = ListItemPosition.Single,
-                    onClick = { onAction(WhatChangedAction.OpenChange(latest)) },
-                    onLongClick = { copyText -> onAction(WhatChangedAction.CopyItem(latest.appName, copyText)) },
-                )
-            }
-        }
         changeSection(
             key = "attention",
             title = R.string.what_changed_section_attention,
@@ -206,11 +194,11 @@ private fun LazyListScope.changedAppsSection(
     uppercase: (String) -> String,
 ) {
     if (state.changedApps.isEmpty()) {
-        if (state.range == WhatChangedRange.AllTime) return
+        val lastChangeAt = state.lastChangeAt ?: return
         item(key = "changed-header") { ListSectionHeader(title = uppercase(stringResource(R.string.what_changed_section_changed_apps))) }
         item(key = "changed-empty") {
             Text(
-                text = stringResource(R.string.what_changed_nothing_hint),
+                text = stringResource(R.string.what_changed_last_change_hint, lastChangeAt.historyDate()),
                 style = AppTheme.typography.bodyMedium,
                 color = AppTheme.colors.onSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 4.dp),
@@ -317,7 +305,7 @@ private val PreviewLoaded = WhatChangedState.Loaded(
     since = PreviewNow.minusSeconds(7 * 86_400L),
     updateCount = 6,
     newAppCount = 2,
-    latestChange = null,
+    lastChangeAt = null,
     needsAttention = listOf(
         PreviewChange,
         PreviewChange.copy(packageName = "com.whatsapp", appName = "WhatsApp", snapshotId = 9, parts = emptyList(), hasCertificateChange = true),
@@ -346,7 +334,7 @@ private fun WhatChangedNothingInRangePreview() {
             state = PreviewLoaded.copy(
                 updateCount = 0,
                 newAppCount = 0,
-                latestChange = PreviewChange.copy(date = PreviewNow.minusSeconds(16 * 86_400L)),
+                lastChangeAt = PreviewNow.minusSeconds(16 * 86_400L),
                 needsAttention = emptyList(),
                 changedApps = emptyList(),
                 uninstalledApps = emptyList(),

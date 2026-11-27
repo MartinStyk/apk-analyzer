@@ -9,8 +9,7 @@
     <string name="what_changed_range_all_time">Tüm zamanlar</string>
     <string name="what_changed_since">%1$s tarihinden beri</string>
     <string name="what_changed_nothing_since">%1$s tarihinden beri değişiklik yok</string>
-    <string name="what_changed_nothing_hint">Daha eski değişiklikleri görmek için daha uzun bir aralık seçin.</string>
-    <string name="what_changed_section_latest">Son değişiklik</string>
+    <string name="what_changed_last_change_hint">Son değişiklik %1$s tarihindeydi. Görmek için daha uzun bir aralık seçin.</string>
     <string name="what_changed_section_attention">Dikkat gerektiriyor</string>
     <string name="what_changed_section_changed_apps">Değişen uygulamalar</string>
     <string name="what_changed_section_uninstalled">Artık yüklü değil</string>

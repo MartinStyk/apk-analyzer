@@ -9,8 +9,7 @@
     <string name="what_changed_range_all_time">Todo el tiempo</string>
     <string name="what_changed_since">Desde el %1$s</string>
     <string name="what_changed_nothing_since">Sin cambios desde el %1$s</string>
-    <string name="what_changed_nothing_hint">Elige un periodo más largo para ver cambios anteriores.</string>
-    <string name="what_changed_section_latest">Último cambio</string>
+    <string name="what_changed_last_change_hint">El último cambio fue el %1$s. Elige un periodo más largo para verlo.</string>
     <string name="what_changed_section_attention">Requiere atención</string>
     <string name="what_changed_section_changed_apps">Apps con cambios</string>
     <string name="what_changed_section_uninstalled">Ya no instaladas</string>

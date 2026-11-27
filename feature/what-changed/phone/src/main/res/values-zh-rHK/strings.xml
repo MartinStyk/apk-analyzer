@@ -9,8 +9,7 @@
     <string name="what_changed_range_all_time">所有時間</string>
     <string name="what_changed_since">自 %1$s 起</string>
     <string name="what_changed_nothing_since">自 %1$s 起沒有任何更改</string>
-    <string name="what_changed_nothing_hint">選擇較長的時間範圍，便可查看較早的更改。</string>
-    <string name="what_changed_section_latest">最新更改</string>
+    <string name="what_changed_last_change_hint">最近一次更改是在 %1$s。選擇較長的時間範圍，便可查看。</string>
     <string name="what_changed_section_attention">需要注意</string>
     <string name="what_changed_section_changed_apps">有更改的應用程式</string>
     <string name="what_changed_section_uninstalled">已解除安裝</string>

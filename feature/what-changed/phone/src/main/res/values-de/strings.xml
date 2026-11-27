@@ -2,15 +2,14 @@
 <resources>
     <string name="what_changed_title">Was sich geändert hat</string>
     <string name="what_changed_full_history">Gesamter Verlauf</string>
-    <string name="what_changed_range_since_last_visit">Seit dem letzten Besuch</string>
+    <string name="what_changed_range_since_last_visit">Seit deinem letzten Besuch</string>
     <string name="what_changed_range_7_days">7 Tage</string>
     <string name="what_changed_range_30_days">30 Tage</string>
     <string name="what_changed_range_90_days">90 Tage</string>
     <string name="what_changed_range_all_time">Gesamter Zeitraum</string>
     <string name="what_changed_since">Seit %1$s</string>
     <string name="what_changed_nothing_since">Keine Änderungen seit %1$s</string>
-    <string name="what_changed_nothing_hint">Wähle einen längeren Zeitraum, um ältere Änderungen zu sehen.</string>
-    <string name="what_changed_section_latest">Letzte Änderung</string>
+    <string name="what_changed_last_change_hint">Die letzte Änderung war am %1$s. Wähle einen längeren Zeitraum, um sie zu sehen.</string>
     <string name="what_changed_section_attention">Erfordert Aufmerksamkeit</string>
     <string name="what_changed_section_changed_apps">Geänderte Apps</string>
     <string name="what_changed_section_uninstalled">Nicht mehr installiert</string>

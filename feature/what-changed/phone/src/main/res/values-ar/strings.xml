@@ -9,8 +9,7 @@
     <string name="what_changed_range_all_time">كل الأوقات</string>
     <string name="what_changed_since">منذ %1$s</string>
     <string name="what_changed_nothing_since">لا تغييرات منذ %1$s</string>
-    <string name="what_changed_nothing_hint">اختر نطاقًا زمنيًا أطول لعرض التغييرات الأقدم.</string>
-    <string name="what_changed_section_latest">أحدث تغيير</string>
+    <string name="what_changed_last_change_hint">كان آخر تغيير في %1$s. اختر نطاقًا زمنيًا أطول لعرضه.</string>
     <string name="what_changed_section_attention">يحتاج إلى انتباه</string>
     <string name="what_changed_section_changed_apps">التطبيقات المتغيّرة</string>
     <string name="what_changed_section_uninstalled">لم تعد مثبّتة</string>

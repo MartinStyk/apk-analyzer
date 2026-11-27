@@ -9,8 +9,7 @@
     <string name="what_changed_range_all_time">전체 기간</string>
     <string name="what_changed_since">%1$s 이후</string>
     <string name="what_changed_nothing_since">%1$s 이후 변경 없음</string>
-    <string name="what_changed_nothing_hint">더 긴 기간을 선택하면 이전 변경 사항을 볼 수 있습니다.</string>
-    <string name="what_changed_section_latest">최근 변경</string>
+    <string name="what_changed_last_change_hint">마지막 변경은 %1$s입니다. 더 긴 기간을 선택하면 볼 수 있습니다.</string>
     <string name="what_changed_section_attention">확인 필요</string>
     <string name="what_changed_section_changed_apps">변경된 앱</string>
     <string name="what_changed_section_uninstalled">더 이상 설치되어 있지 않음</string>
