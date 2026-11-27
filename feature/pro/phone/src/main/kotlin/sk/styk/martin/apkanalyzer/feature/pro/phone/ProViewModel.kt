@@ -21,6 +21,7 @@ import sk.styk.martin.apkanalyzer.core.entitlements.api.PurchaseResult
 import sk.styk.martin.apkanalyzer.feature.pro.api.PaywallReason
 import sk.styk.martin.apkanalyzer.feature.pro.phone.analytics.ProAnalytics
 import sk.styk.martin.apkanalyzer.feature.pro.phone.analytics.ProAnalyticsEvent
+import sk.styk.martin.apkanalyzer.feature.pro.phone.analytics.RestoreOutcome
 
 @HiltViewModel(assistedFactory = ProViewModel.Factory::class)
 internal class ProViewModel @AssistedInject constructor(
@@ -86,9 +87,18 @@ internal class ProViewModel @AssistedInject constructor(
         if (state.value.status.blocksActions) return
         state.update { it.copy(status = ProStatus.Restoring) }
         viewModelScope.launch {
-            val restored = Entitlement.Pro in entitlementsRepository.refresh()
-            analytics.track(ProAnalyticsEvent.RestoreFinished(reason, restored))
-            if (restored) close() else state.update { it.copy(status = ProStatus.NothingToRestore) }
+            val owned = entitlementsRepository.refresh()
+            val outcome = when {
+                owned == null -> RestoreOutcome.Failed
+                Entitlement.Pro in owned -> RestoreOutcome.Restored
+                else -> RestoreOutcome.NothingFound
+            }
+            analytics.track(ProAnalyticsEvent.RestoreFinished(reason, outcome))
+            when (outcome) {
+                RestoreOutcome.Restored -> close()
+                RestoreOutcome.NothingFound -> state.update { it.copy(status = ProStatus.NothingToRestore) }
+                RestoreOutcome.Failed -> state.update { it.copy(status = ProStatus.Failed) }
+            }
         }
     }
 

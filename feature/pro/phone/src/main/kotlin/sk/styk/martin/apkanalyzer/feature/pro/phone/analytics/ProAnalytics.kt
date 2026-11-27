@@ -24,12 +24,19 @@ internal class ProAnalytics @Inject constructor(private val analyticsTracker: An
 
                 is ProAnalyticsEvent.RestoreFinished -> AnalyticsEvent(
                     "pro_restore_finished",
-                    mapOf(source, AnalyticsParameterName.Result to if (event.restored) "restored" else "nothing_found"),
+                    mapOf(source, AnalyticsParameterName.Result to event.outcome.analyticsValue),
                 )
             },
         )
     }
 }
+
+private val RestoreOutcome.analyticsValue: String
+    get() = when (this) {
+        RestoreOutcome.Restored -> "restored"
+        RestoreOutcome.NothingFound -> "nothing_found"
+        RestoreOutcome.Failed -> "failed"
+    }
 
 private val PaywallReason.analyticsValue: String
     get() = when (this) {

@@ -47,7 +47,7 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
 
     override fun entitlements(): Flow<Set<Entitlement>> = purchaseUpdates.updates
         .onSubscription { emit(PurchaseUpdate.Refresh) }
-        .map { queryOwnedEntitlements() }
+        .map { update -> update.owned ?: queryOwnedEntitlements() }
         .keepingLastKnown()
         .distinctUntilChanged()
 
@@ -78,15 +78,14 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
             } else {
                 update.cancel()
                 if (launchResult.responseCode == BillingResponseCode.ITEM_ALREADY_OWNED) {
-                    queryOwnedEntitlements()
-                    purchaseUpdates.refresh()
+                    refresh()
                 }
                 purchaseResultOf(launchResult.responseCode)
             }
         }
     }
 
-    override suspend fun refresh(): Set<Entitlement> = queryOwnedEntitlements().orEmpty().also { purchaseUpdates.refresh() }
+    override suspend fun refresh(): Set<Entitlement>? = queryOwnedEntitlements()?.also { purchaseUpdates.publish(it) }
 
     private suspend fun queryOwnedEntitlements(): Set<Entitlement>? {
         if (!billingConnection.connect()) return null

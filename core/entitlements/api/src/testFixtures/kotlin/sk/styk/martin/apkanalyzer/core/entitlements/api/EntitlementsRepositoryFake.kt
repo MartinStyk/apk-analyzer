@@ -33,5 +33,7 @@ class EntitlementsRepositoryFake(vararg entitlements: Entitlement) : Entitlement
         return purchaseResult
     }
 
-    override suspend fun refresh(): Set<Entitlement> = owned.value
+    var isPlayReachable: Boolean = true
+
+    override suspend fun refresh(): Set<Entitlement>? = owned.value.takeIf { isPlayReachable }
 }

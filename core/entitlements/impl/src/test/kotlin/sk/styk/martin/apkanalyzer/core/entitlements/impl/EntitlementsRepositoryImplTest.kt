@@ -211,12 +211,25 @@ class EntitlementsRepositoryImplTest {
         billingClient.givenPurchases()
         val entitlements = mutableListOf<Set<Entitlement>>()
         backgroundScope.launch(dispatcherProvider.default()) { repository.entitlements().toList(entitlements) }
-        billingClient.givenPurchases(aProPurchase())
+        every { billingClient.queryPurchasesAsync(any(), any()) } answers {
+            secondArg<PurchasesResponseListener>().onQueryPurchasesResponse(aBillingResult(BillingResponseCode.OK), listOf(aProPurchase()))
+        } andThenAnswer {
+            secondArg<PurchasesResponseListener>().onQueryPurchasesResponse(aBillingResult(BillingResponseCode.SERVICE_UNAVAILABLE), emptyList())
+        }
 
         val refreshed = repository.refresh()
 
         refreshed shouldBe setOf(Entitlement.Pro)
         entitlements shouldBe listOf(emptySet(), setOf(Entitlement.Pro))
+    }
+
+    @Test
+    fun `Given Play cannot be reached When refreshing Then the refresh fails`() = runTest {
+        billingClient.givenBillingUnavailable()
+
+        val refreshed = repository.refresh()
+
+        refreshed shouldBe null
     }
 
     @Test

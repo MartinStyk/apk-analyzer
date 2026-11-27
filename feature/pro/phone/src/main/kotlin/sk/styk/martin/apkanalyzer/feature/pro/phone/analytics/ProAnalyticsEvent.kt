@@ -12,5 +12,11 @@ internal sealed interface ProAnalyticsEvent {
 
     data class PurchaseFinished(override val reason: PaywallReason, val result: PurchaseResult) : ProAnalyticsEvent
 
-    data class RestoreFinished(override val reason: PaywallReason, val restored: Boolean) : ProAnalyticsEvent
+    data class RestoreFinished(override val reason: PaywallReason, val outcome: RestoreOutcome) : ProAnalyticsEvent
+}
+
+internal enum class RestoreOutcome {
+    Restored,
+    NothingFound,
+    Failed,
 }
