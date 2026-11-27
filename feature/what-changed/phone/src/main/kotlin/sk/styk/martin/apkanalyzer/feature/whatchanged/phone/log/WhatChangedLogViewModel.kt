@@ -99,11 +99,11 @@ internal class WhatChangedLogViewModel @Inject constructor(
     }
 
     private fun AppHistoryDeviceTimeline.Available.toEntries(hasPro: Boolean): List<LogEntry> {
-        val access = accessPolicy.accessTo(this, hasPro)
-        return allEntries.map {
+        val access = accessPolicy.accessTo(hasPro)
+        return allEntries.mapIndexed { index, entry ->
             LogEntry(
-                item = itemMapper.map(it.packageName, it.applicationName, it.entry),
-                isReadable = access.canRead(it.packageName, it.entry),
+                item = itemMapper.map(entry.packageName, entry.applicationName, entry.entry),
+                isReadable = access.canReadLogRow(index, entry.entry),
             )
         }
     }

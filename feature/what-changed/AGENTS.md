@@ -51,12 +51,14 @@ Applies to this tab and its full log only. Per-app history in `feature:app-detai
 every app.
 
 * **One decision per row, from one class.** `WhatChangedAccessPolicy` reads
-  `EntitlementsRepository.entitlements()` and builds a `WhatChangedAccess` per timeline; both
-  ViewModels ask it whether each row is readable, so the tab and the log cannot disagree.
-* **Without Pro, exactly one app is free in full:** the device's most recently changed app
-  (`AppHistoryDeviceTimeline.Available.latestChange`), in every section and in the log. Also free:
-  any certificate change (and a Changed apps row whose net change includes one) and first-recorded
-  rows. Summary counts and range chips stay free.
+  `EntitlementsRepository.entitlements()` and builds a `WhatChangedAccess`; both ViewModels ask it
+  whether each row is readable.
+* **Without Pro, previews are positional:** the first five rows in each tab section and the first
+  ten rows in the full log are readable, in their existing newest-first order. A readable row never
+  unlocks later rows for the same app. The log assigns access before category filtering and month
+  grouping, so filters cannot reveal additional rows. Also free: any certificate change (and a
+  Changed apps row whose net change includes one) and all first-recorded rows. These exceptions
+  still occupy their normal positions in the preview. Summary counts and range chips stay free.
   Everything else is a locked row. With Pro (and in release, where `noop` grants it) nothing is locked.
 * **A locked row never carries real data.** State holds `LockableRow.Locked(key)` only, and
   `LockedRow` draws blurred placeholder shapes with a `ProBadge`, because `Modifier.blur` does nothing

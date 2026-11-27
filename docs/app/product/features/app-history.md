@@ -286,16 +286,18 @@ Four rules this screen lives or dies by:
 Lives in `feature:what-changed`, debug builds only (`ConfigurationKey.WhatChangedTabEnabled`), with no
 sample card or category stubs. Differences from the design above, all decided with the app owner:
 
-- **The Pro gate locks rows, not a sample card.** Without Pro, the device's most recently changed app
-  is readable in full in every section and in the full log; certificate changes and first-recorded
-  rows stay free too. Every other row is a blurred placeholder with a Pro badge that
+- **The Pro gate locks rows, not a sample card.** Without Pro, the first five rows in each tab
+  section and the first ten rows in the full log are readable in newest-first order. A readable
+  row does not unlock later rows for the same app. The full log applies its limit before filters
+  and month grouping. Certificate changes and all first-recorded rows stay free too, without
+  expanding the positional preview. Every other row is a blurred placeholder with a Pro badge that
   hides the app name, icon and values, and opens the paywall when tapped. Summary counts and range
   chips stay free. Per-app history in app detail stays free for every app.
 - **The window is user-selectable** — chips for *Since last visit* (default), 7, 30 and 90 days, and
   *All time*, remembered across launches. *Since last visit* is the previous app run that opened the
   tab, with **no 7-day floor**, so "No changes since …" is an accepted summary. The range filters the
   summary, Needs attention and the app list; No longer installed ignores it. There is no Latest
-  change card: it only repeated rows already listed, and the readable latest app replaces it. An
+  change card: it only repeated rows already listed, and the readable preview replaces it. An
   empty range names the date of the last change instead.
 - **The summary counts updates (including updates that changed nothing visible), new apps by install
   date, and apps needing attention.** There is no "removed" count: the store does not record when an
