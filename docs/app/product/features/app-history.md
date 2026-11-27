@@ -287,8 +287,8 @@ Lives in `feature:what-changed`, debug builds only (`ConfigurationKey.WhatChange
 sample card or category stubs. Differences from the design above, all decided with the app owner:
 
 - **The Pro gate locks rows, not a sample card.** Without Pro, the device's most recently changed app
-  is readable in full in every section and in the full log; certificate changes, first-recorded rows
-  and install-only rows stay free too. Every other row is a blurred placeholder with a Pro badge that
+  is readable in full in every section and in the full log; certificate changes and first-recorded
+  rows stay free too. Every other row is a blurred placeholder with a Pro badge that
   hides the app name, icon and values, and opens the paywall when tapped. Summary counts and range
   chips stay free. Per-app history in app detail stays free for every app.
 - **The window is user-selectable** — chips for *Since last visit* (default), 7, 30 and 90 days, and

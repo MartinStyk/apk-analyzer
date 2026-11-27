@@ -464,16 +464,17 @@ private val PreviewLoaded = WhatChangedState.Loaded(
             ChangedAppItem("com.instagram.android", "Instagram", 2, false, NetChange.Changed(PreviewChange.parts, hasCertificateChange = false)),
             "com.instagram.android",
         ),
-        LockableRow.Readable(ChangedAppItem("org.thoughtcrime.securesms", "Signal", 0, true, NetChange.NotCompared), "org.thoughtcrime.securesms"),
+        LockableRow.Locked("org.thoughtcrime.securesms"),
         LockableRow.Locked("com.android.chrome"),
     ),
     uninstalledApps = listOf(LockableRow.Locked("com.torch.pro")),
-    lockedAppCount = 2,
+    lockedAppCount = 3,
 )
 
 private val PreviewPro = PreviewLoaded.copy(
     needsAttention = PreviewLoaded.needsAttention.filterIsInstance<LockableRow.Readable<AppChangeItem>>(),
     changedApps = PreviewLoaded.changedApps.filterIsInstance<LockableRow.Readable<ChangedAppItem>>() +
+        LockableRow.Readable(ChangedAppItem("org.thoughtcrime.securesms", "Signal", 0, true, NetChange.NotCompared), "org.thoughtcrime.securesms") +
         LockableRow.Readable(ChangedAppItem("com.android.chrome", "Chrome", 2, false, NetChange.None), "com.android.chrome"),
     uninstalledApps = listOf(LockableRow.Readable(UninstalledAppItem("com.torch.pro", "Torch Pro", 5), "com.torch.pro")),
     lockedAppCount = 0,

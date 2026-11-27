@@ -55,8 +55,8 @@ every app.
   ViewModels ask it whether each row is readable, so the tab and the log cannot disagree.
 * **Without Pro, exactly one app is free in full:** the device's most recently changed app
   (`AppHistoryDeviceTimeline.Available.latestChange`), in every section and in the log. Also free:
-  any certificate change (and a Changed apps row whose net change includes one), first-recorded rows,
-  and a Changed apps row that only reports a new install. Summary counts and range chips stay free.
+  any certificate change (and a Changed apps row whose net change includes one) and first-recorded
+  rows. Summary counts and range chips stay free.
   Everything else is a locked row. With Pro (and in release, where `noop` grants it) nothing is locked.
 * **A locked row never carries real data.** State holds `LockableRow.Locked(key)` only, and
   `LockedRow` draws blurred placeholder shapes with a `ProBadge`, because `Modifier.blur` does nothing

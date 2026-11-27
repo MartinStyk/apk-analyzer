@@ -23,9 +23,6 @@ internal class WhatChangedAccessPolicy @Inject constructor(private val entitleme
 
 internal class WhatChangedAccess(private val hasPro: Boolean, private val sampleApp: PackageName?) {
 
-    private val AppHistoryChangedApp.isInstallOnly: Boolean
-        get() = isNew && updateCount == 0 && netChange == null
-
     fun canReadApp(packageName: PackageName): Boolean = hasPro || packageName == sampleApp
 
     fun canRead(packageName: PackageName, entry: AppHistoryEntry): Boolean = canReadApp(packageName) ||
@@ -34,7 +31,5 @@ internal class WhatChangedAccess(private val hasPro: Boolean, private val sample
             is AppHistoryEntry.Change -> entry.diff.hasCertificateChange
         }
 
-    fun canRead(app: AppHistoryChangedApp): Boolean = canReadApp(app.packageName) ||
-        app.netChange?.hasCertificateChange == true ||
-        app.isInstallOnly
+    fun canRead(app: AppHistoryChangedApp): Boolean = canReadApp(app.packageName) || app.netChange?.hasCertificateChange == true
 }
