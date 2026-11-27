@@ -26,6 +26,8 @@ import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.recordingSi
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.summaryParts
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.summarySince
 import sk.styk.martin.apkanalyzer.core.apps.api.InstalledAppsRepository
+import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
+import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.settings.Key
@@ -43,6 +45,7 @@ internal class WhatChangedViewModel @Inject constructor(
     private val persistenceRepository: PersistenceRepository,
     private val visitTracker: WhatChangedVisitTracker,
     private val itemMapper: AppChangeItemMapper,
+    private val clipboardManager: ClipboardManager,
     private val dispatcherProvider: DispatcherProvider,
 ) : ViewModel() {
 
@@ -76,6 +79,12 @@ internal class WhatChangedViewModel @Inject constructor(
             is WhatChangedAction.OpenChange -> sendEvent(action.item.toNavigationEvent())
 
             is WhatChangedAction.OpenAppHistory -> sendEvent(WhatChangedEvent.NavigateToAppHistory(action.packageName, action.appName))
+
+            is WhatChangedAction.CopyItem -> {
+                if (clipboardManager.copy(action.label, action.value) == CopyResult.FeedbackNotShown) {
+                    sendEvent(WhatChangedEvent.ShowCopiedFeedback)
+                }
+            }
         }
     }
 

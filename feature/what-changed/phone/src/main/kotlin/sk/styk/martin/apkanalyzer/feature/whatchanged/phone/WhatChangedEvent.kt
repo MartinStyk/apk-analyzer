@@ -14,4 +14,6 @@ internal sealed interface WhatChangedEvent {
     data class NavigateToFullDetail(val input: AppDetailInput.Historical) : WhatChangedEvent
 
     data class NavigateToAppHistory(val packageName: String, val appName: String) : WhatChangedEvent
+
+    data object ShowCopiedFeedback : WhatChangedEvent
 }

@@ -12,4 +12,6 @@ internal sealed interface WhatChangedAction {
     data class OpenChange(val item: AppChangeItem) : WhatChangedAction
 
     data class OpenAppHistory(val packageName: String, val appName: String) : WhatChangedAction
+
+    data class CopyItem(val label: String, val value: String) : WhatChangedAction
 }

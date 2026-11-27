@@ -1,5 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.whatchanged.phone
 
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -21,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -63,6 +65,7 @@ internal fun WhatChangedScreen(
     viewModel: WhatChangedViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
@@ -71,6 +74,7 @@ internal fun WhatChangedScreen(
                 is WhatChangedEvent.NavigateToChange -> onNavigateToChange(event.packageName, event.snapshotId, event.appName)
                 is WhatChangedEvent.NavigateToFullDetail -> onNavigateToFullDetail(event.input)
                 is WhatChangedEvent.NavigateToAppHistory -> onNavigateToAppHistory(event.packageName, event.appName)
+                WhatChangedEvent.ShowCopiedFeedback -> Toast.makeText(context, R.string.what_changed_copied, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -135,7 +139,12 @@ private fun LoadedContent(
         state.latestChange?.let { latest ->
             item(key = "latest-header") { ListSectionHeader(title = stringResource(R.string.what_changed_section_latest).uppercase(locale)) }
             item(key = "latest-${latest.key}") {
-                AppChangeRow(item = latest, position = ListItemPosition.Single, onClick = { onAction(WhatChangedAction.OpenChange(latest)) })
+                AppChangeRow(
+                    item = latest,
+                    position = ListItemPosition.Single,
+                    onClick = { onAction(WhatChangedAction.OpenChange(latest)) },
+                    onLongClick = { copyText -> onAction(WhatChangedAction.CopyItem(latest.appName, copyText)) },
+                )
             }
         }
         changeSection(
@@ -175,7 +184,12 @@ private fun LazyListScope.changeSection(
     if (items.isEmpty()) return
     item(key = "$key-header") { ListSectionHeader(title = uppercase(stringResource(title))) }
     itemsPositioned(items = items, key = { _, item -> "$key-${item.key}" }) { position, item ->
-        AppChangeRow(item = item, position = position, onClick = { onAction(WhatChangedAction.OpenChange(item)) })
+        AppChangeRow(
+            item = item,
+            position = position,
+            onClick = { onAction(WhatChangedAction.OpenChange(item)) },
+            onLongClick = { copyText -> onAction(WhatChangedAction.CopyItem(item.appName, copyText)) },
+        )
     }
 }
 
