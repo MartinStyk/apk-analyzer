@@ -2,6 +2,7 @@ package sk.styk.martin.apkanalyzer.core.designsystem.phone.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,6 +25,7 @@ fun Toolbar(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     subtitle: String? = null,
+    contentPadding: PaddingValues = PaddingValues(start = 4.dp, end = 8.dp, top = 12.dp, bottom = 12.dp),
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     Row(
@@ -31,7 +33,7 @@ fun Toolbar(
         modifier = modifier
             .fillMaxWidth()
             .background(AppTheme.colors.background)
-            .padding(start = 4.dp, end = 8.dp, top = 12.dp, bottom = 12.dp),
+            .padding(contentPadding),
     ) {
         IconButton(
             imageVector = ApkAnalyzerIcons.Back,

@@ -16,8 +16,6 @@
     <string name="inventory_export_columns_selected">Выбрано сведений: %1$d из %2$d</string>
     <string name="inventory_export_select_all">Выбрать всё</string>
     <string name="inventory_export_clear">Снять выделение</string>
-    <string name="inventory_export_slower_tag">Медленнее</string>
-    <string name="inventory_export_slow_hint">Некоторые выбранные сведения требуют более тщательного анализа каждого приложения, поэтому экспорт занимает больше времени.</string>
     <string name="inventory_export_usage_access_hint">Время последнего использования и размер хранилища остаются пустыми, пока вы не разрешите доступ к данным об использовании.</string>
     <string name="inventory_export_grant_access">Разрешить доступ</string>
     <string name="inventory_export_attribute_category">Категория</string>
@@ -104,7 +102,9 @@
     <string name="inventory_export_next">Далее</string>
     <string name="inventory_export_columns_omitted">В файл CSV не попадут: %1$s. CSV не поддерживает полные записи.</string>
     <string name="inventory_export_use_json">Использовать JSON</string>
-    <string name="inventory_export_pro_columns">Сведения сверх набора «Основное» для нескольких приложений доступны в Pro</string>
+    <string name="inventory_export_pro_columns">Основные сведения бесплатны. Разблокируйте Pro для экспорта остальных сведений.</string>
+    <string name="inventory_export_unlock_pro">Разблокировать Pro</string>
+    <string name="inventory_export_dismiss_hint">Скрыть уведомление</string>
     <string name="inventory_export_use_basics">Экспортировать только «Основное»</string>
     <string name="inventory_export_structured_hint">Сведения только для JSON включают полные записи, а не только количество. В файлах CSV их нет.</string>
     <string name="inventory_export_intro_got_it">Понятно</string>

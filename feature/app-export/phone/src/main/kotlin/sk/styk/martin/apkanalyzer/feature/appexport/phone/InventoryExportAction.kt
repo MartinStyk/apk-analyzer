@@ -26,6 +26,8 @@ sealed interface InventoryExportAction {
     data class ColumnGroupToggled(val group: InventoryColumnGroup) : ColumnSelectionAction
     data object AllColumnsToggled : ColumnSelectionAction
     data object OpenUsageAccessSettings : ColumnSelectionAction
+    data class DismissHint(val hint: InventoryExportHint) : InventoryExportAction
+    data object OpenPro : InventoryExportAction
 
     data object ShowIntro : InventoryExportAction
     data object DismissIntro : InventoryExportAction

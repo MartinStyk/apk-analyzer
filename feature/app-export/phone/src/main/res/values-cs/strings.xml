@@ -16,8 +16,6 @@
     <string name="inventory_export_columns_selected">Vybrané údaje: %1$d z %2$d</string>
     <string name="inventory_export_select_all">Vybrat vše</string>
     <string name="inventory_export_clear">Zrušit výběr</string>
-    <string name="inventory_export_slower_tag">Pomalejší</string>
-    <string name="inventory_export_slow_hint">Některé vybrané údaje vyžadují podrobnější kontrolu každé aplikace, takže export trvá déle.</string>
     <string name="inventory_export_usage_access_hint">Čas posledního použití a velikost úložiště zůstanou prázdné, dokud nepovolíte přístup k údajům o používání.</string>
     <string name="inventory_export_grant_access">Povolit přístup</string>
     <string name="inventory_export_attribute_category">Kategorie</string>
@@ -104,7 +102,9 @@
     <string name="inventory_export_next">Další</string>
     <string name="inventory_export_columns_omitted">Do souboru CSV se nedostanou: %1$s. CSV neumí uložit úplné záznamy.</string>
     <string name="inventory_export_use_json">Použít JSON</string>
-    <string name="inventory_export_pro_columns">Údaje nad rámec předvolby Základní pro více než jednu aplikaci jsou součástí Pro</string>
+    <string name="inventory_export_pro_columns">Základní údaje jsou zdarma. Odemkněte Pro pro export ostatních údajů.</string>
+    <string name="inventory_export_unlock_pro">Odemknout Pro</string>
+    <string name="inventory_export_dismiss_hint">Skrýt upozornění</string>
     <string name="inventory_export_use_basics">Exportovat jen Základní</string>
     <string name="inventory_export_structured_hint">Údaje pouze pro JSON obsahují úplné záznamy, nejen počty. Soubory CSV je vynechají.</string>
     <string name="inventory_export_intro_got_it">Rozumím</string>

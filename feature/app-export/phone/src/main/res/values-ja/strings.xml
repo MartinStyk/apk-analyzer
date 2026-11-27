@@ -13,8 +13,6 @@
     <string name="inventory_export_columns_selected">%2$d項目中%1$d項目を選択</string>
     <string name="inventory_export_select_all">すべて選択</string>
     <string name="inventory_export_clear">選択を解除</string>
-    <string name="inventory_export_slower_tag">時間がかかる</string>
-    <string name="inventory_export_slow_hint">選択した情報の一部は各アプリの詳しい分析が必要なため、エクスポートに時間がかかります。</string>
     <string name="inventory_export_usage_access_hint">使用状況へのアクセスを許可するまで、最終使用日時とストレージサイズは空欄になります。</string>
     <string name="inventory_export_grant_access">アクセスを許可</string>
     <string name="inventory_export_attribute_category">カテゴリ</string>
@@ -86,7 +84,9 @@
     <string name="inventory_export_next">次へ</string>
     <string name="inventory_export_columns_omitted">CSVファイルに含まれない情報: %1$s。CSVには完全なレコードを入れられません。</string>
     <string name="inventory_export_use_json">JSONを使う</string>
-    <string name="inventory_export_pro_columns">複数のアプリで基本以外の情報をエクスポートするには Pro が必要です</string>
+    <string name="inventory_export_pro_columns">基本情報は無料です。その他の情報をエクスポートするには Pro をアンロックしてください。</string>
+    <string name="inventory_export_unlock_pro">Pro をアンロック</string>
+    <string name="inventory_export_dismiss_hint">お知らせを閉じる</string>
     <string name="inventory_export_use_basics">代わりに基本をエクスポート</string>
     <string name="inventory_export_structured_hint">JSON専用の情報には、件数だけでなく完全なレコードが含まれます。CSVファイルでは除外されます。</string>
     <string name="inventory_export_intro_got_it">了解</string>

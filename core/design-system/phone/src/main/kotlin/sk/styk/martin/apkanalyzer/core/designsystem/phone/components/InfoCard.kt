@@ -29,6 +29,7 @@ fun InfoCard(
     modifier: Modifier = Modifier,
     tone: InfoCardTone = InfoCardTone.Info,
     action: (@Composable () -> Unit)? = null,
+    trailingAction: (@Composable () -> Unit)? = null,
 ) {
     Column(
         modifier = modifier
@@ -45,7 +46,7 @@ fun InfoCard(
             Spacer(modifier = Modifier.width(12.dp))
             Column(
                 verticalArrangement = Arrangement.spacedBy(2.dp),
-                modifier = Modifier.padding(end = 6.dp),
+                modifier = Modifier.weight(1f).padding(end = 6.dp),
             ) {
                 title?.let {
                     Text(
@@ -60,6 +61,7 @@ fun InfoCard(
                     color = tone.contentColor,
                 )
             }
+            trailingAction?.invoke()
         }
         action?.let {
             Row(

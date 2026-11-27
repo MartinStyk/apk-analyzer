@@ -29,8 +29,6 @@
     <string name="inventory_export_select_all">全選</string>
     <string name="inventory_export_clear">取消全選</string>
     <string name="inventory_export_no_columns_hint">請至少選擇一項要匯出的詳細資料。</string>
-    <string name="inventory_export_slower_tag">較耗時</string>
-    <string name="inventory_export_slow_hint">部分選取的資料需要進一步檢查每個應用程式，因此匯出會花較長時間。</string>
     <string name="inventory_export_usage_access_hint">允許存取使用情況資料後，才會填入上次使用時間和儲存空間大小。</string>
     <string name="inventory_export_grant_access">允許存取</string>
     <string name="inventory_export_attribute_category">類別</string>
@@ -82,7 +80,9 @@
     <string name="inventory_export_structured_hint">僅限 JSON 的詳細資料包含完整紀錄，而不只是數量。CSV 檔案不會納入這些資料。</string>
     <string name="inventory_export_columns_omitted">CSV 檔案未納入：%1$s。CSV 無法儲存完整紀錄。</string>
     <string name="inventory_export_use_json">改用 JSON</string>
-    <string name="inventory_export_pro_columns">為多個應用程式匯出基本資訊以外的詳細資料屬於 Pro 功能</string>
+    <string name="inventory_export_pro_columns">基本資訊免費。解鎖 Pro 即可匯出其他詳細資訊。</string>
+    <string name="inventory_export_unlock_pro">解鎖 Pro</string>
+    <string name="inventory_export_dismiss_hint">關閉提示</string>
     <string name="inventory_export_use_basics">改為只匯出基本資訊</string>
     <string name="inventory_export_json_only">僅限 JSON</string>
     <string name="inventory_export_stop_title">停止匯出？</string>

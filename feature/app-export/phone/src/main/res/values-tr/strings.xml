@@ -14,8 +14,6 @@
     <string name="inventory_export_columns_selected">%2$d ayrıntıdan %1$d tanesi seçildi</string>
     <string name="inventory_export_select_all">Tümünü seç</string>
     <string name="inventory_export_clear">Seçimi temizle</string>
-    <string name="inventory_export_slower_tag">Daha yavaş</string>
-    <string name="inventory_export_slow_hint">Seçilen bazı ayrıntılar her uygulamanın daha yakından incelenmesini gerektirdiği için dışa aktarma daha uzun sürer.</string>
     <string name="inventory_export_usage_access_hint">Kullanım verilerine erişime izin verene kadar son kullanım zamanı ve depolama boyutu boş kalır.</string>
     <string name="inventory_export_grant_access">Erişime izin ver</string>
     <string name="inventory_export_attribute_category">Kategori</string>
@@ -92,7 +90,9 @@
     <string name="inventory_export_next">İleri</string>
     <string name="inventory_export_columns_omitted">CSV dosyasında yer almayacak: %1$s. CSV tam kayıtları tutamaz.</string>
     <string name="inventory_export_use_json">JSON kullan</string>
-    <string name="inventory_export_pro_columns">Birden fazla uygulama için Temel dışındaki ayrıntılar Pro\'nun parçasıdır</string>
+    <string name="inventory_export_pro_columns">Temel bilgiler ücretsizdir. Diğer ayrıntıları dışa aktarmak için Pro kilidini açın.</string>
+    <string name="inventory_export_unlock_pro">Pro kilidini aç</string>
+    <string name="inventory_export_dismiss_hint">Bildirimi kapat</string>
     <string name="inventory_export_use_basics">Bunun yerine Temel\'i dışa aktar</string>
     <string name="inventory_export_structured_hint">Yalnızca JSON ayrıntıları, sadece sayıları değil tam kayıtları içerir. CSV dosyaları bunları dışarıda bırakır.</string>
     <string name="inventory_export_intro_got_it">Anladım</string>

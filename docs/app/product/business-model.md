@@ -89,9 +89,10 @@ the price or the target has to move.
    Gates stay honest (derived free sample, fail open, no ambush paywalls).
 4. **Added by the user: inventory export is Pro.** It is built (`feature:app-export`, #244) and
    hidden in release (`InventoryExportEnabled -> BuildConfig.DEBUG`). Gate per design decision 7A:
-   exporting one app with every raw attribute is free (also from the app detail summary sheet,
-   `AppInventoryExportNavKey`), and the whole flow and preview work for everyone. Exporting more
-   than one app is Pro, and the paywall opens on the Export tap. Derived columns (risk, trackers)
+   Basics columns are free for any number of apps, including exports from the app detail summary
+   sheet (`AppInventoryExportNavKey`), and the whole flow and preview work for everyone. Exporting
+   any other details requires Pro regardless of app count, and the paywall opens on Save, Share,
+   or the explicit Unlock Pro action. Derived columns (risk, trackers)
    will be Pro when they exist; none exist at launch. This is `BX`'s CSV/JSON export, already done.
 5. **Price is tested, not decided.** Launch at €3.99 and change it based on Play Console
    conversion data.
@@ -176,7 +177,7 @@ Build order across both releases:
    shipped in release N. Certificate changes notify everyone for free, everything else is Pro, and
    all of it is off until the user opts in.
 
-8. Inventory export: `InventoryExportEnabled` turned on for release; exporting more than one app asks for Pro on the Export tap (7A). Single-app export with every raw attribute is free. No derived columns at launch.
+8. Inventory export: `InventoryExportEnabled` turned on for release; only Basics columns are free, regardless of app count (7A). Other exported details ask for Pro on Save or Share, with an explicit Unlock Pro action in the notice. No derived columns at launch.
 **N+1 rollout (D24):** staged at 20% → 100%. Halt if purchase-acknowledgement failures or a crash
 spike appear in the first 48 hours. The Pro product must be active in Play Console before the 20%
 step.
@@ -832,12 +833,14 @@ The sheet opens **only** from an explicit user tap on:
 
 Each entry point passes a `source` to the sheet and to `EN-06` analytics. The sheet never opens on launch, after an alert, on a timer, or after N uses. Long-pressing a stub still copies (AGENTS.md row idiom).
 
-### Export gate (7A, supersedes OH-8's up-front multi-app lock)
-- **Free:** exporting one app with every raw attribute, and the whole flow, including choosing apps, choosing columns and the preview, for any number of apps.
-- **Pro:** exporting more than one app. Derived columns (risk and tracker columns, once they exist) will also carry `ProLock` in the details step; there are none at launch (autoplan taste decision, see the Decision Audit Trail).
-- **Passive hint (d7):** for a free user with more than one app selected, the export flow shows one plain line, "Exporting more than one app is part of Pro", with no lock icon and no tap action. The sheet still opens only on the Export tap.
-- The sheet opens on the **Export** tap (source=export) only when the export needs Pro. After purchase, the export continues automatically (3A). No lock is shown up front on the app list.
-- Single-app export from the app detail summary sheet never shows a lock.
+### Export gate (7A, revised 2026-11-27)
+This revision supersedes the earlier app-count gate, passive hint, and automatic-resume behavior
+recorded in the historical review and decision audit elsewhere in this document.
+- **Free:** exporting Basics columns for any number of apps, and the whole flow, including choosing apps, choosing columns and the preview.
+- **Pro:** exporting any column outside Basics, including a single-app export from the app detail summary sheet. Columns omitted by the selected file format do not count toward the gate.
+- **Actionable notice:** when an export requires Pro, explain that Basics are free and other details require Pro. Show an explicit **Unlock Pro** purchase action and **Export Basics instead** as the free alternative.
+- **Attribute badges:** for users without Pro, every non-Basics attribute shows a tappable Pro badge that opens the purchase sheet, even when that attribute is not selected or the current format would omit it. Do not show export-cost or "Slower" hints.
+- The sheet opens on **Save**, **Share**, or **Unlock Pro** only when the export needs Pro. After purchase, the notice disappears and the user taps Save or Share again. No lock is shown up front on the app list.
 - A purchase left pending from Export abandons that export; the user runs it again once Pro is active.
 
 ### States (2A)

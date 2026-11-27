@@ -51,11 +51,14 @@ exception is `InactiveSearchBar`, which lives in `SearchBarInactive.kt`.
   shared component owns semantics and its shape-clipped ripple.
 * `Chip` is an interactive selector with a full touch target. `Tag` is a compact, non-interactive
   inline fact on a row. Do not use them interchangeably.
-* `InfoCard` is the one tinted message card: an icon, an optional title, a body, and an optional
-  trailing action such as a dismiss button. Its `InfoCardTone` picks the meaning: `Info` introduces a
-  screen or says what it shows, `Attention` flags something worth a look, `Warning` flags a problem.
+* `InfoCard` is the one tinted message card: an icon, an optional title, a body, an optional
+  action below the body, and an optional inline `trailingAction` such as a dismiss button. Its
+  `InfoCardTone` picks the meaning: `Info` introduces a screen or says what it shows, `Attention`
+  flags something worth a look, `Warning` flags a problem.
   Use it rather than a feature-local tinted card or banner; pass a clickable modifier when the card
   leads somewhere.
+* `SwipeDismiss` wraps content that can be dismissed by swiping in either direction. The caller
+  removes it on `onDismiss` and provides a visible dismiss action as an alternative to swiping.
 * `AppRow` (and `AppRowSkeleton`) is the shared installed-app row: icon, name, package, and a
   caller-supplied trailing slot, shaped by its `ListItemPosition` through `ListItemPosition.shape()`
   in `lazylist/`. Build app lists on it instead of a feature-local row.
@@ -73,7 +76,8 @@ exception is `InactiveSearchBar`, which lives in `SearchBarInactive.kt`.
   line, used above grouped list rows and as a sticky month header.
 * `ProBadge` is the one marker for content locked behind Pro: a highlighted `Tag` with a lock icon and
   the label "Pro", announced as "Part of Pro". Use it on locked rows and actions; never on content
-  that is free.
+  that is free. Its `onClick` overload uses the tonal `Chip` with a full touch target when the badge
+  itself opens the purchase sheet.
 * `navigation/BottomSheetSceneStrategy` shows a Navigation 3 entry as a `BottomSheet` over the
   screen below it. An entry opts in with `metadata = BottomSheetSceneStrategy.bottomSheet()`; the
   `app` shell passes the strategy to `NavDisplay`. Swipe, outside tap and Back pop the entry.

@@ -30,8 +30,6 @@
     <string name="inventory_export_select_all">Select all</string>
     <string name="inventory_export_clear">Clear</string>
     <string name="inventory_export_no_columns_hint">Choose at least one detail to export.</string>
-    <string name="inventory_export_slower_tag">Slower</string>
-    <string name="inventory_export_slow_hint">Some selected details need a closer look at each app, so the export takes longer.</string>
     <string name="inventory_export_usage_access_hint">Last used time and storage size stay empty until you allow usage access.</string>
     <string name="inventory_export_grant_access">Allow access</string>
     <string name="inventory_export_attribute_category">Category</string>
@@ -88,7 +86,9 @@
     <string name="inventory_export_structured_hint">JSON-only details include full records, not just counts. CSV files leave them out.</string>
     <string name="inventory_export_columns_omitted">Left out of the CSV file: %1$s. CSV cannot hold full records.</string>
     <string name="inventory_export_use_json">Use JSON</string>
-    <string name="inventory_export_pro_columns">Details beyond Basics for more than one app are part of Pro</string>
+    <string name="inventory_export_pro_columns">Basics are free. Unlock Pro to export any other details.</string>
+    <string name="inventory_export_unlock_pro">Unlock Pro</string>
+    <string name="inventory_export_dismiss_hint">Dismiss notice</string>
     <string name="inventory_export_use_basics">Export Basics instead</string>
     <string name="inventory_export_json_only">JSON only</string>
     <string name="inventory_export_stop_title">Stop export?</string>

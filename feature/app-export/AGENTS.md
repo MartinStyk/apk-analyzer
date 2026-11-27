@@ -63,20 +63,28 @@ app, opened from the app detail summary sheet). Implementation code uses the pac
   restored selection and the app list before it starts, so a result delivered after process death
   still writes the file the user created.
 * The Export step links to the published file format reference (`INVENTORY_REFERENCE_URL`).
-* Pro gate: Basics columns are free for any number of apps, and a one-app export is free with every
-  column. `InventoryExportState.requiresPro` (more than one app, an exported column outside
+* Pro gate: Basics columns are free for any number of apps. Every other exported column requires
+  Pro, including a one-app export. `InventoryExportState.requiresPro` (an exported column outside
   `InventoryPreset.Basics`, Pro known not owned) is the one predicate behind the Export step's Pro notice,
   the Save/Share gate, and opening `ProNavKey(PaywallReason.Export)`. Ownership (`ProOwnership`) is
   collected for the ViewModel's lifetime, so it doesn't reset when the screen leaves and returns; while
   it is `Unknown` the notice stays hidden and Save/Share wait for it, but only for an export that may
-  need Pro (`exportNeedsPro`); Basics-only and one-app exports never wait. Save and Share check it before
+  need Pro (`exportNeedsPro`); Basics-only exports never wait. Save and Share check it before
   the document picker opens; choosing apps, columns, and the preview stay free. The notice's "Export
-  Basics instead" resets the columns to Basics. Nothing resumes after a purchase: the notice
-  disappears once `entitlements()` holds Pro and the user taps Save or Share again.
+  Basics instead" resets the columns to Basics; "Unlock Pro" opens the purchase sheet directly.
+  Nothing resumes after a purchase: the notice disappears once `entitlements()` holds Pro and
+  the user taps Save or Share again.
+* For users without Pro, every attribute outside Basics has a tappable Pro badge that opens the
+  purchase sheet independently of the current selection or file format. Selecting attributes
+  remains free; no analysis-cost or "Slower" hints appear in the details step.
+* The step progress track sits directly below the toolbar, without its own top padding. This flow
+  uses tighter toolbar bottom padding without changing the default toolbar spacing elsewhere.
+* The details presets scroll edge-to-edge with inset content, not inside the list's side margins.
+  JSON-only and usage-access notices can be swiped away in either direction or dismissed
+  with their close button. Dismissals last for the current flow, including returning from another
+  step; they never change the selected columns or grant access. The no-selection hint stays visible.
 * Export logic, file writing, destination handling, and progress live in `core:app-export`. This
   module maps state to UI and hands the file to the document picker or the share sheet.
-* `requiresAppAnalysis` marks every expensive source, including the independent lazy native-library,
-  signing-scheme, intent-filter, and manifest queries, not just `AppDetailRepository`.
 * First-run guidance: step 1 shows an intro card until the user taps "Got it", which persists through
   `InventoryExportPreferences`. The "About this export" action in the step 1 toolbar brings it back
   without changing the saved flag. While the intro is visible, step 1 hides its one-line guidance,
