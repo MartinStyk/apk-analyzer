@@ -2,6 +2,8 @@ package sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model
 
 import sk.styk.martin.apkanalyzer.core.apps.api.permissions.UsedPermission
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
+import sk.styk.martin.apkanalyzer.core.common.model.ChangeDirection
+import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import java.time.Instant
 
 val AppHistoryDiff.hasCertificateChange: Boolean
@@ -14,26 +16,58 @@ private val AppHistoryDiff.addedRequestedPermissions: List<UsedPermission>
     get() = (requestedPermissions as? SetChange.Changed)?.added.orEmpty().distinctBy { it.permissionData.name }
 
 val AppHistorySummaryPart.needsAttention: Boolean
-    get() = this is AppHistorySummaryPart.DangerousPermissionsAdded
+    get() = when (this) {
+        is AppHistorySummaryPart.DangerousPermissionsAdded, is AppHistorySummaryPart.InstallSourceChanged -> true
 
-enum class AppHistoryChangeDirection {
-    Added,
-    Removed,
-    Changed,
-}
+        is AppHistorySummaryPart.DebuggingChanged -> isEnabled
 
-val AppHistorySummaryPart.direction: AppHistoryChangeDirection
+        is AppHistorySummaryPart.SizeChanged -> isLargeGrowth
+
+        AppHistorySummaryPart.SigningMethodChanged,
+        is AppHistorySummaryPart.BackupChanged,
+        is AppHistorySummaryPart.UnencryptedTrafficChanged,
+        is AppHistorySummaryPart.PermissionsAdded,
+        is AppHistorySummaryPart.PermissionsRemoved,
+        is AppHistorySummaryPart.DefinedPermissionsChanged,
+        is AppHistorySummaryPart.TargetSdkChanged,
+        is AppHistorySummaryPart.MinSdkChanged,
+        is AppHistorySummaryPart.ComponentsAdded,
+        is AppHistorySummaryPart.ComponentsRemoved,
+        is AppHistorySummaryPart.ComponentsChanged,
+        is AppHistorySummaryPart.NativeLibrariesAdded,
+        is AppHistorySummaryPart.NativeLibrariesRemoved,
+        is AppHistorySummaryPart.NativeLibrariesChanged,
+        AppHistorySummaryPart.RequirementsChanged,
+        -> false
+    }
+
+private const val LARGE_GROWTH_PERCENT = 25
+private val LargeGrowth = 20.megabytes
+
+private val AppHistorySummaryPart.SizeChanged.isLargeGrowth: Boolean
+    get() {
+        val growth = after.bytes - before.bytes
+        return growth > 0 && (growth >= LargeGrowth.bytes || growth * 100 >= before.bytes * LARGE_GROWTH_PERCENT)
+    }
+
+val AppHistoryDiff.needsAttention: Boolean
+    get() = hasCertificateChange || summaryParts { it }.any { it.needsAttention }
+
+val AppHistoryEntry.Change.needsAttention: Boolean
+    get() = diff.needsAttention
+
+val AppHistorySummaryPart.direction: ChangeDirection
     get() = when (this) {
         is AppHistorySummaryPart.DangerousPermissionsAdded,
         is AppHistorySummaryPart.PermissionsAdded,
         is AppHistorySummaryPart.ComponentsAdded,
         is AppHistorySummaryPart.NativeLibrariesAdded,
-        -> AppHistoryChangeDirection.Added
+        -> ChangeDirection.Added
 
         is AppHistorySummaryPart.PermissionsRemoved,
         is AppHistorySummaryPart.ComponentsRemoved,
         is AppHistorySummaryPart.NativeLibrariesRemoved,
-        -> AppHistoryChangeDirection.Removed
+        -> ChangeDirection.Removed
 
         AppHistorySummaryPart.SigningMethodChanged,
         is AppHistorySummaryPart.InstallSourceChanged,
@@ -47,7 +81,7 @@ val AppHistorySummaryPart.direction: AppHistoryChangeDirection
         is AppHistorySummaryPart.NativeLibrariesChanged,
         AppHistorySummaryPart.RequirementsChanged,
         is AppHistorySummaryPart.SizeChanged,
-        -> AppHistoryChangeDirection.Changed
+        -> ChangeDirection.Changed
     }
 
 val AppHistoryEntry.Change.isOlderVersion: Boolean
@@ -63,7 +97,7 @@ val AppHistoryEntry.Change.isQuiet: Boolean
     get() = kind == AppHistoryEntry.Change.Kind.Updated &&
         !diff.hasCertificateChange &&
         !hasOnlyUncomparableDetails &&
-        summaryParts { it }.all { it is AppHistorySummaryPart.SizeChanged }
+        summaryParts { it }.all { it is AppHistorySummaryPart.SizeChanged && !it.needsAttention }
 
 sealed interface AppHistorySummaryPart {
     data object SigningMethodChanged : AppHistorySummaryPart
@@ -105,7 +139,10 @@ sealed interface AppHistorySummaryPart {
     data class SizeChanged(val before: AppSize, val after: AppSize) : AppHistorySummaryPart
 }
 
-fun AppHistoryEntry.Change.summaryParts(permissionLabel: (String) -> String): List<AppHistorySummaryPart> = buildList {
+fun AppHistoryEntry.Change.summaryParts(permissionLabel: (String) -> String): List<AppHistorySummaryPart> = diff.summaryParts(permissionLabel)
+
+fun AppHistoryDiff.summaryParts(permissionLabel: (String) -> String): List<AppHistorySummaryPart> = buildList {
+    val diff = this@summaryParts
     if (!diff.hasCertificateChange && diff.signingSchemes is SetChange.Changed) add(AppHistorySummaryPart.SigningMethodChanged)
     diff.installSource?.let { add(AppHistorySummaryPart.InstallSourceChanged(it)) }
     diff.isDebuggable?.let { add(AppHistorySummaryPart.DebuggingChanged(it.after)) }

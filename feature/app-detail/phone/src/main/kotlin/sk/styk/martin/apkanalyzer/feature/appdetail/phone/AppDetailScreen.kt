@@ -67,6 +67,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.LabeledHash
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.LoadingSpinner
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.format.historyDate
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.launcher.launchSafely
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.collapsingToolbarScroll
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.rememberCollapsingToolbarState
@@ -86,7 +87,6 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppSummaryB
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SplitApkExportBottomSheet
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.aisummary.AiSummaryCard
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.historyDate
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.Date

@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -28,6 +29,8 @@ private val KEY_REVIEW_FLOW_REQUESTED = booleanPreferencesKey("review_flow_reque
 private val KEY_INVENTORY_EXPORT_COLUMNS = stringSetPreferencesKey("inventory_export_columns")
 private val KEY_INVENTORY_EXPORT_FORMAT = stringPreferencesKey("inventory_export_format")
 private val KEY_INVENTORY_EXPORT_INTRO_DISMISSED = booleanPreferencesKey("inventory_export_intro_dismissed")
+private val KEY_WHAT_CHANGED_LAST_VISIT_AT = longPreferencesKey("what_changed_last_visit_at")
+private val KEY_WHAT_CHANGED_RANGE = stringPreferencesKey("what_changed_range")
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
     name = "app_settings",
@@ -62,18 +65,11 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
 
     private fun <T : Any> Key<T>.read(prefs: Preferences): T = when (this) {
         Key.ColorScheme -> {
-            when (prefs[KEY_COLOR_SCHEME]) {
-                "light" -> ColorAppScheme.Day
-                "dark" -> ColorAppScheme.Night
-                else -> ColorAppScheme.FollowSystem
-            }
+            prefs[KEY_COLOR_SCHEME].toColorAppScheme()
         }
 
         Key.HexFingerprintFormat -> {
-            when (prefs[KEY_FINGERPRINT_FORMAT]) {
-                "continuous" -> FingerprintFormat.Continuous
-                else -> FingerprintFormat.ColonSeparated
-            }
+            prefs[KEY_FINGERPRINT_FORMAT].toFingerprintFormat()
         }
 
         Key.OnboardingRequired -> {
@@ -106,6 +102,14 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
 
         Key.InventoryExportIntroDismissed -> {
             prefs[KEY_INVENTORY_EXPORT_INTRO_DISMISSED] ?: false
+        }
+
+        Key.WhatChangedLastVisitAt -> {
+            prefs[KEY_WHAT_CHANGED_LAST_VISIT_AT] ?: 0L
+        }
+
+        Key.WhatChangedRange -> {
+            prefs[KEY_WHAT_CHANGED_RANGE] ?: ""
         }
     } as T
 
@@ -158,5 +162,24 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
         Key.InventoryExportIntroDismissed -> {
             prefs[KEY_INVENTORY_EXPORT_INTRO_DISMISSED] = value as Boolean
         }
+
+        Key.WhatChangedLastVisitAt -> {
+            prefs[KEY_WHAT_CHANGED_LAST_VISIT_AT] = value as Long
+        }
+
+        Key.WhatChangedRange -> {
+            prefs[KEY_WHAT_CHANGED_RANGE] = value as String
+        }
     }
+}
+
+private fun String?.toColorAppScheme(): ColorAppScheme = when (this) {
+    "light" -> ColorAppScheme.Day
+    "dark" -> ColorAppScheme.Night
+    else -> ColorAppScheme.FollowSystem
+}
+
+private fun String?.toFingerprintFormat(): FingerprintFormat = when (this) {
+    "continuous" -> FingerprintFormat.Continuous
+    else -> FingerprintFormat.ColonSeparated
 }

@@ -35,7 +35,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryChangeDirection
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryEntry
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryFieldChange
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryInstallSource
@@ -64,6 +63,7 @@ import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateTrustLevel
 import sk.styk.martin.apkanalyzer.core.apps.api.signing.SigningSchemeVersion
 import sk.styk.martin.apkanalyzer.core.apps.api.signing.labelRes
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
+import sk.styk.martin.apkanalyzer.core.common.model.ChangeDirection
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.model.bytes
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
@@ -73,9 +73,13 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.InfoCard
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.InfoCardTone
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.LabeledHashBox
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ListSectionHeader
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.OutlinedButton
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.TextButton
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.format.historyDate
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.format.historyDateTime
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.format.isSameDayAs
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.card
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
@@ -91,16 +95,12 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents.Componen
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailSectionScaffold
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.InfoRow
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.InfoRowItem
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ListSectionHeader
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.RationaleBottomSheet
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionCard
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.HistoryVersionTag
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.historyDate
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.historyDateTime
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.icon
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.isSameDayAs
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.text
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.nativelibraries.NativeLibraryDetailBottomSheet
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.nativelibraries.NativeLibraryRow
@@ -474,7 +474,7 @@ private fun LazyListScope.worthKnowing(
     }
     if (section.removedInsights.isNotEmpty()) {
         item(key = "worth-knowing-removed") {
-            InsightGroup(kind = AppHistoryChangeDirection.Removed, insights = section.removedInsights, isFirst = false)
+            InsightGroup(kind = ChangeDirection.Removed, insights = section.removedInsights, isFirst = false)
         }
     }
 }
@@ -559,7 +559,7 @@ private fun LazyListScope.groups(
             ChangeRow(
                 row = row,
                 marker = group.kind.takeUnless {
-                    it == AppHistoryChangeDirection.Changed
+                    it == ChangeDirection.Changed
                 },
                 onSelect = { onSelectRow(row.key) },
                 onCopy = onCopy,
@@ -581,9 +581,9 @@ private fun LazyListScope.groups(
 private fun HistoryChangeGroup.headerText(): String {
     val kindText = stringResource(
         when (kind) {
-            AppHistoryChangeDirection.Added -> R.string.app_history_group_added
-            AppHistoryChangeDirection.Removed -> R.string.app_history_group_removed
-            AppHistoryChangeDirection.Changed -> R.string.app_history_group_changed
+            ChangeDirection.Added -> R.string.app_history_group_added
+            ChangeDirection.Removed -> R.string.app_history_group_removed
+            ChangeDirection.Changed -> R.string.app_history_group_changed
         },
     ).uppercase()
     return when (val scope = scope) {
@@ -595,7 +595,7 @@ private fun HistoryChangeGroup.headerText(): String {
 @Composable
 private fun ChangeRow(
     row: HistoryChangeRow,
-    marker: AppHistoryChangeDirection?,
+    marker: ChangeDirection?,
     onSelect: () -> Unit,
     onCopy: (String, String) -> Unit,
 ) {
@@ -642,7 +642,7 @@ private fun ChangeRow(
 
 @Composable
 private fun InsightGroup(
-    kind: AppHistoryChangeDirection,
+    kind: ChangeDirection,
     insights: List<AppDetailInsight>,
     isFirst: Boolean,
 ) {
@@ -651,7 +651,7 @@ private fun InsightGroup(
         R.string.app_history_group_header,
         stringResource(
             if (kind ==
-                AppHistoryChangeDirection.Added
+                ChangeDirection.Added
             ) {
                 R.string.app_history_group_added
             } else {
@@ -950,7 +950,7 @@ private val normalSections = listOf(
         groups = listOf(
             HistoryChangeGroup(
                 id = "requested-added",
-                kind = AppHistoryChangeDirection.Added,
+                kind = ChangeDirection.Added,
                 scope = PermissionScope.Requested,
                 rows = listOf(
                     HistoryChangeRow.Permission("requested-added:camera", samplePermission("android.permission.CAMERA", "Camera", ProtectionLevel.Dangerous)),
@@ -966,7 +966,7 @@ private val normalSections = listOf(
         groups = listOf(
             HistoryChangeGroup(
                 id = "components-changed",
-                kind = AppHistoryChangeDirection.Changed,
+                kind = ChangeDirection.Changed,
                 rows = listOf(
                     HistoryChangeRow.Component(
                         key = "components-changed:SyncService",
@@ -981,7 +981,7 @@ private val normalSections = listOf(
         groups = listOf(
             HistoryChangeGroup(
                 id = "native-added",
-                kind = AppHistoryChangeDirection.Added,
+                kind = ChangeDirection.Added,
                 rows = listOf(
                     HistoryChangeRow.NativeLibrary(
                         key = "native-added:libfoo.so",
@@ -1056,12 +1056,12 @@ private fun AppHistoryChangeInsightsAndRequirementsPreview() {
                         groups = listOf(
                             HistoryChangeGroup(
                                 id = "requirements-added",
-                                kind = AppHistoryChangeDirection.Added,
+                                kind = ChangeDirection.Added,
                                 rows = listOf(HistoryChangeRow.Requirement(key = "requirements-added:nfc", item = nfc)),
                             ),
                             HistoryChangeGroup(
                                 id = "requirements-changed",
-                                kind = AppHistoryChangeDirection.Changed,
+                                kind = ChangeDirection.Changed,
                                 rows = listOf(
                                     HistoryChangeRow.Requirement(
                                         key = "requirements-changed:camera",

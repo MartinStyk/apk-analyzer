@@ -13,7 +13,8 @@ only, is described under [TV Module](#tv-module).
 ## Modules
 
 * `api` owns `AppDetailInput`, the one description of what app detail shows: an installed package, an
-  APK file, or a recorded version.
+  APK file, or a recorded version. It also owns `AppHistoryTimelineNavKey` and `AppHistoryChangeNavKey`,
+  because `feature:what-changed` opens a per-app timeline and change detail.
 * `domain` (`sk.styk.martin.apkanalyzer.feature.appdetail.domain`) is shared by `phone` and `tv`:
   `AppDetailSectionRepository`, which loads each section for an `AppDetailInput` from the live
   repositories or from `core:app-history`; `SectionErrorReason` with `toSectionErrorReason()`; and the input helpers

@@ -24,6 +24,7 @@ import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.CapturedSection
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.StoredAppHistoryRecord
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.timeline.AppHistoryDiffer
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.timeline.AppHistoryRepositoryImpl
+import sk.styk.martin.apkanalyzer.core.apphistory.impl.timeline.AppHistoryTimelineBuilder
 import sk.styk.martin.apkanalyzer.core.apps.api.AppDetailRepositoryFake
 import sk.styk.martin.apkanalyzer.core.apps.api.InstalledAppsRepositoryFake
 import sk.styk.martin.apkanalyzer.core.apps.api.model.Detail.WhatsApp
@@ -70,7 +71,7 @@ class AppHistoryCaptureRepositoryImplTest {
         configurationRepository = configuration,
         appScope = appScope,
     )
-    private val history = AppHistoryRepositoryImpl(persistence, AppHistoryDiffer(), dispatcherProvider)
+    private val history = AppHistoryRepositoryImpl(persistence, AppHistoryTimelineBuilder(AppHistoryDiffer()), PerformanceTrackerFake(), dispatcherProvider)
 
     @After
     fun tearDown() {

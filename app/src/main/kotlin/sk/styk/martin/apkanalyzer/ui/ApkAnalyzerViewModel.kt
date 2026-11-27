@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationKey
+import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationRepository
 import sk.styk.martin.apkanalyzer.core.common.review.ReviewEligibilityTracker
 import sk.styk.martin.apkanalyzer.core.common.settings.Key
 import sk.styk.martin.apkanalyzer.core.common.settings.PersistenceRepository
@@ -18,16 +20,19 @@ import javax.inject.Inject
 @HiltViewModel
 internal class ApkAnalyzerViewModel @Inject constructor(
     persistenceRepository: PersistenceRepository,
+    configurationRepository: ConfigurationRepository,
     private val reviewEligibilityTracker: ReviewEligibilityTracker,
 ) : ViewModel() {
     val state: StateFlow<ApkAnalyzerState> =
         combine(
             persistenceRepository.observe(Key.ColorScheme),
             persistenceRepository.observe(Key.HexFingerprintFormat),
-        ) { scheme, fingerprintFormat ->
+            configurationRepository.observe(ConfigurationKey.AppHistoryDisplayEnabled),
+        ) { scheme, fingerprintFormat, isWhatChangedEnabled ->
             ApkAnalyzerState.Data(
                 colorAppScheme = scheme,
                 fingerprintFormat = fingerprintFormat,
+                isWhatChangedEnabled = isWhatChangedEnabled,
             )
         }.stateIn(
             scope = viewModelScope,

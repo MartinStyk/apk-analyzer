@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="what_changed_title">Co się zmieniło</string>
+    <string name="what_changed_full_history">Pełna historia</string>
+    <string name="what_changed_range_since_last_visit">Od ostatniej wizyty</string>
+    <string name="what_changed_range_7_days">7 dni</string>
+    <string name="what_changed_range_30_days">30 dni</string>
+    <string name="what_changed_range_90_days">90 dni</string>
+    <string name="what_changed_range_all_time">Cały okres</string>
+    <string name="what_changed_since">Od %1$s</string>
+    <string name="what_changed_nothing_since">Brak zmian od %1$s</string>
+    <string name="what_changed_nothing_hint">Wybierz dłuższy okres, aby zobaczyć starsze zmiany.</string>
+    <string name="what_changed_section_latest">Ostatnia zmiana</string>
+    <string name="what_changed_section_attention">Wymaga uwagi</string>
+    <string name="what_changed_section_changed_apps">Zmienione aplikacje</string>
+    <string name="what_changed_section_uninstalled">Już niezainstalowane</string>
+    <string name="what_changed_new_app">Nowa aplikacja</string>
+    <string name="what_changed_no_net_change">Ostatecznie bez zmian</string>
+    <string name="what_changed_reverted">Cofnięto %1$s</string>
+    <string name="what_changed_no_changes_recorded">Nie odnotowano zmian</string>
+    <string name="what_changed_empty_title">Na razie brak zapisów</string>
+    <string name="what_changed_empty_body">Apk Analyzer śledzi Twoje aplikacje w tle. Gdy aplikacja się zaktualizuje, tutaj zobaczysz, co się w niej zmieniło.</string>
+    <string name="what_changed_error">Nie udało się wczytać historii zmian</string>
+    <string name="what_changed_retry">Spróbuj ponownie</string>
+    <string name="what_changed_row_click_label">Zobacz, co się zmieniło</string>
+    <string name="what_changed_row_first_click_label">Zobacz wszystkie szczegóły</string>
+    <string name="what_changed_copied">Skopiowano</string>
+    <string name="what_changed_row_long_click_label">Kopiuj</string>
+    <string name="what_changed_app_click_label">Zobacz historię tej aplikacji</string>
+    <string name="what_changed_filter_attention">Wymaga uwagi</string>
+    <string name="what_changed_filter_requirements">Wymagania dotyczące urządzenia</string>
+    <string name="what_changed_log_no_match">Żadne zmiany nie pasują do tych filtrów</string>
+    <plurals name="what_changed_updates">
+        <item quantity="one">%d aktualizacja</item>
+        <item quantity="few">%d aktualizacje</item>
+        <item quantity="many">%d aktualizacji</item>
+        <item quantity="other">%d aktualizacji</item>
+    </plurals>
+    <plurals name="what_changed_new_apps">
+        <item quantity="one">%d nowa aplikacja</item>
+        <item quantity="few">%d nowe aplikacje</item>
+        <item quantity="many">%d nowych aplikacji</item>
+        <item quantity="other">%d nowej aplikacji</item>
+    </plurals>
+    <plurals name="what_changed_attention_count">
+        <item quantity="one">%d wymaga uwagi</item>
+        <item quantity="few">%d wymagają uwagi</item>
+        <item quantity="many">%d wymaga uwagi</item>
+        <item quantity="other">%d wymaga uwagi</item>
+    </plurals>
+    <plurals name="what_changed_change_count">
+        <item quantity="one">%d zmiana</item>
+        <item quantity="few">%d zmiany</item>
+        <item quantity="many">%d zmian</item>
+        <item quantity="other">%d zmiany</item>
+    </plurals>
+    <string name="what_changed_category_android_versions">Wersje Androida</string>
+    <string name="what_changed_category_components">Komponenty</string>
+    <string name="what_changed_category_install_source">Źródło instalacji</string>
+    <string name="what_changed_category_native">Biblioteki natywne</string>
+    <string name="what_changed_category_permissions">Uprawnienia</string>
+    <string name="what_changed_category_settings">Ustawienia aplikacji</string>
+    <string name="what_changed_category_signing">Podpis</string>
+    <string name="what_changed_category_size">Rozmiar</string>
+    <string name="what_changed_certificate_changed">Certyfikat podpisu się zmienił</string>
+    <string name="what_changed_first_recorded">Pierwszy zapis</string>
+    <string name="what_changed_uncomparable_only">Nie udało się porównać niektórych danych</string>
+</resources>

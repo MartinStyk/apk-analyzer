@@ -63,6 +63,14 @@ exception is `InactiveSearchBar`, which lives in `SearchBarInactive.kt`.
   and dismiss actions. Outside taps and system Back dismiss without confirming.
 * `HashBox` and `LabeledHashBox` accept raw fingerprints and read `LocalFingerprintFormat`.
   Their `onCopy` callbacks receive the formatted value without display-only wrapping characters.
+* `ChangeToken` (a marker dot plus a one-line label) and `ChangeMarkerDot` render one change by its
+  `core:common` `ChangeDirection`: a filled plus for added, a filled minus for removed, an outlined
+  chevron for changed;
+  `isEmphasized` switches to the tertiary color for a change that needs attention. App history rows
+  on every screen use them, so the markers mean the same everywhere.
+* `format/HistoryDates.kt` formats app-history dates for display (short date this year, full date otherwise, month headers). It lives here, not in `core:app-history:api`, because it uses `android.text.format.DateFormat`.
+* `ListSectionHeader` is the small primary-colored list section title, with an optional explanation
+  line, used above grouped list rows and as a sticky month header.
 
 ## tv
 

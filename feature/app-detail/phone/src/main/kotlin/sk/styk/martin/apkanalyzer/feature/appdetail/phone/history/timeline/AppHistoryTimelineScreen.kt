@@ -32,18 +32,18 @@ import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ListSectionHeader
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.format.historyDate
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.format.historyMonth
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.lazylist.itemsPositioned
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailSectionScaffold
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ListSectionHeader
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.HistoryVersionTag
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.historyDate
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.historyMonth
 import java.time.Instant
 import java.time.YearMonth
 

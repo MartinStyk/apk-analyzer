@@ -3,40 +3,61 @@ package sk.styk.martin.apkanalyzer.core.apphistory.impl.timeline
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.AppHistoryRepository
-import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryEntry
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryAppTimeline
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryDeviceTimeline
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySection
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySnapshot
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySnapshotId
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySnapshotRead
-import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySnapshotSummary
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryTimeline
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.capture.APP_HISTORY
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.AppHistoryPersistenceRepository
+import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.AppHistorySnapshotHeader
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.CapturedSection
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.StoredAppHistoryRecord
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
+import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
+import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
+import sk.styk.martin.apkanalyzer.core.common.performance.appCount
+import sk.styk.martin.apkanalyzer.core.common.performance.outcome
+import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 internal class AppHistoryRepositoryImpl @Inject constructor(
     private val persistenceRepository: AppHistoryPersistenceRepository,
-    private val differ: AppHistoryDiffer,
+    private val timelineBuilder: AppHistoryTimelineBuilder,
+    private val performanceTracker: PerformanceTracker,
     private val dispatcherProvider: DispatcherProvider,
 ) : AppHistoryRepository {
+
+    private val deviceCache = ConcurrentHashMap<PackageName, CachedAppTimeline>()
 
     override fun timeline(packageName: PackageName): Flow<AppHistoryTimeline> = persistenceRepository.observe(packageName)
         .map { result ->
             result.fold(
-                onSuccess = { records -> AppHistoryTimeline.Available(buildTimeline(records)) },
+                onSuccess = { records -> AppHistoryTimeline.Available(timelineBuilder.entries(records)) },
                 onFailure = { throwable ->
                     Logger.e(APP_HISTORY, throwable, "Timeline load failed for ${packageName.value}")
                     AppHistoryTimeline.Unavailable
                 },
             )
+        }
+        .flowOn(dispatcherProvider.default())
+
+    override fun deviceTimeline(): Flow<AppHistoryDeviceTimeline> = persistenceRepository.observeHeaders()
+        .mapLatest { result ->
+            runCatchingCancellable { buildDeviceTimeline(result.getOrThrow()) }.getOrElse { throwable ->
+                Logger.e(APP_HISTORY, throwable, "Device timeline load failed")
+                AppHistoryDeviceTimeline.Unavailable
+            }
         }
         .flowOn(dispatcherProvider.default())
 
@@ -48,38 +69,30 @@ internal class AppHistoryRepositoryImpl @Inject constructor(
         },
     )
 
-    private fun buildTimeline(records: List<StoredAppHistoryRecord>): List<AppHistoryEntry> {
-        val first = records.firstOrNull() ?: return emptyList()
-        val changes = records.zipWithNext { previous, current ->
-            val diff = differ(before = previous.record, after = current.record)
-            val kind = when {
-                current isOnNewDeviceAfter previous -> AppHistoryEntry.Change.Kind.NewDevice
-                current isReinstallOf previous -> AppHistoryEntry.Change.Kind.Reinstalled
-                else -> AppHistoryEntry.Change.Kind.Updated
+    private suspend fun buildDeviceTimeline(headers: List<AppHistorySnapshotHeader>): AppHistoryDeviceTimeline =
+        performanceTracker.startCancellableTrace("app_history_device_timeline") {
+            val headersByPackage = headers.groupBy { it.packageName }
+            deviceCache.keys.retainAll(headersByPackage.keys)
+            var decodedCount = 0
+            val apps = headersByPackage.mapNotNull { (packageName, packageHeaders) ->
+                deviceCache[packageName]?.takeIf { it.headers == packageHeaders }?.let { return@mapNotNull it.timeline }
+                val timeline = if (packageHeaders.size == 1) {
+                    timelineBuilder.firstSeenOnly(packageHeaders.single())
+                } else {
+                    decodedCount++
+                    timelineBuilder.appTimeline(persistenceRepository.records(packageName).getOrThrow())
+                }
+                deviceCache[packageName] = CachedAppTimeline(packageHeaders, timeline)
+                timeline
             }
-            AppHistoryEntry.Change(kind = kind, snapshot = current.toSummary(), previous = previous.toSummary(), diff = diff)
-        }.filterNot { it.isUpdateWithoutVisibleChange }
-        return changes.asReversed() + AppHistoryEntry.FirstSeen(first.toSummary())
-    }
+            appCount = headersByPackage.size
+            this["decoded_count"] = decodedCount
+            outcome = TraceOutcome.Success
+            AppHistoryDeviceTimeline.Available(apps)
+        }
 }
 
-private val AppHistoryEntry.Change.isUpdateWithoutVisibleChange: Boolean
-    get() = kind == AppHistoryEntry.Change.Kind.Updated && diff.changedCategories.isEmpty() && diff.uncomparableCategories.isEmpty()
-
-private infix fun StoredAppHistoryRecord.isOnNewDeviceAfter(previous: StoredAppHistoryRecord): Boolean =
-    record.captureKey.deviceId != previous.record.captureKey.deviceId
-
-private infix fun StoredAppHistoryRecord.isReinstallOf(previous: StoredAppHistoryRecord): Boolean =
-    record.captureKey.firstInstallTime != previous.record.captureKey.firstInstallTime
-
-private fun StoredAppHistoryRecord.toSummary() = AppHistorySnapshotSummary(
-    id = AppHistorySnapshotId(id),
-    applicationName = record.detail.info.applicationName,
-    version = record.detail.info.version,
-    firstInstallTime = record.captureKey.firstInstallTime,
-    lastUpdateTime = record.captureKey.lastUpdateTime,
-    capturedAt = record.capturedAt,
-)
+private data class CachedAppTimeline(val headers: List<AppHistorySnapshotHeader>, val timeline: AppHistoryAppTimeline?)
 
 private fun StoredAppHistoryRecord.toSnapshot() = AppHistorySnapshot(
     id = AppHistorySnapshotId(id),

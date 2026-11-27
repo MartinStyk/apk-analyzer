@@ -7,6 +7,7 @@ import androidx.compose.material.icons.automirrored.rounded.InsertDriveFile
 import androidx.compose.material.icons.automirrored.rounded.VolumeUp
 import androidx.compose.material.icons.outlined.Apps
 import androidx.compose.material.icons.outlined.Explore
+import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.InsertChart
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.rounded.Add
@@ -140,6 +141,7 @@ data object ApkAnalyzerIcons {
     val Clear = Icons.Rounded.Clear
     val Filter = Icons.Rounded.FilterList
     val History = Icons.Rounded.History
+    val HistoryBorder = Icons.Outlined.History
     val Lock = Icons.Rounded.Lock
     val Search = Icons.Rounded.Search
     val Settings = Icons.Rounded.Settings

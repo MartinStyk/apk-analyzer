@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="what_changed_title">O que mudou</string>
+    <string name="what_changed_full_history">Histórico completo</string>
+    <string name="what_changed_range_since_last_visit">Desde a última visita</string>
+    <string name="what_changed_range_7_days">7 dias</string>
+    <string name="what_changed_range_30_days">30 dias</string>
+    <string name="what_changed_range_90_days">90 dias</string>
+    <string name="what_changed_range_all_time">Todo o período</string>
+    <string name="what_changed_since">Desde %1$s</string>
+    <string name="what_changed_nothing_since">Nenhuma alteração desde %1$s</string>
+    <string name="what_changed_nothing_hint">Escolha um período maior para ver alterações mais antigas.</string>
+    <string name="what_changed_section_latest">Última alteração</string>
+    <string name="what_changed_section_attention">Requer atenção</string>
+    <string name="what_changed_section_changed_apps">Apps alterados</string>
+    <string name="what_changed_section_uninstalled">Não estão mais instalados</string>
+    <string name="what_changed_new_app">App novo</string>
+    <string name="what_changed_no_net_change">Sem diferença no final</string>
+    <string name="what_changed_reverted">Revertido em %1$s</string>
+    <string name="what_changed_no_changes_recorded">Nenhuma alteração registrada</string>
+    <string name="what_changed_empty_title">Nada registrado ainda</string>
+    <string name="what_changed_empty_body">O Apk Analyzer registra seus apps em segundo plano. Quando um app é atualizado, o que mudou nele aparece aqui.</string>
+    <string name="what_changed_error">Não foi possível carregar o histórico de alterações</string>
+    <string name="what_changed_retry">Tente novamente</string>
+    <string name="what_changed_row_click_label">Ver o que mudou</string>
+    <string name="what_changed_row_first_click_label">Ver todos os detalhes</string>
+    <string name="what_changed_copied">Copiado</string>
+    <string name="what_changed_row_long_click_label">Copiar</string>
+    <string name="what_changed_app_click_label">Ver o histórico deste app</string>
+    <string name="what_changed_filter_attention">Requer atenção</string>
+    <string name="what_changed_filter_requirements">Requisitos do dispositivo</string>
+    <string name="what_changed_log_no_match">Nenhuma alteração corresponde a esses filtros</string>
+    <plurals name="what_changed_updates">
+        <item quantity="one">%d atualização</item>
+        <item quantity="many">%d atualizações</item>
+        <item quantity="other">%d atualizações</item>
+    </plurals>
+    <plurals name="what_changed_new_apps">
+        <item quantity="one">%d app novo</item>
+        <item quantity="many">%d apps novos</item>
+        <item quantity="other">%d apps novos</item>
+    </plurals>
+    <plurals name="what_changed_attention_count">
+        <item quantity="one">%d requer atenção</item>
+        <item quantity="many">%d requerem atenção</item>
+        <item quantity="other">%d requerem atenção</item>
+    </plurals>
+    <plurals name="what_changed_change_count">
+        <item quantity="one">%d alteração</item>
+        <item quantity="many">%d alterações</item>
+        <item quantity="other">%d alterações</item>
+    </plurals>
+    <string name="what_changed_category_android_versions">Versões do Android</string>
+    <string name="what_changed_category_components">Componentes</string>
+    <string name="what_changed_category_install_source">Fonte de instalação</string>
+    <string name="what_changed_category_native">Bibliotecas nativas</string>
+    <string name="what_changed_category_permissions">Permissões</string>
+    <string name="what_changed_category_settings">Configurações do app</string>
+    <string name="what_changed_category_signing">Assinatura</string>
+    <string name="what_changed_category_size">Tamanho</string>
+    <string name="what_changed_certificate_changed">Certificado de assinatura alterado</string>
+    <string name="what_changed_first_recorded">Primeiro registro</string>
+    <string name="what_changed_uncomparable_only">Não foi possível comparar alguns detalhes</string>
+</resources>

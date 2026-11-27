@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="what_changed_title">変更内容</string>
+    <string name="what_changed_full_history">すべての履歴</string>
+    <string name="what_changed_range_since_last_visit">前回の確認以降</string>
+    <string name="what_changed_range_7_days">7 日間</string>
+    <string name="what_changed_range_30_days">30 日間</string>
+    <string name="what_changed_range_90_days">90 日間</string>
+    <string name="what_changed_range_all_time">全期間</string>
+    <string name="what_changed_since">%1$s 以降</string>
+    <string name="what_changed_nothing_since">%1$s 以降の変更なし</string>
+    <string name="what_changed_nothing_hint">期間を長くすると、以前の変更も表示されます。</string>
+    <string name="what_changed_section_latest">最新の変更</string>
+    <string name="what_changed_section_attention">要確認</string>
+    <string name="what_changed_section_changed_apps">変更されたアプリ</string>
+    <string name="what_changed_section_uninstalled">アンインストール済み</string>
+    <string name="what_changed_new_app">新しいアプリ</string>
+    <string name="what_changed_no_net_change">結果的に変更なし</string>
+    <string name="what_changed_reverted">%1$s に元に戻りました</string>
+    <string name="what_changed_no_changes_recorded">変更の記録なし</string>
+    <string name="what_changed_empty_title">まだ記録がありません</string>
+    <string name="what_changed_empty_body">Apk Analyzer はアプリをバックグラウンドで記録します。アプリが更新されると、変更内容がここに表示されます。</string>
+    <string name="what_changed_error">変更履歴を読み込めませんでした</string>
+    <string name="what_changed_retry">再試行</string>
+    <string name="what_changed_row_click_label">変更内容を見る</string>
+    <string name="what_changed_row_first_click_label">詳細をすべて見る</string>
+    <string name="what_changed_copied">コピーしました</string>
+    <string name="what_changed_row_long_click_label">コピー</string>
+    <string name="what_changed_app_click_label">このアプリの履歴を見る</string>
+    <string name="what_changed_filter_attention">要確認</string>
+    <string name="what_changed_filter_requirements">デバイス要件</string>
+    <string name="what_changed_log_no_match">このフィルタに一致する変更はありません</string>
+    <plurals name="what_changed_updates">
+        <item quantity="other">%d 件の更新</item>
+    </plurals>
+    <plurals name="what_changed_new_apps">
+        <item quantity="other">新しいアプリ %d 件</item>
+    </plurals>
+    <plurals name="what_changed_attention_count">
+        <item quantity="other">要確認 %d 件</item>
+    </plurals>
+    <plurals name="what_changed_change_count">
+        <item quantity="other">%d 件の変更</item>
+    </plurals>
+    <string name="what_changed_category_android_versions">Android バージョン</string>
+    <string name="what_changed_category_components">コンポーネント</string>
+    <string name="what_changed_category_install_source">インストール元</string>
+    <string name="what_changed_category_native">ネイティブライブラリ</string>
+    <string name="what_changed_category_permissions">権限</string>
+    <string name="what_changed_category_settings">アプリの設定</string>
+    <string name="what_changed_category_signing">署名</string>
+    <string name="what_changed_category_size">サイズ</string>
+    <string name="what_changed_certificate_changed">署名証明書が変更されました</string>
+    <string name="what_changed_first_recorded">最初の記録</string>
+    <string name="what_changed_uncomparable_only">一部の情報を比較できませんでした</string>
+</resources>

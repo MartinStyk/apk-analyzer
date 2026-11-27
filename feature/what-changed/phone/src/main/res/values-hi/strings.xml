@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="what_changed_title">क्या बदला</string>
+    <string name="what_changed_full_history">पूरा इतिहास</string>
+    <string name="what_changed_range_since_last_visit">पिछली बार देखने के बाद से</string>
+    <string name="what_changed_range_7_days">7 दिन</string>
+    <string name="what_changed_range_30_days">30 दिन</string>
+    <string name="what_changed_range_90_days">90 दिन</string>
+    <string name="what_changed_range_all_time">शुरू से अब तक</string>
+    <string name="what_changed_since">%1$s से</string>
+    <string name="what_changed_nothing_since">%1$s से कोई बदलाव नहीं</string>
+    <string name="what_changed_nothing_hint">पुराने बदलाव देखने के लिए लंबी अवधि चुनें।</string>
+    <string name="what_changed_section_latest">ताज़ा बदलाव</string>
+    <string name="what_changed_section_attention">ध्यान देने लायक</string>
+    <string name="what_changed_section_changed_apps">बदले गए ऐप</string>
+    <string name="what_changed_section_uninstalled">अब इंस्टॉल नहीं हैं</string>
+    <string name="what_changed_new_app">नया ऐप</string>
+    <string name="what_changed_no_net_change">आख़िर में कोई बदलाव नहीं</string>
+    <string name="what_changed_reverted">%1$s को वापस लिया गया</string>
+    <string name="what_changed_no_changes_recorded">कोई बदलाव दर्ज नहीं हुआ</string>
+    <string name="what_changed_empty_title">अभी कुछ दर्ज नहीं हुआ</string>
+    <string name="what_changed_empty_body">Apk Analyzer आपके ऐप को बैकग्राउंड में दर्ज करता है। जब कोई ऐप अपडेट होता है, तो उसमें क्या बदला, यह यहाँ दिखता है।</string>
+    <string name="what_changed_error">बदलावों का इतिहास लोड नहीं हो सका</string>
+    <string name="what_changed_retry">फिर से प्रयास करें</string>
+    <string name="what_changed_row_click_label">देखें क्या बदला</string>
+    <string name="what_changed_row_first_click_label">पूरी जानकारी देखें</string>
+    <string name="what_changed_copied">कॉपी हो गया</string>
+    <string name="what_changed_row_long_click_label">कॉपी करें</string>
+    <string name="what_changed_app_click_label">इस ऐप का इतिहास देखें</string>
+    <string name="what_changed_filter_attention">ध्यान देने लायक</string>
+    <string name="what_changed_filter_requirements">डिवाइस आवश्यकताएँ</string>
+    <string name="what_changed_log_no_match">इन फ़िल्टर से कोई बदलाव मेल नहीं खाता</string>
+    <plurals name="what_changed_updates">
+        <item quantity="one">%d अपडेट</item>
+        <item quantity="other">%d अपडेट</item>
+    </plurals>
+    <plurals name="what_changed_new_apps">
+        <item quantity="one">%d नया ऐप</item>
+        <item quantity="other">%d नए ऐप</item>
+    </plurals>
+    <plurals name="what_changed_attention_count">
+        <item quantity="one">%d पर ध्यान देना ज़रूरी</item>
+        <item quantity="other">%d पर ध्यान देना ज़रूरी</item>
+    </plurals>
+    <plurals name="what_changed_change_count">
+        <item quantity="one">%d बदलाव</item>
+        <item quantity="other">%d बदलाव</item>
+    </plurals>
+    <string name="what_changed_category_android_versions">Android वर्शन</string>
+    <string name="what_changed_category_components">कंपोनेंट</string>
+    <string name="what_changed_category_install_source">इंस्टॉल स्रोत</string>
+    <string name="what_changed_category_native">नेटिव लाइब्रेरी</string>
+    <string name="what_changed_category_permissions">अनुमतियां</string>
+    <string name="what_changed_category_settings">ऐप सेटिंग</string>
+    <string name="what_changed_category_signing">साइनिंग</string>
+    <string name="what_changed_category_size">आकार</string>
+    <string name="what_changed_certificate_changed">साइनिंग प्रमाणपत्र बदल गया</string>
+    <string name="what_changed_first_recorded">पहली बार दर्ज</string>
+    <string name="what_changed_uncomparable_only">कुछ जानकारी की तुलना नहीं हो सकी</string>
+</resources>

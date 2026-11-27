@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="what_changed_title">Was sich geändert hat</string>
+    <string name="what_changed_full_history">Gesamter Verlauf</string>
+    <string name="what_changed_range_since_last_visit">Seit dem letzten Besuch</string>
+    <string name="what_changed_range_7_days">7 Tage</string>
+    <string name="what_changed_range_30_days">30 Tage</string>
+    <string name="what_changed_range_90_days">90 Tage</string>
+    <string name="what_changed_range_all_time">Gesamter Zeitraum</string>
+    <string name="what_changed_since">Seit %1$s</string>
+    <string name="what_changed_nothing_since">Keine Änderungen seit %1$s</string>
+    <string name="what_changed_nothing_hint">Wähle einen längeren Zeitraum, um ältere Änderungen zu sehen.</string>
+    <string name="what_changed_section_latest">Letzte Änderung</string>
+    <string name="what_changed_section_attention">Erfordert Aufmerksamkeit</string>
+    <string name="what_changed_section_changed_apps">Geänderte Apps</string>
+    <string name="what_changed_section_uninstalled">Nicht mehr installiert</string>
+    <string name="what_changed_new_app">Neue App</string>
+    <string name="what_changed_no_net_change">Unterm Strich unverändert</string>
+    <string name="what_changed_reverted">Rückgängig gemacht am %1$s</string>
+    <string name="what_changed_no_changes_recorded">Keine Änderungen erfasst</string>
+    <string name="what_changed_empty_title">Noch nichts erfasst</string>
+    <string name="what_changed_empty_body">Apk Analyzer erfasst deine Apps im Hintergrund. Wenn eine App aktualisiert wird, siehst du hier, was sich daran geändert hat.</string>
+    <string name="what_changed_error">Der Änderungsverlauf konnte nicht geladen werden</string>
+    <string name="what_changed_retry">Erneut versuchen</string>
+    <string name="what_changed_row_click_label">Änderungen ansehen</string>
+    <string name="what_changed_row_first_click_label">Alle Details ansehen</string>
+    <string name="what_changed_copied">Kopiert</string>
+    <string name="what_changed_row_long_click_label">Kopieren</string>
+    <string name="what_changed_app_click_label">Verlauf dieser App ansehen</string>
+    <string name="what_changed_filter_attention">Erfordert Aufmerksamkeit</string>
+    <string name="what_changed_filter_requirements">Geräteanforderungen</string>
+    <string name="what_changed_log_no_match">Keine Änderungen entsprechen diesen Filtern</string>
+    <plurals name="what_changed_updates">
+        <item quantity="one">%d Update</item>
+        <item quantity="other">%d Updates</item>
+    </plurals>
+    <plurals name="what_changed_new_apps">
+        <item quantity="one">%d neue App</item>
+        <item quantity="other">%d neue Apps</item>
+    </plurals>
+    <plurals name="what_changed_attention_count">
+        <item quantity="one">%d erfordert Aufmerksamkeit</item>
+        <item quantity="other">%d erfordern Aufmerksamkeit</item>
+    </plurals>
+    <plurals name="what_changed_change_count">
+        <item quantity="one">%d Änderung</item>
+        <item quantity="other">%d Änderungen</item>
+    </plurals>
+    <string name="what_changed_category_android_versions">Android-Versionen</string>
+    <string name="what_changed_category_components">Komponenten</string>
+    <string name="what_changed_category_install_source">Installationsquelle</string>
+    <string name="what_changed_category_native">Native Bibliotheken</string>
+    <string name="what_changed_category_permissions">Berechtigungen</string>
+    <string name="what_changed_category_settings">App-Einstellungen</string>
+    <string name="what_changed_category_signing">Signatur</string>
+    <string name="what_changed_category_size">Größe</string>
+    <string name="what_changed_certificate_changed">Signaturzertifikat geändert</string>
+    <string name="what_changed_first_recorded">Erstmals erfasst</string>
+    <string name="what_changed_uncomparable_only">Einige Angaben ließen sich nicht vergleichen</string>
+</resources>

@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="what_changed_title">Qué cambió</string>
+    <string name="what_changed_full_history">Historial completo</string>
+    <string name="what_changed_range_since_last_visit">Desde tu última visita</string>
+    <string name="what_changed_range_7_days">7 días</string>
+    <string name="what_changed_range_30_days">30 días</string>
+    <string name="what_changed_range_90_days">90 días</string>
+    <string name="what_changed_range_all_time">Todo el tiempo</string>
+    <string name="what_changed_since">Desde el %1$s</string>
+    <string name="what_changed_nothing_since">Sin cambios desde el %1$s</string>
+    <string name="what_changed_nothing_hint">Elige un periodo más largo para ver cambios anteriores.</string>
+    <string name="what_changed_section_latest">Último cambio</string>
+    <string name="what_changed_section_attention">Requiere atención</string>
+    <string name="what_changed_section_changed_apps">Apps con cambios</string>
+    <string name="what_changed_section_uninstalled">Ya no instaladas</string>
+    <string name="what_changed_new_app">App nueva</string>
+    <string name="what_changed_no_net_change">Sin cambios netos</string>
+    <string name="what_changed_reverted">Revertido el %1$s</string>
+    <string name="what_changed_no_changes_recorded">No se registraron cambios</string>
+    <string name="what_changed_empty_title">Aún no hay nada registrado</string>
+    <string name="what_changed_empty_body">Apk Analyzer registra tus apps en segundo plano. Cuando una app se actualiza, aquí aparece qué cambió en ella.</string>
+    <string name="what_changed_error">No se pudo cargar el historial de cambios</string>
+    <string name="what_changed_retry">Intenta de nuevo</string>
+    <string name="what_changed_row_click_label">Ver qué cambió</string>
+    <string name="what_changed_row_first_click_label">Ver todos los detalles</string>
+    <string name="what_changed_copied">Copiado</string>
+    <string name="what_changed_row_long_click_label">Copiar</string>
+    <string name="what_changed_app_click_label">Ver el historial de esta app</string>
+    <string name="what_changed_filter_attention">Requiere atención</string>
+    <string name="what_changed_filter_requirements">Requisitos del dispositivo</string>
+    <string name="what_changed_log_no_match">Ningún cambio coincide con estos filtros</string>
+    <plurals name="what_changed_updates">
+        <item quantity="one">%d actualización</item>
+        <item quantity="many">%d actualizaciones</item>
+        <item quantity="other">%d actualizaciones</item>
+    </plurals>
+    <plurals name="what_changed_new_apps">
+        <item quantity="one">%d app nueva</item>
+        <item quantity="many">%d apps nuevas</item>
+        <item quantity="other">%d apps nuevas</item>
+    </plurals>
+    <plurals name="what_changed_attention_count">
+        <item quantity="one">%d requiere atención</item>
+        <item quantity="many">%d requieren atención</item>
+        <item quantity="other">%d requieren atención</item>
+    </plurals>
+    <plurals name="what_changed_change_count">
+        <item quantity="one">%d cambio</item>
+        <item quantity="many">%d cambios</item>
+        <item quantity="other">%d cambios</item>
+    </plurals>
+    <string name="what_changed_category_android_versions">Versiones de Android</string>
+    <string name="what_changed_category_components">Componentes</string>
+    <string name="what_changed_category_install_source">Fuente de instalación</string>
+    <string name="what_changed_category_native">Bibliotecas nativas</string>
+    <string name="what_changed_category_permissions">Permisos</string>
+    <string name="what_changed_category_settings">Ajustes de la app</string>
+    <string name="what_changed_category_signing">Firma</string>
+    <string name="what_changed_category_size">Tamaño</string>
+    <string name="what_changed_certificate_changed">Cambió el certificado de firma</string>
+    <string name="what_changed_first_recorded">Primer registro</string>
+    <string name="what_changed_uncomparable_only">No se pudieron comparar algunos datos</string>
+</resources>

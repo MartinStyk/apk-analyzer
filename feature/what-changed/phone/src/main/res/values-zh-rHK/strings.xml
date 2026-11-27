@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="what_changed_title">更改內容</string>
+    <string name="what_changed_full_history">完整歷史記錄</string>
+    <string name="what_changed_range_since_last_visit">自上次查看以來</string>
+    <string name="what_changed_range_7_days">7 天</string>
+    <string name="what_changed_range_30_days">30 天</string>
+    <string name="what_changed_range_90_days">90 天</string>
+    <string name="what_changed_range_all_time">所有時間</string>
+    <string name="what_changed_since">自 %1$s 起</string>
+    <string name="what_changed_nothing_since">自 %1$s 起沒有任何更改</string>
+    <string name="what_changed_nothing_hint">選擇較長的時間範圍，便可查看較早的更改。</string>
+    <string name="what_changed_section_latest">最新更改</string>
+    <string name="what_changed_section_attention">需要注意</string>
+    <string name="what_changed_section_changed_apps">有更改的應用程式</string>
+    <string name="what_changed_section_uninstalled">已解除安裝</string>
+    <string name="what_changed_new_app">新應用程式</string>
+    <string name="what_changed_no_net_change">整體沒有更改</string>
+    <string name="what_changed_reverted">已於 %1$s 還原</string>
+    <string name="what_changed_no_changes_recorded">未有記錄任何更改</string>
+    <string name="what_changed_empty_title">尚未有任何記錄</string>
+    <string name="what_changed_empty_body">Apk Analyzer 會在背景記錄你的應用程式。應用程式更新後，有哪些更改便會顯示在這裏。</string>
+    <string name="what_changed_error">無法載入更改歷史記錄</string>
+    <string name="what_changed_retry">重試</string>
+    <string name="what_changed_row_click_label">查看更改</string>
+    <string name="what_changed_row_first_click_label">查看完整詳情</string>
+    <string name="what_changed_copied">已複製</string>
+    <string name="what_changed_row_long_click_label">複製</string>
+    <string name="what_changed_app_click_label">查看此應用程式的歷史記錄</string>
+    <string name="what_changed_filter_attention">需要注意</string>
+    <string name="what_changed_filter_requirements">裝置需求</string>
+    <string name="what_changed_log_no_match">沒有符合這些篩選條件的更改</string>
+    <plurals name="what_changed_updates">
+        <item quantity="other">%d 次更新</item>
+    </plurals>
+    <plurals name="what_changed_new_apps">
+        <item quantity="other">%d 個新應用程式</item>
+    </plurals>
+    <plurals name="what_changed_attention_count">
+        <item quantity="other">%d 個需要注意</item>
+    </plurals>
+    <plurals name="what_changed_change_count">
+        <item quantity="other">%d 項更改</item>
+    </plurals>
+    <string name="what_changed_category_android_versions">Android 版本</string>
+    <string name="what_changed_category_components">元件</string>
+    <string name="what_changed_category_install_source">安裝來源</string>
+    <string name="what_changed_category_native">原生程式庫</string>
+    <string name="what_changed_category_permissions">權限</string>
+    <string name="what_changed_category_settings">應用程式設定</string>
+    <string name="what_changed_category_signing">簽署</string>
+    <string name="what_changed_category_size">大小</string>
+    <string name="what_changed_certificate_changed">簽署證書已更改</string>
+    <string name="what_changed_first_recorded">首次記錄</string>
+    <string name="what_changed_uncomparable_only">部分資料無法比較</string>
+</resources>

@@ -16,8 +16,10 @@ broadcast, on-launch reconciliation, periodic `WorkManager` reconciliation, and 
 read API — see [Timeline and Diff](#timeline-and-diff). `feature:app-detail:phone` reads it for the
 per-app timeline, change detail, and historical detail (`HI-08`, `HI-15`), behind the debug-only
 `ConfigurationKey.AppHistoryDisplayEnabled`; capture is gated separately by the debug-only
-`ConfigurationKey.AppHistoryRecordingEnabled`. Not yet built:
-the What Changed tab and other UI (`HI-06`/`HI-14`), the significance rules (`HI-18`),
+`ConfigurationKey.AppHistoryRecordingEnabled`. The device-wide read (`deviceTimeline()`), the summary
+rules behind it, and the `HI-18` significance rules are implemented and read by
+[`feature:what-changed`](../../feature/what-changed/AGENTS.md) (`HI-14`, `HI-07`). Not yet built:
+the Pro gate, free sample and stubs (`HI-06`/`HI-19`), the first run (`HI-05`/`HI-21`),
 retention/pruning (`HI-04`), the Pro-gated Drive backup half of `HI-16`, and the `HI-10` runtime-state
 (enabled/install-source) tier. See
 [`docs/app/technical/app-history-capture-schema.md`](../../docs/app/technical/app-history-capture-schema.md)
@@ -210,15 +212,39 @@ stored at all, so a device language change can never read as an app change.
 screen renders from, so a modified item always has something to say. `Activity.isLauncher` is compared
 only when both sides know it. A change of nothing else is therefore not a change at all.
 
-Screens read shared rules from `timeline/model/`, so a future TV screen or What Changed tab agrees with
-the phone: `hasCertificateChange` (the one predicate; it reads `certificates`, never the `Signing`
+Screens read shared rules from `timeline/model/`, so the per-app timeline and the What Changed tab
+agree: `hasCertificateChange` (the one predicate; it reads `certificates`, never the `Signing`
 category, which also fires on a scheme change), `addedDangerousPermissions` and `needsAttention` (the
-one rule for what a timeline row highlights and what change detail puts under "Worth knowing" — a
-dangerous permission added is its own `DangerousPermissionsAdded` part, never folded into
-`PermissionsAdded`), `direction` (whether a summary part adds, removes or changes something — an
-exhaustive `when`, so a new part must choose), `summaryParts`, `isQuiet`, `changeCount`,
-`recordingSince`, `overview`, and the matching text in `AppHistoryText.kt` with its strings in this
-module. Date a `FirstSeen` row with `snapshot.capturedAt`, never `timestamp`, which can be a factory date.
+`HI-18` rule, one predicate for what a timeline row highlights and what the tab lists under "Needs
+attention": a certificate change, a dangerous permission added, an install source change, debugging
+turned on, or the APK growing by 25% or by 20 MB — a dangerous permission added is its own
+`DangerousPermissionsAdded` part, never folded into `PermissionsAdded`), `direction` (a
+`core:common` `ChangeDirection`, shared with the design system's change token — an exhaustive
+`when`, so a new part must choose), `summaryParts` (on an entry or any `AppHistoryDiff`), `isQuiet`
+(never true for a change that needs attention), `changeCount`, `recordingSince`, `overview`, the
+and the matching text in `AppHistoryText.kt` with its
+strings in this module. Date a `FirstSeen` row with `snapshot.capturedAt`, never `timestamp`, which
+can be a factory date (`occurredAt` does this).
+
+### Device-wide read
+
+`deviceTimeline()` emits one `AppHistoryAppTimeline` per recorded package, built by the same
+`AppHistoryTimelineBuilder` as `timeline()`, so per-app entries and counts are identical in both. It
+watches snapshot rows only (`observeHeaders`, no blobs). A package with one snapshot becomes a
+`FirstSeen` straight from its row and is never decoded; a package with more is decoded and diffed.
+Results are cached per package in the repository, keyed by that package's row list, so a capture
+rebuilds only that app and reopening the screen costs one row query. Each build is traced as
+`app_history_device_timeline` (`app_count`, `decoded_count`). Like `timeline()`, a failure emits
+`Unavailable` and completes, so retry is a fresh collection.
+
+Besides entries, each app carries the timestamps of updates the timeline hides as unchanged (they
+still count as updates) and `diffsToLatest`: a diff from every earlier snapshot to the latest, so a
+range's net change needs no second decode. `AppHistoryDeviceSummary.kt` holds the rules over it:
+`summarySince(since)` counts updates and new apps (by install date, never by first recording, which
+would call every app new when recording starts), lists changed apps with their net change, and lists
+the newest attention-worthy change per app with the date a later update undid it, if all its reasons
+were undone. A certificate change or a size jump is never "undone". `latestChange` and `allEntries`
+ignore the range. Moves to a new device are never counted as app changes.
 
 Install source is compared as `AppHistoryInstallSource`: the resolved `AppSource` plus the installing
 package. A move between two unrecognized stores resolves to Unknown on both sides, and must still read as

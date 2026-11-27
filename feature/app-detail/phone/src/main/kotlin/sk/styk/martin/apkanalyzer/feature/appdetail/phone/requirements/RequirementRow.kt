@@ -18,7 +18,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryChangeDirection
 import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.DeviceFeatures
 import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.Feature
 import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.FeatureAvailability
@@ -26,6 +25,7 @@ import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.RequirementItem
 import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.label
 import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.missingText
 import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.toRequirementItem
+import sk.styk.martin.apkanalyzer.core.common.model.ChangeDirection
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
@@ -41,7 +41,7 @@ internal fun RequirementRow(
     onLongClick: (label: String) -> Unit,
     modifier: Modifier = Modifier,
     changeLines: List<String> = emptyList(),
-    changeMarker: AppHistoryChangeDirection? = null,
+    changeMarker: ChangeDirection? = null,
 ) {
     val label = item.label(LocalResources.current)
     val showIdentifier = label != item.identifier
@@ -121,7 +121,7 @@ private fun RequirementRowAddedPreview() {
             item = Feature.Hardware(name = "android.hardware.nfc").toRequirementItem(DeviceFeatures.Unknown),
             onClick = {},
             onLongClick = {},
-            changeMarker = AppHistoryChangeDirection.Added,
+            changeMarker = ChangeDirection.Added,
         )
     }
 }

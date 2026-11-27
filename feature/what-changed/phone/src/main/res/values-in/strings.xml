@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="what_changed_title">Yang berubah</string>
+    <string name="what_changed_full_history">Riwayat lengkap</string>
+    <string name="what_changed_range_since_last_visit">Sejak kunjungan terakhir</string>
+    <string name="what_changed_range_7_days">7 hari</string>
+    <string name="what_changed_range_30_days">30 hari</string>
+    <string name="what_changed_range_90_days">90 hari</string>
+    <string name="what_changed_range_all_time">Sepanjang waktu</string>
+    <string name="what_changed_since">Sejak %1$s</string>
+    <string name="what_changed_nothing_since">Tidak ada perubahan sejak %1$s</string>
+    <string name="what_changed_nothing_hint">Pilih rentang yang lebih panjang untuk melihat perubahan lama.</string>
+    <string name="what_changed_section_latest">Perubahan terbaru</string>
+    <string name="what_changed_section_attention">Perlu perhatian</string>
+    <string name="what_changed_section_changed_apps">Aplikasi yang berubah</string>
+    <string name="what_changed_section_uninstalled">Tidak terinstal lagi</string>
+    <string name="what_changed_new_app">Aplikasi baru</string>
+    <string name="what_changed_no_net_change">Pada akhirnya tidak berubah</string>
+    <string name="what_changed_reverted">Dibatalkan %1$s</string>
+    <string name="what_changed_no_changes_recorded">Tidak ada perubahan tercatat</string>
+    <string name="what_changed_empty_title">Belum ada yang tercatat</string>
+    <string name="what_changed_empty_body">Apk Analyzer mencatat aplikasi Anda di latar belakang. Saat aplikasi diperbarui, perubahan di dalamnya muncul di sini.</string>
+    <string name="what_changed_error">Tidak dapat memuat riwayat perubahan</string>
+    <string name="what_changed_retry">Coba lagi</string>
+    <string name="what_changed_row_click_label">Lihat yang berubah</string>
+    <string name="what_changed_row_first_click_label">Lihat detail lengkap</string>
+    <string name="what_changed_copied">Disalin</string>
+    <string name="what_changed_row_long_click_label">Salin</string>
+    <string name="what_changed_app_click_label">Lihat riwayat aplikasi ini</string>
+    <string name="what_changed_filter_attention">Perlu perhatian</string>
+    <string name="what_changed_filter_requirements">Persyaratan perangkat</string>
+    <string name="what_changed_log_no_match">Tidak ada perubahan yang cocok dengan filter ini</string>
+    <plurals name="what_changed_updates">
+        <item quantity="other">%d pembaruan</item>
+    </plurals>
+    <plurals name="what_changed_new_apps">
+        <item quantity="other">%d aplikasi baru</item>
+    </plurals>
+    <plurals name="what_changed_attention_count">
+        <item quantity="other">%d perlu perhatian</item>
+    </plurals>
+    <plurals name="what_changed_change_count">
+        <item quantity="other">%d perubahan</item>
+    </plurals>
+    <string name="what_changed_category_android_versions">Versi Android</string>
+    <string name="what_changed_category_components">Komponen</string>
+    <string name="what_changed_category_install_source">Sumber instalasi</string>
+    <string name="what_changed_category_native">Perpustakaan asli</string>
+    <string name="what_changed_category_permissions">Izin</string>
+    <string name="what_changed_category_settings">Setelan aplikasi</string>
+    <string name="what_changed_category_signing">Penandatanganan</string>
+    <string name="what_changed_category_size">Ukuran</string>
+    <string name="what_changed_certificate_changed">Sertifikat penandatangan berubah</string>
+    <string name="what_changed_first_recorded">Pertama kali tercatat</string>
+    <string name="what_changed_uncomparable_only">Beberapa detail tidak dapat dibandingkan</string>
+</resources>

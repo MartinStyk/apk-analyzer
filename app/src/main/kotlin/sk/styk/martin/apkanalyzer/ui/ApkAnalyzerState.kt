@@ -8,5 +8,9 @@ import sk.styk.martin.apkanalyzer.core.common.settings.FingerprintFormat
 sealed interface ApkAnalyzerState {
     data object Loading : ApkAnalyzerState
 
-    data class Data(val colorAppScheme: ColorAppScheme, val fingerprintFormat: FingerprintFormat) : ApkAnalyzerState
+    data class Data(
+        val colorAppScheme: ColorAppScheme,
+        val fingerprintFormat: FingerprintFormat,
+        val isWhatChangedEnabled: Boolean,
+    ) : ApkAnalyzerState
 }

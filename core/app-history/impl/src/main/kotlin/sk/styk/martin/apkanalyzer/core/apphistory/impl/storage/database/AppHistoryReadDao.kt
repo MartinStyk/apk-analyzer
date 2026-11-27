@@ -13,6 +13,12 @@ internal interface AppHistoryReadDao {
     @Query("SELECT * FROM app_history_snapshot WHERE packageName = :packageName ORDER BY capturedAt ASC, id ASC")
     fun observeSnapshots(packageName: String): Flow<List<AppHistorySnapshotEntity>>
 
+    @Query("SELECT * FROM app_history_snapshot WHERE packageName = :packageName ORDER BY capturedAt ASC, id ASC")
+    suspend fun snapshots(packageName: String): List<AppHistorySnapshotEntity>
+
+    @Query("SELECT * FROM app_history_snapshot ORDER BY packageName ASC, capturedAt ASC, id ASC")
+    fun observeAllSnapshots(): Flow<List<AppHistorySnapshotEntity>>
+
     @Query("SELECT * FROM app_history_snapshot WHERE id = :id")
     suspend fun snapshot(id: Long): AppHistorySnapshotEntity?
 

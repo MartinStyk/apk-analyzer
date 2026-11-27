@@ -41,6 +41,7 @@ import sk.styk.martin.apkanalyzer.core.common.util.sendForeignBroadcast
 import sk.styk.martin.apkanalyzer.core.common.util.startForeignActivity
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Chip
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ListSectionHeader
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.SearchBarActive
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.SelectorChip
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
@@ -54,7 +55,6 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.domain.SectionErrorReason
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.recordedAt
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.AppDetailSectionScaffold
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ListSectionHeader
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionError
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.SectionLoading
 import java.time.Instant

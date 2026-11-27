@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="what_changed_title">Що змінилося</string>
+    <string name="what_changed_full_history">Уся історія</string>
+    <string name="what_changed_range_since_last_visit">З останнього візиту</string>
+    <string name="what_changed_range_7_days">7 днів</string>
+    <string name="what_changed_range_30_days">30 днів</string>
+    <string name="what_changed_range_90_days">90 днів</string>
+    <string name="what_changed_range_all_time">За весь час</string>
+    <string name="what_changed_since">З %1$s</string>
+    <string name="what_changed_nothing_since">Немає змін з %1$s</string>
+    <string name="what_changed_nothing_hint">Виберіть довший період, щоб побачити давніші зміни.</string>
+    <string name="what_changed_section_latest">Остання зміна</string>
+    <string name="what_changed_section_attention">Потребує уваги</string>
+    <string name="what_changed_section_changed_apps">Змінені застосунки</string>
+    <string name="what_changed_section_uninstalled">Більше не встановлені</string>
+    <string name="what_changed_new_app">Новий застосунок</string>
+    <string name="what_changed_no_net_change">Зрештою без змін</string>
+    <string name="what_changed_reverted">Скасовано %1$s</string>
+    <string name="what_changed_no_changes_recorded">Зміни не зафіксовано</string>
+    <string name="what_changed_empty_title">Поки нічого не зафіксовано</string>
+    <string name="what_changed_empty_body">Apk Analyzer фіксує ваші застосунки у фоновому режимі. Коли застосунок оновлюється, тут з’являється те, що в ньому змінилося.</string>
+    <string name="what_changed_error">Не вдалося завантажити історію змін</string>
+    <string name="what_changed_retry">Спробуйте ще раз</string>
+    <string name="what_changed_row_click_label">Переглянути зміни</string>
+    <string name="what_changed_row_first_click_label">Переглянути всі відомості</string>
+    <string name="what_changed_copied">Скопійовано</string>
+    <string name="what_changed_row_long_click_label">Копіювати</string>
+    <string name="what_changed_app_click_label">Переглянути історію цього застосунку</string>
+    <string name="what_changed_filter_attention">Потребує уваги</string>
+    <string name="what_changed_filter_requirements">Вимоги до пристрою</string>
+    <string name="what_changed_log_no_match">Жодна зміна не відповідає цим фільтрам</string>
+    <plurals name="what_changed_updates">
+        <item quantity="one">%d оновлення</item>
+        <item quantity="few">%d оновлення</item>
+        <item quantity="many">%d оновлень</item>
+        <item quantity="other">%d оновлення</item>
+    </plurals>
+    <plurals name="what_changed_new_apps">
+        <item quantity="one">%d новий застосунок</item>
+        <item quantity="few">%d нові застосунки</item>
+        <item quantity="many">%d нових застосунків</item>
+        <item quantity="other">%d нового застосунку</item>
+    </plurals>
+    <plurals name="what_changed_attention_count">
+        <item quantity="one">%d потребує уваги</item>
+        <item quantity="few">%d потребують уваги</item>
+        <item quantity="many">%d потребують уваги</item>
+        <item quantity="other">%d потребують уваги</item>
+    </plurals>
+    <plurals name="what_changed_change_count">
+        <item quantity="one">%d зміна</item>
+        <item quantity="few">%d зміни</item>
+        <item quantity="many">%d змін</item>
+        <item quantity="other">%d зміни</item>
+    </plurals>
+    <string name="what_changed_category_android_versions">Версії Android</string>
+    <string name="what_changed_category_components">Компоненти</string>
+    <string name="what_changed_category_install_source">Джерело встановлення</string>
+    <string name="what_changed_category_native">Рідні бібліотеки</string>
+    <string name="what_changed_category_permissions">Дозволи</string>
+    <string name="what_changed_category_settings">Налаштування застосунку</string>
+    <string name="what_changed_category_signing">Підпис</string>
+    <string name="what_changed_category_size">Розмір</string>
+    <string name="what_changed_certificate_changed">Сертифікат підпису змінився</string>
+    <string name="what_changed_first_recorded">Уперше зафіксовано</string>
+    <string name="what_changed_uncomparable_only">Деякі дані не вдалося порівняти</string>
+</resources>

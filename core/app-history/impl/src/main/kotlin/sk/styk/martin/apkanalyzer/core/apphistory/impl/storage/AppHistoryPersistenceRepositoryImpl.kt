@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.database.AppHistoryGateDao
@@ -50,6 +51,16 @@ internal class AppHistoryPersistenceRepositoryImpl @Inject constructor(
         .catch { emit(Result.failure(it)) }
         .flowOn(dispatcherProvider.default())
 
+    override fun observeHeaders(): Flow<Result<List<AppHistorySnapshotHeader>>> = appHistoryReadDao.observeAllSnapshots()
+        .map { rows -> Result.success(rows.map { it.toHeader() }) }
+        .distinctUntilChanged()
+        .catch { emit(Result.failure(it)) }
+        .flowOn(dispatcherProvider.default())
+
+    override suspend fun records(packageName: PackageName): Result<List<StoredAppHistoryRecord>> = withContext(dispatcherProvider.default()) {
+        runCatchingCancellable { decoder.decode(appHistoryReadDao.snapshots(packageName.value), appHistoryReadDao.blobs(packageName.value)) }
+    }
+
     override suspend fun read(id: Long): Result<StoredAppHistoryRecord?> = withContext(dispatcherProvider.default()) {
         runCatchingCancellable {
             appHistoryReadDao.snapshot(id)?.let { row ->
@@ -72,6 +83,21 @@ private val AppHistorySnapshotEntity.blobHashes: List<Long>
         signingSchemeHash,
         installedSplitsHash,
     )
+
+private fun AppHistorySnapshotEntity.toHeader() = AppHistorySnapshotHeader(
+    id = id,
+    packageName = PackageName(packageName),
+    applicationName = applicationName,
+    versionCode = versionCode,
+    versionName = versionName,
+    capturedAt = Instant.ofEpochMilli(capturedAt),
+    captureKey = AppHistoryCaptureKey(
+        deviceId = deviceId,
+        firstInstallTime = Instant.ofEpochMilli(firstInstallTime),
+        lastUpdateTime = Instant.ofEpochMilli(lastUpdateTime),
+        versionCode = versionCode,
+    ),
+)
 
 private fun AppHistoryGateState.toCaptureKey() = AppHistoryCaptureKey(
     deviceId = deviceId,

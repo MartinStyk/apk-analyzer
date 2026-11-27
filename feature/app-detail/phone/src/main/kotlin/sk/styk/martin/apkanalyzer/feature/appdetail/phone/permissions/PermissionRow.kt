@@ -21,11 +21,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryChangeDirection
 import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.GrantState
 import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.PermissionItem
 import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.labelRes
 import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionLevel
+import sk.styk.martin.apkanalyzer.core.common.model.ChangeDirection
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Tag
@@ -44,7 +44,7 @@ internal fun PermissionRow(
     modifier: Modifier = Modifier,
     tag: String? = null,
     changeLines: List<String> = emptyList(),
-    changeMarker: AppHistoryChangeDirection? = null,
+    changeMarker: ChangeDirection? = null,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -142,7 +142,7 @@ private fun PermissionRowPreview() {
 private fun PermissionRowAddedPreview() {
     ApkAnalyzerTheme {
         PermissionRow(item = samplePermission(grantState = null), onClick = {
-        }, onLongClick = {}, tag = "Dangerous", changeMarker = AppHistoryChangeDirection.Added)
+        }, onLongClick = {}, tag = "Dangerous", changeMarker = ChangeDirection.Added)
     }
 }
 
@@ -150,6 +150,6 @@ private fun PermissionRowAddedPreview() {
 @Composable
 private fun PermissionRowRemovedPreview() {
     ApkAnalyzerTheme {
-        PermissionRow(item = samplePermission(grantState = null), onClick = {}, onLongClick = {}, changeMarker = AppHistoryChangeDirection.Removed)
+        PermissionRow(item = samplePermission(grantState = null), onClick = {}, onLongClick = {}, changeMarker = ChangeDirection.Removed)
     }
 }

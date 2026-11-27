@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="what_changed_title">变化内容</string>
+    <string name="what_changed_full_history">完整历史记录</string>
+    <string name="what_changed_range_since_last_visit">自上次访问以来</string>
+    <string name="what_changed_range_7_days">7 天</string>
+    <string name="what_changed_range_30_days">30 天</string>
+    <string name="what_changed_range_90_days">90 天</string>
+    <string name="what_changed_range_all_time">全部时间</string>
+    <string name="what_changed_since">自 %1$s 以来</string>
+    <string name="what_changed_nothing_since">自 %1$s 以来没有变化</string>
+    <string name="what_changed_nothing_hint">选择更长的时间范围可查看更早的变化。</string>
+    <string name="what_changed_section_latest">最新变化</string>
+    <string name="what_changed_section_attention">需要注意</string>
+    <string name="what_changed_section_changed_apps">有变化的应用</string>
+    <string name="what_changed_section_uninstalled">已不再安装</string>
+    <string name="what_changed_new_app">新应用</string>
+    <string name="what_changed_no_net_change">最终没有变化</string>
+    <string name="what_changed_reverted">已于 %1$s 撤销</string>
+    <string name="what_changed_no_changes_recorded">未记录到变化</string>
+    <string name="what_changed_empty_title">尚无记录</string>
+    <string name="what_changed_empty_body">Apk Analyzer 会在后台记录你的应用。应用更新后，其中的变化会显示在这里。</string>
+    <string name="what_changed_error">无法加载变化历史记录</string>
+    <string name="what_changed_retry">再试一次</string>
+    <string name="what_changed_row_click_label">查看变化</string>
+    <string name="what_changed_row_first_click_label">查看完整详情</string>
+    <string name="what_changed_copied">已复制</string>
+    <string name="what_changed_row_long_click_label">复制</string>
+    <string name="what_changed_app_click_label">查看此应用的历史记录</string>
+    <string name="what_changed_filter_attention">需要注意</string>
+    <string name="what_changed_filter_requirements">设备要求</string>
+    <string name="what_changed_log_no_match">没有符合这些筛选条件的变化</string>
+    <plurals name="what_changed_updates">
+        <item quantity="other">%d 次更新</item>
+    </plurals>
+    <plurals name="what_changed_new_apps">
+        <item quantity="other">%d 个新应用</item>
+    </plurals>
+    <plurals name="what_changed_attention_count">
+        <item quantity="other">%d 个需要注意</item>
+    </plurals>
+    <plurals name="what_changed_change_count">
+        <item quantity="other">%d 项变化</item>
+    </plurals>
+    <string name="what_changed_category_android_versions">Android 版本</string>
+    <string name="what_changed_category_components">组件</string>
+    <string name="what_changed_category_install_source">安装来源</string>
+    <string name="what_changed_category_native">本地库</string>
+    <string name="what_changed_category_permissions">权限</string>
+    <string name="what_changed_category_settings">应用设置</string>
+    <string name="what_changed_category_signing">签名</string>
+    <string name="what_changed_category_size">大小</string>
+    <string name="what_changed_certificate_changed">签名证书已更改</string>
+    <string name="what_changed_first_recorded">首次记录</string>
+    <string name="what_changed_uncomparable_only">部分信息无法比较</string>
+</resources>

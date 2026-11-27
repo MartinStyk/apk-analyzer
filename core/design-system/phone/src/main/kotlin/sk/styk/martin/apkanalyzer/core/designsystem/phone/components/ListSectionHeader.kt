@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.feature.appdetail.phone.components
+package sk.styk.martin.apkanalyzer.core.designsystem.phone.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,11 +10,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 
 @Composable
-internal fun ListSectionHeader(
+fun ListSectionHeader(
     title: String,
     modifier: Modifier = Modifier,
     explanation: String? = null,

@@ -35,7 +35,10 @@ class ApkAnalyzerActivity : ComponentActivity() {
                 }
             }
             ApkAnalyzerThemeHost(state = state) {
-                ApkAnalyzerApp(onBackAtRoot = ::finish)
+                ApkAnalyzerApp(
+                    isWhatChangedEnabled = (state as? ApkAnalyzerState.Data)?.isWhatChangedEnabled == true,
+                    onBackAtRoot = ::finish,
+                )
             }
         }
     }

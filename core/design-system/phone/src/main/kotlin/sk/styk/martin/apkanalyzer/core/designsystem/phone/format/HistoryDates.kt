@@ -1,4 +1,4 @@
-package sk.styk.martin.apkanalyzer.feature.appdetail.phone.history
+package sk.styk.martin.apkanalyzer.core.designsystem.phone.format
 
 import android.text.format.DateFormat
 import java.time.Instant
@@ -13,12 +13,12 @@ private const val SHORT_DATE_TIME_SKELETON = "dMMMjmm"
 private const val MONTH_SKELETON = "LLLL"
 private const val MONTH_YEAR_SKELETON = "MMMMy"
 
-internal fun YearMonth.historyMonth(locale: Locale): String {
+fun YearMonth.historyMonth(locale: Locale): String {
     val skeleton = if (year == YearMonth.now().year) MONTH_SKELETON else MONTH_YEAR_SKELETON
     return DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(locale, skeleton), locale).format(this)
 }
 
-internal fun Instant.historyDate(): String {
+fun Instant.historyDate(): String {
     val zone = ZoneId.systemDefault()
     if (atZone(zone).year != Instant.now().atZone(zone).year) return historyFullDate()
     val locale = Locale.getDefault()
@@ -28,7 +28,7 @@ internal fun Instant.historyDate(): String {
         .format(this)
 }
 
-internal fun Instant.historyDateTime(): String {
+fun Instant.historyDateTime(): String {
     val locale = Locale.getDefault()
     return DateTimeFormatter
         .ofPattern(DateFormat.getBestDateTimePattern(locale, SHORT_DATE_TIME_SKELETON), locale)
@@ -36,13 +36,13 @@ internal fun Instant.historyDateTime(): String {
         .format(this)
 }
 
-internal fun Instant.historyFullDate(): String = DateTimeFormatter
+fun Instant.historyFullDate(): String = DateTimeFormatter
     .ofLocalizedDate(FormatStyle.MEDIUM)
     .withLocale(Locale.getDefault())
     .withZone(ZoneId.systemDefault())
     .format(this)
 
-internal fun Instant.isSameDayAs(other: Instant): Boolean {
+fun Instant.isSameDayAs(other: Instant): Boolean {
     val zone = ZoneId.systemDefault()
     return atZone(zone).toLocalDate() == other.atZone(zone).toLocalDate()
 }

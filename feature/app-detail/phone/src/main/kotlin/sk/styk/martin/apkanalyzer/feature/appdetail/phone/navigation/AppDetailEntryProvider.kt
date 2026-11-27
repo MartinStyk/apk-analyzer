@@ -5,6 +5,8 @@ import androidx.navigation3.runtime.NavKey
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.animation.slideFromEndEntryMetadata
 import sk.styk.martin.apkanalyzer.core.navigation.Navigator
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailNavKey
+import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppHistoryChangeNavKey
+import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppHistoryTimelineNavKey
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.AppDetailScreen
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents.ComponentScope
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents.ComponentsScreen

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="what_changed_title">What changed</string>
+    <string name="what_changed_full_history">Full history</string>
+    <string name="what_changed_range_since_last_visit">Since last visit</string>
+    <string name="what_changed_range_7_days">7 days</string>
+    <string name="what_changed_range_30_days">30 days</string>
+    <string name="what_changed_range_90_days">90 days</string>
+    <string name="what_changed_range_all_time">All time</string>
+    <string name="what_changed_since">Since %1$s</string>
+    <string name="what_changed_nothing_since">No changes since %1$s</string>
+    <string name="what_changed_nothing_hint">Choose a longer range to see older changes.</string>
+    <string name="what_changed_section_latest">Latest change</string>
+    <string name="what_changed_section_attention">Needs attention</string>
+    <string name="what_changed_section_changed_apps">Changed apps</string>
+    <string name="what_changed_section_uninstalled">No longer installed</string>
+    <string name="what_changed_new_app">New app</string>
+    <string name="what_changed_no_net_change">No net change</string>
+    <string name="what_changed_reverted">Reverted %1$s</string>
+    <string name="what_changed_no_changes_recorded">No changes recorded</string>
+    <string name="what_changed_empty_title">Nothing recorded yet</string>
+    <string name="what_changed_empty_body">Apk Analyzer records your apps in the background. When an app updates, what changed in it shows up here.</string>
+    <string name="what_changed_error">Couldn\'t load the change history</string>
+    <string name="what_changed_retry">Try again</string>
+    <string name="what_changed_row_click_label">See what changed</string>
+    <string name="what_changed_row_first_click_label">See full detail</string>
+    <string name="what_changed_copied">Copied</string>
+    <string name="what_changed_row_long_click_label">Copy</string>
+    <string name="what_changed_app_click_label">See this app\'s history</string>
+    <string name="what_changed_filter_attention">Needs attention</string>
+    <string name="what_changed_filter_requirements">Device requirements</string>
+    <string name="what_changed_log_no_match">No changes match these filters</string>
+    <string name="what_changed_separator" translatable="false">" · "</string>
+    <plurals name="what_changed_updates">
+        <item quantity="one">%d update</item>
+        <item quantity="other">%d updates</item>
+    </plurals>
+    <plurals name="what_changed_new_apps">
+        <item quantity="one">%d new app</item>
+        <item quantity="other">%d new apps</item>
+    </plurals>
+    <plurals name="what_changed_attention_count">
+        <item quantity="one">%d needs attention</item>
+        <item quantity="other">%d need attention</item>
+    </plurals>
+    <plurals name="what_changed_change_count">
+        <item quantity="one">%d change</item>
+        <item quantity="other">%d changes</item>
+    </plurals>
+    <string name="what_changed_category_android_versions">Android versions</string>
+    <string name="what_changed_category_components">Components</string>
+    <string name="what_changed_category_install_source">Install source</string>
+    <string name="what_changed_category_native">Native libraries</string>
+    <string name="what_changed_category_permissions">Permissions</string>
+    <string name="what_changed_category_settings">App settings</string>
+    <string name="what_changed_category_signing">Signing</string>
+    <string name="what_changed_category_size">Size</string>
+    <string name="what_changed_certificate_changed">Signing certificate changed</string>
+    <string name="what_changed_first_recorded">First recorded</string>
+    <string name="what_changed_uncomparable_only">Some details couldn\'t be compared</string>
+</resources>

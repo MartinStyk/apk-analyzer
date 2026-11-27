@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="what_changed_title">Что изменилось</string>
+    <string name="what_changed_full_history">Вся история</string>
+    <string name="what_changed_range_since_last_visit">С последнего визита</string>
+    <string name="what_changed_range_7_days">7 дней</string>
+    <string name="what_changed_range_30_days">30 дней</string>
+    <string name="what_changed_range_90_days">90 дней</string>
+    <string name="what_changed_range_all_time">За всё время</string>
+    <string name="what_changed_since">С %1$s</string>
+    <string name="what_changed_nothing_since">Нет изменений с %1$s</string>
+    <string name="what_changed_nothing_hint">Выберите период подлиннее, чтобы увидеть более ранние изменения.</string>
+    <string name="what_changed_section_latest">Последнее изменение</string>
+    <string name="what_changed_section_attention">Требует внимания</string>
+    <string name="what_changed_section_changed_apps">Изменённые приложения</string>
+    <string name="what_changed_section_uninstalled">Больше не установлены</string>
+    <string name="what_changed_new_app">Новое приложение</string>
+    <string name="what_changed_no_net_change">В итоге без изменений</string>
+    <string name="what_changed_reverted">Отменено %1$s</string>
+    <string name="what_changed_no_changes_recorded">Изменения не зафиксированы</string>
+    <string name="what_changed_empty_title">Пока ничего не зафиксировано</string>
+    <string name="what_changed_empty_body">Apk Analyzer фиксирует ваши приложения в фоновом режиме. Когда приложение обновляется, здесь появляется то, что в нём изменилось.</string>
+    <string name="what_changed_error">Не удалось загрузить историю изменений</string>
+    <string name="what_changed_retry">Попробуйте снова</string>
+    <string name="what_changed_row_click_label">Посмотреть изменения</string>
+    <string name="what_changed_row_first_click_label">Посмотреть все сведения</string>
+    <string name="what_changed_copied">Скопировано</string>
+    <string name="what_changed_row_long_click_label">Копировать</string>
+    <string name="what_changed_app_click_label">Посмотреть историю этого приложения</string>
+    <string name="what_changed_filter_attention">Требует внимания</string>
+    <string name="what_changed_filter_requirements">Требования к устройству</string>
+    <string name="what_changed_log_no_match">Нет изменений, подходящих под эти фильтры</string>
+    <plurals name="what_changed_updates">
+        <item quantity="one">%d обновление</item>
+        <item quantity="few">%d обновления</item>
+        <item quantity="many">%d обновлений</item>
+        <item quantity="other">%d обновления</item>
+    </plurals>
+    <plurals name="what_changed_new_apps">
+        <item quantity="one">%d новое приложение</item>
+        <item quantity="few">%d новых приложения</item>
+        <item quantity="many">%d новых приложений</item>
+        <item quantity="other">%d нового приложения</item>
+    </plurals>
+    <plurals name="what_changed_attention_count">
+        <item quantity="one">%d требует внимания</item>
+        <item quantity="few">%d требуют внимания</item>
+        <item quantity="many">%d требуют внимания</item>
+        <item quantity="other">%d требуют внимания</item>
+    </plurals>
+    <plurals name="what_changed_change_count">
+        <item quantity="one">%d изменение</item>
+        <item quantity="few">%d изменения</item>
+        <item quantity="many">%d изменений</item>
+        <item quantity="other">%d изменения</item>
+    </plurals>
+    <string name="what_changed_category_android_versions">Версии Android</string>
+    <string name="what_changed_category_components">Компоненты</string>
+    <string name="what_changed_category_install_source">Источник установки</string>
+    <string name="what_changed_category_native">Нативные библиотеки</string>
+    <string name="what_changed_category_permissions">Разрешения</string>
+    <string name="what_changed_category_settings">Настройки приложения</string>
+    <string name="what_changed_category_signing">Подпись</string>
+    <string name="what_changed_category_size">Размер</string>
+    <string name="what_changed_certificate_changed">Сертификат подписи изменился</string>
+    <string name="what_changed_first_recorded">Впервые зафиксировано</string>
+    <string name="what_changed_uncomparable_only">Некоторые данные не удалось сравнить</string>
+</resources>

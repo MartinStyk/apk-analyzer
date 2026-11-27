@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.AppHistoryRepository
-import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryChangeDirection
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryDiff
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryEntry
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryFieldChange
@@ -40,6 +39,7 @@ import sk.styk.martin.apkanalyzer.core.apps.api.sdkversion.SdkVersionResolver
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.common.model.ChangeDirection
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.analytics.AppDetailAnalytics
@@ -195,31 +195,31 @@ internal class AppHistoryChangeViewModel @AssistedInject constructor(
         val groups = listOfNotNull(
             permissionGroup(
                 id = REQUESTED_ADDED_GROUP_ID,
-                kind = AppHistoryChangeDirection.Added,
+                kind = ChangeDirection.Added,
                 scope = PermissionScope.Requested,
                 items = permissionItemMapper.recordedRequested(requested?.added.orEmpty(), analysedPackage),
             ),
             permissionGroup(
                 id = "requested-removed",
-                kind = AppHistoryChangeDirection.Removed,
+                kind = ChangeDirection.Removed,
                 scope = PermissionScope.Requested,
                 items = permissionItemMapper.recordedRequested(requested?.removed.orEmpty(), analysedPackage),
             ),
             permissionGroup(
                 id = "defined-added",
-                kind = AppHistoryChangeDirection.Added,
+                kind = ChangeDirection.Added,
                 scope = PermissionScope.Defined,
                 items = permissionItemMapper.recordedDefined(defined?.added.orEmpty(), analysedPackage),
             ),
             permissionGroup(
                 id = "defined-removed",
-                kind = AppHistoryChangeDirection.Removed,
+                kind = ChangeDirection.Removed,
                 scope = PermissionScope.Defined,
                 items = permissionItemMapper.recordedDefined(defined?.removed.orEmpty(), analysedPackage),
             ),
             permissionGroup(
                 id = "defined-changed",
-                kind = AppHistoryChangeDirection.Changed,
+                kind = ChangeDirection.Changed,
                 scope = PermissionScope.Defined,
                 items = permissionItemMapper.recordedDefined(modifiedDefined.map { it.after }, analysedPackage),
                 fieldChangesByName = fieldChangesByName,
@@ -244,7 +244,7 @@ private fun ValueChange<Int?>.toSdkLevels(sdkVersionResolver: SdkVersionResolver
 
 private fun permissionGroup(
     id: String,
-    kind: AppHistoryChangeDirection,
+    kind: ChangeDirection,
     scope: PermissionScope,
     items: List<PermissionItem>,
     fieldChangesByName: Map<String, List<AppHistoryFieldChange>> = emptyMap(),
@@ -294,11 +294,11 @@ private fun AppHistoryDiff.componentsSection(): HistoryChangeSection? {
     )
     val modified = changes.flatMap { it.modified }
     val groups = listOfNotNull(
-        componentGroup(id = "components-added", kind = AppHistoryChangeDirection.Added, items = changes.flatMap { it.added }),
-        componentGroup(id = "components-removed", kind = AppHistoryChangeDirection.Removed, items = changes.flatMap { it.removed }),
+        componentGroup(id = "components-added", kind = ChangeDirection.Added, items = changes.flatMap { it.added }),
+        componentGroup(id = "components-removed", kind = ChangeDirection.Removed, items = changes.flatMap { it.removed }),
         componentGroup(
             id = "components-changed",
-            kind = AppHistoryChangeDirection.Changed,
+            kind = ChangeDirection.Changed,
             items = modified.map { it.first },
             fieldChangesByKey = modified.associate { (item, fieldChanges) -> item.stableKey to fieldChanges },
         ),
@@ -308,7 +308,7 @@ private fun AppHistoryDiff.componentsSection(): HistoryChangeSection? {
 
 private fun componentGroup(
     id: String,
-    kind: AppHistoryChangeDirection,
+    kind: ChangeDirection,
     items: List<ComponentItem>,
     fieldChangesByKey: Map<String, List<AppHistoryFieldChange>> = emptyMap(),
 ): HistoryChangeGroup? = items
@@ -321,11 +321,11 @@ private fun componentGroup(
 private fun AppHistoryDiff.requirementsSection(): HistoryChangeSection? {
     val features = requirements as? SetChange.Changed ?: return null
     val groups = listOfNotNull(
-        requirementGroup(id = "requirements-added", kind = AppHistoryChangeDirection.Added, features = features.added),
-        requirementGroup(id = "requirements-removed", kind = AppHistoryChangeDirection.Removed, features = features.removed),
+        requirementGroup(id = "requirements-added", kind = ChangeDirection.Added, features = features.added),
+        requirementGroup(id = "requirements-removed", kind = ChangeDirection.Removed, features = features.removed),
         requirementGroup(
             id = "requirements-changed",
-            kind = AppHistoryChangeDirection.Changed,
+            kind = ChangeDirection.Changed,
             features = features.modified.map { it.after },
             fieldChanges = features.modified.map { it.after.fieldChangesFrom(it.before) },
         ),
@@ -335,7 +335,7 @@ private fun AppHistoryDiff.requirementsSection(): HistoryChangeSection? {
 
 private fun requirementGroup(
     id: String,
-    kind: AppHistoryChangeDirection,
+    kind: ChangeDirection,
     features: List<Feature>,
     fieldChanges: List<List<AppHistoryFieldChange>> = emptyList(),
 ): HistoryChangeGroup? = features
@@ -350,11 +350,11 @@ private fun requirementGroup(
 private fun AppHistoryDiff.nativeLibrariesSection(): HistoryChangeSection? {
     val libraries = nativeLibraries as? SetChange.Changed ?: return null
     val groups = listOfNotNull(
-        nativeGroup(id = "native-added", kind = AppHistoryChangeDirection.Added, files = libraries.added.flatMap { it.files }),
-        nativeGroup(id = "native-removed", kind = AppHistoryChangeDirection.Removed, files = libraries.removed.flatMap { it.files }),
+        nativeGroup(id = "native-added", kind = ChangeDirection.Added, files = libraries.added.flatMap { it.files }),
+        nativeGroup(id = "native-removed", kind = ChangeDirection.Removed, files = libraries.removed.flatMap { it.files }),
         nativeGroup(
             id = "native-changed",
-            kind = AppHistoryChangeDirection.Changed,
+            kind = ChangeDirection.Changed,
             files = libraries.modified.flatMap { it.after.files },
             fieldChangesByName = libraries.modified.associate { it.after.name to it.after.fieldChangesFrom(it.before) },
         ),
@@ -364,7 +364,7 @@ private fun AppHistoryDiff.nativeLibrariesSection(): HistoryChangeSection? {
 
 private fun nativeGroup(
     id: String,
-    kind: AppHistoryChangeDirection,
+    kind: ChangeDirection,
     files: List<NativeLibraryFile>,
     fieldChangesByName: Map<String, List<AppHistoryFieldChange>> = emptyMap(),
 ): HistoryChangeGroup? = files

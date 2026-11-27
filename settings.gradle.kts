@@ -69,4 +69,6 @@ include(
     ":feature:app-export:phone",
     ":feature:settings:api",
     ":feature:settings:phone",
+    ":feature:what-changed:api",
+    ":feature:what-changed:phone",
 )

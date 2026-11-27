@@ -126,6 +126,32 @@ class AppHistoryEntrySummaryTest {
     }
 
     @Test
+    fun `Given size changes When judging attention Then only growth of a quarter or twenty megabytes needs it`() {
+        val parts = listOf(
+            AppHistorySummaryPart.SizeChanged(40.megabytes, 49.megabytes),
+            AppHistorySummaryPart.SizeChanged(4.megabytes, 5.megabytes),
+            AppHistorySummaryPart.SizeChanged(500.megabytes, 520.megabytes),
+            AppHistorySummaryPart.SizeChanged(500.megabytes, 400.megabytes),
+        )
+
+        parts.map { it.needsAttention } shouldBe listOf(false, true, true, false)
+    }
+
+    @Test
+    fun `Given debugging flips When judging attention Then only turning it on needs attention`() {
+        AppHistorySummaryPart.DebuggingChanged(isEnabled = true).needsAttention shouldBe true
+        AppHistorySummaryPart.DebuggingChanged(isEnabled = false).needsAttention shouldBe false
+    }
+
+    @Test
+    fun `Given only a large size jump When summarizing Then the change needs attention and the row is not quiet`() {
+        val change = aChange(aDiff(apkSize = ValueChange(40.megabytes, 70.megabytes)))
+
+        change.needsAttention shouldBe true
+        change.isQuiet shouldBe false
+    }
+
+    @Test
     fun `Given a system app first recorded long after its factory date When reading the overview Then the date is when it was recorded`() {
         val entries = listOf(AppHistoryEntry.FirstSeen(aSummary(lastUpdateTime = FactoryDate, capturedAt = RecordedDate)))
 

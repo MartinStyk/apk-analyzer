@@ -28,11 +28,12 @@ import sk.styk.martin.apkanalyzer.feature.apps.api.AppsNavKey
 import sk.styk.martin.apkanalyzer.feature.apps.phone.navigation.appEntries
 import sk.styk.martin.apkanalyzer.feature.browse.phone.navigation.browseEntries
 import sk.styk.martin.apkanalyzer.feature.settings.phone.navigation.settingsEntries
-import sk.styk.martin.apkanalyzer.ui.navigation.TOP_LEVEL_DESTINATIONS
+import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.navigation.whatChangedEntries
 import sk.styk.martin.apkanalyzer.ui.navigation.TOP_LEVEL_KEYS
+import sk.styk.martin.apkanalyzer.ui.navigation.topLevelDestinations
 
 @Composable
-internal fun ApkAnalyzerApp(onBackAtRoot: () -> Unit) {
+internal fun ApkAnalyzerApp(isWhatChangedEnabled: Boolean, onBackAtRoot: () -> Unit) {
     val navigationState = rememberNavigationState(
         startKey = AppsNavKey,
         topLevelKeys = TOP_LEVEL_KEYS,
@@ -59,6 +60,7 @@ internal fun ApkAnalyzerApp(onBackAtRoot: () -> Unit) {
                         browseEntries(navigator)
                         inventoryExportEntries(navigator)
                         settingsEntries(navigator)
+                        whatChangedEntries(navigator)
                     }
                     NavDisplay(
                         modifier = Modifier
@@ -70,7 +72,7 @@ internal fun ApkAnalyzerApp(onBackAtRoot: () -> Unit) {
                 }
             }
             NavigationBar(
-                items = TOP_LEVEL_DESTINATIONS,
+                items = topLevelDestinations(isWhatChangedEnabled),
                 selectedKey = navigationState.currentTopLevelKey,
                 isVisible = navigationState.currentKey in navigationState.topLevelKeys,
                 onSelectKey = navigator::navigate,

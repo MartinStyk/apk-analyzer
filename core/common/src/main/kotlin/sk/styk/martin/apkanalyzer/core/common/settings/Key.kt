@@ -20,6 +20,10 @@ sealed interface Key<T : Any> {
     data object InventoryExportFormat : Key<String>
 
     data object InventoryExportIntroDismissed : Key<Boolean>
+
+    data object WhatChangedLastVisitAt : Key<Long>
+
+    data object WhatChangedRange : Key<String>
 }
 
 enum class ColorAppScheme {

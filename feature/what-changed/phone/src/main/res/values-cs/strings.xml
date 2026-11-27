@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="what_changed_title">Co se změnilo</string>
+    <string name="what_changed_full_history">Celá historie</string>
+    <string name="what_changed_range_since_last_visit">Od poslední návštěvy</string>
+    <string name="what_changed_range_7_days">7 dní</string>
+    <string name="what_changed_range_30_days">30 dní</string>
+    <string name="what_changed_range_90_days">90 dní</string>
+    <string name="what_changed_range_all_time">Celé období</string>
+    <string name="what_changed_since">Od %1$s</string>
+    <string name="what_changed_nothing_since">Žádné změny od %1$s</string>
+    <string name="what_changed_nothing_hint">Pokud chcete vidět starší změny, vyberte delší období.</string>
+    <string name="what_changed_section_latest">Poslední změna</string>
+    <string name="what_changed_section_attention">Vyžaduje pozornost</string>
+    <string name="what_changed_section_changed_apps">Změněné aplikace</string>
+    <string name="what_changed_section_uninstalled">Už nejsou nainstalované</string>
+    <string name="what_changed_new_app">Nová aplikace</string>
+    <string name="what_changed_no_net_change">Celkově beze změny</string>
+    <string name="what_changed_reverted">Vráceno zpět %1$s</string>
+    <string name="what_changed_no_changes_recorded">Nezaznamenány žádné změny</string>
+    <string name="what_changed_empty_title">Zatím nic nezaznamenáno</string>
+    <string name="what_changed_empty_body">Apk Analyzer zaznamenává vaše aplikace na pozadí. Když se aplikace aktualizuje, zobrazí se tady, co se v ní změnilo.</string>
+    <string name="what_changed_error">Historii změn se nepodařilo načíst</string>
+    <string name="what_changed_retry">Zkusit znovu</string>
+    <string name="what_changed_row_click_label">Zobrazit, co se změnilo</string>
+    <string name="what_changed_row_first_click_label">Zobrazit všechny podrobnosti</string>
+    <string name="what_changed_copied">Zkopírováno</string>
+    <string name="what_changed_row_long_click_label">Kopírovat</string>
+    <string name="what_changed_app_click_label">Zobrazit historii této aplikace</string>
+    <string name="what_changed_filter_attention">Vyžaduje pozornost</string>
+    <string name="what_changed_filter_requirements">Požadavky na zařízení</string>
+    <string name="what_changed_log_no_match">Těmto filtrům neodpovídají žádné změny</string>
+    <plurals name="what_changed_updates">
+        <item quantity="one">%d aktualizace</item>
+        <item quantity="few">%d aktualizace</item>
+        <item quantity="many">%d aktualizací</item>
+        <item quantity="other">%d aktualizací</item>
+    </plurals>
+    <plurals name="what_changed_new_apps">
+        <item quantity="one">%d nová aplikace</item>
+        <item quantity="few">%d nové aplikace</item>
+        <item quantity="many">%d nových aplikací</item>
+        <item quantity="other">%d nových aplikací</item>
+    </plurals>
+    <plurals name="what_changed_attention_count">
+        <item quantity="one">%d vyžaduje pozornost</item>
+        <item quantity="few">%d vyžadují pozornost</item>
+        <item quantity="many">%d vyžaduje pozornost</item>
+        <item quantity="other">%d vyžaduje pozornost</item>
+    </plurals>
+    <plurals name="what_changed_change_count">
+        <item quantity="one">%d změna</item>
+        <item quantity="few">%d změny</item>
+        <item quantity="many">%d změn</item>
+        <item quantity="other">%d změn</item>
+    </plurals>
+    <string name="what_changed_category_android_versions">Verze Androidu</string>
+    <string name="what_changed_category_components">Komponenty</string>
+    <string name="what_changed_category_install_source">Zdroj instalace</string>
+    <string name="what_changed_category_native">Nativní knihovny</string>
+    <string name="what_changed_category_permissions">Oprávnění</string>
+    <string name="what_changed_category_settings">Nastavení aplikace</string>
+    <string name="what_changed_category_signing">Podepisování</string>
+    <string name="what_changed_category_size">Velikost</string>
+    <string name="what_changed_certificate_changed">Certifikát pro podepisování se změnil</string>
+    <string name="what_changed_first_recorded">Poprvé zaznamenáno</string>
+    <string name="what_changed_uncomparable_only">Některé údaje nešlo porovnat</string>
+</resources>

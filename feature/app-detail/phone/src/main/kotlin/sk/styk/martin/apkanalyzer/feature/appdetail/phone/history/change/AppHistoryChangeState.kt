@@ -1,7 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.change
 
 import androidx.compose.runtime.Immutable
-import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryChangeDirection
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryEntry
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryFieldChange
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryInstallSource
@@ -15,6 +14,7 @@ import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraryItem
 import sk.styk.martin.apkanalyzer.core.apps.api.signing.Certificate
 import sk.styk.martin.apkanalyzer.core.apps.api.signing.SigningSchemeVersion
 import sk.styk.martin.apkanalyzer.core.common.model.AppSize
+import sk.styk.martin.apkanalyzer.core.common.model.ChangeDirection
 import sk.styk.martin.apkanalyzer.feature.appdetail.domain.insight.AppDetailInsight
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.appcomponents.ComponentItem
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.HistoryVersionTag
@@ -72,7 +72,7 @@ internal sealed interface HistoryChangeRow {
 @Immutable
 internal data class HistoryChangeGroup(
     val id: String,
-    val kind: AppHistoryChangeDirection,
+    val kind: ChangeDirection,
     val scope: PermissionScope? = null,
     val rows: List<HistoryChangeRow>,
 )

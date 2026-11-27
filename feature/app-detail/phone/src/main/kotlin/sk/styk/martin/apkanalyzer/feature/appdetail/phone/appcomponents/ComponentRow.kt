@@ -19,8 +19,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryChangeDirection
 import sk.styk.martin.apkanalyzer.core.apps.api.components.labelRes
+import sk.styk.martin.apkanalyzer.core.common.model.ChangeDirection
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
@@ -44,7 +44,7 @@ internal fun ComponentRow(
     modifier: Modifier = Modifier,
     onLaunch: (() -> Unit)? = null,
     changeLines: List<String> = emptyList(),
-    changeMarker: AppHistoryChangeDirection? = null,
+    changeMarker: ChangeDirection? = null,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -152,6 +152,6 @@ private fun ComponentRowPreview() {
 @Composable
 private fun ComponentRowAddedPreview() {
     ApkAnalyzerTheme {
-        ComponentRow(item = sampleComponent(), onClick = {}, onLongClick = {}, changeMarker = AppHistoryChangeDirection.Added)
+        ComponentRow(item = sampleComponent(), onClick = {}, onLongClick = {}, changeMarker = ChangeDirection.Added)
     }
 }

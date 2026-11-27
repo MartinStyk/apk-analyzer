@@ -12,8 +12,10 @@ internal class AppHistoryPersistenceRepositoryFake(vararg records: StoredAppHist
     private val records = MutableStateFlow(records.toList())
 
     var readFailure: Throwable? = null
+    var headersFailure: Throwable? = null
     var saveFailure: Throwable? = null
     var saveBarrier: Deferred<Unit>? = null
+    val recordReads = mutableListOf<PackageName>()
 
     operator fun plusAssign(record: StoredAppHistoryRecord) {
         records.update { existing -> existing.filterNot { it.id == record.id } + record }
@@ -35,6 +37,28 @@ internal class AppHistoryPersistenceRepositoryFake(vararg records: StoredAppHist
     override fun observe(packageName: PackageName): Flow<Result<List<StoredAppHistoryRecord>>> =
         records.map { all -> Result.success(all.filter { it.record.packageName == packageName }) }.distinctUntilChanged()
 
+    override fun observeHeaders(): Flow<Result<List<AppHistorySnapshotHeader>>> = records.map { all ->
+        headersFailure?.let { Result.failure(it) } ?: Result.success(
+            all.sortedWith(compareBy({ it.record.packageName.value }, { it.record.capturedAt }, { it.id })).map { it.toHeader() },
+        )
+    }
+
+    override suspend fun records(packageName: PackageName): Result<List<StoredAppHistoryRecord>> {
+        recordReads += packageName
+        return readFailure?.let { Result.failure(it) }
+            ?: Result.success(records.value.filter { it.record.packageName == packageName }.sortedWith(compareBy({ it.record.capturedAt }, { it.id })))
+    }
+
     override suspend fun read(id: Long): Result<StoredAppHistoryRecord?> =
         readFailure?.let { Result.failure(it) } ?: Result.success(records.value.firstOrNull { it.id == id })
 }
+
+private fun StoredAppHistoryRecord.toHeader() = AppHistorySnapshotHeader(
+    id = id,
+    packageName = record.packageName,
+    applicationName = record.detail.info.applicationName,
+    versionCode = record.detail.info.versionCode,
+    versionName = record.detail.info.versionName,
+    capturedAt = record.capturedAt,
+    captureKey = record.captureKey,
+)

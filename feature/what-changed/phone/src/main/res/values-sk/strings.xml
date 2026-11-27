@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="what_changed_title">Čo sa zmenilo</string>
+    <string name="what_changed_full_history">Celá história</string>
+    <string name="what_changed_range_since_last_visit">Od poslednej návštevy</string>
+    <string name="what_changed_range_7_days">7 dní</string>
+    <string name="what_changed_range_30_days">30 dní</string>
+    <string name="what_changed_range_90_days">90 dní</string>
+    <string name="what_changed_range_all_time">Celé obdobie</string>
+    <string name="what_changed_since">Od %1$s</string>
+    <string name="what_changed_nothing_since">Žiadne zmeny od %1$s</string>
+    <string name="what_changed_nothing_hint">Ak chcete vidieť staršie zmeny, vyberte dlhšie obdobie.</string>
+    <string name="what_changed_section_latest">Posledná zmena</string>
+    <string name="what_changed_section_attention">Vyžaduje pozornosť</string>
+    <string name="what_changed_section_changed_apps">Zmenené aplikácie</string>
+    <string name="what_changed_section_uninstalled">Už nie sú nainštalované</string>
+    <string name="what_changed_new_app">Nová aplikácia</string>
+    <string name="what_changed_no_net_change">Celkovo bez zmeny</string>
+    <string name="what_changed_reverted">Vrátené späť %1$s</string>
+    <string name="what_changed_no_changes_recorded">Nezaznamenali sa žiadne zmeny</string>
+    <string name="what_changed_empty_title">Zatiaľ nič nezaznamenané</string>
+    <string name="what_changed_empty_body">Apk Analyzer zaznamenáva vaše aplikácie na pozadí. Keď sa aplikácia aktualizuje, tu sa zobrazí, čo sa v nej zmenilo.</string>
+    <string name="what_changed_error">Históriu zmien sa nepodarilo načítať</string>
+    <string name="what_changed_retry">Skúste znova</string>
+    <string name="what_changed_row_click_label">Zobraziť, čo sa zmenilo</string>
+    <string name="what_changed_row_first_click_label">Zobraziť všetky podrobnosti</string>
+    <string name="what_changed_copied">Skopírované</string>
+    <string name="what_changed_row_long_click_label">Kopírovať</string>
+    <string name="what_changed_app_click_label">Zobraziť históriu tejto aplikácie</string>
+    <string name="what_changed_filter_attention">Vyžaduje pozornosť</string>
+    <string name="what_changed_filter_requirements">Požiadavky na zariadenie</string>
+    <string name="what_changed_log_no_match">Týmto filtrom nezodpovedajú žiadne zmeny</string>
+    <plurals name="what_changed_updates">
+        <item quantity="one">%d aktualizácia</item>
+        <item quantity="few">%d aktualizácie</item>
+        <item quantity="many">%d aktualizácií</item>
+        <item quantity="other">%d aktualizácií</item>
+    </plurals>
+    <plurals name="what_changed_new_apps">
+        <item quantity="one">%d nová aplikácia</item>
+        <item quantity="few">%d nové aplikácie</item>
+        <item quantity="many">%d nových aplikácií</item>
+        <item quantity="other">%d nových aplikácií</item>
+    </plurals>
+    <plurals name="what_changed_attention_count">
+        <item quantity="one">%d vyžaduje pozornosť</item>
+        <item quantity="few">%d vyžadujú pozornosť</item>
+        <item quantity="many">%d vyžaduje pozornosť</item>
+        <item quantity="other">%d vyžaduje pozornosť</item>
+    </plurals>
+    <plurals name="what_changed_change_count">
+        <item quantity="one">%d zmena</item>
+        <item quantity="few">%d zmeny</item>
+        <item quantity="many">%d zmien</item>
+        <item quantity="other">%d zmien</item>
+    </plurals>
+    <string name="what_changed_category_android_versions">Verzie Androidu</string>
+    <string name="what_changed_category_components">Komponenty</string>
+    <string name="what_changed_category_install_source">Zdroj inštalácie</string>
+    <string name="what_changed_category_native">Nativné knižnice</string>
+    <string name="what_changed_category_permissions">Povolenia</string>
+    <string name="what_changed_category_settings">Nastavenia aplikácie</string>
+    <string name="what_changed_category_signing">Podpis</string>
+    <string name="what_changed_category_size">Veľkosť</string>
+    <string name="what_changed_certificate_changed">Podpisový certifikát sa zmenil</string>
+    <string name="what_changed_first_recorded">Prvýkrát zaznamenané</string>
+    <string name="what_changed_uncomparable_only">Niektoré údaje sa nedali porovnať</string>
+</resources>

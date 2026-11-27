@@ -18,9 +18,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryChangeDirection
 import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraryItem
 import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraryVariant
+import sk.styk.martin.apkanalyzer.core.common.model.ChangeDirection
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
@@ -39,7 +39,7 @@ internal fun NativeLibraryRow(
     onCopy: (label: String, value: String) -> Unit,
     modifier: Modifier = Modifier,
     changeLines: List<String> = emptyList(),
-    changeMarker: AppHistoryChangeDirection? = null,
+    changeMarker: ChangeDirection? = null,
 ) {
     val copyLabel = stringResource(DomainR.string.nativelibraries_title)
     val copyValue = (listOf(item.name) + changeLines).joinToString("\n")
@@ -127,6 +127,6 @@ private fun NativeLibraryRowPreview() {
 @Composable
 private fun NativeLibraryRowRemovedPreview() {
     ApkAnalyzerTheme {
-        NativeLibraryRow(item = sampleLibrary, onClick = {}, onCopy = { _, _ -> }, changeMarker = AppHistoryChangeDirection.Removed)
+        NativeLibraryRow(item = sampleLibrary, onClick = {}, onCopy = { _, _ -> }, changeMarker = ChangeDirection.Removed)
     }
 }

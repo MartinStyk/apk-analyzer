@@ -12,8 +12,20 @@ internal interface AppHistoryPersistenceRepository {
     suspend fun latestCaptureKeys(): Result<Map<PackageName, AppHistoryCaptureKey>>
     suspend fun save(record: AppHistoryRecord, device: AppHistoryDevice): Result<Unit>
     fun observe(packageName: PackageName): Flow<Result<List<StoredAppHistoryRecord>>>
+    fun observeHeaders(): Flow<Result<List<AppHistorySnapshotHeader>>>
+    suspend fun records(packageName: PackageName): Result<List<StoredAppHistoryRecord>>
     suspend fun read(id: Long): Result<StoredAppHistoryRecord?>
 }
+
+internal data class AppHistorySnapshotHeader(
+    val id: Long,
+    val packageName: PackageName,
+    val applicationName: String,
+    val versionCode: Long,
+    val versionName: String?,
+    val capturedAt: Instant,
+    val captureKey: AppHistoryCaptureKey,
+)
 
 internal data class AppHistoryCaptureKey(
     val deviceId: String,

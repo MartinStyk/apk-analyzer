@@ -281,6 +281,28 @@ Four rules this screen lives or dies by:
   actually have* is a real question, and the answer survives the app. It does mean this list is
   "apps I have seen", not "apps installed", and the section header is what carries that.
 
+#### What Changed tab as built
+
+Lives in `feature:what-changed`, debug builds only, with no Pro gate, sample card, stubs or badge
+yet. Differences from the design above, all decided with the app owner:
+
+- **The window is user-selectable** — chips for *Since last visit* (default), 7, 30 and 90 days, and
+  *All time*, remembered across launches. *Since last visit* is the previous app run that opened the
+  tab, with **no 7-day floor**, so "No changes since …" is an accepted summary. The range filters the
+  summary, Needs attention and the app list; Latest change and No longer installed ignore it.
+- **The summary counts updates (including updates that changed nothing visible), new apps by install
+  date, and apps needing attention.** There is no "removed" count: the store does not record when an
+  app was uninstalled.
+- **"All apps" became *Changed apps*:** only apps that changed in the range, each showing its **net
+  change** across the range (state before vs now), so a permission added and removed again reads
+  "No net change". Needs attention stays per event and marks an undone event "Reverted <date>".
+- **The full change log (`HI-07`) is a separate *Full history* screen**, opened from the tab's top
+  bar, styled like the per-app timeline with an app identity on each row and filter chips per change
+  type.
+- History is rebuilt on read; see
+  [`core/app-history/AGENTS.md`](../../../../core/app-history/AGENTS.md#device-wide-read) for the
+  per-app cache and the `app_history_device_timeline` trace.
+
 ### First run
 
 Day one has zero changes by definition, and this is the first impression for every existing user who

@@ -1,10 +1,10 @@
-package sk.styk.martin.apkanalyzer.feature.appdetail.phone.navigation
+package sk.styk.martin.apkanalyzer.feature.appdetail.api
 
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class AppHistoryChangeNavKey(
+data class AppHistoryChangeNavKey(
     val packageName: String,
     val snapshotId: Long,
     val appName: String,

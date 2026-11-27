@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="what_changed_title">Ne değişti</string>
+    <string name="what_changed_full_history">Tüm geçmiş</string>
+    <string name="what_changed_range_since_last_visit">Son ziyaretten beri</string>
+    <string name="what_changed_range_7_days">7 gün</string>
+    <string name="what_changed_range_30_days">30 gün</string>
+    <string name="what_changed_range_90_days">90 gün</string>
+    <string name="what_changed_range_all_time">Tüm zamanlar</string>
+    <string name="what_changed_since">%1$s tarihinden beri</string>
+    <string name="what_changed_nothing_since">%1$s tarihinden beri değişiklik yok</string>
+    <string name="what_changed_nothing_hint">Daha eski değişiklikleri görmek için daha uzun bir aralık seçin.</string>
+    <string name="what_changed_section_latest">Son değişiklik</string>
+    <string name="what_changed_section_attention">Dikkat gerektiriyor</string>
+    <string name="what_changed_section_changed_apps">Değişen uygulamalar</string>
+    <string name="what_changed_section_uninstalled">Artık yüklü değil</string>
+    <string name="what_changed_new_app">Yeni uygulama</string>
+    <string name="what_changed_no_net_change">Sonuçta değişiklik yok</string>
+    <string name="what_changed_reverted">%1$s tarihinde geri alındı</string>
+    <string name="what_changed_no_changes_recorded">Kaydedilmiş değişiklik yok</string>
+    <string name="what_changed_empty_title">Henüz kayıt yok</string>
+    <string name="what_changed_empty_body">Apk Analyzer uygulamalarınızı arka planda kaydeder. Bir uygulama güncellendiğinde, içinde neyin değiştiği burada görünür.</string>
+    <string name="what_changed_error">Değişiklik geçmişi yüklenemedi</string>
+    <string name="what_changed_retry">Tekrar dene</string>
+    <string name="what_changed_row_click_label">Neyin değiştiğini gör</string>
+    <string name="what_changed_row_first_click_label">Tüm ayrıntıları gör</string>
+    <string name="what_changed_copied">Kopyalandı</string>
+    <string name="what_changed_row_long_click_label">Kopyala</string>
+    <string name="what_changed_app_click_label">Bu uygulamanın geçmişini gör</string>
+    <string name="what_changed_filter_attention">Dikkat gerektiriyor</string>
+    <string name="what_changed_filter_requirements">Cihaz gereksinimleri</string>
+    <string name="what_changed_log_no_match">Bu filtrelerle eşleşen değişiklik yok</string>
+    <plurals name="what_changed_updates">
+        <item quantity="one">%d güncelleme</item>
+        <item quantity="other">%d güncelleme</item>
+    </plurals>
+    <plurals name="what_changed_new_apps">
+        <item quantity="one">%d yeni uygulama</item>
+        <item quantity="other">%d yeni uygulama</item>
+    </plurals>
+    <plurals name="what_changed_attention_count">
+        <item quantity="one">%d dikkat gerektiriyor</item>
+        <item quantity="other">%d dikkat gerektiriyor</item>
+    </plurals>
+    <plurals name="what_changed_change_count">
+        <item quantity="one">%d değişiklik</item>
+        <item quantity="other">%d değişiklik</item>
+    </plurals>
+    <string name="what_changed_category_android_versions">Android sürümleri</string>
+    <string name="what_changed_category_components">Bileşenler</string>
+    <string name="what_changed_category_install_source">Kurulum kaynağı</string>
+    <string name="what_changed_category_native">Yerel kütüphaneler</string>
+    <string name="what_changed_category_permissions">İzinler</string>
+    <string name="what_changed_category_settings">Uygulama ayarları</string>
+    <string name="what_changed_category_signing">İmza</string>
+    <string name="what_changed_category_size">Boyut</string>
+    <string name="what_changed_certificate_changed">İmza sertifikası değişti</string>
+    <string name="what_changed_first_recorded">İlk kayıt</string>
+    <string name="what_changed_uncomparable_only">Bazı ayrıntılar karşılaştırılamadı</string>
+</resources>

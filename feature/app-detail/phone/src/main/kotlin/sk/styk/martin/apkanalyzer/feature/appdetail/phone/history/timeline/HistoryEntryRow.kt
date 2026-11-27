@@ -26,7 +26,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryChangeDirection
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryEntry
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySummaryPart
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryVersion
@@ -38,18 +37,18 @@ import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.needsAttent
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ChangeToken
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.format.historyDate
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.format.historyDateTime
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.format.historyFullDate
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.lazylist.ListItemPosition
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.lazylist.shape
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.R
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.components.ChangeMarkerDot
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.HistoryVersionTag
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.historyDate
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.historyDateTime
-import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.historyFullDate
 import sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.icon
 import java.time.Instant
 import sk.styk.martin.apkanalyzer.core.apphistory.api.R as HistoryR
@@ -198,7 +197,7 @@ private fun ChangeTokens(parts: List<AppHistorySummaryPart>, textColor: Color) {
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         visible.forEach { (part, label) ->
-            ChangeToken(text = label, marker = part.direction, needsAttention = part.needsAttention, textColor = textColor)
+            ChangeToken(text = label, direction = part.direction, isEmphasized = part.needsAttention, textColor = textColor)
         }
         if (hiddenCount > 0) {
             Text(
@@ -207,30 +206,6 @@ private fun ChangeTokens(parts: List<AppHistorySummaryPart>, textColor: Color) {
                 color = textColor,
             )
         }
-    }
-}
-
-@Composable
-private fun ChangeToken(
-    text: String,
-    marker: AppHistoryChangeDirection,
-    needsAttention: Boolean,
-    textColor: Color,
-) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        if (needsAttention) {
-            ChangeMarkerDot(marker = marker, contentDescription = null, color = AppTheme.colors.tertiary)
-        } else {
-            ChangeMarkerDot(marker = marker, contentDescription = null)
-        }
-        Spacer(modifier = Modifier.width(5.dp))
-        Text(
-            text = text,
-            style = if (needsAttention) AppTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium) else AppTheme.typography.bodySmall,
-            color = if (needsAttention) AppTheme.colors.tertiary else textColor,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
     }
 }
 

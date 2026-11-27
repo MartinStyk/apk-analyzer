@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="what_changed_title">Điều gì đã thay đổi</string>
+    <string name="what_changed_full_history">Toàn bộ lịch sử</string>
+    <string name="what_changed_range_since_last_visit">Từ lần xem trước</string>
+    <string name="what_changed_range_7_days">7 ngày</string>
+    <string name="what_changed_range_30_days">30 ngày</string>
+    <string name="what_changed_range_90_days">90 ngày</string>
+    <string name="what_changed_range_all_time">Toàn bộ thời gian</string>
+    <string name="what_changed_since">Từ %1$s</string>
+    <string name="what_changed_nothing_since">Không có thay đổi từ %1$s</string>
+    <string name="what_changed_nothing_hint">Chọn khoảng thời gian dài hơn để xem các thay đổi cũ hơn.</string>
+    <string name="what_changed_section_latest">Thay đổi mới nhất</string>
+    <string name="what_changed_section_attention">Cần chú ý</string>
+    <string name="what_changed_section_changed_apps">Ứng dụng đã thay đổi</string>
+    <string name="what_changed_section_uninstalled">Không còn được cài đặt</string>
+    <string name="what_changed_new_app">Ứng dụng mới</string>
+    <string name="what_changed_no_net_change">Rốt cuộc không thay đổi</string>
+    <string name="what_changed_reverted">Đã hoàn tác ngày %1$s</string>
+    <string name="what_changed_no_changes_recorded">Chưa ghi nhận thay đổi nào</string>
+    <string name="what_changed_empty_title">Chưa ghi nhận gì</string>
+    <string name="what_changed_empty_body">Apk Analyzer ghi nhận các ứng dụng của bạn ở chế độ nền. Khi một ứng dụng cập nhật, những gì thay đổi trong đó sẽ hiện ở đây.</string>
+    <string name="what_changed_error">Không thể tải lịch sử thay đổi</string>
+    <string name="what_changed_retry">Thử lại</string>
+    <string name="what_changed_row_click_label">Xem thay đổi</string>
+    <string name="what_changed_row_first_click_label">Xem toàn bộ chi tiết</string>
+    <string name="what_changed_copied">Đã sao chép</string>
+    <string name="what_changed_row_long_click_label">Sao chép</string>
+    <string name="what_changed_app_click_label">Xem lịch sử của ứng dụng này</string>
+    <string name="what_changed_filter_attention">Cần chú ý</string>
+    <string name="what_changed_filter_requirements">Yêu cầu thiết bị</string>
+    <string name="what_changed_log_no_match">Không có thay đổi nào khớp với các bộ lọc này</string>
+    <plurals name="what_changed_updates">
+        <item quantity="other">%d bản cập nhật</item>
+    </plurals>
+    <plurals name="what_changed_new_apps">
+        <item quantity="other">%d ứng dụng mới</item>
+    </plurals>
+    <plurals name="what_changed_attention_count">
+        <item quantity="other">%d cần chú ý</item>
+    </plurals>
+    <plurals name="what_changed_change_count">
+        <item quantity="other">%d thay đổi</item>
+    </plurals>
+    <string name="what_changed_category_android_versions">Phiên bản Android</string>
+    <string name="what_changed_category_components">Thành phần</string>
+    <string name="what_changed_category_install_source">Nguồn cài đặt</string>
+    <string name="what_changed_category_native">Thư viện gốc</string>
+    <string name="what_changed_category_permissions">Quyền</string>
+    <string name="what_changed_category_settings">Cài đặt ứng dụng</string>
+    <string name="what_changed_category_signing">Ký</string>
+    <string name="what_changed_category_size">Kích thước</string>
+    <string name="what_changed_certificate_changed">Chứng chỉ ký đã thay đổi</string>
+    <string name="what_changed_first_recorded">Lần ghi nhận đầu tiên</string>
+    <string name="what_changed_uncomparable_only">Không thể so sánh một số chi tiết</string>
+</resources>
