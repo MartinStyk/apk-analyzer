@@ -35,7 +35,9 @@ once the product exists in Play Console.
 * `refresh()` re-reads purchases from Play, tells active `entitlements()` collectors to refresh, and
   returns what the user now owns. "Restore purchase" calls it.
 * Nothing throws. Every billing failure, including `BILLING_UNAVAILABLE` on a sideloaded debug build,
-  becomes an empty set, an empty list, or `PurchaseResult.Failed`.
+  becomes an empty set, an empty list, or `PurchaseResult.Failed`. The one exception: once an
+  `entitlements()` collector has read what the user owns, a later failed query keeps that value
+  instead of emitting an empty set, so a dropped Play connection never relocks Pro.
 
 ## Play Billing Behavior
 

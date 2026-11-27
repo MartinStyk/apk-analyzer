@@ -94,6 +94,20 @@ class EntitlementsRepositoryImplTest {
     }
 
     @Test
+    fun `Given Pro is owned When a later purchase query fails Then Pro is kept`() = runTest {
+        billingClient.givenPurchases(aProPurchase())
+        val entitlements = mutableListOf<Set<Entitlement>>()
+        backgroundScope.launch(dispatcherProvider.default()) { repository.entitlements().toList(entitlements) }
+        every { billingClient.queryPurchasesAsync(any(), any()) } answers {
+            secondArg<PurchasesResponseListener>().onQueryPurchasesResponse(aBillingResult(BillingResponseCode.SERVICE_UNAVAILABLE), emptyList())
+        }
+
+        purchaseUpdates.refresh()
+
+        entitlements shouldBe listOf(setOf(Entitlement.Pro))
+    }
+
+    @Test
     fun `Given a purchase completes during the first query When observing entitlements Then Pro is granted`() = runTest {
         every { billingClient.queryPurchasesAsync(any(), any()) } answers {
             purchaseUpdates.onPurchasesUpdated(aBillingResult(BillingResponseCode.OK), listOf(aProPurchase()))

@@ -48,6 +48,7 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
     override fun entitlements(): Flow<Set<Entitlement>> = purchaseUpdates.updates
         .onSubscription { emit(PurchaseUpdate.Refresh) }
         .map { queryOwnedEntitlements() }
+        .keepingLastKnown()
         .distinctUntilChanged()
 
     override fun offers(): Flow<List<Offer>> = combine(
@@ -85,15 +86,15 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun refresh(): Set<Entitlement> = queryOwnedEntitlements().also { purchaseUpdates.refresh() }
+    override suspend fun refresh(): Set<Entitlement> = queryOwnedEntitlements().orEmpty().also { purchaseUpdates.refresh() }
 
-    private suspend fun queryOwnedEntitlements(): Set<Entitlement> {
-        if (!billingConnection.connect()) return emptySet()
+    private suspend fun queryOwnedEntitlements(): Set<Entitlement>? {
+        if (!billingConnection.connect()) return null
         val params = QueryPurchasesParams.newBuilder().setProductType(ProductType.INAPP).build()
         val result = billingClient.queryPurchasesAsync(params)
         if (result.billingResult.responseCode != BillingResponseCode.OK) {
             Logger.w(TAG, "Querying purchases failed with response code ${result.billingResult.responseCode}")
-            return emptySet()
+            return null
         }
         val purchased = result.purchasesList.filter { it.purchaseState == Purchase.PurchaseState.PURCHASED }
         purchased.forEach { acknowledge(it) }
@@ -155,6 +156,15 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
         if (result.responseCode != BillingResponseCode.OK) {
             Logger.w(TAG, "Acknowledging purchase failed with response code ${result.responseCode}")
         }
+    }
+}
+
+private fun Flow<Set<Entitlement>?>.keepingLastKnown(): Flow<Set<Entitlement>> = flow {
+    var lastKnown: Set<Entitlement>? = null
+    collect { queried ->
+        val owned = queried ?: lastKnown.orEmpty()
+        if (queried != null) lastKnown = queried
+        emit(owned)
     }
 }
 
