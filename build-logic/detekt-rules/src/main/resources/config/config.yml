@@ -12,6 +12,8 @@ apkanalyzer:
     active: true
   MutableFlowExposure:
     active: true
+  NoChainedCombine:
+    active: true
   EntryBlockDelegatesToScreen:
     active: true
   NavKeyShape:

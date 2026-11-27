@@ -253,6 +253,9 @@ Modules live under `app/`, `tv/`, `core/<name>/`, and `feature/<name>/{api,domai
   (e.g. `core:app-permissions`, `core:app-index`, `core:apk-files`) has no reason to do this yet —
   don't pre-split a module that hasn't earned it.
 * No wildcard imports.
+* Combine input flows in one `combine(...)` call, never `combine(...).combine(...)` or
+  `flow.combine(...).combine(...)`, even with other operators between them. For six inputs, use
+  the typed `combine` overload in `core.common.coroutines`.
 * Prefer `private`; `internal` for module-visible; `public` only for actual public API.
 * `Logger` from `core.common.logger`, never raw Timber: `Logger.d("Tag", "msg")`,
   `Logger.e("Tag", throwable, "msg")`. Declare `private const val TAG` at file level.
