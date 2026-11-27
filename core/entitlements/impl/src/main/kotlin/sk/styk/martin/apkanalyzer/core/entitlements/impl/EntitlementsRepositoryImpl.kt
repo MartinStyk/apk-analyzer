@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
@@ -46,8 +46,7 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
 ) : EntitlementsRepository {
 
     override fun entitlements(): Flow<Set<Entitlement>> = purchaseUpdates.updates
-        .map { }
-        .onStart { emit(Unit) }
+        .onSubscription { emit(PurchaseUpdate.Refresh) }
         .map { queryOwnedEntitlements() }
         .distinctUntilChanged()
 
@@ -77,6 +76,10 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
                 purchaseResultOf(update.await(), offer.entitlement)
             } else {
                 update.cancel()
+                if (launchResult.responseCode == BillingResponseCode.ITEM_ALREADY_OWNED) {
+                    queryOwnedEntitlements()
+                    purchaseUpdates.refresh()
+                }
                 purchaseResultOf(launchResult.responseCode)
             }
         }

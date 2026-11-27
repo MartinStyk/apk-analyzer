@@ -94,6 +94,21 @@ class EntitlementsRepositoryImplTest {
     }
 
     @Test
+    fun `Given a purchase completes during the first query When observing entitlements Then Pro is granted`() = runTest {
+        every { billingClient.queryPurchasesAsync(any(), any()) } answers {
+            purchaseUpdates.onPurchasesUpdated(aBillingResult(BillingResponseCode.OK), listOf(aProPurchase()))
+            secondArg<PurchasesResponseListener>().onQueryPurchasesResponse(aBillingResult(BillingResponseCode.OK), emptyList())
+        } andThenAnswer {
+            secondArg<PurchasesResponseListener>().onQueryPurchasesResponse(aBillingResult(BillingResponseCode.OK), listOf(aProPurchase()))
+        }
+        val entitlements = mutableListOf<Set<Entitlement>>()
+
+        backgroundScope.launch(dispatcherProvider.default()) { repository.entitlements().toList(entitlements) }
+
+        entitlements shouldBe listOf(emptySet(), setOf(Entitlement.Pro))
+    }
+
+    @Test
     fun `Given Pro is not owned When observing offers Then Pro is offered at its price`() = runTest {
         billingClient.givenPurchases()
 
@@ -154,12 +169,27 @@ class EntitlementsRepositoryImplTest {
     }
 
     @Test
-    fun `Given Pro is already owned When purchasing Then the purchase succeeds`() = runTest {
+    fun `Given Pro is already owned When purchasing Then the purchase succeeds and is acknowledged`() = runTest {
+        billingClient.givenPurchases(aProPurchase(acknowledged = false))
         every { billingClient.launchBillingFlow(any(), any()) } returns aBillingResult(BillingResponseCode.ITEM_ALREADY_OWNED)
 
         val result = repository.purchase(activity, Offer(Entitlement.Pro, "€4.99"))
 
         result shouldBe PurchaseResult.Purchased
+        verify { billingClient.acknowledgePurchase(any(), any()) }
+    }
+
+    @Test
+    fun `Given stale entitlements When purchasing an already owned Pro Then observers are granted Pro`() = runTest {
+        billingClient.givenPurchases()
+        val entitlements = mutableListOf<Set<Entitlement>>()
+        backgroundScope.launch(dispatcherProvider.default()) { repository.entitlements().toList(entitlements) }
+        billingClient.givenPurchases(aProPurchase())
+        every { billingClient.launchBillingFlow(any(), any()) } returns aBillingResult(BillingResponseCode.ITEM_ALREADY_OWNED)
+
+        repository.purchase(activity, Offer(Entitlement.Pro, "€4.99"))
+
+        entitlements shouldBe listOf(emptySet(), setOf(Entitlement.Pro))
     }
 
     @Test

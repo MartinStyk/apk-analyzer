@@ -1,5 +1,6 @@
 package sk.styk.martin.apkanalyzer.core.entitlements.impl.billing
 
+import com.android.billingclient.api.BillingClient.BillingResponseCode
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
@@ -17,9 +18,17 @@ internal class PurchaseUpdates @Inject constructor() : PurchasesUpdatedListener 
         updates.tryEmit(PurchaseUpdate(billingResult.responseCode, purchases.orEmpty()))
     }
 
+    fun refresh() {
+        updates.tryEmit(PurchaseUpdate.Refresh)
+    }
+
     private companion object {
         const val UPDATE_BUFFER_CAPACITY = 8
     }
 }
 
-internal data class PurchaseUpdate(val responseCode: Int, val purchases: List<Purchase>)
+internal data class PurchaseUpdate(val responseCode: Int, val purchases: List<Purchase>) {
+    companion object {
+        val Refresh = PurchaseUpdate(BillingResponseCode.OK, emptyList())
+    }
+}

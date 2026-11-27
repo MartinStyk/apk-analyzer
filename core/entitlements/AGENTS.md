@@ -41,6 +41,9 @@ product exists in Play Console.
 * Play refunds a purchase that isn't acknowledged within three days. Every entitlements query and
   every successful `purchase` acknowledges unacknowledged purchases, so a purchase that completes
   while the app is closed is still acknowledged the next time entitlements are read.
-* `ITEM_ALREADY_OWNED` counts as a successful purchase.
-* Each `entitlements()` collector re-queries purchases on start and on every purchase update from
-  `PurchaseUpdates`, the `PurchasesUpdatedListener` the `BillingClient` is built with.
+* `ITEM_ALREADY_OWNED` counts as a successful purchase. The purchase is queried (which acknowledges
+  it) and active `entitlements()` collectors are told to refresh, so stale offers disappear.
+* Each `entitlements()` collector subscribes to `PurchaseUpdates`, the `PurchasesUpdatedListener` the
+  `BillingClient` is built with, before its first query, so an update during that query is not lost.
+  It re-queries purchases on every update. Nothing refreshes on returning to the foreground yet; add
+  that with the first screen that keeps a collector alive.
