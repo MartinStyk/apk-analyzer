@@ -98,6 +98,8 @@
     <string name="inventory_export_next">Siguiente</string>
     <string name="inventory_export_columns_omitted">Se omiten del archivo CSV: %1$s. CSV no admite registros completos.</string>
     <string name="inventory_export_use_json">Usar JSON</string>
+    <string name="inventory_export_pro_columns">Los detalles más allá de Básico para más de una app forman parte de Pro</string>
+    <string name="inventory_export_use_basics">Exportar solo Básico</string>
     <string name="inventory_export_structured_hint">Los detalles exclusivos de JSON incluyen registros completos, no solo cantidades. Los archivos CSV los omiten.</string>
     <string name="inventory_export_intro_got_it">Entendido</string>
     <string name="inventory_export_intro_about">Acerca de esta exportación</string>

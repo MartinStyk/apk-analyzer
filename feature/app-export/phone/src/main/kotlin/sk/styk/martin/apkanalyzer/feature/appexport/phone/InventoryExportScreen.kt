@@ -53,12 +53,14 @@ import sk.styk.martin.apkanalyzer.feature.appexport.phone.columns.ColumnsPage
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.components.StepScaffold
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.export.ExportBottomBar
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.export.ExportPage
+import sk.styk.martin.apkanalyzer.feature.pro.api.PaywallReason
 
 @Composable
 internal fun InventoryExportScreen(
     scope: InventoryExportScope,
     onBack: () -> Unit,
     onEditFilters: () -> Unit,
+    onOpenPro: (PaywallReason) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: InventoryExportViewModel = hiltViewModel { factory: InventoryExportViewModel.Factory ->
         factory.create(scope)
@@ -87,6 +89,8 @@ internal fun InventoryExportScreen(
                 InventoryExportEvent.OpenUsageAccessSettings -> context.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
 
                 is InventoryExportEvent.OpenFormatReference -> context.openBrowser(event.url)
+
+                is InventoryExportEvent.OpenPro -> onOpenPro(event.reason)
 
                 is InventoryExportEvent.CreateDocument -> {
                     val launcher = when (event.format) {

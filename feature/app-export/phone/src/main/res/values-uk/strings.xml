@@ -104,6 +104,8 @@
     <string name="inventory_export_next">Далі</string>
     <string name="inventory_export_columns_omitted">У файл CSV не потраплять: %1$s. CSV не підтримує повні записи.</string>
     <string name="inventory_export_use_json">Використати JSON</string>
+    <string name="inventory_export_pro_columns">Відомості понад набір «Основне» для кількох програм доступні в Pro</string>
+    <string name="inventory_export_use_basics">Експортувати лише «Основне»</string>
     <string name="inventory_export_structured_hint">Відомості лише для JSON містять повні записи, а не тільки кількість. У файлах CSV їх немає.</string>
     <string name="inventory_export_intro_got_it">Зрозуміло</string>
     <string name="inventory_export_intro_about">Про цей експорт</string>

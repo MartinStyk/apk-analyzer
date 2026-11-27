@@ -86,6 +86,8 @@
     <string name="inventory_export_next">Tiếp theo</string>
     <string name="inventory_export_columns_omitted">Không có trong tệp CSV: %1$s. CSV không chứa được bản ghi đầy đủ.</string>
     <string name="inventory_export_use_json">Dùng JSON</string>
+    <string name="inventory_export_pro_columns">Thông tin ngoài Cơ bản cho nhiều ứng dụng là một phần của Pro</string>
+    <string name="inventory_export_use_basics">Chỉ xuất Cơ bản</string>
     <string name="inventory_export_structured_hint">Thông tin chỉ dành cho JSON gồm các bản ghi đầy đủ, không chỉ số lượng. Tệp CSV sẽ bỏ qua chúng.</string>
     <string name="inventory_export_intro_got_it">Đã hiểu</string>
     <string name="inventory_export_intro_about">Giới thiệu về tính năng xuất</string>

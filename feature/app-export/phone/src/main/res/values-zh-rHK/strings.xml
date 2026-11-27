@@ -82,6 +82,8 @@
     <string name="inventory_export_structured_hint">僅限 JSON 的詳細資料包含完整記錄，而不只是數量。CSV 檔案不會納入這些資料。</string>
     <string name="inventory_export_columns_omitted">CSV 檔案未納入：%1$s。CSV 無法儲存完整記錄。</string>
     <string name="inventory_export_use_json">改用 JSON</string>
+    <string name="inventory_export_pro_columns">為多個應用程式匯出基本資料以外的詳細資料屬於 Pro 功能</string>
+    <string name="inventory_export_use_basics">改為只匯出基本資料</string>
     <string name="inventory_export_json_only">僅限 JSON</string>
     <string name="inventory_export_stop_title">停止匯出？</string>
     <string name="inventory_export_stop_message">尚未完成的檔案將會刪除。你選取的應用程式、詳細資料和格式會保留。</string>

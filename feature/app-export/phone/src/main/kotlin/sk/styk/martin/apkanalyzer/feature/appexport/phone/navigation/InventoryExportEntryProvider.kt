@@ -11,6 +11,7 @@ import sk.styk.martin.apkanalyzer.feature.appexport.phone.InventoryExportScope
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.InventoryExportScreen
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.apps.InventoryExportFilterScope
 import sk.styk.martin.apkanalyzer.feature.apps.api.AppFilterNavKey
+import sk.styk.martin.apkanalyzer.feature.pro.api.ProNavKey
 
 fun EntryProviderScope<NavKey>.inventoryExportEntries(navigator: Navigator) {
     entry<InventoryExportNavKey>(
@@ -24,6 +25,9 @@ fun EntryProviderScope<NavKey>.inventoryExportEntries(navigator: Navigator) {
             onEditFilters = {
                 navigator.navigate(AppFilterNavKey(InventoryExportFilterScope.id))
             },
+            onOpenPro = { reason ->
+                navigator.navigate(ProNavKey(reason))
+            },
         )
     }
 
@@ -36,6 +40,9 @@ fun EntryProviderScope<NavKey>.inventoryExportEntries(navigator: Navigator) {
                 navigator.goBack()
             },
             onEditFilters = {},
+            onOpenPro = { reason ->
+                navigator.navigate(ProNavKey(reason))
+            },
         )
     }
 }

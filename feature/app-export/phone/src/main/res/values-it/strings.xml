@@ -98,6 +98,8 @@
     <string name="inventory_export_next">Avanti</string>
     <string name="inventory_export_columns_omitted">Esclusi dal file CSV: %1$s. Il formato CSV non supporta record completi.</string>
     <string name="inventory_export_use_json">Usa JSON</string>
+    <string name="inventory_export_pro_columns">I dettagli oltre Base per più di un\'app fanno parte di Pro</string>
+    <string name="inventory_export_use_basics">Esporta solo Base</string>
     <string name="inventory_export_structured_hint">I dettagli disponibili solo in JSON includono record completi, non solo conteggi. I file CSV li escludono.</string>
     <string name="inventory_export_intro_got_it">Ho capito</string>
     <string name="inventory_export_intro_about">Informazioni su questa esportazione</string>

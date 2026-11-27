@@ -10,6 +10,7 @@ import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 sealed interface InventoryExportAction {
     sealed interface AppSelectionAction : InventoryExportAction
     sealed interface ColumnSelectionAction : InventoryExportAction
+    sealed interface ExportRequestAction : InventoryExportAction
 
     data object Back : InventoryExportAction
     data object Next : InventoryExportAction
@@ -32,9 +33,9 @@ sealed interface InventoryExportAction {
     data class FormatSelected(val format: InventoryFormat) : InventoryExportAction
     data object OpenFormatReference : InventoryExportAction
 
-    data object Save : InventoryExportAction
+    data object Save : ExportRequestAction
     data class SaveTo(val destination: Uri, val format: InventoryFormat) : InventoryExportAction
-    data object Share : InventoryExportAction
+    data object Share : ExportRequestAction
     data object DocumentPickerUnavailable : InventoryExportAction
     data object ShareUnavailable : InventoryExportAction
 
