@@ -166,7 +166,7 @@ private fun PurchaseArea(
                 Button(
                     text = stringResource(R.string.pro_unlock, offer.formattedPrice),
                     onClick = onUnlock,
-                    enabled = state.status != ProStatus.Purchasing && state.status != ProStatus.Restoring,
+                    enabled = !state.status.blocksActions,
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
@@ -182,7 +182,7 @@ private fun PurchaseArea(
             TextButton(
                 text = stringResource(R.string.pro_restore),
                 onClick = onRestore,
-                enabled = state.status != ProStatus.Purchasing && state.status != ProStatus.Restoring,
+                enabled = !state.status.blocksActions,
             )
         }
     }

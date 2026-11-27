@@ -33,3 +33,6 @@ internal sealed interface ProStatus {
 
     data object NothingToRestore : ProStatus
 }
+
+internal val ProStatus.blocksActions: Boolean
+    get() = this == ProStatus.Purchasing || this == ProStatus.Restoring || this == ProStatus.Pending

@@ -1,9 +1,12 @@
 package sk.styk.martin.apkanalyzer.core.designsystem.phone.navigation
 
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavMetadataKey
 import androidx.navigation3.runtime.get
@@ -42,22 +45,23 @@ private class BottomSheetScene<T : Any>(
     private val onBack: () -> Unit,
 ) : OverlayScene<T> {
 
-    private var sheetState: SheetState? = null
-
     override val entries: List<NavEntry<T>> = listOf(entry)
 
     override val overlaidEntries: List<NavEntry<T>> = previousEntries
 
     override val content: @Composable () -> Unit = {
-        val state = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-        sheetState = state
-        BottomSheet(onDismiss = onBack, sheetState = state) {
+        var isDismissed by remember { mutableStateOf(false) }
+        BottomSheet(
+            onDismiss = {
+                if (!isDismissed) {
+                    isDismissed = true
+                    onBack()
+                }
+            },
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        ) {
             entry.Content()
         }
-    }
-
-    override suspend fun onRemove() {
-        sheetState?.hide()
     }
 
     override fun equals(other: Any?): Boolean = other is BottomSheetScene<*> &&

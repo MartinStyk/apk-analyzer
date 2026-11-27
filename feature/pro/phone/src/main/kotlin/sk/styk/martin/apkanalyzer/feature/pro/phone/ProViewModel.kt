@@ -67,7 +67,7 @@ internal class ProViewModel @AssistedInject constructor(
 
     private fun unlock(activity: Activity) {
         val offer = proOffer ?: return
-        if (state.value.status.isBusy) return
+        if (state.value.status.blocksActions) return
         state.update { it.copy(status = ProStatus.Purchasing) }
         analytics.track(ProAnalyticsEvent.PurchaseStarted(reason))
         viewModelScope.launch {
@@ -83,7 +83,7 @@ internal class ProViewModel @AssistedInject constructor(
     }
 
     private fun restore() {
-        if (state.value.status.isBusy) return
+        if (state.value.status.blocksActions) return
         state.update { it.copy(status = ProStatus.Restoring) }
         viewModelScope.launch {
             val restored = Entitlement.Pro in entitlementsRepository.refresh()
@@ -98,6 +98,3 @@ internal class ProViewModel @AssistedInject constructor(
         eventChannel.trySend(ProEvent.Close)
     }
 }
-
-private val ProStatus.isBusy: Boolean
-    get() = this == ProStatus.Purchasing || this == ProStatus.Restoring
