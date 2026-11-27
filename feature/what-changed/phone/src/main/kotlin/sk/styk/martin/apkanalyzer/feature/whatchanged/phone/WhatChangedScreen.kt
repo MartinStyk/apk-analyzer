@@ -3,7 +3,6 @@ package sk.styk.martin.apkanalyzer.feature.whatchanged.phone
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,7 +14,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -96,9 +97,15 @@ private fun WhatChangedContent(
         Header(onOpenFullHistory = { onAction(WhatChangedAction.OpenFullHistory) })
         when (state) {
             WhatChangedState.Loading -> HistoryLoading()
+
             WhatChangedState.Error -> HistoryError(onRetry = { onAction(WhatChangedAction.Retry) })
+
             WhatChangedState.Empty -> HistoryEmpty()
-            is WhatChangedState.Loaded -> LoadedContent(state = state, onAction = onAction)
+
+            is WhatChangedState.Loaded -> {
+                RangeChips(selected = state.range, onSelectRange = { onAction(WhatChangedAction.SelectRange(it)) })
+                LoadedContent(state = state, onAction = onAction)
+            }
         }
     }
 }
@@ -134,7 +141,7 @@ private fun LoadedContent(
         modifier = modifier.fillMaxSize(),
     ) {
         item(key = "summary") {
-            Summary(state = state, onSelectRange = { onAction(WhatChangedAction.SelectRange(it)) })
+            Summary(state = state)
         }
         state.latestChange?.let { latest ->
             item(key = "latest-header") { ListSectionHeader(title = stringResource(R.string.what_changed_section_latest).uppercase(locale)) }
@@ -242,24 +249,28 @@ private fun ChangedAppItem.supportingText(): String {
 }
 
 @Composable
-private fun Summary(
-    state: WhatChangedState.Loaded,
+private fun RangeChips(
+    selected: WhatChangedRange,
     onSelectRange: (WhatChangedRange) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val resources = LocalResources.current
-    Column(modifier = modifier.padding(bottom = 4.dp)) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .horizontalScroll(rememberScrollState())
-                .padding(vertical = 8.dp),
-        ) {
-            WhatChangedRange.entries.forEach { range ->
-                Chip(label = stringResource(range.labelRes), selected = range == state.range, onClick = { onSelectRange(range) })
-            }
+    val listState = rememberLazyListState(initialFirstVisibleItemIndex = WhatChangedRange.entries.indexOf(selected))
+    LazyRow(
+        state = listState,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+        modifier = modifier.fillMaxWidth(),
+    ) {
+        items(items = WhatChangedRange.entries, key = { it.name }) { range ->
+            Chip(label = stringResource(range.labelRes), selected = range == selected, onClick = { onSelectRange(range) })
         }
+    }
+}
+
+@Composable
+private fun Summary(state: WhatChangedState.Loaded, modifier: Modifier = Modifier) {
+    val resources = LocalResources.current
+    Column(modifier = modifier.padding(top = 4.dp, bottom = 4.dp)) {
         val counts = buildList {
             if (state.updateCount > 0) add(resources.getQuantityString(R.plurals.what_changed_updates, state.updateCount, state.updateCount))
             if (state.newAppCount > 0) add(resources.getQuantityString(R.plurals.what_changed_new_apps, state.newAppCount, state.newAppCount))
