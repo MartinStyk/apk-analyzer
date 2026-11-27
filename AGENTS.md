@@ -111,7 +111,8 @@ Modules live under `app/`, `tv/`, `core/<name>/`, and `feature/<name>/{api,domai
   `domain` when it is about this feature, or to `core` when it is a domain rule other features use.
 * `core/*` — may depend on other `core` modules. **Never** depends on a `feature` module.
 * Every core domain module is split into `core/<name>/api` (applies `apkanalyzer.core.api`) and an
-  implementation submodule (`impl`, or one per implementation such as `play`/`noop`, applying
+  implementation submodule (`impl`, plus a sibling such as `noop` when a build type ships a second
+  implementation, as `core:entitlements` does; each applies
   `apkanalyzer.core.impl`). Everything else consumes it
   through `api` only; only the app shells depend on the implementation, so everything at its top
   level is `private` or `internal`. `design-system`, `common`, `navigation`, and `app-functions` stay

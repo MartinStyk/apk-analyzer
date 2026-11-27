@@ -47,6 +47,7 @@ room = "2.8.5"
 
 # Play Core
 play-review = "2.0.2"
+play-billing = "9.1.0"
 
 # On-device AI
 mlkit-genai-prompt = "1.0.0-beta5"
@@ -139,6 +140,7 @@ androidx-appfunctions-compiler = { module = "androidx.appfunctions:appfunctions-
 
 # Play Core
 play-review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "play-review" }
+play-billing-ktx = { module = "com.android.billingclient:billing-ktx", version.ref = "play-billing" }
 
 # Third-party
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }

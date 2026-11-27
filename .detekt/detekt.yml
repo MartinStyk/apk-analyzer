@@ -126,6 +126,7 @@ style:
       - value: 'androidx.*'
         reason: 'A core api module holds contracts, not platform access; map platform types in its impl module (docs/app/technical/core-api-impl-split.md).'
     allowedImports:
+      - 'android.app.Activity'
       - 'android.net.Uri'
       - 'android.content.res.Resources'
       - 'androidx.annotation.*'

@@ -38,7 +38,7 @@ unit-test and test-fixture sources.
 | Check | Enforces |
 |---|---|
 | detekt `ForbiddenImport` | No `android.util.Log`, `runBlocking`, `Executor`s, or `collectAsState` |
-| detekt `ForbiddenImport/CoreApiPlatformAccess` | Core `api` main and test-fixture sources import no `android.*` or `androidx.*` except `android.net.Uri`, `android.content.res.Resources`, and `androidx.annotation.*`. Hilt, Room, WorkManager, and Compose are already absent from the `api` classpath; the Android framework is not, so this is what keeps platform access in `impl` |
+| detekt `ForbiddenImport/CoreApiPlatformAccess` | Core `api` main and test-fixture sources import no `android.*` or `androidx.*` except `android.net.Uri`, `android.app.Activity`, `android.content.res.Resources`, and `androidx.annotation.*`. Hilt, Room, WorkManager, and Compose are already absent from the `api` classpath; the Android framework is not, so this is what keeps platform access in `impl` |
 | detekt `ForbiddenMethodCall` | No `print`/`println`, `Thread`, `thread { }`, or `Thread.sleep` |
 | detekt `ForbiddenSuppress` | No `@Suppress` of a guardrail |
 | detekt `UnusedImport` | No unused imports (ktlint doesn't report them) |
