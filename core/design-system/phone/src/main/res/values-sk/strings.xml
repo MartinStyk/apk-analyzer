@@ -2,4 +2,5 @@
 <resources>
     <string name="content_description_back">Späť</string>
     <string name="content_description_selected">Vybrané</string>
+    <string name="content_description_pro">Súčasť Pro</string>
 </resources>

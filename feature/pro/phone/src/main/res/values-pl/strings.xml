@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="pro_headline_export">
+        <item quantity="one">Wyeksportuj wszystkie szczegóły z %d aplikacji</item>
+        <item quantity="few">Wyeksportuj wszystkie szczegóły z %d aplikacji</item>
+        <item quantity="many">Wyeksportuj wszystkie szczegóły z %d aplikacji</item>
+        <item quantity="other">Wyeksportuj wszystkie szczegóły z %d aplikacji</item>
+    </plurals>
+    <plurals name="pro_headline_what_changed">
+        <item quantity="one">Zobacz, co się zmieniło w %d kolejnej aplikacji</item>
+        <item quantity="few">Zobacz, co się zmieniło w %d kolejnych aplikacjach</item>
+        <item quantity="many">Zobacz, co się zmieniło w %d kolejnych aplikacjach</item>
+        <item quantity="other">Zobacz, co się zmieniło w %d kolejnej aplikacji</item>
+    </plurals>
+    <string name="pro_feature_export">Eksportuj uprawnienia, certyfikaty, komponenty i nie tylko z wielu aplikacji naraz</string>
+    <string name="pro_feature_what_changed">Zobacz wszystkie zmiany aplikacji na urządzeniu na jednej liście</string>
+    <string name="pro_supporter">Wesprzyj niezależną aplikację open source. Wszystko, co dziś jest bezpłatne, takie pozostanie.</string>
+    <string name="pro_unlock">Odblokuj Pro · %s</string>
+    <string name="pro_one_time">Jednorazowy zakup. Bez subskrypcji.</string>
+    <string name="pro_restore">Przywróć zakup</string>
+    <string name="pro_unavailable">Zakupy wymagają Google Play na tym urządzeniu.</string>
+    <string name="pro_failed">Nie udało się połączyć z Google Play. Spróbuj ponownie.</string>
+    <string name="pro_pending">Zakup oczekuje</string>
+    <string name="pro_pending_body">Google Play czeka na Twoją płatność. Pro odblokuje się, gdy tylko zostanie zrealizowana.</string>
+    <string name="pro_restore_nothing">Nie znaleziono zakupu Pro na tym koncie Google.</string>
+</resources>

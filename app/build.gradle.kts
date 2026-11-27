@@ -68,6 +68,7 @@ dependencies {
     implementation(projects.feature.settings.phone)
     implementation(projects.feature.appDetail.phone)
     implementation(projects.feature.whatChanged.phone)
+    implementation(projects.feature.pro.phone)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)

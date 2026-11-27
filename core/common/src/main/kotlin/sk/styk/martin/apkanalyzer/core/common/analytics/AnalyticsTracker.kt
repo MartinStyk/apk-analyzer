@@ -20,4 +20,6 @@ enum class AnalyticsParameterName(val value: String) {
     HistoryBucket("history_bucket"),
     Dimension("dimension"),
     Section("section"),
+    PaywallSource("paywall_source"),
+    Result("result"),
 }

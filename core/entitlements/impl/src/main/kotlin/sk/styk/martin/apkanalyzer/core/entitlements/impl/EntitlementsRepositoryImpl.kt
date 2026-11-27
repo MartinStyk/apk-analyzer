@@ -85,6 +85,8 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun refresh(): Set<Entitlement> = queryOwnedEntitlements().also { purchaseUpdates.refresh() }
+
     private suspend fun queryOwnedEntitlements(): Set<Entitlement> {
         if (!billingConnection.connect()) return emptySet()
         val params = QueryPurchasesParams.newBuilder().setProductType(ProductType.INAPP).build()

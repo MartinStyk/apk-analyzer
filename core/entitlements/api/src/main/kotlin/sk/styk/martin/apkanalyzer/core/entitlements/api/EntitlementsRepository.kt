@@ -10,6 +10,8 @@ interface EntitlementsRepository {
     fun offers(): Flow<List<Offer>>
 
     suspend fun purchase(activity: Activity, offer: Offer): PurchaseResult
+
+    suspend fun refresh(): Set<Entitlement>
 }
 
 @Serializable

@@ -71,4 +71,6 @@ include(
     ":feature:settings:phone",
     ":feature:what-changed:api",
     ":feature:what-changed:phone",
+    ":feature:pro:api",
+    ":feature:pro:phone",
 )

@@ -2,4 +2,5 @@
 <resources>
     <string name="content_description_back">Kembali</string>
     <string name="content_description_selected">Dipilih</string>
+    <string name="content_description_pro">Bagian dari Pro</string>
 </resources>

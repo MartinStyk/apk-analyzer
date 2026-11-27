@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="pro_headline_export">
+        <item quantity="zero">صدِّر كل التفاصيل عن %d تطبيق</item>
+        <item quantity="one">صدِّر كل التفاصيل عن %d تطبيق</item>
+        <item quantity="two">صدِّر كل التفاصيل عن %d تطبيقين</item>
+        <item quantity="few">صدِّر كل التفاصيل عن %d تطبيقات</item>
+        <item quantity="many">صدِّر كل التفاصيل عن %d تطبيقًا</item>
+        <item quantity="other">صدِّر كل التفاصيل عن %d تطبيق</item>
+    </plurals>
+    <plurals name="pro_headline_what_changed">
+        <item quantity="zero">اطّلع على ما تغيّر في %d تطبيق آخر</item>
+        <item quantity="one">اطّلع على ما تغيّر في %d تطبيق آخر</item>
+        <item quantity="two">اطّلع على ما تغيّر في %d تطبيقين آخرين</item>
+        <item quantity="few">اطّلع على ما تغيّر في %d تطبيقات أخرى</item>
+        <item quantity="many">اطّلع على ما تغيّر في %d تطبيقًا آخر</item>
+        <item quantity="other">اطّلع على ما تغيّر في %d تطبيق آخر</item>
+    </plurals>
+    <string name="pro_feature_export">صدِّر الأذونات والشهادات والمكوّنات وغيرها لعدة تطبيقات دفعة واحدة</string>
+    <string name="pro_feature_what_changed">اطّلع على كل تغييرات التطبيقات على جهازك في قائمة واحدة</string>
+    <string name="pro_supporter">ادعم تطبيقًا مستقلًا ومفتوح المصدر. كل ما هو مجاني اليوم سيبقى مجانيًا.</string>
+    <string name="pro_unlock">فتح Pro · %s</string>
+    <string name="pro_one_time">شراء لمرة واحدة. بلا اشتراك.</string>
+    <string name="pro_restore">استعادة الشراء</string>
+    <string name="pro_unavailable">تتطلب عمليات الشراء وجود Google Play على هذا الجهاز.</string>
+    <string name="pro_failed">تعذّر الاتصال بـ Google Play. حاول مرة أخرى.</string>
+    <string name="pro_pending">الشراء قيد الانتظار</string>
+    <string name="pro_pending_body">ينتظر Google Play إتمام الدفع. يُفتح Pro فور إتمامه.</string>
+    <string name="pro_restore_nothing">لم يتم العثور على عملية شراء Pro لحساب Google هذا.</string>
+</resources>

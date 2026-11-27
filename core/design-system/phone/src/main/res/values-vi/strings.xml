@@ -2,4 +2,5 @@
 <resources>
     <string name="content_description_back">Quay lại</string>
     <string name="content_description_selected">Đã chọn</string>
+    <string name="content_description_pro">Thuộc gói Pro</string>
 </resources>

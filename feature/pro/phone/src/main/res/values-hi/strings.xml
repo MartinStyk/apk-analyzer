@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="pro_headline_export">
+        <item quantity="one">%d ऐप की हर जानकारी एक्सपोर्ट करें</item>
+        <item quantity="other">%d ऐप की हर जानकारी एक्सपोर्ट करें</item>
+    </plurals>
+    <plurals name="pro_headline_what_changed">
+        <item quantity="one">देखें कि %d और ऐप में क्या बदला</item>
+        <item quantity="other">देखें कि %d और ऐप में क्या बदला</item>
+    </plurals>
+    <string name="pro_feature_export">एक साथ कई ऐप की अनुमतियाँ, सर्टिफ़िकेट, कॉम्पोनेंट और बहुत कुछ एक्सपोर्ट करें</string>
+    <string name="pro_feature_what_changed">अपने डिवाइस पर ऐप में हुए हर बदलाव को एक ही सूची में देखें</string>
+    <string name="pro_supporter">एक स्वतंत्र, ओपन-सोर्स ऐप को सपोर्ट करें। आज जो कुछ भी मुफ़्त है, वह मुफ़्त ही रहेगा।</string>
+    <string name="pro_unlock">Pro अनलॉक करें · %s</string>
+    <string name="pro_one_time">एक बार की खरीदारी। कोई सदस्यता नहीं।</string>
+    <string name="pro_restore">खरीदारी बहाल करें</string>
+    <string name="pro_unavailable">खरीदारी के लिए इस डिवाइस पर Google Play ज़रूरी है।</string>
+    <string name="pro_failed">Google Play से कनेक्ट नहीं हो सका। फिर से प्रयास करें।</string>
+    <string name="pro_pending">खरीदारी लंबित है</string>
+    <string name="pro_pending_body">Google Play आपके भुगतान का इंतज़ार कर रहा है। भुगतान पूरा होते ही Pro अनलॉक हो जाता है।</string>
+    <string name="pro_restore_nothing">इस Google खाते के लिए Pro की कोई खरीदारी नहीं मिली।</string>
+</resources>

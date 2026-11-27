@@ -2,4 +2,5 @@
 <resources>
     <string name="content_description_back">Atrás</string>
     <string name="content_description_selected">Seleccionado</string>
+    <string name="content_description_pro">Incluido en Pro</string>
 </resources>

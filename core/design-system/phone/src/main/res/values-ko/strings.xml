@@ -2,4 +2,5 @@
 <resources>
     <string name="content_description_back">뒤로</string>
     <string name="content_description_selected">선택됨</string>
+    <string name="content_description_pro">Pro 기능</string>
 </resources>

@@ -2,4 +2,5 @@
 <resources>
     <string name="content_description_back">Voltar</string>
     <string name="content_description_selected">Selecionado</string>
+    <string name="content_description_pro">Incluído no Pro</string>
 </resources>

@@ -193,6 +193,19 @@ class EntitlementsRepositoryImplTest {
     }
 
     @Test
+    fun `Given Pro was bought elsewhere When refreshing Then Pro is returned and observers are granted Pro`() = runTest {
+        billingClient.givenPurchases()
+        val entitlements = mutableListOf<Set<Entitlement>>()
+        backgroundScope.launch(dispatcherProvider.default()) { repository.entitlements().toList(entitlements) }
+        billingClient.givenPurchases(aProPurchase())
+
+        val refreshed = repository.refresh()
+
+        refreshed shouldBe setOf(Entitlement.Pro)
+        entitlements shouldBe listOf(emptySet(), setOf(Entitlement.Pro))
+    }
+
+    @Test
     fun `Given the billing flow fails to open When purchasing Then the purchase fails`() = runTest {
         every { billingClient.launchBillingFlow(any(), any()) } returns aBillingResult(BillingResponseCode.SERVICE_UNAVAILABLE)
 

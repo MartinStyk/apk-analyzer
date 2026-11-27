@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="pro_headline_export">
+        <item quantity="other">%d個のアプリの詳細をすべて書き出せます</item>
+    </plurals>
+    <plurals name="pro_headline_what_changed">
+        <item quantity="other">あと%d個のアプリの変更内容を確認できます</item>
+    </plurals>
+    <string name="pro_feature_export">権限、証明書、コンポーネントなどを複数のアプリからまとめて書き出せます</string>
+    <string name="pro_feature_what_changed">デバイス上のアプリの変更をすべて1つのリストで確認できます</string>
+    <string name="pro_supporter">独立系のオープンソースアプリを応援しましょう。現在無料の機能は今後も無料のままです。</string>
+    <string name="pro_unlock">Pro をアンロック · %s</string>
+    <string name="pro_one_time">買い切りです。定期購入ではありません。</string>
+    <string name="pro_restore">購入を復元</string>
+    <string name="pro_unavailable">購入するには、このデバイスに Google Play が必要です。</string>
+    <string name="pro_failed">Google Play に接続できませんでした。もう一度お試しください。</string>
+    <string name="pro_pending">購入保留中</string>
+    <string name="pro_pending_body">Google Play でお支払いの完了を待っています。完了するとすぐに Pro が利用可能になります。</string>
+    <string name="pro_restore_nothing">この Google アカウントでは Pro の購入が見つかりませんでした。</string>
+</resources>

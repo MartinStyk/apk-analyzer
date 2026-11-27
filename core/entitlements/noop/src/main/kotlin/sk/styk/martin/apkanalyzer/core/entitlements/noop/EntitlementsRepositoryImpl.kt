@@ -16,4 +16,6 @@ internal class EntitlementsRepositoryImpl @Inject constructor() : EntitlementsRe
     override fun offers(): Flow<List<Offer>> = flowOf(emptyList())
 
     override suspend fun purchase(activity: Activity, offer: Offer): PurchaseResult = PurchaseResult.Failed
+
+    override suspend fun refresh(): Set<Entitlement> = Entitlement.entries.toSet()
 }

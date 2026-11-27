@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="pro_headline_export">
+        <item quantity="one">%d uygulamanın tüm ayrıntılarını dışa aktarın</item>
+        <item quantity="other">%d uygulamanın tüm ayrıntılarını dışa aktarın</item>
+    </plurals>
+    <plurals name="pro_headline_what_changed">
+        <item quantity="one">%d uygulamada daha nelerin değiştiğini görün</item>
+        <item quantity="other">%d uygulamada daha nelerin değiştiğini görün</item>
+    </plurals>
+    <string name="pro_feature_export">Birçok uygulamanın izinlerini, sertifikalarını, bileşenlerini ve daha fazlasını tek seferde dışa aktarın</string>
+    <string name="pro_feature_what_changed">Cihazınızdaki tüm uygulama değişikliklerini tek listede görün</string>
+    <string name="pro_supporter">Bağımsız, açık kaynaklı bir uygulamayı destekleyin. Bugün ücretsiz olan her şey ücretsiz kalacak.</string>
+    <string name="pro_unlock">Pro kilidini aç · %s</string>
+    <string name="pro_one_time">Tek seferlik satın alma. Abonelik yok.</string>
+    <string name="pro_restore">Satın alımı geri yükle</string>
+    <string name="pro_unavailable">Satın alma için bu cihazda Google Play gerekir.</string>
+    <string name="pro_failed">Google Play\'e ulaşılamadı. Tekrar deneyin.</string>
+    <string name="pro_pending">Satın alma bekliyor</string>
+    <string name="pro_pending_body">Google Play ödemenizi bekliyor. Ödeme tamamlanır tamamlanmaz Pro\'nun kilidi açılır.</string>
+    <string name="pro_restore_nothing">Bu Google hesabı için Pro satın alımı bulunamadı.</string>
+</resources>
