@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
@@ -22,11 +25,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -39,12 +47,18 @@ import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Chip
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ListSectionHeader
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.SkeletonBox
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.TextButton
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.navigationBarContentPadding
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.format.historyDate
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.lazylist.ListItemPosition
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.lazylist.itemsPositioned
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.lazylist.shape
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.ShimmerGroup
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.shimmer
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppChangeItem
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppChangeKind
@@ -52,7 +66,6 @@ import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppChange
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppHistoryAppRow
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.HistoryEmpty
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.HistoryError
-import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.HistoryLoading
 import java.time.Instant
 
 @Composable
@@ -95,7 +108,7 @@ private fun WhatChangedContent(
     ) {
         Header(onOpenFullHistory = { onAction(WhatChangedAction.OpenFullHistory) })
         when (state) {
-            WhatChangedState.Loading -> HistoryLoading()
+            WhatChangedState.Loading -> LoadingContent()
 
             WhatChangedState.Error -> HistoryError(onRetry = { onAction(WhatChangedAction.Retry) })
 
@@ -106,6 +119,108 @@ private fun WhatChangedContent(
                 LoadedContent(state = state, onAction = onAction)
             }
         }
+    }
+}
+
+@Composable
+private fun LoadingContent(modifier: Modifier = Modifier) {
+    ShimmerGroup {
+        Column(modifier = modifier.fillMaxSize().clearAndSetSemantics {}) {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                userScrollEnabled = false,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                items(items = WhatChangedRange.entries, key = { it.name }) { range ->
+                    Box(modifier = Modifier.height(48.dp), contentAlignment = Alignment.Center) {
+                        Text(
+                            text = stringResource(range.labelRes),
+                            style = AppTheme.typography.labelLarge,
+                            modifier = Modifier
+                                .clip(Shapes.CardShape)
+                                .shimmer(surfaceColor = AppTheme.colors.surfaceVariant, highlightColor = AppTheme.colors.surface)
+                                .padding(horizontal = 16.dp, vertical = 6.dp),
+                        )
+                    }
+                }
+            }
+            LazyColumn(
+                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = navigationBarContentPadding + 16.dp),
+                userScrollEnabled = false,
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                item(key = "summary") {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(2.dp),
+                        modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp),
+                    ) {
+                        LoadingText(style = AppTheme.typography.titleMedium, modifier = Modifier.fillMaxWidth(0.4f))
+                        LoadingText(style = AppTheme.typography.bodyMedium, modifier = Modifier.fillMaxWidth(0.85f))
+                    }
+                }
+                item(key = "section-header") {
+                    LoadingText(
+                        style = AppTheme.typography.labelMedium,
+                        modifier = Modifier
+                            .padding(top = 20.dp, bottom = 8.dp, start = 4.dp, end = 4.dp)
+                            .fillMaxWidth(0.4f),
+                    )
+                }
+                itemsPositioned(items = listOf(0, 1, 2, 3, 4), key = { _, index -> "loading-$index" }) { position, _ ->
+                    LoadingAppRow(position = position)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun LoadingAppRow(position: ListItemPosition, modifier: Modifier = Modifier) {
+    Row(
+        verticalAlignment = Alignment.Top,
+        modifier = modifier
+            .fillMaxWidth()
+            .background(AppTheme.colors.surface, position.shape())
+            .padding(14.dp),
+    ) {
+        Box(
+            modifier = Modifier.size(36.dp).clip(Shapes.CardShape)
+                .shimmer(surfaceColor = AppTheme.colors.surfaceVariant, highlightColor = AppTheme.colors.surface),
+        )
+        Spacer(modifier = Modifier.width(12.dp))
+        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                LoadingText(style = AppTheme.typography.titleSmall, modifier = Modifier.weight(1f).padding(end = 32.dp))
+                LoadingText(style = AppTheme.typography.labelMedium, modifier = Modifier.width(40.dp))
+            }
+            LoadingText(style = AppTheme.typography.bodySmall, modifier = Modifier.fillMaxWidth(0.55f))
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                LoadingText(style = AppTheme.typography.bodySmall, modifier = Modifier.weight(1f))
+                LoadingText(style = AppTheme.typography.bodySmall, modifier = Modifier.weight(1f))
+            }
+        }
+        Spacer(modifier = Modifier.width(4.dp))
+        Box(modifier = Modifier.size(20.dp).align(Alignment.CenterVertically), contentAlignment = Alignment.Center) {
+            SkeletonBox(modifier = Modifier.size(width = 8.dp, height = 12.dp))
+        }
+    }
+}
+
+@Composable
+private fun LoadingText(style: TextStyle, modifier: Modifier = Modifier) {
+    val density = LocalDensity.current
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.CenterStart,
+    ) {
+        Text(
+            text = " ",
+            style = style,
+            color = Color.Transparent,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        SkeletonBox(modifier = Modifier.fillMaxWidth().height(with(density) { style.fontSize.toDp() }))
     }
 }
 
@@ -349,5 +464,21 @@ private fun WhatChangedNothingInRangePreview() {
 private fun WhatChangedEmptyPreview() {
     ApkAnalyzerTheme {
         WhatChangedContent(state = WhatChangedState.Empty, onAction = {})
+    }
+}
+
+@Preview
+@Composable
+private fun WhatChangedLoadingPreview() {
+    ApkAnalyzerTheme {
+        WhatChangedContent(state = WhatChangedState.Loading, onAction = {})
+    }
+}
+
+@Preview
+@Composable
+private fun WhatChangedLoadingDarkPreview() {
+    ApkAnalyzerTheme(isDarkTheme = true) {
+        WhatChangedContent(state = WhatChangedState.Loading, onAction = {})
     }
 }
