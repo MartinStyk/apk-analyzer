@@ -7,6 +7,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.featureFlags.api)
     api(projects.feature.apps.api)
     implementation(projects.feature.settings.api)
     implementation(projects.feature.appDetail.api)

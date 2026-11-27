@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import sk.styk.martin.apkanalyzer.core.common.configuration.ApplicationVariant
+import sk.styk.martin.apkanalyzer.core.featureflags.api.ApplicationVariant
 
 @Module
 @InstallIn(SingletonComponent::class)

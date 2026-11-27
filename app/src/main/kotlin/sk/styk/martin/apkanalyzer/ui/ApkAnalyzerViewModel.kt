@@ -10,29 +10,29 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationKey
-import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationRepository
 import sk.styk.martin.apkanalyzer.core.common.review.ReviewEligibilityTracker
 import sk.styk.martin.apkanalyzer.core.common.settings.Key
 import sk.styk.martin.apkanalyzer.core.common.settings.PersistenceRepository
+import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlag
+import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlagRepository
 import javax.inject.Inject
 
 @HiltViewModel
 internal class ApkAnalyzerViewModel @Inject constructor(
     persistenceRepository: PersistenceRepository,
-    configurationRepository: ConfigurationRepository,
+    featureFlagRepository: FeatureFlagRepository,
     private val reviewEligibilityTracker: ReviewEligibilityTracker,
 ) : ViewModel() {
     val state: StateFlow<ApkAnalyzerState> =
         combine(
             persistenceRepository.observe(Key.ColorScheme),
             persistenceRepository.observe(Key.HexFingerprintFormat),
-            configurationRepository.observe(ConfigurationKey.WhatChangedTabEnabled),
+            featureFlagRepository.observe(FeatureFlag.WhatChangedTab),
         ) { scheme, fingerprintFormat, isWhatChangedEnabled ->
             ApkAnalyzerState.Data(
                 colorAppScheme = scheme,
                 fingerprintFormat = fingerprintFormat,
-                isWhatChangedEnabled = isWhatChangedEnabled,
+                isWhatChangedEnabled = isWhatChangedEnabled.getOrDefault(false),
             )
         }.stateIn(
             scope = viewModelScope,

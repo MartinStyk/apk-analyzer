@@ -37,6 +37,8 @@ dependencies {
     debugImplementation(projects.core.entitlements.impl)
     releaseImplementation(projects.core.entitlements.noop)
     implementation(projects.core.common)
+    implementation(projects.core.featureFlags.api)
+    implementation(projects.core.featureFlags.impl)
     implementation(projects.core.designSystem.tv)
     implementation(projects.core.navigation)
 

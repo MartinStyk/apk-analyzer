@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -47,16 +49,18 @@ private val SettingsRowMinHeight = 48.dp
 internal fun SettingsScreen(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
+    onFeatureFlags: (() -> Unit)? = null,
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(onBack, onFeatureFlags) {
         viewModel.events.collect { event ->
             when (event) {
                 is SettingsEvent.NavigateBack -> onBack()
                 is SettingsEvent.OpenAppLanguageSettings -> context.openAppLanguageSettings()
+                SettingsEvent.OpenFeatureFlags -> if (BuildConfig.DEBUG) onFeatureFlags?.invoke()
             }
         }
     }
@@ -65,6 +69,14 @@ internal fun SettingsScreen(
         state = state,
         onAction = viewModel::onAction,
         modifier = modifier,
+        developerOptions = if (BuildConfig.DEBUG) {
+            SettingsDeveloperOptions(
+                stringResource(R.string.feature_flags_debug),
+                stringResource(R.string.feature_flags_title),
+            )
+        } else {
+            null
+        },
     )
 }
 
@@ -73,6 +85,7 @@ private fun SettingsContent(
     state: SettingsState,
     onAction: (SettingsAction) -> Unit,
     modifier: Modifier = Modifier,
+    developerOptions: SettingsDeveloperOptions? = null,
 ) {
     Column(
         modifier = modifier
@@ -88,7 +101,8 @@ private fun SettingsContent(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .verticalScroll(rememberScrollState())
+                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             AppearanceSection(
@@ -108,6 +122,34 @@ private fun SettingsContent(
                     appLanguageSetting = state.appLanguageSetting,
                     onOpenLanguageSettings = { onAction(SettingsAction.OpenLanguageSettings) },
                 )
+            }
+
+            if (developerOptions != null) {
+                Column {
+                    Text(
+                        text = developerOptions.title,
+                        style = AppTheme.typography.titleMedium,
+                        color = AppTheme.colors.onBackground,
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .card()
+                            .clickable { onAction(SettingsAction.OpenFeatureFlags) }
+                            .padding(16.dp)
+                            .heightIn(min = SettingsRowMinHeight),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = developerOptions.featureFlagsTitle,
+                            style = AppTheme.typography.bodyMedium,
+                            color = AppTheme.colors.onSurface,
+                            modifier = Modifier.weight(1f),
+                        )
+                        Icon(imageVector = ApkAnalyzerIcons.ChevronRight, contentDescription = null)
+                    }
+                }
             }
         }
     }
@@ -287,6 +329,7 @@ private fun SettingsContentPreview() {
                 appLanguageSetting = AppLanguageSetting.Available.SystemDefault,
             ),
             onAction = {},
+            developerOptions = SettingsDeveloperOptions("Debug", "Feature flags"),
         )
     }
 }

@@ -1,0 +1,18 @@
+<resources>
+    <string name="feature_flags_debug" translatable="false">Debug</string>
+    <string name="feature_flags_title" translatable="false">Feature flags</string>
+    <string name="feature_flags_explanation" translatable="false">Changes apply immediately and survive app restarts. Reset a flag to follow its build default. Debug builds only.</string>
+    <string name="feature_flags_inventory_export" translatable="false">App inventory export</string>
+    <string name="feature_flags_history_display" translatable="false">Show app history</string>
+    <string name="feature_flags_what_changed_tab" translatable="false">Show What changed tab</string>
+    <string name="feature_flags_history_recording" translatable="false">Record app history</string>
+    <string name="feature_flags_default_on" translatable="false">Build default: on</string>
+    <string name="feature_flags_default_off" translatable="false">Build default: off</string>
+    <string name="feature_flags_override_on" translatable="false">Saved override: on</string>
+    <string name="feature_flags_override_off" translatable="false">Saved override: off</string>
+    <string name="feature_flags_reset" translatable="false">Use build default</string>
+    <string name="feature_flags_reset_all" translatable="false">Reset all flags</string>
+    <string name="feature_flags_load_failed" translatable="false">Could not load feature flags. Try again.</string>
+    <string name="feature_flags_save_failed" translatable="false">Could not save feature flags. Try again.</string>
+    <string name="feature_flags_retry" translatable="false">Retry</string>
+</resources>

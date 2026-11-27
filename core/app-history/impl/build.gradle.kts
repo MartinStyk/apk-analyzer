@@ -20,6 +20,7 @@ dependencies {
     implementation(projects.core.appHistory.api)
     implementation(projects.core.apps.api)
     implementation(projects.core.common)
+    implementation(projects.core.featureFlags.api)
     implementation(libs.kotlinx.serialization.json)
 
     testFixturesImplementation(projects.core.apps.api)
@@ -27,4 +28,5 @@ dependencies {
 
     testImplementation(testFixtures(projects.core.apps.api))
     testImplementation(testFixtures(projects.core.common))
+    testImplementation(testFixtures(projects.core.featureFlags.api))
 }

@@ -283,7 +283,7 @@ Four rules this screen lives or dies by:
 
 #### What Changed tab as built
 
-Lives in `feature:what-changed`, debug builds only (`ConfigurationKey.WhatChangedTabEnabled`), with no
+Lives in `feature:what-changed`, debug builds only (`FeatureFlag.WhatChangedTab`), with no
 sample card or category stubs. Differences from the design above, all decided with the app owner:
 
 - **The Pro gate locks rows, not a sample card.** Without Pro, the first five rows in each tab

@@ -38,11 +38,11 @@ import sk.styk.martin.apkanalyzer.core.apps.api.model.Detail.WhatsApp
 import sk.styk.martin.apkanalyzer.core.apps.api.model.anApp
 import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibrariesRepositoryFake
 import sk.styk.martin.apkanalyzer.core.apps.api.signing.SigningSchemeRepositoryFake
-import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationKey
-import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationRepositoryFake
 import sk.styk.martin.apkanalyzer.core.common.coroutines.TestDispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.device.DeviceInfoProviderFake
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTrackerFake
+import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlag
+import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlagRepositoryFake
 import java.io.IOException
 import java.util.concurrent.ExecutionException
 
@@ -56,7 +56,7 @@ class AppHistoryCaptureSchedulerImplTest {
     private val database = Room.databaseBuilder(context, AppHistoryDatabase::class.java, "app_history_v2.db").build()
     private val cleanup = AppHistoryStorageCleanup(context)
     private val appScope = CoroutineScope(SupervisorJob() + dispatcherProvider.default())
-    private val configuration = ConfigurationRepositoryFake(ConfigurationKey.AppHistoryRecordingEnabled)
+    private val featureFlags = FeatureFlagRepositoryFake(FeatureFlag.AppHistoryRecording)
     private val packageChanges = PackageChangesObserverFake()
     private val installedApp = anApp(name = "WhatsApp", packageName = WhatsApp.info.packageName.value)
     private val persistence = AppHistoryPersistenceRepositoryFake()
@@ -69,7 +69,7 @@ class AppHistoryCaptureSchedulerImplTest {
         deviceInfoProvider = DeviceInfoProviderFake(),
         dispatcherProvider = dispatcherProvider,
         performanceTracker = PerformanceTrackerFake(),
-        configurationRepository = configuration,
+        featureFlagRepository = featureFlags,
         appScope = appScope,
     )
     private val workManager = mockk<WorkManager>()
@@ -91,7 +91,7 @@ class AppHistoryCaptureSchedulerImplTest {
         workManager = Lazy { workManager },
         restoreMerger = AppHistoryRestoreMergerImpl(context, database.appHistoryWriteDao(), dispatcherProvider),
         storageCleanup = cleanup,
-        configurationRepository = configuration,
+        featureFlagRepository = featureFlags,
         appScope = appScope,
         dispatcherProvider = dispatcherProvider,
     )
@@ -119,7 +119,7 @@ class AppHistoryCaptureSchedulerImplTest {
         historyFile.parentFile!!.mkdirs()
         historyFile.writeText("previous history")
 
-        configuration[ConfigurationKey.AppHistoryRecordingEnabled] = false
+        featureFlags[FeatureFlag.AppHistoryRecording] = false
         runCurrent()
         advanceTimeBy(60_001)
         packageChanges.emit(PackageChangeEvent(installedApp.packageName, PackageChangeAction.Added))
@@ -133,12 +133,12 @@ class AppHistoryCaptureSchedulerImplTest {
 
     @Test
     fun `Given recording starts disabled When it turns on Then package changes are captured once`() = runTest {
-        configuration[ConfigurationKey.AppHistoryRecordingEnabled] = false
+        featureFlags[FeatureFlag.AppHistoryRecording] = false
         scheduler.start()
         scheduler.start()
         runCurrent()
 
-        configuration[ConfigurationKey.AppHistoryRecordingEnabled] = true
+        featureFlags[FeatureFlag.AppHistoryRecording] = true
         runCurrent()
         packageChanges.emit(PackageChangeEvent(installedApp.packageName, PackageChangeAction.Replaced))
         runCurrent()
@@ -148,13 +148,13 @@ class AppHistoryCaptureSchedulerImplTest {
     }
 
     @Test
-    fun `Given periodic cancellation fails When recording turns on Then configuration observation continues`() = runTest {
-        configuration[ConfigurationKey.AppHistoryRecordingEnabled] = false
+    fun `Given periodic cancellation fails When recording turns on Then flag observation continues`() = runTest {
+        featureFlags[FeatureFlag.AppHistoryRecording] = false
         every { workManager.cancelUniqueWork(any()) } returns failedOperation
 
         scheduler.start()
         runCurrent()
-        configuration[ConfigurationKey.AppHistoryRecordingEnabled] = true
+        featureFlags[FeatureFlag.AppHistoryRecording] = true
         runCurrent()
         packageChanges.emit(PackageChangeEvent(installedApp.packageName, PackageChangeAction.Replaced))
         runCurrent()
@@ -165,11 +165,11 @@ class AppHistoryCaptureSchedulerImplTest {
     }
 
     @Test
-    fun `Given recording is enabled When unrelated configuration changes Then capture is not restarted`() = runTest {
+    fun `Given recording is enabled When an unrelated flag changes Then capture is not restarted`() = runTest {
         scheduler.start()
         runCurrent()
 
-        configuration[ConfigurationKey.WhatChangedTabEnabled] = true
+        featureFlags[FeatureFlag.WhatChangedTab] = true
         runCurrent()
 
         packageChanges.subscriberCount shouldBe 1
@@ -178,7 +178,7 @@ class AppHistoryCaptureSchedulerImplTest {
 
     @Test
     fun `Given recording is disabled When starting Then only uncompressed history is deleted and capture stays off`() = runTest {
-        configuration[ConfigurationKey.AppHistoryRecordingEnabled] = false
+        featureFlags[FeatureFlag.AppHistoryRecording] = false
         val historyFile = context.getDatabasePath("app_history_v2.db")
         historyFile.parentFile!!.mkdirs()
         historyFile.writeText("previous history")
@@ -201,7 +201,7 @@ class AppHistoryCaptureSchedulerImplTest {
 
     @Test
     fun `Given recording is disabled without existing files When starting Then no history database is created`() = runTest {
-        configuration[ConfigurationKey.AppHistoryRecordingEnabled] = false
+        featureFlags[FeatureFlag.AppHistoryRecording] = false
 
         scheduler.start()
         runCurrent()

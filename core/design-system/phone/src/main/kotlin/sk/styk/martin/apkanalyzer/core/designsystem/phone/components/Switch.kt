@@ -13,11 +13,13 @@ fun Switch(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
 ) {
     Switch(
         checked = checked,
         onCheckedChange = onCheckedChange,
         modifier = modifier,
+        enabled = enabled,
         colors = SwitchDefaults.colors(
             checkedTrackColor = AppTheme.colors.primary,
             checkedThumbColor = AppTheme.colors.onPrimary,
@@ -40,5 +42,13 @@ private fun SwitchOnPreview() {
 private fun SwitchOffPreview() {
     ApkAnalyzerTheme {
         Switch(checked = false, onCheckedChange = {})
+    }
+}
+
+@Preview
+@Composable
+private fun SwitchDisabledDarkPreview() {
+    ApkAnalyzerTheme(isDarkTheme = true) {
+        Switch(checked = false, onCheckedChange = {}, enabled = false)
     }
 }

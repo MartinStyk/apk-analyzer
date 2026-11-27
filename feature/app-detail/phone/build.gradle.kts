@@ -7,6 +7,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.featureFlags.api)
     api(projects.feature.appDetail.api)
     implementation(projects.feature.appDetail.domain)
     implementation(projects.feature.appExport.api)
