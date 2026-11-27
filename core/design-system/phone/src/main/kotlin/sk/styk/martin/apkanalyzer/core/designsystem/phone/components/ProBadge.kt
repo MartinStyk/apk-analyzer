@@ -10,6 +10,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
+import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.R
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 
@@ -19,7 +20,8 @@ fun ProBadge(modifier: Modifier = Modifier) {
     Tag(
         text = stringResource(R.string.pro_badge),
         icon = ApkAnalyzerIcons.Lock,
-        highlighted = true,
+        contentColor = AppTheme.colors.pro,
+        containerColor = AppTheme.colors.proContainer,
         modifier = modifier.clearAndSetSemantics { contentDescription = description },
     )
 }
@@ -29,7 +31,7 @@ fun ProBadge(onClick: () -> Unit, modifier: Modifier = Modifier) {
     val description = stringResource(R.string.content_description_pro)
     Chip(
         label = stringResource(R.string.pro_badge),
-        variant = ChipVariant.Tonal,
+        variant = ChipVariant.Pro,
         leadingIcon = ApkAnalyzerIcons.Lock,
         onClick = onClick,
         modifier = modifier
@@ -38,10 +40,18 @@ fun ProBadge(onClick: () -> Unit, modifier: Modifier = Modifier) {
     )
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun ProBadgePreview() {
-    ApkAnalyzerTheme {
+    ApkAnalyzerTheme(isDarkTheme = false) {
+        ProBadge()
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFF161618)
+@Composable
+private fun ProBadgeDarkPreview() {
+    ApkAnalyzerTheme(isDarkTheme = true) {
         ProBadge()
     }
 }

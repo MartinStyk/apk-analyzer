@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
@@ -18,14 +19,16 @@ fun Button(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    containerColor: Color = AppTheme.colors.primary,
+    contentColor: Color = AppTheme.colors.onPrimary,
 ) {
     MaterialButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
-            containerColor = AppTheme.colors.primary,
-            contentColor = AppTheme.colors.onPrimary,
+            containerColor = containerColor,
+            contentColor = contentColor,
         ),
     ) {
         Text(text = text, style = AppTheme.typography.labelLarge)

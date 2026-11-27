@@ -33,6 +33,8 @@ data class ApkAnalyzerColorPalette(
     val warningContainer: Color,
     val aiAccent: Color,
     val aiAccentContainer: Color,
+    val pro: Color,
+    val proContainer: Color,
 
     val shadow: Color,
     val pillBorder: Color,
@@ -64,6 +66,8 @@ val LightApkAnalyzerColors = ApkAnalyzerColorPalette(
     warningContainer = Color(0xFFFFF3E0),
     aiAccent = Color(0xFF7C4DFF),
     aiAccentContainer = Color(0xFFEDE7FE),
+    pro = Color(0xFF805C00),
+    proContainer = Color(0xFFFFE08A),
     shadow = Color(0x1A000000),
     pillBorder = Color.Transparent,
 )
@@ -94,6 +98,8 @@ val DarkApkAnalyzerColors = ApkAnalyzerColorPalette(
     warningContainer = Color(0xFF3E2A0F),
     aiAccent = Color(0xFFB39DFF),
     aiAccentContainer = Color(0xFF2E2251),
+    pro = Color(0xFFFFD166),
+    proContainer = Color(0xFF3C2E0C),
     shadow = Color(0x00000000),
     pillBorder = Color(0xFF2C2C2E),
 )

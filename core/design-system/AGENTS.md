@@ -74,10 +74,11 @@ exception is `InactiveSearchBar`, which lives in `SearchBarInactive.kt`.
 * `format/HistoryDates.kt` formats app-history dates for display (short date this year, full date otherwise, month headers). It lives here, not in `core:app-history:api`, because it uses `android.text.format.DateFormat`.
 * `ListSectionHeader` is the small primary-colored list section title, with an optional explanation
   line, used above grouped list rows and as a sticky month header.
-* `ProBadge` is the one marker for content locked behind Pro: a highlighted `Tag` with a lock icon and
+* `ProBadge` is the one marker for content locked behind Pro: a gold `Tag` with a lock icon and
   the label "Pro", announced as "Part of Pro". Use it on locked rows and actions; never on content
-  that is free. Its `onClick` overload uses the tonal `Chip` with a full touch target when the badge
-  itself opens the purchase sheet.
+  that is free. Pro labels use `AppTheme.colors.pro` and `proContainer`, not action or warning colors.
+  Its `onClick` overload uses the Pro `Chip` with a full touch target when the badge itself opens
+  the purchase sheet.
 * `navigation/BottomSheetSceneStrategy` shows a Navigation 3 entry as a `BottomSheet` over the
   screen below it. An entry opts in with `metadata = BottomSheetSceneStrategy.bottomSheet()`; the
   `app` shell passes the strategy to `NavDisplay`. Swipe, outside tap and Back pop the entry.

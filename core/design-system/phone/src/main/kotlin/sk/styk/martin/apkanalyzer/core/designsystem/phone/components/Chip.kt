@@ -30,6 +30,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 sealed interface ChipVariant {
     data object Default : ChipVariant
     data object Tonal : ChipVariant
+    data object Pro : ChipVariant
     data object Positive : ChipVariant
     data object Warning : ChipVariant
     data object Negative : ChipVariant
@@ -181,6 +182,7 @@ private fun ChipContent(
 private fun ChipVariant.colors() = when (this) {
     ChipVariant.Default -> AppTheme.colors.surfaceVariant to AppTheme.colors.onSurfaceVariant
     ChipVariant.Tonal -> AppTheme.colors.secondaryContainer to AppTheme.colors.onSecondaryContainer
+    ChipVariant.Pro -> AppTheme.colors.proContainer to AppTheme.colors.pro
     ChipVariant.Positive -> AppTheme.colors.positiveContainer to AppTheme.colors.positive
     ChipVariant.Warning -> AppTheme.colors.warningContainer to AppTheme.colors.warning
     ChipVariant.Negative -> AppTheme.colors.negativeContainer to AppTheme.colors.negative
