@@ -22,6 +22,7 @@ import androidx.compose.foundation.gestures.anchoredDraggable
 import androidx.compose.foundation.gestures.animateTo
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -67,12 +68,12 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.R
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import kotlin.math.roundToInt
 
-private val NavigationPillHeight: Dp = 56.dp
+private val NavigationPillHeight: Dp = 64.dp
 private val NavigationPillMargin: Dp = 16.dp
 private val NavigationPillItemPadding: Dp = 4.dp
-private val NavigationPillItemSpacing: Dp = 8.dp
-private val NavigationPillItemHorizontalPadding: Dp = 16.dp
-private val NavigationPillIconSize: Dp = 20.dp
+private val NavigationPillItemSpacing: Dp = 2.dp
+private val NavigationPillItemHorizontalPadding: Dp = 12.dp
+private val NavigationPillIconSize: Dp = 22.dp
 private val NavigationPillElevation: Dp = 8.dp
 private val NavigationPillBorderWidth: Dp = 1.dp
 
@@ -212,7 +213,7 @@ private fun NavigationPillItem(
         animationSpec = tween(durationMillis = NAV_DURATION_STANDARD),
     )
 
-    Row(
+    Column(
         modifier = modifier
             .clip(CircleShape)
             .selectable(
@@ -221,8 +222,8 @@ private fun NavigationPillItem(
                 onClick = onClick,
             )
             .padding(horizontal = NavigationPillItemHorizontalPadding),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(NavigationPillItemSpacing, Alignment.CenterHorizontally),
+        verticalArrangement = Arrangement.spacedBy(NavigationPillItemSpacing, Alignment.CenterVertically),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Icon(
             imageVector = if (isSelected) item.selectedIcon else item.unselectedIcon,
@@ -231,7 +232,7 @@ private fun NavigationPillItem(
         )
         Text(
             text = stringResource(item.title),
-            style = AppTheme.typography.labelLarge,
+            style = AppTheme.typography.labelMedium,
             color = contentColor,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
