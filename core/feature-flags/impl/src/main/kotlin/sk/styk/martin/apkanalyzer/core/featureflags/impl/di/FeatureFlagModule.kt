@@ -9,11 +9,13 @@ import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlagOverridesRepo
 import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlagRepository
 import sk.styk.martin.apkanalyzer.core.featureflags.impl.BuildFeatureFlagRepository
 import javax.inject.Named
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 internal interface FeatureFlagModule {
     @Binds
+    @Singleton
     @Named("buildFeatureFlags")
     fun bindBuildFeatureFlagRepository(impl: BuildFeatureFlagRepository): FeatureFlagRepository
 
