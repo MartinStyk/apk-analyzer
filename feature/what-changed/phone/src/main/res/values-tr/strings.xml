@@ -56,4 +56,6 @@
     <string name="what_changed_certificate_changed">İmza sertifikası değişti</string>
     <string name="what_changed_first_recorded">İlk kayıt</string>
     <string name="what_changed_uncomparable_only">Bazı ayrıntılar karşılaştırılamadı</string>
+    <string name="what_changed_locked_row">Kilitli uygulama değişikliği, Pro kapsamında</string>
+    <string name="what_changed_locked_click_label">Pro ile kilidi aç</string>
 </resources>

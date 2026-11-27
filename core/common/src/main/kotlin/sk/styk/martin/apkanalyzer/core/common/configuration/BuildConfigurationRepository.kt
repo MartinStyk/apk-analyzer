@@ -16,7 +16,8 @@ internal class BuildConfigurationRepository @Inject constructor(private val appl
     @Suppress("UNCHECKED_CAST")
     private fun <T : Any> resolve(key: ConfigurationKey<T>): T = when (key) {
         ConfigurationKey.InventoryExportEnabled -> BuildConfig.DEBUG
-        ConfigurationKey.AppHistoryDisplayEnabled -> BuildConfig.DEBUG && applicationVariant == ApplicationVariant.Phone
+        ConfigurationKey.WhatChangedTabEnabled -> BuildConfig.DEBUG && applicationVariant == ApplicationVariant.Phone
+        ConfigurationKey.AppDetailHistoryEnabled -> BuildConfig.DEBUG && applicationVariant == ApplicationVariant.Phone
         ConfigurationKey.AppHistoryRecordingEnabled -> BuildConfig.DEBUG && applicationVariant == ApplicationVariant.Phone
     } as T
 }

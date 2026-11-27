@@ -52,4 +52,6 @@
     <string name="what_changed_certificate_changed">Sertifikat penandatangan berubah</string>
     <string name="what_changed_first_recorded">Pertama kali tercatat</string>
     <string name="what_changed_uncomparable_only">Beberapa detail tidak dapat dibandingkan</string>
+    <string name="what_changed_locked_row">Perubahan aplikasi terkunci, bagian dari Pro</string>
+    <string name="what_changed_locked_click_label">Buka dengan Pro</string>
 </resources>

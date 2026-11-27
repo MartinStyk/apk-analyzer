@@ -422,7 +422,8 @@ timeline hides it on read (see [`core/app-history/AGENTS.md`](../../../core/app-
 
 Capture is enabled only when the debug-only `ConfigurationKey.AppHistoryRecordingEnabled` flag is on.
 Both capture entry points check the recording flag before reading installed apps or history storage.
-The history display has a separate debug-only `ConfigurationKey.AppHistoryDisplayEnabled` flag.
+The history display has separate debug-only flags: `ConfigurationKey.WhatChangedTabEnabled` for the
+What changed tab and `ConfigurationKey.AppDetailHistoryEnabled` for app detail's History card.
 When recording is enabled, the pipeline runs once per package that the gate says changed:
 
 1. Resolve the package's current `PackageInfo` (existence + `lastUpdateTime`/`firstInstallTime`).

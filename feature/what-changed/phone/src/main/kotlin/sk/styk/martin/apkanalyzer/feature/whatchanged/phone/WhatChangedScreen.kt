@@ -60,12 +60,14 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.modifier.shimmer
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.access.LockableRow
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppChangeItem
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppChangeKind
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppChangeRow
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppHistoryAppRow
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.HistoryEmpty
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.HistoryError
+import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.LockedRow
 import java.time.Instant
 
 @Composable
@@ -74,6 +76,7 @@ internal fun WhatChangedScreen(
     onNavigateToChange: (packageName: String, snapshotId: Long, appName: String) -> Unit,
     onNavigateToFullDetail: (AppDetailInput.Historical) -> Unit,
     onNavigateToAppHistory: (packageName: String, appName: String) -> Unit,
+    onNavigateToPaywall: (lockedAppCount: Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: WhatChangedViewModel = hiltViewModel(),
 ) {
@@ -87,6 +90,7 @@ internal fun WhatChangedScreen(
                 is WhatChangedEvent.NavigateToChange -> onNavigateToChange(event.packageName, event.snapshotId, event.appName)
                 is WhatChangedEvent.NavigateToFullDetail -> onNavigateToFullDetail(event.input)
                 is WhatChangedEvent.NavigateToAppHistory -> onNavigateToAppHistory(event.packageName, event.appName)
+                is WhatChangedEvent.NavigateToPaywall -> onNavigateToPaywall(event.lockedAppCount)
                 WhatChangedEvent.ShowCopiedFeedback -> Toast.makeText(context, R.string.what_changed_copied, Toast.LENGTH_SHORT).show()
             }
         }
@@ -267,39 +271,55 @@ private fun LoadedContent(
         changedAppsSection(state = state, onAction = onAction, uppercase = { it.uppercase(locale) })
         if (state.uninstalledApps.isNotEmpty()) {
             item(key = "uninstalled-header") { ListSectionHeader(title = stringResource(R.string.what_changed_section_uninstalled).uppercase(locale)) }
-            itemsPositioned(items = state.uninstalledApps, key = { _, app -> "uninstalled-${app.packageName}" }) { position, app ->
-                AppHistoryAppRow(
-                    packageName = app.packageName,
-                    appName = app.appName,
-                    supportingText = if (app.changeCount == 0) {
-                        stringResource(R.string.what_changed_no_changes_recorded)
-                    } else {
-                        pluralStringResource(R.plurals.what_changed_change_count, app.changeCount, app.changeCount)
-                    },
-                    position = position,
-                    onClick = { onAction(WhatChangedAction.OpenAppHistory(app.packageName, app.appName)) },
-                )
+            itemsPositioned(items = state.uninstalledApps, key = { _, row -> "uninstalled-${row.key}" }) { position, row ->
+                when (row) {
+                    is LockableRow.Locked -> LockedRow(position = position, onClick = { onAction(WhatChangedAction.OpenLocked) })
+                    is LockableRow.Readable -> UninstalledAppRow(app = row.item, position = position, onAction = onAction)
+                }
             }
         }
     }
 }
 
+@Composable
+private fun UninstalledAppRow(
+    app: UninstalledAppItem,
+    position: ListItemPosition,
+    onAction: (WhatChangedAction) -> Unit,
+) {
+    AppHistoryAppRow(
+        packageName = app.packageName,
+        appName = app.appName,
+        supportingText = if (app.changeCount == 0) {
+            stringResource(R.string.what_changed_no_changes_recorded)
+        } else {
+            pluralStringResource(R.plurals.what_changed_change_count, app.changeCount, app.changeCount)
+        },
+        position = position,
+        onClick = { onAction(WhatChangedAction.OpenAppHistory(app.packageName, app.appName)) },
+    )
+}
+
 private fun LazyListScope.changeSection(
     key: String,
     @StringRes title: Int,
-    items: List<AppChangeItem>,
+    items: List<LockableRow<AppChangeItem>>,
     onAction: (WhatChangedAction) -> Unit,
     uppercase: (String) -> String,
 ) {
     if (items.isEmpty()) return
     item(key = "$key-header") { ListSectionHeader(title = uppercase(stringResource(title))) }
-    itemsPositioned(items = items, key = { _, item -> "$key-${item.key}" }) { position, item ->
-        AppChangeRow(
-            item = item,
-            position = position,
-            onClick = { onAction(WhatChangedAction.OpenChange(item)) },
-            onLongClick = { copyText -> onAction(WhatChangedAction.CopyItem(item.appName, copyText)) },
-        )
+    itemsPositioned(items = items, key = { _, row -> "$key-${row.key}" }) { position, row ->
+        when (row) {
+            is LockableRow.Locked -> LockedRow(position = position, onClick = { onAction(WhatChangedAction.OpenLocked) })
+
+            is LockableRow.Readable -> AppChangeRow(
+                item = row.item,
+                position = position,
+                onClick = { onAction(WhatChangedAction.OpenChange(row.item)) },
+                onLongClick = { copyText -> onAction(WhatChangedAction.CopyItem(row.item.appName, copyText)) },
+            )
+        }
     }
 }
 
@@ -322,18 +342,30 @@ private fun LazyListScope.changedAppsSection(
         return
     }
     item(key = "changed-header") { ListSectionHeader(title = uppercase(stringResource(R.string.what_changed_section_changed_apps))) }
-    itemsPositioned(items = state.changedApps, key = { _, app -> "changed-${app.packageName}" }) { position, app ->
-        val netChange = app.netChange as? NetChange.Changed
-        AppHistoryAppRow(
-            packageName = app.packageName,
-            appName = app.appName,
-            supportingText = app.supportingText(),
-            parts = netChange?.parts.orEmpty(),
-            isWarning = netChange?.hasCertificateChange == true,
-            position = position,
-            onClick = { onAction(WhatChangedAction.OpenAppHistory(app.packageName, app.appName)) },
-        )
+    itemsPositioned(items = state.changedApps, key = { _, row -> "changed-${row.key}" }) { position, row ->
+        when (row) {
+            is LockableRow.Locked -> LockedRow(position = position, onClick = { onAction(WhatChangedAction.OpenLocked) })
+            is LockableRow.Readable -> ChangedAppRow(app = row.item, position = position, onAction = onAction)
+        }
     }
+}
+
+@Composable
+private fun ChangedAppRow(
+    app: ChangedAppItem,
+    position: ListItemPosition,
+    onAction: (WhatChangedAction) -> Unit,
+) {
+    val netChange = app.netChange as? NetChange.Changed
+    AppHistoryAppRow(
+        packageName = app.packageName,
+        appName = app.appName,
+        supportingText = app.supportingText(),
+        parts = netChange?.parts.orEmpty(),
+        isWarning = netChange?.hasCertificateChange == true,
+        position = position,
+        onClick = { onAction(WhatChangedAction.OpenAppHistory(app.packageName, app.appName)) },
+    )
 }
 
 @Composable
@@ -422,15 +454,30 @@ private val PreviewLoaded = WhatChangedState.Loaded(
     newAppCount = 2,
     lastChangeAt = null,
     needsAttention = listOf(
-        PreviewChange,
-        PreviewChange.copy(packageName = "com.whatsapp", appName = "WhatsApp", snapshotId = 9, parts = emptyList(), hasCertificateChange = true),
+        LockableRow.Readable(PreviewChange, PreviewChange.key),
+        PreviewChange.copy(packageName = "com.whatsapp", appName = "WhatsApp", snapshotId = 9, parts = emptyList(), hasCertificateChange = true)
+            .let { LockableRow.Readable(it, it.key) },
+        LockableRow.Locked("com.torch.pro:3"),
     ),
     changedApps = listOf(
-        ChangedAppItem("com.instagram.android", "Instagram", 2, false, NetChange.Changed(PreviewChange.parts, hasCertificateChange = false)),
-        ChangedAppItem("org.thoughtcrime.securesms", "Signal", 0, true, NetChange.NotCompared),
-        ChangedAppItem("com.android.chrome", "Chrome", 2, false, NetChange.None),
+        LockableRow.Readable(
+            ChangedAppItem("com.instagram.android", "Instagram", 2, false, NetChange.Changed(PreviewChange.parts, hasCertificateChange = false)),
+            "com.instagram.android",
+        ),
+        LockableRow.Locked("org.thoughtcrime.securesms"),
+        LockableRow.Locked("com.android.chrome"),
     ),
-    uninstalledApps = listOf(UninstalledAppItem("com.torch.pro", "Torch Pro", 5)),
+    uninstalledApps = listOf(LockableRow.Locked("com.torch.pro")),
+    lockedAppCount = 3,
+)
+
+private val PreviewPro = PreviewLoaded.copy(
+    needsAttention = PreviewLoaded.needsAttention.filterIsInstance<LockableRow.Readable<AppChangeItem>>(),
+    changedApps = PreviewLoaded.changedApps.filterIsInstance<LockableRow.Readable<ChangedAppItem>>() +
+        LockableRow.Readable(ChangedAppItem("org.thoughtcrime.securesms", "Signal", 0, true, NetChange.NotCompared), "org.thoughtcrime.securesms") +
+        LockableRow.Readable(ChangedAppItem("com.android.chrome", "Chrome", 2, false, NetChange.None), "com.android.chrome"),
+    uninstalledApps = listOf(LockableRow.Readable(UninstalledAppItem("com.torch.pro", "Torch Pro", 5), "com.torch.pro")),
+    lockedAppCount = 0,
 )
 
 @Preview(heightDp = 1300)
@@ -438,6 +485,14 @@ private val PreviewLoaded = WhatChangedState.Loaded(
 private fun WhatChangedLoadedPreview() {
     ApkAnalyzerTheme {
         WhatChangedContent(state = PreviewLoaded, onAction = {})
+    }
+}
+
+@Preview(heightDp = 1300)
+@Composable
+private fun WhatChangedProPreview() {
+    ApkAnalyzerTheme(isDarkTheme = true) {
+        WhatChangedContent(state = PreviewPro, onAction = {})
     }
 }
 

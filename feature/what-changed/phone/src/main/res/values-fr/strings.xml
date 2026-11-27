@@ -60,4 +60,6 @@
     <string name="what_changed_certificate_changed">Le certificat de signature a changé</string>
     <string name="what_changed_first_recorded">Première observation</string>
     <string name="what_changed_uncomparable_only">Certains détails n\'ont pas pu être comparés</string>
+    <string name="what_changed_locked_row">Modification d\'appli verrouillée, incluse dans Pro</string>
+    <string name="what_changed_locked_click_label">Déverrouiller avec Pro</string>
 </resources>

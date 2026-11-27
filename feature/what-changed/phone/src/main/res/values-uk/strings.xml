@@ -64,4 +64,6 @@
     <string name="what_changed_certificate_changed">Сертифікат підпису змінився</string>
     <string name="what_changed_first_recorded">Уперше зафіксовано</string>
     <string name="what_changed_uncomparable_only">Деякі дані не вдалося порівняти</string>
+    <string name="what_changed_locked_row">Заблокована зміна застосунку, входить до Pro</string>
+    <string name="what_changed_locked_click_label">Розблокувати з Pro</string>
 </resources>

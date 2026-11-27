@@ -64,4 +64,6 @@
     <string name="what_changed_certificate_changed">Certyfikat podpisu się zmienił</string>
     <string name="what_changed_first_recorded">Pierwszy zapis</string>
     <string name="what_changed_uncomparable_only">Nie udało się porównać niektórych danych</string>
+    <string name="what_changed_locked_row">Zablokowana zmiana aplikacji, część Pro</string>
+    <string name="what_changed_locked_click_label">Odblokuj z Pro</string>
 </resources>

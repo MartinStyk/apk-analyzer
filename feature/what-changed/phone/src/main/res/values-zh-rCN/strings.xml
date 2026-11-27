@@ -52,4 +52,6 @@
     <string name="what_changed_certificate_changed">签名证书已更改</string>
     <string name="what_changed_first_recorded">首次记录</string>
     <string name="what_changed_uncomparable_only">部分信息无法比较</string>
+    <string name="what_changed_locked_row">已锁定的应用变更，Pro 版功能</string>
+    <string name="what_changed_locked_click_label">使用 Pro 版解锁</string>
 </resources>

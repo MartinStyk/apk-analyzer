@@ -64,4 +64,6 @@
     <string name="what_changed_certificate_changed">Certifikát pro podepisování se změnil</string>
     <string name="what_changed_first_recorded">Poprvé zaznamenáno</string>
     <string name="what_changed_uncomparable_only">Některé údaje nešlo porovnat</string>
+    <string name="what_changed_locked_row">Uzamčená změna aplikace, součást Pro</string>
+    <string name="what_changed_locked_click_label">Odemknout s Pro</string>
 </resources>

@@ -2,6 +2,7 @@ package sk.styk.martin.apkanalyzer.feature.whatchanged.phone.log
 
 import androidx.compose.runtime.Immutable
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryChangeCategory
+import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.access.LockableRow
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppChangeItem
 import java.time.YearMonth
 
@@ -18,11 +19,12 @@ internal sealed interface WhatChangedLogState {
         val months: List<AppChangeMonth>,
         val filters: List<LogFilter>,
         val selectedFilters: Set<LogFilter>,
+        val lockedAppCount: Int,
     ) : WhatChangedLogState
 }
 
 @Immutable
-internal data class AppChangeMonth(val month: YearMonth, val items: List<AppChangeItem>)
+internal data class AppChangeMonth(val month: YearMonth, val items: List<LockableRow<AppChangeItem>>)
 
 @Immutable
 internal sealed interface LogFilter {

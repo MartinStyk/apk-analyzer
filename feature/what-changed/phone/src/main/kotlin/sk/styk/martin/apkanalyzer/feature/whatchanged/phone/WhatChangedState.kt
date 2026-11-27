@@ -2,6 +2,7 @@ package sk.styk.martin.apkanalyzer.feature.whatchanged.phone
 
 import androidx.compose.runtime.Immutable
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySummaryPart
+import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.access.LockableRow
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppChangeItem
 import java.time.Instant
 
@@ -20,9 +21,10 @@ internal sealed interface WhatChangedState {
         val updateCount: Int,
         val newAppCount: Int,
         val lastChangeAt: Instant?,
-        val needsAttention: List<AppChangeItem>,
-        val changedApps: List<ChangedAppItem>,
-        val uninstalledApps: List<UninstalledAppItem>,
+        val needsAttention: List<LockableRow<AppChangeItem>>,
+        val changedApps: List<LockableRow<ChangedAppItem>>,
+        val uninstalledApps: List<LockableRow<UninstalledAppItem>>,
+        val lockedAppCount: Int,
     ) : WhatChangedState
 }
 

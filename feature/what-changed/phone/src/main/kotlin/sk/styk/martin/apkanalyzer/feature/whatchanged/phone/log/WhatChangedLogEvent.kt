@@ -13,5 +13,7 @@ internal sealed interface WhatChangedLogEvent {
 
     data class NavigateToFullDetail(val input: AppDetailInput.Historical) : WhatChangedLogEvent
 
+    data class NavigateToPaywall(val lockedAppCount: Int) : WhatChangedLogEvent
+
     data object ShowCopiedFeedback : WhatChangedLogEvent
 }

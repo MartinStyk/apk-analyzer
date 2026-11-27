@@ -38,12 +38,14 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.lazylist.itemsPosition
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.R
+import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.access.LockableRow
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppChangeItem
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppChangeKind
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppChangeRow
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.HistoryEmpty
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.HistoryError
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.HistoryLoading
+import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.LockedRow
 import java.time.Instant
 import java.time.YearMonth
 
@@ -52,6 +54,7 @@ internal fun WhatChangedLogScreen(
     onBack: () -> Unit,
     onNavigateToChange: (packageName: String, snapshotId: Long, appName: String) -> Unit,
     onNavigateToFullDetail: (AppDetailInput.Historical) -> Unit,
+    onNavigateToPaywall: (lockedAppCount: Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: WhatChangedLogViewModel = hiltViewModel(),
 ) {
@@ -64,6 +67,7 @@ internal fun WhatChangedLogScreen(
                 WhatChangedLogEvent.NavigateBack -> onBack()
                 is WhatChangedLogEvent.NavigateToChange -> onNavigateToChange(event.packageName, event.snapshotId, event.appName)
                 is WhatChangedLogEvent.NavigateToFullDetail -> onNavigateToFullDetail(event.input)
+                is WhatChangedLogEvent.NavigateToPaywall -> onNavigateToPaywall(event.lockedAppCount)
                 WhatChangedLogEvent.ShowCopiedFeedback -> Toast.makeText(context, R.string.what_changed_copied, Toast.LENGTH_SHORT).show()
             }
         }
@@ -141,13 +145,17 @@ private fun LoadedContent(
                             .background(AppTheme.colors.background),
                     )
                 }
-                itemsPositioned(items = month.items, key = { _, item -> item.key }) { position, item ->
-                    AppChangeRow(
-                        item = item,
-                        position = position,
-                        onClick = { onAction(WhatChangedLogAction.OpenItem(item)) },
-                        onLongClick = { copyText -> onAction(WhatChangedLogAction.CopyItem(item.appName, copyText)) },
-                    )
+                itemsPositioned(items = month.items, key = { _, row -> row.key }) { position, row ->
+                    when (row) {
+                        is LockableRow.Locked -> LockedRow(position = position, onClick = { onAction(WhatChangedLogAction.OpenLocked) })
+
+                        is LockableRow.Readable -> AppChangeRow(
+                            item = row.item,
+                            position = position,
+                            onClick = { onAction(WhatChangedLogAction.OpenItem(row.item)) },
+                            onLongClick = { copyText -> onAction(WhatChangedLogAction.CopyItem(row.item.appName, copyText)) },
+                        )
+                    }
                 }
             }
         }
@@ -194,13 +202,16 @@ private val PreviewLoaded = WhatChangedLogState.Loaded(
         AppChangeMonth(
             YearMonth.of(2026, 11),
             listOf(
-                PreviewItem,
-                PreviewItem.copy(packageName = "com.whatsapp", appName = "WhatsApp", snapshotId = 7, parts = emptyList(), hasCertificateChange = true),
+                LockableRow.Readable(PreviewItem, PreviewItem.key),
+                PreviewItem.copy(packageName = "com.whatsapp", appName = "WhatsApp", snapshotId = 7, parts = emptyList(), hasCertificateChange = true)
+                    .let { LockableRow.Readable(it, it.key) },
+                LockableRow.Locked("com.android.chrome:5"),
             ),
         ),
         AppChangeMonth(
             YearMonth.of(2026, 10),
             listOf(
+                LockableRow.Locked("com.torch.pro:2"),
                 PreviewItem.copy(
                     packageName = "com.torch.pro",
                     appName = "Torch Pro",
@@ -208,7 +219,7 @@ private val PreviewLoaded = WhatChangedLogState.Loaded(
                     date = Instant.parse("2026-10-14T10:00:00Z"),
                     kind = AppChangeKind.FirstRecorded,
                     parts = emptyList(),
-                ),
+                ).let { LockableRow.Readable(it, it.key) },
             ),
         ),
     ),
@@ -218,6 +229,7 @@ private val PreviewLoaded = WhatChangedLogState.Loaded(
         LogFilter.Category(AppHistoryChangeCategory.Components),
     ),
     selectedFilters = emptySet(),
+    lockedAppCount = 2,
 )
 
 @Preview

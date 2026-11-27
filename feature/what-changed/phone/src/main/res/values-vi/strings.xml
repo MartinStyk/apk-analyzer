@@ -52,4 +52,6 @@
     <string name="what_changed_certificate_changed">Chứng chỉ ký đã thay đổi</string>
     <string name="what_changed_first_recorded">Lần ghi nhận đầu tiên</string>
     <string name="what_changed_uncomparable_only">Không thể so sánh một số chi tiết</string>
+    <string name="what_changed_locked_row">Thay đổi ứng dụng bị khóa, thuộc gói Pro</string>
+    <string name="what_changed_locked_click_label">Mở khóa bằng Pro</string>
 </resources>

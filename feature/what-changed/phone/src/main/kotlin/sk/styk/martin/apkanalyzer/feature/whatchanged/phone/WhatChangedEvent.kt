@@ -15,5 +15,7 @@ internal sealed interface WhatChangedEvent {
 
     data class NavigateToAppHistory(val packageName: String, val appName: String) : WhatChangedEvent
 
+    data class NavigateToPaywall(val lockedAppCount: Int) : WhatChangedEvent
+
     data object ShowCopiedFeedback : WhatChangedEvent
 }

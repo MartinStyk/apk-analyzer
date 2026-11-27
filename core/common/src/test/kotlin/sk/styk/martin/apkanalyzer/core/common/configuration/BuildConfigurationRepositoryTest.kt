@@ -10,11 +10,13 @@ class BuildConfigurationRepositoryTest {
     private val tv: ConfigurationRepository = BuildConfigurationRepository(ApplicationVariant.Tv)
 
     @Test
-    fun `Given the TV application When reading history configuration Then recording and display are disabled`() = runTest {
+    fun `Given the TV application When reading history configuration Then recording and both displays are disabled`() = runTest {
         val recording = tv.get(ConfigurationKey.AppHistoryRecordingEnabled)
-        val display = tv.observe(ConfigurationKey.AppHistoryDisplayEnabled).first()
+        val whatChangedTab = tv.observe(ConfigurationKey.WhatChangedTabEnabled).first()
+        val appDetailHistory = tv.observe(ConfigurationKey.AppDetailHistoryEnabled).first()
 
         recording shouldBe false
-        display shouldBe false
+        whatChangedTab shouldBe false
+        appDetailHistory shouldBe false
     }
 }

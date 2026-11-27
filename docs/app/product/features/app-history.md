@@ -283,15 +283,20 @@ Four rules this screen lives or dies by:
 
 #### What Changed tab as built
 
-Lives in `feature:what-changed`, debug builds only, with no Pro gate, sample card, stubs or badge
-yet. Differences from the design above, all decided with the app owner:
+Lives in `feature:what-changed`, debug builds only (`ConfigurationKey.WhatChangedTabEnabled`), with no
+sample card or category stubs. Differences from the design above, all decided with the app owner:
 
+- **The Pro gate locks rows, not a sample card.** Without Pro, the device's most recently changed app
+  is readable in full in every section and in the full log; certificate changes and first-recorded
+  rows stay free too. Every other row is a blurred placeholder with a Pro badge that
+  hides the app name, icon and values, and opens the paywall when tapped. Summary counts and range
+  chips stay free. Per-app history in app detail stays free for every app.
 - **The window is user-selectable** — chips for *Since last visit* (default), 7, 30 and 90 days, and
   *All time*, remembered across launches. *Since last visit* is the previous app run that opened the
   tab, with **no 7-day floor**, so "No changes since …" is an accepted summary. The range filters the
   summary, Needs attention and the app list; No longer installed ignores it. There is no Latest
-  change card yet: without a Pro gate it only repeated rows already listed, so it returns with
-  `HI-06`. An empty range names the date of the last change instead.
+  change card: it only repeated rows already listed, and the readable latest app replaces it. An
+  empty range names the date of the last change instead.
 - **The summary counts updates (including updates that changed nothing visible), new apps by install
   date, and apps needing attention.** There is no "removed" count: the store does not record when an
   app was uninstalled.

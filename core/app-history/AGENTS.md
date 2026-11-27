@@ -15,11 +15,12 @@ broadcast, on-launch reconciliation, periodic `WorkManager` reconciliation, and 
 [Restore Merge](#restore-merge). The diff engine (`HI-03`) is implemented as the per-app timeline
 read API — see [Timeline and Diff](#timeline-and-diff). `feature:app-detail:phone` reads it for the
 per-app timeline, change detail, and historical detail (`HI-08`, `HI-15`), behind the debug-only
-`ConfigurationKey.AppHistoryDisplayEnabled`; capture is gated separately by the debug-only
+`ConfigurationKey.AppDetailHistoryEnabled`; capture is gated separately by the debug-only
 `ConfigurationKey.AppHistoryRecordingEnabled`. The device-wide read (`deviceTimeline()`), the summary
 rules behind it, and the `HI-18` significance rules are implemented and read by
-[`feature:what-changed`](../../feature/what-changed/AGENTS.md) (`HI-14`, `HI-07`). Not yet built:
-the Pro gate, free sample and stubs (`HI-06`/`HI-19`), the first run (`HI-05`/`HI-21`),
+[`feature:what-changed`](../../feature/what-changed/AGENTS.md) (`HI-14`, `HI-07`), which also owns
+that tab's Pro gate. Not yet built:
+the stubs (`HI-19`), the first run (`HI-05`/`HI-21`),
 retention/pruning (`HI-04`), the Pro-gated Drive backup half of `HI-16`, and the `HI-10` runtime-state
 (enabled/install-source) tier. See
 [`docs/app/technical/app-history-capture-schema.md`](../../docs/app/technical/app-history-capture-schema.md)
