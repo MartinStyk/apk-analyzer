@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.transformLatest
@@ -78,6 +77,7 @@ internal class InventoryExportViewModel @AssistedInject constructor(
     private val showIntro = MutableStateFlow(false)
     private val exportProgress = MutableStateFlow<InventoryExportProgressState>(InventoryExportProgressState.Idle)
     private var exportJob: Job? = null
+    private var exportRequestJob: Job? = null
     private var exitJob: Job? = null
 
     private val isExporting: Boolean
@@ -106,10 +106,9 @@ internal class InventoryExportViewModel @AssistedInject constructor(
         .distinctUntilChanged()
         .flatMapLatest { isVisible -> if (isVisible) previewContent else flowOf(InventoryPreviewState.Loading) }
 
-    private val hasPro: Flow<Boolean> = entitlementsRepository.entitlements()
-        .map { Entitlement.Pro in it }
-        .onStart { emit(false) }
-        .distinctUntilChanged()
+    private val proOwnership: StateFlow<ProOwnership> = entitlementsRepository.entitlements()
+        .map { if (Entitlement.Pro in it) ProOwnership.Owned else ProOwnership.NotOwned }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, ProOwnership.Unknown)
 
     private val selection = combine(
         step,
@@ -119,7 +118,7 @@ internal class InventoryExportViewModel @AssistedInject constructor(
         format,
     ) { step, apps, columns, isUsageAccessGranted, format ->
         InventoryExportState(step = step, steps = steps, apps = apps, columns = columns, isUsageAccessGranted = isUsageAccessGranted, format = format)
-    }.combine(hasPro) { selection, hasPro -> selection.copy(hasPro = hasPro) }
+    }.combine(proOwnership) { selection, proOwnership -> selection.copy(proOwnership = proOwnership) }
 
     val state: StateFlow<InventoryExportState> = combine(
         selection,
@@ -220,20 +219,23 @@ internal class InventoryExportViewModel @AssistedInject constructor(
     }
 
     private fun onExportRequest(action: InventoryExportAction.ExportRequestAction) {
-        val current = state.value
-        when {
-            !current.canExport -> Unit
+        if (exportRequestJob?.isActive == true) return
+        exportRequestJob = viewModelScope.launch {
+            val current = state.first { it.proOwnership != ProOwnership.Unknown }
+            when {
+                !current.canExport -> Unit
 
-            current.requiresPro ->
-                eventChannel.trySend(InventoryExportEvent.OpenPro(PaywallReason.Export(appCount = current.apps.summary.selectedCount)))
+                current.requiresPro ->
+                    eventChannel.send(InventoryExportEvent.OpenPro(PaywallReason.Export(appCount = current.apps.summary.selectedCount)))
 
-            else -> when (action) {
-                InventoryExportAction.Save -> {
-                    val format = format.value
-                    eventChannel.trySend(InventoryExportEvent.CreateDocument(format, format.fileName(LocalDateTime.now())))
+                else -> when (action) {
+                    InventoryExportAction.Save -> {
+                        val format = format.value
+                        eventChannel.send(InventoryExportEvent.CreateDocument(format, format.fileName(LocalDateTime.now())))
+                    }
+
+                    InventoryExportAction.Share -> startExport(InventoryDestination.Share, format.value)
                 }
-
-                InventoryExportAction.Share -> startExport(InventoryDestination.Share, format.value)
             }
         }
     }

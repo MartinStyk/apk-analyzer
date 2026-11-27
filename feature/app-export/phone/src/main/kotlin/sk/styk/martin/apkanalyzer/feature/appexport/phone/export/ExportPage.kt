@@ -44,6 +44,7 @@ import sk.styk.martin.apkanalyzer.feature.appexport.phone.InventoryExportProgres
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.InventoryExportState
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.InventoryExportStep
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.InventoryPreviewState
+import sk.styk.martin.apkanalyzer.feature.appexport.phone.ProOwnership
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.R
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.apps.AppSelectionState
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.apps.AppSelectionSummary
@@ -499,6 +500,7 @@ private fun ExportPageProRequiredPreview() {
                 preview = previewContent,
                 columns = InventoryPreset.Basics.columns + InventoryColumn.Debuggable + InventoryColumn.RequestedPermissions,
                 format = InventoryFormat.Json,
+                proOwnership = ProOwnership.NotOwned,
             ),
             onAction = {},
         )

@@ -65,8 +65,10 @@ app, opened from the app detail summary sheet). Implementation code uses the pac
 * The Export step links to the published file format reference (`INVENTORY_REFERENCE_URL`).
 * Pro gate: Basics columns are free for any number of apps, and a one-app export is free with every
   column. `InventoryExportState.requiresPro` (more than one app, an exported column outside
-  `InventoryPreset.Basics`, Pro not owned) is the one predicate behind the Export step's Pro notice,
-  the Save/Share gate, and opening `ProNavKey(PaywallReason.Export)`. Save and Share check it before
+  `InventoryPreset.Basics`, Pro known not owned) is the one predicate behind the Export step's Pro notice,
+  the Save/Share gate, and opening `ProNavKey(PaywallReason.Export)`. Ownership (`ProOwnership`) is
+  collected for the ViewModel's lifetime, so it doesn't reset when the screen leaves and returns; while
+  it is `Unknown` the notice stays hidden and Save/Share wait for it. Save and Share check it before
   the document picker opens; choosing apps, columns, and the preview stay free. The notice's "Export
   Basics instead" resets the columns to Basics. Nothing resumes after a purchase: the notice
   disappears once `entitlements()` holds Pro and the user taps Save or Share again.

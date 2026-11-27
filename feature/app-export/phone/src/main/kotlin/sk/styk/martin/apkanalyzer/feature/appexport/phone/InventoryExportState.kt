@@ -13,6 +13,12 @@ enum class InventoryExportStep {
     Export,
 }
 
+enum class ProOwnership {
+    Unknown,
+    Owned,
+    NotOwned,
+}
+
 @Immutable
 data class InventoryExportState(
     val step: InventoryExportStep = InventoryExportStep.Apps,
@@ -21,7 +27,7 @@ data class InventoryExportState(
     val columns: Set<InventoryColumn> = InventoryPreset.Default.columns,
     val isUsageAccessGranted: Boolean = true,
     val format: InventoryFormat = InventoryFormat.Csv,
-    val hasPro: Boolean = false,
+    val proOwnership: ProOwnership = ProOwnership.Unknown,
     val preview: InventoryPreviewState = InventoryPreviewState.Loading,
     val progress: InventoryExportProgressState = InventoryExportProgressState.Idle,
     val showStopConfirmation: Boolean = false,
@@ -58,7 +64,7 @@ data class InventoryExportState(
         get() = apps.summary.hasSelection && exportedColumnCount > 0
 
     val requiresPro: Boolean
-        get() = !hasPro &&
+        get() = proOwnership == ProOwnership.NotOwned &&
             apps.summary.selectedCount > 1 &&
             exportedColumns.any { it !in InventoryPreset.Basics.columns }
 
