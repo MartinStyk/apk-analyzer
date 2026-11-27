@@ -20,13 +20,9 @@ logic do not belong here.
   user property (`phone` or `tv`) at startup so their events can be separated in Firebase reports.
 * `review/` - in-app review eligibility tracking and the internal Play Core adapter.
 * `settings/` - generic typed DataStore persistence and preference keys.
-* `configuration/` - read-only typed configuration behind `ConfigurationRepository`, separate from
-  user preferences. The internal build-backed implementation owns debug/release policy; public
-  keys expose neither defaults nor backend identifiers. Each application provides its `ApplicationVariant`
-  enum through Hilt; these app-identity bindings are an exception to the platform-only `@Provides` rule.
-  Feature decisions stay in `BuildConfigurationRepository`, never in the app bindings or resources.
-  History is supported only by the phone application, with recording and display enabled only in debug.
-  Inventory export is enabled only in debug.
+* Feature flags live in [`core:feature-flags`](../feature-flags/AGENTS.md), not in this foundation
+  module. Each application supplies its `ApplicationVariant` through Hilt; these identity bindings
+  remain an exception to the platform-only `@Provides` rule.
 * `model/` - genuinely cross-module value types such as app references, source classification, and
   file sizes.
 * `resources/`, `clipboard/`, `digest/`, `device/`, `file/`, and `io/` - shared platform adapters and

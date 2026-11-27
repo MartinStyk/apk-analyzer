@@ -18,10 +18,10 @@ import sk.styk.martin.apkanalyzer.core.apps.api.sorting.AppSortType
 import sk.styk.martin.apkanalyzer.core.apps.api.sorting.comparator
 import sk.styk.martin.apkanalyzer.core.apps.api.storagestats.StorageStatsRepository
 import sk.styk.martin.apkanalyzer.core.apps.api.usagestats.UsageStatsRepository
-import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationKey
-import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.combine
+import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlag
+import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlagRepository
 import sk.styk.martin.apkanalyzer.core.userpreferences.api.recentlyviewed.RecentlyViewedAppsRepository
 import sk.styk.martin.apkanalyzer.feature.apps.phone.components.AppDataPermission
 import javax.inject.Inject
@@ -30,7 +30,7 @@ import javax.inject.Inject
 internal class AppsViewModel @Inject constructor(
     installedAppsRepository: InstalledAppsRepository,
     recentlyViewedAppsRepository: RecentlyViewedAppsRepository,
-    configurationRepository: ConfigurationRepository,
+    featureFlagRepository: FeatureFlagRepository,
     private val appFilterRepository: AppFilterRepository,
     private val usageStatsRepository: UsageStatsRepository,
     private val storageStatsRepository: StorageStatsRepository,
@@ -66,7 +66,7 @@ internal class AppsViewModel @Inject constructor(
         sortType,
         sortAscending,
         sortPermissionRationale,
-        configurationRepository.observe(ConfigurationKey.InventoryExportEnabled),
+        featureFlagRepository.observe(FeatureFlag.InventoryExport),
     ) { (filteredApps, filter), recents, sort, ascending, rationale, isInventoryExportEnabled ->
         val (effectiveSortType, effectiveAscending) = when {
             filter.isRecentInstallActive -> AppSortType.InstallDate to false
@@ -88,7 +88,7 @@ internal class AppsViewModel @Inject constructor(
             sortAscending = effectiveAscending,
             activeFilter = filter,
             sortPermissionRationale = rationale,
-            isInventoryExportEnabled = isInventoryExportEnabled,
+            isInventoryExportEnabled = isInventoryExportEnabled.getOrDefault(false),
         )
     }
         .flowOn(dispatcherProvider.default())

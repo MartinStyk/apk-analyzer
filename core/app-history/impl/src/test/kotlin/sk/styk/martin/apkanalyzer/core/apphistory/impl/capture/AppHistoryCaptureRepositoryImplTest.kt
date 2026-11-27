@@ -32,11 +32,11 @@ import sk.styk.martin.apkanalyzer.core.apps.api.model.anApp
 import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraries
 import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibrariesRepositoryFake
 import sk.styk.martin.apkanalyzer.core.apps.api.signing.SigningSchemeRepositoryFake
-import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationKey
-import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationRepositoryFake
 import sk.styk.martin.apkanalyzer.core.common.coroutines.TestDispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.device.DeviceInfoProviderFake
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTrackerFake
+import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlag
+import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlagRepositoryFake
 import java.io.IOException
 import java.time.Instant
 
@@ -57,7 +57,7 @@ class AppHistoryCaptureRepositoryImplTest {
     private val installedApps = InstalledAppsRepositoryFake(installedApp)
     private val details = AppDetailRepositoryFake(detail)
     private val persistence = AppHistoryPersistenceRepositoryFake()
-    private val configuration = ConfigurationRepositoryFake(ConfigurationKey.AppHistoryRecordingEnabled)
+    private val featureFlags = FeatureFlagRepositoryFake(FeatureFlag.AppHistoryRecording)
     private val appScope = CoroutineScope(SupervisorJob() + dispatcherProvider.default())
     private val repository = AppHistoryCaptureRepositoryImpl(
         installedAppsRepository = installedApps,
@@ -68,7 +68,7 @@ class AppHistoryCaptureRepositoryImplTest {
         deviceInfoProvider = DeviceInfoProviderFake(),
         dispatcherProvider = dispatcherProvider,
         performanceTracker = PerformanceTrackerFake(),
-        configurationRepository = configuration,
+        featureFlagRepository = featureFlags,
         appScope = appScope,
     )
     private val history = AppHistoryRepositoryImpl(persistence, AppHistoryTimelineBuilder(AppHistoryDiffer()), PerformanceTrackerFake(), dispatcherProvider)
@@ -116,7 +116,7 @@ class AppHistoryCaptureRepositoryImplTest {
 
     @Test
     fun `Given recording is disabled When capture is requested Then no snapshot is saved`() = runTest {
-        configuration[ConfigurationKey.AppHistoryRecordingEnabled] = false
+        featureFlags[FeatureFlag.AppHistoryRecording] = false
 
         repository.requestCapture(installedApp.packageName)
         advanceUntilIdle()

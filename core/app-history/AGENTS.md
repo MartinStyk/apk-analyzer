@@ -15,8 +15,8 @@ broadcast, on-launch reconciliation, periodic `WorkManager` reconciliation, and 
 [Restore Merge](#restore-merge). The diff engine (`HI-03`) is implemented as the per-app timeline
 read API — see [Timeline and Diff](#timeline-and-diff). `feature:app-detail:phone` reads it for the
 per-app timeline, change detail, and historical detail (`HI-08`, `HI-15`), behind the debug-only
-`ConfigurationKey.AppDetailHistoryEnabled`; capture is gated separately by the debug-only
-`ConfigurationKey.AppHistoryRecordingEnabled`. The device-wide read (`deviceTimeline()`), the summary
+`FeatureFlag.AppDetailHistory`; capture is gated separately by the debug-only
+`FeatureFlag.AppHistoryRecording`. The device-wide read (`deviceTimeline()`), the summary
 rules behind it, and the `HI-18` significance rules are implemented and read by
 [`feature:what-changed`](../../feature/what-changed/AGENTS.md) (`HI-14`, `HI-07`), which also owns
 that tab's Pro gate. Not yet built:
@@ -284,7 +284,7 @@ the same size is not a visible change.
 [Capture Gate](../../docs/app/technical/app-history-capture-schema.md#capture-gate) and
 [Capture Pipeline](../../docs/app/technical/app-history-capture-schema.md#capture-pipeline) sections
 exactly — read there for the gate/write steps. Both capture entry points check the debug-only
-`ConfigurationKey.AppHistoryRecordingEnabled` before reading installed apps or history storage, so every
+`FeatureFlag.AppHistoryRecording` before reading installed apps or history storage, so every
 capture call from a trigger becomes a no-op when capture is disabled. Three invariants live only in
 this implementation, not in the design doc:
 
@@ -328,7 +328,7 @@ that registration forces Hilt to construct this singleton at app launch in the f
 else in the app injects `AppHistoryCaptureScheduler` directly, so without that forced construction
 background capture would never start.
 
-Startup observes `ConfigurationKey.AppHistoryRecordingEnabled` before starting any trigger or restore merge.
+Startup observes `FeatureFlag.AppHistoryRecording` before starting any trigger or restore merge.
 The phone variant records only in debug; TV never records. Disabled recording cancels the existing
 periodic reconciliation. `AppHistoryStorageCleanup` runs independently to delete only legacy uncompressed databases.
 Disabling history never deletes or closes the current compressed database or its restore staging file.

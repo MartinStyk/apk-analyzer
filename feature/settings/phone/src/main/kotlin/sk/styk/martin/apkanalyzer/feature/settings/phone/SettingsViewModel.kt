@@ -54,6 +54,10 @@ internal class SettingsViewModel @Inject constructor(
                 eventChannel.trySend(SettingsEvent.OpenAppLanguageSettings)
             }
 
+            SettingsAction.OpenFeatureFlags -> {
+                if (BuildConfig.DEBUG) eventChannel.trySend(SettingsEvent.OpenFeatureFlags)
+            }
+
             is SettingsAction.NavigateBack -> {
                 eventChannel.trySend(SettingsEvent.NavigateBack)
             }

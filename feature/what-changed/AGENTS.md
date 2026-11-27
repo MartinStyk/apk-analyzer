@@ -4,7 +4,7 @@
 
 Top-level "What changed" destination: a device-wide view of app history recorded by
 [`core:app-history`](../../core/app-history/AGENTS.md) (roadmap `HI-14`, with the `HI-07` full change
-log). Phone only and debug only: the tab is shown when `ConfigurationKey.WhatChangedTabEnabled` is
+log). Phone only and debug only: the tab is shown when `FeatureFlag.WhatChangedTab` is
 on. It stays debug only until the release that swaps the `noop` entitlements binding for real
 billing. Without Pro, most rows are locked behind the paywall in
 [`feature:pro`](../pro/AGENTS.md); see [Pro gate](#pro-gate).

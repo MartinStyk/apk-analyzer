@@ -18,8 +18,6 @@ import sk.styk.martin.apkanalyzer.core.apps.api.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.apps.api.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibrariesRepository
 import sk.styk.martin.apkanalyzer.core.apps.api.signing.SigningSchemeRepository
-import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationKey
-import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.device.DeviceInfoProvider
@@ -31,6 +29,8 @@ import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
 import sk.styk.martin.apkanalyzer.core.common.performance.appCount
 import sk.styk.martin.apkanalyzer.core.common.performance.outcome
 import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
+import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlag
+import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlagRepository
 import java.time.Instant
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
@@ -48,7 +48,7 @@ internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
     private val deviceInfoProvider: DeviceInfoProvider,
     private val dispatcherProvider: DispatcherProvider,
     private val performanceTracker: PerformanceTracker,
-    private val configurationRepository: ConfigurationRepository,
+    private val featureFlagRepository: FeatureFlagRepository,
     private val appScope: CoroutineScope,
 ) : AppHistoryCaptureRepository {
 
@@ -114,7 +114,7 @@ internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
     }
 
     private suspend fun ifRecordingEnabled(action: suspend () -> Unit) {
-        if (configurationRepository.get(ConfigurationKey.AppHistoryRecordingEnabled)) action()
+        if (featureFlagRepository.get(FeatureFlag.AppHistoryRecording).getOrThrow()) action()
     }
 
     private suspend fun captureIfGateOpen(app: InstalledApp): Boolean = perPackageMutexes.computeIfAbsent(app.packageName) { Mutex() }.withLock {

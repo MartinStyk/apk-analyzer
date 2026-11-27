@@ -475,12 +475,16 @@ Working plan: this file (source of truth); repo copy `docs/app/product/business-
 | Per-app timeline (HI-08/15) | `feature:app-detail:phone` history/ | Built, debug-gated (`AppHistoryDisplayEnabled`) |
 | Backup/restore merge (HI-17 half) | `AppHistoryBackupAgent` in both manifests | Built |
 | Inventory export (BX-04/05/07) | `feature:app-export`, `core:app-export` | Built, debug-gated (`InventoryExportEnabled`) |
-| Feature gating mechanism | `ConfigurationRepository` / `ConfigurationKey` (`core:common/configuration`) | Built; ProGate can follow the same observe/get shape |
+| Feature gating mechanism | `FeatureFlagRepository` / `FeatureFlag` (`core:feature-flags:api`) | Built; debug overrides persist, release retains build defaults; ProGate stays separate |
 | Funnel analytics (EN-06) | `AnalyticsTracker` (`core:common/analytics`), feature `analytics/` convention | Built |
 | Billing (EN-01/02) | none; Play Billing is not in `gradle/libs.versions.toml` | New dependency, needs sign-off |
 | WorkManager (OQ-03) | `androidx-work` already in catalog (`libs.versions.toml:21`) | OQ-03 is effectively resolved; roadmap is stale |
 
 **Reality rows**
+
+Configuration references below are historical review receipts. The current defaults live in
+`core:feature-flags:impl`; debug-only storage lives in `core:feature-flags:debug`. Missing overrides
+follow the build defaults, and release never reads overrides.
 
 | premise | claim | receipt | verdict |
 |---|---|---|---|

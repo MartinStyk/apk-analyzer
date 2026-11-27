@@ -59,6 +59,9 @@ dependencies {
     releaseImplementation(projects.core.entitlements.noop)
     implementation(projects.core.appFunctions)
     implementation(projects.core.common)
+    implementation(projects.core.featureFlags.api)
+    implementation(projects.core.featureFlags.impl)
+    debugImplementation(projects.core.featureFlags.debug)
     implementation(projects.core.navigation)
     implementation(projects.core.designSystem.phone)
 

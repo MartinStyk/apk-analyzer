@@ -36,11 +36,11 @@ import sk.styk.martin.apkanalyzer.core.apps.api.export.AppExportManager
 import sk.styk.martin.apkanalyzer.core.apps.api.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.common.clipboard.ClipboardManager
 import sk.styk.martin.apkanalyzer.core.common.clipboard.CopyResult
-import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationKey
-import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.review.ReviewEligibilityTracker
+import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlag
+import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlagRepository
 import sk.styk.martin.apkanalyzer.core.userpreferences.api.recentlyviewed.RecentlyViewedAppsRepository
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.ApkFileLifetime
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
@@ -80,7 +80,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
     private val summaryTextFormatter: AppSummaryTextFormatter,
     private val reviewEligibilityTracker: ReviewEligibilityTracker,
     private val analytics: AppDetailAnalytics,
-    configurationRepository: ConfigurationRepository,
+    featureFlagRepository: FeatureFlagRepository,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -94,8 +94,8 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
     private val historyStatus: StateFlow<AppDetailHistoryStatus> = appDetailInput.installedPackage
         ?.let { installedPackage ->
-            configurationRepository.observe(ConfigurationKey.AppDetailHistoryEnabled).flatMapLatest { isEnabled ->
-                if (isEnabled) {
+            featureFlagRepository.observe(FeatureFlag.AppDetailHistory).flatMapLatest { isEnabled ->
+                if (isEnabled.getOrDefault(false)) {
                     appHistoryRepository.timeline(installedPackage).map { it.toHistoryStatus() }
                 } else {
                     flowOf(AppDetailHistoryStatus.Hidden)
@@ -108,7 +108,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
     val state: StateFlow<AppDetailState> = combine(
         source,
         exportInProgress,
-        configurationRepository.observe(ConfigurationKey.InventoryExportEnabled),
+        featureFlagRepository.observe(FeatureFlag.InventoryExport),
         historyStatus,
     ) { source, exportInProgress, isInventoryExportEnabled, history ->
         when (source) {
@@ -118,7 +118,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
             is AppDetailSource.Ready -> source.state.copy(
                 exportInProgress = exportInProgress,
-                isInventoryExportEnabled = isInventoryExportEnabled,
+                isInventoryExportEnabled = isInventoryExportEnabled.getOrDefault(false),
                 history = history,
             )
         }

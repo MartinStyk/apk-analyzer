@@ -21,11 +21,11 @@ import sk.styk.martin.apkanalyzer.core.apphistory.impl.restore.AppHistoryRestore
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.AppHistoryStorageCleanup
 import sk.styk.martin.apkanalyzer.core.apps.api.PackageChangeAction
 import sk.styk.martin.apkanalyzer.core.apps.api.PackageChangesObserver
-import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationKey
-import sk.styk.martin.apkanalyzer.core.common.configuration.ConfigurationRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
+import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlag
+import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlagRepository
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
@@ -41,7 +41,7 @@ internal class AppHistoryCaptureSchedulerImpl @Inject constructor(
     private val workManager: Lazy<WorkManager>,
     private val restoreMerger: AppHistoryRestoreMerger,
     private val storageCleanup: AppHistoryStorageCleanup,
-    private val configurationRepository: ConfigurationRepository,
+    private val featureFlagRepository: FeatureFlagRepository,
     private val appScope: CoroutineScope,
     private val dispatcherProvider: DispatcherProvider,
 ) : AppHistoryCaptureScheduler,
@@ -59,10 +59,10 @@ internal class AppHistoryCaptureSchedulerImpl @Inject constructor(
         appScope.launch(dispatcherProvider.io()) {
             storageCleanup.deleteUncompressedDatabases()
 
-            configurationRepository.observe(ConfigurationKey.AppHistoryRecordingEnabled)
+            featureFlagRepository.observe(FeatureFlag.AppHistoryRecording)
                 .distinctUntilChanged()
                 .collectLatest { enabled ->
-                    if (enabled) {
+                    if (enabled.getOrDefault(false)) {
                         recordHistory()
                     } else {
                         cancelPeriodicReconciliation()
