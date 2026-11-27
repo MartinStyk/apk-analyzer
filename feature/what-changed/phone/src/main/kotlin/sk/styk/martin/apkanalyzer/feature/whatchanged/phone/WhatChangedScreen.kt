@@ -33,12 +33,11 @@ import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryS
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryVersion
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.ValueChange
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
-import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Chip
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.IconButton
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ListSectionHeader
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.TextButton
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.navigationBarContentPadding
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.format.historyDate
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.lazylist.ListItemPosition
@@ -112,10 +111,9 @@ private fun Header(onOpenFullHistory: () -> Unit, modifier: Modifier = Modifier)
             color = AppTheme.colors.onBackground,
             modifier = Modifier.weight(1f),
         )
-        IconButton(
-            imageVector = ApkAnalyzerIcons.History,
+        TextButton(
+            text = stringResource(R.string.what_changed_full_history),
             onClick = onOpenFullHistory,
-            contentDescription = stringResource(R.string.what_changed_full_history),
         )
     }
 }
