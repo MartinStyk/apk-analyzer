@@ -155,6 +155,7 @@ style:
       - 'ViewModelContract'
       - 'ContractTypeShape'
       - 'MutableFlowExposure'
+      - 'NoChainedCombine'
       - 'EntryBlockDelegatesToScreen'
       - 'NavKeyShape'
       - 'ApiModuleContents'

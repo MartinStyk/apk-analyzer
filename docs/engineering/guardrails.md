@@ -22,6 +22,7 @@ unit-test and test-fixture sources.
 | `ViewModelContract` | `@HiltViewModel`; extends `ViewModel()`; public API is only `state`, `events`, and `onAction`; events go through `Channel(BUFFERED)` exposed with `receiveAsFlow()`; no `Navigator` |
 | `ContractTypeShape` | Action and Event are sealed interfaces; State is a sealed interface or an `@Immutable` data class without lambdas or mutable collections |
 | `MutableFlowExposure` | No public mutable flow or channel; an explicit backing field instead of a private flow plus `asStateFlow()` |
+| `NoChainedCombine` | One `combine` call per flow chain, including chains with intervening operators; supports import aliases and the typed six-input helper |
 | `EntryBlockDelegatesToScreen` | An `entry { }` block calls exactly one `*Screen` |
 | `NavKeyShape` | NavKeys are `@Serializable` `data class` or `data object` |
 | `ApiModuleContents` | Feature `api` modules hold only NavKeys |

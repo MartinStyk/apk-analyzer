@@ -17,6 +17,7 @@ class ApkAnalyzerRuleSetProvider : RuleSetProvider {
             ::ViewModelContract,
             ::ContractTypeShape,
             ::MutableFlowExposure,
+            ::NoChainedCombine,
             ::EntryBlockDelegatesToScreen,
             ::NavKeyShape,
             ::ApiModuleContents,
