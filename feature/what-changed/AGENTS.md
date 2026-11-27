@@ -25,8 +25,9 @@ package `sk.styk.martin.apkanalyzer.feature.whatchanged.phone`. There is no TV m
 * **All history rules live in `core:app-history`** (`AppHistoryDeviceSummary.kt`): counts, net change,
   needs-attention, revert dates. The ViewModels only choose the range and map to UI models; never
   recompute "needs attention" or a count here, or the tab and the per-app timeline will disagree.
-* **The range filters the summary, Needs attention and Changed apps.** Latest change, No longer
-  installed and the full log always cover all recorded history.
+* **The range filters the summary, Needs attention and Changed apps.** No longer installed and the
+  full log always cover all recorded history. Latest change appears only when the range has no
+  changed apps: otherwise it would repeat the first Changed apps or Needs attention row.
 * **"Since last visit" means the previous app run that opened the tab.** `WhatChangedVisitTracker`
   reads and replaces the stored visit once per process, so reopening the tab in the same run never
   moves the start. Never visited means all recorded history. There is no 7-day floor, so "No changes

@@ -289,7 +289,8 @@ yet. Differences from the design above, all decided with the app owner:
 - **The window is user-selectable** — chips for *Since last visit* (default), 7, 30 and 90 days, and
   *All time*, remembered across launches. *Since last visit* is the previous app run that opened the
   tab, with **no 7-day floor**, so "No changes since …" is an accepted summary. The range filters the
-  summary, Needs attention and the app list; Latest change and No longer installed ignore it.
+  summary, Needs attention and the app list; No longer installed ignores it. Latest change shows only
+  when the range has no changed apps, so it never repeats a row already on screen.
 - **The summary counts updates (including updates that changed nothing visible), new apps by install
   date, and apps needing attention.** There is no "removed" count: the store does not record when an
   app was uninstalled.

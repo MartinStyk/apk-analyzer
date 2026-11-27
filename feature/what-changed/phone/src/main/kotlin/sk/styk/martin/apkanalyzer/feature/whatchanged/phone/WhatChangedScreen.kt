@@ -294,7 +294,7 @@ private val PreviewLoaded = WhatChangedState.Loaded(
     since = PreviewNow.minusSeconds(7 * 86_400L),
     updateCount = 6,
     newAppCount = 2,
-    latestChange = PreviewChange,
+    latestChange = null,
     needsAttention = listOf(
         PreviewChange,
         PreviewChange.copy(packageName = "com.whatsapp", appName = "WhatsApp", snapshotId = 9, parts = emptyList(), hasCertificateChange = true),
@@ -323,6 +323,7 @@ private fun WhatChangedNothingInRangePreview() {
             state = PreviewLoaded.copy(
                 updateCount = 0,
                 newAppCount = 0,
+                latestChange = PreviewChange.copy(date = PreviewNow.minusSeconds(16 * 86_400L)),
                 needsAttention = emptyList(),
                 changedApps = emptyList(),
                 uninstalledApps = emptyList(),
