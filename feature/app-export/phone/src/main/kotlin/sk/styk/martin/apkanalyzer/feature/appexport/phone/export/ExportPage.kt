@@ -33,6 +33,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Chip
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.LoadingSpinner
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.OutlinedButton
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ProBadge
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ProgressBar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.TextButton
@@ -91,6 +92,13 @@ internal fun ExportPage(
             enabled = !state.isExporting,
             onClick = { onAction(InventoryExportAction.GoToStep(InventoryExportStep.Columns)) },
         )
+        if (state.requiresPro) {
+            ProColumnsNotice(
+                enabled = !state.isExporting,
+                onUseBasics = { onAction(InventoryExportAction.PresetSelected(InventoryPreset.Basics)) },
+                modifier = Modifier.padding(top = 12.dp),
+            )
+        }
 
         SectionTitle(text = stringResource(R.string.inventory_export_format_title))
         FormatRow(
@@ -271,6 +279,41 @@ private fun OmittedColumnsNotice(
 }
 
 @Composable
+private fun ProColumnsNotice(
+    enabled: Boolean,
+    onUseBasics: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(AppTheme.colors.surfaceVariant, Shapes.CardShape)
+            .padding(start = 16.dp, end = 8.dp, top = 12.dp, bottom = 4.dp),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            ProBadge()
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(
+                text = stringResource(R.string.inventory_export_pro_columns),
+                style = AppTheme.typography.bodyMedium,
+                color = AppTheme.colors.onSurfaceVariant,
+                modifier = Modifier.padding(end = 8.dp),
+            )
+        }
+        Row(
+            horizontalArrangement = Arrangement.End,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            TextButton(
+                text = stringResource(R.string.inventory_export_use_basics),
+                onClick = onUseBasics,
+                enabled = enabled,
+            )
+        }
+    }
+}
+
+@Composable
 private fun PreviewBox(
     preview: InventoryPreviewState,
     hasColumns: Boolean,
@@ -440,6 +483,23 @@ private fun ExportPageLoadingPreview() {
     ApkAnalyzerTheme {
         ExportPage(
             state = InventoryExportState(),
+            onAction = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ExportPageProRequiredPreview() {
+    ApkAnalyzerTheme {
+        ExportPage(
+            state = InventoryExportState(
+                step = InventoryExportStep.Export,
+                apps = previewApps,
+                preview = previewContent,
+                columns = InventoryPreset.Basics.columns + InventoryColumn.Debuggable + InventoryColumn.RequestedPermissions,
+                format = InventoryFormat.Json,
+            ),
             onAction = {},
         )
     }

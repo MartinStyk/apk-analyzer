@@ -92,6 +92,8 @@
     <string name="inventory_export_next">İleri</string>
     <string name="inventory_export_columns_omitted">CSV dosyasında yer almayacak: %1$s. CSV tam kayıtları tutamaz.</string>
     <string name="inventory_export_use_json">JSON kullan</string>
+    <string name="inventory_export_pro_columns">Birden fazla uygulama için Temel dışındaki ayrıntılar Pro\'nun parçasıdır</string>
+    <string name="inventory_export_use_basics">Bunun yerine Temel\'i dışa aktar</string>
     <string name="inventory_export_structured_hint">Yalnızca JSON ayrıntıları, sadece sayıları değil tam kayıtları içerir. CSV dosyaları bunları dışarıda bırakır.</string>
     <string name="inventory_export_intro_got_it">Anladım</string>
     <string name="inventory_export_intro_about">Bu dışa aktarma hakkında</string>

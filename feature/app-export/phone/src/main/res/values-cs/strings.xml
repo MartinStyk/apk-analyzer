@@ -104,6 +104,8 @@
     <string name="inventory_export_next">Další</string>
     <string name="inventory_export_columns_omitted">Do souboru CSV se nedostanou: %1$s. CSV neumí uložit úplné záznamy.</string>
     <string name="inventory_export_use_json">Použít JSON</string>
+    <string name="inventory_export_pro_columns">Údaje nad rámec předvolby Základní pro více než jednu aplikaci jsou součástí Pro</string>
+    <string name="inventory_export_use_basics">Exportovat jen Základní</string>
     <string name="inventory_export_structured_hint">Údaje pouze pro JSON obsahují úplné záznamy, nejen počty. Soubory CSV je vynechají.</string>
     <string name="inventory_export_intro_got_it">Rozumím</string>
     <string name="inventory_export_intro_about">O tomto exportu</string>

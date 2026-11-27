@@ -98,6 +98,8 @@
     <string name="inventory_export_next">Suivant</string>
     <string name="inventory_export_columns_omitted">Absents du fichier CSV : %1$s. Le format CSV ne peut pas contenir d’enregistrements complets.</string>
     <string name="inventory_export_use_json">Utiliser JSON</string>
+    <string name="inventory_export_pro_columns">Les détails au-delà d\'Essentiel pour plusieurs applications font partie de Pro</string>
+    <string name="inventory_export_use_basics">Exporter Essentiel à la place</string>
     <string name="inventory_export_structured_hint">Les détails réservés à JSON contiennent des enregistrements complets, pas seulement des nombres. Les fichiers CSV les omettent.</string>
     <string name="inventory_export_intro_got_it">Compris</string>
     <string name="inventory_export_intro_about">À propos de cet export</string>

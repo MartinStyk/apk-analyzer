@@ -86,6 +86,8 @@
     <string name="inventory_export_next">次へ</string>
     <string name="inventory_export_columns_omitted">CSVファイルに含まれない情報: %1$s。CSVには完全なレコードを入れられません。</string>
     <string name="inventory_export_use_json">JSONを使う</string>
+    <string name="inventory_export_pro_columns">複数のアプリで基本以外の情報をエクスポートするには Pro が必要です</string>
+    <string name="inventory_export_use_basics">代わりに基本をエクスポート</string>
     <string name="inventory_export_structured_hint">JSON専用の情報には、件数だけでなく完全なレコードが含まれます。CSVファイルでは除外されます。</string>
     <string name="inventory_export_intro_got_it">了解</string>
     <string name="inventory_export_intro_about">このエクスポートについて</string>

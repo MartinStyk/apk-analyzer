@@ -63,6 +63,13 @@ app, opened from the app detail summary sheet). Implementation code uses the pac
   restored selection and the app list before it starts, so a result delivered after process death
   still writes the file the user created.
 * The Export step links to the published file format reference (`INVENTORY_REFERENCE_URL`).
+* Pro gate: Basics columns are free for any number of apps, and a one-app export is free with every
+  column. `InventoryExportState.requiresPro` (more than one app, an exported column outside
+  `InventoryPreset.Basics`, Pro not owned) is the one predicate behind the Export step's Pro notice,
+  the Save/Share gate, and opening `ProNavKey(PaywallReason.Export)`. Save and Share check it before
+  the document picker opens; choosing apps, columns, and the preview stay free. The notice's "Export
+  Basics instead" resets the columns to Basics. Nothing resumes after a purchase: the notice
+  disappears once `entitlements()` holds Pro and the user taps Save or Share again.
 * Export logic, file writing, destination handling, and progress live in `core:app-export`. This
   module maps state to UI and hands the file to the document picker or the share sheet.
 * `requiresAppAnalysis` marks every expensive source, including the independent lazy native-library,

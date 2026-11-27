@@ -92,6 +92,8 @@
     <string name="inventory_export_next">Weiter</string>
     <string name="inventory_export_columns_omitted">In der CSV-Datei fehlen: %1$s. CSV kann keine vollständigen Datensätze enthalten.</string>
     <string name="inventory_export_use_json">JSON verwenden</string>
+    <string name="inventory_export_pro_columns">Details über Grundlagen hinaus sind für mehr als eine App Teil von Pro</string>
+    <string name="inventory_export_use_basics">Stattdessen Grundlagen exportieren</string>
     <string name="inventory_export_structured_hint">Nur in JSON verfügbare Details enthalten vollständige Datensätze, nicht nur Anzahlen. CSV-Dateien lassen sie weg.</string>
     <string name="inventory_export_intro_got_it">Verstanden</string>
     <string name="inventory_export_intro_about">Über diesen Export</string>

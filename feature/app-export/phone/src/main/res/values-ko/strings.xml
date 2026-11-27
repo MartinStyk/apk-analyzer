@@ -86,6 +86,8 @@
     <string name="inventory_export_next">다음</string>
     <string name="inventory_export_columns_omitted">CSV 파일에서 제외되는 정보: %1$s. CSV에는 전체 레코드를 담을 수 없습니다.</string>
     <string name="inventory_export_use_json">JSON 사용</string>
+    <string name="inventory_export_pro_columns">여러 앱에서 기본 외의 정보를 내보내려면 Pro가 필요합니다</string>
+    <string name="inventory_export_use_basics">대신 기본만 내보내기</string>
     <string name="inventory_export_structured_hint">JSON 전용 정보에는 개수뿐 아니라 전체 레코드가 포함됩니다. CSV 파일에서는 제외됩니다.</string>
     <string name="inventory_export_intro_got_it">확인</string>
     <string name="inventory_export_intro_about">내보내기 정보</string>

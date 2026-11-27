@@ -21,6 +21,7 @@ data class InventoryExportState(
     val columns: Set<InventoryColumn> = InventoryPreset.Default.columns,
     val isUsageAccessGranted: Boolean = true,
     val format: InventoryFormat = InventoryFormat.Csv,
+    val hasPro: Boolean = false,
     val preview: InventoryPreviewState = InventoryPreviewState.Loading,
     val progress: InventoryExportProgressState = InventoryExportProgressState.Idle,
     val showStopConfirmation: Boolean = false,
@@ -55,6 +56,11 @@ data class InventoryExportState(
 
     val canExport: Boolean
         get() = apps.summary.hasSelection && exportedColumnCount > 0
+
+    val requiresPro: Boolean
+        get() = !hasPro &&
+            apps.summary.selectedCount > 1 &&
+            exportedColumns.any { it !in InventoryPreset.Basics.columns }
 
     val canProceed: Boolean
         get() = when (step) {

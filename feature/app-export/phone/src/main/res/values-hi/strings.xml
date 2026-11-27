@@ -92,6 +92,8 @@
     <string name="inventory_export_next">अगला</string>
     <string name="inventory_export_columns_omitted">CSV फ़ाइल में शामिल नहीं होंगे: %1$s. CSV में पूरे रिकॉर्ड सेव नहीं हो सकते।</string>
     <string name="inventory_export_use_json">JSON इस्तेमाल करें</string>
+    <string name="inventory_export_pro_columns">एक से ज़्यादा ऐप्लिकेशन के लिए बुनियादी से आगे की जानकारी Pro का हिस्सा है</string>
+    <string name="inventory_export_use_basics">सिर्फ़ बुनियादी एक्सपोर्ट करें</string>
     <string name="inventory_export_structured_hint">सिर्फ़ JSON वाली जानकारी में केवल गिनती नहीं, बल्कि पूरे रिकॉर्ड शामिल होते हैं। CSV फ़ाइलों में ये शामिल नहीं होती हैं।</string>
     <string name="inventory_export_intro_got_it">समझ गया</string>
     <string name="inventory_export_intro_about">इस एक्सपोर्ट के बारे में</string>

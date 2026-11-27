@@ -86,6 +86,8 @@
     <string name="inventory_export_next">下一步</string>
     <string name="inventory_export_columns_omitted">CSV 文件中不包含：%1$s。CSV 无法保存完整记录。</string>
     <string name="inventory_export_use_json">使用 JSON</string>
+    <string name="inventory_export_pro_columns">为多个应用导出基础以外的信息属于 Pro 功能</string>
+    <string name="inventory_export_use_basics">改为只导出基础</string>
     <string name="inventory_export_structured_hint">仅限 JSON 的信息包含完整记录，而不只是数量。CSV 文件会省略这些信息。</string>
     <string name="inventory_export_intro_got_it">知道了</string>
     <string name="inventory_export_intro_about">关于此导出</string>

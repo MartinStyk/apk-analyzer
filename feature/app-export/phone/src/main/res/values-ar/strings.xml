@@ -116,6 +116,8 @@
     <string name="inventory_export_next">التالي</string>
     <string name="inventory_export_columns_omitted">غير مضمّنة في ملف CSV: %1$s. لا يمكن لـ CSV حفظ سجلات كاملة.</string>
     <string name="inventory_export_use_json">استخدام JSON</string>
+    <string name="inventory_export_pro_columns">التفاصيل التي تتجاوز الأساسيات لأكثر من تطبيق واحد جزء من Pro</string>
+    <string name="inventory_export_use_basics">تصدير الأساسيات فقط</string>
     <string name="inventory_export_structured_hint">تتضمن التفاصيل المخصصة لـ JSON سجلات كاملة، وليس الأعداد فقط. تستبعدها ملفات CSV.</string>
     <string name="inventory_export_intro_got_it">حسنًا</string>
     <string name="inventory_export_intro_about">حول هذا التصدير</string>

@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.transformLatest
@@ -39,8 +40,11 @@ import sk.styk.martin.apkanalyzer.core.apps.api.filtering.AppFilterRepositories
 import sk.styk.martin.apkanalyzer.core.apps.api.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.apps.api.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.entitlements.api.Entitlement
+import sk.styk.martin.apkanalyzer.core.entitlements.api.EntitlementsRepository
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.apps.AppSelection
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.columns.ColumnSelection
+import sk.styk.martin.apkanalyzer.feature.pro.api.PaywallReason
 import java.time.LocalDateTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -52,6 +56,7 @@ internal class InventoryExportViewModel @AssistedInject constructor(
     private val inventoryExportManager: InventoryExportManager,
     private val inventoryExportPreferences: InventoryExportPreferences,
     usageStatsRepository: UsageStatsRepository,
+    entitlementsRepository: EntitlementsRepository,
     dispatcherProvider: DispatcherProvider,
 ) : ViewModel() {
 
@@ -101,6 +106,11 @@ internal class InventoryExportViewModel @AssistedInject constructor(
         .distinctUntilChanged()
         .flatMapLatest { isVisible -> if (isVisible) previewContent else flowOf(InventoryPreviewState.Loading) }
 
+    private val hasPro: Flow<Boolean> = entitlementsRepository.entitlements()
+        .map { Entitlement.Pro in it }
+        .onStart { emit(false) }
+        .distinctUntilChanged()
+
     private val selection = combine(
         step,
         apps.state,
@@ -109,7 +119,7 @@ internal class InventoryExportViewModel @AssistedInject constructor(
         format,
     ) { step, apps, columns, isUsageAccessGranted, format ->
         InventoryExportState(step = step, steps = steps, apps = apps, columns = columns, isUsageAccessGranted = isUsageAccessGranted, format = format)
-    }
+    }.combine(hasPro) { selection, hasPro -> selection.copy(hasPro = hasPro) }
 
     val state: StateFlow<InventoryExportState> = combine(
         selection,
@@ -154,14 +164,9 @@ internal class InventoryExportViewModel @AssistedInject constructor(
 
             InventoryExportAction.OpenFormatReference -> eventChannel.trySend(InventoryExportEvent.OpenFormatReference(INVENTORY_REFERENCE_URL))
 
-            InventoryExportAction.Save -> if (state.value.canExport) {
-                val format = format.value
-                eventChannel.trySend(InventoryExportEvent.CreateDocument(format, format.fileName(LocalDateTime.now())))
-            }
+            is InventoryExportAction.ExportRequestAction -> onExportRequest(action)
 
             is InventoryExportAction.SaveTo -> startExport(InventoryDestination.Document(action.destination), action.format)
-
-            InventoryExportAction.Share -> startExport(InventoryDestination.Share, format.value)
 
             InventoryExportAction.DocumentPickerUnavailable -> showFeedback(InventoryExportFeedback.DocumentPickerUnavailable)
 
@@ -212,6 +217,25 @@ internal class InventoryExportViewModel @AssistedInject constructor(
     private fun goNext() {
         val next = state.value.nextStep ?: return
         if (state.value.canProceed) step.value = next
+    }
+
+    private fun onExportRequest(action: InventoryExportAction.ExportRequestAction) {
+        val current = state.value
+        when {
+            !current.canExport -> Unit
+
+            current.requiresPro ->
+                eventChannel.trySend(InventoryExportEvent.OpenPro(PaywallReason.Export(appCount = current.apps.summary.selectedCount)))
+
+            else -> when (action) {
+                InventoryExportAction.Save -> {
+                    val format = format.value
+                    eventChannel.trySend(InventoryExportEvent.CreateDocument(format, format.fileName(LocalDateTime.now())))
+                }
+
+                InventoryExportAction.Share -> startExport(InventoryDestination.Share, format.value)
+            }
+        }
     }
 
     private fun startExport(destination: InventoryDestination, exportFormat: InventoryFormat) {
