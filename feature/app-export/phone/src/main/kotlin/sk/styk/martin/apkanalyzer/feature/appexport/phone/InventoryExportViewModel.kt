@@ -39,6 +39,7 @@ import sk.styk.martin.apkanalyzer.core.apps.api.filtering.AppFilterRepositories
 import sk.styk.martin.apkanalyzer.core.apps.api.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.apps.api.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.common.coroutines.combine
 import sk.styk.martin.apkanalyzer.core.entitlements.api.Entitlement
 import sk.styk.martin.apkanalyzer.core.entitlements.api.EntitlementsRepository
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.apps.AppSelection
@@ -116,9 +117,18 @@ internal class InventoryExportViewModel @AssistedInject constructor(
         columns.columns,
         usageStatsRepository.isPermissionGranted,
         format,
-    ) { step, apps, columns, isUsageAccessGranted, format ->
-        InventoryExportState(step = step, steps = steps, apps = apps, columns = columns, isUsageAccessGranted = isUsageAccessGranted, format = format)
-    }.combine(proOwnership) { selection, proOwnership -> selection.copy(proOwnership = proOwnership) }
+        proOwnership,
+    ) { step, apps, columns, isUsageAccessGranted, format, proOwnership ->
+        InventoryExportState(
+            step = step,
+            steps = steps,
+            apps = apps,
+            columns = columns,
+            isUsageAccessGranted = isUsageAccessGranted,
+            format = format,
+            proOwnership = proOwnership,
+        )
+    }
 
     val state: StateFlow<InventoryExportState> = combine(
         selection,
