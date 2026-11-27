@@ -2,7 +2,8 @@
 
 **Status:** Implemented for the existing core domain modules (`apps`, `app-permissions`,
 `app-index`, `app-history`, `app-export`, `apk-files`, `ai-insights`, `user-preferences`), with the
-convention plugins and `validateArchitecture` checks. `core:entitlements` is not built yet.
+convention plugins and `validateArchitecture` checks, and for the new `core:entitlements` with its
+Google Play Billing `impl` and `noop` implementations.
 **Scope:** How a core domain module splits into an `api` and an implementation module, where models,
 resources, and top-level functions go, how the split is enforced, and how `core:entitlements` swaps
 its Google Play Billing implementation for a no-op one per build type. Does not cover the
@@ -24,16 +25,16 @@ entitlement product design: what is paid, pricing, or the purchase UI.
 | `core/<name>/api` | Public interfaces, models, constants, pure extensions on those models, model labels |
 | `core/<name>/impl` | The implementation: `Impl` classes, Hilt bindings, workers, Room, platform access |
 
-A domain with more than one implementation names each module after what it is instead of `impl`:
+A domain with a second implementation keeps `impl` for the real one and names the other after what it\nis:
 
 | Module | Holds |
 |---|---|
 | `core/entitlements/api` | `EntitlementsRepository` and the entitlement models |
-| `core/entitlements/play` | The Google Play Billing implementation; the only module with the billing library |
+| `core/entitlements/impl` | The Google Play Billing implementation; the only module with the billing library |
 | `core/entitlements/noop` | Grants every entitlement and offers nothing for sale |
 
 Packages and namespaces follow the existing directory rule: `core.entitlements.api`,
-`core.entitlements.play`, `core.apps.api`, `core.apps.impl`. Each module therefore has its own `R`
+`core.entitlements.noop`, `core.apps.api`, `core.apps.impl`. Each module therefore has its own `R`
 class.
 
 ### Which modules split
@@ -112,7 +113,7 @@ graph TD
     app[":app / :tv"]
     feature["feature/*/phone, tv, domain"]
     api["core/*/api"]
-    impl["core/*/impl, play, noop"]
+    impl["core/*/impl, noop"]
     common["core:common"]
 
     app --> impl
@@ -138,7 +139,7 @@ ships the no-op:
 ```kotlin
 dependencies {
     implementation(projects.core.entitlements.api)
-    debugImplementation(projects.core.entitlements.play)
+    debugImplementation(projects.core.entitlements.impl)
     releaseImplementation(projects.core.entitlements.noop)
 }
 ```
@@ -149,22 +150,32 @@ shell.
 * Hilt fails to compile a variant with no `EntitlementsRepository` binding, so a missing or duplicate
   implementation cannot ship silently.
 * The baseline profile plugin adds its own `nonMinifiedRelease` and `benchmarkRelease` build types.
-  Check that they resolve the no-op; if they don't inherit `releaseImplementation`, declare the no-op
-  for them explicitly.
+  They inherit `releaseImplementation`, so both resolve the no-op without a declaration of their own.
 * `noop` grants every entitlement and exposes no offers. Purchase UI derives from the offers, so it
   disappears on its own in release without a separate "billing enabled" flag.
-* `play` maps every billing failure, including `BILLING_UNAVAILABLE` on a sideloaded debug build,
-  to a state or a `Result`. It never throws, following the existing interface rule.
+* `impl` maps every billing failure, including `BILLING_UNAVAILABLE` on a sideloaded debug build,
+  to an empty set, an empty list, or `PurchaseResult.Failed`. It never throws, following the
+  existing interface rule.
 
-### Contract sketch
+### Contract
 
-The product design decides the actual entitlements. The shape to keep:
+The product design decides the actual entitlements. Until then there is one, `Entitlement.Pro`, a
+one-time in-app product whose Play product ID is a placeholder in `impl`.
 
-* One `Flow` of what the user currently has access to, so a paid feature checks access from a single
-  source rather than each screen asking billing on its own.
-* One `Flow` of the offers that can be bought; empty in `noop`.
-* A purchase call. Play Billing needs an `Activity` to launch its flow. How that reaches the
-  repository without a ViewModel holding an `Activity` is an open question below.
+```kotlin
+interface EntitlementsRepository {
+    fun entitlements(): Flow<Set<Entitlement>>
+    fun offers(): Flow<List<Offer>>
+    suspend fun purchase(activity: Activity, offer: Offer): PurchaseResult
+}
+```
+
+* `entitlements()` is what the user currently has access to, so a paid feature checks access from a
+  single source rather than each screen asking billing on its own.
+* `offers()` is what can still be bought: owned entitlements are excluded, and it is empty in `noop`.
+* `purchase` takes the `Activity` Play Billing needs to launch its flow, and reports `Purchased`,
+  `Pending`, `Cancelled`, or `Failed`. `android.app.Activity` is allowed in `api` for it (see
+  Enforcement).
 
 ## Enforcement
 
@@ -179,11 +190,12 @@ The product design decides the actual entitlements. The shape to keep:
   Compose are not on an `api` module's classpath, so the compiler rejects them. The Android framework
   always is, so a second, path-scoped instance of detekt's `ForbiddenImport` rejects every `android.*`
   and `androidx.*` import in `api` main and test-fixture sources except `android.net.Uri` (a value in
-  contracts), `android.content.res.Resources` (resolving labels), and `androidx.annotation.*`.
+  contracts), `android.app.Activity` (the host Play Billing's purchase flow needs, passed through),
+  `android.content.res.Resources` (resolving labels), and `androidx.annotation.*`.
   Mapping a platform value such as a `PackageInfo` flag to an `api` model belongs in `impl`.
 * **A detekt rule in `build-logic/detekt-rules`.** Built: `ImplModuleVisibility` reports any public
   top-level declaration in a nested core module other than `api` and `design-system`, so every new
-  implementation module (`impl`, `play`, `noop`) is covered without a config change.
+  implementation module (`impl`, `noop`) is covered without a config change.
 * **`core/<name>/AGENTS.md`** stays one file per domain, covering both submodules, the same way
   `feature/<name>/AGENTS.md` and `core/design-system/AGENTS.md` already cover theirs.
 
@@ -193,7 +205,7 @@ The product design decides the actual entitlements. The shape to keep:
 2. Done: the existing modules, in dependency order (`apk-files`, `apps`, `app-permissions`,
    `app-index`, `user-preferences`, `ai-insights`, `app-export`, `app-history`), so each module's
    `api` only ever depended on modules that had already split.
-3. Build `core:entitlements` with this shape. It is new, so nothing moves.
+3. Done: `core:entitlements`, built with this shape. It was new, so nothing moved.
 
 Migrating one module means: create `api`, move interfaces, models, labels, and pure extensions into
 it, rename the remaining module to `impl` and make it `internal`, repoint consumers' imports and
@@ -209,9 +221,11 @@ values, so they are unaffected.
 
 ## Open Questions
 
-* **Purchase handoff.** Play Billing's purchase flow needs an `Activity`. The likely shape is a
-  ViewModel event the screen handles, calling the repository with the `Activity` it already has;
-  confirm when the purchase UI is designed.
+* **Purchase handoff.** `purchase` takes the `Activity`, so no ViewModel needs to hold one. The
+  likely caller is a ViewModel event the screen handles, calling the repository with the `Activity`
+  it already has; confirm when the purchase UI is designed.
+* **Products.** Which features `Pro` unlocks, its price, and its real Play product ID replace the
+  placeholder once the product design is decided.
 * **A billing-free public build.** If a build without billing is ever distributed, for example on
   F-Droid, build types stop being enough and the app shells move to product flavors. Nothing in the
   module shape changes; only the wiring does.
