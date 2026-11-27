@@ -31,6 +31,8 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Tag
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.TextButton
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
+import sk.styk.martin.apkanalyzer.core.entitlements.api.Entitlement
+import sk.styk.martin.apkanalyzer.core.entitlements.api.Offer
 import sk.styk.martin.apkanalyzer.feature.pro.api.PaywallReason
 
 @Composable
@@ -164,7 +166,7 @@ private fun PurchaseArea(
                 Tag(text = stringResource(R.string.pro_pending))
             } else {
                 Button(
-                    text = stringResource(R.string.pro_unlock, offer.formattedPrice),
+                    text = stringResource(R.string.pro_unlock, offer.offer.formattedPrice),
                     onClick = onUnlock,
                     enabled = !state.status.blocksActions,
                     modifier = Modifier.fillMaxWidth(),
@@ -202,7 +204,7 @@ private fun statusMessage(state: ProState): String? = when {
 private fun ProContentExportPreview() {
     ApkAnalyzerTheme {
         ProContent(
-            state = ProState(reason = PaywallReason.Export(appCount = 142), offer = ProOffer.Available("€3.99")),
+            state = ProState(reason = PaywallReason.Export(appCount = 142), offer = ProOffer.Available(Offer(Entitlement.Pro, "€3.99"))),
             onUnlock = {},
             onRestore = {},
         )
@@ -214,7 +216,7 @@ private fun ProContentExportPreview() {
 private fun ProContentWhatChangedPreview() {
     ApkAnalyzerTheme {
         ProContent(
-            state = ProState(reason = PaywallReason.WhatChanged(lockedAppCount = 11), offer = ProOffer.Available("€3.99")),
+            state = ProState(reason = PaywallReason.WhatChanged(lockedAppCount = 11), offer = ProOffer.Available(Offer(Entitlement.Pro, "€3.99"))),
             onUnlock = {},
             onRestore = {},
         )
@@ -240,7 +242,7 @@ private fun ProContentPendingPreview() {
         ProContent(
             state = ProState(
                 reason = PaywallReason.WhatChanged(lockedAppCount = 4),
-                offer = ProOffer.Available("€3.99"),
+                offer = ProOffer.Available(Offer(Entitlement.Pro, "€3.99")),
                 status = ProStatus.Pending,
             ),
             onUnlock = {},
@@ -256,7 +258,7 @@ private fun ProContentFailedPreview() {
         ProContent(
             state = ProState(
                 reason = PaywallReason.Export(appCount = 38),
-                offer = ProOffer.Available("€3.99"),
+                offer = ProOffer.Available(Offer(Entitlement.Pro, "€3.99")),
                 status = ProStatus.Failed,
             ),
             onUnlock = {},

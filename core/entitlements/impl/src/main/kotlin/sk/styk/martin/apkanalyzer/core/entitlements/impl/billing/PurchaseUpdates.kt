@@ -1,6 +1,5 @@
 package sk.styk.martin.apkanalyzer.core.entitlements.impl.billing
 
-import com.android.billingclient.api.BillingClient.BillingResponseCode
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
@@ -16,7 +15,7 @@ internal class PurchaseUpdates @Inject constructor() : PurchasesUpdatedListener 
         field = MutableSharedFlow(extraBufferCapacity = UPDATE_BUFFER_CAPACITY)
 
     override fun onPurchasesUpdated(billingResult: BillingResult, purchases: List<Purchase>?) {
-        updates.tryEmit(PurchaseUpdate(billingResult.responseCode, purchases.orEmpty()))
+        updates.tryEmit(PurchaseUpdate.FromPlay(billingResult.responseCode, purchases.orEmpty()))
     }
 
     fun refresh() {
@@ -24,7 +23,7 @@ internal class PurchaseUpdates @Inject constructor() : PurchasesUpdatedListener 
     }
 
     fun publish(owned: Set<Entitlement>) {
-        updates.tryEmit(PurchaseUpdate(BillingResponseCode.OK, emptyList(), owned))
+        updates.tryEmit(PurchaseUpdate.Known(owned))
     }
 
     private companion object {
@@ -32,12 +31,10 @@ internal class PurchaseUpdates @Inject constructor() : PurchasesUpdatedListener 
     }
 }
 
-internal data class PurchaseUpdate(
-    val responseCode: Int,
-    val purchases: List<Purchase>,
-    val owned: Set<Entitlement>? = null,
-) {
-    companion object {
-        val Refresh = PurchaseUpdate(BillingResponseCode.OK, emptyList())
-    }
+internal sealed interface PurchaseUpdate {
+    data class FromPlay(val responseCode: Int, val purchases: List<Purchase>) : PurchaseUpdate
+
+    data object Refresh : PurchaseUpdate
+
+    data class Known(val owned: Set<Entitlement>) : PurchaseUpdate
 }

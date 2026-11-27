@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.entitlements.api.Entitlement
 import sk.styk.martin.apkanalyzer.core.entitlements.api.EntitlementsRepository
-import sk.styk.martin.apkanalyzer.core.entitlements.api.Offer
 import sk.styk.martin.apkanalyzer.core.entitlements.api.PurchaseResult
 import sk.styk.martin.apkanalyzer.feature.pro.api.PaywallReason
 import sk.styk.martin.apkanalyzer.feature.pro.phone.analytics.ProAnalytics
@@ -41,7 +40,6 @@ internal class ProViewModel @AssistedInject constructor(
     private val eventChannel = Channel<ProEvent>(Channel.BUFFERED)
     val events = eventChannel.receiveAsFlow()
 
-    private var proOffer: Offer? = null
     private var isClosing = false
 
     init {
@@ -52,8 +50,7 @@ internal class ProViewModel @AssistedInject constructor(
         }
         viewModelScope.launch {
             entitlementsRepository.offers().collect { offers ->
-                proOffer = offers.firstOrNull { it.entitlement == Entitlement.Pro }
-                val offer = proOffer?.let { ProOffer.Available(it.formattedPrice) } ?: ProOffer.Unavailable
+                val offer = offers.firstOrNull { it.entitlement == Entitlement.Pro }?.let(ProOffer::Available) ?: ProOffer.Unavailable
                 state.update { it.copy(offer = offer) }
             }
         }
@@ -67,7 +64,7 @@ internal class ProViewModel @AssistedInject constructor(
     }
 
     private fun unlock(activity: Activity) {
-        val offer = proOffer ?: return
+        val offer = (state.value.offer as? ProOffer.Available)?.offer ?: return
         if (state.value.status.blocksActions) return
         state.update { it.copy(status = ProStatus.Purchasing) }
         analytics.track(ProAnalyticsEvent.PurchaseStarted(reason))

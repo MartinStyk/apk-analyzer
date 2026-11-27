@@ -19,6 +19,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -48,7 +49,12 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
 
     override fun entitlements(): Flow<Set<Entitlement>> = purchaseUpdates.updates
         .onSubscription { emit(PurchaseUpdate.Refresh) }
-        .map { update -> update.owned ?: queryOwnedEntitlements().getOrNull() }
+        .map { update ->
+            when (update) {
+                is PurchaseUpdate.Known -> Result.success(update.owned)
+                is PurchaseUpdate.FromPlay, PurchaseUpdate.Refresh -> queryOwnedEntitlements()
+            }
+        }
         .keepingLastKnown()
         .distinctUntilChanged()
 
@@ -69,7 +75,7 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
             .build()
         return coroutineScope {
             val update = async(start = CoroutineStart.UNDISPATCHED) {
-                purchaseUpdates.updates.first { it.concerns(offer.entitlement) }
+                purchaseUpdates.updates.filterIsInstance<PurchaseUpdate.FromPlay>().first { it.concerns(offer.entitlement) }
             }
             val launchResult = withContext(dispatcherProvider.main()) {
                 billingClient.launchBillingFlow(activity, params)
@@ -89,12 +95,12 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
     override suspend fun refresh(): Result<Set<Entitlement>> = queryOwnedEntitlements().onSuccess { purchaseUpdates.publish(it) }
 
     private suspend fun queryOwnedEntitlements(): Result<Set<Entitlement>> {
-        if (!billingConnection.connect()) return Result.failure(BillingUnavailableException())
+        if (!billingConnection.connect()) return Result.failure(BillingUnavailableException("Google Play could not be reached"))
         val params = QueryPurchasesParams.newBuilder().setProductType(ProductType.INAPP).build()
         val result = billingClient.queryPurchasesAsync(params)
         if (result.billingResult.responseCode != BillingResponseCode.OK) {
             Logger.w(TAG, "Querying purchases failed with response code ${result.billingResult.responseCode}")
-            return Result.failure(BillingUnavailableException(result.billingResult.responseCode))
+            return Result.failure(BillingUnavailableException("Querying purchases failed with response code ${result.billingResult.responseCode}"))
         }
         val purchased = result.purchasesList.filter { it.purchaseState == Purchase.PurchaseState.PURCHASED }
         purchased.forEach { acknowledge(it) }
@@ -123,7 +129,7 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
         return result.productDetailsList.orEmpty()
     }
 
-    private suspend fun purchaseResultOf(update: PurchaseUpdate, entitlement: Entitlement): PurchaseResult {
+    private suspend fun purchaseResultOf(update: PurchaseUpdate.FromPlay, entitlement: Entitlement): PurchaseResult {
         if (update.responseCode != BillingResponseCode.OK) return purchaseResultOf(update.responseCode)
         val purchase = update.purchases.firstOrNull { entitlement.productId in it.products } ?: return PurchaseResult.Failed
         return when (purchase.purchaseState) {
@@ -159,16 +165,15 @@ internal class EntitlementsRepositoryImpl @Inject constructor(
     }
 }
 
-private fun Flow<Set<Entitlement>?>.keepingLastKnown(): Flow<Set<Entitlement>> = flow {
-    var lastKnown: Set<Entitlement>? = null
+private fun Flow<Result<Set<Entitlement>>>.keepingLastKnown(): Flow<Set<Entitlement>> = flow {
+    var lastKnown = emptySet<Entitlement>()
     collect { queried ->
-        val owned = queried ?: lastKnown.orEmpty()
-        if (queried != null) lastKnown = queried
-        emit(owned)
+        queried.onSuccess { lastKnown = it }
+        emit(lastKnown)
     }
 }
 
-private fun PurchaseUpdate.concerns(entitlement: Entitlement): Boolean =
+private fun PurchaseUpdate.FromPlay.concerns(entitlement: Entitlement): Boolean =
     responseCode != BillingResponseCode.OK || purchases.any { entitlement.productId in it.products }
 
 private val Entitlement.productId: String

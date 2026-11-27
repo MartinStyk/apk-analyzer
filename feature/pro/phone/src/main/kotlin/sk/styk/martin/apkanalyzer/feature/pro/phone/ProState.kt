@@ -1,6 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.pro.phone
 
 import androidx.compose.runtime.Immutable
+import sk.styk.martin.apkanalyzer.core.entitlements.api.Offer
 import sk.styk.martin.apkanalyzer.feature.pro.api.PaywallReason
 
 @Immutable
@@ -14,7 +15,7 @@ internal data class ProState(
 internal sealed interface ProOffer {
     data object Loading : ProOffer
 
-    data class Available(val formattedPrice: String) : ProOffer
+    data class Available(val offer: Offer) : ProOffer
 
     data object Unavailable : ProOffer
 }
