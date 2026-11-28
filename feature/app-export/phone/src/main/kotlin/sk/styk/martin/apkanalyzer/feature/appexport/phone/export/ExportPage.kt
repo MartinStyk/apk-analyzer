@@ -584,7 +584,7 @@ private fun ExportBottomBarProRequiredPreview() {
 @Composable
 private fun ProColumnsNoticePreview() {
     ApkAnalyzerTheme {
-        ProColumnsNotice(enabled = true, onUnlockPro = {}, onUseBasics = {})
+        ProColumnsNotice(proColumns = previewProColumns, enabled = true, onUnlockPro = {}, onUseBasics = {})
     }
 }
 
@@ -592,7 +592,7 @@ private fun ProColumnsNoticePreview() {
 @Composable
 private fun ProColumnsNoticeDarkPreview() {
     ApkAnalyzerTheme(isDarkTheme = true) {
-        ProColumnsNotice(enabled = true, onUnlockPro = {}, onUseBasics = {})
+        ProColumnsNotice(proColumns = previewProColumns, enabled = true, onUnlockPro = {}, onUseBasics = {})
     }
 }
 
@@ -600,7 +600,7 @@ private fun ProColumnsNoticeDarkPreview() {
 @Composable
 private fun ProColumnsNoticeLargeTextPreview() {
     ApkAnalyzerTheme {
-        ProColumnsNotice(enabled = true, onUnlockPro = {}, onUseBasics = {})
+        ProColumnsNotice(proColumns = previewProColumns, enabled = true, onUnlockPro = {}, onUseBasics = {})
     }
 }
 
@@ -619,3 +619,5 @@ private fun ExportPageOmittedColumnsPreview() {
         )
     }
 }
+
+private val previewProColumns = listOf(InventoryColumn.SigningCertificateSha256, InventoryColumn.RequestedPermissions)
