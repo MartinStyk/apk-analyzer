@@ -13,6 +13,5 @@
     <string name="feature_flags_reset" translatable="false">Use build default</string>
     <string name="feature_flags_reset_all" translatable="false">Reset all flags</string>
     <string name="feature_flags_load_failed" translatable="false">Could not load feature flags. Try again.</string>
-    <string name="feature_flags_save_failed" translatable="false">Could not save feature flags. Try again.</string>
     <string name="feature_flags_retry" translatable="false">Retry</string>
 </resources>

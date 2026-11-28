@@ -114,7 +114,7 @@ internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
     }
 
     private suspend fun ifRecordingEnabled(action: suspend () -> Unit) {
-        if (featureFlagRepository.get(FeatureFlag.AppHistoryRecording).getOrThrow()) action()
+        if (featureFlagRepository.get(FeatureFlag.AppHistoryRecording)) action()
     }
 
     private suspend fun captureIfGateOpen(app: InstalledApp): Boolean = perPackageMutexes.computeIfAbsent(app.packageName) { Mutex() }.withLock {

@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
 interface FeatureFlagRepository {
-    fun observe(flag: FeatureFlag): Flow<Result<Boolean>>
+    fun observe(flag: FeatureFlag): Flow<Boolean>
 
-    suspend operator fun get(flag: FeatureFlag): Result<Boolean> = observe(flag).first()
+    suspend operator fun get(flag: FeatureFlag): Boolean = observe(flag).first()
 }

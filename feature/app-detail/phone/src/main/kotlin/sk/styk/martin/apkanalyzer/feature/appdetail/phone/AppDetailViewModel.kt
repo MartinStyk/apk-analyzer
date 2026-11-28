@@ -95,7 +95,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
     private val historyStatus: StateFlow<AppDetailHistoryStatus> = appDetailInput.installedPackage
         ?.let { installedPackage ->
             featureFlagRepository.observe(FeatureFlag.AppDetailHistory).flatMapLatest { isEnabled ->
-                if (isEnabled.getOrDefault(false)) {
+                if (isEnabled) {
                     appHistoryRepository.timeline(installedPackage).map { it.toHistoryStatus() }
                 } else {
                     flowOf(AppDetailHistoryStatus.Hidden)
@@ -118,7 +118,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
 
             is AppDetailSource.Ready -> source.state.copy(
                 exportInProgress = exportInProgress,
-                isInventoryExportEnabled = isInventoryExportEnabled.getOrDefault(false),
+                isInventoryExportEnabled = isInventoryExportEnabled,
                 history = history,
             )
         }

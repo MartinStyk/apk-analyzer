@@ -32,7 +32,7 @@ internal class ApkAnalyzerViewModel @Inject constructor(
             ApkAnalyzerState.Data(
                 colorAppScheme = scheme,
                 fingerprintFormat = fingerprintFormat,
-                isWhatChangedEnabled = isWhatChangedEnabled.getOrDefault(false),
+                isWhatChangedEnabled = isWhatChangedEnabled,
             )
         }.stateIn(
             scope = viewModelScope,

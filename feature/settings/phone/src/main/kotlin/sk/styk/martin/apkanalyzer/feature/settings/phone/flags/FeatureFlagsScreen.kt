@@ -1,6 +1,5 @@
 package sk.styk.martin.apkanalyzer.feature.settings.phone.flags
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,7 +15,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -48,12 +46,10 @@ internal fun FeatureFlagsScreen(
     viewModel: FeatureFlagsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val context = LocalContext.current
     LaunchedEffect(onBack) {
         viewModel.events.collect { event ->
             when (event) {
                 FeatureFlagsEvent.NavigateBack -> onBack()
-                FeatureFlagsEvent.SaveFailed -> Toast.makeText(context, R.string.feature_flags_save_failed, Toast.LENGTH_SHORT).show()
             }
         }
     }

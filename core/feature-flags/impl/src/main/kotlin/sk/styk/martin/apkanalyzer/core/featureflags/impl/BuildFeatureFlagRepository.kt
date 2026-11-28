@@ -10,9 +10,7 @@ import javax.inject.Singleton
 
 @Singleton
 internal class BuildFeatureFlagRepository @Inject constructor(private val applicationVariant: ApplicationVariant) : FeatureFlagRepository {
-    override fun observe(flag: FeatureFlag): Flow<Result<Boolean>> = flowOf(
-        Result.success(defaultValue(flag)),
-    )
+    override fun observe(flag: FeatureFlag): Flow<Boolean> = flowOf(defaultValue(flag))
 
     private fun defaultValue(flag: FeatureFlag): Boolean {
         if (!BuildConfig.DEBUG) return false

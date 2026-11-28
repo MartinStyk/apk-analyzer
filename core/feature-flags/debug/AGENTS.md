@@ -8,9 +8,9 @@ this implementation module, with `debugImplementation`; features consume `api`. 
 
 The isolated `debug_feature_flags` preferences file stores explicit Boolean overrides with stable
 backend keys. It never stores build defaults. Reset removes
-one key; reset-all removes all known flag keys. Report read and write failures as `Result` and
-preserve coroutine cancellation. Reads log failures; the editor logs and reports failed writes.
-The first effective result waits for storage, and read failures never fall back to build defaults.
+one key; reset-all removes all known flag keys. Reads and writes propagate DataStore exceptions
+and coroutine cancellation without catching or wrapping them.
+The first effective value waits for storage, and read failures never fall back to build defaults.
 Editor observations read the immutable build defaults once and observe persisted changes.
 Normal per-flag reads remain reactive and distinct. Both use `FeatureFlagStatus.isEnabled`
 internally so the editor and consumers agree. Any explicit override replaces the default, including
