@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryEntry
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryRecordedOn
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySummaryPart
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
@@ -210,8 +211,9 @@ private fun EmptyContent(modifier: Modifier = Modifier) {
 
 private val sampleSince = Instant.ofEpochMilli(1_760_227_200_000)
 
-private fun firstRecordedRow() = sampleHistoryRow(
+private fun firstRecordedRow(recordedOn: AppHistoryRecordedOn = AppHistoryRecordedOn.ThisDevice) = sampleHistoryRow(
     kind = AppHistoryRowKind.FirstRecorded,
+    recordedOn = recordedOn,
     snapshotId = 1,
     versionChange = null,
     summary = emptyList(),
@@ -294,7 +296,7 @@ private fun AppHistoryTimelineCertificatePreview() {
                     sampleHistoryRow(
                         snapshotId = 4,
                         summary = listOf(AppHistorySummaryPart.PermissionsAdded(firstLabel = "Camera", otherCount = 0)),
-                        hasCertificateChange = true,
+                        hasCertificateWarning = true,
                     ),
                     sampleHistoryRow(
                         snapshotId = 3,
@@ -324,20 +326,28 @@ private fun AppHistoryTimelineBreaksPreview() {
                         isQuiet = true,
                     ),
                     sampleHistoryRow(
-                        kind = AppHistoryRowKind.Change(AppHistoryEntry.Change.Kind.Reinstalled),
+                        kind = AppHistoryRowKind.Change(AppHistoryEntry.Change.Kind.Reinstalled, previousRecordedOn = AppHistoryRecordedOn.ThisDevice),
                         snapshotId = 4,
                         summary = listOf(AppHistorySummaryPart.PermissionsRemoved(count = 2)),
                     ),
                 ),
                 listOf(
                     sampleHistoryRow(
-                        kind = AppHistoryRowKind.Change(AppHistoryEntry.Change.Kind.NewDevice),
+                        kind = AppHistoryRowKind.Change(AppHistoryEntry.Change.Kind.NewDevice, previousRecordedOn = samplePixel),
                         snapshotId = 3,
                         versionChange = null,
                         summary = listOf(AppHistorySummaryPart.SizeChanged(before = 151.megabytes, after = 152.megabytes)),
                     ),
                 ),
-                listOf(firstRecordedRow()),
+                listOf(
+                    sampleHistoryRow(
+                        snapshotId = 2,
+                        recordedOn = samplePixel,
+                        summary = listOf(AppHistorySummaryPart.SizeChanged(before = 150.megabytes, after = 151.megabytes)),
+                        isQuiet = true,
+                    ),
+                    firstRecordedRow(recordedOn = samplePixel),
+                ),
             ),
             fallbackAppName = "Spotify",
             onAction = {},

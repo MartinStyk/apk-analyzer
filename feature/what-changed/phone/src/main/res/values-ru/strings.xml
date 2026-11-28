@@ -17,6 +17,8 @@
     <string name="what_changed_no_net_change">В итоге без изменений</string>
     <string name="what_changed_reverted">Отменено %1$s</string>
     <string name="what_changed_no_changes_recorded">Изменения не зафиксированы</string>
+    <string name="what_changed_last_seen_on">Последний раз на устройстве %1$s</string>
+    <string name="what_changed_includes_device">Включает историю с устройства %1$s</string>
     <string name="what_changed_empty_title">Пока ничего не зафиксировано</string>
     <string name="what_changed_empty_body">Apk Analyzer фиксирует ваши приложения в фоновом режиме. Когда приложение обновляется, здесь появляется то, что в нём изменилось.</string>
     <string name="what_changed_error">Не удалось загрузить историю изменений</string>
@@ -70,4 +72,10 @@
     <string name="what_changed_recording_off_title">Фиксация выключена</string>
     <string name="what_changed_recording_off_body">Новые установки и обновления не фиксируются.</string>
     <string name="what_changed_recording_turn_on">Включить</string>
+    <plurals name="what_changed_includes_devices">
+        <item quantity="one">Включает историю с %d другого устройства</item>
+        <item quantity="few">Включает историю с %d других устройств</item>
+        <item quantity="many">Включает историю с %d других устройств</item>
+        <item quantity="other">Включает историю с %d другого устройства</item>
+    </plurals>
 </resources>

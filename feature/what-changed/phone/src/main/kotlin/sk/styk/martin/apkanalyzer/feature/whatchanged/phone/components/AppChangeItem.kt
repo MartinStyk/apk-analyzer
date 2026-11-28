@@ -3,10 +3,11 @@ package sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components
 import androidx.compose.runtime.Immutable
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryChangeCategory
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryEntry
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryRecordedOn
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySummaryPart
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryVersion
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.ValueChange
-import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.hasCertificateChange
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.hasCertificateWarning
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.hasOnlyUncomparableDetails
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.needsAttention
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.summaryParts
@@ -20,7 +21,7 @@ import javax.inject.Inject
 internal sealed interface AppChangeKind {
     data object FirstRecorded : AppChangeKind
 
-    data class Change(val kind: AppHistoryEntry.Change.Kind) : AppChangeKind
+    data class Change(val kind: AppHistoryEntry.Change.Kind, val previousRecordedOn: AppHistoryRecordedOn) : AppChangeKind
 }
 
 @Immutable
@@ -31,11 +32,12 @@ internal data class AppChangeItem(
     val capturedAt: Instant,
     val date: Instant,
     val kind: AppChangeKind,
+    val recordedOn: AppHistoryRecordedOn,
     val version: AppHistoryVersion,
     val versionChange: ValueChange<AppHistoryVersion>? = null,
     val parts: List<AppHistorySummaryPart> = emptyList(),
     val categories: Set<AppHistoryChangeCategory> = emptySet(),
-    val hasCertificateChange: Boolean = false,
+    val hasCertificateWarning: Boolean = false,
     val needsAttention: Boolean = false,
     val hasOnlyUncomparableDetails: Boolean = false,
     val revertedAt: Instant? = null,
@@ -62,6 +64,7 @@ internal class AppChangeItemMapper @Inject constructor(private val permissionLab
             capturedAt = entry.snapshot.capturedAt,
             date = entry.snapshot.capturedAt,
             kind = AppChangeKind.FirstRecorded,
+            recordedOn = entry.snapshot.recordedOn,
             version = entry.snapshot.version,
         )
 
@@ -71,12 +74,13 @@ internal class AppChangeItemMapper @Inject constructor(private val permissionLab
             snapshotId = entry.snapshot.id.value,
             capturedAt = entry.snapshot.capturedAt,
             date = entry.timestamp,
-            kind = AppChangeKind.Change(entry.kind),
+            kind = AppChangeKind.Change(entry.kind, previousRecordedOn = entry.previous.recordedOn),
+            recordedOn = entry.snapshot.recordedOn,
             version = entry.snapshot.version,
             versionChange = entry.diff.version,
             parts = entry.summaryParts(permissionLabelProvider::getLabel).sortedByDescending { it.needsAttention },
             categories = entry.diff.changedCategories,
-            hasCertificateChange = entry.diff.hasCertificateChange,
+            hasCertificateWarning = entry.hasCertificateWarning,
             needsAttention = entry.needsAttention,
             hasOnlyUncomparableDetails = entry.hasOnlyUncomparableDetails,
             revertedAt = revertedAt,

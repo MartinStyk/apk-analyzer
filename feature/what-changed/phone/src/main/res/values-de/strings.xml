@@ -17,6 +17,8 @@
     <string name="what_changed_no_net_change">Unterm Strich unverändert</string>
     <string name="what_changed_reverted">Rückgängig gemacht am %1$s</string>
     <string name="what_changed_no_changes_recorded">Keine Änderungen erfasst</string>
+    <string name="what_changed_last_seen_on">Zuletzt gesehen auf %1$s</string>
+    <string name="what_changed_includes_device">Enthält Verlauf von %1$s</string>
     <string name="what_changed_empty_title">Noch nichts erfasst</string>
     <string name="what_changed_empty_body">Apk Analyzer erfasst deine Apps im Hintergrund. Wenn eine App aktualisiert wird, siehst du hier, was sich daran geändert hat.</string>
     <string name="what_changed_error">Der Änderungsverlauf konnte nicht geladen werden</string>
@@ -62,4 +64,8 @@
     <string name="what_changed_recording_off_title">Die Erfassung ist deaktiviert</string>
     <string name="what_changed_recording_off_body">Neue Installationen und Updates werden nicht erfasst.</string>
     <string name="what_changed_recording_turn_on">Aktivieren</string>
+    <plurals name="what_changed_includes_devices">
+        <item quantity="one">Enthält Verlauf von %d weiteren Gerät</item>
+        <item quantity="other">Enthält Verlauf von %d weiteren Geräten</item>
+    </plurals>
 </resources>

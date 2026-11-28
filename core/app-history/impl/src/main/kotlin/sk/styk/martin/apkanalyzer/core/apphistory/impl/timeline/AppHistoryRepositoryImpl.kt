@@ -15,17 +15,14 @@ import kotlinx.coroutines.flow.transform
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.AppHistoryRepository
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryAppTimeline
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryDeviceTimeline
-import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySection
-import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySnapshot
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySnapshotId
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySnapshotRead
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryTimeline
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.capture.APP_HISTORY
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.AppHistoryPersistenceRepository
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.AppHistorySnapshotHeader
-import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.CapturedSection
-import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.StoredAppHistoryRecord
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTracker
@@ -74,8 +71,8 @@ internal class AppHistoryRepositoryImpl @Inject constructor(
 
     override fun timeline(packageName: PackageName): Flow<AppHistoryTimeline> = persistenceRepository.observe(packageName)
         .map { result ->
-            result.fold(
-                onSuccess = { records -> AppHistoryTimeline.Available(timelineBuilder.entries(records)) },
+            runCatchingCancellable { timelineBuilder.entries(result.getOrThrow(), persistenceRepository.devices().getOrThrow()) }.fold(
+                onSuccess = { entries -> AppHistoryTimeline.Available(entries) },
                 onFailure = { throwable ->
                     Logger.e(APP_HISTORY, throwable, "Timeline load failed for ${packageName.value}")
                     AppHistoryTimeline.Unavailable
@@ -86,8 +83,10 @@ internal class AppHistoryRepositoryImpl @Inject constructor(
 
     override fun deviceTimeline(): Flow<AppHistoryDeviceTimeline> = cachedDeviceTimeline
 
-    override suspend fun snapshot(id: AppHistorySnapshotId): AppHistorySnapshotRead = persistenceRepository.read(id.value).fold(
-        onSuccess = { stored -> stored?.let { AppHistorySnapshotRead.Found(it.toSnapshot()) } ?: AppHistorySnapshotRead.NotFound },
+    override suspend fun snapshot(id: AppHistorySnapshotId): AppHistorySnapshotRead = runCatchingCancellable {
+        persistenceRepository.read(id.value).getOrThrow()?.let { timelineBuilder.snapshot(it, persistenceRepository.devices().getOrThrow()) }
+    }.fold(
+        onSuccess = { snapshot -> snapshot?.let(AppHistorySnapshotRead::Found) ?: AppHistorySnapshotRead.NotFound },
         onFailure = { throwable ->
             Logger.e(APP_HISTORY, throwable, "Snapshot ${id.value} could not be read")
             AppHistorySnapshotRead.Unavailable
@@ -99,6 +98,7 @@ internal class AppHistoryRepositoryImpl @Inject constructor(
             timedSection(tag = APP_HISTORY, operation = "Device timeline build", metric = "build_ms") {
                 val headersByPackage = headers.groupBy { it.packageName }
                 deviceCache.keys.retainAll(headersByPackage.keys)
+                val devices = persistenceRepository.devices().getOrThrow()
                 var decodedCount = 0
                 var cachedCount = 0
                 val apps = headersByPackage.mapNotNull { (packageName, packageHeaders) ->
@@ -108,10 +108,10 @@ internal class AppHistoryRepositoryImpl @Inject constructor(
                         return@mapNotNull it.timeline
                     }
                     val timeline = if (packageHeaders.size == 1) {
-                        timelineBuilder.firstSeenOnly(packageHeaders.single())
+                        timelineBuilder.firstSeenOnly(packageHeaders.single(), devices)
                     } else {
                         decodedCount++
-                        timelineBuilder.appTimeline(persistenceRepository.records(packageName).getOrThrow())
+                        timelineBuilder.appTimeline(persistenceRepository.records(packageName).getOrThrow(), devices)
                     }
                     deviceCache[packageName] = CachedAppTimeline(packageHeaders, timeline)
                     timeline
@@ -131,16 +131,3 @@ internal class AppHistoryRepositoryImpl @Inject constructor(
 }
 
 private data class CachedAppTimeline(val headers: List<AppHistorySnapshotHeader>, val timeline: AppHistoryAppTimeline?)
-
-private fun StoredAppHistoryRecord.toSnapshot() = AppHistorySnapshot(
-    id = AppHistorySnapshotId(id),
-    capturedAt = record.capturedAt,
-    detail = record.detail,
-    nativeLibraries = record.nativeLibraries.toSection(),
-    signingSchemes = record.signingScheme.toSection(),
-)
-
-private fun <T> CapturedSection<T>.toSection(): AppHistorySection<T> = when (this) {
-    is CapturedSection.Captured -> AppHistorySection.Recorded(value)
-    CapturedSection.Unavailable -> AppHistorySection.NotRecorded
-}

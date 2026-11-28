@@ -23,6 +23,7 @@ import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.AppHistoryRecord
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.CapturedSection
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.StoredAppHistoryRecord
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.timeline.AppHistoryDiffer
+import sk.styk.martin.apkanalyzer.core.apphistory.impl.timeline.AppHistoryRecordedOnResolver
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.timeline.AppHistoryRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.timeline.AppHistoryTimelineBuilder
 import sk.styk.martin.apkanalyzer.core.apps.api.AppDetailRepositoryFake
@@ -75,7 +76,13 @@ class AppHistoryCaptureRepositoryImplTest {
         appScope = appScope,
     )
     private val history =
-        AppHistoryRepositoryImpl(persistence, AppHistoryTimelineBuilder(AppHistoryDiffer()), PerformanceTrackerFake(), dispatcherProvider, appScope)
+        AppHistoryRepositoryImpl(
+            persistence,
+            AppHistoryTimelineBuilder(AppHistoryDiffer(), AppHistoryRecordedOnResolver(DeviceInfoProviderFake())),
+            PerformanceTrackerFake(),
+            dispatcherProvider,
+            appScope,
+        )
 
     @After
     fun tearDown() {

@@ -308,6 +308,13 @@ sample card or category stubs. Differences from the design above, all decided wi
 - **The full change log (`HI-07`) is a separate *Full history* screen**, opened from the tab's top
   bar, styled like the per-app timeline with an app identity on each row and filter chips per change
   type.
+- **History from another phone is labelled, never flagged.** After an import or a restore, a row
+  recorded on another phone carries an "On <phone>" tag, the move itself reads "Moved from <phone>",
+  a Changed apps row that includes such changes says "Includes history from <phone>", an app known
+  only from another phone reads "Last seen on <phone>" under No longer installed, and the summary
+  names the other phones when the range includes their history. A move is never counted as needing
+  attention and never highlighted, even when the certificate or install source differs across it:
+  a new phone routinely gets a differently signed or differently sourced copy of the same app.
 - History is rebuilt on read; see
   [`core/app-history/AGENTS.md`](../../../../core/app-history/AGENTS.md#device-wide-read) for the
   per-app cache and the `app_history_device_timeline` trace.
@@ -403,9 +410,12 @@ API, and the first snapshot is the first *recording*, often long after install. 
 "Camera and 1 other permission added", rather than category labels. The first row reads "First recorded"
 and is dated when it was recorded, since an install date can be a factory date. A change can be
 `Updated`, `Reinstalled`, or `NewDevice`. The break is drawn below the row that caused it: the list runs
-newest first, so the row belongs with the install it began. Certificate changes carry a kind-specific
-explanation, because on an update Android required the old key's approval. Full detail is labelled "As
-seen on <date>", using the recording date, and reads only the store; see
+newest first, so the row belongs with the install it began. A `NewDevice` break reads "Moved from
+<phone>", and every row recorded on another phone carries an "On <phone>" tag, so imported history
+never passes for local updates. Certificate changes carry a kind-specific explanation, because on an
+update Android required the old key's approval; across a move the change is shown neutrally, never as
+a warning. Full detail is labelled "As seen on <date>", using the recording date, adds "Recorded on
+<phone>" when the snapshot came from another phone, and reads only the store; see
 [`feature/app-detail/AGENTS.md`](../../../../feature/app-detail/AGENTS.md#historical-mode).
 
 An uninstall followed by a reinstall is a **break in the chain**, drawn as one — same package, new

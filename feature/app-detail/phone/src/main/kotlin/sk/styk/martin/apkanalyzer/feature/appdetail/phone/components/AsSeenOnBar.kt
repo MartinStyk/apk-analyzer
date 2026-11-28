@@ -23,8 +23,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.paneTitle
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryRecordedOn
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
@@ -38,10 +40,11 @@ import java.time.Instant
 internal fun AppDetailModeFrame(
     recordedAt: Instant?,
     modifier: Modifier = Modifier,
+    recordedOn: AppHistoryRecordedOn = AppHistoryRecordedOn.ThisDevice,
     content: @Composable () -> Unit,
 ) {
     Column(modifier = modifier.fillMaxSize()) {
-        recordedAt?.let { AsSeenOnBar(recordedAt = it) }
+        recordedAt?.let { AsSeenOnBar(recordedAt = it, recordedOn = recordedOn) }
         Box(modifier = Modifier.weight(1f)) {
             content()
         }
@@ -49,17 +52,22 @@ internal fun AppDetailModeFrame(
 }
 
 @Composable
-internal fun AsSeenOnBar(recordedAt: Instant, modifier: Modifier = Modifier) {
+internal fun AsSeenOnBar(
+    recordedAt: Instant,
+    modifier: Modifier = Modifier,
+    recordedOn: AppHistoryRecordedOn = AppHistoryRecordedOn.ThisDevice,
+) {
     var showExplanation by rememberSaveable { mutableStateOf(false) }
     val date = recordedAt.historyFullDate()
     val text = stringResource(R.string.app_history_as_seen_on, date)
+    val device = (recordedOn as? AppHistoryRecordedOn.OtherDevice)?.let { stringResource(R.string.app_history_recorded_on_device, it.name) }
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
             .heightIn(min = 48.dp)
             .background(AppTheme.colors.secondaryContainer)
-            .semantics(mergeDescendants = true) { paneTitle = text }
+            .semantics(mergeDescendants = true) { paneTitle = listOfNotNull(text, device).joinToString(separator = "\n") }
             .clickable(
                 onClickLabel = stringResource(R.string.app_history_as_seen_click_label),
                 role = Role.Button,
@@ -74,13 +82,23 @@ internal fun AsSeenOnBar(recordedAt: Instant, modifier: Modifier = Modifier) {
             modifier = Modifier.size(18.dp),
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(
-            text = text,
-            style = AppTheme.typography.labelLarge,
-            color = AppTheme.colors.onSecondaryContainer,
-            maxLines = 2,
-            modifier = Modifier.weight(1f),
-        )
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = text,
+                style = AppTheme.typography.labelLarge,
+                color = AppTheme.colors.onSecondaryContainer,
+                maxLines = 2,
+            )
+            device?.let {
+                Text(
+                    text = it,
+                    style = AppTheme.typography.labelMedium,
+                    color = AppTheme.colors.onSecondaryContainer,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+        }
         Spacer(modifier = Modifier.width(8.dp))
         Icon(
             imageVector = ApkAnalyzerIcons.Info,
@@ -93,7 +111,7 @@ internal fun AsSeenOnBar(recordedAt: Instant, modifier: Modifier = Modifier) {
         RationaleBottomSheet(
             row = InfoRow(
                 label = stringResource(R.string.app_history_as_seen_on_label),
-                value = date,
+                value = listOfNotNull(date, device).joinToString(separator = "\n"),
                 rationale = stringResource(R.string.app_history_as_seen_on_explanation),
             ),
             onDismiss = { showExplanation = false },
@@ -114,5 +132,13 @@ private fun AsSeenOnBarPreview() {
 private fun AsSeenOnBarDarkPreview() {
     ApkAnalyzerTheme(isDarkTheme = true) {
         AsSeenOnBar(recordedAt = Instant.ofEpochMilli(1_773_014_400_000))
+    }
+}
+
+@Preview
+@Composable
+private fun AsSeenOnBarOtherDevicePreview() {
+    ApkAnalyzerTheme {
+        AsSeenOnBar(recordedAt = Instant.ofEpochMilli(1_773_014_400_000), recordedOn = AppHistoryRecordedOn.OtherDevice("Google Pixel 7"))
     }
 }

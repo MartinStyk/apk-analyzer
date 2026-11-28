@@ -17,6 +17,8 @@
     <string name="what_changed_no_net_change">No net change</string>
     <string name="what_changed_reverted">Reverted %1$s</string>
     <string name="what_changed_no_changes_recorded">No changes recorded</string>
+    <string name="what_changed_last_seen_on">Last seen on %1$s</string>
+    <string name="what_changed_includes_device">Includes history from %1$s</string>
     <string name="what_changed_empty_title">Nothing recorded yet</string>
     <string name="what_changed_empty_body">Apk Analyzer records your apps in the background. When an app updates, what changed in it shows up here.</string>
     <string name="what_changed_error">Couldn\'t load the change history</string>
@@ -63,4 +65,8 @@
     <string name="what_changed_recording_off_title">Recording is off</string>
     <string name="what_changed_recording_off_body">New installs and updates aren\'t being recorded.</string>
     <string name="what_changed_recording_turn_on">Turn on</string>
+    <plurals name="what_changed_includes_devices">
+        <item quantity="one">Includes history from %d other device</item>
+        <item quantity="other">Includes history from %d other devices</item>
+    </plurals>
 </resources>

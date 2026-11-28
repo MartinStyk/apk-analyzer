@@ -2,7 +2,9 @@
 <resources>
     <string name="app_history_signing_method_changed">La méthode de signature a changé</string>
     <string name="app_history_reinstalled">Supprimée puis réinstallée</string>
-    <string name="app_history_new_device">Suite sur un nouvel appareil</string>
+    <string name="app_history_moved_from">Transférée depuis %1$s</string>
+    <string name="app_history_moved_from_this_device">Transférée depuis cet appareil</string>
+    <string name="app_history_on_device">Sur %1$s</string>
     <string name="app_history_version">Version %1$s</string>
     <string name="app_history_version_with_code">%1$s (%2$d)</string>
     <string name="app_history_value_change">%1$s → %2$s</string>

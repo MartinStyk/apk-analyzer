@@ -6,6 +6,9 @@ import sk.styk.martin.apkanalyzer.core.apps.api.permissions.Permission
 import sk.styk.martin.apkanalyzer.core.apps.api.permissions.PermissionDetails
 import sk.styk.martin.apkanalyzer.core.apps.api.permissions.ProtectionLevel
 import sk.styk.martin.apkanalyzer.core.apps.api.permissions.UsedPermission
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.Certificate
+import sk.styk.martin.apkanalyzer.core.apps.api.signing.WhatsAppCertificate
+import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import java.time.Instant
 
@@ -83,7 +86,77 @@ class AppHistoryDeviceSummaryTest {
 
         latest?.packageName?.value shouldBe "com.updated"
     }
+
+    @Test
+    fun `Given a move with a new certificate and install source When summarizing Then nothing needs attention`() {
+        val diff = aVersionDiff().copy(certificates = aCertificateChange(), installSource = aStoreChange())
+        val moved = aChange(id = 2, previous = 1, day = 5, diff = diff, kind = AppHistoryEntry.Change.Kind.NewDevice, previousRecordedOn = Pixel)
+        val app = anApp("com.moved", listOf(moved), firstRecordedOn = Pixel)
+
+        val summary = AppHistoryDeviceTimeline.Available(listOf(app)).summarySince(day(3))
+
+        summary.needsAttention shouldBe emptyList()
+    }
+
+    @Test
+    fun `Given a certificate that differs only across a move When summarizing Then the changed app is not a warning`() {
+        val updatedOnPixel = aChange(id = 2, previous = 1, day = 4, diff = aVersionDiff(), recordedOn = Pixel)
+        val moved = aChange(
+            id = 3,
+            previous = 2,
+            day = 5,
+            diff = aVersionDiff().copy(certificates = aCertificateChange()),
+            kind = AppHistoryEntry.Change.Kind.NewDevice,
+            previousRecordedOn = Pixel,
+        )
+        val app = anApp(
+            "com.moved",
+            listOf(moved, updatedOnPixel),
+            firstRecordedOn = Pixel,
+            diffsToLatest = mapOf(AppHistorySnapshotId(1) to aVersionDiff().copy(certificates = aCertificateChange())),
+        )
+
+        val summary = AppHistoryDeviceTimeline.Available(listOf(app)).summarySince(day(3))
+
+        summary.changedApps.single().netChange?.hasCertificateChange shouldBe true
+        summary.changedApps.single().hasCertificateWarning shouldBe false
+    }
+
+    @Test
+    fun `Given an update that changed the certificate When summarizing Then the changed app is a warning`() {
+        val app = anApp(
+            "com.signed",
+            listOf(aChange(id = 2, previous = 1, day = 5, diff = aVersionDiff().copy(certificates = aCertificateChange()))),
+            diffsToLatest = mapOf(AppHistorySnapshotId(1) to aVersionDiff().copy(certificates = aCertificateChange())),
+        )
+
+        val summary = AppHistoryDeviceTimeline.Available(listOf(app)).summarySince(day(3))
+
+        summary.changedApps.single().hasCertificateWarning shouldBe true
+    }
+
+    @Test
+    fun `Given history from other phones inside and outside the range When summarizing Then only phones in range are named`() {
+        val moved = aChange(id = 2, previous = 1, day = 5, diff = aVersionDiff(), kind = AppHistoryEntry.Change.Kind.NewDevice, previousRecordedOn = Pixel)
+        val movedApp = anApp("com.moved", listOf(moved), firstRecordedOn = Pixel)
+        val oldApp = anApp("com.old", installedOn = day(1), firstRecordedOn = AppHistoryRecordedOn.OtherDevice("Samsung SM-S918B"))
+
+        val summary = AppHistoryDeviceTimeline.Available(listOf(movedApp, oldApp)).summarySince(day(3))
+
+        summary.otherDevices shouldBe listOf("Google Pixel 7")
+    }
+
+    @Test
+    fun `Given an app installed in range on another phone When summarizing Then its row names that phone`() {
+        val app = anApp("com.installed", installedOn = day(4), firstRecordedOn = Pixel)
+
+        val summary = AppHistoryDeviceTimeline.Available(listOf(app)).summarySince(day(3))
+
+        summary.changedApps.single().otherDevices shouldBe listOf("Google Pixel 7")
+    }
 }
+
+private val Pixel = AppHistoryRecordedOn.OtherDevice("Google Pixel 7")
 
 private fun day(day: Int): Instant = Instant.ofEpochSecond(day * 86_400L)
 
@@ -91,6 +164,7 @@ private fun aSummary(
     id: Long,
     at: Instant,
     installedOn: Instant = day(0),
+    recordedOn: AppHistoryRecordedOn = AppHistoryRecordedOn.ThisDevice,
 ) = AppHistorySnapshotSummary(
     id = AppHistorySnapshotId(id),
     applicationName = "App",
@@ -98,6 +172,7 @@ private fun aSummary(
     firstInstallTime = installedOn,
     lastUpdateTime = at,
     capturedAt = at,
+    recordedOn = recordedOn,
 )
 
 private fun aChange(
@@ -106,7 +181,14 @@ private fun aChange(
     day: Int,
     diff: AppHistoryDiff,
     kind: AppHistoryEntry.Change.Kind = AppHistoryEntry.Change.Kind.Updated,
-) = AppHistoryEntry.Change(kind = kind, snapshot = aSummary(id, day(day)), previous = aSummary(previous, day(day - 1)), diff = diff)
+    recordedOn: AppHistoryRecordedOn = AppHistoryRecordedOn.ThisDevice,
+    previousRecordedOn: AppHistoryRecordedOn = recordedOn,
+) = AppHistoryEntry.Change(
+    kind = kind,
+    snapshot = aSummary(id, day(day), recordedOn = recordedOn),
+    previous = aSummary(previous, day(day - 1), recordedOn = previousRecordedOn),
+    diff = diff,
+)
 
 private fun anApp(
     packageName: String,
@@ -114,12 +196,20 @@ private fun anApp(
     installedOn: Instant = day(0),
     unchangedUpdates: List<Instant> = emptyList(),
     diffsToLatest: Map<AppHistorySnapshotId, AppHistoryDiff> = emptyMap(),
+    firstRecordedOn: AppHistoryRecordedOn = AppHistoryRecordedOn.ThisDevice,
 ) = AppHistoryAppTimeline(
     packageName = PackageName(packageName),
     applicationName = packageName,
-    entries = changes + AppHistoryEntry.FirstSeen(aSummary(id = 1, at = installedOn, installedOn = installedOn)),
+    entries = changes + AppHistoryEntry.FirstSeen(aSummary(id = 1, at = installedOn, installedOn = installedOn, recordedOn = firstRecordedOn)),
     unchangedUpdates = unchangedUpdates,
     diffsToLatest = diffsToLatest,
+)
+
+private fun aCertificateChange() = SetChange.Changed<Certificate>(added = listOf(WhatsAppCertificate), removed = emptyList(), modified = emptyList())
+
+private fun aStoreChange() = ValueChange(
+    AppHistoryInstallSource(AppSource.GooglePlay, PackageName("com.android.vending")),
+    AppHistoryInstallSource(AppSource.Sideloaded, PackageName("com.google.android.packageinstaller")),
 )
 
 private fun aDangerousPermission(name: String) = UsedPermission(

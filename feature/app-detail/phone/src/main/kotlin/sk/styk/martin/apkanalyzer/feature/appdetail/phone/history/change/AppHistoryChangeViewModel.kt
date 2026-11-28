@@ -22,6 +22,7 @@ import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.ValueChange
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.addedDangerousPermissions
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.fieldChangesFrom
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.hasCertificateChange
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.hasCertificateWarning
 import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.PermissionItem
 import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.PermissionItemMapper
 import sk.styk.martin.apkanalyzer.core.apppermissions.api.detail.PermissionScope
@@ -149,6 +150,8 @@ internal class AppHistoryChangeViewModel @AssistedInject constructor(
         kind = kind,
         timestamp = timestamp,
         capturedAt = snapshot.capturedAt,
+        recordedOn = snapshot.recordedOn,
+        previousRecordedOn = previous.recordedOn,
         version = snapshot.version,
         versionChange = diff.version,
         versionTag = versionTag,
@@ -168,6 +171,7 @@ internal class AppHistoryChangeViewModel @AssistedInject constructor(
         if (!diff.hasCertificateChange && hasNoInsightOrPermission) return null
         return HistoryChangeSection.WorthKnowing(
             hasCertificateChange = diff.hasCertificateChange,
+            isCertificateWarning = hasCertificateWarning,
             dangerousPermissions = dangerousPermissions,
             addedInsights = addedInsights,
             removedInsights = removedInsights,

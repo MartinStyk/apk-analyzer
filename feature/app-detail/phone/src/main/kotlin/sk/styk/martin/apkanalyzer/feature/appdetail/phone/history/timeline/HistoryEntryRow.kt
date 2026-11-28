@@ -27,10 +27,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryEntry
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryRecordedOn
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySummaryPart
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryVersion
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.ValueChange
-import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.breakHeadlineRes
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.breakHeadline
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.deviceLabel
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.direction
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.label
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.needsAttention
@@ -39,6 +41,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzer
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ChangeToken
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Tag
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.format.historyDate
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.format.historyDateTime
@@ -64,13 +67,13 @@ internal fun HistoryEntryRow(
     modifier: Modifier = Modifier,
 ) {
     val resources = LocalResources.current
-    val secondaryColor = if (row.hasCertificateChange) AppTheme.colors.onSurface else AppTheme.colors.onSurfaceVariant
+    val secondaryColor = if (row.hasCertificateWarning) AppTheme.colors.onSurface else AppTheme.colors.onSurfaceVariant
     val date = remember(row.date, row.showsTime) { if (row.showsTime) row.date.historyDateTime() else row.date.historyDate() }
     Row(
         verticalAlignment = if (row.isCompact) Alignment.CenterVertically else Alignment.Top,
         modifier = modifier
             .fillMaxWidth()
-            .background(if (row.hasCertificateChange) AppTheme.colors.warningContainer else AppTheme.colors.surface, position.shape())
+            .background(if (row.hasCertificateWarning) AppTheme.colors.warningContainer else AppTheme.colors.surface, position.shape())
             .padding(2.dp)
             .clip(Shapes.CardShape)
             .combinedClickable(
@@ -114,14 +117,16 @@ private fun CompactRowContent(
     modifier: Modifier = Modifier,
 ) {
     val resources = LocalResources.current
-    HeadlineWithDate(
-        headline = row.compactLine(row.versionText(resources), resources),
-        headlineStyle = AppTheme.typography.bodySmall,
-        headlineColor = AppTheme.colors.onSurfaceVariant,
-        date = date,
-        dateColor = AppTheme.colors.onSurfaceVariant,
-        modifier = modifier,
-    )
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp), modifier = modifier) {
+        HeadlineWithDate(
+            headline = row.compactLine(row.versionText(resources), resources),
+            headlineStyle = AppTheme.typography.bodySmall,
+            headlineColor = AppTheme.colors.onSurfaceVariant,
+            date = date,
+            dateColor = AppTheme.colors.onSurfaceVariant,
+        )
+        row.recordedOn.deviceLabel(resources)?.let { DeviceTag(text = it) }
+    }
 }
 
 @Composable
@@ -131,22 +136,24 @@ private fun FullRowContent(
     secondaryColor: Color,
     modifier: Modifier = Modifier,
 ) {
+    val resources = LocalResources.current
     Column(verticalArrangement = Arrangement.spacedBy(4.dp), modifier = modifier) {
         HeadlineWithDate(
-            headline = row.versionText(LocalResources.current),
+            headline = row.versionText(resources),
             headlineStyle = AppTheme.typography.titleSmall,
             headlineColor = AppTheme.colors.onBackground,
             date = date,
             dateColor = secondaryColor,
         )
-        if (row.hasCertificateChange) {
+        if (row.hasCertificateWarning) {
             Text(
                 text = stringResource(R.string.app_history_certificate_changed),
                 style = AppTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
                 color = AppTheme.colors.onSurface,
             )
         }
-        row.breakHeadlineRes?.let { BodyLine(text = stringResource(it), color = secondaryColor) }
+        row.breakHeadline(resources)?.let { BodyLine(text = it, color = secondaryColor) }
+        row.recordedOn.deviceLabel(resources)?.let { DeviceTag(text = it) }
         if (row.hasOnlyUncomparableDetails) {
             BodyLine(text = stringResource(R.string.app_history_uncomparable_only), color = secondaryColor)
         } else {
@@ -210,6 +217,11 @@ private fun ChangeTokens(parts: List<AppHistorySummaryPart>, textColor: Color) {
 }
 
 @Composable
+private fun DeviceTag(text: String) {
+    Tag(text = text, icon = ApkAnalyzerIcons.Screen, highlighted = true)
+}
+
+@Composable
 private fun BodyLine(text: String, color: Color) {
     Text(
         text = text,
@@ -223,19 +235,19 @@ private fun BodyLine(text: String, color: Color) {
 private val AppHistoryRow.isCompact: Boolean
     get() = isQuiet || kind == AppHistoryRowKind.FirstRecorded
 
-private val AppHistoryRow.breakHeadlineRes: Int?
-    get() = changeKind?.breakHeadlineRes
+private fun AppHistoryRow.breakHeadline(resources: Resources): String? =
+    (kind as? AppHistoryRowKind.Change)?.let { it.kind.breakHeadline(it.previousRecordedOn, resources) }
 
 private val AppHistoryRow.icon: ImageVector
     get() = when {
-        hasCertificateChange -> ApkAnalyzerIcons.Warning
+        hasCertificateWarning -> ApkAnalyzerIcons.Warning
         else -> changeKind?.icon(versionTag) ?: ApkAnalyzerIcons.History
     }
 
 private val AppHistoryRow.iconTint: Color
     @Composable
     get() = when {
-        hasCertificateChange -> AppTheme.colors.warning
+        hasCertificateWarning -> AppTheme.colors.warning
         isCompact || changeKind == AppHistoryEntry.Change.Kind.NewDevice -> AppTheme.colors.onSurfaceVariant
         else -> AppTheme.colors.primary
     }
@@ -257,18 +269,21 @@ private fun List<AppHistorySummaryPart>.joinedLabels(resources: Resources): Stri
 
 private fun AppHistoryRow.copyText(resources: Resources): String {
     val event = when {
-        hasCertificateChange -> resources.getString(R.string.app_history_certificate_changed)
+        hasCertificateWarning -> resources.getString(R.string.app_history_certificate_changed)
         kind == AppHistoryRowKind.FirstRecorded -> resources.getString(R.string.app_history_first_recorded)
-        else -> breakHeadlineRes?.let(resources::getString)
+        else -> breakHeadline(resources)
     }
-    return (listOfNotNull(event, date.historyFullDate(), versionText(resources)) + summary.map { it.label(resources) })
+    val facts = listOfNotNull(event, recordedOn.deviceLabel(resources), date.historyFullDate(), versionText(resources))
+    return (facts + summary.map { it.label(resources) })
         .reduce { joined, part -> resources.getString(HistoryR.string.app_history_summary_join, joined, part) }
 }
 
 private val sampleDate = Instant.ofEpochMilli(1_772_409_600_000)
+internal val samplePixel = AppHistoryRecordedOn.OtherDevice("Google Pixel 7")
 
 internal fun sampleHistoryRow(
-    kind: AppHistoryRowKind = AppHistoryRowKind.Change(AppHistoryEntry.Change.Kind.Updated),
+    kind: AppHistoryRowKind = AppHistoryRowKind.Change(AppHistoryEntry.Change.Kind.Updated, previousRecordedOn = AppHistoryRecordedOn.ThisDevice),
+    recordedOn: AppHistoryRecordedOn = AppHistoryRecordedOn.ThisDevice,
     snapshotId: Long = 4,
     versionChange: ValueChange<AppHistoryVersion>? = ValueChange(AppHistoryVersion(31200, "312.0"), AppHistoryVersion(31500, "315.0")),
     summary: List<AppHistorySummaryPart> = listOf(
@@ -279,7 +294,7 @@ internal fun sampleHistoryRow(
         AppHistorySummaryPart.TargetSdkChanged(before = 34, after = 35),
         AppHistorySummaryPart.SizeChanged(before = 152.megabytes, after = 160.megabytes),
     ),
-    hasCertificateChange: Boolean = false,
+    hasCertificateWarning: Boolean = false,
     isQuiet: Boolean = false,
     versionTag: HistoryVersionTag? = null,
     hasOnlyUncomparableDetails: Boolean = false,
@@ -288,10 +303,11 @@ internal fun sampleHistoryRow(
     capturedAt = sampleDate,
     date = sampleDate,
     kind = kind,
+    recordedOn = recordedOn,
     version = AppHistoryVersion(31500, "315.0"),
     versionChange = versionChange,
     summary = summary,
-    hasCertificateChange = hasCertificateChange,
+    hasCertificateWarning = hasCertificateWarning,
     isQuiet = isQuiet,
     versionTag = versionTag,
     hasOnlyUncomparableDetails = hasOnlyUncomparableDetails,
@@ -323,11 +339,45 @@ private fun HistoryEntryRowQuietPreview() {
 private fun HistoryEntryRowCertificateOnReinstallPreview() {
     ApkAnalyzerTheme {
         HistoryEntryRow(
-            row = sampleHistoryRow(kind = AppHistoryRowKind.Change(AppHistoryEntry.Change.Kind.Reinstalled), hasCertificateChange = true),
+            row = sampleHistoryRow(
+                kind = AppHistoryRowKind.Change(AppHistoryEntry.Change.Kind.Reinstalled, previousRecordedOn = AppHistoryRecordedOn.ThisDevice),
+                hasCertificateWarning = true,
+            ),
             position = ListItemPosition.Single,
             onClick = {},
             onLongClick = {},
         )
+    }
+}
+
+@Preview
+@Composable
+private fun HistoryEntryRowOtherDevicePreview() {
+    ApkAnalyzerTheme {
+        Column {
+            HistoryEntryRow(
+                row = sampleHistoryRow(
+                    kind = AppHistoryRowKind.Change(AppHistoryEntry.Change.Kind.NewDevice, previousRecordedOn = samplePixel),
+                    versionChange = null,
+                    summary = listOf(AppHistorySummaryPart.TargetSdkChanged(before = 34, after = 35)),
+                ),
+                position = ListItemPosition.First,
+                onClick = {},
+                onLongClick = {},
+            )
+            HistoryEntryRow(
+                row = sampleHistoryRow(recordedOn = samplePixel),
+                position = ListItemPosition.Middle,
+                onClick = {},
+                onLongClick = {},
+            )
+            HistoryEntryRow(
+                row = sampleHistoryRow(kind = AppHistoryRowKind.FirstRecorded, recordedOn = samplePixel, versionChange = null, summary = emptyList()),
+                position = ListItemPosition.Last,
+                onClick = {},
+                onLongClick = {},
+            )
+        }
     }
 }
 

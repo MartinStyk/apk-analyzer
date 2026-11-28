@@ -2,7 +2,9 @@
 <resources>
     <string name="app_history_signing_method_changed">署名方式が変更されました</string>
     <string name="app_history_reinstalled">削除後に再インストール</string>
-    <string name="app_history_new_device">新しいデバイスで継続</string>
+    <string name="app_history_moved_from">%1$s から移行</string>
+    <string name="app_history_moved_from_this_device">このデバイスから移行</string>
+    <string name="app_history_on_device">%1$s で記録</string>
     <string name="app_history_version">バージョン %1$s</string>
     <string name="app_history_version_with_code">%1$s (%2$d)</string>
     <string name="app_history_value_change">%1$s → %2$s</string>

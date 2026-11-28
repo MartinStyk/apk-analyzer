@@ -319,6 +319,7 @@
     <string name="app_history_when_updated">%1$s को अपडेट हुआ</string>
     <string name="app_history_when_reinstalled">%1$s को फिर से इंस्टॉल हुआ</string>
     <string name="app_history_when_recorded">%1$s को दर्ज हुआ</string>
+    <string name="app_history_recorded_on_device">%1$s पर दर्ज हुआ</string>
     <string name="app_history_when_with_recorded">%1$s · %2$s को दर्ज</string>
     <string name="app_history_changes_heading">इन वर्शन के बीच बदलाव</string>
     <string name="app_history_device_note">कुछ अंतर ऐप से नहीं, डिवाइस से हो सकते हैं।</string>

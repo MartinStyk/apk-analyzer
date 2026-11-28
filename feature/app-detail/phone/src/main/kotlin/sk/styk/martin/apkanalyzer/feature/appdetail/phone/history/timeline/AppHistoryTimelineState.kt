@@ -2,6 +2,7 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.phone.history.timeline
 
 import androidx.compose.runtime.Immutable
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryEntry
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryRecordedOn
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySummaryPart
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryVersion
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.ValueChange
@@ -13,7 +14,7 @@ import java.time.YearMonth
 internal sealed interface AppHistoryRowKind {
     data object FirstRecorded : AppHistoryRowKind
 
-    data class Change(val kind: AppHistoryEntry.Change.Kind) : AppHistoryRowKind
+    data class Change(val kind: AppHistoryEntry.Change.Kind, val previousRecordedOn: AppHistoryRecordedOn) : AppHistoryRowKind
 }
 
 @Immutable
@@ -22,10 +23,11 @@ internal data class AppHistoryRow(
     val capturedAt: Instant,
     val date: Instant,
     val kind: AppHistoryRowKind,
+    val recordedOn: AppHistoryRecordedOn,
     val version: AppHistoryVersion,
     val versionChange: ValueChange<AppHistoryVersion>? = null,
     val summary: List<AppHistorySummaryPart> = emptyList(),
-    val hasCertificateChange: Boolean = false,
+    val hasCertificateWarning: Boolean = false,
     val isQuiet: Boolean = false,
     val versionTag: HistoryVersionTag? = null,
     val hasOnlyUncomparableDetails: Boolean = false,

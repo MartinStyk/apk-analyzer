@@ -2,6 +2,7 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.phone
 
 import androidx.compose.runtime.Immutable
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryOverview
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryRecordedOn
 import sk.styk.martin.apkanalyzer.core.apps.api.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateTrustLevel
@@ -51,6 +52,7 @@ internal sealed interface AppDetailState {
     @Immutable
     data class Loaded(
         val analysisMode: AppDetail.AnalysisMode,
+        val recordedOn: AppHistoryRecordedOn,
         val appName: String,
         val packageName: PackageName,
         val processName: String?,

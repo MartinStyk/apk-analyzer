@@ -350,6 +350,7 @@
     <string name="app_history_when_updated">Aggiornata il %1$s</string>
     <string name="app_history_when_reinstalled">Reinstallata il %1$s</string>
     <string name="app_history_when_recorded">Rilevato il %1$s</string>
+    <string name="app_history_recorded_on_device">Rilevato su %1$s</string>
     <string name="app_history_when_with_recorded">%1$s · rilevato il %2$s</string>
     <string name="app_history_changes_heading">Modifiche tra queste versioni</string>
     <string name="app_history_device_note">Alcune differenze possono dipendere dal dispositivo, non dall\'app.</string>

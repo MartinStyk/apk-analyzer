@@ -319,6 +319,7 @@
     <string name="app_history_when_updated">Güncellendi: %1$s</string>
     <string name="app_history_when_reinstalled">Yeniden yüklendi: %1$s</string>
     <string name="app_history_when_recorded">Kaydedildi: %1$s</string>
+    <string name="app_history_recorded_on_device">%1$s cihazında kaydedildi</string>
     <string name="app_history_when_with_recorded">%1$s · kaydedildi: %2$s</string>
     <string name="app_history_changes_heading">Bu sürümler arasındaki değişiklikler</string>
     <string name="app_history_device_note">Bazı farklar uygulamadan değil cihazdan kaynaklanabilir.</string>

@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryOverview
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryRecordedOn
 import sk.styk.martin.apkanalyzer.core.apps.api.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificatePrincipal
 import sk.styk.martin.apkanalyzer.core.apps.api.signing.CertificateTrustLevel
@@ -255,7 +256,11 @@ private fun AppDetailContent(
     modifier: Modifier = Modifier,
     showToolbarWhileLoading: Boolean = false,
 ) {
-    AppDetailModeFrame(recordedAt = appDetailInput.recordedAt, modifier = modifier) {
+    AppDetailModeFrame(
+        recordedAt = appDetailInput.recordedAt,
+        recordedOn = (state as? AppDetailState.Loaded)?.recordedOn ?: AppHistoryRecordedOn.ThisDevice,
+        modifier = modifier,
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -1261,6 +1266,7 @@ private fun AppDetailHistoricalLoadedPreview() {
         AppDetailContent(
             state = sampleLoadedState().copy(
                 analysisMode = AppDetail.AnalysisMode.Historical,
+                recordedOn = AppHistoryRecordedOn.OtherDevice("Google Pixel 7"),
                 grantedDangerousPermissionsCount = null,
                 totalSize = null,
                 unmetRequirementsCount = 0,
@@ -1351,6 +1357,7 @@ private val sampleHistoricalInput = AppDetailInput.Historical(
 
 internal fun sampleLoadedState() = AppDetailState.Loaded(
     analysisMode = AppDetail.AnalysisMode.InstalledPackage,
+    recordedOn = AppHistoryRecordedOn.ThisDevice,
     appName = "Spotify",
     packageName = PackageName("com.spotify.music"),
     processName = "com.spotify.music",

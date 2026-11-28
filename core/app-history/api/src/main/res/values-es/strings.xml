@@ -2,7 +2,9 @@
 <resources>
     <string name="app_history_signing_method_changed">Cambió el método de firma</string>
     <string name="app_history_reinstalled">Eliminada e instalada de nuevo</string>
-    <string name="app_history_new_device">Continúa en un dispositivo nuevo</string>
+    <string name="app_history_moved_from">Trasladada desde %1$s</string>
+    <string name="app_history_moved_from_this_device">Trasladada desde este dispositivo</string>
+    <string name="app_history_on_device">En %1$s</string>
     <string name="app_history_version">Versión %1$s</string>
     <string name="app_history_version_with_code">%1$s (%2$d)</string>
     <string name="app_history_value_change">%1$s → %2$s</string>

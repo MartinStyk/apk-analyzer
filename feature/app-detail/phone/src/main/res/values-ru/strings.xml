@@ -381,6 +381,7 @@
     <string name="app_history_when_updated">Обновлено %1$s</string>
     <string name="app_history_when_reinstalled">Установлено снова %1$s</string>
     <string name="app_history_when_recorded">Зафиксировано %1$s</string>
+    <string name="app_history_recorded_on_device">Зафиксировано на устройстве %1$s</string>
     <string name="app_history_when_with_recorded">%1$s · зафиксировано %2$s</string>
     <string name="app_history_changes_heading">Изменения между этими версиями</string>
     <string name="app_history_device_note">Некоторые различия могут быть связаны с устройством, а не с приложением.</string>

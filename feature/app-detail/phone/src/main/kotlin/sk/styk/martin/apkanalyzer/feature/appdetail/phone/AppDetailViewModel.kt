@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.apkfiles.api.TemporaryApkManager
 import sk.styk.martin.apkanalyzer.core.apphistory.api.capture.AppHistoryCaptureRepository
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.AppHistoryRepository
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryRecordedOn
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryTimeline
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.overview
 import sk.styk.martin.apkanalyzer.core.apppermissions.api.PermissionLabelProvider
@@ -360,7 +361,8 @@ internal class AppDetailViewModel @AssistedInject constructor(
             source.value = detailResult.fold(
                 onSuccess = { detail ->
                     analytics.track(AppDetailAnalyticsEvent.Opened(appDetailInput))
-                    AppDetailSource.Ready(detail.toLoadedState(deviceFeatures, isNativeLibrariesRecorded))
+                    val recordedOn = sectionRepository.recordedOn(appDetailInput).getOrDefault(AppHistoryRecordedOn.ThisDevice)
+                    AppDetailSource.Ready(detail.toLoadedState(deviceFeatures, isNativeLibrariesRecorded, recordedOn))
                 },
                 onFailure = { AppDetailSource.Error(it.toErrorReason()) },
             )
@@ -372,7 +374,11 @@ internal class AppDetailViewModel @AssistedInject constructor(
         }
     }
 
-    private fun AppDetail.toLoadedState(deviceFeatures: DeviceFeatures, isNativeLibrariesRecorded: Boolean): AppDetailState.Loaded {
+    private fun AppDetail.toLoadedState(
+        deviceFeatures: DeviceFeatures,
+        isNativeLibrariesRecorded: Boolean,
+        recordedOn: AppHistoryRecordedOn,
+    ): AppDetailState.Loaded {
         val dangerousPermissions = permissions.used.filter { it.isDangerous }
         val relevantDangerousPermissions = when (analysisMode) {
             AppDetail.AnalysisMode.InstalledPackage -> dangerousPermissions.filter { it.isGranted }
@@ -383,6 +389,7 @@ internal class AppDetailViewModel @AssistedInject constructor(
         val badges = badgeEvaluator.evaluate(info, input = appDetailInput)
         return AppDetailState.Loaded(
             analysisMode = analysisMode,
+            recordedOn = recordedOn,
             appName = info.applicationName,
             packageName = info.packageName,
             processName = info.processName,

@@ -20,6 +20,7 @@ data class AppHistorySnapshotSummary(
     val firstInstallTime: Instant,
     val lastUpdateTime: Instant,
     val capturedAt: Instant,
+    val recordedOn: AppHistoryRecordedOn,
 )
 
 sealed interface AppHistoryEntry {

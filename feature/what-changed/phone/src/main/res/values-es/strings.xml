@@ -17,6 +17,8 @@
     <string name="what_changed_no_net_change">Sin cambios netos</string>
     <string name="what_changed_reverted">Revertido el %1$s</string>
     <string name="what_changed_no_changes_recorded">No se registraron cambios</string>
+    <string name="what_changed_last_seen_on">Vista por última vez en %1$s</string>
+    <string name="what_changed_includes_device">Incluye historial de %1$s</string>
     <string name="what_changed_empty_title">Aún no hay nada registrado</string>
     <string name="what_changed_empty_body">Apk Analyzer registra tus apps en segundo plano. Cuando una app se actualiza, aquí aparece qué cambió en ella.</string>
     <string name="what_changed_error">No se pudo cargar el historial de cambios</string>
@@ -66,4 +68,9 @@
     <string name="what_changed_recording_off_title">El registro está desactivado</string>
     <string name="what_changed_recording_off_body">Las nuevas instalaciones y actualizaciones no se están registrando.</string>
     <string name="what_changed_recording_turn_on">Activar</string>
+    <plurals name="what_changed_includes_devices">
+        <item quantity="one">Incluye historial de %d dispositivo más</item>
+        <item quantity="many">Incluye historial de %d dispositivos más</item>
+        <item quantity="other">Incluye historial de %d dispositivos más</item>
+    </plurals>
 </resources>

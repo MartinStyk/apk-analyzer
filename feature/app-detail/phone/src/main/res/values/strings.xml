@@ -336,6 +336,7 @@
     <string name="app_history_when_updated">Updated %1$s</string>
     <string name="app_history_when_reinstalled">Installed again %1$s</string>
     <string name="app_history_when_recorded">Recorded %1$s</string>
+    <string name="app_history_recorded_on_device">Recorded on %1$s</string>
     <string name="app_history_when_with_recorded">%1$s · recorded %2$s</string>
     <string name="app_history_changes_heading">Changes between these versions</string>
     <string name="app_history_device_note">Some differences can come from the device, not the app.</string>

@@ -2,7 +2,9 @@
 <resources>
     <string name="app_history_signing_method_changed">Phương thức ký đã thay đổi</string>
     <string name="app_history_reinstalled">Đã gỡ và cài đặt lại</string>
-    <string name="app_history_new_device">Tiếp tục trên thiết bị mới</string>
+    <string name="app_history_moved_from">Chuyển từ %1$s</string>
+    <string name="app_history_moved_from_this_device">Chuyển từ thiết bị này</string>
+    <string name="app_history_on_device">Trên %1$s</string>
     <string name="app_history_version">Phiên bản %1$s</string>
     <string name="app_history_version_with_code">%1$s (%2$d)</string>
     <string name="app_history_value_change">%1$s → %2$s</string>

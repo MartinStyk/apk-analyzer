@@ -66,7 +66,9 @@ a past state means nothing to them.
 * **One label.** Every app-detail stateless content composable wraps its root in `AppDetailModeFrame`
   with the input's `recordedAt` (section sub-screens get this via `AppDetailSectionScaffold`), which
   pins `AsSeenOnBar` above the screen in every state and shows it in previews. A new app-detail
-  destination must do the same.
+  destination must do the same. The hub also passes the snapshot's `recordedOn`, read through
+  `AppDetailSectionRepository.recordedOn`, so the bar adds "Recorded on <phone>" for history from
+  another phone; section sub-screens show the date only.
 * **Judge as of the recorded date, against no device.** Dates are judged at `recordedAt ?: now`: the
   capture date for a historical input, now otherwise. That covers certificate validity, "not yet valid", unused
   time, and recency badges. Device facts (features, ABIs, SDK) need a live app, so a screen reads them

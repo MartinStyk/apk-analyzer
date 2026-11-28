@@ -68,6 +68,12 @@ internal class AppHistoryPersistenceRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override suspend fun devices(): Result<Map<String, AppHistoryDevice>> = withContext(dispatcherProvider.default()) {
+        runCatchingCancellable {
+            appHistoryReadDao.allDevices().associate { it.deviceId to AppHistoryDevice(manufacturer = it.manufacturer, model = it.model) }
+        }
+    }
 }
 
 private val AppHistorySnapshotEntity.blobHashes: List<Long>

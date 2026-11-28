@@ -48,6 +48,10 @@ package `sk.styk.martin.apkanalyzer.feature.whatchanged.phone`. There is no TV m
 * **Changed apps show the net change over the range** (state before the range vs now), so a
   permission added and removed again reads "No net change". Needs attention stays per event and marks
   an undone event with its revert date.
+* **History from another phone is labelled, never flagged.** Rows show the core-computed
+  `recordedOn`, `otherDevices` and `lastSeenOn` facts; the warning highlight on a changed app comes
+  from `AppHistoryChangedApp.hasCertificateWarning`, never from `netChange.hasCertificateChange`,
+  because a net change can span a move to a new device.
 * Section rows can repeat an app across sections, so LazyColumn keys carry the section prefix. Locked
   rows keep the same key as their readable form; the key is never rendered. Rows and section headers
   use lazy-item animations for insertion, removal, and movement as history arrives; never force
@@ -67,8 +71,9 @@ every app.
 * **Without Pro, previews are positional:** the first five rows in each tab section and the first
   ten rows in the full log are readable, in their existing newest-first order. A readable row never
   unlocks later rows for the same app. The log assigns access before category filtering and month
-  grouping, so filters cannot reveal additional rows. Also free: any certificate change (and a
-  Changed apps row whose net change includes one) and all first-recorded rows. These exceptions
+  grouping, so filters cannot reveal additional rows. Also free: any certificate change that is
+  warning-highlighted (`hasCertificateWarning`; a move to a new device never is), a Changed apps row
+  whose `hasCertificateWarning` is set, and all first-recorded rows. These exceptions
   still occupy their normal positions in the preview. Summary counts and range chips stay free.
   Everything else is a locked row. With Pro (and in release, where `noop` grants it) nothing is locked.
 * **A locked row never carries real data.** State holds `LockableRow.Locked(key)` only, and
