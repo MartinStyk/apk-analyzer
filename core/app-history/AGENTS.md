@@ -349,9 +349,9 @@ that registration forces Hilt to construct this singleton at app launch in the f
 else in the app injects `AppHistoryCaptureScheduler` directly, so without that forced construction
 background capture would never start.
 
-`AppHistoryRecording` drives startup: `On` merges a pending restore and starts every trigger; `Off`
-cancels the periodic work but still merges a pending Auto Backup restore, because the preference is
-restored with the backup and must not hide restored history; `Unavailable` only cancels.
+Startup observes [recording](#recording) before starting any trigger or restore merge. Only `On`
+merges a pending restore and starts the triggers; `Off` and `Unavailable` cancel the periodic work. A
+backup restored while the user has recording off stays staged and merges once recording is back on.
 The phone variant records only in debug; TV never records. Disabled recording cancels the existing
 periodic reconciliation. `AppHistoryStorageCleanup` runs independently to delete only legacy uncompressed databases.
 Disabling history never deletes or closes the current compressed database or its restore staging file.
@@ -539,9 +539,9 @@ propagated days earlier — not from anything forced in the same session.
 the capture repository, the scheduler, and every screen that shows the switch or its state. It is
 `Unavailable` when `FeatureFlag.AppHistoryRecording` is off (release and TV: the feature does not
 exist, so screens hide the switch), otherwise `On` or `Off` from the user's
-`Key.AppHistoryRecordingEnabled` preference, which defaults to on. Turning it off stops capture
-like the flag does, but a pending Auto Backup restore is still merged, and nothing already recorded is
-deleted or hidden. Turning it back on
+`Key.AppHistoryRecordingEnabled` preference, which defaults to on. Turning it off stops capture and
+the restore merge exactly like the flag does, and never deletes what is already recorded; a backup
+restored while it is off stays staged until recording is turned back on. Turning it back on
 resumes from the current state: the sweep captures each app that changed once, so several updates
 made while it was off collapse into one change, and apps installed and removed in between are never
 seen. Never read the flag or the preference alone for recording decisions.

@@ -14,6 +14,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.apphistory.api.capture.AppHistoryCaptureRepository
@@ -60,17 +61,13 @@ internal class AppHistoryCaptureSchedulerImpl @Inject constructor(
             storageCleanup.deleteUncompressedDatabases()
 
             recordingRepository.recording()
+                .map { it == AppHistoryRecording.On }
                 .distinctUntilChanged()
-                .collectLatest { recording ->
-                    when (recording) {
-                        AppHistoryRecording.On -> recordHistory()
-
-                        AppHistoryRecording.Off -> {
-                            cancelPeriodicReconciliation()
-                            restoreMerger.mergeIfPending()
-                        }
-
-                        AppHistoryRecording.Unavailable -> cancelPeriodicReconciliation()
+                .collectLatest { enabled ->
+                    if (enabled) {
+                        recordHistory()
+                    } else {
+                        cancelPeriodicReconciliation()
                     }
                 }
         }

@@ -1,6 +1,7 @@
 package sk.styk.martin.apkanalyzer.core.apphistory.impl.capture
 
 import android.content.Context
+import androidx.room.Room
 import androidx.work.Operation
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
@@ -24,9 +25,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
-import sk.styk.martin.apkanalyzer.core.apphistory.impl.restore.AppHistoryRestoreMergerFake
+import sk.styk.martin.apkanalyzer.core.apphistory.impl.restore.AppHistoryRestoreMergerImpl
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.AppHistoryPersistenceRepositoryFake
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.AppHistoryStorageCleanup
+import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.database.AppHistoryDatabase
 import sk.styk.martin.apkanalyzer.core.apps.api.AppDetailRepositoryFake
 import sk.styk.martin.apkanalyzer.core.apps.api.InstalledAppsRepositoryFake
 import sk.styk.martin.apkanalyzer.core.apps.api.PackageChangeAction
@@ -53,6 +55,7 @@ class AppHistoryCaptureSchedulerImplTest {
     val dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher())
 
     private val context: Context = RuntimeEnvironment.getApplication()
+    private val database = Room.databaseBuilder(context, AppHistoryDatabase::class.java, "app_history_v2.db").build()
     private val cleanup = AppHistoryStorageCleanup(context)
     private val appScope = CoroutineScope(SupervisorJob() + dispatcherProvider.default())
     private val featureFlags = FeatureFlagRepositoryFake(FeatureFlag.AppHistoryRecording)
@@ -86,12 +89,11 @@ class AppHistoryCaptureSchedulerImplTest {
             every { get() } throws ExecutionException(IOException("Cancellation could not be persisted"))
         }
     }
-    private val restoreMerger = AppHistoryRestoreMergerFake()
     private val scheduler: AppHistoryCaptureScheduler = AppHistoryCaptureSchedulerImpl(
         captureRepository = captureRepository,
         packageChangesObserver = packageChanges,
         workManager = Lazy { workManager },
-        restoreMerger = restoreMerger,
+        restoreMerger = AppHistoryRestoreMergerImpl(context, database.appHistoryWriteDao(), dispatcherProvider),
         storageCleanup = cleanup,
         recordingRepository = recording,
         appScope = appScope,
@@ -107,6 +109,7 @@ class AppHistoryCaptureSchedulerImplTest {
     @After
     fun tearDown() {
         appScope.cancel()
+        database.close()
         context.deleteDatabase("app_history_v2.db")
         context.deleteDatabase("app_history.db")
         context.deleteDatabase("app_history_restore_staging.db")
@@ -146,17 +149,6 @@ class AppHistoryCaptureSchedulerImplTest {
         persistence.observe(installedApp.packageName).first().getOrThrow() shouldBe emptyList()
         packageChanges.subscriberCount shouldBe 0
         verify(exactly = 1) { workManager.cancelUniqueWork(any()) }
-    }
-
-    @Test
-    fun `Given the user turned recording off When starting Then a restored backup is still merged`() = runTest {
-        preferences[Key.AppHistoryRecordingEnabled] = false
-
-        scheduler.start()
-        runCurrent()
-
-        restoreMerger.mergeCount shouldBe 1
-        packageChanges.subscriberCount shouldBe 0
     }
 
     @Test
