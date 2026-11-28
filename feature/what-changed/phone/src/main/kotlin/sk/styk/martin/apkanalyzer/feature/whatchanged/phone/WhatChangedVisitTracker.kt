@@ -16,7 +16,7 @@ internal class WhatChangedVisitTracker @Inject constructor(private val persisten
 
     suspend fun previousVisit(): Instant? = mutex.withLock {
         if (!isVisitRecorded) {
-            previousVisit = persistenceRepository.get(Key.WhatChangedLastVisitAt).takeIf { it > 0 }?.let(Instant::ofEpochMilli)
+            previousVisit = persistenceRepository[Key.WhatChangedLastVisitAt].takeIf { it > 0 }?.let(Instant::ofEpochMilli)
             persistenceRepository.save(Key.WhatChangedLastVisitAt, Instant.now().toEpochMilli())
             isVisitRecorded = true
         }

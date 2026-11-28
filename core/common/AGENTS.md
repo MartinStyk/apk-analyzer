@@ -74,6 +74,8 @@ logic do not belong here.
   excluding recognized stores and system-preinstalled apps.
 * Add preference keys to the typed persistence contract rather than creating feature-local
   DataStore instances.
+* Read a preference with `persistenceRepository[key]` in a suspend context; use `observe(key)` for
+  reactive reads and `save(key, value)` for writes.
 * Play Core review APIs stay inside `review/`'s internal adapter, same rule as Firebase Performance.
   `ReviewEligibilityTracker.reviewPromptRequests` is a one-shot event stream (`Flow<Unit>`), not
   observable state — showing the review dialog is a side effect, and this codebase's rule that
