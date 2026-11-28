@@ -1,22 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <plurals name="pro_headline_export">
-        <item quantity="one">%d uygulamanın tüm ayrıntılarını dışa aktarın</item>
-        <item quantity="other">%d uygulamanın tüm ayrıntılarını dışa aktarın</item>
-    </plurals>
-    <plurals name="pro_headline_what_changed">
-        <item quantity="one">%d uygulamada daha nelerin değiştiğini görün</item>
-        <item quantity="other">%d uygulamada daha nelerin değiştiğini görün</item>
-    </plurals>
-    <string name="pro_feature_export">Birçok uygulamanın izinlerini, sertifikalarını, bileşenlerini ve daha fazlasını tek seferde dışa aktarın</string>
-    <string name="pro_feature_what_changed">Cihazınızdaki tüm uygulama değişikliklerini tek listede görün</string>
-    <string name="pro_supporter">Bağımsız, açık kaynaklı bir uygulamayı destekleyin. Bugün ücretsiz olan her şey ücretsiz kalacak.</string>
-    <string name="pro_unlock">Pro kilidini aç · %s</string>
-    <string name="pro_one_time">Tek seferlik satın alma. Abonelik yok.</string>
     <string name="pro_restore">Satın alımı geri yükle</string>
     <string name="pro_unavailable">Satın alma için bu cihazda Google Play gerekir.</string>
     <string name="pro_failed">Google Play\'e ulaşılamadı. Tekrar deneyin.</string>
     <string name="pro_pending">Satın alma bekliyor</string>
     <string name="pro_pending_body">Google Play ödemenizi bekliyor. Ödeme tamamlanır tamamlanmaz Pro\'nun kilidi açılır.</string>
     <string name="pro_restore_nothing">Bu Google hesabı için Pro satın alımı bulunamadı.</string>
+    <string name="pro_unlock_lifetime">Ömür boyu Pro\'nun kilidini aç · %s</string>
+    <string name="pro_support_unlock">Destekle ve ömür boyu Pro al · %s</string>
+    <string name="pro_one_payment">Tek ödeme. Abonelik yok.</string>
+    <string name="pro_support_title">Açık olarak geliştirildi. Sizin desteğinizle.</string>
+    <string name="pro_author">Martin, Apk Analyzer\'ın geliştiricisi</string>
+    <plurals name="pro_history_headline">
+        <item quantity="one">%2$s tarihinden beri telefonunuzda %1$d değişiklik kaydedildi</item>
+        <item quantity="other">%2$s tarihinden beri telefonunuzda %1$d değişiklik kaydedildi</item>
+    </plurals>
+    <plurals name="pro_history_free">
+        <item quantity="one">%d uygulamayı ücretsiz okuyabilirsiniz.</item>
+        <item quantity="other">%d uygulamayı ücretsiz okuyabilirsiniz.</item>
+    </plurals>
+    <plurals name="pro_history_locked">
+        <item quantity="one">Pro, %d uygulamayı daha açar.</item>
+        <item quantity="other">Pro, %d uygulamayı daha açar.</item>
+    </plurals>
+    <string name="pro_history_fallback">Telefonunuzda kaydedilen her değişikliği okuyun</string>
+    <plurals name="pro_benefit_permissions">
+        <item quantity="one">Uygulamalarınıza eklenen %d izin ve bunları alan uygulamalar</item>
+        <item quantity="other">Uygulamalarınıza eklenen %d izin ve bunları alan uygulamalar</item>
+    </plurals>
+    <plurals name="pro_benefit_components">
+        <item quantity="one">Yeni hizmetler ve alıcılar gibi %d bileşen değişikliği</item>
+        <item quantity="other">Yeni hizmetler ve alıcılar gibi %d bileşen değişikliği</item>
+    </plurals>
+    <plurals name="pro_benefit_sizes">
+        <item quantity="one">Güncelleme güncelleme %d boyut değişikliği</item>
+        <item quantity="other">Güncelleme güncelleme %d boyut değişikliği</item>
+    </plurals>
+    <string name="pro_benefit_plus_export">Ayrıca: uygulamalarınızın tüm ayrıntılarını dışa aktarın</string>
+    <plurals name="pro_card_permissions">
+        <item quantity="one">%d izin eklendi</item>
+        <item quantity="other">%d izin eklendi</item>
+    </plurals>
+    <plurals name="pro_card_components">
+        <item quantity="one">%d bileşen değişti</item>
+        <item quantity="other">%d bileşen değişti</item>
+    </plurals>
+    <string name="pro_card_size">Boyut değişti</string>
+    <string name="pro_export_headline">Dışa aktarmanıza tüm ayrıntıları ekleyin</string>
+    <string name="pro_export_details">%1$d Temel bilgi ücretsizdir. Pro kalan %2$d bilgiyi ekler.</string>
+    <plurals name="pro_export_audit">
+        <item quantity="one">%d uygulamanın izinlerini tek bir tabloda denetleyin</item>
+        <item quantity="other">%d uygulamanın izinlerini tek bir tabloda denetleyin</item>
+    </plurals>
+    <string name="pro_export_certificates">Her imzalama sertifikasını SHA-256, konu ve şemalarla kontrol edin</string>
+    <string name="pro_export_components">Her uygulamanın bileşenlerini etkinliklerden intent filtrelerine kadar sayın</string>
+    <plurals name="pro_export_plus_history">
+        <item quantity="one">Ayrıca: bu telefonda kaydedilen %d değişikliğin tümünü okuyun</item>
+        <item quantity="other">Ayrıca: bu telefonda kaydedilen %d değişikliğin tümünü okuyun</item>
+    </plurals>
+    <string name="pro_export_plus_history_none">Ayrıca: bu telefonda kaydedilen her değişikliği okuyun</string>
+    <string name="pro_export_preview_app">Uygulama</string>
+    <string name="pro_export_preview_permissions">İzinler</string>
+    <string name="pro_export_preview_certificate">Sertifika</string>
+    <string name="pro_export_basics_only">Yalnızca temel bilgileri dışa aktar</string>
+    <string name="pro_still_free">Hâlâ ücretsiz.</string>
+    <string name="pro_still_free_body">Ücretsiz olan her şey ücretsiz kalıyor. İki yeni özellik Pro\'ya dahil:</string>
+    <string name="pro_feature_history">Uygulama geçmişi</string>
+    <plurals name="pro_feature_history_count">
+        <item quantity="one">%d değişiklik kaydedildi</item>
+        <item quantity="other">%d değişiklik kaydedildi</item>
+    </plurals>
+    <string name="pro_feature_history_empty">Her güncellemeyi kaydeder</string>
+    <string name="pro_feature_export_title">Envanter dışa aktarma</string>
+    <string name="pro_feature_export_detail">Tüm ayrıntılar</string>
+    <string name="pro_continue_free">Ücretsiz devam et</string>
 </resources>

@@ -86,7 +86,6 @@
     <string name="inventory_export_next">次へ</string>
     <string name="inventory_export_columns_omitted">CSVファイルに含まれない情報: %1$s。CSVには完全なレコードを入れられません。</string>
     <string name="inventory_export_use_json">JSONを使う</string>
-    <string name="inventory_export_pro_columns">基本情報は無料です。その他の情報をエクスポートするには Pro をアンロックしてください。</string>
     <string name="inventory_export_unlock_pro">Pro をアンロック</string>
     <string name="inventory_export_dismiss_hint">お知らせを閉じる</string>
     <string name="inventory_export_use_basics">代わりに基本をエクスポート</string>
@@ -102,4 +101,9 @@
     <string name="inventory_export_intro_description">複数のアプリの情報を1つのCSVまたはJSONファイルに書き出します。</string>
     <string name="inventory_export_columns_guidance">アプリごとに含める情報を選んでください。</string>
     <string name="inventory_export_format_guidance">スプレッドシートにはCSV、すべての情報にはJSONを選び、保存または共有します。</string>
+    <string name="inventory_export_pro_rule">%1$d 項目の基本は無料です。残りの %2$d 項目は Pro です。選択してプレビューで確認することはできます。</string>
+    <plurals name="inventory_export_pro_needed">
+        <item quantity="other">このうち %d 項目には Pro が必要です</item>
+    </plurals>
+    <string name="inventory_export_pro_needed_body">%1$s。%2$d 項目の基本は無料でエクスポートできます。</string>
 </resources>

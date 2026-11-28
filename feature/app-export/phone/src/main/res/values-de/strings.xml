@@ -92,7 +92,6 @@
     <string name="inventory_export_next">Weiter</string>
     <string name="inventory_export_columns_omitted">In der CSV-Datei fehlen: %1$s. CSV kann keine vollständigen Datensätze enthalten.</string>
     <string name="inventory_export_use_json">JSON verwenden</string>
-    <string name="inventory_export_pro_columns">Grundlagen sind kostenlos. Schalte Pro frei, um weitere Details zu exportieren.</string>
     <string name="inventory_export_unlock_pro">Pro freischalten</string>
     <string name="inventory_export_dismiss_hint">Hinweis schließen</string>
     <string name="inventory_export_use_basics">Stattdessen Grundlagen exportieren</string>
@@ -108,4 +107,10 @@
     <string name="inventory_export_intro_description">Exportiere Informationen zu mehreren Apps in einer CSV- oder JSON-Datei.</string>
     <string name="inventory_export_columns_guidance">Wähle, welche Details für jede App enthalten sein sollen.</string>
     <string name="inventory_export_format_guidance">Wähle CSV für Tabellen oder JSON für alle Details und speichere oder teile die Datei dann.</string>
+    <string name="inventory_export_pro_rule">Die %1$d Grundlagen sind kostenlos. Die übrigen %2$d Details gehören zu Pro. Du kannst sie trotzdem auswählen und in der Vorschau sehen.</string>
+    <plurals name="inventory_export_pro_needed">
+        <item quantity="one">%d dieser Details erfordert Pro</item>
+        <item quantity="other">%d dieser Details erfordern Pro</item>
+    </plurals>
+    <string name="inventory_export_pro_needed_body">%1$s. Die %2$d Grundlagen exportierst du kostenlos.</string>
 </resources>

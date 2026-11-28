@@ -86,7 +86,6 @@
     <string name="inventory_export_next">Berikutnya</string>
     <string name="inventory_export_columns_omitted">Tidak disertakan dalam file CSV: %1$s. CSV tidak dapat memuat data lengkap.</string>
     <string name="inventory_export_use_json">Gunakan JSON</string>
-    <string name="inventory_export_pro_columns">Informasi dasar gratis. Buka Pro untuk mengekspor detail lainnya.</string>
     <string name="inventory_export_unlock_pro">Buka Pro</string>
     <string name="inventory_export_dismiss_hint">Tutup pemberitahuan</string>
     <string name="inventory_export_use_basics">Ekspor Dasar saja</string>
@@ -102,4 +101,9 @@
     <string name="inventory_export_intro_description">Ekspor informasi beberapa aplikasi dalam satu file CSV atau JSON.</string>
     <string name="inventory_export_columns_guidance">Pilih detail yang disertakan untuk setiap aplikasi.</string>
     <string name="inventory_export_format_guidance">Pilih CSV untuk spreadsheet atau JSON untuk detail lengkap, lalu simpan atau bagikan.</string>
+    <string name="inventory_export_pro_rule">%1$d data Dasar gratis. %2$d detail lainnya termasuk Pro. Anda tetap bisa memilihnya dan melihatnya di pratinjau.</string>
+    <plurals name="inventory_export_pro_needed">
+        <item quantity="other">%d detail ini memerlukan Pro</item>
+    </plurals>
+    <string name="inventory_export_pro_needed_body">%1$s. %2$d data Dasar diekspor gratis.</string>
 </resources>

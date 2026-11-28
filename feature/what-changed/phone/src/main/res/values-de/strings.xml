@@ -58,4 +58,11 @@
     <string name="what_changed_uncomparable_only">Einige Angaben ließen sich nicht vergleichen</string>
     <string name="what_changed_locked_row">Gesperrte App-Änderung, Teil von Pro</string>
     <string name="what_changed_locked_click_label">Mit Pro freischalten</string>
+    <plurals name="what_changed_pro_title">
+        <item quantity="one">Sieh dir an, was sich in %d weiteren App geändert hat</item>
+        <item quantity="other">Sieh dir an, was sich in %d weiteren Apps geändert hat</item>
+    </plurals>
+    <string name="what_changed_pro_card_body">Jede hinzugefügte Berechtigung, Komponente und Größenänderung. Zertifikatsänderungen bleiben kostenlos.</string>
+    <string name="what_changed_pro_bar_body">Berechtigungen, Komponenten, Größen</string>
+    <string name="what_changed_pro_unlock">Freischalten</string>
 </resources>

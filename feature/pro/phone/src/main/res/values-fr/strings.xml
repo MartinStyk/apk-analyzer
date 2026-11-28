@@ -1,24 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <plurals name="pro_headline_export">
-        <item quantity="one">Exportez tous les détails de %d application</item>
-        <item quantity="many">Exportez tous les détails de %d applications</item>
-        <item quantity="other">Exportez tous les détails de %d applications</item>
-    </plurals>
-    <plurals name="pro_headline_what_changed">
-        <item quantity="one">Découvrez ce qui a changé dans %d autre application</item>
-        <item quantity="many">Découvrez ce qui a changé dans %d autres applications</item>
-        <item quantity="other">Découvrez ce qui a changé dans %d autres applications</item>
-    </plurals>
-    <string name="pro_feature_export">Exportez les autorisations, certificats, composants et plus encore pour de nombreuses applications à la fois</string>
-    <string name="pro_feature_what_changed">Retrouvez toutes les modifications d\'applications de votre appareil dans une seule liste</string>
-    <string name="pro_supporter">Soutenez une application indépendante et open source. Tout ce qui est gratuit aujourd\'hui le restera.</string>
-    <string name="pro_unlock">Débloquer Pro · %s</string>
-    <string name="pro_one_time">Achat unique. Sans abonnement.</string>
     <string name="pro_restore">Restaurer l\'achat</string>
     <string name="pro_unavailable">Les achats nécessitent Google Play sur cet appareil.</string>
     <string name="pro_failed">Impossible de joindre Google Play. Réessayez.</string>
     <string name="pro_pending">Achat en attente</string>
     <string name="pro_pending_body">Google Play attend votre paiement. Pro est débloqué dès que le paiement est validé.</string>
     <string name="pro_restore_nothing">Aucun achat Pro trouvé pour ce compte Google.</string>
+    <string name="pro_unlock_lifetime">Débloquer Pro à vie · %s</string>
+    <string name="pro_support_unlock">Soutenir et obtenir Pro à vie · %s</string>
+    <string name="pro_one_payment">Un seul paiement. Sans abonnement.</string>
+    <string name="pro_support_title">Conçu en open source. Soutenu par vous.</string>
+    <string name="pro_author">Martin, auteur d\'Apk Analyzer</string>
+    <plurals name="pro_history_headline">
+        <item quantity="one">%1$d modification enregistrée sur votre téléphone depuis le %2$s</item>
+        <item quantity="many">%1$d modifications enregistrées sur votre téléphone depuis le %2$s</item>
+        <item quantity="other">%1$d modifications enregistrées sur votre téléphone depuis le %2$s</item>
+    </plurals>
+    <plurals name="pro_history_free">
+        <item quantity="one">%d application est consultable gratuitement.</item>
+        <item quantity="many">%d applications sont consultables gratuitement.</item>
+        <item quantity="other">%d applications sont consultables gratuitement.</item>
+    </plurals>
+    <plurals name="pro_history_locked">
+        <item quantity="one">Pro débloque %d application de plus.</item>
+        <item quantity="many">Pro débloque %d applications de plus.</item>
+        <item quantity="other">Pro débloque %d applications de plus.</item>
+    </plurals>
+    <string name="pro_history_fallback">Consultez chaque modification enregistrée sur votre téléphone</string>
+    <plurals name="pro_benefit_permissions">
+        <item quantity="one">%d autorisation ajoutée à vos applications, et l\'application qui l\'a reçue</item>
+        <item quantity="many">%d autorisations ajoutées à vos applications, et les applications qui les ont reçues</item>
+        <item quantity="other">%d autorisations ajoutées à vos applications, et les applications qui les ont reçues</item>
+    </plurals>
+    <plurals name="pro_benefit_components">
+        <item quantity="one">%d modification de composant, comme un nouveau service ou récepteur</item>
+        <item quantity="many">%d modifications de composants, comme de nouveaux services et récepteurs</item>
+        <item quantity="other">%d modifications de composants, comme de nouveaux services et récepteurs</item>
+    </plurals>
+    <plurals name="pro_benefit_sizes">
+        <item quantity="one">%d changement de taille, mise à jour après mise à jour</item>
+        <item quantity="many">%d changements de taille, mise à jour après mise à jour</item>
+        <item quantity="other">%d changements de taille, mise à jour après mise à jour</item>
+    </plurals>
+    <string name="pro_benefit_plus_export">En plus : exportez tous les détails de vos applications</string>
+    <plurals name="pro_card_permissions">
+        <item quantity="one">%d autorisation ajoutée</item>
+        <item quantity="many">%d autorisations ajoutées</item>
+        <item quantity="other">%d autorisations ajoutées</item>
+    </plurals>
+    <plurals name="pro_card_components">
+        <item quantity="one">%d composant modifié</item>
+        <item quantity="many">%d composants modifiés</item>
+        <item quantity="other">%d composants modifiés</item>
+    </plurals>
+    <string name="pro_card_size">Taille modifiée</string>
+    <string name="pro_export_headline">Ajoutez tous les détails à votre export</string>
+    <string name="pro_export_details">Les %1$d données Essentiel sont gratuites. Pro ajoute les %2$d autres.</string>
+    <plurals name="pro_export_audit">
+        <item quantity="one">Vérifiez les autorisations de %d application dans un seul tableur</item>
+        <item quantity="many">Vérifiez les autorisations des %d applications dans un seul tableur</item>
+        <item quantity="other">Vérifiez les autorisations des %d applications dans un seul tableur</item>
+    </plurals>
+    <string name="pro_export_certificates">Vérifiez chaque certificat de signature, avec SHA-256, sujet et schémas</string>
+    <string name="pro_export_components">Comptez les composants de chaque application, des activités aux filtres d\'intent</string>
+    <plurals name="pro_export_plus_history">
+        <item quantity="one">En plus : consultez la %d modification enregistrée sur ce téléphone</item>
+        <item quantity="many">En plus : consultez les %d modifications enregistrées sur ce téléphone</item>
+        <item quantity="other">En plus : consultez les %d modifications enregistrées sur ce téléphone</item>
+    </plurals>
+    <string name="pro_export_plus_history_none">En plus : consultez chaque modification enregistrée sur ce téléphone</string>
+    <string name="pro_export_preview_app">Application</string>
+    <string name="pro_export_preview_permissions">Autorisations</string>
+    <string name="pro_export_preview_certificate">Certificat</string>
+    <string name="pro_export_basics_only">Exporter l\'essentiel uniquement</string>
+    <string name="pro_still_free">Toujours gratuit.</string>
+    <string name="pro_still_free_body">Tout ce qui était gratuit le reste. Deux nouvelles fonctionnalités font partie de Pro :</string>
+    <string name="pro_feature_history">Historique des applications</string>
+    <plurals name="pro_feature_history_count">
+        <item quantity="one">%d modification enregistrée</item>
+        <item quantity="many">%d modifications enregistrées</item>
+        <item quantity="other">%d modifications enregistrées</item>
+    </plurals>
+    <string name="pro_feature_history_empty">Enregistre chaque mise à jour</string>
+    <string name="pro_feature_export_title">Export de l\'inventaire</string>
+    <string name="pro_feature_export_detail">Tous les détails</string>
+    <string name="pro_continue_free">Continuer gratuitement</string>
 </resources>

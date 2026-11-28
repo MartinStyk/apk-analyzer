@@ -12,6 +12,7 @@ fun EntryProviderScope<NavKey>.proEntries(navigator: Navigator) {
         ProScreen(
             reason = key.reason,
             onClose = { navigator.goBack() },
+            onCloseWithResult = { result -> navigator.goBack(result) },
         )
     }
 }

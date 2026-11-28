@@ -8,8 +8,16 @@ internal sealed interface LockableRow<out T> {
 
     data class Readable<out T>(val item: T, override val key: String) : LockableRow<T>
 
-    data class Locked(override val key: String) : LockableRow<Nothing>
+    data class Locked(
+        override val key: String,
+        val packageName: String,
+        val appName: String,
+    ) : LockableRow<Nothing>
 }
 
-internal fun <T> T.toLockableRow(key: String, isReadable: Boolean): LockableRow<T> =
-    if (isReadable) LockableRow.Readable(this, key) else LockableRow.Locked(key)
+internal fun <T> T.toLockableRow(
+    key: String,
+    isReadable: Boolean,
+    packageName: String,
+    appName: String,
+): LockableRow<T> = if (isReadable) LockableRow.Readable(this, key) else LockableRow.Locked(key, packageName, appName)

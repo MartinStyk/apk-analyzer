@@ -15,6 +15,7 @@ import sk.styk.martin.apkanalyzer.core.common.settings.Key
 import sk.styk.martin.apkanalyzer.core.common.settings.PersistenceRepository
 import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlag
 import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlagRepository
+import sk.styk.martin.apkanalyzer.feature.pro.phone.support.SupportPromptScheduler
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,6 +23,7 @@ internal class ApkAnalyzerViewModel @Inject constructor(
     persistenceRepository: PersistenceRepository,
     featureFlagRepository: FeatureFlagRepository,
     private val reviewEligibilityTracker: ReviewEligibilityTracker,
+    private val supportPromptScheduler: SupportPromptScheduler,
 ) : ViewModel() {
     val state: StateFlow<ApkAnalyzerState> =
         combine(
@@ -47,6 +49,11 @@ internal class ApkAnalyzerViewModel @Inject constructor(
         viewModelScope.launch {
             reviewEligibilityTracker.reviewPromptRequests.collect {
                 eventChannel.send(ApkAnalyzerEvent.RequestReview)
+            }
+        }
+        viewModelScope.launch {
+            supportPromptScheduler.promptRequests.collect {
+                eventChannel.send(ApkAnalyzerEvent.ShowSupportPrompt)
             }
         }
     }

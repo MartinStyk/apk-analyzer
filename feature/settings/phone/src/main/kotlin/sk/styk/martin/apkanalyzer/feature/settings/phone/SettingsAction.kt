@@ -9,5 +9,6 @@ sealed interface SettingsAction {
     data class RecentlyViewedAppsToggled(val enabled: Boolean) : SettingsAction
     data object OpenLanguageSettings : SettingsAction
     data object OpenFeatureFlags : SettingsAction
+    data object OpenPro : SettingsAction
     data object NavigateBack : SettingsAction
 }

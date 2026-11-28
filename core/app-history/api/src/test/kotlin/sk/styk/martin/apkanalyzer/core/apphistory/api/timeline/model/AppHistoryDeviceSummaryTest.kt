@@ -83,6 +83,28 @@ class AppHistoryDeviceSummaryTest {
 
         latest?.packageName?.value shouldBe "com.updated"
     }
+
+    @Test
+    fun `Given apps past the free rows When summarizing for Pro Then certificate changes stay free`() {
+        val certificateChange = aVersionDiff().copy(certificates = SetChange.Changed(emptyList(), emptyList(), emptyList()))
+        val apps = (1..7).map { index ->
+            val diff = if (index == 7) certificateChange else aVersionDiff()
+            anApp(
+                "com.app$index",
+                listOf(aChange(id = 2, previous = 1, day = 20 - index, diff = diff)),
+                diffsToLatest = mapOf(AppHistorySnapshotId(1) to diff),
+            )
+        }
+        val moved = anApp("com.moved", listOf(aChange(id = 2, previous = 1, day = 2, diff = aVersionDiff(), kind = AppHistoryEntry.Change.Kind.NewDevice)))
+
+        val summary = AppHistoryDeviceTimeline.Available(apps + moved).proSummary()
+
+        summary?.changedAppCount shouldBe 8
+        summary?.freeAppCount shouldBe 6
+        summary?.lockedAppCount shouldBe 2
+        summary?.changeCount shouldBe 7
+        summary?.latestLocked?.packageName?.value shouldBe "com.app6"
+    }
 }
 
 private fun day(day: Int): Instant = Instant.ofEpochSecond(day * 86_400L)

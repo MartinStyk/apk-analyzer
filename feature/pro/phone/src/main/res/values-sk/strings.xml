@@ -1,26 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <plurals name="pro_headline_export">
-        <item quantity="one">Exportujte všetky podrobnosti o %d aplikácii</item>
-        <item quantity="few">Exportujte všetky podrobnosti o %d aplikáciách</item>
-        <item quantity="many">Exportujte všetky podrobnosti o %d aplikácie</item>
-        <item quantity="other">Exportujte všetky podrobnosti o %d aplikáciách</item>
-    </plurals>
-    <plurals name="pro_headline_what_changed">
-        <item quantity="one">Pozrite si, čo sa zmenilo v %d ďalšej aplikácii</item>
-        <item quantity="few">Pozrite si, čo sa zmenilo v %d ďalších aplikáciách</item>
-        <item quantity="many">Pozrite si, čo sa zmenilo v %d ďalšej aplikácie</item>
-        <item quantity="other">Pozrite si, čo sa zmenilo v %d ďalších aplikáciách</item>
-    </plurals>
-    <string name="pro_feature_export">Exportujte oprávnenia, certifikáty, komponenty a ďalšie údaje z mnohých aplikácií naraz</string>
-    <string name="pro_feature_what_changed">Pozrite si všetky zmeny aplikácií vo svojom zariadení v jednom zozname</string>
-    <string name="pro_supporter">Podporte nezávislú open-source aplikáciu. Všetko, čo je dnes zadarmo, zostane zadarmo.</string>
-    <string name="pro_unlock">Odomknúť Pro · %s</string>
-    <string name="pro_one_time">Jednorazový nákup. Žiadne predplatné.</string>
     <string name="pro_restore">Obnoviť nákup</string>
     <string name="pro_unavailable">Na nákupy je v tomto zariadení potrebný Google Play.</string>
     <string name="pro_failed">Nepodarilo sa spojiť s Google Play. Skúste to znova.</string>
     <string name="pro_pending">Nákup sa spracúva</string>
     <string name="pro_pending_body">Google Play čaká na vašu platbu. Pro sa odomkne hneď, ako platba prejde.</string>
     <string name="pro_restore_nothing">Pre tento účet Google sa nenašiel žiadny nákup Pro.</string>
+    <string name="pro_unlock_lifetime">Odomknúť doživotné Pro · %s</string>
+    <string name="pro_support_unlock">Podporiť a získať doživotné Pro · %s</string>
+    <string name="pro_one_payment">Jedna platba. Žiadne predplatné.</string>
+    <string name="pro_support_title">Vytvorené otvorene. Podporované vami.</string>
+    <string name="pro_author">Martin, autor Apk Analyzer</string>
+    <plurals name="pro_history_headline">
+        <item quantity="one">%1$d zmena zaznamenaná vo vašom telefóne od %2$s</item>
+        <item quantity="few">%1$d zmeny zaznamenané vo vašom telefóne od %2$s</item>
+        <item quantity="many">%1$d zmeny zaznamenanej vo vašom telefóne od %2$s</item>
+        <item quantity="other">%1$d zmien zaznamenaných vo vašom telefóne od %2$s</item>
+    </plurals>
+    <plurals name="pro_history_free">
+        <item quantity="one">%d aplikáciu si môžete prečítať zadarmo.</item>
+        <item quantity="few">%d aplikácie si môžete prečítať zadarmo.</item>
+        <item quantity="many">%d aplikácie si môžete prečítať zadarmo.</item>
+        <item quantity="other">%d aplikácií si môžete prečítať zadarmo.</item>
+    </plurals>
+    <plurals name="pro_history_locked">
+        <item quantity="one">Pro sprístupní ďalšiu %d aplikáciu.</item>
+        <item quantity="few">Pro sprístupní ďalšie %d aplikácie.</item>
+        <item quantity="many">Pro sprístupní ďalších %d aplikácie.</item>
+        <item quantity="other">Pro sprístupní ďalších %d aplikácií.</item>
+    </plurals>
+    <string name="pro_history_fallback">Prečítajte si každú zmenu zaznamenanú vo vašom telefóne</string>
+    <plurals name="pro_benefit_permissions">
+        <item quantity="one">%d oprávnenie pridané do vašich aplikácií a ktorá aplikácia ho dostala</item>
+        <item quantity="few">%d oprávnenia pridané do vašich aplikácií a ktoré aplikácie ich dostali</item>
+        <item quantity="many">%d oprávnenia pridaného do vašich aplikácií a ktoré aplikácie ho dostali</item>
+        <item quantity="other">%d oprávnení pridaných do vašich aplikácií a ktoré aplikácie ich dostali</item>
+    </plurals>
+    <plurals name="pro_benefit_components">
+        <item quantity="one">%d zmena komponentu, napríklad nová služba alebo prijímač</item>
+        <item quantity="few">%d zmeny komponentov, napríklad nové služby a prijímače</item>
+        <item quantity="many">%d zmeny komponentov, napríklad nové služby a prijímače</item>
+        <item quantity="other">%d zmien komponentov, napríklad nové služby a prijímače</item>
+    </plurals>
+    <plurals name="pro_benefit_sizes">
+        <item quantity="one">%d zmena veľkosti, aktualizácia po aktualizácii</item>
+        <item quantity="few">%d zmeny veľkosti, aktualizácia po aktualizácii</item>
+        <item quantity="many">%d zmeny veľkosti, aktualizácia po aktualizácii</item>
+        <item quantity="other">%d zmien veľkosti, aktualizácia po aktualizácii</item>
+    </plurals>
+    <string name="pro_benefit_plus_export">Navyše: export všetkých podrobností o vašich aplikáciách</string>
+    <plurals name="pro_card_permissions">
+        <item quantity="one">%d pridané oprávnenie</item>
+        <item quantity="few">%d pridané oprávnenia</item>
+        <item quantity="many">%d pridaného oprávnenia</item>
+        <item quantity="other">%d pridaných oprávnení</item>
+    </plurals>
+    <plurals name="pro_card_components">
+        <item quantity="one">%d zmenený komponent</item>
+        <item quantity="few">%d zmenené komponenty</item>
+        <item quantity="many">%d zmeneného komponentu</item>
+        <item quantity="other">%d zmenených komponentov</item>
+    </plurals>
+    <string name="pro_card_size">Zmenená veľkosť</string>
+    <string name="pro_export_headline">Pridajte do exportu všetky podrobnosti</string>
+    <string name="pro_export_details">%1$d základných údajov je zadarmo. Pro pridá ostatných %2$d.</string>
+    <plurals name="pro_export_audit">
+        <item quantity="one">Skontrolujte oprávnenia %d aplikácie v jednej tabuľke</item>
+        <item quantity="few">Skontrolujte oprávnenia všetkých %d aplikácií v jednej tabuľke</item>
+        <item quantity="many">Skontrolujte oprávnenia všetkých %d aplikácií v jednej tabuľke</item>
+        <item quantity="other">Skontrolujte oprávnenia všetkých %d aplikácií v jednej tabuľke</item>
+    </plurals>
+    <string name="pro_export_certificates">Skontrolujte každý podpisový certifikát vrátane SHA-256, subjektu a schém</string>
+    <string name="pro_export_components">Spočítajte komponenty každej aplikácie, od aktivít po filtre intentov</string>
+    <plurals name="pro_export_plus_history">
+        <item quantity="one">Navyše: prečítajte si %d zmenu zaznamenanú v tomto telefóne</item>
+        <item quantity="few">Navyše: prečítajte si všetky %d zmeny zaznamenané v tomto telefóne</item>
+        <item quantity="many">Navyše: prečítajte si všetkých %d zmeny zaznamenanej v tomto telefóne</item>
+        <item quantity="other">Navyše: prečítajte si všetkých %d zmien zaznamenaných v tomto telefóne</item>
+    </plurals>
+    <string name="pro_export_plus_history_none">Navyše: prečítajte si každú zmenu zaznamenanú v tomto telefóne</string>
+    <string name="pro_export_preview_app">Aplikácia</string>
+    <string name="pro_export_preview_permissions">Oprávnenia</string>
+    <string name="pro_export_preview_certificate">Certifikát</string>
+    <string name="pro_export_basics_only">Exportovať len základné</string>
+    <string name="pro_still_free">Stále zadarmo.</string>
+    <string name="pro_still_free_body">Všetko, čo bolo zadarmo, zostáva zadarmo. Súčasťou Pro sú dve nové funkcie:</string>
+    <string name="pro_feature_history">História aplikácií</string>
+    <plurals name="pro_feature_history_count">
+        <item quantity="one">%d zaznamenaná zmena</item>
+        <item quantity="few">%d zaznamenané zmeny</item>
+        <item quantity="many">%d zaznamenanej zmeny</item>
+        <item quantity="other">%d zaznamenaných zmien</item>
+    </plurals>
+    <string name="pro_feature_history_empty">Zaznamenáva každú aktualizáciu</string>
+    <string name="pro_feature_export_title">Export inventára aplikácií</string>
+    <string name="pro_feature_export_detail">Všetky podrobnosti</string>
+    <string name="pro_continue_free">Pokračovať zadarmo</string>
 </resources>

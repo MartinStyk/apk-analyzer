@@ -24,6 +24,12 @@ sealed interface Key<T : Any> {
     data object WhatChangedLastVisitAt : Key<Long>
 
     data object WhatChangedRange : Key<String>
+
+    data object ReviewFlowRequestedAt : Key<Long>
+
+    data object SupportPromptShownCount : Key<Int>
+
+    data object SupportPromptLastVersion : Key<Long>
 }
 
 enum class ColorAppScheme {

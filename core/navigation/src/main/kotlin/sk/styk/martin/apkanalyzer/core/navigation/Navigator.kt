@@ -1,6 +1,8 @@
 package sk.styk.martin.apkanalyzer.core.navigation
 
 import androidx.navigation3.runtime.NavKey
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 
 class Navigator(val navigationState: NavigationState, private val onBackAtRoot: () -> Unit = { error("You cannot go back from the start route") }) {
     fun navigate(key: NavKey) {
@@ -9,6 +11,14 @@ class Navigator(val navigationState: NavigationState, private val onBackAtRoot: 
             in navigationState.topLevelKeys -> goToTopLevel(key)
             else -> goToKey(key)
         }
+    }
+
+    val results: SharedFlow<Any>
+        field = MutableSharedFlow<Any>(extraBufferCapacity = 1)
+
+    fun goBack(result: Any) {
+        results.tryEmit(result)
+        goBack()
     }
 
     fun goBack() {

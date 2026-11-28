@@ -58,4 +58,11 @@
     <string name="what_changed_uncomparable_only">कुछ जानकारी की तुलना नहीं हो सकी</string>
     <string name="what_changed_locked_row">लॉक किया गया ऐप बदलाव, Pro का हिस्सा</string>
     <string name="what_changed_locked_click_label">Pro से अनलॉक करें</string>
+    <plurals name="what_changed_pro_title">
+        <item quantity="one">%d और ऐप्लिकेशन में क्या बदला, देखें</item>
+        <item quantity="other">%d और ऐप्लिकेशन में क्या बदला, देखें</item>
+    </plurals>
+    <string name="what_changed_pro_card_body">जोड़ी गई हर अनुमति, कॉम्पोनेंट और साइज़ बदलाव। सर्टिफ़िकेट बदलाव मुफ़्त रहते हैं।</string>
+    <string name="what_changed_pro_bar_body">अनुमतियां, कॉम्पोनेंट, साइज़</string>
+    <string name="what_changed_pro_unlock">अनलॉक करें</string>
 </resources>

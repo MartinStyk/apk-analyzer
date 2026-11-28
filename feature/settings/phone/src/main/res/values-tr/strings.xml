@@ -14,4 +14,8 @@
     <string name="settings_fingerprint_format">Parmak izi biçimi</string>
     <string name="settings_fingerprint_format_colon_separated">İki nokta ile ayrılmış</string>
     <string name="settings_fingerprint_format_continuous">Kesintisiz</string>
+    <string name="settings_pro_title">Apk Analyzer Pro\'yu edinin</string>
+    <string name="settings_pro_body">Geliştirmeyi destekleyen ve en yeni özelliklerin kilidini açan tek seferlik bir satın alma.</string>
+    <string name="settings_pro_active">Pro etkin</string>
+    <string name="settings_pro_active_body">Apk Analyzer\'ı desteklediğiniz için teşekkürler.</string>
 </resources>

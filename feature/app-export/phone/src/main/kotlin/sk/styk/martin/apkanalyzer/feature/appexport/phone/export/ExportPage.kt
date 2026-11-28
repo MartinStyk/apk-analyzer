@@ -44,10 +44,10 @@ import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzer
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Button
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.InfoCard
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.InfoCardTone
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.LoadingSpinner
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.OutlinedButton
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ProButton
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ProMark
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ProgressBar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.TextButton
@@ -110,6 +110,7 @@ internal fun ExportPage(
         )
         if (state.requiresPro) {
             ProColumnsNotice(
+                proColumns = state.exportedColumns.filter { it !in InventoryPreset.Basics.columns },
                 enabled = !state.isExporting,
                 onUnlockPro = { onAction(InventoryExportAction.OpenPro) },
                 onUseBasics = { onAction(InventoryExportAction.PresetSelected(InventoryPreset.Basics)) },
@@ -326,37 +327,62 @@ private fun OmittedColumnsNotice(
 
 @Composable
 private fun ProColumnsNotice(
+    proColumns: List<InventoryColumn>,
     enabled: Boolean,
     onUnlockPro: () -> Unit,
     onUseBasics: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    InfoCard(
-        icon = ApkAnalyzerIcons.Star,
-        title = null,
-        body = stringResource(R.string.inventory_export_pro_columns),
-        tone = InfoCardTone.Pro,
-        modifier = modifier,
-        action = {
-            Column(modifier = Modifier.fillMaxWidth().padding(start = 6.dp, end = 6.dp, top = 8.dp)) {
-                Button(
-                    text = stringResource(R.string.inventory_export_unlock_pro),
-                    onClick = onUnlockPro,
-                    enabled = enabled,
-                    modifier = Modifier.fillMaxWidth(),
-                    leadingIcon = ApkAnalyzerIcons.Star,
-                    containerColor = AppTheme.colors.pro,
-                    contentColor = AppTheme.colors.proContainer,
+    Column(
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .background(AppTheme.colors.proContainer, Shapes.CardShape)
+            .padding(start = 16.dp, end = 12.dp, top = 14.dp, bottom = 8.dp),
+    ) {
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            ProMark(size = 20.dp, modifier = Modifier.padding(top = 2.dp))
+            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(
+                    text = pluralStringResource(R.plurals.inventory_export_pro_needed, proColumns.size, proColumns.size),
+                    style = AppTheme.typography.titleSmall,
+                    color = AppTheme.colors.onSurface,
                 )
-                TextButton(
-                    text = stringResource(R.string.inventory_export_use_basics),
-                    onClick = onUseBasics,
-                    enabled = enabled,
-                    modifier = Modifier.fillMaxWidth(),
+                Text(
+                    text = stringResource(
+                        R.string.inventory_export_pro_needed_body,
+                        columnNames(proColumns),
+                        InventoryPreset.Basics.columns.size,
+                    ),
+                    style = AppTheme.typography.bodySmall,
+                    color = AppTheme.colors.onSurfaceVariant,
                 )
             }
-        },
-    )
+        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.padding(start = 32.dp),
+        ) {
+            ProButton(
+                text = stringResource(R.string.inventory_export_unlock_pro),
+                onClick = onUnlockPro,
+                enabled = enabled,
+            )
+            TextButton(
+                text = stringResource(R.string.inventory_export_use_basics),
+                onClick = onUseBasics,
+                enabled = enabled,
+            )
+        }
+    }
+}
+
+@Composable
+private fun columnNames(columns: List<InventoryColumn>): String {
+    val names = columns.take(VISIBLE_COLUMN_NAMES).map { stringResource(it.labelRes()) }.joinToString(separator = ", ")
+    val remaining = columns.size - VISIBLE_COLUMN_NAMES
+    return if (remaining > 0) stringResource(R.string.inventory_export_columns_more, names, remaining) else names
 }
 
 @Composable
@@ -471,19 +497,18 @@ internal fun ExportBottomBar(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             modifier = modifier.fillMaxWidth(),
         ) {
-            val proIcon = ApkAnalyzerIcons.Star.takeIf { state.requiresPro }
             OutlinedButton(
                 text = stringResource(R.string.inventory_export_share),
                 onClick = { onAction(InventoryExportAction.Share) },
                 enabled = state.canExport,
-                leadingIcon = proIcon,
+                showProMark = state.requiresPro,
                 modifier = Modifier.weight(1f),
             )
             Button(
                 text = stringResource(R.string.inventory_export_save),
                 onClick = { onAction(InventoryExportAction.Save) },
                 enabled = state.canExport,
-                leadingIcon = proIcon,
+                showProMark = state.requiresPro,
                 modifier = Modifier.weight(1f),
             )
         }
@@ -633,7 +658,7 @@ private fun ExportBottomBarProRequiredPreview() {
 @Composable
 private fun ProColumnsNoticePreview() {
     ApkAnalyzerTheme {
-        ProColumnsNotice(enabled = true, onUnlockPro = {}, onUseBasics = {})
+        ProColumnsNotice(proColumns = previewProColumns, enabled = true, onUnlockPro = {}, onUseBasics = {})
     }
 }
 
@@ -641,7 +666,7 @@ private fun ProColumnsNoticePreview() {
 @Composable
 private fun ProColumnsNoticeDarkPreview() {
     ApkAnalyzerTheme(isDarkTheme = true) {
-        ProColumnsNotice(enabled = true, onUnlockPro = {}, onUseBasics = {})
+        ProColumnsNotice(proColumns = previewProColumns, enabled = true, onUnlockPro = {}, onUseBasics = {})
     }
 }
 
@@ -649,7 +674,7 @@ private fun ProColumnsNoticeDarkPreview() {
 @Composable
 private fun ProColumnsNoticeLargeTextPreview() {
     ApkAnalyzerTheme {
-        ProColumnsNotice(enabled = true, onUnlockPro = {}, onUseBasics = {})
+        ProColumnsNotice(proColumns = previewProColumns, enabled = true, onUnlockPro = {}, onUseBasics = {})
     }
 }
 
@@ -668,3 +693,5 @@ private fun ExportPageOmittedColumnsPreview() {
         )
     }
 }
+
+private val previewProColumns = listOf(InventoryColumn.SigningCertificateSha256, InventoryColumn.RequestedPermissions)

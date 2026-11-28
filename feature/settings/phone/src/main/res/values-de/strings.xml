@@ -14,4 +14,8 @@
     <string name="settings_fingerprint_format">Fingerabdruckformat</string>
     <string name="settings_fingerprint_format_colon_separated">Mit Doppelpunkten</string>
     <string name="settings_fingerprint_format_continuous">Ohne Trennzeichen</string>
+    <string name="settings_pro_title">Apk Analyzer Pro holen</string>
+    <string name="settings_pro_body">Ein einmaliger Kauf, der die Entwicklung unterstützt und die neuesten Funktionen freischaltet.</string>
+    <string name="settings_pro_active">Pro ist aktiv</string>
+    <string name="settings_pro_active_body">Danke, dass du Apk Analyzer unterstützt.</string>
 </resources>

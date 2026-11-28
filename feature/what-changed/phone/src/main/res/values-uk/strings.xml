@@ -66,4 +66,13 @@
     <string name="what_changed_uncomparable_only">Деякі дані не вдалося порівняти</string>
     <string name="what_changed_locked_row">Заблокована зміна застосунку, входить до Pro</string>
     <string name="what_changed_locked_click_label">Розблокувати з Pro</string>
+    <plurals name="what_changed_pro_title">
+        <item quantity="one">Дізнайтеся, що змінилося ще в %d програмі</item>
+        <item quantity="few">Дізнайтеся, що змінилося ще в %d програмах</item>
+        <item quantity="many">Дізнайтеся, що змінилося ще в %d програмах</item>
+        <item quantity="other">Дізнайтеся, що змінилося ще в %d програмах</item>
+    </plurals>
+    <string name="what_changed_pro_card_body">Кожен доданий дозвіл, компонент і зміна розміру. Зміни сертифікатів лишаються безкоштовними.</string>
+    <string name="what_changed_pro_bar_body">Дозволи, компоненти, розміри</string>
+    <string name="what_changed_pro_unlock">Відкрити</string>
 </resources>

@@ -62,4 +62,12 @@
     <string name="what_changed_uncomparable_only">No se pudieron comparar algunos datos</string>
     <string name="what_changed_locked_row">Cambio de app bloqueado, incluido en Pro</string>
     <string name="what_changed_locked_click_label">Desbloquear con Pro</string>
+    <plurals name="what_changed_pro_title">
+        <item quantity="one">Mira qué cambió en %d app más</item>
+        <item quantity="many">Mira qué cambió en %d apps más</item>
+        <item quantity="other">Mira qué cambió en %d apps más</item>
+    </plurals>
+    <string name="what_changed_pro_card_body">Cada permiso, componente y cambio de tamaño añadido. Los cambios de certificado siguen siendo gratis.</string>
+    <string name="what_changed_pro_bar_body">Permisos, componentes, tamaños</string>
+    <string name="what_changed_pro_unlock">Desbloquear</string>
 </resources>

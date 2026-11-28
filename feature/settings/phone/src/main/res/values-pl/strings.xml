@@ -14,4 +14,8 @@
     <string name="settings_fingerprint_format">Format odcisku palca</string>
     <string name="settings_fingerprint_format_colon_separated">Oddzielone dwukropkami</string>
     <string name="settings_fingerprint_format_continuous">Ciągły</string>
+    <string name="settings_pro_title">Kup Apk Analyzer Pro</string>
+    <string name="settings_pro_body">Jednorazowy zakup, który wspiera rozwój i odblokowuje najnowsze funkcje.</string>
+    <string name="settings_pro_active">Pro jest aktywne</string>
+    <string name="settings_pro_active_body">Dziękujemy za wspieranie Apk Analyzer.</string>
 </resources>

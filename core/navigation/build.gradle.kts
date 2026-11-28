@@ -8,3 +8,7 @@ android {
 
     androidResources.enable = false
 }
+
+dependencies {
+    api(libs.kotlinx.coroutines.core)
+}

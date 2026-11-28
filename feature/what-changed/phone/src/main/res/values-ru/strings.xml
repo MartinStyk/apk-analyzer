@@ -66,4 +66,13 @@
     <string name="what_changed_uncomparable_only">Некоторые данные не удалось сравнить</string>
     <string name="what_changed_locked_row">Заблокированное изменение приложения, входит в Pro</string>
     <string name="what_changed_locked_click_label">Разблокировать с Pro</string>
+    <plurals name="what_changed_pro_title">
+        <item quantity="one">Узнайте, что изменилось ещё в %d приложении</item>
+        <item quantity="few">Узнайте, что изменилось ещё в %d приложениях</item>
+        <item quantity="many">Узнайте, что изменилось ещё в %d приложениях</item>
+        <item quantity="other">Узнайте, что изменилось ещё в %d приложениях</item>
+    </plurals>
+    <string name="what_changed_pro_card_body">Каждое добавленное разрешение, компонент и изменение размера. Изменения сертификатов остаются бесплатными.</string>
+    <string name="what_changed_pro_bar_body">Разрешения, компоненты, размеры</string>
+    <string name="what_changed_pro_unlock">Открыть</string>
 </resources>

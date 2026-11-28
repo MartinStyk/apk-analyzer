@@ -67,12 +67,19 @@ every app.
   Changed apps row whose net change includes one) and all first-recorded rows. These exceptions
   still occupy their normal positions in the preview. Summary counts and range chips stay free.
   Everything else is a locked row. With Pro (and in release, where `noop` grants it) nothing is locked.
-* **A locked row never carries real data.** State holds `LockableRow.Locked(key)` only, and
-  `LockedRow` draws blurred placeholder shapes with a `ProBadge`, because `Modifier.blur` does nothing
-  below Android 12 and TalkBack reads text. Its only semantics are the "Locked app change, part of
-  Pro" description and the click action. There is no long-press on a locked row.
-* **Tapping a locked row opens the paywall only**, with `PaywallReason.WhatChanged` quoting the
-  number of distinct locked apps. Nothing comes back from the sheet: rows unlock when
-  `entitlements()` reports Pro.
+* **A locked row carries the app's identity, never its change.** State holds
+  `LockableRow.Locked(key, packageName, appName)`; `LockedRow` shows the app icon and name, a
+  placeholder bar where the detail would be, and a `ProBadge`. Never render the real detail, even
+  blurred: `Modifier.blur` does nothing below Android 12 and TalkBack reads text. There is no
+  long-press on a locked row.
+* **One Pro card, then a bar.** The tab places one `ProUnlockCard` where the first locked row of the
+  first section with locked rows begins. Once the card has scrolled off the top, `ProUnlockBar`
+  appears above the tab bar; the two are never visible together and the bar never shows above the
+  free rows.
+* **Tapping a locked row, the card or the bar opens the paywall only**, with
+  `PaywallReason.WhatChanged` naming the placement. The sheet computes its own counts from
+  `AppHistoryProSummary`. Nothing comes back from the sheet: rows unlock when `entitlements()`
+  reports Pro. The free-row counts and certificate exception come from `AppHistoryFreeSample`,
+  `isFreeAt` and `isFreeSample` in `core:app-history`, the same rule the sheet counts with.
 * The log's filter chips still filter locked rows by their categories, so a locked row can appear
   under a filter it matches.

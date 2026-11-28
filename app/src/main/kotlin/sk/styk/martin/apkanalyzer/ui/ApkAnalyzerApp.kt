@@ -28,6 +28,8 @@ import sk.styk.martin.apkanalyzer.feature.appexport.phone.navigation.inventoryEx
 import sk.styk.martin.apkanalyzer.feature.apps.api.AppsNavKey
 import sk.styk.martin.apkanalyzer.feature.apps.phone.navigation.appEntries
 import sk.styk.martin.apkanalyzer.feature.browse.phone.navigation.browseEntries
+import sk.styk.martin.apkanalyzer.feature.pro.api.PaywallReason
+import sk.styk.martin.apkanalyzer.feature.pro.api.ProNavKey
 import sk.styk.martin.apkanalyzer.feature.pro.phone.navigation.proEntries
 import sk.styk.martin.apkanalyzer.feature.settings.phone.navigation.settingsEntries
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.navigation.whatChangedEntries
@@ -35,7 +37,12 @@ import sk.styk.martin.apkanalyzer.ui.navigation.TOP_LEVEL_KEYS
 import sk.styk.martin.apkanalyzer.ui.navigation.topLevelDestinations
 
 @Composable
-internal fun ApkAnalyzerApp(isWhatChangedEnabled: Boolean, onBackAtRoot: () -> Unit) {
+internal fun ApkAnalyzerApp(
+    isWhatChangedEnabled: Boolean,
+    onBackAtRoot: () -> Unit,
+    isSupportPromptPending: Boolean,
+    onShowSupportPrompt: () -> Unit,
+) {
     val navigationState = rememberNavigationState(
         startKey = AppsNavKey,
         topLevelKeys = TOP_LEVEL_KEYS,
@@ -46,6 +53,13 @@ internal fun ApkAnalyzerApp(isWhatChangedEnabled: Boolean, onBackAtRoot: () -> U
 
     LaunchedEffect(navigationState.currentKey) {
         Logger.i("Navigation", "Screen opened: ${navigationState.currentKey}")
+    }
+
+    LaunchedEffect(isSupportPromptPending, navigationState.currentKey) {
+        if (isSupportPromptPending && navigationState.currentKey in navigationState.topLevelKeys) {
+            onShowSupportPrompt()
+            navigator.navigate(ProNavKey(PaywallReason.Launch))
+        }
     }
 
     Scaffold { paddings ->

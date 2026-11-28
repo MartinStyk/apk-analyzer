@@ -1,30 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <plurals name="pro_headline_export">
-        <item quantity="zero">صدِّر كل التفاصيل عن %d تطبيق</item>
-        <item quantity="one">صدِّر كل التفاصيل عن %d تطبيق</item>
-        <item quantity="two">صدِّر كل التفاصيل عن %d تطبيقين</item>
-        <item quantity="few">صدِّر كل التفاصيل عن %d تطبيقات</item>
-        <item quantity="many">صدِّر كل التفاصيل عن %d تطبيقًا</item>
-        <item quantity="other">صدِّر كل التفاصيل عن %d تطبيق</item>
-    </plurals>
-    <plurals name="pro_headline_what_changed">
-        <item quantity="zero">اطّلع على ما تغيّر في %d تطبيق آخر</item>
-        <item quantity="one">اطّلع على ما تغيّر في %d تطبيق آخر</item>
-        <item quantity="two">اطّلع على ما تغيّر في %d تطبيقين آخرين</item>
-        <item quantity="few">اطّلع على ما تغيّر في %d تطبيقات أخرى</item>
-        <item quantity="many">اطّلع على ما تغيّر في %d تطبيقًا آخر</item>
-        <item quantity="other">اطّلع على ما تغيّر في %d تطبيق آخر</item>
-    </plurals>
-    <string name="pro_feature_export">صدِّر الأذونات والشهادات والمكوّنات وغيرها لعدة تطبيقات دفعة واحدة</string>
-    <string name="pro_feature_what_changed">اطّلع على كل تغييرات التطبيقات على جهازك في قائمة واحدة</string>
-    <string name="pro_supporter">ادعم تطبيقًا مستقلًا ومفتوح المصدر. كل ما هو مجاني اليوم سيبقى مجانيًا.</string>
-    <string name="pro_unlock">فتح Pro · %s</string>
-    <string name="pro_one_time">شراء لمرة واحدة. بلا اشتراك.</string>
     <string name="pro_restore">استعادة الشراء</string>
     <string name="pro_unavailable">تتطلب عمليات الشراء وجود Google Play على هذا الجهاز.</string>
     <string name="pro_failed">تعذّر الاتصال بـ Google Play. حاول مرة أخرى.</string>
     <string name="pro_pending">الشراء قيد الانتظار</string>
     <string name="pro_pending_body">ينتظر Google Play إتمام الدفع. يُفتح Pro فور إتمامه.</string>
     <string name="pro_restore_nothing">لم يتم العثور على عملية شراء Pro لحساب Google هذا.</string>
+    <string name="pro_unlock_lifetime">فتح Pro مدى الحياة · %s</string>
+    <string name="pro_support_unlock">ادعم واحصل على Pro مدى الحياة · %s</string>
+    <string name="pro_one_payment">دفعة واحدة. بلا اشتراك.</string>
+    <string name="pro_support_title">مبني بشكل مفتوح. بدعم منك.</string>
+    <string name="pro_author">مارتن، مطوّر Apk Analyzer</string>
+    <plurals name="pro_history_headline">
+        <item quantity="zero">سُجّل على هاتفك %1$d من التغييرات منذ %2$s</item>
+        <item quantity="one">سُجّل على هاتفك %1$d من التغييرات منذ %2$s</item>
+        <item quantity="two">سُجّل على هاتفك %1$d من التغييرات منذ %2$s</item>
+        <item quantity="few">سُجّل على هاتفك %1$d من التغييرات منذ %2$s</item>
+        <item quantity="many">سُجّل على هاتفك %1$d من التغييرات منذ %2$s</item>
+        <item quantity="other">سُجّل على هاتفك %1$d من التغييرات منذ %2$s</item>
+    </plurals>
+    <plurals name="pro_history_free">
+        <item quantity="zero">يمكنك قراءة %d من التطبيقات مجانًا.</item>
+        <item quantity="one">يمكنك قراءة %d من التطبيقات مجانًا.</item>
+        <item quantity="two">يمكنك قراءة %d من التطبيقات مجانًا.</item>
+        <item quantity="few">يمكنك قراءة %d من التطبيقات مجانًا.</item>
+        <item quantity="many">يمكنك قراءة %d من التطبيقات مجانًا.</item>
+        <item quantity="other">يمكنك قراءة %d من التطبيقات مجانًا.</item>
+    </plurals>
+    <plurals name="pro_history_locked">
+        <item quantity="zero">يفتح Pro %d من التطبيقات الأخرى.</item>
+        <item quantity="one">يفتح Pro %d من التطبيقات الأخرى.</item>
+        <item quantity="two">يفتح Pro %d من التطبيقات الأخرى.</item>
+        <item quantity="few">يفتح Pro %d من التطبيقات الأخرى.</item>
+        <item quantity="many">يفتح Pro %d من التطبيقات الأخرى.</item>
+        <item quantity="other">يفتح Pro %d من التطبيقات الأخرى.</item>
+    </plurals>
+    <string name="pro_history_fallback">اقرأ كل تغيير مسجّل على هاتفك</string>
+    <plurals name="pro_benefit_permissions">
+        <item quantity="zero">%d من الأذونات أُضيفت إلى تطبيقاتك، والتطبيقات التي حصلت عليها</item>
+        <item quantity="one">%d من الأذونات أُضيفت إلى تطبيقاتك، والتطبيقات التي حصلت عليها</item>
+        <item quantity="two">%d من الأذونات أُضيفت إلى تطبيقاتك، والتطبيقات التي حصلت عليها</item>
+        <item quantity="few">%d من الأذونات أُضيفت إلى تطبيقاتك، والتطبيقات التي حصلت عليها</item>
+        <item quantity="many">%d من الأذونات أُضيفت إلى تطبيقاتك، والتطبيقات التي حصلت عليها</item>
+        <item quantity="other">%d من الأذونات أُضيفت إلى تطبيقاتك، والتطبيقات التي حصلت عليها</item>
+    </plurals>
+    <plurals name="pro_benefit_components">
+        <item quantity="zero">%d من تغييرات المكوّنات، مثل الخدمات وأجهزة الاستقبال الجديدة</item>
+        <item quantity="one">%d من تغييرات المكوّنات، مثل الخدمات وأجهزة الاستقبال الجديدة</item>
+        <item quantity="two">%d من تغييرات المكوّنات، مثل الخدمات وأجهزة الاستقبال الجديدة</item>
+        <item quantity="few">%d من تغييرات المكوّنات، مثل الخدمات وأجهزة الاستقبال الجديدة</item>
+        <item quantity="many">%d من تغييرات المكوّنات، مثل الخدمات وأجهزة الاستقبال الجديدة</item>
+        <item quantity="other">%d من تغييرات المكوّنات، مثل الخدمات وأجهزة الاستقبال الجديدة</item>
+    </plurals>
+    <plurals name="pro_benefit_sizes">
+        <item quantity="zero">%d من تغييرات الحجم، تحديثًا بعد تحديث</item>
+        <item quantity="one">%d من تغييرات الحجم، تحديثًا بعد تحديث</item>
+        <item quantity="two">%d من تغييرات الحجم، تحديثًا بعد تحديث</item>
+        <item quantity="few">%d من تغييرات الحجم، تحديثًا بعد تحديث</item>
+        <item quantity="many">%d من تغييرات الحجم، تحديثًا بعد تحديث</item>
+        <item quantity="other">%d من تغييرات الحجم، تحديثًا بعد تحديث</item>
+    </plurals>
+    <string name="pro_benefit_plus_export">وأيضًا: صدّر كل تفاصيل تطبيقاتك</string>
+    <plurals name="pro_card_permissions">
+        <item quantity="zero">أُضيف %d من الأذونات</item>
+        <item quantity="one">أُضيف %d من الأذونات</item>
+        <item quantity="two">أُضيف %d من الأذونات</item>
+        <item quantity="few">أُضيف %d من الأذونات</item>
+        <item quantity="many">أُضيف %d من الأذونات</item>
+        <item quantity="other">أُضيف %d من الأذونات</item>
+    </plurals>
+    <plurals name="pro_card_components">
+        <item quantity="zero">تغيّر %d من المكوّنات</item>
+        <item quantity="one">تغيّر %d من المكوّنات</item>
+        <item quantity="two">تغيّر %d من المكوّنات</item>
+        <item quantity="few">تغيّر %d من المكوّنات</item>
+        <item quantity="many">تغيّر %d من المكوّنات</item>
+        <item quantity="other">تغيّر %d من المكوّنات</item>
+    </plurals>
+    <string name="pro_card_size">تغيّر الحجم</string>
+    <string name="pro_export_headline">أضف كل التفاصيل إلى التصدير</string>
+    <string name="pro_export_details">بيانات الأساسيات (%1$d) مجانية. يضيف Pro البيانات الأخرى (%2$d).</string>
+    <plurals name="pro_export_audit">
+        <item quantity="zero">راجع أذونات %d من التطبيقات في جدول واحد</item>
+        <item quantity="one">راجع أذونات %d من التطبيقات في جدول واحد</item>
+        <item quantity="two">راجع أذونات %d من التطبيقات في جدول واحد</item>
+        <item quantity="few">راجع أذونات %d من التطبيقات في جدول واحد</item>
+        <item quantity="many">راجع أذونات %d من التطبيقات في جدول واحد</item>
+        <item quantity="other">راجع أذونات %d من التطبيقات في جدول واحد</item>
+    </plurals>
+    <string name="pro_export_certificates">تحقّق من كل شهادة توقيع مع SHA-256 والموضوع والمخططات</string>
+    <string name="pro_export_components">احسب مكوّنات كل تطبيق، من الأنشطة إلى فلاتر الأهداف</string>
+    <plurals name="pro_export_plus_history">
+        <item quantity="zero">وأيضًا: اقرأ %d من التغييرات المسجّلة على هذا الهاتف</item>
+        <item quantity="one">وأيضًا: اقرأ %d من التغييرات المسجّلة على هذا الهاتف</item>
+        <item quantity="two">وأيضًا: اقرأ %d من التغييرات المسجّلة على هذا الهاتف</item>
+        <item quantity="few">وأيضًا: اقرأ %d من التغييرات المسجّلة على هذا الهاتف</item>
+        <item quantity="many">وأيضًا: اقرأ %d من التغييرات المسجّلة على هذا الهاتف</item>
+        <item quantity="other">وأيضًا: اقرأ %d من التغييرات المسجّلة على هذا الهاتف</item>
+    </plurals>
+    <string name="pro_export_plus_history_none">وأيضًا: اقرأ كل تغيير مسجّل على هذا الهاتف</string>
+    <string name="pro_export_preview_app">التطبيق</string>
+    <string name="pro_export_preview_permissions">الأذونات</string>
+    <string name="pro_export_preview_certificate">الشهادة</string>
+    <string name="pro_export_basics_only">تصدير الأساسيات فقط</string>
+    <string name="pro_still_free">ما زال مجانيًا.</string>
+    <string name="pro_still_free_body">كل ما كان مجانيًا يبقى مجانيًا. ميزتان جديدتان ضمن Pro:</string>
+    <string name="pro_feature_history">سجلّ التطبيقات</string>
+    <plurals name="pro_feature_history_count">
+        <item quantity="zero">سُجّل %d من التغييرات</item>
+        <item quantity="one">سُجّل %d من التغييرات</item>
+        <item quantity="two">سُجّل %d من التغييرات</item>
+        <item quantity="few">سُجّل %d من التغييرات</item>
+        <item quantity="many">سُجّل %d من التغييرات</item>
+        <item quantity="other">سُجّل %d من التغييرات</item>
+    </plurals>
+    <string name="pro_feature_history_empty">يسجّل كل تحديث</string>
+    <string name="pro_feature_export_title">تصدير قائمة التطبيقات</string>
+    <string name="pro_feature_export_detail">كل التفاصيل</string>
+    <string name="pro_continue_free">المتابعة مجانًا</string>
 </resources>

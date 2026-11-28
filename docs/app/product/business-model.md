@@ -835,7 +835,7 @@ The sheet opens **only** from an explicit user tap on:
 - a non-certificate alert toggle (`HI-13`)
 - **Export** in the inventory export flow when the export is Pro (7A)
 
-Each entry point passes a `source` to the sheet and to `EN-06` analytics. The sheet never opens on launch, after an alert, on a timer, or after N uses. Long-pressing a stub still copies (AGENTS.md row idiom).
+Each entry point passes a `source` to the sheet and to `EN-06` analytics. The sheet never opens on launch, after an alert, on a timer, or after N uses. Long-pressing a stub still copies (AGENTS.md row idiom). **Superseded 2026-11-28:** one after-update support prompt (EN-07) is allowed under the conditions in [Pro](features/pro.md#a3--after-update-prompt); the paywall design in that doc replaces this section's sheet layout.
 
 ### Export gate (7A, revised 2026-11-27)
 This revision supersedes the earlier app-count gate, passive hint, and automatic-resume behavior

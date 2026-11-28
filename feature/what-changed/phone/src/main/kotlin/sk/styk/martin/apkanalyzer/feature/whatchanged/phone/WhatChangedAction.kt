@@ -1,5 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.whatchanged.phone
 
+import sk.styk.martin.apkanalyzer.feature.pro.api.WhatChangedPlacement
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppChangeItem
 
 internal sealed interface WhatChangedAction {
@@ -13,7 +14,7 @@ internal sealed interface WhatChangedAction {
 
     data class OpenAppHistory(val packageName: String, val appName: String) : WhatChangedAction
 
-    data object OpenLocked : WhatChangedAction
+    data class OpenLocked(val placement: WhatChangedPlacement) : WhatChangedAction
 
     data class CopyItem(val label: String, val value: String) : WhatChangedAction
 }

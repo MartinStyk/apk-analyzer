@@ -30,6 +30,7 @@ fun Button(
     containerColor: Color = AppTheme.colors.primary,
     contentColor: Color = AppTheme.colors.onPrimary,
     leadingIcon: ImageVector? = null,
+    showProMark: Boolean = false,
 ) {
     MaterialButton(
         onClick = onClick,
@@ -40,7 +41,31 @@ fun Button(
             contentColor = contentColor,
         ),
     ) {
-        ButtonLabel(text = text, leadingIcon = leadingIcon)
+        ButtonLabel(text = text, leadingIcon = leadingIcon, showProMark = showProMark)
+    }
+}
+
+@Composable
+fun ProButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+) {
+    MaterialButton(
+        onClick = onClick,
+        modifier = modifier,
+        enabled = enabled,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = AppTheme.colors.proFill,
+            contentColor = AppTheme.colors.onProFill,
+        ),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            ProMark(size = ButtonDefaults.IconSize, inverted = true)
+            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+            Text(text = text, style = AppTheme.typography.labelLarge)
+        }
     }
 }
 
@@ -51,6 +76,7 @@ fun OutlinedButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     leadingIcon: ImageVector? = null,
+    showProMark: Boolean = false,
 ) {
     MaterialOutlinedButton(
         onClick = onClick,
@@ -59,13 +85,21 @@ fun OutlinedButton(
         border = BorderStroke(width = 1.dp, color = AppTheme.colors.onSurfaceVariant),
         colors = ButtonDefaults.outlinedButtonColors(contentColor = AppTheme.colors.primary),
     ) {
-        ButtonLabel(text = text, leadingIcon = leadingIcon)
+        ButtonLabel(text = text, leadingIcon = leadingIcon, showProMark = showProMark)
     }
 }
 
 @Composable
-private fun ButtonLabel(text: String, leadingIcon: ImageVector?) {
+private fun ButtonLabel(
+    text: String,
+    leadingIcon: ImageVector?,
+    showProMark: Boolean,
+) {
     Row(verticalAlignment = Alignment.CenterVertically) {
+        if (showProMark) {
+            ProMark(size = ButtonDefaults.IconSize)
+            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+        }
         if (leadingIcon != null) {
             Icon(
                 imageVector = leadingIcon,
@@ -115,12 +149,9 @@ private fun ButtonDisabledPreview() {
 @Composable
 private fun ButtonProPreview() {
     ApkAnalyzerTheme {
-        Button(
-            text = "Unlock Pro",
+        ProButton(
+            text = "Unlock lifetime Pro · €3.99",
             onClick = {},
-            leadingIcon = ApkAnalyzerIcons.Star,
-            containerColor = AppTheme.colors.pro,
-            contentColor = AppTheme.colors.proContainer,
         )
     }
 }
@@ -129,12 +160,9 @@ private fun ButtonProPreview() {
 @Composable
 private fun ButtonProDarkPreview() {
     ApkAnalyzerTheme(isDarkTheme = true) {
-        Button(
-            text = "Unlock Pro",
+        ProButton(
+            text = "Unlock lifetime Pro · €3.99",
             onClick = {},
-            leadingIcon = ApkAnalyzerIcons.Star,
-            containerColor = AppTheme.colors.pro,
-            contentColor = AppTheme.colors.proContainer,
         )
     }
 }
@@ -143,13 +171,10 @@ private fun ButtonProDarkPreview() {
 @Composable
 private fun ButtonProDisabledPreview() {
     ApkAnalyzerTheme {
-        Button(
-            text = "Unlock Pro",
+        ProButton(
+            text = "Unlock lifetime Pro · €3.99",
             onClick = {},
             enabled = false,
-            leadingIcon = ApkAnalyzerIcons.Star,
-            containerColor = AppTheme.colors.pro,
-            contentColor = AppTheme.colors.proContainer,
         )
     }
 }

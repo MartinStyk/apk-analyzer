@@ -66,4 +66,13 @@
     <string name="what_changed_uncomparable_only">Niektoré údaje sa nedali porovnať</string>
     <string name="what_changed_locked_row">Uzamknutá zmena aplikácie, súčasť Pro</string>
     <string name="what_changed_locked_click_label">Odomknúť s Pro</string>
+    <plurals name="what_changed_pro_title">
+        <item quantity="one">Pozrite si, čo sa zmenilo v ďalšej %d aplikácii</item>
+        <item quantity="few">Pozrite si, čo sa zmenilo v ďalších %d aplikáciách</item>
+        <item quantity="many">Pozrite si, čo sa zmenilo v ďalších %d aplikáciách</item>
+        <item quantity="other">Pozrite si, čo sa zmenilo v ďalších %d aplikáciách</item>
+    </plurals>
+    <string name="what_changed_pro_card_body">Každé pridané oprávnenie, komponent aj zmena veľkosti. Zmeny certifikátu zostávajú zadarmo.</string>
+    <string name="what_changed_pro_bar_body">Oprávnenia, komponenty, veľkosti</string>
+    <string name="what_changed_pro_unlock">Odomknúť</string>
 </resources>

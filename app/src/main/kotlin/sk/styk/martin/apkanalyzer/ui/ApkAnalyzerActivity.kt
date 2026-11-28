@@ -7,6 +7,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import sk.styk.martin.apkanalyzer.core.common.review.InAppReviewLauncher
@@ -26,11 +29,13 @@ class ApkAnalyzerActivity : ComponentActivity() {
 
         setContent {
             val state by viewModel.state.collectAsStateWithLifecycle()
+            var isSupportPromptPending by remember { mutableStateOf(false) }
             splashScreen.KeepOnScreenWhile(state is ApkAnalyzerState.Loading)
             LaunchedEffect(Unit) {
                 viewModel.events.collect { event ->
                     when (event) {
                         ApkAnalyzerEvent.RequestReview -> inAppReviewLauncher.launchReviewFlow(this@ApkAnalyzerActivity)
+                        ApkAnalyzerEvent.ShowSupportPrompt -> isSupportPromptPending = true
                     }
                 }
             }
@@ -38,6 +43,8 @@ class ApkAnalyzerActivity : ComponentActivity() {
                 ApkAnalyzerApp(
                     isWhatChangedEnabled = (state as? ApkAnalyzerState.Data)?.isWhatChangedEnabled == true,
                     onBackAtRoot = ::finish,
+                    isSupportPromptPending = isSupportPromptPending,
+                    onShowSupportPrompt = { isSupportPromptPending = false },
                 )
             }
         }

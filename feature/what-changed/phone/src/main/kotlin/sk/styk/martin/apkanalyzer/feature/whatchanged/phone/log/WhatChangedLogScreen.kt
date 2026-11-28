@@ -54,7 +54,7 @@ internal fun WhatChangedLogScreen(
     onBack: () -> Unit,
     onNavigateToChange: (packageName: String, snapshotId: Long, appName: String) -> Unit,
     onNavigateToFullDetail: (AppDetailInput.Historical) -> Unit,
-    onNavigateToPaywall: (lockedAppCount: Int) -> Unit,
+    onNavigateToPaywall: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: WhatChangedLogViewModel = hiltViewModel(),
 ) {
@@ -67,7 +67,7 @@ internal fun WhatChangedLogScreen(
                 WhatChangedLogEvent.NavigateBack -> onBack()
                 is WhatChangedLogEvent.NavigateToChange -> onNavigateToChange(event.packageName, event.snapshotId, event.appName)
                 is WhatChangedLogEvent.NavigateToFullDetail -> onNavigateToFullDetail(event.input)
-                is WhatChangedLogEvent.NavigateToPaywall -> onNavigateToPaywall(event.lockedAppCount)
+                WhatChangedLogEvent.NavigateToPaywall -> onNavigateToPaywall()
                 WhatChangedLogEvent.ShowCopiedFeedback -> Toast.makeText(context, R.string.what_changed_copied, Toast.LENGTH_SHORT).show()
             }
         }
@@ -147,7 +147,12 @@ private fun LoadedContent(
                 }
                 itemsPositioned(items = month.items, key = { _, row -> row.key }) { position, row ->
                     when (row) {
-                        is LockableRow.Locked -> LockedRow(position = position, onClick = { onAction(WhatChangedLogAction.OpenLocked) })
+                        is LockableRow.Locked -> LockedRow(
+                            packageName = row.packageName,
+                            appName = row.appName,
+                            position = position,
+                            onClick = { onAction(WhatChangedLogAction.OpenLocked) },
+                        )
 
                         is LockableRow.Readable -> AppChangeRow(
                             item = row.item,
@@ -205,13 +210,13 @@ private val PreviewLoaded = WhatChangedLogState.Loaded(
                 LockableRow.Readable(PreviewItem, PreviewItem.key),
                 PreviewItem.copy(packageName = "com.whatsapp", appName = "WhatsApp", snapshotId = 7, parts = emptyList(), hasCertificateChange = true)
                     .let { LockableRow.Readable(it, it.key) },
-                LockableRow.Locked("com.android.chrome:5"),
+                LockableRow.Locked("com.android.chrome:5", "com.android.chrome", "Chrome"),
             ),
         ),
         AppChangeMonth(
             YearMonth.of(2026, 10),
             listOf(
-                LockableRow.Locked("com.torch.pro:2"),
+                LockableRow.Locked("com.torch.pro:2", "com.torch.pro", "Torch Pro"),
                 PreviewItem.copy(
                     packageName = "com.torch.pro",
                     appName = "Torch Pro",
@@ -229,7 +234,6 @@ private val PreviewLoaded = WhatChangedLogState.Loaded(
         LogFilter.Category(AppHistoryChangeCategory.Components),
     ),
     selectedFilters = emptySet(),
-    lockedAppCount = 2,
 )
 
 @Preview

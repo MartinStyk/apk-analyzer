@@ -1,26 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <plurals name="pro_headline_export">
-        <item quantity="one">Экспортируйте все сведения о %d приложении</item>
-        <item quantity="few">Экспортируйте все сведения о %d приложениях</item>
-        <item quantity="many">Экспортируйте все сведения о %d приложениях</item>
-        <item quantity="other">Экспортируйте все сведения о %d приложения</item>
-    </plurals>
-    <plurals name="pro_headline_what_changed">
-        <item quantity="one">Узнайте, что изменилось ещё в %d приложении</item>
-        <item quantity="few">Узнайте, что изменилось ещё в %d приложениях</item>
-        <item quantity="many">Узнайте, что изменилось ещё в %d приложениях</item>
-        <item quantity="other">Узнайте, что изменилось ещё в %d приложения</item>
-    </plurals>
-    <string name="pro_feature_export">Экспортируйте разрешения, сертификаты, компоненты и другие данные сразу для многих приложений</string>
-    <string name="pro_feature_what_changed">Смотрите все изменения приложений на устройстве в одном списке</string>
-    <string name="pro_supporter">Поддержите независимое приложение с открытым исходным кодом. Всё, что бесплатно сегодня, останется бесплатным.</string>
-    <string name="pro_unlock">Разблокировать Pro · %s</string>
-    <string name="pro_one_time">Разовая покупка. Без подписки.</string>
     <string name="pro_restore">Восстановить покупку</string>
     <string name="pro_unavailable">Для покупок на этом устройстве нужен Google Play.</string>
     <string name="pro_failed">Не удалось связаться с Google Play. Попробуйте снова.</string>
     <string name="pro_pending">Покупка в обработке</string>
     <string name="pro_pending_body">Google Play ожидает вашу оплату. Pro разблокируется, как только она пройдёт.</string>
     <string name="pro_restore_nothing">Для этого аккаунта Google покупка Pro не найдена.</string>
+    <string name="pro_unlock_lifetime">Разблокировать Pro навсегда · %s</string>
+    <string name="pro_support_unlock">Поддержать и получить Pro навсегда · %s</string>
+    <string name="pro_one_payment">Один платёж. Без подписки.</string>
+    <string name="pro_support_title">Создаётся открыто. Держится на вашей поддержке.</string>
+    <string name="pro_author">Мартин, автор Apk Analyzer</string>
+    <plurals name="pro_history_headline">
+        <item quantity="one">%1$d изменение записано на вашем телефоне с %2$s</item>
+        <item quantity="few">%1$d изменения записаны на вашем телефоне с %2$s</item>
+        <item quantity="many">%1$d изменений записано на вашем телефоне с %2$s</item>
+        <item quantity="other">%1$d изменения записано на вашем телефоне с %2$s</item>
+    </plurals>
+    <plurals name="pro_history_free">
+        <item quantity="one">%d приложение доступно бесплатно.</item>
+        <item quantity="few">%d приложения доступны бесплатно.</item>
+        <item quantity="many">%d приложений доступно бесплатно.</item>
+        <item quantity="other">%d приложения доступно бесплатно.</item>
+    </plurals>
+    <plurals name="pro_history_locked">
+        <item quantity="one">Pro открывает ещё %d приложение.</item>
+        <item quantity="few">Pro открывает ещё %d приложения.</item>
+        <item quantity="many">Pro открывает ещё %d приложений.</item>
+        <item quantity="other">Pro открывает ещё %d приложения.</item>
+    </plurals>
+    <string name="pro_history_fallback">Читайте каждое изменение, записанное на вашем телефоне</string>
+    <plurals name="pro_benefit_permissions">
+        <item quantity="one">%d разрешение добавлено в ваши приложения — и какие приложения его получили</item>
+        <item quantity="few">%d разрешения добавлены в ваши приложения — и какие приложения их получили</item>
+        <item quantity="many">%d разрешений добавлено в ваши приложения — и какие приложения их получили</item>
+        <item quantity="other">%d разрешения добавлено в ваши приложения — и какие приложения их получили</item>
+    </plurals>
+    <plurals name="pro_benefit_components">
+        <item quantity="one">%d изменение компонентов, например новая служба или приёмник</item>
+        <item quantity="few">%d изменения компонентов, например новые службы и приёмники</item>
+        <item quantity="many">%d изменений компонентов, например новые службы и приёмники</item>
+        <item quantity="other">%d изменения компонентов, например новые службы и приёмники</item>
+    </plurals>
+    <plurals name="pro_benefit_sizes">
+        <item quantity="one">%d изменение размера, обновление за обновлением</item>
+        <item quantity="few">%d изменения размера, обновление за обновлением</item>
+        <item quantity="many">%d изменений размера, обновление за обновлением</item>
+        <item quantity="other">%d изменения размера, обновление за обновлением</item>
+    </plurals>
+    <string name="pro_benefit_plus_export">А ещё: экспорт всех сведений о ваших приложениях</string>
+    <plurals name="pro_card_permissions">
+        <item quantity="one">Добавлено %d разрешение</item>
+        <item quantity="few">Добавлено %d разрешения</item>
+        <item quantity="many">Добавлено %d разрешений</item>
+        <item quantity="other">Добавлено %d разрешения</item>
+    </plurals>
+    <plurals name="pro_card_components">
+        <item quantity="one">Изменён %d компонент</item>
+        <item quantity="few">Изменено %d компонента</item>
+        <item quantity="many">Изменено %d компонентов</item>
+        <item quantity="other">Изменено %d компонента</item>
+    </plurals>
+    <string name="pro_card_size">Размер изменился</string>
+    <string name="pro_export_headline">Добавьте в экспорт все сведения</string>
+    <string name="pro_export_details">Раздел «Основное» (%1$d) бесплатный. Pro добавляет остальные %2$d.</string>
+    <plurals name="pro_export_audit">
+        <item quantity="one">Проверьте разрешения %d приложения в одной таблице</item>
+        <item quantity="few">Проверьте разрешения всех %d приложений в одной таблице</item>
+        <item quantity="many">Проверьте разрешения всех %d приложений в одной таблице</item>
+        <item quantity="other">Проверьте разрешения всех %d приложения в одной таблице</item>
+    </plurals>
+    <string name="pro_export_certificates">Проверьте каждый сертификат подписи: SHA-256, субъект и схемы</string>
+    <string name="pro_export_components">Подсчитайте компоненты каждого приложения — от активностей до фильтров интентов</string>
+    <plurals name="pro_export_plus_history">
+        <item quantity="one">А ещё: читайте %d изменение, записанное на этом телефоне</item>
+        <item quantity="few">А ещё: читайте все %d изменения, записанные на этом телефоне</item>
+        <item quantity="many">А ещё: читайте все %d изменений, записанных на этом телефоне</item>
+        <item quantity="other">А ещё: читайте все %d изменения, записанные на этом телефоне</item>
+    </plurals>
+    <string name="pro_export_plus_history_none">А ещё: читайте каждое изменение, записанное на этом телефоне</string>
+    <string name="pro_export_preview_app">Приложение</string>
+    <string name="pro_export_preview_permissions">Разрешения</string>
+    <string name="pro_export_preview_certificate">Сертификат</string>
+    <string name="pro_export_basics_only">Экспортировать только основное</string>
+    <string name="pro_still_free">По-прежнему бесплатно.</string>
+    <string name="pro_still_free_body">Всё, что было бесплатным, остаётся бесплатным. Две новые функции входят в Pro:</string>
+    <string name="pro_feature_history">История приложений</string>
+    <plurals name="pro_feature_history_count">
+        <item quantity="one">Записано %d изменение</item>
+        <item quantity="few">Записано %d изменения</item>
+        <item quantity="many">Записано %d изменений</item>
+        <item quantity="other">Записано %d изменения</item>
+    </plurals>
+    <string name="pro_feature_history_empty">Записывает каждое обновление</string>
+    <string name="pro_feature_export_title">Экспорт списка приложений</string>
+    <string name="pro_feature_export_detail">Все сведения</string>
+    <string name="pro_continue_free">Продолжить бесплатно</string>
 </resources>

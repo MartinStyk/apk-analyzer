@@ -109,6 +109,8 @@ ID prefix rather than a letter, so an item keeps its ID if it moves.
 | EN-04 | "Sample free / complete Pro" UI | The single reusable gate pattern from Principle 2              | S    |
 | EN-05 | Paywall screen                  | Plus the CTA placements that lead into it                      | S    |
 | EN-06 | Purchase funnel analytics       | Gate impressions → tap → purchase; drives the Part 3 decisions | XS   |
+| EN-07 | After-update support prompt     | Shown at most twice, after an update and an accomplishment; see [Pro](features/pro.md#a3--after-update-prompt) | S |
+| EN-08 | Settings Pro row                | Get Pro / Pro is active, opens the sheet; see [Pro](features/pro.md#a6--settings) | XS |
 
 **Area total: ~3–4 days**
 

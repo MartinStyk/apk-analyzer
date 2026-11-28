@@ -88,7 +88,12 @@
     <string name="inventory_export_structured_hint">JSON-only details include full records, not just counts. CSV files leave them out.</string>
     <string name="inventory_export_columns_omitted">Left out of the CSV file: %1$s. CSV cannot hold full records.</string>
     <string name="inventory_export_use_json">Use JSON</string>
-    <string name="inventory_export_pro_columns">Basics are free. Unlock Pro to export any other details.</string>
+    <string name="inventory_export_pro_rule" tools:ignore="PluralsCandidate">The %1$d Basics are free. The other %2$d details are Pro. You can still pick them and see them in the preview.</string>
+    <plurals name="inventory_export_pro_needed">
+        <item quantity="one">%d of these details needs Pro</item>
+        <item quantity="other">%d of these details need Pro</item>
+    </plurals>
+    <string name="inventory_export_pro_needed_body" tools:ignore="PluralsCandidate">%1$s. The %2$d Basics export for free.</string>
     <string name="inventory_export_unlock_pro">Unlock Pro</string>
     <string name="inventory_export_dismiss_hint">Dismiss notice</string>
     <string name="inventory_export_use_basics">Export Basics instead</string>

@@ -19,6 +19,9 @@ logic do not belong here.
   and mappings stay in their feature's domain module. Both applications set the `form_factor`
   user property (`phone` or `tv`) at startup so their events can be separated in Firebase reports.
 * `review/` - in-app review eligibility tracking and the internal Play Core adapter.
+* `engagement/` - `SessionAccomplishments`, an in-memory signal that the user finished something
+  worthwhile this run (a qualified app-detail session or a finished export). Prompts read it; the
+  policy for what to show stays in the feature that shows it.
 * `settings/` - generic typed DataStore persistence and preference keys.
 * Feature flags live in [`core:feature-flags`](../feature-flags/AGENTS.md), not in this foundation
   module. Each application supplies its `ApplicationVariant` through Hilt; these identity bindings

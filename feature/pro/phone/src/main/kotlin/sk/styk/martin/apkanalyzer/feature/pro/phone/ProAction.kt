@@ -6,4 +6,8 @@ internal sealed interface ProAction {
     data class Unlock(val activity: Activity) : ProAction
 
     data object Restore : ProAction
+
+    data object ExportBasicsOnly : ProAction
+
+    data object Dismiss : ProAction
 }

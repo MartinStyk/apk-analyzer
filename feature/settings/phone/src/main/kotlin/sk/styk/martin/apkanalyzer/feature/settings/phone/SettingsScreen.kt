@@ -36,6 +36,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzer
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Chip
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ProMark
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Switch
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Toolbar
@@ -48,6 +49,7 @@ private val SettingsRowMinHeight = 48.dp
 @Composable
 internal fun SettingsScreen(
     onBack: () -> Unit,
+    onOpenPro: () -> Unit,
     modifier: Modifier = Modifier,
     onFeatureFlags: (() -> Unit)? = null,
     viewModel: SettingsViewModel = hiltViewModel(),
@@ -55,12 +57,13 @@ internal fun SettingsScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    LaunchedEffect(onBack, onFeatureFlags) {
+    LaunchedEffect(onBack, onFeatureFlags, onOpenPro) {
         viewModel.events.collect { event ->
             when (event) {
                 is SettingsEvent.NavigateBack -> onBack()
                 is SettingsEvent.OpenAppLanguageSettings -> context.openAppLanguageSettings()
                 SettingsEvent.OpenFeatureFlags -> if (BuildConfig.DEBUG) onFeatureFlags?.invoke()
+                SettingsEvent.OpenPro -> onOpenPro()
             }
         }
     }
@@ -105,6 +108,22 @@ private fun SettingsContent(
                 .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
+            when (state.pro) {
+                SettingsPro.Hidden -> Unit
+
+                SettingsPro.NotOwned -> ProRow(
+                    title = stringResource(R.string.settings_pro_title),
+                    body = stringResource(R.string.settings_pro_body),
+                    onClick = { onAction(SettingsAction.OpenPro) },
+                )
+
+                SettingsPro.Owned -> ProRow(
+                    title = stringResource(R.string.settings_pro_active),
+                    body = stringResource(R.string.settings_pro_active_body),
+                    onClick = null,
+                )
+            }
+
             AppearanceSection(
                 colorScheme = state.colorScheme,
                 fingerprintFormat = state.fingerprintFormat,
@@ -318,6 +337,34 @@ private fun FingerprintFormat.displayName(): String = when (this) {
     FingerprintFormat.Continuous -> stringResource(R.string.settings_fingerprint_format_continuous)
 }
 
+@Composable
+private fun ProRow(
+    title: String,
+    body: String,
+    onClick: (() -> Unit)?,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(14.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .card()
+            .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
+            .padding(16.dp)
+            .heightIn(min = SettingsRowMinHeight),
+    ) {
+        ProMark(size = 24.dp)
+        Column(verticalArrangement = Arrangement.spacedBy(2.dp), modifier = Modifier.weight(1f)) {
+            Text(text = title, style = AppTheme.typography.titleMedium, color = AppTheme.colors.onSurface)
+            Text(text = body, style = AppTheme.typography.bodyMedium, color = AppTheme.colors.onSurfaceVariant)
+        }
+        if (onClick != null) {
+            Icon(imageVector = ApkAnalyzerIcons.ChevronRight, contentDescription = null)
+        }
+    }
+}
+
 @Preview
 @Composable
 private fun SettingsContentPreview() {
@@ -327,6 +374,7 @@ private fun SettingsContentPreview() {
                 colorScheme = ColorAppScheme.FollowSystem,
                 recentlyViewedAppsEnabled = true,
                 appLanguageSetting = AppLanguageSetting.Available.SystemDefault,
+                pro = SettingsPro.NotOwned,
             ),
             onAction = {},
             developerOptions = SettingsDeveloperOptions("Debug", "Feature flags"),
@@ -343,6 +391,7 @@ private fun SettingsContentDayRecentlyDisabledPreview() {
                 colorScheme = ColorAppScheme.Day,
                 recentlyViewedAppsEnabled = false,
                 appLanguageSetting = AppLanguageSetting.Available.Specific("English"),
+                pro = SettingsPro.Owned,
             ),
             onAction = {},
         )

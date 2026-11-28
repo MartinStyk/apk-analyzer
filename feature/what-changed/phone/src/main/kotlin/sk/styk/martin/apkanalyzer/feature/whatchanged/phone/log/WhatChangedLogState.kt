@@ -19,7 +19,6 @@ internal sealed interface WhatChangedLogState {
         val months: List<AppChangeMonth>,
         val filters: List<LogFilter>,
         val selectedFilters: Set<LogFilter>,
-        val lockedAppCount: Int,
     ) : WhatChangedLogState
 }
 

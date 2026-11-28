@@ -104,7 +104,6 @@
     <string name="inventory_export_next">Далее</string>
     <string name="inventory_export_columns_omitted">В файл CSV не попадут: %1$s. CSV не поддерживает полные записи.</string>
     <string name="inventory_export_use_json">Использовать JSON</string>
-    <string name="inventory_export_pro_columns">Основные сведения бесплатны. Разблокируйте Pro для экспорта остальных сведений.</string>
     <string name="inventory_export_unlock_pro">Разблокировать Pro</string>
     <string name="inventory_export_dismiss_hint">Скрыть уведомление</string>
     <string name="inventory_export_use_basics">Экспортировать только «Основное»</string>
@@ -120,4 +119,12 @@
     <string name="inventory_export_intro_description">Экспортируйте сведения о нескольких приложениях в один файл CSV или JSON.</string>
     <string name="inventory_export_columns_guidance">Выберите, какие сведения включить для каждого приложения.</string>
     <string name="inventory_export_format_guidance">Выберите CSV для таблиц или JSON для полных сведений, затем сохраните или отправьте файл.</string>
+    <string name="inventory_export_pro_rule">Раздел «Основное» (%1$d) бесплатный. Остальные сведения (%2$d) входят в Pro. Их всё равно можно выбрать и посмотреть в предпросмотре.</string>
+    <plurals name="inventory_export_pro_needed">
+        <item quantity="one">%d из этих сведений требует Pro</item>
+        <item quantity="few">%d из этих сведений требуют Pro</item>
+        <item quantity="many">%d из этих сведений требуют Pro</item>
+        <item quantity="other">%d из этих сведений требуют Pro</item>
+    </plurals>
+    <string name="inventory_export_pro_needed_body">%1$s. Раздел «Основное» (%2$d) экспортируется бесплатно.</string>
 </resources>

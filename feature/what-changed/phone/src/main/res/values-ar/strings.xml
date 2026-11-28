@@ -74,4 +74,15 @@
     <string name="what_changed_uncomparable_only">تعذّرت مقارنة بعض التفاصيل</string>
     <string name="what_changed_locked_row">تغيير تطبيق مقفل، جزء من Pro</string>
     <string name="what_changed_locked_click_label">فتح القفل باستخدام Pro</string>
+    <plurals name="what_changed_pro_title">
+        <item quantity="zero">اطّلع على ما تغيّر في %d من التطبيقات الأخرى</item>
+        <item quantity="one">اطّلع على ما تغيّر في %d من التطبيقات الأخرى</item>
+        <item quantity="two">اطّلع على ما تغيّر في %d من التطبيقات الأخرى</item>
+        <item quantity="few">اطّلع على ما تغيّر في %d من التطبيقات الأخرى</item>
+        <item quantity="many">اطّلع على ما تغيّر في %d من التطبيقات الأخرى</item>
+        <item quantity="other">اطّلع على ما تغيّر في %d من التطبيقات الأخرى</item>
+    </plurals>
+    <string name="what_changed_pro_card_body">كل إذن أو مكوّن أو تغيير في الحجم أُضيف. تغييرات الشهادات تبقى مجانية.</string>
+    <string name="what_changed_pro_bar_body">الأذونات، المكوّنات، الأحجام</string>
+    <string name="what_changed_pro_unlock">فتح</string>
 </resources>

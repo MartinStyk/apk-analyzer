@@ -30,6 +30,7 @@ import sk.styk.martin.apkanalyzer.core.appexport.api.InventoryExportManager
 import sk.styk.martin.apkanalyzer.core.appexport.api.InventoryExportProgress
 import sk.styk.martin.apkanalyzer.core.appexport.api.InventoryExportRequest
 import sk.styk.martin.apkanalyzer.core.appexport.api.column.InventoryColumn
+import sk.styk.martin.apkanalyzer.core.appexport.api.column.InventoryPreset
 import sk.styk.martin.apkanalyzer.core.appexport.api.format.INVENTORY_REFERENCE_URL
 import sk.styk.martin.apkanalyzer.core.appexport.api.format.InventoryFormat
 import sk.styk.martin.apkanalyzer.core.appexport.api.preferences.InventoryExportPreferences
@@ -40,6 +41,7 @@ import sk.styk.martin.apkanalyzer.core.apps.api.model.InstalledApp
 import sk.styk.martin.apkanalyzer.core.apps.api.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.combine
+import sk.styk.martin.apkanalyzer.core.common.engagement.SessionAccomplishments
 import sk.styk.martin.apkanalyzer.core.entitlements.api.Entitlement
 import sk.styk.martin.apkanalyzer.core.entitlements.api.EntitlementsRepository
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.apps.AppSelection
@@ -58,6 +60,7 @@ internal class InventoryExportViewModel @AssistedInject constructor(
     usageStatsRepository: UsageStatsRepository,
     entitlementsRepository: EntitlementsRepository,
     dispatcherProvider: DispatcherProvider,
+    private val sessionAccomplishments: SessionAccomplishments,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -172,8 +175,7 @@ internal class InventoryExportViewModel @AssistedInject constructor(
 
             is InventoryExportAction.DismissHint -> dismissedHints.value += action.hint
 
-            InventoryExportAction.OpenPro ->
-                eventChannel.trySend(InventoryExportEvent.OpenPro(PaywallReason.Export(appCount = state.value.apps.summary.selectedCount)))
+            InventoryExportAction.OpenPro -> eventChannel.trySend(InventoryExportEvent.OpenPro(paywallReason(state.value)))
 
             InventoryExportAction.ShowIntro -> showIntro.value = true
 
@@ -248,8 +250,7 @@ internal class InventoryExportViewModel @AssistedInject constructor(
             when {
                 !current.canExport -> Unit
 
-                current.requiresPro ->
-                    eventChannel.send(InventoryExportEvent.OpenPro(PaywallReason.Export(appCount = current.apps.summary.selectedCount)))
+                current.requiresPro -> eventChannel.send(InventoryExportEvent.OpenPro(paywallReason(current)))
 
                 else -> when (action) {
                     InventoryExportAction.Save -> {
@@ -298,8 +299,16 @@ internal class InventoryExportViewModel @AssistedInject constructor(
         selection: InventorySelection,
     ) {
         inventoryExportPreferences.saveSelection(selection)
+        sessionAccomplishments.record()
         deliver(completed, destination, selection.format)
     }
+
+    private fun paywallReason(current: InventoryExportState) = PaywallReason.Export(
+        appCount = current.apps.summary.selectedCount,
+        sampleAppNames = apps.selectedApps.value.orEmpty().take(PAYWALL_SAMPLE_APP_COUNT).map { it.applicationName },
+        freeDetailCount = InventoryPreset.Basics.columns.size,
+        proDetailCount = InventoryColumn.entries.size - InventoryPreset.Basics.columns.size,
+    )
 
     private fun deliver(
         completed: InventoryExportProgress.Completed,
@@ -326,6 +335,7 @@ internal class InventoryExportViewModel @AssistedInject constructor(
 
     private companion object {
         const val STOP_TIMEOUT_MILLIS = 5_000L
+        const val PAYWALL_SAMPLE_APP_COUNT = 4
     }
 }
 

@@ -14,4 +14,8 @@
     <string name="settings_language_section">語言</string>
     <string name="settings_language_app_language">應用程式語言</string>
     <string name="settings_language_system_default">系統預設</string>
+    <string name="settings_pro_title">取得 Apk Analyzer Pro</string>
+    <string name="settings_pro_body">一次性購買,支持開發並解鎖最新功能。</string>
+    <string name="settings_pro_active">Pro 已啟用</string>
+    <string name="settings_pro_active_body">感謝你支持 Apk Analyzer。</string>
 </resources>

@@ -82,7 +82,6 @@
     <string name="inventory_export_structured_hint">僅限 JSON 的詳細資料包含完整紀錄，而不只是數量。CSV 檔案不會納入這些資料。</string>
     <string name="inventory_export_columns_omitted">CSV 檔案未納入：%1$s。CSV 無法儲存完整紀錄。</string>
     <string name="inventory_export_use_json">改用 JSON</string>
-    <string name="inventory_export_pro_columns">基本資訊免費。解鎖 Pro 即可匯出其他詳細資訊。</string>
     <string name="inventory_export_unlock_pro">解鎖 Pro</string>
     <string name="inventory_export_dismiss_hint">關閉提示</string>
     <string name="inventory_export_use_basics">改為只匯出基本資訊</string>
@@ -102,4 +101,9 @@
     <string name="inventory_export_preset_security_audit_description">偵錯與備份設定、簽署憑證和簽署方案。</string>
     <string name="inventory_export_preset_permissions_description">要求與已授予的權限，以及元件數量。</string>
     <string name="inventory_export_preset_everything_description">所有可用的詳細資料，包括完整紀錄。</string>
+    <string name="inventory_export_pro_rule">%1$d 項基本資訊免費。其餘 %2$d 項詳細資料屬於 Pro。你仍可選取並在預覽中查看。</string>
+    <plurals name="inventory_export_pro_needed">
+        <item quantity="other">其中 %d 項詳細資料需要 Pro</item>
+    </plurals>
+    <string name="inventory_export_pro_needed_body">%1$s。%2$d 項基本資訊可免費匯出。</string>
 </resources>

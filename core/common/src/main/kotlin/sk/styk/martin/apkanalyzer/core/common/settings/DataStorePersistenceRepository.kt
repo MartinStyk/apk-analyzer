@@ -31,6 +31,9 @@ private val KEY_INVENTORY_EXPORT_FORMAT = stringPreferencesKey("inventory_export
 private val KEY_INVENTORY_EXPORT_INTRO_DISMISSED = booleanPreferencesKey("inventory_export_intro_dismissed")
 private val KEY_WHAT_CHANGED_LAST_VISIT_AT = longPreferencesKey("what_changed_last_visit_at")
 private val KEY_WHAT_CHANGED_RANGE = stringPreferencesKey("what_changed_range")
+private val KEY_REVIEW_FLOW_REQUESTED_AT = longPreferencesKey("review_flow_requested_at")
+private val KEY_SUPPORT_PROMPT_SHOWN_COUNT = intPreferencesKey("support_prompt_shown_count")
+private val KEY_SUPPORT_PROMPT_LAST_VERSION = longPreferencesKey("support_prompt_last_version")
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
     name = "app_settings",
@@ -73,43 +76,55 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
         }
 
         Key.OnboardingRequired -> {
-            prefs[KEY_ONBOARDING] ?: true
+            prefs.getOrDefault(KEY_ONBOARDING, true)
         }
 
         Key.AppStartNumber -> {
-            prefs[KEY_APP_START_NUMBER] ?: 0
+            prefs.getOrDefault(KEY_APP_START_NUMBER, 0)
         }
 
         Key.RecentlyViewedAppsEnabled -> {
-            prefs[KEY_RECENTLY_VIEWED_ENABLED] ?: true
+            prefs.getOrDefault(KEY_RECENTLY_VIEWED_ENABLED, true)
         }
 
         Key.AppDetailQualifiedSessionCount -> {
-            prefs[KEY_APP_DETAIL_QUALIFIED_SESSION_COUNT] ?: 0
+            prefs.getOrDefault(KEY_APP_DETAIL_QUALIFIED_SESSION_COUNT, 0)
         }
 
         Key.ReviewFlowRequested -> {
-            prefs[KEY_REVIEW_FLOW_REQUESTED] ?: false
+            prefs.getOrDefault(KEY_REVIEW_FLOW_REQUESTED, false)
         }
 
         Key.InventoryExportColumns -> {
-            prefs[KEY_INVENTORY_EXPORT_COLUMNS] ?: emptySet<String>()
+            prefs.getOrDefault(KEY_INVENTORY_EXPORT_COLUMNS, emptySet<String>())
         }
 
         Key.InventoryExportFormat -> {
-            prefs[KEY_INVENTORY_EXPORT_FORMAT] ?: ""
+            prefs.getOrDefault(KEY_INVENTORY_EXPORT_FORMAT, "")
         }
 
         Key.InventoryExportIntroDismissed -> {
-            prefs[KEY_INVENTORY_EXPORT_INTRO_DISMISSED] ?: false
+            prefs.getOrDefault(KEY_INVENTORY_EXPORT_INTRO_DISMISSED, false)
         }
 
         Key.WhatChangedLastVisitAt -> {
-            prefs[KEY_WHAT_CHANGED_LAST_VISIT_AT] ?: 0L
+            prefs.getOrDefault(KEY_WHAT_CHANGED_LAST_VISIT_AT, 0L)
         }
 
         Key.WhatChangedRange -> {
-            prefs[KEY_WHAT_CHANGED_RANGE] ?: ""
+            prefs.getOrDefault(KEY_WHAT_CHANGED_RANGE, "")
+        }
+
+        Key.ReviewFlowRequestedAt -> {
+            prefs.getOrDefault(KEY_REVIEW_FLOW_REQUESTED_AT, 0L)
+        }
+
+        Key.SupportPromptShownCount -> {
+            prefs.getOrDefault(KEY_SUPPORT_PROMPT_SHOWN_COUNT, 0)
+        }
+
+        Key.SupportPromptLastVersion -> {
+            prefs.getOrDefault(KEY_SUPPORT_PROMPT_LAST_VERSION, 0L)
         }
     } as T
 
@@ -170,8 +185,22 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
         Key.WhatChangedRange -> {
             prefs[KEY_WHAT_CHANGED_RANGE] = value as String
         }
+
+        Key.ReviewFlowRequestedAt -> {
+            prefs[KEY_REVIEW_FLOW_REQUESTED_AT] = value as Long
+        }
+
+        Key.SupportPromptShownCount -> {
+            prefs[KEY_SUPPORT_PROMPT_SHOWN_COUNT] = value as Int
+        }
+
+        Key.SupportPromptLastVersion -> {
+            prefs[KEY_SUPPORT_PROMPT_LAST_VERSION] = value as Long
+        }
     }
 }
+
+private fun <V : Any> Preferences.getOrDefault(key: Preferences.Key<V>, default: V): V = this[key] ?: default
 
 private fun String?.toColorAppScheme(): ColorAppScheme = when (this) {
     "light" -> ColorAppScheme.Day

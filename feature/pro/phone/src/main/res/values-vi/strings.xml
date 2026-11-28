@@ -1,20 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <plurals name="pro_headline_export">
-        <item quantity="other">Xuất mọi chi tiết của %d ứng dụng</item>
-    </plurals>
-    <plurals name="pro_headline_what_changed">
-        <item quantity="other">Xem những gì đã thay đổi ở %d ứng dụng khác</item>
-    </plurals>
-    <string name="pro_feature_export">Xuất quyền, chứng chỉ, thành phần và nhiều thông tin khác của nhiều ứng dụng cùng lúc</string>
-    <string name="pro_feature_what_changed">Xem mọi thay đổi của ứng dụng trên thiết bị trong một danh sách</string>
-    <string name="pro_supporter">Ủng hộ một ứng dụng độc lập, mã nguồn mở. Mọi thứ miễn phí hôm nay sẽ luôn miễn phí.</string>
-    <string name="pro_unlock">Mở khóa Pro · %s</string>
-    <string name="pro_one_time">Mua một lần. Không cần gói thuê bao.</string>
     <string name="pro_restore">Khôi phục giao dịch mua</string>
     <string name="pro_unavailable">Cần có Google Play trên thiết bị này để mua hàng.</string>
     <string name="pro_failed">Không thể kết nối với Google Play. Hãy thử lại.</string>
     <string name="pro_pending">Đang chờ thanh toán</string>
     <string name="pro_pending_body">Google Play đang chờ bạn thanh toán. Pro sẽ được mở khóa ngay khi thanh toán hoàn tất.</string>
     <string name="pro_restore_nothing">Không tìm thấy giao dịch mua Pro nào cho Tài khoản Google này.</string>
+    <string name="pro_unlock_lifetime">Mở khóa Pro trọn đời · %s</string>
+    <string name="pro_support_unlock">Ủng hộ và nhận Pro trọn đời · %s</string>
+    <string name="pro_one_payment">Thanh toán một lần. Không cần đăng ký.</string>
+    <string name="pro_support_title">Phát triển công khai. Nhờ bạn ủng hộ.</string>
+    <string name="pro_author">Martin, tác giả của Apk Analyzer</string>
+    <plurals name="pro_history_headline">
+        <item quantity="other">%1$d thay đổi được ghi lại trên điện thoại của bạn kể từ %2$s</item>
+    </plurals>
+    <plurals name="pro_history_free">
+        <item quantity="other">Bạn có thể đọc miễn phí %d ứng dụng.</item>
+    </plurals>
+    <plurals name="pro_history_locked">
+        <item quantity="other">Pro mở thêm %d ứng dụng.</item>
+    </plurals>
+    <string name="pro_history_fallback">Đọc mọi thay đổi được ghi lại trên điện thoại của bạn</string>
+    <plurals name="pro_benefit_permissions">
+        <item quantity="other">%d quyền được thêm vào ứng dụng của bạn, và ứng dụng nào nhận được</item>
+    </plurals>
+    <plurals name="pro_benefit_components">
+        <item quantity="other">%d thay đổi thành phần, chẳng hạn dịch vụ và bộ nhận mới</item>
+    </plurals>
+    <plurals name="pro_benefit_sizes">
+        <item quantity="other">%d thay đổi kích thước, qua từng bản cập nhật</item>
+    </plurals>
+    <string name="pro_benefit_plus_export">Ngoài ra: xuất mọi chi tiết về ứng dụng của bạn</string>
+    <plurals name="pro_card_permissions">
+        <item quantity="other">Đã thêm %d quyền</item>
+    </plurals>
+    <plurals name="pro_card_components">
+        <item quantity="other">Đã thay đổi %d thành phần</item>
+    </plurals>
+    <string name="pro_card_size">Kích thước đã thay đổi</string>
+    <string name="pro_export_headline">Thêm mọi chi tiết vào bản xuất</string>
+    <string name="pro_export_details">%1$d mục Cơ bản là miễn phí. Pro thêm %2$d mục còn lại.</string>
+    <plurals name="pro_export_audit">
+        <item quantity="other">Kiểm tra quyền của %d ứng dụng trong một bảng tính</item>
+    </plurals>
+    <string name="pro_export_certificates">Kiểm tra mọi chứng chỉ ký, gồm SHA-256, chủ thể và lược đồ</string>
+    <string name="pro_export_components">Đếm thành phần của từng ứng dụng, từ hoạt động đến bộ lọc intent</string>
+    <plurals name="pro_export_plus_history">
+        <item quantity="other">Ngoài ra: đọc cả %d thay đổi được ghi lại trên điện thoại này</item>
+    </plurals>
+    <string name="pro_export_plus_history_none">Ngoài ra: đọc mọi thay đổi được ghi lại trên điện thoại này</string>
+    <string name="pro_export_preview_app">Ứng dụng</string>
+    <string name="pro_export_preview_permissions">Quyền</string>
+    <string name="pro_export_preview_certificate">Chứng chỉ</string>
+    <string name="pro_export_basics_only">Chỉ xuất mục cơ bản</string>
+    <string name="pro_still_free">Vẫn miễn phí.</string>
+    <string name="pro_still_free_body">Mọi thứ từng miễn phí vẫn miễn phí. Hai tính năng mới thuộc Pro:</string>
+    <string name="pro_feature_history">Lịch sử ứng dụng</string>
+    <plurals name="pro_feature_history_count">
+        <item quantity="other">Đã ghi lại %d thay đổi</item>
+    </plurals>
+    <string name="pro_feature_history_empty">Ghi lại mọi bản cập nhật</string>
+    <string name="pro_feature_export_title">Xuất danh mục</string>
+    <string name="pro_feature_export_detail">Mọi chi tiết</string>
+    <string name="pro_continue_free">Tiếp tục miễn phí</string>
 </resources>

@@ -14,4 +14,8 @@
     <string name="settings_fingerprint_format">Формат відбитка</string>
     <string name="settings_fingerprint_format_colon_separated">З двокрапками</string>
     <string name="settings_fingerprint_format_continuous">Без роздільників</string>
+    <string name="settings_pro_title">Отримати Apk Analyzer Pro</string>
+    <string name="settings_pro_body">Разова покупка, яка підтримує розробку й відкриває найновіші функції.</string>
+    <string name="settings_pro_active">Pro активний</string>
+    <string name="settings_pro_active_body">Дякуємо, що підтримуєте Apk Analyzer.</string>
 </resources>

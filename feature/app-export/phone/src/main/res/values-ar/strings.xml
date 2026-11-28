@@ -116,7 +116,6 @@
     <string name="inventory_export_next">التالي</string>
     <string name="inventory_export_columns_omitted">غير مضمّنة في ملف CSV: %1$s. لا يمكن لـ CSV حفظ سجلات كاملة.</string>
     <string name="inventory_export_use_json">استخدام JSON</string>
-    <string name="inventory_export_pro_columns">المعلومات الأساسية مجانية. افتح Pro لتصدير التفاصيل الأخرى.</string>
     <string name="inventory_export_unlock_pro">فتح Pro</string>
     <string name="inventory_export_dismiss_hint">إغلاق التنبيه</string>
     <string name="inventory_export_use_basics">تصدير الأساسيات فقط</string>
@@ -132,4 +131,14 @@
     <string name="inventory_export_intro_description">صدِّر معلومات عدة تطبيقات في ملف CSV أو JSON واحد.</string>
     <string name="inventory_export_columns_guidance">اختر التفاصيل التي تريد تضمينها لكل تطبيق.</string>
     <string name="inventory_export_format_guidance">اختر CSV لجداول البيانات أو JSON للتفاصيل الكاملة، ثم احفظ الملف أو شاركه.</string>
+    <string name="inventory_export_pro_rule">بيانات الأساسيات (%1$d) مجانية. التفاصيل الأخرى (%2$d) ضمن Pro. ويمكنك مع ذلك اختيارها ورؤيتها في المعاينة.</string>
+    <plurals name="inventory_export_pro_needed">
+        <item quantity="zero">%d من هذه التفاصيل تتطلب Pro</item>
+        <item quantity="one">%d من هذه التفاصيل تتطلب Pro</item>
+        <item quantity="two">%d من هذه التفاصيل تتطلب Pro</item>
+        <item quantity="few">%d من هذه التفاصيل تتطلب Pro</item>
+        <item quantity="many">%d من هذه التفاصيل تتطلب Pro</item>
+        <item quantity="other">%d من هذه التفاصيل تتطلب Pro</item>
+    </plurals>
+    <string name="inventory_export_pro_needed_body">%1$s. تُصدَّر بيانات الأساسيات (%2$d) مجانًا.</string>
 </resources>

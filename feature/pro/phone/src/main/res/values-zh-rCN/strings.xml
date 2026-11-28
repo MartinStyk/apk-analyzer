@@ -1,20 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <plurals name="pro_headline_export">
-        <item quantity="other">导出 %d 个应用的全部详细信息</item>
-    </plurals>
-    <plurals name="pro_headline_what_changed">
-        <item quantity="other">查看另外 %d 个应用的变化</item>
-    </plurals>
-    <string name="pro_feature_export">一次导出多个应用的权限、证书、组件等信息</string>
-    <string name="pro_feature_what_changed">在一个列表中查看设备上的所有应用变化</string>
-    <string name="pro_supporter">支持一款独立的开源应用。现在免费的功能将永远免费。</string>
-    <string name="pro_unlock">解锁 Pro · %s</string>
-    <string name="pro_one_time">一次性购买，无需订阅。</string>
     <string name="pro_restore">恢复购买</string>
     <string name="pro_unavailable">需要在此设备上安装 Google Play 才能购买。</string>
     <string name="pro_failed">无法连接到 Google Play。请重试。</string>
     <string name="pro_pending">购买待处理</string>
     <string name="pro_pending_body">Google Play 正在等待你付款。付款完成后，Pro 会立即解锁。</string>
     <string name="pro_restore_nothing">未找到此 Google 账号的 Pro 购买记录。</string>
+    <string name="pro_unlock_lifetime">解锁终身 Pro · %s</string>
+    <string name="pro_support_unlock">支持并获取终身 Pro · %s</string>
+    <string name="pro_one_payment">一次付费。无需订阅。</string>
+    <string name="pro_support_title">开放开发。由你支持。</string>
+    <string name="pro_author">Martin,Apk Analyzer 作者</string>
+    <plurals name="pro_history_headline">
+        <item quantity="other">自 %2$s 以来,你的手机上记录了 %1$d 项变化</item>
+    </plurals>
+    <plurals name="pro_history_free">
+        <item quantity="other">%d 个应用可免费查看。</item>
+    </plurals>
+    <plurals name="pro_history_locked">
+        <item quantity="other">Pro 还可查看另外 %d 个应用。</item>
+    </plurals>
+    <string name="pro_history_fallback">查看手机上记录的每一项变化</string>
+    <plurals name="pro_benefit_permissions">
+        <item quantity="other">应用新增的 %d 项权限,以及获得权限的应用</item>
+    </plurals>
+    <plurals name="pro_benefit_components">
+        <item quantity="other">%d 项组件变化,例如新的服务和接收器</item>
+    </plurals>
+    <plurals name="pro_benefit_sizes">
+        <item quantity="other">%d 项大小变化,逐次更新可查</item>
+    </plurals>
+    <string name="pro_benefit_plus_export">此外:导出应用的全部详细信息</string>
+    <plurals name="pro_card_permissions">
+        <item quantity="other">新增 %d 项权限</item>
+    </plurals>
+    <plurals name="pro_card_components">
+        <item quantity="other">%d 个组件有变化</item>
+    </plurals>
+    <string name="pro_card_size">大小有变化</string>
+    <string name="pro_export_headline">为导出添加全部详细信息</string>
+    <string name="pro_export_details">%1$d 项基础信息免费。Pro 可添加其余 %2$d 项。</string>
+    <plurals name="pro_export_audit">
+        <item quantity="other">在一个表格中审查全部 %d 个应用的权限</item>
+    </plurals>
+    <string name="pro_export_certificates">检查每个签名证书,包括 SHA-256、主体和签名方案</string>
+    <string name="pro_export_components">统计每个应用的组件,从 Activity 到 Intent 过滤器</string>
+    <plurals name="pro_export_plus_history">
+        <item quantity="other">此外:查看这部手机上记录的全部 %d 项变化</item>
+    </plurals>
+    <string name="pro_export_plus_history_none">此外:查看这部手机上记录的每一项变化</string>
+    <string name="pro_export_preview_app">应用</string>
+    <string name="pro_export_preview_permissions">权限</string>
+    <string name="pro_export_preview_certificate">证书</string>
+    <string name="pro_export_basics_only">仅导出基础信息</string>
+    <string name="pro_still_free">依然免费。</string>
+    <string name="pro_still_free_body">原本免费的一切依然免费。两项新功能属于 Pro:</string>
+    <string name="pro_feature_history">应用历史</string>
+    <plurals name="pro_feature_history_count">
+        <item quantity="other">已记录 %d 项变化</item>
+    </plurals>
+    <string name="pro_feature_history_empty">记录每次更新</string>
+    <string name="pro_feature_export_title">清单导出</string>
+    <string name="pro_feature_export_detail">全部详细信息</string>
+    <string name="pro_continue_free">继续免费使用</string>
 </resources>

@@ -92,7 +92,6 @@
     <string name="inventory_export_next">अगला</string>
     <string name="inventory_export_columns_omitted">CSV फ़ाइल में शामिल नहीं होंगे: %1$s. CSV में पूरे रिकॉर्ड सेव नहीं हो सकते।</string>
     <string name="inventory_export_use_json">JSON इस्तेमाल करें</string>
-    <string name="inventory_export_pro_columns">बुनियादी जानकारी मुफ़्त है। अन्य जानकारी एक्सपोर्ट करने के लिए Pro अनलॉक करें।</string>
     <string name="inventory_export_unlock_pro">Pro अनलॉक करें</string>
     <string name="inventory_export_dismiss_hint">सूचना बंद करें</string>
     <string name="inventory_export_use_basics">सिर्फ़ बुनियादी एक्सपोर्ट करें</string>
@@ -108,4 +107,10 @@
     <string name="inventory_export_intro_description">कई ऐप की जानकारी एक CSV या JSON फ़ाइल में एक्सपोर्ट करें।</string>
     <string name="inventory_export_columns_guidance">हर ऐप के लिए शामिल की जाने वाली जानकारी चुनें।</string>
     <string name="inventory_export_format_guidance">स्प्रेडशीट के लिए CSV या पूरी जानकारी के लिए JSON चुनें, फिर सेव करें या शेयर करें।</string>
+    <string name="inventory_export_pro_rule">%1$d बुनियादी जानकारियां मुफ़्त हैं। बाकी %2$d जानकारियां Pro हैं। आप फिर भी उन्हें चुनकर झलक में देख सकते हैं।</string>
+    <plurals name="inventory_export_pro_needed">
+        <item quantity="one">इनमें से %d जानकारियों के लिए Pro चाहिए</item>
+        <item quantity="other">इनमें से %d जानकारियों के लिए Pro चाहिए</item>
+    </plurals>
+    <string name="inventory_export_pro_needed_body">%1$s। %2$d बुनियादी जानकारियां मुफ़्त में एक्सपोर्ट होती हैं।</string>
 </resources>
