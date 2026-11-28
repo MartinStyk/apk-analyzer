@@ -140,6 +140,12 @@ Modules live under `app/`, `tv/`, `core/<name>/`, and `feature/<name>/{api,domai
 * Extend `ViewModel()` directly. No base class.
 * Expose exactly one `val state: StateFlow<FeatureState>` and one
   `fun onAction(action: FeatureAction)` with a `when` dispatch. No other public methods.
+* **Keep `onAction` easy to scan.** Prefer a `when(action)` that makes each action's effect clear.
+  Keep simple assignments, short cohesive operations, guards, and state transformations inline.
+  Extract a private handler when a branch contains substantial workflow logic, nested decisions,
+  error handling, or sequencing that a meaningful name makes easier to understand. Extract to
+  clarify responsibility, not merely to reduce statement count or move complexity elsewhere.
+  Do not introduce action families solely to satisfy lint limits.
 * Back `state` with an explicit backing field (`val state: StateFlow<S>` + `field = MutableStateFlow(...)`),
   never a private `_state` plus `asStateFlow()`. The same goes for any flow a class exposes.
 * One-shot events go through `Channel<Event>(Channel.BUFFERED)` exposed as `receiveAsFlow()` —
