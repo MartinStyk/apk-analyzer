@@ -83,6 +83,8 @@
     <string name="components_tag_launcher">Launcher</string>
     <string name="components_detail_launcher_explanation">Questo è ciò che si apre quando tocchi l\'icona dell\'app.</string>
     <string name="components_tag_unprotected">Esportato senza protezione dei permessi</string>
+    <string name="components_tag_disabled">Disattivato</string>
+    <string name="components_detail_disabled_explanation">Disattivato su questo dispositivo, quindi al momento niente può raggiungerlo, nemmeno l\'app stessa. Le app possono attivare e disattivare i propri componenti in qualsiasi momento.</string>
     <string name="components_flag_enabled">Sì</string>
     <string name="components_detail_section_reachability">Raggiungibilità</string>
     <string name="components_detail_section_details">Dettagli</string>

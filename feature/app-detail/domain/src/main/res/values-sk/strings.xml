@@ -87,6 +87,8 @@
     <string name="components_tag_launcher">Launcher</string>
     <string name="components_detail_launcher_explanation">Otvorí sa, keď ťuknete na ikonu aplikácie.</string>
     <string name="components_tag_unprotected">Exportované bez zabezpečenia povolením</string>
+    <string name="components_tag_disabled">Vypnuté</string>
+    <string name="components_detail_disabled_explanation">Tento komponent je na tomto zariadení vypnutý, takže sa k nemu teraz nič nedostane, ani samotná aplikácia. Aplikácie môžu svoje komponenty kedykoľvek zapnúť alebo vypnúť.</string>
     <string name="components_flag_enabled">Áno</string>
     <string name="components_detail_section_reachability">Dostupnosť</string>
     <string name="components_detail_section_details">Podrobnosti</string>

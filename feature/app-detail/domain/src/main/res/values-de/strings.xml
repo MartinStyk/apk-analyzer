@@ -79,6 +79,8 @@
     <string name="components_tag_launcher">Launcher</string>
     <string name="components_detail_launcher_explanation">Das öffnet sich, wenn Sie auf das App-Icon tippen.</string>
     <string name="components_tag_unprotected">Exportiert ohne Berechtigungsprüfung</string>
+    <string name="components_tag_disabled">Deaktiviert</string>
+    <string name="components_detail_disabled_explanation">Auf diesem Gerät ausgeschaltet, daher kann gerade nichts darauf zugreifen, nicht einmal die App selbst. Apps können ihre eigenen Komponenten jederzeit ein- und ausschalten.</string>
     <string name="components_flag_enabled">Ja</string>
     <string name="components_detail_section_reachability">Erreichbarkeit</string>
     <string name="components_detail_section_details">Details</string>

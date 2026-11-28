@@ -319,6 +319,11 @@ out precisely because it is rare. Tap → sheet with every field for that type (
 targetActivity, parentName, permission, exported; service: all five flags; provider: authority,
 read and write permissions).
 
+A **Disabled** tag marks a component the app or its manifest has turned off on this device. It is
+read live for installed packages, so it follows the app's own runtime toggles without touching app
+history. A disabled component is never Unprotected and has no launch button; its sheet opens with
+a Disabled line explaining that nothing can reach it right now.
+
 Package grouping is **deferred** — see [Deferred](#deferred).
 
 ### Certificates

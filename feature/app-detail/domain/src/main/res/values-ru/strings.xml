@@ -87,6 +87,8 @@
     <string name="components_tag_launcher">Запускатель</string>
     <string name="components_detail_launcher_explanation">Это то, что открывается, когда вы нажимаете на иконку приложения.</string>
     <string name="components_tag_unprotected">Экспортировано без защиты разрешений</string>
+    <string name="components_tag_disabled">Отключён</string>
+    <string name="components_detail_disabled_explanation">Этот компонент отключён на этом устройстве, поэтому сейчас ничто не может получить к нему доступ, даже само приложение. Приложения могут в любой момент включать и отключать свои компоненты.</string>
     <string name="components_flag_enabled">Да</string>
     <string name="components_detail_section_reachability">Доступность</string>
     <string name="components_detail_section_details">Детали</string>

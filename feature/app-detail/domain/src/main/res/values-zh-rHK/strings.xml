@@ -75,6 +75,8 @@
     <string name="components_tag_launcher">啟動畫面</string>
     <string name="components_detail_launcher_explanation">輕觸應用程式圖示時，開啟的就是這個畫面。</string>
     <string name="components_tag_unprotected">對外開放且無權限保護</string>
+    <string name="components_tag_disabled">已停用</string>
+    <string name="components_detail_disabled_explanation">這個元件已在這部裝置上停用，目前任何應用程式都無法存取，連這個應用程式本身也不例外。應用程式可以隨時啟用或停用自己的元件。</string>
     <string name="components_flag_enabled">是</string>
     <string name="components_detail_section_reachability">可存取性</string>
     <string name="components_detail_section_details">詳細資料</string>

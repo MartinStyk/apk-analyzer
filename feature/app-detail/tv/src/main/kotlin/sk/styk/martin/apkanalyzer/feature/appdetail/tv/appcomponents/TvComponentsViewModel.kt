@@ -22,6 +22,7 @@ import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilter
 import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilterKey
 import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentKind
 import sk.styk.martin.apkanalyzer.core.apps.api.components.ContentProvider
+import sk.styk.martin.apkanalyzer.core.apps.api.components.DisabledComponents
 import sk.styk.martin.apkanalyzer.core.apps.api.components.Service
 import sk.styk.martin.apkanalyzer.core.apps.api.components.flags
 import sk.styk.martin.apkanalyzer.core.apps.api.components.isExternallyReachableWithoutPermission
@@ -88,9 +89,10 @@ internal class TvComponentsViewModel @AssistedInject constructor(
             val canLaunch = appDetailInput.installedPackage != null
             sectionRepository.detail(appDetailInput)
                 .onSuccess { detail ->
-                    source.value = detail.toSource(canLaunch, intentFiltersByComponent = null)
+                    val disabledComponents = sectionRepository.disabledComponents(appDetailInput)
+                    source.value = detail.toSource(canLaunch, disabledComponents, intentFiltersByComponent = null)
                     val intentFilters = (sectionRepository.intentFilters(appDetailInput).getOrNull() as? AppDetailSection.Available)?.value
-                    source.value = detail.toSource(canLaunch, intentFiltersByComponent = intentFilters)
+                    source.value = detail.toSource(canLaunch, disabledComponents, intentFiltersByComponent = intentFilters)
                 }
                 .onFailure { source.value = ComponentsSource.Error }
         }
@@ -105,26 +107,41 @@ private sealed interface ComponentsSource {
 
 private fun AppDetail.toSource(
     canLaunch: Boolean,
+    disabledComponents: DisabledComponents,
     intentFiltersByComponent: Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>?,
 ): ComponentsSource.Ready {
+    fun isDisabled(name: String, kind: ComponentKind) = disabledComponents.contains(name, kind)
     fun filtersFor(name: String, kind: ComponentKind) = intentFiltersByComponent?.let { it[ComponentIntentFilterKey(name, kind)].orEmpty() }
     return ComponentsSource.Ready(
         componentsByKind = mapOf(
-            ComponentKind.Activity to activities.map { it.toItem(canLaunch, filtersFor(it.name, ComponentKind.Activity)) },
-            ComponentKind.Service to services.map { it.toItem(filtersFor(it.name, ComponentKind.Service)) },
-            ComponentKind.Receiver to receivers.map { it.toItem(canLaunch, filtersFor(it.name, ComponentKind.Receiver)) },
-            ComponentKind.Provider to contentProviders.map { it.toItem(filtersFor(it.name, ComponentKind.Provider)) },
+            ComponentKind.Activity to activities.map {
+                it.toItem(canLaunch, isDisabled(it.name, ComponentKind.Activity), filtersFor(it.name, ComponentKind.Activity))
+            },
+            ComponentKind.Service to services.map {
+                it.toItem(isDisabled(it.name, ComponentKind.Service), filtersFor(it.name, ComponentKind.Service))
+            },
+            ComponentKind.Receiver to receivers.map {
+                it.toItem(canLaunch, isDisabled(it.name, ComponentKind.Receiver), filtersFor(it.name, ComponentKind.Receiver))
+            },
+            ComponentKind.Provider to contentProviders.map {
+                it.toItem(isDisabled(it.name, ComponentKind.Provider), filtersFor(it.name, ComponentKind.Provider))
+            },
         ).mapValues { (_, items) -> items.mergeDuplicatesByKey().sortedForDisplay() },
     )
 }
 
-private fun Activity.toItem(canLaunch: Boolean, intentFilters: List<ComponentIntentFilter>?) = TvComponentItem(
+private fun Activity.toItem(
+    canLaunch: Boolean,
+    isDisabled: Boolean,
+    intentFilters: List<ComponentIntentFilter>?,
+) = TvComponentItem(
     name = name,
     kind = ComponentKind.Activity,
     isExported = isExported,
-    isUnprotected = isExternallyReachableWithoutPermission,
+    isUnprotected = isExternallyReachableWithoutPermission(isDisabled = isDisabled),
     isLauncher = isLauncher == true,
-    isLaunchable = canLaunch && isLaunchable,
+    isLaunchable = canLaunch && isLaunchable(isDisabled = isDisabled),
+    isDisabled = isDisabled,
     permission = permission,
     label = label,
     targetActivity = targetActivity,
@@ -132,34 +149,41 @@ private fun Activity.toItem(canLaunch: Boolean, intentFilters: List<ComponentInt
     intentFilters = intentFilters,
 )
 
-private fun Service.toItem(intentFilters: List<ComponentIntentFilter>?) = TvComponentItem(
+private fun Service.toItem(isDisabled: Boolean, intentFilters: List<ComponentIntentFilter>?) = TvComponentItem(
     name = name,
     kind = ComponentKind.Service,
     isExported = isExported,
-    isUnprotected = isExternallyReachableWithoutPermission,
+    isUnprotected = isExternallyReachableWithoutPermission(isDisabled = isDisabled),
     isLauncher = false,
+    isDisabled = isDisabled,
     permission = permission,
     flags = flags,
     intentFilters = intentFilters,
 )
 
-private fun BroadcastReceiver.toItem(canLaunch: Boolean, intentFilters: List<ComponentIntentFilter>?) = TvComponentItem(
+private fun BroadcastReceiver.toItem(
+    canLaunch: Boolean,
+    isDisabled: Boolean,
+    intentFilters: List<ComponentIntentFilter>?,
+) = TvComponentItem(
     name = name,
     kind = ComponentKind.Receiver,
     isExported = isExported,
-    isUnprotected = isExternallyReachableWithoutPermission,
+    isUnprotected = isExternallyReachableWithoutPermission(isDisabled = isDisabled),
     isLauncher = false,
-    isLaunchable = canLaunch && isLaunchable,
+    isLaunchable = canLaunch && isLaunchable(isDisabled = isDisabled),
+    isDisabled = isDisabled,
     permission = permission,
     intentFilters = intentFilters,
 )
 
-private fun ContentProvider.toItem(intentFilters: List<ComponentIntentFilter>?) = TvComponentItem(
+private fun ContentProvider.toItem(isDisabled: Boolean, intentFilters: List<ComponentIntentFilter>?) = TvComponentItem(
     name = name,
     kind = ComponentKind.Provider,
     isExported = isExported,
-    isUnprotected = isExternallyReachableWithoutPermission,
+    isUnprotected = isExternallyReachableWithoutPermission(isDisabled = isDisabled),
     isLauncher = false,
+    isDisabled = isDisabled,
     readPermission = readPermission,
     writePermission = writePermission,
     authority = authority,

@@ -75,6 +75,8 @@
     <string name="components_tag_launcher">런처</string>
     <string name="components_detail_launcher_explanation">앱 아이콘을 탭하면 열리는 화면입니다.</string>
     <string name="components_tag_unprotected">권한 보호 없이 내보내기</string>
+    <string name="components_tag_disabled">사용 중지됨</string>
+    <string name="components_detail_disabled_explanation">이 장치에서 사용 중지되어 지금은 앱 자신을 포함해 아무것도 접근할 수 없습니다. 앱은 자신의 구성 요소를 언제든지 켜고 끌 수 있습니다.</string>
     <string name="components_flag_enabled">예</string>
     <string name="components_detail_section_reachability">접근성</string>
     <string name="components_detail_section_details">세부정보</string>

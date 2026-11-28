@@ -179,8 +179,13 @@ Components are what the APK declares, not what is enabled right now. `AppDetailR
 passes `MATCH_DISABLED_COMPONENTS` to the package query and to launcher detection, so a component
 the manifest or the app itself disabled is still listed, and `isLauncher` means "declares a launcher
 intent filter". Enabled state is runtime device state, like grant state: apps toggle it without an
-update, and `core:app-history` must never see it change. If app detail ever shows whether a component
-is enabled, read it live at display time and keep it out of `AppDetail`.
+update, and `core:app-history` must never see it change. Keep it out of `AppDetail`.
+
+`DisabledComponentsRepository` reads that state live and uncached for an installed package. It
+queries the package with and without `MATCH_DISABLED_COMPONENTS`; the platform omits components that
+are effectively disabled from the second query, whether the manifest or a runtime toggle turned them
+off, so declared-but-absent means disabled. `DisabledComponents` keys names by `ComponentKind`,
+because different kinds may share a class name. APK files and recorded versions have no such state.
 
 `PackageInfo` does not enumerate declared intent filters. Query APIs only return filters matching an
 intent the caller already knows, so manifest parsing is required.
@@ -203,6 +208,10 @@ partial result that callers could misread as "no filters."
 These are technical facts for component filtering, not a general security verdict.
 
 * Exported alone is not a finding.
+* A disabled component is unreachable. The reachability and `isLaunchable` predicates take
+  `isDisabled`, so a disabled component is neither unguarded nor launchable, and
+  `exportedExplanationRes` has no reachability sentence for it. Inputs without live state pass
+  `false`.
 * Launcher activities are expected to be exported and are excluded from the installed-app
   "unprotected" classification.
 * An installed activity is unguarded only when launcher status is known to be false and no permission

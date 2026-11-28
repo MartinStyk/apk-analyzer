@@ -905,6 +905,7 @@ private fun sampleComponent(name: String) = ComponentItem(
     isGuarded = false,
     isUnprotected = true,
     isLaunchable = false,
+    isDisabled = false,
     flags = emptyList(),
     intentFilters = null,
     details = ComponentDetails.ServiceDetails(permission = null),

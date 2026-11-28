@@ -87,6 +87,8 @@
     <string name="components_tag_launcher">Launcher</string>
     <string name="components_detail_launcher_explanation">To jest to, co otwiera się po naciśnięciu ikony aplikacji.</string>
     <string name="components_tag_unprotected">Eksportowane bez ochrony uprawnień</string>
+    <string name="components_tag_disabled">Wyłączony</string>
+    <string name="components_detail_disabled_explanation">Ten komponent jest wyłączony na tym urządzeniu, więc nic nie może teraz uzyskać do niego dostępu, nawet sama aplikacja. Aplikacje mogą w dowolnej chwili włączać i wyłączać własne komponenty.</string>
     <string name="components_flag_enabled">Tak</string>
     <string name="components_detail_section_reachability">Dostępność</string>
     <string name="components_detail_section_details">Szczegóły</string>

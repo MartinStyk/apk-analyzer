@@ -8,6 +8,8 @@ import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryS
 import sk.styk.martin.apkanalyzer.core.apps.api.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilter
 import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilterKey
+import sk.styk.martin.apkanalyzer.core.apps.api.components.DisabledComponents
+import sk.styk.martin.apkanalyzer.core.apps.api.components.DisabledComponentsRepository
 import sk.styk.martin.apkanalyzer.core.apps.api.intentfilters.IntentFiltersRepository
 import sk.styk.martin.apkanalyzer.core.apps.api.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraries
@@ -25,6 +27,7 @@ internal class AppDetailSectionRepositoryImpl @Inject constructor(
     private val nativeLibrariesRepository: NativeLibrariesRepository,
     private val signingSchemeRepository: SigningSchemeRepository,
     private val intentFiltersRepository: IntentFiltersRepository,
+    private val disabledComponentsRepository: DisabledComponentsRepository,
     private val appHistoryRepository: AppHistoryRepository,
 ) : AppDetailSectionRepository {
 
@@ -57,6 +60,10 @@ internal class AppDetailSectionRepositoryImpl @Inject constructor(
                 AppDetailSection.Available(it)
             }
         }
+
+    override suspend fun disabledComponents(input: AppDetailInput): DisabledComponents = input.installedPackage
+        ?.let { disabledComponentsRepository.disabledComponents(it).getOrNull() }
+        ?: DisabledComponents.None
 
     private fun AppDetailInput.live(): AppReference = checkNotNull(liveReference)
 

@@ -75,6 +75,7 @@ internal data class ComponentItem(
     val isGuarded: Boolean,
     val isUnprotected: Boolean,
     val isLaunchable: Boolean,
+    val isDisabled: Boolean,
     val flags: List<ComponentFlag>,
     val intentFilters: List<ComponentIntentFilterItem>? = listOf(),
     val details: ComponentDetails,

@@ -389,6 +389,7 @@ private fun sampleLoadedState() = ComponentsState.Loaded(
                     isGuarded = false,
                     isUnprotected = false,
                     isLaunchable = true,
+                    isDisabled = false,
                     flags = listOf(),
                     details = ComponentDetails.ActivityDetails(
                         label = "Spotify",
@@ -407,6 +408,7 @@ private fun sampleLoadedState() = ComponentsState.Loaded(
                     isGuarded = false,
                     isUnprotected = false,
                     isLaunchable = false,
+                    isDisabled = false,
                     flags = listOf(),
                     details = ComponentDetails.ActivityDetails(
                         label = null,
@@ -430,6 +432,7 @@ private fun sampleLoadedState() = ComponentsState.Loaded(
                     isGuarded = true,
                     isUnprotected = false,
                     isLaunchable = false,
+                    isDisabled = false,
                     flags = listOf(ComponentFlag.IsolatedProcess),
                     details = ComponentDetails.ServiceDetails(permission = "android.permission.BIND_JOB_SERVICE"),
                 ),

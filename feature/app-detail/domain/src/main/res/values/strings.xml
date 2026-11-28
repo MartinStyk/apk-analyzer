@@ -79,6 +79,8 @@
     <string name="components_tag_launcher">Launcher</string>
     <string name="components_detail_launcher_explanation">This is what opens when you tap the app\'s icon.</string>
     <string name="components_tag_unprotected">Exported with no permission guard</string>
+    <string name="components_tag_disabled">Disabled</string>
+    <string name="components_detail_disabled_explanation">Turned off on this device, so nothing can reach it right now, not even the app itself. Apps can turn their own components on and off at any time.</string>
     <string name="components_flag_enabled">Yes</string>
     <string name="components_detail_section_reachability">Reachability</string>
     <string name="components_detail_section_details">Details</string>

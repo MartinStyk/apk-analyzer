@@ -79,6 +79,8 @@
     <string name="components_tag_launcher">लॉन्चर</string>
     <string name="components_detail_launcher_explanation">यह वह है जो तब खुलता है जब आप ऐप के आइकन पर टैप करते हैं।</string>
     <string name="components_tag_unprotected">कोई अनुमति सुरक्षा के बिना निर्यातित</string>
+    <string name="components_tag_disabled">अक्षम</string>
+    <string name="components_detail_disabled_explanation">यह घटक इस डिवाइस पर बंद है, इसलिए अभी कोई भी इस तक नहीं पहुंच सकता, खुद ऐप भी नहीं। ऐप्स अपने घटकों को कभी भी चालू या बंद कर सकते हैं।</string>
     <string name="components_flag_enabled">हाँ</string>
     <string name="components_detail_section_reachability">पहुँचयोग्यता</string>
     <string name="components_detail_section_details">विवरण</string>

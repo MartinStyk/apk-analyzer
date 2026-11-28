@@ -75,6 +75,8 @@
     <string name="components_tag_launcher">ランチャー</string>
     <string name="components_detail_launcher_explanation">アプリのアイコンをタップするとこれが開きます。</string>
     <string name="components_tag_unprotected">権限ガードなしでエクスポートされました</string>
+    <string name="components_tag_disabled">無効</string>
+    <string name="components_detail_disabled_explanation">このデバイスで無効になっているため、現在はアプリ自身も含めて何もアクセスできません。アプリは自分のコンポーネントをいつでも有効・無効に切り替えられます。</string>
     <string name="components_flag_enabled">はい</string>
     <string name="components_detail_section_reachability">到達可能性</string>
     <string name="components_detail_section_details">詳細</string>

@@ -287,10 +287,10 @@ private fun <T> SetChange<T>.toComponentChanges(toItem: (T) -> ComponentItem, fi
 
 private fun AppHistoryDiff.componentsSection(): HistoryChangeSection? {
     val changes = listOfNotNull(
-        activities.toComponentChanges({ it.toItem(canLaunch = false, intentFilters = null) }, Activity::fieldChangesFrom),
-        services.toComponentChanges({ it.toItem(intentFilters = null) }, Service::fieldChangesFrom),
-        receivers.toComponentChanges({ it.toItem(canLaunch = false, intentFilters = null) }, BroadcastReceiver::fieldChangesFrom),
-        providers.toComponentChanges({ it.toItem(intentFilters = null) }, ContentProvider::fieldChangesFrom),
+        activities.toComponentChanges({ it.toItem(canLaunch = false, isDisabled = false, intentFilters = null) }, Activity::fieldChangesFrom),
+        services.toComponentChanges({ it.toItem(isDisabled = false, intentFilters = null) }, Service::fieldChangesFrom),
+        receivers.toComponentChanges({ it.toItem(canLaunch = false, isDisabled = false, intentFilters = null) }, BroadcastReceiver::fieldChangesFrom),
+        providers.toComponentChanges({ it.toItem(isDisabled = false, intentFilters = null) }, ContentProvider::fieldChangesFrom),
     )
     val modified = changes.flatMap { it.modified }
     val groups = listOfNotNull(
