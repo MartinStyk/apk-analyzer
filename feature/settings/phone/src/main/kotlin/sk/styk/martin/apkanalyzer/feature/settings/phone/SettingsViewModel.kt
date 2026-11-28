@@ -12,12 +12,15 @@ import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.common.applanguage.AppLanguageRepository
 import sk.styk.martin.apkanalyzer.core.common.settings.Key
 import sk.styk.martin.apkanalyzer.core.common.settings.PersistenceRepository
+import sk.styk.martin.apkanalyzer.core.entitlements.api.Entitlement
+import sk.styk.martin.apkanalyzer.core.entitlements.api.EntitlementsRepository
 import javax.inject.Inject
 
 @HiltViewModel
 internal class SettingsViewModel @Inject constructor(
     private val persistenceRepository: PersistenceRepository,
     private val appLanguageRepository: AppLanguageRepository,
+    entitlementsRepository: EntitlementsRepository,
 ) : ViewModel() {
 
     private val eventChannel = Channel<SettingsEvent>(Channel.BUFFERED)
@@ -27,12 +30,19 @@ internal class SettingsViewModel @Inject constructor(
         persistenceRepository.observe(Key.ColorScheme),
         persistenceRepository.observe(Key.HexFingerprintFormat),
         persistenceRepository.observe(Key.RecentlyViewedAppsEnabled),
-    ) { colorScheme, fingerprintFormat, recentlyViewedEnabled ->
+        entitlementsRepository.entitlements(),
+        entitlementsRepository.offers(),
+    ) { colorScheme, fingerprintFormat, recentlyViewedEnabled, entitlements, offers ->
         SettingsState(
             colorScheme = colorScheme,
             fingerprintFormat = fingerprintFormat,
             recentlyViewedAppsEnabled = recentlyViewedEnabled,
             appLanguageSetting = this.appLanguageRepository.getAppLanguageSetting(),
+            pro = when {
+                offers.none { it.entitlement == Entitlement.Pro } -> SettingsPro.Hidden
+                Entitlement.Pro in entitlements -> SettingsPro.Owned
+                else -> SettingsPro.NotOwned
+            },
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), SettingsState())
 
@@ -52,6 +62,10 @@ internal class SettingsViewModel @Inject constructor(
 
             is SettingsAction.OpenLanguageSettings -> {
                 eventChannel.trySend(SettingsEvent.OpenAppLanguageSettings)
+            }
+
+            SettingsAction.OpenPro -> {
+                eventChannel.trySend(SettingsEvent.OpenPro)
             }
 
             SettingsAction.OpenFeatureFlags -> {

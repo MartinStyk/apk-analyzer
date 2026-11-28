@@ -35,7 +35,10 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.withContext
+import sk.styk.martin.apkanalyzer.core.appexport.api.column.InventoryPreset
 import sk.styk.martin.apkanalyzer.core.appexport.api.format.InventoryFormat
 import sk.styk.martin.apkanalyzer.core.common.util.openBrowser
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.animation.NAV_DURATION_STANDARD
@@ -54,6 +57,7 @@ import sk.styk.martin.apkanalyzer.feature.appexport.phone.components.StepScaffol
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.export.ExportBottomBar
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.export.ExportPage
 import sk.styk.martin.apkanalyzer.feature.pro.api.PaywallReason
+import sk.styk.martin.apkanalyzer.feature.pro.api.ProSheetResult
 
 @Composable
 internal fun InventoryExportScreen(
@@ -61,6 +65,7 @@ internal fun InventoryExportScreen(
     onBack: () -> Unit,
     onEditFilters: () -> Unit,
     onOpenPro: (PaywallReason) -> Unit,
+    sheetResults: Flow<Any>,
     modifier: Modifier = Modifier,
     viewModel: InventoryExportViewModel = hiltViewModel { factory: InventoryExportViewModel.Factory ->
         factory.create(scope)
@@ -77,6 +82,12 @@ internal fun InventoryExportScreen(
         contract = ActivityResultContracts.CreateDocument(InventoryFormat.Json.mimeType),
     ) { destination ->
         if (destination != null) viewModel.onAction(InventoryExportAction.SaveTo(destination, InventoryFormat.Json))
+    }
+
+    LaunchedEffect(sheetResults) {
+        sheetResults.filterIsInstance<ProSheetResult.ExportBasicsOnly>().collect {
+            viewModel.onAction(InventoryExportAction.PresetSelected(InventoryPreset.Basics))
+        }
     }
 
     LaunchedEffect(Unit) {

@@ -44,6 +44,7 @@ fun Chip(
     selected: Boolean = false,
     trailingIcon: ImageVector? = null,
     leadingIcon: ImageVector? = null,
+    showProMark: Boolean = false,
 ) {
     val shownLeadingIcon = leadingIcon ?: ApkAnalyzerIcons.Check.takeIf { selected }
     FilterChip(
@@ -65,14 +66,22 @@ fun Chip(
                 )
             }
         },
-        leadingIcon = shownLeadingIcon?.let {
-            {
-                Icon(
-                    imageVector = shownLeadingIcon,
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp),
-                )
+        leadingIcon = when {
+            shownLeadingIcon != null -> {
+                {
+                    Icon(
+                        imageVector = shownLeadingIcon,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp),
+                    )
+                }
             }
+
+            showProMark -> {
+                { ProMark(size = 16.dp) }
+            }
+
+            else -> null
         },
         shape = Shapes.CardShape,
         colors = FilterChipDefaults.filterChipColors(

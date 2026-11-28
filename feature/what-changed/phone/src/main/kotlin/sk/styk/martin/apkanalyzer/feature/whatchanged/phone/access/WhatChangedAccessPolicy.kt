@@ -5,7 +5,9 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryChangedApp
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryEntry
-import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.hasCertificateChange
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryFreeSample
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.isFreeAt
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.isFreeSample
 import sk.styk.martin.apkanalyzer.core.entitlements.api.Entitlement
 import sk.styk.martin.apkanalyzer.core.entitlements.api.EntitlementsRepository
 import javax.inject.Inject
@@ -19,19 +21,11 @@ internal class WhatChangedAccessPolicy @Inject constructor(private val entitleme
 
 internal class WhatChangedAccess(private val hasPro: Boolean) {
 
-    fun canReadSectionRow(index: Int): Boolean = hasPro || index < SECTION_PREVIEW_COUNT
+    fun canReadSectionRow(index: Int): Boolean = hasPro || index < AppHistoryFreeSample.SECTION_ROWS
 
-    fun canReadSectionRow(index: Int, entry: AppHistoryEntry): Boolean = canReadSectionRow(index) || isFreeEntry(entry)
+    fun canReadSectionRow(index: Int, entry: AppHistoryEntry): Boolean = canReadSectionRow(index) || entry.isFreeSample
 
-    fun canReadSectionRow(index: Int, app: AppHistoryChangedApp): Boolean = canReadSectionRow(index) || app.netChange?.hasCertificateChange == true
+    fun canReadSectionRow(index: Int, app: AppHistoryChangedApp): Boolean = hasPro || app.isFreeAt(index)
 
-    fun canReadLogRow(index: Int, entry: AppHistoryEntry): Boolean = hasPro || index < LOG_PREVIEW_COUNT || isFreeEntry(entry)
-
-    private fun isFreeEntry(entry: AppHistoryEntry): Boolean = when (entry) {
-        is AppHistoryEntry.FirstSeen -> true
-        is AppHistoryEntry.Change -> entry.diff.hasCertificateChange
-    }
+    fun canReadLogRow(index: Int, entry: AppHistoryEntry): Boolean = hasPro || index < AppHistoryFreeSample.LOG_ROWS || entry.isFreeSample
 }
-
-private const val SECTION_PREVIEW_COUNT = 5
-private const val LOG_PREVIEW_COUNT = 10

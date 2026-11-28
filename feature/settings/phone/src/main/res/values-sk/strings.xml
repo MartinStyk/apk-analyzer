@@ -14,4 +14,8 @@
     <string name="settings_language_section">Jazyk</string>
     <string name="settings_language_app_language">Jazyk aplikácie</string>
     <string name="settings_language_system_default">Predvolené systémové nastavenie</string>
+    <string name="settings_pro_title">Získať Apk Analyzer Pro</string>
+    <string name="settings_pro_body">Jednorazový nákup, ktorý podporuje vývoj a odomyká najnovšie funkcie.</string>
+    <string name="settings_pro_active">Pro je aktívne</string>
+    <string name="settings_pro_active_body">Ďakujeme, že podporujete Apk Analyzer.</string>
 </resources>

@@ -14,4 +14,8 @@
     <string name="settings_language_section">Language</string>
     <string name="settings_language_app_language">App language</string>
     <string name="settings_language_system_default">System default</string>
+    <string name="settings_pro_title">Get Apk Analyzer Pro</string>
+    <string name="settings_pro_body">A one-time purchase that supports development and unlocks the newest features.</string>
+    <string name="settings_pro_active">Pro is active</string>
+    <string name="settings_pro_active_body">Thank you for supporting Apk Analyzer.</string>
 </resources>

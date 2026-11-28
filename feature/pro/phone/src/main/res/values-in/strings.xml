@@ -1,20 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <plurals name="pro_headline_export">
-        <item quantity="other">Ekspor semua detail untuk %d aplikasi</item>
-    </plurals>
-    <plurals name="pro_headline_what_changed">
-        <item quantity="other">Lihat perubahan di %d aplikasi lainnya</item>
-    </plurals>
-    <string name="pro_feature_export">Ekspor izin, sertifikat, komponen, dan lainnya untuk banyak aplikasi sekaligus</string>
-    <string name="pro_feature_what_changed">Lihat setiap perubahan aplikasi di perangkat Anda dalam satu daftar</string>
-    <string name="pro_supporter">Dukung aplikasi independen dan open source. Semua yang gratis hari ini akan tetap gratis.</string>
-    <string name="pro_unlock">Buka Pro · %s</string>
-    <string name="pro_one_time">Pembelian sekali bayar. Tanpa langganan.</string>
     <string name="pro_restore">Pulihkan pembelian</string>
     <string name="pro_unavailable">Pembelian memerlukan Google Play di perangkat ini.</string>
     <string name="pro_failed">Tidak dapat terhubung ke Google Play. Coba lagi.</string>
     <string name="pro_pending">Pembelian tertunda</string>
     <string name="pro_pending_body">Google Play sedang menunggu pembayaran Anda. Pro langsung terbuka setelah pembayaran berhasil.</string>
     <string name="pro_restore_nothing">Tidak ada pembelian Pro untuk Akun Google ini.</string>
+    <string name="pro_unlock_lifetime">Buka Pro seumur hidup · %s</string>
+    <string name="pro_support_unlock">Dukung dan dapatkan Pro seumur hidup · %s</string>
+    <string name="pro_one_payment">Sekali bayar. Tanpa langganan.</string>
+    <string name="pro_support_title">Dibuat secara terbuka. Didukung oleh Anda.</string>
+    <string name="pro_author">Martin, pembuat Apk Analyzer</string>
+    <plurals name="pro_history_headline">
+        <item quantity="other">%1$d perubahan tercatat di ponsel Anda sejak %2$s</item>
+    </plurals>
+    <plurals name="pro_history_free">
+        <item quantity="other">%d aplikasi bisa dibaca gratis.</item>
+    </plurals>
+    <plurals name="pro_history_locked">
+        <item quantity="other">Pro membuka %d aplikasi lagi.</item>
+    </plurals>
+    <string name="pro_history_fallback">Baca setiap perubahan yang tercatat di ponsel Anda</string>
+    <plurals name="pro_benefit_permissions">
+        <item quantity="other">%d izin ditambahkan ke aplikasi Anda, dan aplikasi mana yang mendapatkannya</item>
+    </plurals>
+    <plurals name="pro_benefit_components">
+        <item quantity="other">%d perubahan komponen, seperti layanan dan penerima baru</item>
+    </plurals>
+    <plurals name="pro_benefit_sizes">
+        <item quantity="other">%d perubahan ukuran, dari update ke update</item>
+    </plurals>
+    <string name="pro_benefit_plus_export">Plus: ekspor setiap detail aplikasi Anda</string>
+    <plurals name="pro_card_permissions">
+        <item quantity="other">%d izin ditambahkan</item>
+    </plurals>
+    <plurals name="pro_card_components">
+        <item quantity="other">%d komponen diubah</item>
+    </plurals>
+    <string name="pro_card_size">Ukuran berubah</string>
+    <string name="pro_export_headline">Tambahkan setiap detail ke ekspor Anda</string>
+    <string name="pro_export_details">%1$d data Dasar gratis. Pro menambahkan %2$d lainnya.</string>
+    <plurals name="pro_export_audit">
+        <item quantity="other">Audit izin %d aplikasi dalam satu spreadsheet</item>
+    </plurals>
+    <string name="pro_export_certificates">Periksa setiap sertifikat penandatanganan, dengan SHA-256, subjek, dan skema</string>
+    <string name="pro_export_components">Hitung komponen setiap aplikasi, dari aktivitas hingga filter intent</string>
+    <plurals name="pro_export_plus_history">
+        <item quantity="other">Plus: baca semua %d perubahan yang tercatat di ponsel ini</item>
+    </plurals>
+    <string name="pro_export_plus_history_none">Plus: baca setiap perubahan yang tercatat di ponsel ini</string>
+    <string name="pro_export_preview_app">Aplikasi</string>
+    <string name="pro_export_preview_permissions">Izin</string>
+    <string name="pro_export_preview_certificate">Sertifikat</string>
+    <string name="pro_export_basics_only">Ekspor data dasar saja</string>
+    <string name="pro_still_free">Tetap gratis.</string>
+    <string name="pro_still_free_body">Semua yang gratis tetap gratis. Dua fitur baru termasuk dalam Pro:</string>
+    <string name="pro_feature_history">Riwayat aplikasi</string>
+    <plurals name="pro_feature_history_count">
+        <item quantity="other">%d perubahan tercatat</item>
+    </plurals>
+    <string name="pro_feature_history_empty">Mencatat setiap update</string>
+    <string name="pro_feature_export_title">Ekspor inventaris</string>
+    <string name="pro_feature_export_detail">Setiap detail</string>
+    <string name="pro_continue_free">Lanjutkan gratis</string>
 </resources>

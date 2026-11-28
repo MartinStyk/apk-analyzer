@@ -22,3 +22,8 @@ the start destination root it invokes the host-provided root-back callback.
 
 Construct state with the complete top-level key set, retain the `Navigator`, and convert state
 through `toEntries()` for `NavDisplay`. Do not reproduce stack management in a feature or app host.
+
+`Navigator.goBack(result)` pops like `goBack()` and first emits `result` on `Navigator.results`, a
+one-shot flow with no replay. It exists for the one approved case of a screen answering the screen
+below it (the Pro sheet's "Export basics only"); the receiving entry passes `navigator.results` to its
+screen, which collects the result types it understands. Prefer state over results everywhere else.

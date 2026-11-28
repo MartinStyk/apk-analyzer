@@ -54,4 +54,10 @@
     <string name="what_changed_uncomparable_only">Không thể so sánh một số chi tiết</string>
     <string name="what_changed_locked_row">Thay đổi ứng dụng bị khóa, thuộc gói Pro</string>
     <string name="what_changed_locked_click_label">Mở khóa bằng Pro</string>
+    <plurals name="what_changed_pro_title">
+        <item quantity="other">Xem điều gì đã thay đổi ở %d ứng dụng khác</item>
+    </plurals>
+    <string name="what_changed_pro_card_body">Mọi quyền, thành phần và thay đổi kích thước được thêm. Thay đổi chứng chỉ vẫn miễn phí.</string>
+    <string name="what_changed_pro_bar_body">Quyền, thành phần, kích thước</string>
+    <string name="what_changed_pro_unlock">Mở khóa</string>
 </resources>

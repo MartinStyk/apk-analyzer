@@ -25,7 +25,14 @@ internal sealed interface WhatChangedState {
         val changedApps: List<LockableRow<ChangedAppItem>>,
         val uninstalledApps: List<LockableRow<UninstalledAppItem>>,
         val lockedAppCount: Int,
+        val proCardSection: WhatChangedSection?,
     ) : WhatChangedState
+}
+
+internal enum class WhatChangedSection {
+    NeedsAttention,
+    ChangedApps,
+    Uninstalled,
 }
 
 @Immutable

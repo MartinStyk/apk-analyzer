@@ -9,6 +9,7 @@ android {
 dependencies {
     api(projects.feature.pro.api)
     implementation(projects.core.entitlements.api)
+    implementation(projects.core.appHistory.api)
     implementation(projects.core.common)
     implementation(libs.androidx.activity.compose)
 }

@@ -1,26 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <plurals name="pro_headline_export">
-        <item quantity="one">Exportujte všechny podrobnosti o %d aplikaci</item>
-        <item quantity="few">Exportujte všechny podrobnosti o %d aplikacích</item>
-        <item quantity="many">Exportujte všechny podrobnosti o %d aplikace</item>
-        <item quantity="other">Exportujte všechny podrobnosti o %d aplikacích</item>
-    </plurals>
-    <plurals name="pro_headline_what_changed">
-        <item quantity="one">Podívejte se, co se změnilo v %d další aplikaci</item>
-        <item quantity="few">Podívejte se, co se změnilo v %d dalších aplikacích</item>
-        <item quantity="many">Podívejte se, co se změnilo v %d další aplikace</item>
-        <item quantity="other">Podívejte se, co se změnilo v %d dalších aplikacích</item>
-    </plurals>
-    <string name="pro_feature_export">Exportujte oprávnění, certifikáty, komponenty a další údaje z mnoha aplikací najednou</string>
-    <string name="pro_feature_what_changed">Prohlédněte si všechny změny aplikací ve svém zařízení v jednom seznamu</string>
-    <string name="pro_supporter">Podpořte nezávislou open-source aplikaci. Vše, co je dnes zdarma, zůstane zdarma.</string>
-    <string name="pro_unlock">Odemknout Pro · %s</string>
-    <string name="pro_one_time">Jednorázový nákup. Žádné předplatné.</string>
     <string name="pro_restore">Obnovit nákup</string>
     <string name="pro_unavailable">Nákupy v tomto zařízení vyžadují Google Play.</string>
     <string name="pro_failed">Nepodařilo se spojit s Google Play. Zkuste to znovu.</string>
     <string name="pro_pending">Nákup se zpracovává</string>
     <string name="pro_pending_body">Google Play čeká na vaši platbu. Pro se odemkne, jakmile platba projde.</string>
     <string name="pro_restore_nothing">Pro tento účet Google nebyl nalezen žádný nákup Pro.</string>
+    <string name="pro_unlock_lifetime">Odemknout doživotní Pro · %s</string>
+    <string name="pro_support_unlock">Podpořit a získat doživotní Pro · %s</string>
+    <string name="pro_one_payment">Jedna platba. Žádné předplatné.</string>
+    <string name="pro_support_title">Vytvářeno otevřeně. Podporováno vámi.</string>
+    <string name="pro_author">Martin, autor Apk Analyzer</string>
+    <plurals name="pro_history_headline">
+        <item quantity="one">%1$d změna zaznamenaná ve vašem telefonu od %2$s</item>
+        <item quantity="few">%1$d změny zaznamenané ve vašem telefonu od %2$s</item>
+        <item quantity="many">%1$d změny zaznamenané ve vašem telefonu od %2$s</item>
+        <item quantity="other">%1$d změn zaznamenaných ve vašem telefonu od %2$s</item>
+    </plurals>
+    <plurals name="pro_history_free">
+        <item quantity="one">%d aplikaci si můžete přečíst zdarma.</item>
+        <item quantity="few">%d aplikace si můžete přečíst zdarma.</item>
+        <item quantity="many">%d aplikace si můžete přečíst zdarma.</item>
+        <item quantity="other">%d aplikací si můžete přečíst zdarma.</item>
+    </plurals>
+    <plurals name="pro_history_locked">
+        <item quantity="one">Pro zpřístupní další %d aplikaci.</item>
+        <item quantity="few">Pro zpřístupní další %d aplikace.</item>
+        <item quantity="many">Pro zpřístupní dalších %d aplikace.</item>
+        <item quantity="other">Pro zpřístupní dalších %d aplikací.</item>
+    </plurals>
+    <string name="pro_history_fallback">Přečtěte si každou změnu zaznamenanou ve vašem telefonu</string>
+    <plurals name="pro_benefit_permissions">
+        <item quantity="one">%d oprávnění přidané do vašich aplikací a která aplikace ho dostala</item>
+        <item quantity="few">%d oprávnění přidaná do vašich aplikací a které aplikace je dostaly</item>
+        <item quantity="many">%d oprávnění přidaná do vašich aplikací a které aplikace je dostaly</item>
+        <item quantity="other">%d oprávnění přidaných do vašich aplikací a které aplikace je dostaly</item>
+    </plurals>
+    <plurals name="pro_benefit_components">
+        <item quantity="one">%d změna komponenty, například nová služba nebo přijímač</item>
+        <item quantity="few">%d změny komponent, například nové služby a přijímače</item>
+        <item quantity="many">%d změny komponent, například nové služby a přijímače</item>
+        <item quantity="other">%d změn komponent, například nové služby a přijímače</item>
+    </plurals>
+    <plurals name="pro_benefit_sizes">
+        <item quantity="one">%d změna velikosti, aktualizace po aktualizaci</item>
+        <item quantity="few">%d změny velikosti, aktualizace po aktualizaci</item>
+        <item quantity="many">%d změny velikosti, aktualizace po aktualizaci</item>
+        <item quantity="other">%d změn velikosti, aktualizace po aktualizaci</item>
+    </plurals>
+    <string name="pro_benefit_plus_export">Navíc: export všech podrobností o vašich aplikacích</string>
+    <plurals name="pro_card_permissions">
+        <item quantity="one">%d přidané oprávnění</item>
+        <item quantity="few">%d přidaná oprávnění</item>
+        <item quantity="many">%d přidaného oprávnění</item>
+        <item quantity="other">%d přidaných oprávnění</item>
+    </plurals>
+    <plurals name="pro_card_components">
+        <item quantity="one">%d změněná komponenta</item>
+        <item quantity="few">%d změněné komponenty</item>
+        <item quantity="many">%d změněné komponenty</item>
+        <item quantity="other">%d změněných komponent</item>
+    </plurals>
+    <string name="pro_card_size">Změněná velikost</string>
+    <string name="pro_export_headline">Přidejte do exportu všechny podrobnosti</string>
+    <string name="pro_export_details">%1$d základních údajů je zdarma. Pro přidá zbývajících %2$d.</string>
+    <plurals name="pro_export_audit">
+        <item quantity="one">Zkontrolujte oprávnění %d aplikace v jedné tabulce</item>
+        <item quantity="few">Zkontrolujte oprávnění všech %d aplikací v jedné tabulce</item>
+        <item quantity="many">Zkontrolujte oprávnění všech %d aplikací v jedné tabulce</item>
+        <item quantity="other">Zkontrolujte oprávnění všech %d aplikací v jedné tabulce</item>
+    </plurals>
+    <string name="pro_export_certificates">Zkontrolujte každý podpisový certifikát včetně SHA-256, subjektu a schémat</string>
+    <string name="pro_export_components">Spočítejte komponenty každé aplikace, od aktivit po filtry intentů</string>
+    <plurals name="pro_export_plus_history">
+        <item quantity="one">Navíc: přečtěte si %d změnu zaznamenanou v tomto telefonu</item>
+        <item quantity="few">Navíc: přečtěte si všechny %d změny zaznamenané v tomto telefonu</item>
+        <item quantity="many">Navíc: přečtěte si všechny %d změny zaznamenané v tomto telefonu</item>
+        <item quantity="other">Navíc: přečtěte si všech %d změn zaznamenaných v tomto telefonu</item>
+    </plurals>
+    <string name="pro_export_plus_history_none">Navíc: přečtěte si každou změnu zaznamenanou v tomto telefonu</string>
+    <string name="pro_export_preview_app">Aplikace</string>
+    <string name="pro_export_preview_permissions">Oprávnění</string>
+    <string name="pro_export_preview_certificate">Certifikát</string>
+    <string name="pro_export_basics_only">Exportovat jen základní</string>
+    <string name="pro_still_free">Stále zdarma.</string>
+    <string name="pro_still_free_body">Vše, co bylo zdarma, zůstává zdarma. Součástí Pro jsou dvě nové funkce:</string>
+    <string name="pro_feature_history">Historie aplikací</string>
+    <plurals name="pro_feature_history_count">
+        <item quantity="one">%d zaznamenaná změna</item>
+        <item quantity="few">%d zaznamenané změny</item>
+        <item quantity="many">%d zaznamenané změny</item>
+        <item quantity="other">%d zaznamenaných změn</item>
+    </plurals>
+    <string name="pro_feature_history_empty">Zaznamenává každou aktualizaci</string>
+    <string name="pro_feature_export_title">Export inventáře aplikací</string>
+    <string name="pro_feature_export_detail">Všechny podrobnosti</string>
+    <string name="pro_continue_free">Pokračovat zdarma</string>
 </resources>

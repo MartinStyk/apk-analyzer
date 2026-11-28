@@ -14,19 +14,26 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.AppHistoryRepository
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryDeviceTimeline
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.proSummary
 import sk.styk.martin.apkanalyzer.core.entitlements.api.Entitlement
 import sk.styk.martin.apkanalyzer.core.entitlements.api.EntitlementsRepository
 import sk.styk.martin.apkanalyzer.core.entitlements.api.PurchaseResult
 import sk.styk.martin.apkanalyzer.core.entitlements.api.RefreshResult
 import sk.styk.martin.apkanalyzer.feature.pro.api.PaywallReason
+import sk.styk.martin.apkanalyzer.feature.pro.api.ProSheetResult
 import sk.styk.martin.apkanalyzer.feature.pro.phone.analytics.ProAnalytics
 import sk.styk.martin.apkanalyzer.feature.pro.phone.analytics.ProAnalyticsEvent
 import sk.styk.martin.apkanalyzer.feature.pro.phone.analytics.RestoreOutcome
+import sk.styk.martin.apkanalyzer.feature.pro.phone.support.SupportPromptSession
 
 @HiltViewModel(assistedFactory = ProViewModel.Factory::class)
 internal class ProViewModel @AssistedInject constructor(
     @Assisted private val reason: PaywallReason,
     private val entitlementsRepository: EntitlementsRepository,
+    private val appHistoryRepository: AppHistoryRepository,
+    private val supportPromptSession: SupportPromptSession,
     private val analytics: ProAnalytics,
 ) : ViewModel() {
 
@@ -45,14 +52,24 @@ internal class ProViewModel @AssistedInject constructor(
 
     init {
         analytics.track(ProAnalyticsEvent.Opened(reason))
+        supportPromptSession.recordPaywallShown()
         viewModelScope.launch {
             entitlementsRepository.entitlements().first { Entitlement.Pro in it }
-            close()
+            close(ProEvent.Close)
         }
         viewModelScope.launch {
             entitlementsRepository.offers().collect { offers ->
                 val offer = offers.firstOrNull { it.entitlement == Entitlement.Pro }?.let(ProOffer::Available) ?: ProOffer.Unavailable
                 state.update { it.copy(offer = offer) }
+            }
+        }
+        viewModelScope.launch {
+            appHistoryRepository.deviceTimeline().collect { timeline ->
+                val history = when (timeline) {
+                    AppHistoryDeviceTimeline.Unavailable -> ProHistory.Unavailable
+                    is AppHistoryDeviceTimeline.Available -> timeline.proSummary()?.let(ProHistory::Available) ?: ProHistory.Unavailable
+                }
+                state.update { it.copy(history = history) }
             }
         }
     }
@@ -61,6 +78,8 @@ internal class ProViewModel @AssistedInject constructor(
         when (action) {
             is ProAction.Unlock -> unlock(action.activity)
             ProAction.Restore -> restore()
+            ProAction.ExportBasicsOnly -> close(ProEvent.CloseWithResult(ProSheetResult.ExportBasicsOnly))
+            ProAction.Dismiss -> close(ProEvent.Close)
         }
     }
 
@@ -73,7 +92,7 @@ internal class ProViewModel @AssistedInject constructor(
             val result = entitlementsRepository.purchase(activity, offer)
             analytics.track(ProAnalyticsEvent.PurchaseFinished(reason, result))
             when (result) {
-                PurchaseResult.Purchased -> close()
+                PurchaseResult.Purchased -> close(ProEvent.Close)
                 PurchaseResult.Pending -> state.update { it.copy(status = ProStatus.Pending) }
                 PurchaseResult.Cancelled -> state.update { it.copy(status = ProStatus.Idle) }
                 PurchaseResult.Failed -> state.update { it.copy(status = ProStatus.Failed) }
@@ -91,16 +110,16 @@ internal class ProViewModel @AssistedInject constructor(
             }
             analytics.track(ProAnalyticsEvent.RestoreFinished(reason, outcome))
             when (outcome) {
-                RestoreOutcome.Restored -> close()
+                RestoreOutcome.Restored -> close(ProEvent.Close)
                 RestoreOutcome.NothingFound -> state.update { it.copy(status = ProStatus.NothingToRestore) }
                 RestoreOutcome.Failed -> state.update { it.copy(status = ProStatus.Failed) }
             }
         }
     }
 
-    private fun close() {
+    private fun close(event: ProEvent) {
         if (isClosing) return
         isClosing = true
-        eventChannel.trySend(ProEvent.Close)
+        eventChannel.trySend(event)
     }
 }

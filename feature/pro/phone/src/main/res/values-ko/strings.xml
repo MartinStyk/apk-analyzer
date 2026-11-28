@@ -1,20 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <plurals name="pro_headline_export">
-        <item quantity="other">앱 %d개의 모든 세부정보 내보내기</item>
-    </plurals>
-    <plurals name="pro_headline_what_changed">
-        <item quantity="other">앱 %d개에서 바뀐 내용 더 보기</item>
-    </plurals>
-    <string name="pro_feature_export">여러 앱의 권한, 인증서, 구성요소 등을 한 번에 내보낼 수 있습니다</string>
-    <string name="pro_feature_what_changed">기기의 모든 앱 변경사항을 하나의 목록에서 확인할 수 있습니다</string>
-    <string name="pro_supporter">독립 오픈소스 앱을 후원하세요. 지금 무료인 기능은 앞으로도 무료입니다.</string>
-    <string name="pro_unlock">Pro 잠금 해제 · %s</string>
-    <string name="pro_one_time">1회 구매. 구독 없음.</string>
     <string name="pro_restore">구매 복원</string>
     <string name="pro_unavailable">구매하려면 이 기기에 Google Play가 있어야 합니다.</string>
     <string name="pro_failed">Google Play에 연결할 수 없습니다. 다시 시도하세요.</string>
     <string name="pro_pending">구매 대기 중</string>
     <string name="pro_pending_body">Google Play에서 결제를 기다리고 있습니다. 결제가 완료되면 바로 Pro가 잠금 해제됩니다.</string>
     <string name="pro_restore_nothing">이 Google 계정에서 Pro 구매 내역을 찾을 수 없습니다.</string>
+    <string name="pro_unlock_lifetime">평생 Pro 잠금 해제 · %s</string>
+    <string name="pro_support_unlock">후원하고 평생 Pro 받기 · %s</string>
+    <string name="pro_one_payment">한 번 결제. 구독 없음.</string>
+    <string name="pro_support_title">공개적으로 개발합니다. 여러분의 후원으로 이어갑니다.</string>
+    <string name="pro_author">Martin, Apk Analyzer 개발자</string>
+    <plurals name="pro_history_headline">
+        <item quantity="other">%2$s 이후 휴대전화에 기록된 변경 사항 %1$d개</item>
+    </plurals>
+    <plurals name="pro_history_free">
+        <item quantity="other">앱 %d개는 무료로 볼 수 있습니다.</item>
+    </plurals>
+    <plurals name="pro_history_locked">
+        <item quantity="other">Pro로 앱 %d개를 더 볼 수 있습니다.</item>
+    </plurals>
+    <string name="pro_history_fallback">휴대전화에 기록된 모든 변경 사항 보기</string>
+    <plurals name="pro_benefit_permissions">
+        <item quantity="other">앱에 추가된 권한 %d개와 해당 권한을 받은 앱</item>
+    </plurals>
+    <plurals name="pro_benefit_components">
+        <item quantity="other">구성요소 변경 %d개(예: 새 서비스, 수신기)</item>
+    </plurals>
+    <plurals name="pro_benefit_sizes">
+        <item quantity="other">크기 변경 %d개(업데이트별)</item>
+    </plurals>
+    <string name="pro_benefit_plus_export">추가로: 앱의 모든 세부정보 내보내기</string>
+    <plurals name="pro_card_permissions">
+        <item quantity="other">권한 %d개 추가됨</item>
+    </plurals>
+    <plurals name="pro_card_components">
+        <item quantity="other">구성요소 %d개 변경됨</item>
+    </plurals>
+    <string name="pro_card_size">크기 변경됨</string>
+    <string name="pro_export_headline">내보내기에 모든 세부정보 추가</string>
+    <string name="pro_export_details">기본 항목 %1$d개는 무료입니다. Pro는 나머지 %2$d개를 추가합니다.</string>
+    <plurals name="pro_export_audit">
+        <item quantity="other">앱 %d개의 권한을 하나의 스프레드시트에서 검토</item>
+    </plurals>
+    <string name="pro_export_certificates">모든 서명 인증서를 SHA-256, 주체, 서명 체계와 함께 확인</string>
+    <string name="pro_export_components">앱별 구성요소 계산(활동부터 인텐트 필터까지)</string>
+    <plurals name="pro_export_plus_history">
+        <item quantity="other">추가로: 이 휴대전화에 기록된 변경 사항 %d개 모두 보기</item>
+    </plurals>
+    <string name="pro_export_plus_history_none">추가로: 이 휴대전화에 기록된 모든 변경 사항 보기</string>
+    <string name="pro_export_preview_app">앱</string>
+    <string name="pro_export_preview_permissions">권한</string>
+    <string name="pro_export_preview_certificate">인증서</string>
+    <string name="pro_export_basics_only">기본 항목만 내보내기</string>
+    <string name="pro_still_free">여전히 무료입니다.</string>
+    <string name="pro_still_free_body">무료였던 기능은 모두 계속 무료입니다. 두 가지 새 기능이 Pro에 포함됩니다:</string>
+    <string name="pro_feature_history">앱 기록</string>
+    <plurals name="pro_feature_history_count">
+        <item quantity="other">변경 사항 %d개 기록됨</item>
+    </plurals>
+    <string name="pro_feature_history_empty">모든 업데이트 기록</string>
+    <string name="pro_feature_export_title">인벤토리 내보내기</string>
+    <string name="pro_feature_export_detail">모든 세부정보</string>
+    <string name="pro_continue_free">무료로 계속하기</string>
 </resources>

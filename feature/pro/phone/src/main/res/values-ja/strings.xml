@@ -1,20 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <plurals name="pro_headline_export">
-        <item quantity="other">%d個のアプリの詳細をすべて書き出せます</item>
-    </plurals>
-    <plurals name="pro_headline_what_changed">
-        <item quantity="other">あと%d個のアプリの変更内容を確認できます</item>
-    </plurals>
-    <string name="pro_feature_export">権限、証明書、コンポーネントなどを複数のアプリからまとめて書き出せます</string>
-    <string name="pro_feature_what_changed">デバイス上のアプリの変更をすべて1つのリストで確認できます</string>
-    <string name="pro_supporter">独立系のオープンソースアプリを応援しましょう。現在無料の機能は今後も無料のままです。</string>
-    <string name="pro_unlock">Pro をアンロック · %s</string>
-    <string name="pro_one_time">買い切りです。定期購入ではありません。</string>
     <string name="pro_restore">購入を復元</string>
     <string name="pro_unavailable">購入するには、このデバイスに Google Play が必要です。</string>
     <string name="pro_failed">Google Play に接続できませんでした。もう一度お試しください。</string>
     <string name="pro_pending">購入保留中</string>
     <string name="pro_pending_body">Google Play でお支払いの完了を待っています。完了するとすぐに Pro が利用可能になります。</string>
     <string name="pro_restore_nothing">この Google アカウントでは Pro の購入が見つかりませんでした。</string>
+    <string name="pro_unlock_lifetime">永久版 Pro をアンロック · %s</string>
+    <string name="pro_support_unlock">応援して永久版 Pro を入手 · %s</string>
+    <string name="pro_one_payment">1 回の支払いのみ。サブスクリプションなし。</string>
+    <string name="pro_support_title">オープンに開発。皆さんの支援で継続。</string>
+    <string name="pro_author">Martin(Apk Analyzer 作者)</string>
+    <plurals name="pro_history_headline">
+        <item quantity="other">%2$s 以降、スマートフォンで %1$d 件の変更を記録しました</item>
+    </plurals>
+    <plurals name="pro_history_free">
+        <item quantity="other">%d 個のアプリは無料で閲覧できます。</item>
+    </plurals>
+    <plurals name="pro_history_locked">
+        <item quantity="other">Pro ではさらに %d 個のアプリを閲覧できます。</item>
+    </plurals>
+    <string name="pro_history_fallback">スマートフォンで記録されたすべての変更を確認</string>
+    <plurals name="pro_benefit_permissions">
+        <item quantity="other">アプリに追加された %d 件の権限と、それを受け取ったアプリ</item>
+    </plurals>
+    <plurals name="pro_benefit_components">
+        <item quantity="other">%d 件のコンポーネントの変更(新しいサービスやレシーバーなど)</item>
+    </plurals>
+    <plurals name="pro_benefit_sizes">
+        <item quantity="other">%d 件のサイズの変更(アップデートごと)</item>
+    </plurals>
+    <string name="pro_benefit_plus_export">さらに: アプリのすべての詳細をエクスポート</string>
+    <plurals name="pro_card_permissions">
+        <item quantity="other">%d 件の権限を追加</item>
+    </plurals>
+    <plurals name="pro_card_components">
+        <item quantity="other">%d 件のコンポーネントを変更</item>
+    </plurals>
+    <string name="pro_card_size">サイズが変更</string>
+    <string name="pro_export_headline">エクスポートにすべての詳細を追加</string>
+    <string name="pro_export_details">%1$d 項目の基本は無料です。Pro では残りの %2$d 項目を追加します。</string>
+    <plurals name="pro_export_audit">
+        <item quantity="other">%d 個のアプリの権限を 1 つのスプレッドシートで確認</item>
+    </plurals>
+    <string name="pro_export_certificates">すべての署名証明書を SHA-256、サブジェクト、スキームとともに確認</string>
+    <string name="pro_export_components">アプリごとのコンポーネントを集計(アクティビティからインテント フィルタまで)</string>
+    <plurals name="pro_export_plus_history">
+        <item quantity="other">さらに: このスマートフォンで記録された %d 件の変更をすべて確認</item>
+    </plurals>
+    <string name="pro_export_plus_history_none">さらに: このスマートフォンで記録されたすべての変更を確認</string>
+    <string name="pro_export_preview_app">アプリ</string>
+    <string name="pro_export_preview_permissions">権限</string>
+    <string name="pro_export_preview_certificate">証明書</string>
+    <string name="pro_export_basics_only">基本のみエクスポート</string>
+    <string name="pro_still_free">引き続き無料。</string>
+    <string name="pro_still_free_body">無料だった機能はすべて無料のままです。2 つの新機能が Pro に含まれます:</string>
+    <string name="pro_feature_history">アプリの履歴</string>
+    <plurals name="pro_feature_history_count">
+        <item quantity="other">%d 件の変更を記録</item>
+    </plurals>
+    <string name="pro_feature_history_empty">すべてのアップデートを記録</string>
+    <string name="pro_feature_export_title">インベントリのエクスポート</string>
+    <string name="pro_feature_export_detail">すべての詳細</string>
+    <string name="pro_continue_free">無料で続ける</string>
 </resources>

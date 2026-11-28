@@ -1,19 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="pro_title" translatable="false">Apk Analyzer Pro</string>
-    <plurals name="pro_headline_export">
-        <item quantity="one">Export every detail for %d app</item>
-        <item quantity="other">Export every detail for %d apps</item>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="pro_unlock_lifetime">Unlock lifetime Pro · %s</string>
+    <string name="pro_support_unlock">Support and get lifetime Pro · %s</string>
+    <string name="pro_one_payment">One payment. No subscription.</string>
+    <string name="pro_support_title">Built open. Supported by you.</string>
+    <string name="pro_author">Martin, author of Apk Analyzer</string>
+    <plurals name="pro_history_headline">
+        <item quantity="one">%1$d change recorded on your phone since %2$s</item>
+        <item quantity="other">%1$d changes recorded on your phone since %2$s</item>
     </plurals>
-    <plurals name="pro_headline_what_changed">
-        <item quantity="one">See what changed in %d more app</item>
-        <item quantity="other">See what changed in %d more apps</item>
+    <plurals name="pro_history_free">
+        <item quantity="one">%d app is free to read.</item>
+        <item quantity="other">%d apps are free to read.</item>
     </plurals>
-    <string name="pro_feature_export">Export permissions, certificates, components and more for many apps at once</string>
-    <string name="pro_feature_what_changed">See every app change on your device in one list</string>
-    <string name="pro_supporter">Support an independent, open-source app. Everything free today stays free.</string>
-    <string name="pro_unlock">Unlock Pro · %s</string>
-    <string name="pro_one_time">One-time purchase. No subscription.</string>
+    <plurals name="pro_history_locked">
+        <item quantity="one">Pro opens %d more app.</item>
+        <item quantity="other">Pro opens %d more apps.</item>
+    </plurals>
+    <string name="pro_history_fallback">Read every change recorded on your phone</string>
+    <plurals name="pro_benefit_permissions">
+        <item quantity="one">%d permission added to your apps, and which app got it</item>
+        <item quantity="other">%d permissions added to your apps, and which apps got them</item>
+    </plurals>
+    <plurals name="pro_benefit_components">
+        <item quantity="one">%d component change, such as a new service or receiver</item>
+        <item quantity="other">%d component changes, such as new services and receivers</item>
+    </plurals>
+    <plurals name="pro_benefit_sizes">
+        <item quantity="one">%d size change, update by update</item>
+        <item quantity="other">%d size changes, update by update</item>
+    </plurals>
+    <string name="pro_benefit_plus_export">Plus: export every detail of your apps</string>
+    <plurals name="pro_card_permissions">
+        <item quantity="one">%d permission added</item>
+        <item quantity="other">%d permissions added</item>
+    </plurals>
+    <plurals name="pro_card_components">
+        <item quantity="one">%d component changed</item>
+        <item quantity="other">%d components changed</item>
+    </plurals>
+    <string name="pro_card_size">Size changed</string>
+    <string name="pro_export_headline">Add every detail to your export</string>
+    <string name="pro_export_details" tools:ignore="PluralsCandidate">The %1$d Basics are free. Pro adds the other %2$d.</string>
+    <plurals name="pro_export_audit">
+        <item quantity="one">Audit the permissions of %d app in one spreadsheet</item>
+        <item quantity="other">Audit the permissions of all %d apps in one spreadsheet</item>
+    </plurals>
+    <string name="pro_export_certificates">Check every signing certificate, with SHA-256, subject and schemes</string>
+    <string name="pro_export_components">Count components per app, from activities to intent filters</string>
+    <plurals name="pro_export_plus_history">
+        <item quantity="one">Plus: read the %d change recorded on this phone</item>
+        <item quantity="other">Plus: read all %d changes recorded on this phone</item>
+    </plurals>
+    <string name="pro_export_plus_history_none">Plus: read every change recorded on this phone</string>
+    <string name="pro_export_preview_app">App</string>
+    <string name="pro_export_preview_permissions">Permissions</string>
+    <string name="pro_export_preview_certificate">Certificate</string>
+    <string name="pro_export_basics_only">Export basics only</string>
+    <string name="pro_still_free">Still free.</string>
+    <string name="pro_still_free_body">Everything that was free stays free. Two new features are part of Pro:</string>
+    <string name="pro_feature_history">App history</string>
+    <plurals name="pro_feature_history_count">
+        <item quantity="one">%d change recorded</item>
+        <item quantity="other">%d changes recorded</item>
+    </plurals>
+    <string name="pro_feature_history_empty">Records every update</string>
+    <string name="pro_feature_export_title">Inventory export</string>
+    <string name="pro_feature_export_detail">Every detail</string>
+    <string name="pro_continue_free">Continue for free</string>
     <string name="pro_restore">Restore purchase</string>
     <string name="pro_unavailable">Purchases need Google Play on this device.</string>
     <string name="pro_failed">Couldn\'t reach Google Play. Try again.</string>

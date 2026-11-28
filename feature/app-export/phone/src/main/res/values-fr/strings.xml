@@ -98,7 +98,6 @@
     <string name="inventory_export_next">Suivant</string>
     <string name="inventory_export_columns_omitted">Absents du fichier CSV : %1$s. Le format CSV ne peut pas contenir d’enregistrements complets.</string>
     <string name="inventory_export_use_json">Utiliser JSON</string>
-    <string name="inventory_export_pro_columns">Les informations essentielles sont gratuites. Débloquez Pro pour exporter les autres détails.</string>
     <string name="inventory_export_unlock_pro">Débloquer Pro</string>
     <string name="inventory_export_dismiss_hint">Masquer cet avis</string>
     <string name="inventory_export_use_basics">Exporter Essentiel à la place</string>
@@ -114,4 +113,11 @@
     <string name="inventory_export_intro_description">Exportez des informations sur plusieurs applications dans un seul fichier CSV ou JSON.</string>
     <string name="inventory_export_columns_guidance">Choisissez les détails à inclure pour chaque application.</string>
     <string name="inventory_export_format_guidance">Choisissez CSV pour les tableurs ou JSON pour tous les détails, puis enregistrez ou partagez.</string>
+    <string name="inventory_export_pro_rule">Les %1$d données Essentiel sont gratuites. Les %2$d autres données sont Pro. Vous pouvez quand même les choisir et les voir dans l\'aperçu.</string>
+    <plurals name="inventory_export_pro_needed">
+        <item quantity="one">%d de ces données nécessite Pro</item>
+        <item quantity="many">%d de ces données nécessitent Pro</item>
+        <item quantity="other">%d de ces données nécessitent Pro</item>
+    </plurals>
+    <string name="inventory_export_pro_needed_body">%1$s. Les %2$d données Essentiel s\'exportent gratuitement.</string>
 </resources>

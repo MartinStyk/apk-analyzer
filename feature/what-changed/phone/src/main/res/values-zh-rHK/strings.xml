@@ -54,4 +54,10 @@
     <string name="what_changed_uncomparable_only">部分資料無法比較</string>
     <string name="what_changed_locked_row">已鎖定的應用程式變更，Pro 版功能</string>
     <string name="what_changed_locked_click_label">使用 Pro 版解鎖</string>
+    <plurals name="what_changed_pro_title">
+        <item quantity="other">查看另外 %d 個應用程式的更改</item>
+    </plurals>
+    <string name="what_changed_pro_card_body">每項新增的權限、組件和大小更改。證書更改依然免費。</string>
+    <string name="what_changed_pro_bar_body">權限、組件、大小</string>
+    <string name="what_changed_pro_unlock">解鎖</string>
 </resources>

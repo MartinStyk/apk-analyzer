@@ -58,4 +58,11 @@
     <string name="what_changed_uncomparable_only">Bazı ayrıntılar karşılaştırılamadı</string>
     <string name="what_changed_locked_row">Kilitli uygulama değişikliği, Pro kapsamında</string>
     <string name="what_changed_locked_click_label">Pro ile kilidi aç</string>
+    <plurals name="what_changed_pro_title">
+        <item quantity="one">%d uygulamada daha nelerin değiştiğini görün</item>
+        <item quantity="other">%d uygulamada daha nelerin değiştiğini görün</item>
+    </plurals>
+    <string name="what_changed_pro_card_body">Eklenen her izin, bileşen ve boyut değişikliği. Sertifika değişiklikleri ücretsiz kalır.</string>
+    <string name="what_changed_pro_bar_body">İzinler, bileşenler, boyutlar</string>
+    <string name="what_changed_pro_unlock">Kilidi aç</string>
 </resources>

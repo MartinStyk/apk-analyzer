@@ -86,7 +86,6 @@
     <string name="inventory_export_next">下一步</string>
     <string name="inventory_export_columns_omitted">CSV 文件中不包含：%1$s。CSV 无法保存完整记录。</string>
     <string name="inventory_export_use_json">使用 JSON</string>
-    <string name="inventory_export_pro_columns">基础信息免费。解锁 Pro 即可导出其他详细信息。</string>
     <string name="inventory_export_unlock_pro">解锁 Pro</string>
     <string name="inventory_export_dismiss_hint">关闭提示</string>
     <string name="inventory_export_use_basics">改为只导出基础</string>
@@ -102,4 +101,9 @@
     <string name="inventory_export_intro_description">将多个应用的信息导出到一个 CSV 或 JSON 文件中。</string>
     <string name="inventory_export_columns_guidance">选择为每个应用包含哪些信息。</string>
     <string name="inventory_export_format_guidance">表格选择 CSV，完整信息选择 JSON，然后保存或分享。</string>
+    <string name="inventory_export_pro_rule">%1$d 项基础信息免费。其余 %2$d 项信息属于 Pro。你仍可选择它们并在预览中查看。</string>
+    <plurals name="inventory_export_pro_needed">
+        <item quantity="other">其中 %d 项信息需要 Pro</item>
+    </plurals>
+    <string name="inventory_export_pro_needed_body">%1$s。%2$d 项基础信息可免费导出。</string>
 </resources>

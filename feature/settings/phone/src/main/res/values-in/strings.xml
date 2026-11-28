@@ -14,4 +14,8 @@
     <string name="settings_fingerprint_format">Format sidik jari</string>
     <string name="settings_fingerprint_format_colon_separated">Dipisahkan titik dua</string>
     <string name="settings_fingerprint_format_continuous">Tanpa pemisah</string>
+    <string name="settings_pro_title">Dapatkan Apk Analyzer Pro</string>
+    <string name="settings_pro_body">Pembelian sekali yang mendukung pengembangan dan membuka fitur terbaru.</string>
+    <string name="settings_pro_active">Pro aktif</string>
+    <string name="settings_pro_active_body">Terima kasih telah mendukung Apk Analyzer.</string>
 </resources>

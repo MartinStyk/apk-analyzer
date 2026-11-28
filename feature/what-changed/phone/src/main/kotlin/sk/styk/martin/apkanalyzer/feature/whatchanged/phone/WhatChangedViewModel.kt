@@ -83,9 +83,7 @@ internal class WhatChangedViewModel @Inject constructor(
 
             is WhatChangedAction.OpenAppHistory -> sendEvent(WhatChangedEvent.NavigateToAppHistory(action.packageName, action.appName))
 
-            WhatChangedAction.OpenLocked -> (state.value as? WhatChangedState.Loaded)?.let {
-                sendEvent(WhatChangedEvent.NavigateToPaywall(it.lockedAppCount))
-            }
+            is WhatChangedAction.OpenLocked -> sendEvent(WhatChangedEvent.NavigateToPaywall(action.placement))
 
             is WhatChangedAction.CopyItem -> {
                 if (clipboardManager.copy(action.label, action.value) == CopyResult.FeedbackNotShown) {
@@ -143,23 +141,26 @@ internal class WhatChangedViewModel @Inject constructor(
         val lockedApps = mutableSetOf<PackageName>()
         fun <T> T.gated(
             packageName: PackageName,
+            appName: String,
             key: String,
             isReadable: Boolean,
         ): LockableRow<T> {
             if (!isReadable) lockedApps += packageName
-            return toLockableRow(key, isReadable)
+            return toLockableRow(key, isReadable, packageName.value, appName)
         }
         val needsAttention = summary.needsAttention.mapIndexed { index, attention ->
             val change = attention.change
             val item = itemMapper.map(change.packageName, change.applicationName, change.change, revertedAt = attention.revertedAt)
-            item.gated(change.packageName, item.key, access.canReadSectionRow(index, change.change))
+            item.gated(change.packageName, change.applicationName, item.key, access.canReadSectionRow(index, change.change))
         }
         val changedApps = summary.changedApps.mapIndexed { index, app ->
-            app.toItem().gated(app.packageName, app.packageName.value, access.canReadSectionRow(index, app))
+            app.toItem().gated(app.packageName, app.applicationName, app.packageName.value, access.canReadSectionRow(index, app))
         }
         val uninstalledApps = apps.filter { it.packageName !in installed }
             .sortedByDescending { app -> app.entries.firstOrNull()?.occurredAt }
-            .mapIndexed { index, app -> app.toUninstalledItem().gated(app.packageName, app.packageName.value, access.canReadSectionRow(index)) }
+            .mapIndexed { index, app ->
+                app.toUninstalledItem().gated(app.packageName, app.applicationName, app.packageName.value, access.canReadSectionRow(index))
+            }
         return WhatChangedState.Loaded(
             range = range,
             since = since,
@@ -170,6 +171,12 @@ internal class WhatChangedViewModel @Inject constructor(
             changedApps = changedApps,
             uninstalledApps = uninstalledApps,
             lockedAppCount = lockedApps.size,
+            proCardSection = when {
+                needsAttention.any { it is LockableRow.Locked } -> WhatChangedSection.NeedsAttention
+                changedApps.any { it is LockableRow.Locked } -> WhatChangedSection.ChangedApps
+                uninstalledApps.any { it is LockableRow.Locked } -> WhatChangedSection.Uninstalled
+                else -> null
+            },
         )
     }
 

@@ -31,6 +31,9 @@ private val KEY_INVENTORY_EXPORT_FORMAT = stringPreferencesKey("inventory_export
 private val KEY_INVENTORY_EXPORT_INTRO_DISMISSED = booleanPreferencesKey("inventory_export_intro_dismissed")
 private val KEY_WHAT_CHANGED_LAST_VISIT_AT = longPreferencesKey("what_changed_last_visit_at")
 private val KEY_WHAT_CHANGED_RANGE = stringPreferencesKey("what_changed_range")
+private val KEY_REVIEW_FLOW_REQUESTED_AT = longPreferencesKey("review_flow_requested_at")
+private val KEY_SUPPORT_PROMPT_SHOWN_COUNT = intPreferencesKey("support_prompt_shown_count")
+private val KEY_SUPPORT_PROMPT_LAST_VERSION = longPreferencesKey("support_prompt_last_version")
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
     name = "app_settings",
@@ -111,6 +114,18 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
         Key.WhatChangedRange -> {
             prefs[KEY_WHAT_CHANGED_RANGE] ?: ""
         }
+
+        Key.ReviewFlowRequestedAt -> {
+            prefs[KEY_REVIEW_FLOW_REQUESTED_AT] ?: 0L
+        }
+
+        Key.SupportPromptShownCount -> {
+            prefs[KEY_SUPPORT_PROMPT_SHOWN_COUNT] ?: 0
+        }
+
+        Key.SupportPromptLastVersion -> {
+            prefs[KEY_SUPPORT_PROMPT_LAST_VERSION] ?: 0L
+        }
     } as T
 
     private fun <T : Any> Key<T>.write(prefs: MutablePreferences, value: T) = when (this) {
@@ -169,6 +184,18 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
 
         Key.WhatChangedRange -> {
             prefs[KEY_WHAT_CHANGED_RANGE] = value as String
+        }
+
+        Key.ReviewFlowRequestedAt -> {
+            prefs[KEY_REVIEW_FLOW_REQUESTED_AT] = value as Long
+        }
+
+        Key.SupportPromptShownCount -> {
+            prefs[KEY_SUPPORT_PROMPT_SHOWN_COUNT] = value as Int
+        }
+
+        Key.SupportPromptLastVersion -> {
+            prefs[KEY_SUPPORT_PROMPT_LAST_VERSION] = value as Long
         }
     }
 }

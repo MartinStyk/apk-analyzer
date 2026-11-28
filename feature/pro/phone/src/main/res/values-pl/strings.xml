@@ -1,26 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <plurals name="pro_headline_export">
-        <item quantity="one">Wyeksportuj wszystkie szczegóły z %d aplikacji</item>
-        <item quantity="few">Wyeksportuj wszystkie szczegóły z %d aplikacji</item>
-        <item quantity="many">Wyeksportuj wszystkie szczegóły z %d aplikacji</item>
-        <item quantity="other">Wyeksportuj wszystkie szczegóły z %d aplikacji</item>
-    </plurals>
-    <plurals name="pro_headline_what_changed">
-        <item quantity="one">Zobacz, co się zmieniło w %d kolejnej aplikacji</item>
-        <item quantity="few">Zobacz, co się zmieniło w %d kolejnych aplikacjach</item>
-        <item quantity="many">Zobacz, co się zmieniło w %d kolejnych aplikacjach</item>
-        <item quantity="other">Zobacz, co się zmieniło w %d kolejnej aplikacji</item>
-    </plurals>
-    <string name="pro_feature_export">Eksportuj uprawnienia, certyfikaty, komponenty i nie tylko z wielu aplikacji naraz</string>
-    <string name="pro_feature_what_changed">Zobacz wszystkie zmiany aplikacji na urządzeniu na jednej liście</string>
-    <string name="pro_supporter">Wesprzyj niezależną aplikację open source. Wszystko, co dziś jest bezpłatne, takie pozostanie.</string>
-    <string name="pro_unlock">Odblokuj Pro · %s</string>
-    <string name="pro_one_time">Jednorazowy zakup. Bez subskrypcji.</string>
     <string name="pro_restore">Przywróć zakup</string>
     <string name="pro_unavailable">Zakupy wymagają Google Play na tym urządzeniu.</string>
     <string name="pro_failed">Nie udało się połączyć z Google Play. Spróbuj ponownie.</string>
     <string name="pro_pending">Zakup oczekuje</string>
     <string name="pro_pending_body">Google Play czeka na Twoją płatność. Pro odblokuje się, gdy tylko zostanie zrealizowana.</string>
     <string name="pro_restore_nothing">Nie znaleziono zakupu Pro na tym koncie Google.</string>
+    <string name="pro_unlock_lifetime">Odblokuj Pro na zawsze · %s</string>
+    <string name="pro_support_unlock">Wesprzyj i odbierz Pro na zawsze · %s</string>
+    <string name="pro_one_payment">Jedna płatność. Bez subskrypcji.</string>
+    <string name="pro_support_title">Tworzone otwarcie. Wspierane przez Ciebie.</string>
+    <string name="pro_author">Martin, autor Apk Analyzer</string>
+    <plurals name="pro_history_headline">
+        <item quantity="one">%1$d zmiana zapisana na Twoim telefonie od %2$s</item>
+        <item quantity="few">%1$d zmiany zapisane na Twoim telefonie od %2$s</item>
+        <item quantity="many">%1$d zmian zapisanych na Twoim telefonie od %2$s</item>
+        <item quantity="other">%1$d zmiany zapisanej na Twoim telefonie od %2$s</item>
+    </plurals>
+    <plurals name="pro_history_free">
+        <item quantity="one">%d aplikację możesz przeczytać za darmo.</item>
+        <item quantity="few">%d aplikacje możesz przeczytać za darmo.</item>
+        <item quantity="many">%d aplikacji możesz przeczytać za darmo.</item>
+        <item quantity="other">%d aplikacji możesz przeczytać za darmo.</item>
+    </plurals>
+    <plurals name="pro_history_locked">
+        <item quantity="one">Pro otwiera jeszcze %d aplikację.</item>
+        <item quantity="few">Pro otwiera jeszcze %d aplikacje.</item>
+        <item quantity="many">Pro otwiera jeszcze %d aplikacji.</item>
+        <item quantity="other">Pro otwiera jeszcze %d aplikacji.</item>
+    </plurals>
+    <string name="pro_history_fallback">Czytaj każdą zmianę zapisaną na Twoim telefonie</string>
+    <plurals name="pro_benefit_permissions">
+        <item quantity="one">%d uprawnienie dodane do Twoich aplikacji i która aplikacja je dostała</item>
+        <item quantity="few">%d uprawnienia dodane do Twoich aplikacji i które aplikacje je dostały</item>
+        <item quantity="many">%d uprawnień dodanych do Twoich aplikacji i które aplikacje je dostały</item>
+        <item quantity="other">%d uprawnienia dodanego do Twoich aplikacji i które aplikacje je dostały</item>
+    </plurals>
+    <plurals name="pro_benefit_components">
+        <item quantity="one">%d zmiana komponentów, np. nowa usługa lub odbiornik</item>
+        <item quantity="few">%d zmiany komponentów, np. nowe usługi i odbiorniki</item>
+        <item quantity="many">%d zmian komponentów, np. nowe usługi i odbiorniki</item>
+        <item quantity="other">%d zmiany komponentów, np. nowe usługi i odbiorniki</item>
+    </plurals>
+    <plurals name="pro_benefit_sizes">
+        <item quantity="one">%d zmiana rozmiaru, aktualizacja po aktualizacji</item>
+        <item quantity="few">%d zmiany rozmiaru, aktualizacja po aktualizacji</item>
+        <item quantity="many">%d zmian rozmiaru, aktualizacja po aktualizacji</item>
+        <item quantity="other">%d zmiany rozmiaru, aktualizacja po aktualizacji</item>
+    </plurals>
+    <string name="pro_benefit_plus_export">Dodatkowo: eksport wszystkich szczegółów Twoich aplikacji</string>
+    <plurals name="pro_card_permissions">
+        <item quantity="one">Dodano %d uprawnienie</item>
+        <item quantity="few">Dodano %d uprawnienia</item>
+        <item quantity="many">Dodano %d uprawnień</item>
+        <item quantity="other">Dodano %d uprawnienia</item>
+    </plurals>
+    <plurals name="pro_card_components">
+        <item quantity="one">Zmieniono %d komponent</item>
+        <item quantity="few">Zmieniono %d komponenty</item>
+        <item quantity="many">Zmieniono %d komponentów</item>
+        <item quantity="other">Zmieniono %d komponentu</item>
+    </plurals>
+    <string name="pro_card_size">Zmieniono rozmiar</string>
+    <string name="pro_export_headline">Dodaj do eksportu wszystkie szczegóły</string>
+    <string name="pro_export_details">Sekcja „Podstawowe” (%1$d) jest darmowa. Pro dodaje pozostałe %2$d.</string>
+    <plurals name="pro_export_audit">
+        <item quantity="one">Sprawdź uprawnienia %d aplikacji w jednym arkuszu</item>
+        <item quantity="few">Sprawdź uprawnienia wszystkich %d aplikacji w jednym arkuszu</item>
+        <item quantity="many">Sprawdź uprawnienia wszystkich %d aplikacji w jednym arkuszu</item>
+        <item quantity="other">Sprawdź uprawnienia wszystkich %d aplikacji w jednym arkuszu</item>
+    </plurals>
+    <string name="pro_export_certificates">Sprawdź każdy certyfikat podpisu: SHA-256, podmiot i schematy</string>
+    <string name="pro_export_components">Policz komponenty każdej aplikacji, od aktywności po filtry intencji</string>
+    <plurals name="pro_export_plus_history">
+        <item quantity="one">Dodatkowo: przeczytaj %d zmianę zapisaną na tym telefonie</item>
+        <item quantity="few">Dodatkowo: przeczytaj wszystkie %d zmiany zapisane na tym telefonie</item>
+        <item quantity="many">Dodatkowo: przeczytaj wszystkie %d zmian zapisanych na tym telefonie</item>
+        <item quantity="other">Dodatkowo: przeczytaj wszystkie %d zmiany zapisane na tym telefonie</item>
+    </plurals>
+    <string name="pro_export_plus_history_none">Dodatkowo: przeczytaj każdą zmianę zapisaną na tym telefonie</string>
+    <string name="pro_export_preview_app">Aplikacja</string>
+    <string name="pro_export_preview_permissions">Uprawnienia</string>
+    <string name="pro_export_preview_certificate">Certyfikat</string>
+    <string name="pro_export_basics_only">Eksportuj tylko podstawowe</string>
+    <string name="pro_still_free">Nadal za darmo.</string>
+    <string name="pro_still_free_body">Wszystko, co było darmowe, pozostaje darmowe. Dwie nowe funkcje należą do Pro:</string>
+    <string name="pro_feature_history">Historia aplikacji</string>
+    <plurals name="pro_feature_history_count">
+        <item quantity="one">Zapisano %d zmianę</item>
+        <item quantity="few">Zapisano %d zmiany</item>
+        <item quantity="many">Zapisano %d zmian</item>
+        <item quantity="other">Zapisano %d zmiany</item>
+    </plurals>
+    <string name="pro_feature_history_empty">Zapisuje każdą aktualizację</string>
+    <string name="pro_feature_export_title">Eksport listy aplikacji</string>
+    <string name="pro_feature_export_detail">Wszystkie szczegóły</string>
+    <string name="pro_continue_free">Kontynuuj za darmo</string>
 </resources>

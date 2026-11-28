@@ -14,4 +14,8 @@
     <string name="settings_fingerprint_format">Định dạng dấu vân tay</string>
     <string name="settings_fingerprint_format_colon_separated">Phân tách bằng dấu hai chấm</string>
     <string name="settings_fingerprint_format_continuous">Liền mạch</string>
+    <string name="settings_pro_title">Nhận Apk Analyzer Pro</string>
+    <string name="settings_pro_body">Một lần mua để ủng hộ phát triển và mở khóa các tính năng mới nhất.</string>
+    <string name="settings_pro_active">Pro đang hoạt động</string>
+    <string name="settings_pro_active_body">Cảm ơn bạn đã ủng hộ Apk Analyzer.</string>
 </resources>

@@ -104,7 +104,6 @@
     <string name="inventory_export_next">Další</string>
     <string name="inventory_export_columns_omitted">Do souboru CSV se nedostanou: %1$s. CSV neumí uložit úplné záznamy.</string>
     <string name="inventory_export_use_json">Použít JSON</string>
-    <string name="inventory_export_pro_columns">Základní údaje jsou zdarma. Odemkněte Pro pro export ostatních údajů.</string>
     <string name="inventory_export_unlock_pro">Odemknout Pro</string>
     <string name="inventory_export_dismiss_hint">Skrýt upozornění</string>
     <string name="inventory_export_use_basics">Exportovat jen Základní</string>
@@ -120,4 +119,12 @@
     <string name="inventory_export_intro_description">Exportujte informace o více aplikacích do jednoho souboru CSV nebo JSON.</string>
     <string name="inventory_export_columns_guidance">Vyberte, které údaje se mají u každé aplikace zahrnout.</string>
     <string name="inventory_export_format_guidance">Pro tabulky zvolte CSV, pro úplné údaje JSON, poté soubor uložte nebo sdílejte.</string>
+    <string name="inventory_export_pro_rule">%1$d základních údajů je zdarma. Zbývajících %2$d údajů je součástí Pro. Přesto je můžete vybrat a zobrazit v náhledu.</string>
+    <plurals name="inventory_export_pro_needed">
+        <item quantity="one">%d z těchto údajů vyžaduje Pro</item>
+        <item quantity="few">%d z těchto údajů vyžadují Pro</item>
+        <item quantity="many">%d z těchto údajů vyžaduje Pro</item>
+        <item quantity="other">%d z těchto údajů vyžaduje Pro</item>
+    </plurals>
+    <string name="inventory_export_pro_needed_body">%1$s. %2$d základních údajů exportujete zdarma.</string>
 </resources>

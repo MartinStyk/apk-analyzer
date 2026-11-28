@@ -1,6 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.pro.phone
 
 import androidx.compose.runtime.Immutable
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryProSummary
 import sk.styk.martin.apkanalyzer.core.entitlements.api.Offer
 import sk.styk.martin.apkanalyzer.feature.pro.api.PaywallReason
 
@@ -9,6 +10,7 @@ internal data class ProState(
     val reason: PaywallReason,
     val offer: ProOffer = ProOffer.Loading,
     val status: ProStatus = ProStatus.Idle,
+    val history: ProHistory = ProHistory.Loading,
 )
 
 @Immutable
@@ -34,6 +36,18 @@ internal sealed interface ProStatus {
 
     data object NothingToRestore : ProStatus
 }
+
+@Immutable
+internal sealed interface ProHistory {
+    data object Loading : ProHistory
+
+    data object Unavailable : ProHistory
+
+    data class Available(val summary: AppHistoryProSummary) : ProHistory
+}
+
+internal val ProHistory.summary: AppHistoryProSummary?
+    get() = (this as? ProHistory.Available)?.summary
 
 internal val ProStatus.blocksActions: Boolean
     get() = this == ProStatus.Purchasing || this == ProStatus.Restoring || this == ProStatus.Pending

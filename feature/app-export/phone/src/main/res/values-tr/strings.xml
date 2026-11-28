@@ -92,7 +92,6 @@
     <string name="inventory_export_next">İleri</string>
     <string name="inventory_export_columns_omitted">CSV dosyasında yer almayacak: %1$s. CSV tam kayıtları tutamaz.</string>
     <string name="inventory_export_use_json">JSON kullan</string>
-    <string name="inventory_export_pro_columns">Temel bilgiler ücretsizdir. Diğer ayrıntıları dışa aktarmak için Pro kilidini açın.</string>
     <string name="inventory_export_unlock_pro">Pro kilidini aç</string>
     <string name="inventory_export_dismiss_hint">Bildirimi kapat</string>
     <string name="inventory_export_use_basics">Bunun yerine Temel\'i dışa aktar</string>
@@ -108,4 +107,10 @@
     <string name="inventory_export_intro_description">Birden fazla uygulamanın bilgilerini tek bir CSV veya JSON dosyasına aktarın.</string>
     <string name="inventory_export_columns_guidance">Her uygulama için hangi ayrıntıların ekleneceğini seçin.</string>
     <string name="inventory_export_format_guidance">Elektronik tablolar için CSV, tüm ayrıntılar için JSON seçin, ardından kaydedin veya paylaşın.</string>
+    <string name="inventory_export_pro_rule">%1$d Temel bilgi ücretsizdir. Kalan %2$d ayrıntı Pro\'dur. Yine de bunları seçip önizlemede görebilirsiniz.</string>
+    <plurals name="inventory_export_pro_needed">
+        <item quantity="one">Bu ayrıntılardan %d tanesi Pro gerektiriyor</item>
+        <item quantity="other">Bu ayrıntılardan %d tanesi Pro gerektiriyor</item>
+    </plurals>
+    <string name="inventory_export_pro_needed_body">%1$s. %2$d Temel bilgi ücretsiz dışa aktarılır.</string>
 </resources>

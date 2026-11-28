@@ -14,4 +14,8 @@
     <string name="settings_fingerprint_format">Formato de huella digital</string>
     <string name="settings_fingerprint_format_colon_separated">Separado por dos puntos</string>
     <string name="settings_fingerprint_format_continuous">Continuo</string>
+    <string name="settings_pro_title">Obtener Apk Analyzer Pro</string>
+    <string name="settings_pro_body">Una compra única que apoya el desarrollo y desbloquea las funciones más nuevas.</string>
+    <string name="settings_pro_active">Pro está activo</string>
+    <string name="settings_pro_active_body">Gracias por apoyar Apk Analyzer.</string>
 </resources>

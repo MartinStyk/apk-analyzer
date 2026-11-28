@@ -9,8 +9,33 @@ data class ProNavKey(val reason: PaywallReason) : NavKey
 @Serializable
 sealed interface PaywallReason {
     @Serializable
-    data class Export(val appCount: Int) : PaywallReason
+    data class Export(
+        val appCount: Int,
+        val sampleAppNames: List<String>,
+        val freeDetailCount: Int,
+        val proDetailCount: Int,
+    ) : PaywallReason
 
     @Serializable
-    data class WhatChanged(val lockedAppCount: Int) : PaywallReason
+    data class WhatChanged(val placement: WhatChangedPlacement) : PaywallReason
+
+    @Serializable
+    data object Settings : PaywallReason
+
+    @Serializable
+    data object Launch : PaywallReason
+}
+
+@Serializable
+enum class WhatChangedPlacement {
+    LockedRow,
+    Card,
+    Bar,
+    LogRow,
+}
+
+@Serializable
+sealed interface ProSheetResult {
+    @Serializable
+    data object ExportBasicsOnly : ProSheetResult
 }

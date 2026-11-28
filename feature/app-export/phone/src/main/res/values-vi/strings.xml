@@ -86,7 +86,6 @@
     <string name="inventory_export_next">Tiếp theo</string>
     <string name="inventory_export_columns_omitted">Không có trong tệp CSV: %1$s. CSV không chứa được bản ghi đầy đủ.</string>
     <string name="inventory_export_use_json">Dùng JSON</string>
-    <string name="inventory_export_pro_columns">Thông tin cơ bản miễn phí. Mở khóa Pro để xuất các thông tin khác.</string>
     <string name="inventory_export_unlock_pro">Mở khóa Pro</string>
     <string name="inventory_export_dismiss_hint">Đóng thông báo</string>
     <string name="inventory_export_use_basics">Chỉ xuất Cơ bản</string>
@@ -102,4 +101,9 @@
     <string name="inventory_export_intro_description">Xuất thông tin của nhiều ứng dụng vào một tệp CSV hoặc JSON.</string>
     <string name="inventory_export_columns_guidance">Chọn thông tin cần đưa vào cho mỗi ứng dụng.</string>
     <string name="inventory_export_format_guidance">Chọn CSV cho bảng tính hoặc JSON cho đầy đủ thông tin, rồi lưu hoặc chia sẻ.</string>
+    <string name="inventory_export_pro_rule">%1$d mục Cơ bản là miễn phí. %2$d mục chi tiết còn lại thuộc Pro. Bạn vẫn có thể chọn và xem chúng trong bản xem trước.</string>
+    <plurals name="inventory_export_pro_needed">
+        <item quantity="other">%d chi tiết trong số này cần Pro</item>
+    </plurals>
+    <string name="inventory_export_pro_needed_body">%1$s. %2$d mục Cơ bản được xuất miễn phí.</string>
 </resources>

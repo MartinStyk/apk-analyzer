@@ -75,11 +75,15 @@ exception is `InactiveSearchBar`, which lives in `SearchBarInactive.kt`.
 * `format/HistoryDates.kt` formats app-history dates for display (short date this year, full date otherwise, month headers). It lives here, not in `core:app-history:api`, because it uses `android.text.format.DateFormat`.
 * `ListSectionHeader` is the small primary-colored list section title, with an optional explanation
   line, used above grouped list rows and as a sticky month header.
-* `ProBadge` is the one paid-tier marker: a compact gold `Tag` with a star icon and
+* `ProMark` is the Pro coin: a Marigold disc with a dark star cut in (`inverted` for use on a
+  Marigold fill). Use it wherever Pro needs an icon; never show Pro gold as color alone. `ProButton`
+  is the filled Marigold buy button with the inverted coin, and `Button`, `OutlinedButton` and the
+  selectable `Chip` take `showProMark` to flag an action or preset that needs Pro.
+* `ProBadge` is the one paid-tier marker: a compact gold label with the `ProMark` coin and
   the label "Pro", announced as "Part of Pro". Use it on Pro rows and actions; never on content
-  that is free. A star identifies the tier; reserve lock icons for unavailable actions.
+  that is free. The coin identifies the tier; reserve lock icons for unavailable actions.
   Pro labels use `AppTheme.colors.pro` and `proContainer`, not action or warning colors.
-  Its `onClick` overload drops the gold fill and keeps the star and label inside a full 48dp touch
+  Its `onClick` overload drops the gold fill and keeps the coin and label inside a full 48dp touch
   target, because it repeats down long lists of rows where a filled pill on every row drowns out
   the content. The badge grows with text scaling rather than fixing its height.
 * `navigation/BottomSheetSceneStrategy` shows a Navigation 3 entry as a `BottomSheet` over the

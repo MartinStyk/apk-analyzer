@@ -98,7 +98,6 @@
     <string name="inventory_export_next">Siguiente</string>
     <string name="inventory_export_columns_omitted">Se omiten del archivo CSV: %1$s. CSV no admite registros completos.</string>
     <string name="inventory_export_use_json">Usar JSON</string>
-    <string name="inventory_export_pro_columns">Los datos básicos son gratis. Desbloquea Pro para exportar otros detalles.</string>
     <string name="inventory_export_unlock_pro">Desbloquear Pro</string>
     <string name="inventory_export_dismiss_hint">Descartar aviso</string>
     <string name="inventory_export_use_basics">Exportar solo Básico</string>
@@ -114,4 +113,11 @@
     <string name="inventory_export_intro_description">Exporta información de varias apps en un solo archivo CSV o JSON.</string>
     <string name="inventory_export_columns_guidance">Elige qué detalles incluir de cada app.</string>
     <string name="inventory_export_format_guidance">Elige CSV para hojas de cálculo o JSON para todos los detalles y luego guarda o comparte.</string>
+    <string name="inventory_export_pro_rule">Los %1$d datos de Básico son gratis. Los otros %2$d datos son Pro. Aun así puedes elegirlos y verlos en la vista previa.</string>
+    <plurals name="inventory_export_pro_needed">
+        <item quantity="one">%d de estos datos requiere Pro</item>
+        <item quantity="many">%d de estos datos requieren Pro</item>
+        <item quantity="other">%d de estos datos requieren Pro</item>
+    </plurals>
+    <string name="inventory_export_pro_needed_body">%1$s. Los %2$d datos de Básico se exportan gratis.</string>
 </resources>

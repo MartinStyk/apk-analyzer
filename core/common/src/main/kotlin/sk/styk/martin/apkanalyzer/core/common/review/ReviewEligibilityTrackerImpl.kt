@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
+import sk.styk.martin.apkanalyzer.core.common.engagement.SessionAccomplishments
 import sk.styk.martin.apkanalyzer.core.common.settings.Key
 import sk.styk.martin.apkanalyzer.core.common.settings.PersistenceRepository
 import java.time.Duration
@@ -23,6 +24,7 @@ internal class ReviewEligibilityTrackerImpl @Inject constructor(
     private val persistenceRepository: PersistenceRepository,
     private val applicationScope: CoroutineScope,
     private val dispatcherProvider: DispatcherProvider,
+    private val sessionAccomplishments: SessionAccomplishments,
 ) : ReviewEligibilityTracker {
 
     override val reviewPromptRequests: Flow<Unit> = combine(
@@ -43,6 +45,7 @@ internal class ReviewEligibilityTrackerImpl @Inject constructor(
         val dwelled = Duration.between(startTime, endTime) >= MIN_QUALIFYING_DWELL
         val qualified = engaged || dwelled
         if (!qualified) return
+        sessionAccomplishments.record()
         applicationScope.launch(dispatcherProvider.io()) {
             val current = persistenceRepository[Key.AppDetailQualifiedSessionCount]
             persistenceRepository.save(Key.AppDetailQualifiedSessionCount, current + 1)
@@ -52,6 +55,7 @@ internal class ReviewEligibilityTrackerImpl @Inject constructor(
     override fun recordPromptShown() {
         applicationScope.launch(dispatcherProvider.io()) {
             persistenceRepository.save(Key.ReviewFlowRequested, true)
+            persistenceRepository.save(Key.ReviewFlowRequestedAt, Instant.now().toEpochMilli())
         }
     }
 }

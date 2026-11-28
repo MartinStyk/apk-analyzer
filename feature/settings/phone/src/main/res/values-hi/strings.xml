@@ -14,4 +14,8 @@
     <string name="settings_fingerprint_format">फ़िंगरप्रिंट फ़ॉर्मैट</string>
     <string name="settings_fingerprint_format_colon_separated">कोलन से अलग</string>
     <string name="settings_fingerprint_format_continuous">बिना विभाजक के</string>
+    <string name="settings_pro_title">Apk Analyzer Pro पाएं</string>
+    <string name="settings_pro_body">एक बार की खरीदारी जो डेवलपमेंट को सपोर्ट करती है और नई सुविधाएं अनलॉक करती है।</string>
+    <string name="settings_pro_active">Pro चालू है</string>
+    <string name="settings_pro_active_body">Apk Analyzer को सपोर्ट करने के लिए धन्यवाद।</string>
 </resources>

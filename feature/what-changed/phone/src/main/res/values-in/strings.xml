@@ -54,4 +54,10 @@
     <string name="what_changed_uncomparable_only">Beberapa detail tidak dapat dibandingkan</string>
     <string name="what_changed_locked_row">Perubahan aplikasi terkunci, bagian dari Pro</string>
     <string name="what_changed_locked_click_label">Buka dengan Pro</string>
+    <plurals name="what_changed_pro_title">
+        <item quantity="other">Lihat yang berubah di %d aplikasi lagi</item>
+    </plurals>
+    <string name="what_changed_pro_card_body">Setiap izin, komponen, dan perubahan ukuran yang ditambahkan. Perubahan sertifikat tetap gratis.</string>
+    <string name="what_changed_pro_bar_body">Izin, komponen, ukuran</string>
+    <string name="what_changed_pro_unlock">Buka</string>
 </resources>

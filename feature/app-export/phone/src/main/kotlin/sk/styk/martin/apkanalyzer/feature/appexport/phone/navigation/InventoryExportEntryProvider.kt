@@ -28,6 +28,7 @@ fun EntryProviderScope<NavKey>.inventoryExportEntries(navigator: Navigator) {
             onOpenPro = { reason ->
                 navigator.navigate(ProNavKey(reason))
             },
+            sheetResults = navigator.results,
         )
     }
 
@@ -43,6 +44,7 @@ fun EntryProviderScope<NavKey>.inventoryExportEntries(navigator: Navigator) {
             onOpenPro = { reason ->
                 navigator.navigate(ProNavKey(reason))
             },
+            sheetResults = navigator.results,
         )
     }
 }

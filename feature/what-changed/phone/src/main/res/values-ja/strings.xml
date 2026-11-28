@@ -54,4 +54,10 @@
     <string name="what_changed_uncomparable_only">一部の情報を比較できませんでした</string>
     <string name="what_changed_locked_row">ロックされたアプリの変更（Pro の機能）</string>
     <string name="what_changed_locked_click_label">Pro でロック解除</string>
+    <plurals name="what_changed_pro_title">
+        <item quantity="other">さらに %d 個のアプリの変更を確認</item>
+    </plurals>
+    <string name="what_changed_pro_card_body">追加されたすべての権限、コンポーネント、サイズの変更。証明書の変更は引き続き無料です。</string>
+    <string name="what_changed_pro_bar_body">権限、コンポーネント、サイズ</string>
+    <string name="what_changed_pro_unlock">アンロック</string>
 </resources>

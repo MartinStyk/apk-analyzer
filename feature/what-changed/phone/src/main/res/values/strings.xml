@@ -59,4 +59,11 @@
     <string name="what_changed_uncomparable_only">Some details couldn\'t be compared</string>
     <string name="what_changed_locked_row">Locked app change, part of Pro</string>
     <string name="what_changed_locked_click_label">Unlock with Pro</string>
+    <plurals name="what_changed_pro_title">
+        <item quantity="one">See what changed in %d more app</item>
+        <item quantity="other">See what changed in %d more apps</item>
+    </plurals>
+    <string name="what_changed_pro_card_body">Every added permission, component and size change. Certificate changes stay free.</string>
+    <string name="what_changed_pro_bar_body">Permissions, components, sizes</string>
+    <string name="what_changed_pro_unlock">Unlock</string>
 </resources>

@@ -4,4 +4,5 @@ sealed interface SettingsEvent {
     data object NavigateBack : SettingsEvent
     data object OpenAppLanguageSettings : SettingsEvent
     data object OpenFeatureFlags : SettingsEvent
+    data object OpenPro : SettingsEvent
 }

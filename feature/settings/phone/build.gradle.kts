@@ -13,4 +13,6 @@ dependencies {
     api(projects.feature.settings.api)
     implementation(projects.core.common)
     implementation(projects.core.featureFlags.api)
+    implementation(projects.core.entitlements.api)
+    implementation(projects.feature.pro.api)
 }

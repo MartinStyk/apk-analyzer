@@ -66,4 +66,13 @@
     <string name="what_changed_uncomparable_only">Nie udało się porównać niektórych danych</string>
     <string name="what_changed_locked_row">Zablokowana zmiana aplikacji, część Pro</string>
     <string name="what_changed_locked_click_label">Odblokuj z Pro</string>
+    <plurals name="what_changed_pro_title">
+        <item quantity="one">Zobacz, co zmieniło się w %d kolejnej aplikacji</item>
+        <item quantity="few">Zobacz, co zmieniło się w %d kolejnych aplikacjach</item>
+        <item quantity="many">Zobacz, co zmieniło się w %d kolejnych aplikacjach</item>
+        <item quantity="other">Zobacz, co zmieniło się w %d kolejnych aplikacjach</item>
+    </plurals>
+    <string name="what_changed_pro_card_body">Każde dodane uprawnienie, komponent i zmiana rozmiaru. Zmiany certyfikatów pozostają darmowe.</string>
+    <string name="what_changed_pro_bar_body">Uprawnienia, komponenty, rozmiary</string>
+    <string name="what_changed_pro_unlock">Odblokuj</string>
 </resources>

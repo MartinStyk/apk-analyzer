@@ -11,4 +11,11 @@ data class SettingsState(
     val fingerprintFormat: FingerprintFormat = FingerprintFormat.ColonSeparated,
     val recentlyViewedAppsEnabled: Boolean = true,
     val appLanguageSetting: AppLanguageSetting = AppLanguageSetting.Unavailable,
+    val pro: SettingsPro = SettingsPro.Hidden,
 )
+
+enum class SettingsPro {
+    Hidden,
+    NotOwned,
+    Owned,
+}

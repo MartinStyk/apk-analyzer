@@ -5,6 +5,7 @@ import sk.styk.martin.apkanalyzer.core.common.analytics.AnalyticsParameterName
 import sk.styk.martin.apkanalyzer.core.common.analytics.AnalyticsTracker
 import sk.styk.martin.apkanalyzer.core.entitlements.api.PurchaseResult
 import sk.styk.martin.apkanalyzer.feature.pro.api.PaywallReason
+import sk.styk.martin.apkanalyzer.feature.pro.api.WhatChangedPlacement
 import javax.inject.Inject
 
 internal class ProAnalytics @Inject constructor(private val analyticsTracker: AnalyticsTracker) {
@@ -41,7 +42,14 @@ private val RestoreOutcome.analyticsValue: String
 private val PaywallReason.analyticsValue: String
     get() = when (this) {
         is PaywallReason.Export -> "export"
-        is PaywallReason.WhatChanged -> "what_changed"
+        is PaywallReason.WhatChanged -> when (placement) {
+            WhatChangedPlacement.LockedRow -> "what_changed_row"
+            WhatChangedPlacement.Card -> "what_changed_card"
+            WhatChangedPlacement.Bar -> "what_changed_bar"
+            WhatChangedPlacement.LogRow -> "what_changed_log"
+        }
+        PaywallReason.Settings -> "settings"
+        PaywallReason.Launch -> "launch_prompt"
     }
 
 private val PurchaseResult.analyticsValue: String

@@ -14,4 +14,8 @@
     <string name="settings_fingerprint_format">フィンガープリント形式</string>
     <string name="settings_fingerprint_format_colon_separated">コロン区切り</string>
     <string name="settings_fingerprint_format_continuous">区切りなし</string>
+    <string name="settings_pro_title">Apk Analyzer Pro を入手</string>
+    <string name="settings_pro_body">開発を支援し、最新機能をアンロックする 1 回限りの購入です。</string>
+    <string name="settings_pro_active">Pro は有効です</string>
+    <string name="settings_pro_active_body">Apk Analyzer を応援していただきありがとうございます。</string>
 </resources>

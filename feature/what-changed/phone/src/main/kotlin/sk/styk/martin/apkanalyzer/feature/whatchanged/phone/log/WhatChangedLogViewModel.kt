@@ -65,9 +65,7 @@ internal class WhatChangedLogViewModel @Inject constructor(
                 },
             )
 
-            WhatChangedLogAction.OpenLocked -> (state.value as? WhatChangedLogState.Loaded)?.let {
-                sendEvent(WhatChangedLogEvent.NavigateToPaywall(it.lockedAppCount))
-            }
+            WhatChangedLogAction.OpenLocked -> sendEvent(WhatChangedLogEvent.NavigateToPaywall)
 
             is WhatChangedLogAction.CopyItem -> {
                 if (clipboardManager.copy(action.label, action.value) == CopyResult.FeedbackNotShown) {
@@ -119,10 +117,11 @@ private fun List<LogEntry>.toState(selectedFilters: Set<LogFilter>): WhatChanged
     return WhatChangedLogState.Loaded(
         months = filter { it.item.matches(activeFilters) }
             .groupBy { YearMonth.from(it.item.date.atZone(zone)) }
-            .map { (month, entries) -> AppChangeMonth(month, entries.map { it.item.toLockableRow(it.item.key, it.isReadable) }) },
+            .map { (month, entries) ->
+                AppChangeMonth(month, entries.map { it.item.toLockableRow(it.item.key, it.isReadable, it.item.packageName, it.item.appName) })
+            },
         filters = available,
         selectedFilters = activeFilters,
-        lockedAppCount = filterNot { it.isReadable }.distinctBy { it.item.packageName }.size,
     )
 }
 

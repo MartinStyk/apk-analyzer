@@ -54,4 +54,10 @@
     <string name="what_changed_uncomparable_only">일부 정보를 비교할 수 없음</string>
     <string name="what_changed_locked_row">잠긴 앱 변경사항, Pro 기능</string>
     <string name="what_changed_locked_click_label">Pro로 잠금 해제</string>
+    <plurals name="what_changed_pro_title">
+        <item quantity="other">앱 %d개의 변경 사항 더 보기</item>
+    </plurals>
+    <string name="what_changed_pro_card_body">추가된 모든 권한, 구성요소, 크기 변경. 인증서 변경은 계속 무료입니다.</string>
+    <string name="what_changed_pro_bar_body">권한, 구성요소, 크기</string>
+    <string name="what_changed_pro_unlock">잠금 해제</string>
 </resources>

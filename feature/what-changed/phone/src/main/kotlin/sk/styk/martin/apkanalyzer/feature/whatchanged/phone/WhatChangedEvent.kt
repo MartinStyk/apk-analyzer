@@ -1,6 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.whatchanged.phone
 
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
+import sk.styk.martin.apkanalyzer.feature.pro.api.WhatChangedPlacement
 
 internal sealed interface WhatChangedEvent {
     data object NavigateToFullHistory : WhatChangedEvent
@@ -15,7 +16,7 @@ internal sealed interface WhatChangedEvent {
 
     data class NavigateToAppHistory(val packageName: String, val appName: String) : WhatChangedEvent
 
-    data class NavigateToPaywall(val lockedAppCount: Int) : WhatChangedEvent
+    data class NavigateToPaywall(val placement: WhatChangedPlacement) : WhatChangedEvent
 
     data object ShowCopiedFeedback : WhatChangedEvent
 }

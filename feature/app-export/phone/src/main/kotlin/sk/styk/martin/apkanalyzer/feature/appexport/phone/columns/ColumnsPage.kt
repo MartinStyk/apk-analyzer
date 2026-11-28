@@ -35,6 +35,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Chip
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.IconButton
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.InfoCard
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ProBadge
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ProMark
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.SwipeDismiss
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Tag
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
@@ -83,8 +84,12 @@ internal fun ColumnsPage(
             Column {
                 PresetRow(
                     selectedPreset = state.preset,
+                    showProMarks = state.proOwnership == ProOwnership.NotOwned,
                     onSelect = { onAction(InventoryExportAction.PresetSelected(it)) },
                 )
+                if (state.proOwnership == ProOwnership.NotOwned) {
+                    ProRuleLine(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp))
+                }
                 state.preset?.let { preset ->
                     Text(
                         text = stringResource(preset.descriptionRes()),
@@ -333,6 +338,7 @@ private fun ColumnsPageNothingSelectedPreview() {
 @Composable
 private fun PresetRow(
     selectedPreset: InventoryPreset?,
+    showProMarks: Boolean,
     onSelect: (InventoryPreset) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -348,7 +354,27 @@ private fun PresetRow(
                 label = stringResource(preset.labelRes()),
                 selected = preset == selectedPreset,
                 onClick = { onSelect(preset) },
+                showProMark = showProMarks && preset != InventoryPreset.Basics,
             )
         }
+    }
+}
+
+@Composable
+private fun ProRuleLine(modifier: Modifier = Modifier) {
+    val freeCount = InventoryPreset.Basics.columns.size
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .background(AppTheme.colors.proContainer, Shapes.CardShape)
+            .padding(horizontal = 12.dp, vertical = 10.dp),
+    ) {
+        ProMark(size = 18.dp, modifier = Modifier.padding(top = 1.dp))
+        Text(
+            text = stringResource(R.string.inventory_export_pro_rule, freeCount, InventoryColumn.entries.size - freeCount),
+            style = AppTheme.typography.bodySmall,
+            color = AppTheme.colors.onSurface,
+        )
     }
 }

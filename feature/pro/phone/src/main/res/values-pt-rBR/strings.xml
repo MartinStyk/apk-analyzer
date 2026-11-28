@@ -1,24 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <plurals name="pro_headline_export">
-        <item quantity="one">Exporte todos os detalhes de %d app</item>
-        <item quantity="many">Exporte todos os detalhes de %d apps</item>
-        <item quantity="other">Exporte todos os detalhes de %d apps</item>
-    </plurals>
-    <plurals name="pro_headline_what_changed">
-        <item quantity="one">Veja o que mudou em mais %d app</item>
-        <item quantity="many">Veja o que mudou em mais %d apps</item>
-        <item quantity="other">Veja o que mudou em mais %d apps</item>
-    </plurals>
-    <string name="pro_feature_export">Exporte permissões, certificados, componentes e muito mais de vários apps de uma só vez</string>
-    <string name="pro_feature_what_changed">Veja todas as alterações de apps do seu dispositivo em uma única lista</string>
-    <string name="pro_supporter">Apoie um app independente e de código aberto. Tudo o que é gratuito hoje continua gratuito.</string>
-    <string name="pro_unlock">Desbloquear Pro · %s</string>
-    <string name="pro_one_time">Compra única. Sem assinatura.</string>
     <string name="pro_restore">Restaurar compra</string>
     <string name="pro_unavailable">As compras exigem o Google Play neste dispositivo.</string>
     <string name="pro_failed">Não foi possível acessar o Google Play. Tente novamente.</string>
     <string name="pro_pending">Compra pendente</string>
     <string name="pro_pending_body">O Google Play está aguardando seu pagamento. O Pro é desbloqueado assim que ele for aprovado.</string>
     <string name="pro_restore_nothing">Nenhuma compra do Pro encontrada para esta Conta do Google.</string>
+    <string name="pro_unlock_lifetime">Desbloquear Pro vitalício · %s</string>
+    <string name="pro_support_unlock">Apoiar e obter Pro vitalício · %s</string>
+    <string name="pro_one_payment">Um único pagamento. Sem assinatura.</string>
+    <string name="pro_support_title">Feito em código aberto. Apoiado por você.</string>
+    <string name="pro_author">Martin, autor do Apk Analyzer</string>
+    <plurals name="pro_history_headline">
+        <item quantity="one">%1$d mudança registrada no seu celular desde %2$s</item>
+        <item quantity="many">%1$d mudanças registradas no seu celular desde %2$s</item>
+        <item quantity="other">%1$d mudanças registradas no seu celular desde %2$s</item>
+    </plurals>
+    <plurals name="pro_history_free">
+        <item quantity="one">%d app pode ser lido de graça.</item>
+        <item quantity="many">%d apps podem ser lidos de graça.</item>
+        <item quantity="other">%d apps podem ser lidos de graça.</item>
+    </plurals>
+    <plurals name="pro_history_locked">
+        <item quantity="one">O Pro libera mais %d app.</item>
+        <item quantity="many">O Pro libera mais %d apps.</item>
+        <item quantity="other">O Pro libera mais %d apps.</item>
+    </plurals>
+    <string name="pro_history_fallback">Leia cada mudança registrada no seu celular</string>
+    <plurals name="pro_benefit_permissions">
+        <item quantity="one">%d permissão adicionada aos seus apps, e qual app a recebeu</item>
+        <item quantity="many">%d permissões adicionadas aos seus apps, e quais apps as receberam</item>
+        <item quantity="other">%d permissões adicionadas aos seus apps, e quais apps as receberam</item>
+    </plurals>
+    <plurals name="pro_benefit_components">
+        <item quantity="one">%d mudança de componente, como um novo serviço ou receptor</item>
+        <item quantity="many">%d mudanças de componentes, como novos serviços e receptores</item>
+        <item quantity="other">%d mudanças de componentes, como novos serviços e receptores</item>
+    </plurals>
+    <plurals name="pro_benefit_sizes">
+        <item quantity="one">%d mudança de tamanho, atualização por atualização</item>
+        <item quantity="many">%d mudanças de tamanho, atualização por atualização</item>
+        <item quantity="other">%d mudanças de tamanho, atualização por atualização</item>
+    </plurals>
+    <string name="pro_benefit_plus_export">E mais: exporte todos os detalhes dos seus apps</string>
+    <plurals name="pro_card_permissions">
+        <item quantity="one">%d permissão adicionada</item>
+        <item quantity="many">%d permissões adicionadas</item>
+        <item quantity="other">%d permissões adicionadas</item>
+    </plurals>
+    <plurals name="pro_card_components">
+        <item quantity="one">%d componente alterado</item>
+        <item quantity="many">%d componentes alterados</item>
+        <item quantity="other">%d componentes alterados</item>
+    </plurals>
+    <string name="pro_card_size">Tamanho alterado</string>
+    <string name="pro_export_headline">Adicione todos os detalhes à sua exportação</string>
+    <string name="pro_export_details">Os %1$d dados do Básico são gratuitos. O Pro adiciona os outros %2$d.</string>
+    <plurals name="pro_export_audit">
+        <item quantity="one">Audite as permissões de %d app em uma única planilha</item>
+        <item quantity="many">Audite as permissões de todos os %d apps em uma única planilha</item>
+        <item quantity="other">Audite as permissões de todos os %d apps em uma única planilha</item>
+    </plurals>
+    <string name="pro_export_certificates">Confira cada certificado de assinatura, com SHA-256, titular e esquemas</string>
+    <string name="pro_export_components">Conte os componentes de cada app, de atividades a filtros de intent</string>
+    <plurals name="pro_export_plus_history">
+        <item quantity="one">E mais: leia a %d mudança registrada neste celular</item>
+        <item quantity="many">E mais: leia todas as %d mudanças registradas neste celular</item>
+        <item quantity="other">E mais: leia todas as %d mudanças registradas neste celular</item>
+    </plurals>
+    <string name="pro_export_plus_history_none">E mais: leia cada mudança registrada neste celular</string>
+    <string name="pro_export_preview_app">App</string>
+    <string name="pro_export_preview_permissions">Permissões</string>
+    <string name="pro_export_preview_certificate">Certificado</string>
+    <string name="pro_export_basics_only">Exportar só o básico</string>
+    <string name="pro_still_free">Continua grátis.</string>
+    <string name="pro_still_free_body">Tudo o que era grátis continua grátis. Dois novos recursos fazem parte do Pro:</string>
+    <string name="pro_feature_history">Histórico de apps</string>
+    <plurals name="pro_feature_history_count">
+        <item quantity="one">%d mudança registrada</item>
+        <item quantity="many">%d mudanças registradas</item>
+        <item quantity="other">%d mudanças registradas</item>
+    </plurals>
+    <string name="pro_feature_history_empty">Registra cada atualização</string>
+    <string name="pro_feature_export_title">Exportação de inventário</string>
+    <string name="pro_feature_export_detail">Todos os detalhes</string>
+    <string name="pro_continue_free">Continuar grátis</string>
 </resources>
