@@ -82,13 +82,16 @@ internal fun ComponentRow(
                 )
             }
             RowChangeLines(lines = changeLines)
-            val hasStatusTag = item.isUnprotected || item.isLauncher || item.isExported
+            val hasStatusTag = item.isDisabled || item.isUnprotected || item.isLauncher || item.isExported
             if (hasStatusTag || item.flags.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(6.dp))
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
+                    if (item.isDisabled) {
+                        Tag(text = stringResource(DomainR.string.components_tag_disabled))
+                    }
                     if (item.isUnprotected) {
                         Icon(
                             imageVector = ApkAnalyzerIcons.Warning,
@@ -135,9 +138,31 @@ private fun sampleComponent() = ComponentItem(
     isGuarded = false,
     isUnprotected = true,
     isLaunchable = false,
+    isDisabled = false,
     flags = emptyList(),
     intentFilters = null,
     details = ComponentDetails.ServiceDetails(permission = null),
+)
+
+private fun sampleDisabledComponent() = ComponentItem(
+    name = "com.google.androidbrowserhelper.trusted.LauncherActivityAlias",
+    simpleName = "LauncherActivityAlias",
+    packagePath = "com.google.androidbrowserhelper.trusted",
+    type = ComponentType.Activity,
+    isExported = true,
+    isGuarded = false,
+    isUnprotected = false,
+    isLaunchable = false,
+    isDisabled = true,
+    flags = emptyList(),
+    intentFilters = null,
+    details = ComponentDetails.ActivityDetails(
+        label = "Docs",
+        targetActivity = "com.google.android.apps.docs.app.NewMainProxyActivity",
+        parentName = null,
+        permission = null,
+        isLauncher = true,
+    ),
 )
 
 @Preview
@@ -145,6 +170,14 @@ private fun sampleComponent() = ComponentItem(
 private fun ComponentRowPreview() {
     ApkAnalyzerTheme {
         ComponentRow(item = sampleComponent(), onClick = {}, onLongClick = {})
+    }
+}
+
+@Preview
+@Composable
+private fun ComponentRowDisabledPreview() {
+    ApkAnalyzerTheme {
+        ComponentRow(item = sampleDisabledComponent(), onClick = {}, onLongClick = {}, onLaunch = {})
     }
 }
 

@@ -8,7 +8,9 @@ fun exportedExplanationRes(
     isExported: Boolean,
     isLauncher: Boolean,
     isUnprotected: Boolean,
-): Int = when {
+    isDisabled: Boolean,
+): Int? = when {
+    isDisabled -> null
     isLauncher -> R.string.components_exported_launcher_explanation
     isUnprotected -> R.string.components_exported_unprotected_explanation
     isExported -> R.string.components_exported_guarded_explanation

@@ -87,6 +87,8 @@
     <string name="components_tag_launcher">Лаунчер</string>
     <string name="components_detail_launcher_explanation">Це те, що відкривається, коли ви натискаєте на іконку додатка.</string>
     <string name="components_tag_unprotected">Експортовано без захисту дозволів</string>
+    <string name="components_tag_disabled">Вимкнений</string>
+    <string name="components_detail_disabled_explanation">Цей компонент вимкнено на цьому пристрої, тому зараз ніщо не може отримати до нього доступ, навіть сам додаток. Додатки можуть будь-коли вмикати й вимикати власні компоненти.</string>
     <string name="components_flag_enabled">Так</string>
     <string name="components_detail_section_reachability">Доступність</string>
     <string name="components_detail_section_details">Деталі</string>

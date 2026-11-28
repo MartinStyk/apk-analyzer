@@ -75,6 +75,8 @@
     <string name="components_tag_launcher">Màn hình khởi động</string>
     <string name="components_detail_launcher_explanation">Đây là những gì mở ra khi bạn chạm vào biểu tượng của ứng dụng.</string>
     <string name="components_tag_unprotected">Đã xuất mà không có bảo vệ quyền</string>
+    <string name="components_tag_disabled">Đã tắt</string>
+    <string name="components_detail_disabled_explanation">Thành phần này đã bị tắt trên thiết bị này nên hiện không gì có thể truy cập, kể cả chính ứng dụng. Ứng dụng có thể bật và tắt các thành phần của mình bất cứ lúc nào.</string>
     <string name="components_flag_enabled">Có</string>
     <string name="components_detail_section_reachability">Khả năng tiếp cận</string>
     <string name="components_detail_section_details">Chi tiết</string>

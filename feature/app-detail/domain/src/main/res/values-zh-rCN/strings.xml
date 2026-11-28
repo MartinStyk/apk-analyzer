@@ -75,6 +75,8 @@
     <string name="components_tag_launcher">启动器</string>
     <string name="components_detail_launcher_explanation">这是您点击应用图标时打开的内容。</string>
     <string name="components_tag_unprotected">未设置权限保护的导出</string>
+    <string name="components_tag_disabled">已停用</string>
+    <string name="components_detail_disabled_explanation">此组件已在此设备上停用，目前任何应用都无法访问它，包括该应用本身。应用可以随时启用或停用自己的组件。</string>
     <string name="components_flag_enabled">是</string>
     <string name="components_detail_section_reachability">可达性</string>
     <string name="components_detail_section_details">详细信息</string>

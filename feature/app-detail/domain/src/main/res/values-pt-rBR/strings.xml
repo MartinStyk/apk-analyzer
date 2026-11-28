@@ -83,6 +83,8 @@
     <string name="components_tag_launcher">Iniciador</string>
     <string name="components_detail_launcher_explanation">Isto é o que abre quando você toca no ícone do aplicativo.</string>
     <string name="components_tag_unprotected">Exportado sem proteção de permissão</string>
+    <string name="components_tag_disabled">Desativado</string>
+    <string name="components_detail_disabled_explanation">Desativado neste dispositivo, então nada pode acessá-lo agora, nem mesmo o próprio aplicativo. Os aplicativos podem ativar e desativar os próprios componentes a qualquer momento.</string>
     <string name="components_flag_enabled">Sim</string>
     <string name="components_detail_section_reachability">Acessibilidade</string>
     <string name="components_detail_section_details">Detalhes</string>

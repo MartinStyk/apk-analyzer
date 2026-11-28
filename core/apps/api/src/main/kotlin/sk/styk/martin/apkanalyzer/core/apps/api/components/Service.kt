@@ -10,5 +10,4 @@ data class Service(
     val isExternalService: Boolean = false,
 )
 
-val Service.isExternallyReachableWithoutPermission: Boolean
-    get() = isExported && permission.isNullOrBlank()
+fun Service.isExternallyReachableWithoutPermission(isDisabled: Boolean): Boolean = !isDisabled && isExported && permission.isNullOrBlank()

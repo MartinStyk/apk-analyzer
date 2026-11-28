@@ -14,6 +14,7 @@ internal data class TvComponentItem(
     val isUnprotected: Boolean,
     val isLauncher: Boolean,
     val isLaunchable: Boolean = false,
+    val isDisabled: Boolean = false,
     val permission: String? = null,
     val readPermission: String? = null,
     val writePermission: String? = null,

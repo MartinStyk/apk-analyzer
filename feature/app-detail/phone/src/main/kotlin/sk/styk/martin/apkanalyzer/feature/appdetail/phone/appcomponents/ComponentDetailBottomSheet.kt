@@ -81,10 +81,18 @@ internal fun ComponentDetailBottomSheet(
             ChangeLinesSection(lines = changeLines)
 
             SheetSection(title = stringResource(DomainR.string.components_detail_section_reachability)) {
+                if (item.isDisabled) {
+                    DetailField(
+                        label = stringResource(DomainR.string.components_tag_disabled),
+                        value = stringResource(DomainR.string.components_flag_enabled),
+                        explanation = stringResource(DomainR.string.components_detail_disabled_explanation),
+                        onCopy = onCopy,
+                    )
+                }
                 DetailField(
                     label = stringResource(AppsR.string.components_detail_exported),
                     value = stringResource(if (item.isExported) AppsR.string.components_exported_yes else AppsR.string.components_exported_no),
-                    explanation = stringResource(exportedExplanationRes(item.isExported, item.isLauncher, item.isUnprotected)),
+                    explanation = exportedExplanationRes(item.isExported, item.isLauncher, item.isUnprotected, item.isDisabled)?.let { stringResource(it) },
                     onCopy = onCopy,
                 )
                 when (val details = item.details) {
@@ -257,6 +265,7 @@ private fun ComponentDetailBottomSheetActivityPreview() {
                 isGuarded = false,
                 isUnprotected = false,
                 isLaunchable = true,
+                isDisabled = false,
                 flags = listOf(),
                 intentFilters = listOf(
                     ComponentIntentFilterItem(
@@ -294,6 +303,38 @@ private fun ComponentDetailBottomSheetActivityPreview() {
 
 @Preview
 @Composable
+private fun ComponentDetailBottomSheetDisabledPreview() {
+    ApkAnalyzerTheme {
+        ComponentDetailBottomSheet(
+            item = ComponentItem(
+                name = "com.google.android.apps.docs.drive.clipboard.SendTextToClipboardActivity",
+                simpleName = "SendTextToClipboardActivity",
+                packagePath = "com.google.android.apps.docs.drive.clipboard",
+                type = ComponentType.Activity,
+                isExported = true,
+                isGuarded = false,
+                isUnprotected = false,
+                isLaunchable = false,
+                isDisabled = true,
+                flags = listOf(),
+                intentFilters = listOf(),
+                details = ComponentDetails.ActivityDetails(
+                    label = "Copy to clipboard",
+                    targetActivity = null,
+                    parentName = null,
+                    permission = null,
+                    isLauncher = false,
+                ),
+            ),
+            onCopy = { _, _ -> },
+            onOpenIntentFilters = {},
+            onDismiss = {},
+        )
+    }
+}
+
+@Preview
+@Composable
 private fun ComponentDetailBottomSheetServicePreview() {
     ApkAnalyzerTheme {
         ComponentDetailBottomSheet(
@@ -306,6 +347,7 @@ private fun ComponentDetailBottomSheetServicePreview() {
                 isGuarded = true,
                 isUnprotected = false,
                 isLaunchable = false,
+                isDisabled = false,
                 flags = listOf(ComponentFlag.IsolatedProcess, ComponentFlag.StopWithTask),
                 details = ComponentDetails.ServiceDetails(permission = "android.permission.BIND_JOB_SERVICE"),
             ),
@@ -330,6 +372,7 @@ private fun ComponentDetailBottomSheetProviderPreview() {
                 isGuarded = false,
                 isUnprotected = false,
                 isLaunchable = false,
+                isDisabled = false,
                 flags = listOf(),
                 details = ComponentDetails.ProviderDetails(
                     authority = "com.spotify.music.androidx-startup",
@@ -359,6 +402,7 @@ private fun ComponentDetailBottomSheetProviderPathPermissionPreview() {
                 isGuarded = false,
                 isUnprotected = true,
                 isLaunchable = false,
+                isDisabled = false,
                 flags = listOf(),
                 details = ComponentDetails.ProviderDetails(
                     authority = "com.spotify.music.sharing",

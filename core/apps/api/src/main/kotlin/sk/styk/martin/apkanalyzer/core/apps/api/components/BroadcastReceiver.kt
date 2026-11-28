@@ -6,8 +6,6 @@ data class BroadcastReceiver(
     val isExported: Boolean = false,
 )
 
-val BroadcastReceiver.isExternallyReachableWithoutPermission: Boolean
-    get() = isExported && permission.isNullOrBlank()
+fun BroadcastReceiver.isExternallyReachableWithoutPermission(isDisabled: Boolean): Boolean = !isDisabled && isExported && permission.isNullOrBlank()
 
-val BroadcastReceiver.isLaunchable: Boolean
-    get() = isExported && permission.isNullOrBlank()
+fun BroadcastReceiver.isLaunchable(isDisabled: Boolean): Boolean = !isDisabled && isExported && permission.isNullOrBlank()

@@ -27,6 +27,6 @@ enum class ProviderPathMatchType {
 val ContentProvider.hasUnguardedPathPermission: Boolean
     get() = pathPermissions.any { it.readPermission.isNullOrBlank() || it.writePermission.isNullOrBlank() }
 
-val ContentProvider.isExternallyReachableWithoutPermission: Boolean
-    get() = isExported &&
-        (readPermission.isNullOrBlank() || writePermission.isNullOrBlank() || hasUnguardedPathPermission)
+fun ContentProvider.isExternallyReachableWithoutPermission(isDisabled: Boolean): Boolean = !isDisabled &&
+    isExported &&
+    (readPermission.isNullOrBlank() || writePermission.isNullOrBlank() || hasUnguardedPathPermission)

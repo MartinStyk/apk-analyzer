@@ -95,6 +95,8 @@
     <string name="components_tag_launcher">مشغل</string>
     <string name="components_detail_launcher_explanation">هذا هو ما يفتح عندما تضغط على أيقونة التطبيق.</string>
     <string name="components_tag_unprotected">تم تصديره بدون حماية إذن</string>
+    <string name="components_tag_disabled">معطّل</string>
+    <string name="components_detail_disabled_explanation">هذا المكون معطّل على هذا الجهاز، لذا لا يمكن لأي شيء الوصول إليه الآن، ولا حتى التطبيق نفسه. يمكن للتطبيقات تشغيل مكوناتها وإيقافها في أي وقت.</string>
     <string name="components_flag_enabled">نعم</string>
     <string name="components_detail_section_reachability">قابلية الوصول</string>
     <string name="components_detail_section_details">التفاصيل</string>

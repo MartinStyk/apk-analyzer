@@ -2,6 +2,7 @@ package sk.styk.martin.apkanalyzer.feature.appdetail.domain
 
 import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilter
 import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilterKey
+import sk.styk.martin.apkanalyzer.core.apps.api.components.DisabledComponents
 import sk.styk.martin.apkanalyzer.core.apps.api.model.AppDetail
 import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraries
 import sk.styk.martin.apkanalyzer.core.apps.api.signing.SigningSchemeVersion
@@ -15,6 +16,8 @@ interface AppDetailSectionRepository {
     suspend fun signingSchemes(input: AppDetailInput): Result<List<SigningSchemeVersion>?>
 
     suspend fun intentFilters(input: AppDetailInput): Result<AppDetailSection<Map<ComponentIntentFilterKey, List<ComponentIntentFilter>>>>
+
+    suspend fun disabledComponents(input: AppDetailInput): DisabledComponents
 }
 
 sealed interface AppDetailSection<out T> {

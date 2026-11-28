@@ -75,6 +75,8 @@
     <string name="components_tag_launcher">Peluncur</string>
     <string name="components_detail_launcher_explanation">Ini yang terbuka ketika Anda mengetuk ikon aplikasi.</string>
     <string name="components_tag_unprotected">Diekspor tanpa pengaman izin</string>
+    <string name="components_tag_disabled">Dinonaktifkan</string>
+    <string name="components_detail_disabled_explanation">Komponen ini dinonaktifkan di perangkat ini, jadi saat ini tidak ada yang dapat mengaksesnya, bahkan aplikasi itu sendiri. Aplikasi dapat mengaktifkan dan menonaktifkan komponennya sendiri kapan saja.</string>
     <string name="components_flag_enabled">Ya</string>
     <string name="components_detail_section_reachability">Keterjangkauan</string>
     <string name="components_detail_section_details">Rincian</string>

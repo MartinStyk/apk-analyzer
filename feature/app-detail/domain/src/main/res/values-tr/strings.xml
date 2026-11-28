@@ -79,6 +79,8 @@
     <string name="components_tag_launcher">Başlatıcı</string>
     <string name="components_detail_launcher_explanation">Uygulamanın simgesine dokunduğunuzda açılan şey budur.</string>
     <string name="components_tag_unprotected">İzin koruması olmadan dışa aktarıldı</string>
+    <string name="components_tag_disabled">Devre dışı</string>
+    <string name="components_detail_disabled_explanation">Bu cihazda devre dışı bırakıldı, bu yüzden şu anda hiçbir şey ona erişemez, uygulamanın kendisi bile. Uygulamalar kendi bileşenlerini istedikleri zaman açıp kapatabilir.</string>
     <string name="components_flag_enabled">Evet</string>
     <string name="components_detail_section_reachability">Erişilebilirlik</string>
     <string name="components_detail_section_details">Ayrıntılar</string>

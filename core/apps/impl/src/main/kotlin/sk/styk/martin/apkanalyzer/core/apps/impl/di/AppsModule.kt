@@ -17,6 +17,7 @@ import dagger.multibindings.IntoSet
 import sk.styk.martin.apkanalyzer.core.apps.api.AppDetailRepository
 import sk.styk.martin.apkanalyzer.core.apps.api.InstalledAppsRepository
 import sk.styk.martin.apkanalyzer.core.apps.api.PackageChangesObserver
+import sk.styk.martin.apkanalyzer.core.apps.api.components.DisabledComponentsRepository
 import sk.styk.martin.apkanalyzer.core.apps.api.devicefeatures.DeviceFeaturesRepository
 import sk.styk.martin.apkanalyzer.core.apps.api.export.AppExportManager
 import sk.styk.martin.apkanalyzer.core.apps.api.filtering.AppFilterRepositories
@@ -33,6 +34,7 @@ import sk.styk.martin.apkanalyzer.core.apps.api.usagestats.UsageStatsRepository
 import sk.styk.martin.apkanalyzer.core.apps.impl.AppDetailRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apps.impl.InstalledAppsRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apps.impl.PackageChangesObserverImpl
+import sk.styk.martin.apkanalyzer.core.apps.impl.components.DisabledComponentsRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apps.impl.devicefeatures.DeviceFeaturesRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apps.impl.export.AppExportManagerImpl
 import sk.styk.martin.apkanalyzer.core.apps.impl.filtering.AppFilterRepositoriesImpl
@@ -111,6 +113,10 @@ internal interface AppsModule {
     @Binds
     @Singleton
     fun bindIntentFiltersRepository(impl: IntentFiltersRepositoryImpl): IntentFiltersRepository
+
+    @Binds
+    @Singleton
+    fun bindDisabledComponentsRepository(impl: DisabledComponentsRepositoryImpl): DisabledComponentsRepository
 
     @Binds
     fun bindInstallSourceResolver(impl: InstallSourceResolverImpl): InstallSourceResolver

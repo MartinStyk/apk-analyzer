@@ -56,12 +56,13 @@ Do not add a variant to `AppReference`: icon, export, manifest, AI, and signing 
 a past state means nothing to them.
 
 * **One data seam.** Phone and TV screens read every section through `domain`'s
-  `AppDetailSectionRepository` with their `AppDetailInput`, intent filters included; it reads the store for a historical input and
+  `AppDetailSectionRepository` with their `AppDetailInput`, intent filters and disabled components
+  included; it reads the store for a historical input and
   the live repositories otherwise. Never fall back to live data: today's facts
   under an "as seen on" label are the worst failure this mode can produce.
 * **Check what an action needs, not the mode.** An action that needs the real app asks the input for it:
   `liveReference` (export, AI, Play Store, App info, review session) or `installedPackage` (History card,
-  recents, launching components). A historical input has neither, so it cannot reach them by accident.
+  recents, launching components, disabled-component state). A historical input has neither, so it cannot reach them by accident.
   A mode check reads `isHistorical` or `isOnDevice`, never a null `liveReference` or `recordedAt`.
 * **One label.** Every app-detail stateless content composable wraps its root in `AppDetailModeFrame`
   with the input's `recordedAt` (section sub-screens get this via `AppDetailSectionScaffold`), which
@@ -165,6 +166,7 @@ sections by type. Exported items sort first.
 
 `isUnprotected` means exported and unguarded, with these rules:
 
+* Disabled components are never unprotected.
 * Launcher activities are excluded for installed packages because their exported state is expected.
 * Other activities require known non-launcher status and no permission guard.
 * Services and receivers require no permission guard.
@@ -176,6 +178,13 @@ sections by type. Exported items sort first.
 `isLaunchable` is a different predicate. It means an installed activity or receiver can receive the
 requested launch intent. Do not derive it from `isUnprotected`: launcher activities are expected to
 be launchable. Services and providers are excluded.
+
+A component the manifest or the app disabled carries a Disabled tag on its phone row (the row summary
+on TV) and a Disabled line, first under Reachability, in its sheet or pane. The state is read live
+through `AppDetailSectionRepository.disabledComponents`, for installed packages only; APK files and
+recorded versions show no tag. Each item holds one `isDisabled` value, and the tag, the Unprotected
+marker, the launch affordance, and the exported explanation all derive from it through the
+`core:apps` predicates, so they cannot disagree.
 
 A successful `startActivity` means Android accepted the request, not that the target stayed open.
 User-facing confirmation must not claim an app or screen opened.

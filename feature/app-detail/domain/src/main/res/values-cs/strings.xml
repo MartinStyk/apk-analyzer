@@ -87,6 +87,8 @@
     <string name="components_tag_launcher">Spouštěč</string>
     <string name="components_detail_launcher_explanation">Tohle se otevře, když klepnete na ikonu aplikace.</string>
     <string name="components_tag_unprotected">Exportováno bez ochrany oprávnění</string>
+    <string name="components_tag_disabled">Vypnuto</string>
+    <string name="components_detail_disabled_explanation">Tato komponenta je na tomto zařízení vypnutá, takže se k ní teď nic nedostane, ani samotná aplikace. Aplikace mohou své komponenty kdykoli zapnout nebo vypnout.</string>
     <string name="components_flag_enabled">Ano</string>
     <string name="components_detail_section_reachability">Dostupnost</string>
     <string name="components_detail_section_details">Podrobnosti</string>

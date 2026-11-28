@@ -83,6 +83,8 @@
     <string name="components_tag_launcher">Lanceur</string>
     <string name="components_detail_launcher_explanation">C\'est ce qui s\'ouvre lorsque vous appuyez sur l\'icône de l\'application.</string>
     <string name="components_tag_unprotected">Exporté sans protection de permission</string>
+    <string name="components_tag_disabled">Désactivé</string>
+    <string name="components_detail_disabled_explanation">Désactivé sur cet appareil, donc rien ne peut y accéder pour le moment, pas même l\'application elle-même. Les applications peuvent activer et désactiver leurs propres composants à tout moment.</string>
     <string name="components_flag_enabled">Oui</string>
     <string name="components_detail_section_reachability">Accessibilité</string>
     <string name="components_detail_section_details">Détails</string>

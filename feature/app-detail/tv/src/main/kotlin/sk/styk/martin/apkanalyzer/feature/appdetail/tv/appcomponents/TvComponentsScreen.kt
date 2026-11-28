@@ -225,10 +225,17 @@ private fun ComponentPane(item: TvComponentItem, modifier: Modifier = Modifier) 
     ) {
         if (item.isLaunchable) LaunchHint()
         PaneSection(title = stringResource(DomainR.string.components_detail_section_reachability)) {
+            if (item.isDisabled) {
+                PaneField(
+                    label = stringResource(DomainR.string.components_tag_disabled),
+                    value = stringResource(DomainR.string.components_flag_enabled),
+                    explanation = stringResource(DomainR.string.components_detail_disabled_explanation),
+                )
+            }
             PaneField(
                 label = stringResource(AppsR.string.components_detail_exported),
                 value = stringResource(if (item.isExported) AppsR.string.components_exported_yes else AppsR.string.components_exported_no),
-                explanation = stringResource(exportedExplanationRes(item.isExported, item.isLauncher, item.isUnprotected)),
+                explanation = exportedExplanationRes(item.isExported, item.isLauncher, item.isUnprotected, item.isDisabled)?.let { stringResource(it) },
                 valueColor = if (item.isUnprotected) AppTheme.colors.warning else AppTheme.colors.onSurface,
             )
             item.permission?.let { PaneField(label = stringResource(AppsR.string.components_detail_permission), value = it) }
@@ -378,6 +385,7 @@ private fun dataRulesText(rules: List<IntentFilterDataRule>): String {
 
 @Composable
 private fun TvComponentItem.summary(): String = when {
+    isDisabled -> stringResource(DomainR.string.components_tag_disabled)
     isLauncher -> stringResource(DomainR.string.components_tag_launcher)
     isUnprotected -> stringResource(DomainR.string.components_tag_unprotected)
     isExported -> stringResource(DomainR.string.components_tag_exported)
@@ -447,6 +455,43 @@ private fun TvComponentsContentPreview() {
                     TvComponentSection(ComponentKind.Activity, listOf(launcher)),
                     TvComponentSection(ComponentKind.Service, listOf(service)),
                 ),
+            ),
+            onAction = {},
+        )
+    }
+}
+
+@Preview(device = Devices.TV_1080p, showBackground = true, backgroundColor = 0xFF000000)
+@Composable
+private fun TvComponentsDisabledPreview() {
+    val disabled = TvComponentItem(
+        name = "com.google.android.youtube.tv.voice.VoiceSearchActivity",
+        kind = ComponentKind.Activity,
+        isExported = true,
+        isUnprotected = false,
+        isLauncher = false,
+        isDisabled = true,
+        intentFilters = listOf(),
+    )
+    val launcher = TvComponentItem(
+        name = "com.google.android.youtube.tv.MainActivity",
+        kind = ComponentKind.Activity,
+        isExported = true,
+        isUnprotected = false,
+        isLauncher = true,
+        isLaunchable = true,
+    )
+    ApkAnalyzerTvTheme {
+        TvComponentsContent(
+            appName = "YouTube",
+            appReference = AppReference.InstalledPackage(PackageName("com.google.android.youtube.tv")),
+            state = TvComponentsState.Loaded(
+                scope = TvComponentScope.Only(ComponentKind.Activity),
+                scopeOptions = listOf(
+                    TvComponentScopeOption(TvComponentScope.All, 2),
+                    TvComponentScopeOption(TvComponentScope.Only(ComponentKind.Activity), 2),
+                ),
+                sections = listOf(TvComponentSection(ComponentKind.Activity, listOf(disabled, launcher))),
             ),
             onAction = {},
         )
