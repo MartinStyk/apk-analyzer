@@ -31,7 +31,9 @@ logic do not belong here.
   latest shared file stays on disk. The URI comes from the app's `FileProvider` (authority =
   application ID), whose `cache-path` in `app` must keep covering the cache directory. `device/`'s `DeviceInfoProvider` wraps `Settings.Secure.ANDROID_ID` and the `android.os.Build`
   manufacturer and model behind an interface so callers never touch `@SuppressLint("HardwareIds")`,
-  `ContentResolver`, or `Build` directly. `io/`'s
+  `ContentResolver`, or `Build` directly. It also exposes Android's `ActivityManager.isLowRamDevice`
+  classification for callers deciding whether to do speculative work; this is not current memory
+  pressure or an app-defined RAM threshold. `io/`'s
   `InputStream.limited(byteCount)` wraps a stream so it EOFs after exactly `byteCount` bytes without
   ever closing the underlying stream — for callers handed a stream they don't own the lifecycle of,
   e.g. a platform callback multiplexing several files over one shared file descriptor, where closing

@@ -5,6 +5,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 
@@ -16,6 +18,10 @@ internal class AppHistoryPersistenceRepositoryFake(vararg records: StoredAppHist
     var saveFailure: Throwable? = null
     var saveBarrier: Deferred<Unit>? = null
     val recordReads = mutableListOf<PackageName>()
+    var headerObservers: Int = 0
+        private set
+    var headerObservationCount: Int = 0
+        private set
 
     operator fun plusAssign(record: StoredAppHistoryRecord) {
         records.update { existing -> existing.filterNot { it.id == record.id } + record }
@@ -41,6 +47,11 @@ internal class AppHistoryPersistenceRepositoryFake(vararg records: StoredAppHist
         headersFailure?.let { Result.failure(it) } ?: Result.success(
             all.sortedWith(compareBy({ it.record.packageName.value }, { it.record.capturedAt }, { it.id })).map { it.toHeader() },
         )
+    }.onStart {
+        headerObservers++
+        headerObservationCount++
+    }.onCompletion {
+        headerObservers--
     }
 
     override suspend fun records(packageName: PackageName): Result<List<StoredAppHistoryRecord>> {

@@ -270,11 +270,21 @@ private fun LoadedContent(
         )
         changedAppsSection(state = state, onAction = onAction, uppercase = { it.uppercase(locale) })
         if (state.uninstalledApps.isNotEmpty()) {
-            item(key = "uninstalled-header") { ListSectionHeader(title = stringResource(R.string.what_changed_section_uninstalled).uppercase(locale)) }
+            item(key = "uninstalled-header") {
+                ListSectionHeader(
+                    title = stringResource(R.string.what_changed_section_uninstalled).uppercase(locale),
+                    modifier = Modifier.animateItem(),
+                )
+            }
             itemsPositioned(items = state.uninstalledApps, key = { _, row -> "uninstalled-${row.key}" }) { position, row ->
                 when (row) {
-                    is LockableRow.Locked -> LockedRow(position = position, onClick = { onAction(WhatChangedAction.OpenLocked) })
-                    is LockableRow.Readable -> UninstalledAppRow(app = row.item, position = position, onAction = onAction)
+                    is LockableRow.Locked -> LockedRow(
+                        position = position,
+                        onClick = { onAction(WhatChangedAction.OpenLocked) },
+                        modifier = Modifier.animateItem(),
+                    )
+
+                    is LockableRow.Readable -> UninstalledAppRow(app = row.item, position = position, onAction = onAction, modifier = Modifier.animateItem())
                 }
             }
         }
@@ -286,6 +296,7 @@ private fun UninstalledAppRow(
     app: UninstalledAppItem,
     position: ListItemPosition,
     onAction: (WhatChangedAction) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     AppHistoryAppRow(
         packageName = app.packageName,
@@ -297,6 +308,7 @@ private fun UninstalledAppRow(
         },
         position = position,
         onClick = { onAction(WhatChangedAction.OpenAppHistory(app.packageName, app.appName)) },
+        modifier = modifier,
     )
 }
 
@@ -308,16 +320,21 @@ private fun LazyListScope.changeSection(
     uppercase: (String) -> String,
 ) {
     if (items.isEmpty()) return
-    item(key = "$key-header") { ListSectionHeader(title = uppercase(stringResource(title))) }
+    item(key = "$key-header") { ListSectionHeader(title = uppercase(stringResource(title)), modifier = Modifier.animateItem()) }
     itemsPositioned(items = items, key = { _, row -> "$key-${row.key}" }) { position, row ->
         when (row) {
-            is LockableRow.Locked -> LockedRow(position = position, onClick = { onAction(WhatChangedAction.OpenLocked) })
+            is LockableRow.Locked -> LockedRow(
+                position = position,
+                onClick = { onAction(WhatChangedAction.OpenLocked) },
+                modifier = Modifier.animateItem(),
+            )
 
             is LockableRow.Readable -> AppChangeRow(
                 item = row.item,
                 position = position,
                 onClick = { onAction(WhatChangedAction.OpenChange(row.item)) },
                 onLongClick = { copyText -> onAction(WhatChangedAction.CopyItem(row.item.appName, copyText)) },
+                modifier = Modifier.animateItem(),
             )
         }
     }
@@ -330,22 +347,31 @@ private fun LazyListScope.changedAppsSection(
 ) {
     if (state.changedApps.isEmpty()) {
         val lastChangeAt = state.lastChangeAt ?: return
-        item(key = "changed-header") { ListSectionHeader(title = uppercase(stringResource(R.string.what_changed_section_changed_apps))) }
+        item(key = "changed-header") {
+            ListSectionHeader(title = uppercase(stringResource(R.string.what_changed_section_changed_apps)), modifier = Modifier.animateItem())
+        }
         item(key = "changed-empty") {
             Text(
                 text = stringResource(R.string.what_changed_last_change_hint, lastChangeAt.historyDate()),
                 style = AppTheme.typography.bodyMedium,
                 color = AppTheme.colors.onSurfaceVariant,
-                modifier = Modifier.padding(horizontal = 4.dp),
+                modifier = Modifier.animateItem().padding(horizontal = 4.dp),
             )
         }
         return
     }
-    item(key = "changed-header") { ListSectionHeader(title = uppercase(stringResource(R.string.what_changed_section_changed_apps))) }
+    item(key = "changed-header") {
+        ListSectionHeader(title = uppercase(stringResource(R.string.what_changed_section_changed_apps)), modifier = Modifier.animateItem())
+    }
     itemsPositioned(items = state.changedApps, key = { _, row -> "changed-${row.key}" }) { position, row ->
         when (row) {
-            is LockableRow.Locked -> LockedRow(position = position, onClick = { onAction(WhatChangedAction.OpenLocked) })
-            is LockableRow.Readable -> ChangedAppRow(app = row.item, position = position, onAction = onAction)
+            is LockableRow.Locked -> LockedRow(
+                position = position,
+                onClick = { onAction(WhatChangedAction.OpenLocked) },
+                modifier = Modifier.animateItem(),
+            )
+
+            is LockableRow.Readable -> ChangedAppRow(app = row.item, position = position, onAction = onAction, modifier = Modifier.animateItem())
         }
     }
 }
@@ -355,6 +381,7 @@ private fun ChangedAppRow(
     app: ChangedAppItem,
     position: ListItemPosition,
     onAction: (WhatChangedAction) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val netChange = app.netChange as? NetChange.Changed
     AppHistoryAppRow(
@@ -365,6 +392,7 @@ private fun ChangedAppRow(
         isWarning = netChange?.hasCertificateChange == true,
         position = position,
         onClick = { onAction(WhatChangedAction.OpenAppHistory(app.packageName, app.appName)) },
+        modifier = modifier,
     )
 }
 

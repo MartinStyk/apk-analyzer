@@ -4,4 +4,5 @@ interface DeviceInfoProvider {
     val deviceId: String
     val manufacturer: String
     val model: String
+    val isLowRamDevice: Boolean
 }

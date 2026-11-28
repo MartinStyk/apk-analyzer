@@ -71,7 +71,8 @@ class AppHistoryCaptureRepositoryImplTest {
         featureFlagRepository = featureFlags,
         appScope = appScope,
     )
-    private val history = AppHistoryRepositoryImpl(persistence, AppHistoryTimelineBuilder(AppHistoryDiffer()), PerformanceTrackerFake(), dispatcherProvider)
+    private val history =
+        AppHistoryRepositoryImpl(persistence, AppHistoryTimelineBuilder(AppHistoryDiffer()), PerformanceTrackerFake(), dispatcherProvider, appScope)
 
     @After
     fun tearDown() {

@@ -48,7 +48,9 @@ package `sk.styk.martin.apkanalyzer.feature.whatchanged.phone`. There is no TV m
   permission added and removed again reads "No net change". Needs attention stays per event and marks
   an undone event with its revert date.
 * Section rows can repeat an app across sections, so LazyColumn keys carry the section prefix. Locked
-  rows keep the same key as their readable form; the key is never rendered.
+  rows keep the same key as their readable form; the key is never rendered. Rows and section headers
+  use lazy-item animations for insertion, removal, and movement as history arrives; never force
+  scrolling to new entries or enable these animations globally in the shared list helper.
 
 ## Pro gate
 

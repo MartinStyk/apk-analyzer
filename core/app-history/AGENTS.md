@@ -234,9 +234,25 @@ can be a factory date (`occurredAt` does this).
 watches snapshot rows only (`observeHeaders`, no blobs). A package with one snapshot becomes a
 `FirstSeen` straight from its row and is never decoded; a package with more is decoded and diffed.
 Results are cached per package in the repository, keyed by that package's row list, so a capture
-rebuilds only that app and reopening the screen costs one row query. Each build is traced as
-`app_history_device_timeline` (`app_count`, `decoded_count`). Like `timeline()`, a failure emits
-`Unavailable` and completes, so retry is a fresh collection.
+rebuilds only that app. All callers share one device-timeline observer and build pipeline, replaying
+the latest result. Observation stops when the last subscriber leaves; the result and per-package
+cache survive, and the next subscription checks current headers. The first build starts immediately;
+subsequent header versions are conflated with a one-second pause after each build, before decoding
+and diffing. Intermediate versions can be skipped, but the newest pending version is processed even
+when writes stop. Selected builds are sequential, not cancelled by each capture. Each build is traced
+as `app_history_device_timeline` (`app_count`, `decoded_count`, `cached_count`, `build_ms`) with DEBUG
+start/finish and rebuilt/cached counts. Failures emit `Unavailable` and restart the shared upstream
+after one second while subscribers remain, so a transient query failure recovers even when both
+history screens are open. The first failure is logged with its throwable; repeated retry failures
+use DEBUG breadcrumbs rather than repeating the non-fatal.
+
+An internal process-lifecycle observer schedules one preload twenty seconds after process creation
+on the application coroutine scope's injected background dispatcher. It checks `WhatChangedTab` and
+`DeviceInfoProvider.isLowRamDevice` before scheduling the delay or obtaining the repository lazily;
+disabled tabs and low-RAM devices do not preload. It takes one shared timeline result and finishes, without waiting for the
+installed-app list or managing foreground/background transitions. Opening a screen before the delay
+loads normally. Preloading does not capture history or record a tab visit. INFO logs report scheduling,
+start, completion, and skip reasons; failures are explicit.
 
 Besides entries, each app carries the timestamps of updates the timeline hides as unchanged (they
 still count as updates) and `diffsToLatest`: a diff from every earlier snapshot to the latest, so a
