@@ -14,8 +14,6 @@
     <string name="inventory_export_columns_selected">%1$d von %2$d Details ausgewählt</string>
     <string name="inventory_export_select_all">Alle auswählen</string>
     <string name="inventory_export_clear">Auswahl aufheben</string>
-    <string name="inventory_export_slower_tag">Langsamer</string>
-    <string name="inventory_export_slow_hint">Einige ausgewählte Details erfordern eine genauere Analyse jeder App. Der Export dauert dadurch länger.</string>
     <string name="inventory_export_usage_access_hint">Letzte Nutzung und Speichergröße bleiben leer, bis Sie den Zugriff auf Nutzungsdaten erlauben.</string>
     <string name="inventory_export_grant_access">Zugriff erlauben</string>
     <string name="inventory_export_attribute_category">Kategorie</string>
@@ -92,7 +90,9 @@
     <string name="inventory_export_next">Weiter</string>
     <string name="inventory_export_columns_omitted">In der CSV-Datei fehlen: %1$s. CSV kann keine vollständigen Datensätze enthalten.</string>
     <string name="inventory_export_use_json">JSON verwenden</string>
-    <string name="inventory_export_pro_columns">Details über Grundlagen hinaus sind für mehr als eine App Teil von Pro</string>
+    <string name="inventory_export_pro_columns">Grundlagen sind kostenlos. Schalte Pro frei, um weitere Details zu exportieren.</string>
+    <string name="inventory_export_unlock_pro">Pro freischalten</string>
+    <string name="inventory_export_dismiss_hint">Hinweis schließen</string>
     <string name="inventory_export_use_basics">Stattdessen Grundlagen exportieren</string>
     <string name="inventory_export_structured_hint">Nur in JSON verfügbare Details enthalten vollständige Datensätze, nicht nur Anzahlen. CSV-Dateien lassen sie weg.</string>
     <string name="inventory_export_intro_got_it">Verstanden</string>

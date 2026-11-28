@@ -76,6 +76,7 @@ internal class InventoryExportViewModel @AssistedInject constructor(
     private val format = MutableStateFlow(InventoryFormat.Csv)
     private val showStopConfirmation = MutableStateFlow(false)
     private val showIntro = MutableStateFlow(false)
+    private val dismissedHints = MutableStateFlow<Set<InventoryExportHint>>(emptySet())
     private val exportProgress = MutableStateFlow<InventoryExportProgressState>(InventoryExportProgressState.Idle)
     private var exportJob: Job? = null
     private var exportRequestJob: Job? = null
@@ -136,8 +137,15 @@ internal class InventoryExportViewModel @AssistedInject constructor(
         exportProgress,
         showStopConfirmation,
         showIntro,
-    ) { selection, preview, progress, showStopConfirmation, showIntro ->
-        selection.copy(preview = preview, progress = progress, showStopConfirmation = showStopConfirmation, showIntro = showIntro)
+        dismissedHints,
+    ) { selection, preview, progress, showStopConfirmation, showIntro, dismissedHints ->
+        selection.copy(
+            preview = preview,
+            progress = progress,
+            showStopConfirmation = showStopConfirmation,
+            showIntro = showIntro,
+            dismissedHints = dismissedHints,
+        )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS), InventoryExportState(step = steps.first(), steps = steps))
 
     private val restoreJob = viewModelScope.launch {
@@ -161,6 +169,11 @@ internal class InventoryExportViewModel @AssistedInject constructor(
             is InventoryExportAction.AppSelectionAction -> onAppSelectionAction(action)
 
             is InventoryExportAction.ColumnSelectionAction -> onColumnSelectionAction(action)
+
+            is InventoryExportAction.DismissHint -> dismissedHints.value += action.hint
+
+            InventoryExportAction.OpenPro ->
+                eventChannel.trySend(InventoryExportEvent.OpenPro(PaywallReason.Export(appCount = state.value.apps.summary.selectedCount)))
 
             InventoryExportAction.ShowIntro -> showIntro.value = true
 

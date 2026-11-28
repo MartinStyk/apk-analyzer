@@ -13,8 +13,6 @@
     <string name="inventory_export_columns_selected">%1$d dari %2$d detail dipilih</string>
     <string name="inventory_export_select_all">Pilih semua</string>
     <string name="inventory_export_clear">Batalkan pilihan</string>
-    <string name="inventory_export_slower_tag">Lebih lambat</string>
-    <string name="inventory_export_slow_hint">Beberapa detail yang dipilih memerlukan analisis lebih mendalam pada setiap aplikasi, sehingga ekspor membutuhkan waktu lebih lama.</string>
     <string name="inventory_export_usage_access_hint">Waktu terakhir digunakan dan ukuran penyimpanan tetap kosong hingga Anda mengizinkan akses data penggunaan.</string>
     <string name="inventory_export_grant_access">Izinkan akses</string>
     <string name="inventory_export_attribute_category">Kategori</string>
@@ -86,7 +84,9 @@
     <string name="inventory_export_next">Berikutnya</string>
     <string name="inventory_export_columns_omitted">Tidak disertakan dalam file CSV: %1$s. CSV tidak dapat memuat data lengkap.</string>
     <string name="inventory_export_use_json">Gunakan JSON</string>
-    <string name="inventory_export_pro_columns">Detail selain Dasar untuk lebih dari satu aplikasi adalah bagian dari Pro</string>
+    <string name="inventory_export_pro_columns">Informasi dasar gratis. Buka Pro untuk mengekspor detail lainnya.</string>
+    <string name="inventory_export_unlock_pro">Buka Pro</string>
+    <string name="inventory_export_dismiss_hint">Tutup pemberitahuan</string>
     <string name="inventory_export_use_basics">Ekspor Dasar saja</string>
     <string name="inventory_export_structured_hint">Detail khusus JSON menyertakan data lengkap, bukan hanya jumlah. File CSV tidak menyertakannya.</string>
     <string name="inventory_export_intro_got_it">Mengerti</string>

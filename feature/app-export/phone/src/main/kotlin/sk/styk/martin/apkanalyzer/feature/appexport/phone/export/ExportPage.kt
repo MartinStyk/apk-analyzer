@@ -31,9 +31,9 @@ import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Button
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Chip
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.InfoCard
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.LoadingSpinner
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.OutlinedButton
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ProBadge
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ProgressBar
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.TextButton
@@ -96,6 +96,7 @@ internal fun ExportPage(
         if (state.requiresPro) {
             ProColumnsNotice(
                 enabled = !state.isExporting,
+                onUnlockPro = { onAction(InventoryExportAction.OpenPro) },
                 onUseBasics = { onAction(InventoryExportAction.PresetSelected(InventoryPreset.Basics)) },
                 modifier = Modifier.padding(top = 12.dp),
             )
@@ -282,36 +283,32 @@ private fun OmittedColumnsNotice(
 @Composable
 private fun ProColumnsNotice(
     enabled: Boolean,
+    onUnlockPro: () -> Unit,
     onUseBasics: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(AppTheme.colors.surfaceVariant, Shapes.CardShape)
-            .padding(start = 16.dp, end = 8.dp, top = 12.dp, bottom = 4.dp),
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            ProBadge()
-            Spacer(modifier = Modifier.width(12.dp))
-            Text(
-                text = stringResource(R.string.inventory_export_pro_columns),
-                style = AppTheme.typography.bodyMedium,
-                color = AppTheme.colors.onSurfaceVariant,
-                modifier = Modifier.padding(end = 8.dp),
-            )
-        }
-        Row(
-            horizontalArrangement = Arrangement.End,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            TextButton(
-                text = stringResource(R.string.inventory_export_use_basics),
-                onClick = onUseBasics,
-                enabled = enabled,
-            )
-        }
-    }
+    InfoCard(
+        icon = ApkAnalyzerIcons.Lock,
+        title = null,
+        body = stringResource(R.string.inventory_export_pro_columns),
+        modifier = modifier,
+        action = {
+            Column(modifier = Modifier.fillMaxWidth().padding(start = 6.dp, end = 6.dp, top = 8.dp)) {
+                Button(
+                    text = stringResource(R.string.inventory_export_unlock_pro),
+                    onClick = onUnlockPro,
+                    enabled = enabled,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                TextButton(
+                    text = stringResource(R.string.inventory_export_use_basics),
+                    onClick = onUseBasics,
+                    enabled = enabled,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+        },
+    )
 }
 
 @Composable

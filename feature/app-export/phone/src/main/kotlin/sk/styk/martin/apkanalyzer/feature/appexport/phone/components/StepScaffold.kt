@@ -7,6 +7,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -64,6 +65,7 @@ internal fun StepScaffold(
             title = stringResource(R.string.inventory_export_title),
             onBack = onBack,
             actions = actions,
+            contentPadding = PaddingValues(start = 4.dp, end = 8.dp, top = 12.dp, bottom = 4.dp),
         )
         if (!isCompactHeight) {
             StepIndicator(
@@ -108,7 +110,6 @@ internal fun StepIndicator(
     Column(modifier = modifier.fillMaxWidth()) {
         Box(
             modifier = Modifier
-                .padding(top = 8.dp)
                 .fillMaxWidth()
                 .height(TrackHeight)
                 .clip(CircleShape)

@@ -13,8 +13,6 @@
     <string name="inventory_export_columns_selected">Đã chọn %1$d trên %2$d mục thông tin</string>
     <string name="inventory_export_select_all">Chọn tất cả</string>
     <string name="inventory_export_clear">Bỏ chọn</string>
-    <string name="inventory_export_slower_tag">Chậm hơn</string>
-    <string name="inventory_export_slow_hint">Một số thông tin đã chọn cần phân tích kỹ hơn từng ứng dụng nên quá trình xuất sẽ lâu hơn.</string>
     <string name="inventory_export_usage_access_hint">Thời gian sử dụng lần cuối và dung lượng lưu trữ sẽ để trống cho đến khi bạn cho phép truy cập dữ liệu sử dụng.</string>
     <string name="inventory_export_grant_access">Cho phép truy cập</string>
     <string name="inventory_export_attribute_category">Danh mục</string>
@@ -86,7 +84,9 @@
     <string name="inventory_export_next">Tiếp theo</string>
     <string name="inventory_export_columns_omitted">Không có trong tệp CSV: %1$s. CSV không chứa được bản ghi đầy đủ.</string>
     <string name="inventory_export_use_json">Dùng JSON</string>
-    <string name="inventory_export_pro_columns">Thông tin ngoài Cơ bản cho nhiều ứng dụng là một phần của Pro</string>
+    <string name="inventory_export_pro_columns">Thông tin cơ bản miễn phí. Mở khóa Pro để xuất các thông tin khác.</string>
+    <string name="inventory_export_unlock_pro">Mở khóa Pro</string>
+    <string name="inventory_export_dismiss_hint">Đóng thông báo</string>
     <string name="inventory_export_use_basics">Chỉ xuất Cơ bản</string>
     <string name="inventory_export_structured_hint">Thông tin chỉ dành cho JSON gồm các bản ghi đầy đủ, không chỉ số lượng. Tệp CSV sẽ bỏ qua chúng.</string>
     <string name="inventory_export_intro_got_it">Đã hiểu</string>

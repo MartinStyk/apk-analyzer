@@ -18,8 +18,6 @@
     <string name="inventory_export_columns_selected">تم اختيار %1$d من %2$d من التفاصيل</string>
     <string name="inventory_export_select_all">تحديد الكل</string>
     <string name="inventory_export_clear">إلغاء التحديد</string>
-    <string name="inventory_export_slower_tag">أبطأ</string>
-    <string name="inventory_export_slow_hint">تتطلب بعض التفاصيل المختارة تحليلًا أدق لكل تطبيق، لذا يستغرق التصدير وقتًا أطول.</string>
     <string name="inventory_export_usage_access_hint">يبقى وقت آخر استخدام وحجم التخزين فارغين حتى تسمح بالوصول إلى بيانات الاستخدام.</string>
     <string name="inventory_export_grant_access">السماح بالوصول</string>
     <string name="inventory_export_attribute_category">الفئة</string>
@@ -116,7 +114,9 @@
     <string name="inventory_export_next">التالي</string>
     <string name="inventory_export_columns_omitted">غير مضمّنة في ملف CSV: %1$s. لا يمكن لـ CSV حفظ سجلات كاملة.</string>
     <string name="inventory_export_use_json">استخدام JSON</string>
-    <string name="inventory_export_pro_columns">التفاصيل التي تتجاوز الأساسيات لأكثر من تطبيق واحد جزء من Pro</string>
+    <string name="inventory_export_pro_columns">المعلومات الأساسية مجانية. افتح Pro لتصدير التفاصيل الأخرى.</string>
+    <string name="inventory_export_unlock_pro">فتح Pro</string>
+    <string name="inventory_export_dismiss_hint">إغلاق التنبيه</string>
     <string name="inventory_export_use_basics">تصدير الأساسيات فقط</string>
     <string name="inventory_export_structured_hint">تتضمن التفاصيل المخصصة لـ JSON سجلات كاملة، وليس الأعداد فقط. تستبعدها ملفات CSV.</string>
     <string name="inventory_export_intro_got_it">حسنًا</string>

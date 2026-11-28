@@ -19,6 +19,11 @@ enum class ProOwnership {
     NotOwned,
 }
 
+enum class InventoryExportHint {
+    Structured,
+    UsageAccess,
+}
+
 @Immutable
 data class InventoryExportState(
     val step: InventoryExportStep = InventoryExportStep.Apps,
@@ -32,6 +37,7 @@ data class InventoryExportState(
     val progress: InventoryExportProgressState = InventoryExportProgressState.Idle,
     val showStopConfirmation: Boolean = false,
     val showIntro: Boolean = false,
+    val dismissedHints: Set<InventoryExportHint> = emptySet(),
 ) {
     val previousStep: InventoryExportStep?
         get() = steps.getOrNull(steps.indexOf(step) - 1)
@@ -54,9 +60,6 @@ data class InventoryExportState(
     val hasStructuredColumns: Boolean
         get() = columns.any { it.shape == InventoryColumnShape.Structured }
 
-    val needsAppAnalysis: Boolean
-        get() = columns.any { it.requiresAppAnalysis }
-
     val needsUsageAccess: Boolean
         get() = !isUsageAccessGranted && columns.any { it.requiresUsageAccess }
 
@@ -64,8 +67,7 @@ data class InventoryExportState(
         get() = apps.summary.hasSelection && exportedColumnCount > 0
 
     val exportNeedsPro: Boolean
-        get() = apps.summary.selectedCount > 1 &&
-            exportedColumns.any { it !in InventoryPreset.Basics.columns }
+        get() = exportedColumns.any { it !in InventoryPreset.Basics.columns }
 
     val requiresPro: Boolean
         get() = exportNeedsPro && proOwnership == ProOwnership.NotOwned

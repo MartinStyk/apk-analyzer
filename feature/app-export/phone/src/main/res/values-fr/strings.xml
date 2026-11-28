@@ -15,8 +15,6 @@
     <string name="inventory_export_columns_selected">%1$d détails sélectionnés sur %2$d</string>
     <string name="inventory_export_select_all">Tout sélectionner</string>
     <string name="inventory_export_clear">Tout désélectionner</string>
-    <string name="inventory_export_slower_tag">Plus lent</string>
-    <string name="inventory_export_slow_hint">Certains détails sélectionnés nécessitent une analyse plus approfondie de chaque application, ce qui prolonge l’exportation.</string>
     <string name="inventory_export_usage_access_hint">La date de dernière utilisation et la taille du stockage restent vides tant que vous n\'autorisez pas l\'accès aux données d\'utilisation.</string>
     <string name="inventory_export_grant_access">Autoriser l\'accès</string>
     <string name="inventory_export_attribute_category">Catégorie</string>
@@ -98,7 +96,9 @@
     <string name="inventory_export_next">Suivant</string>
     <string name="inventory_export_columns_omitted">Absents du fichier CSV : %1$s. Le format CSV ne peut pas contenir d’enregistrements complets.</string>
     <string name="inventory_export_use_json">Utiliser JSON</string>
-    <string name="inventory_export_pro_columns">Les détails au-delà d\'Essentiel pour plusieurs applications font partie de Pro</string>
+    <string name="inventory_export_pro_columns">Les informations essentielles sont gratuites. Débloquez Pro pour exporter les autres détails.</string>
+    <string name="inventory_export_unlock_pro">Débloquer Pro</string>
+    <string name="inventory_export_dismiss_hint">Masquer cet avis</string>
     <string name="inventory_export_use_basics">Exporter Essentiel à la place</string>
     <string name="inventory_export_structured_hint">Les détails réservés à JSON contiennent des enregistrements complets, pas seulement des nombres. Les fichiers CSV les omettent.</string>
     <string name="inventory_export_intro_got_it">Compris</string>

@@ -13,8 +13,6 @@
     <string name="inventory_export_columns_selected">已选择 %1$d 项信息，共 %2$d 项</string>
     <string name="inventory_export_select_all">全选</string>
     <string name="inventory_export_clear">取消选择</string>
-    <string name="inventory_export_slower_tag">较慢</string>
-    <string name="inventory_export_slow_hint">所选的部分信息需要更深入地分析每个应用，因此导出需要更长时间。</string>
     <string name="inventory_export_usage_access_hint">在您允许访问使用情况数据之前，最后使用时间和存储大小将保持为空。</string>
     <string name="inventory_export_grant_access">允许访问</string>
     <string name="inventory_export_attribute_category">类别</string>
@@ -86,7 +84,9 @@
     <string name="inventory_export_next">下一步</string>
     <string name="inventory_export_columns_omitted">CSV 文件中不包含：%1$s。CSV 无法保存完整记录。</string>
     <string name="inventory_export_use_json">使用 JSON</string>
-    <string name="inventory_export_pro_columns">为多个应用导出基础以外的信息属于 Pro 功能</string>
+    <string name="inventory_export_pro_columns">基础信息免费。解锁 Pro 即可导出其他详细信息。</string>
+    <string name="inventory_export_unlock_pro">解锁 Pro</string>
+    <string name="inventory_export_dismiss_hint">关闭提示</string>
     <string name="inventory_export_use_basics">改为只导出基础</string>
     <string name="inventory_export_structured_hint">仅限 JSON 的信息包含完整记录，而不只是数量。CSV 文件会省略这些信息。</string>
     <string name="inventory_export_intro_got_it">知道了</string>

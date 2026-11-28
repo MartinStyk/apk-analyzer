@@ -16,8 +16,6 @@
     <string name="inventory_export_columns_selected">Wybrano %1$d z %2$d szczegółów</string>
     <string name="inventory_export_select_all">Wybierz wszystko</string>
     <string name="inventory_export_clear">Usuń zaznaczenie</string>
-    <string name="inventory_export_slower_tag">Wolniej</string>
-    <string name="inventory_export_slow_hint">Niektóre wybrane szczegóły wymagają dokładniejszej analizy każdej aplikacji, więc eksport trwa dłużej.</string>
     <string name="inventory_export_usage_access_hint">Czas ostatniego użycia i rozmiar pamięci pozostają puste, dopóki nie zezwolisz na dostęp do danych o użytkowaniu.</string>
     <string name="inventory_export_grant_access">Zezwól na dostęp</string>
     <string name="inventory_export_attribute_category">Kategoria</string>
@@ -104,7 +102,9 @@
     <string name="inventory_export_next">Dalej</string>
     <string name="inventory_export_columns_omitted">Pominięte w pliku CSV: %1$s. CSV nie obsługuje pełnych rekordów.</string>
     <string name="inventory_export_use_json">Użyj JSON</string>
-    <string name="inventory_export_pro_columns">Szczegóły wykraczające poza Podstawowe dla więcej niż jednej aplikacji są częścią Pro</string>
+    <string name="inventory_export_pro_columns">Podstawowe dane są bezpłatne. Odblokuj Pro, aby eksportować pozostałe szczegóły.</string>
+    <string name="inventory_export_unlock_pro">Odblokuj Pro</string>
+    <string name="inventory_export_dismiss_hint">Ukryj powiadomienie</string>
     <string name="inventory_export_use_basics">Eksportuj tylko Podstawowe</string>
     <string name="inventory_export_structured_hint">Szczegóły dostępne tylko w JSON obejmują pełne rekordy, nie tylko liczby. Pliki CSV je pomijają.</string>
     <string name="inventory_export_intro_got_it">Rozumiem</string>

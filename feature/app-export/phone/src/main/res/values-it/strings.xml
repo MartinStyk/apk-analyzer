@@ -15,8 +15,6 @@
     <string name="inventory_export_columns_selected">%1$d dettagli selezionati su %2$d</string>
     <string name="inventory_export_select_all">Seleziona tutto</string>
     <string name="inventory_export_clear">Deseleziona tutto</string>
-    <string name="inventory_export_slower_tag">Più lento</string>
-    <string name="inventory_export_slow_hint">Alcuni dettagli selezionati richiedono un’analisi più approfondita di ogni app, quindi l’esportazione richiede più tempo.</string>
     <string name="inventory_export_usage_access_hint">L\'ora dell\'ultimo utilizzo e le dimensioni dello spazio di archiviazione restano vuote finché non consenti l\'accesso ai dati di utilizzo.</string>
     <string name="inventory_export_grant_access">Consenti accesso</string>
     <string name="inventory_export_attribute_category">Categoria</string>
@@ -98,7 +96,9 @@
     <string name="inventory_export_next">Avanti</string>
     <string name="inventory_export_columns_omitted">Esclusi dal file CSV: %1$s. Il formato CSV non supporta record completi.</string>
     <string name="inventory_export_use_json">Usa JSON</string>
-    <string name="inventory_export_pro_columns">I dettagli oltre Base per più di un\'app fanno parte di Pro</string>
+    <string name="inventory_export_pro_columns">I dati di base sono gratuiti. Sblocca Pro per esportare gli altri dettagli.</string>
+    <string name="inventory_export_unlock_pro">Sblocca Pro</string>
+    <string name="inventory_export_dismiss_hint">Chiudi avviso</string>
     <string name="inventory_export_use_basics">Esporta solo Base</string>
     <string name="inventory_export_structured_hint">I dettagli disponibili solo in JSON includono record completi, non solo conteggi. I file CSV li escludono.</string>
     <string name="inventory_export_intro_got_it">Ho capito</string>

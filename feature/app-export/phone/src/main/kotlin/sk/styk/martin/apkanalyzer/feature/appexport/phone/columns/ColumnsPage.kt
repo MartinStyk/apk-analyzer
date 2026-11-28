@@ -4,12 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -32,7 +32,10 @@ import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzer
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Checkbox
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Chip
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.IconButton
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.InfoCard
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ProBadge
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.SwipeDismiss
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Tag
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.TextButton
@@ -42,11 +45,12 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.lazylist.shape
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.ApkAnalyzerTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.InventoryExportAction
+import sk.styk.martin.apkanalyzer.feature.appexport.phone.InventoryExportHint
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.InventoryExportState
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.InventoryExportStep
+import sk.styk.martin.apkanalyzer.feature.appexport.phone.ProOwnership
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.R
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.components.CompactStepIndicator
-import sk.styk.martin.apkanalyzer.feature.appexport.phone.components.PageContentPadding
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.components.StepGuidance
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.components.descriptionRes
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.components.labelRes
@@ -59,7 +63,7 @@ internal fun ColumnsPage(
 ) {
     val selectedColumns = state.columns
     LazyColumn(
-        contentPadding = PageContentPadding,
+        contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),
         modifier = modifier.fillMaxSize(),
     ) {
         item(key = "step_indicator") {
@@ -72,7 +76,7 @@ internal fun ColumnsPage(
         }
 
         item(key = "columns_guidance") {
-            StepGuidance(step = InventoryExportStep.Columns, modifier = Modifier.padding(bottom = 12.dp))
+            StepGuidance(step = InventoryExportStep.Columns, modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp))
         }
 
         item(key = "columns_presets") {
@@ -86,7 +90,7 @@ internal fun ColumnsPage(
                         text = stringResource(preset.descriptionRes()),
                         style = AppTheme.typography.bodySmall,
                         color = AppTheme.colors.onSurfaceVariant,
-                        modifier = Modifier.padding(top = 8.dp),
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp),
                     )
                 }
             }
@@ -98,6 +102,7 @@ internal fun ColumnsPage(
                 isAllSelected = selectedColumns.size == InventoryColumn.entries.size,
                 onToggle = { onAction(InventoryExportAction.AllColumnsToggled) },
                 titleStyle = TitleStyle.Screen,
+                modifier = Modifier.padding(horizontal = 16.dp),
             )
         }
 
@@ -106,33 +111,27 @@ internal fun ColumnsPage(
                 InventoryHint(
                     icon = ApkAnalyzerIcons.Info,
                     text = stringResource(R.string.inventory_export_no_columns_hint),
+                    modifier = Modifier.padding(horizontal = 16.dp),
                 )
             }
         }
 
-        if (state.needsAppAnalysis) {
-            item(key = "columns_hint_analysis") {
-                InventoryHint(
-                    icon = ApkAnalyzerIcons.HourglassEmpty,
-                    text = stringResource(R.string.inventory_export_slow_hint),
-                )
-            }
-        }
-
-        if (state.hasStructuredColumns) {
+        if (state.hasStructuredColumns && InventoryExportHint.Structured !in state.dismissedHints) {
             item(key = "columns_hint_structured") {
-                InventoryHint(
+                DismissibleInventoryHint(
                     icon = ApkAnalyzerIcons.Info,
                     text = stringResource(R.string.inventory_export_structured_hint),
+                    onDismiss = { onAction(InventoryExportAction.DismissHint(InventoryExportHint.Structured)) },
                 )
             }
         }
 
-        if (state.needsUsageAccess) {
+        if (state.needsUsageAccess && InventoryExportHint.UsageAccess !in state.dismissedHints) {
             item(key = "columns_hint_usage_access") {
-                InventoryHint(
+                DismissibleInventoryHint(
                     icon = ApkAnalyzerIcons.Warning,
                     text = stringResource(R.string.inventory_export_usage_access_hint),
+                    onDismiss = { onAction(InventoryExportAction.DismissHint(InventoryExportHint.UsageAccess)) },
                     action = {
                         TextButton(
                             text = stringResource(R.string.inventory_export_grant_access),
@@ -147,6 +146,7 @@ internal fun ColumnsPage(
             columnGroupItems(
                 group = group,
                 selectedColumns = selectedColumns,
+                showProBadges = state.proOwnership == ProOwnership.NotOwned,
                 onAction = onAction,
             )
         }
@@ -156,6 +156,7 @@ internal fun ColumnsPage(
 private fun LazyListScope.columnGroupItems(
     group: InventoryColumnGroup,
     selectedColumns: Set<InventoryColumn>,
+    showProBadges: Boolean,
     onAction: (InventoryExportAction) -> Unit,
 ) {
     val columns = InventoryColumn.entries.filter { it.group == group }
@@ -165,7 +166,7 @@ private fun LazyListScope.columnGroupItems(
             isAllSelected = selectedColumns.containsAll(columns),
             onToggle = { onAction(InventoryExportAction.ColumnGroupToggled(group)) },
             titleStyle = TitleStyle.Section,
-            modifier = Modifier.padding(top = 16.dp),
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
         )
     }
     itemsPositioned(
@@ -175,8 +176,11 @@ private fun LazyListScope.columnGroupItems(
         ColumnRow(
             column = column,
             isSelected = column in selectedColumns,
+            isProLocked = showProBadges && column !in InventoryPreset.Basics.columns,
             position = position,
             onToggle = { onAction(InventoryExportAction.ColumnToggled(column)) },
+            onOpenPro = { onAction(InventoryExportAction.OpenPro) },
+            modifier = Modifier.padding(horizontal = 16.dp),
         )
     }
 }
@@ -215,8 +219,10 @@ private fun SelectionHeader(
 private fun ColumnRow(
     column: InventoryColumn,
     isSelected: Boolean,
+    isProLocked: Boolean,
     position: ListItemPosition,
     onToggle: () -> Unit,
+    onOpenPro: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -244,8 +250,9 @@ private fun ColumnRow(
                 Tag(text = stringResource(R.string.inventory_export_json_only))
             }
         }
-        if (column.requiresAppAnalysis) {
-            Tag(text = stringResource(R.string.inventory_export_slower_tag))
+        if (isProLocked) {
+            Spacer(modifier = Modifier.width(8.dp))
+            ProBadge(onClick = onOpenPro)
         }
     }
 }
@@ -255,37 +262,40 @@ private fun InventoryHint(
     icon: ImageVector,
     text: String,
     modifier: Modifier = Modifier,
+) {
+    InfoCard(
+        icon = icon,
+        title = null,
+        body = text,
+        modifier = modifier.padding(top = 8.dp),
+    )
+}
+
+@Composable
+private fun DismissibleInventoryHint(
+    icon: ImageVector,
+    text: String,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
     action: (@Composable () -> Unit)? = null,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp)
-            .background(AppTheme.colors.surfaceVariant, Shapes.CardShape)
-            .padding(start = 16.dp, end = 8.dp, top = 12.dp, bottom = if (action == null) 12.dp else 4.dp),
+    SwipeDismiss(
+        onDismiss = onDismiss,
+        modifier = modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp),
     ) {
-        Row(verticalAlignment = Alignment.Top) {
-            Icon(
-                imageVector = icon,
-                tint = AppTheme.colors.onSurfaceVariant,
-                modifier = Modifier.size(20.dp),
-            )
-            Spacer(modifier = Modifier.width(12.dp))
-            Text(
-                text = text,
-                style = AppTheme.typography.bodyMedium,
-                color = AppTheme.colors.onSurfaceVariant,
-                modifier = Modifier.padding(end = 8.dp),
-            )
-        }
-        if (action != null) {
-            Row(
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                action()
-            }
-        }
+        InfoCard(
+            icon = icon,
+            title = null,
+            body = text,
+            action = action,
+            trailingAction = {
+                IconButton(
+                    imageVector = ApkAnalyzerIcons.Clear,
+                    contentDescription = stringResource(R.string.inventory_export_dismiss_hint),
+                    onClick = onDismiss,
+                )
+            },
+        )
     }
 }
 
@@ -297,6 +307,7 @@ private fun ColumnsPagePreview() {
             state = InventoryExportState(
                 columns = InventoryPreset.SecurityAudit.columns + InventoryColumn.LastUsed + InventoryColumn.Activities,
                 isUsageAccessGranted = false,
+                proOwnership = ProOwnership.NotOwned,
             ),
             onAction = {},
         )
@@ -324,7 +335,8 @@ private fun PresetRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier
             .fillMaxWidth()
-            .horizontalScroll(rememberScrollState()),
+            .horizontalScroll(rememberScrollState())
+            .padding(horizontal = 16.dp),
     ) {
         InventoryPreset.entries.forEach { preset ->
             Chip(
