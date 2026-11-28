@@ -44,7 +44,7 @@ internal class ReviewEligibilityTrackerImpl @Inject constructor(
         val qualified = engaged || dwelled
         if (!qualified) return
         applicationScope.launch(dispatcherProvider.io()) {
-            val current = persistenceRepository.get(Key.AppDetailQualifiedSessionCount)
+            val current = persistenceRepository[Key.AppDetailQualifiedSessionCount]
             persistenceRepository.save(Key.AppDetailQualifiedSessionCount, current + 1)
         }
     }

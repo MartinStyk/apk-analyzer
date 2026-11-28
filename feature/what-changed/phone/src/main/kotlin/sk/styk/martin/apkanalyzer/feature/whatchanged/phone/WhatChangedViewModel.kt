@@ -101,7 +101,7 @@ internal class WhatChangedViewModel @Inject constructor(
         loadJob = viewModelScope.launch(dispatcherProvider.default()) {
             val previousVisit = visitTracker.previousVisit()
             val initialRange = WhatChangedRange.initial(
-                storedName = persistenceRepository.get(Key.WhatChangedRange),
+                storedName = persistenceRepository[Key.WhatChangedRange],
                 hasPro = accessPolicy.hasPro().first(),
             )
             combine(

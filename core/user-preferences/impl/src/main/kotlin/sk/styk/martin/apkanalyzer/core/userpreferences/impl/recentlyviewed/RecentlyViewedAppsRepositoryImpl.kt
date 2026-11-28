@@ -37,7 +37,7 @@ internal class RecentlyViewedAppsRepositoryImpl @Inject constructor(
         dao.recordView(packageName.value, System.currentTimeMillis())
     }
 
-    override suspend fun hasRecents(): Boolean = persistenceRepository.get(Key.RecentlyViewedAppsEnabled) && dao.count() > 0
+    override suspend fun hasRecents(): Boolean = persistenceRepository[Key.RecentlyViewedAppsEnabled] && dao.count() > 0
 
     private companion object {
         const val MAX_RECENTS = 8
