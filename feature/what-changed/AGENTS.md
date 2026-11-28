@@ -35,6 +35,11 @@ package `sk.styk.martin.apkanalyzer.feature.whatchanged.phone`. There is no TV m
   full log always cover all recorded history. There is no "Latest change" section: it only repeated
   rows already listed. An empty range names the date of the last change instead, so the user knows
   how far to widen it.
+* **The opening range depends on Pro.** Without Pro the tab always opens on All time, so the preview
+  shows the most rows; a picked range lasts for that screen only and is never stored. With Pro it
+  opens on the stored range, or Since last visit, and a picked range is stored. The opening range is
+  chosen once per screen, so buying Pro on the tab doesn't narrow it. `WhatChangedRange.initial`
+  owns this choice.
 * **"Since last visit" means the previous app run that opened the tab.** `WhatChangedVisitTracker`
   reads and replaces the stored visit once per process, so reopening the tab in the same run never
   moves the start. Never visited means all recorded history. There is no 7-day floor, so "No changes

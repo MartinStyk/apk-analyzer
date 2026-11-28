@@ -25,6 +25,9 @@ internal enum class WhatChangedRange(@param:StringRes val labelRes: Int) {
     }
 
     companion object {
-        fun fromStored(name: String): WhatChangedRange = entries.firstOrNull { it.name == name } ?: SinceLastVisit
+        fun initial(storedName: String, hasPro: Boolean): WhatChangedRange = when {
+            hasPro -> entries.firstOrNull { it.name == storedName } ?: SinceLastVisit
+            else -> AllTime
+        }
     }
 }

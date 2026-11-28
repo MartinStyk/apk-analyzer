@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -59,13 +59,10 @@ internal class WhatChangedViewModel @Inject constructor(
     private val eventChannel = Channel<WhatChangedEvent>(Channel.BUFFERED)
     val events = eventChannel.receiveAsFlow()
 
-    private val selectedRange = MutableStateFlow<WhatChangedRange?>(null)
+    private val pickedRange = MutableStateFlow<WhatChangedRange?>(null)
     private var loadJob: Job? = null
 
     init {
-        viewModelScope.launch {
-            selectedRange.value = WhatChangedRange.fromStored(persistenceRepository.get(Key.WhatChangedRange))
-        }
         load()
     }
 
@@ -76,8 +73,10 @@ internal class WhatChangedViewModel @Inject constructor(
             WhatChangedAction.OpenFullHistory -> sendEvent(WhatChangedEvent.NavigateToFullHistory)
 
             is WhatChangedAction.SelectRange -> {
-                selectedRange.value = action.range
-                viewModelScope.launch { persistenceRepository.save(Key.WhatChangedRange, action.range.name) }
+                pickedRange.value = action.range
+                viewModelScope.launch {
+                    if (accessPolicy.hasPro().first()) persistenceRepository.save(Key.WhatChangedRange, action.range.name)
+                }
             }
 
             is WhatChangedAction.OpenChange -> sendEvent(action.item.toNavigationEvent())
@@ -101,12 +100,17 @@ internal class WhatChangedViewModel @Inject constructor(
         state.value = WhatChangedState.Loading
         loadJob = viewModelScope.launch(dispatcherProvider.default()) {
             val previousVisit = visitTracker.previousVisit()
+            val initialRange = WhatChangedRange.initial(
+                storedName = persistenceRepository.get(Key.WhatChangedRange),
+                hasPro = accessPolicy.hasPro().first(),
+            )
             combine(
                 appHistoryRepository.deviceTimeline(),
                 installedAppsRepository.apps().map { apps -> apps.mapTo(HashSet()) { it.packageName } }.distinctUntilChanged(),
-                selectedRange.filterNotNull(),
+                pickedRange,
                 accessPolicy.hasPro(),
-            ) { timeline, installed, range, hasPro ->
+            ) { timeline, installed, picked, hasPro ->
+                val range = picked ?: initialRange
                 timeline.toState(range = range, previousVisit = previousVisit, installed = installed, hasPro = hasPro)
             }.collect { state.value = it }
         }
