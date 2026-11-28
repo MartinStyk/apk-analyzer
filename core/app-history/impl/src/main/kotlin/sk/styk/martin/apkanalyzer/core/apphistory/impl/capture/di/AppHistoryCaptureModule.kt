@@ -11,9 +11,11 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
 import sk.styk.martin.apkanalyzer.core.apphistory.api.capture.AppHistoryCaptureRepository
+import sk.styk.martin.apkanalyzer.core.apphistory.api.capture.AppHistoryRecordingRepository
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.capture.AppHistoryCaptureRepositoryImpl
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.capture.AppHistoryCaptureScheduler
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.capture.AppHistoryCaptureSchedulerImpl
+import sk.styk.martin.apkanalyzer.core.apphistory.impl.capture.AppHistoryRecordingRepositoryImpl
 import javax.inject.Singleton
 
 @Module
@@ -22,6 +24,10 @@ internal interface AppHistoryCaptureModule {
     @Binds
     @Singleton
     fun bindAppHistoryCaptureRepository(impl: AppHistoryCaptureRepositoryImpl): AppHistoryCaptureRepository
+
+    @Binds
+    @Singleton
+    fun bindAppHistoryRecordingRepository(impl: AppHistoryRecordingRepositoryImpl): AppHistoryRecordingRepository
 
     @Binds
     @Singleton

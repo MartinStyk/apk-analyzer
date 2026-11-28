@@ -58,4 +58,8 @@
     <string name="what_changed_uncomparable_only">Bazı ayrıntılar karşılaştırılamadı</string>
     <string name="what_changed_locked_row">Kilitli uygulama değişikliği, Pro kapsamında</string>
     <string name="what_changed_locked_click_label">Pro ile kilidi aç</string>
+    <string name="what_changed_settings">Geçmiş ayarları</string>
+    <string name="what_changed_recording_off_title">Kayıt kapalı</string>
+    <string name="what_changed_recording_off_body">Yeni yüklemeler ve güncellemeler kaydedilmiyor.</string>
+    <string name="what_changed_recording_turn_on">Aç</string>
 </resources>

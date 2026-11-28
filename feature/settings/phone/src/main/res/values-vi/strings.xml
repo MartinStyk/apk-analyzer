@@ -14,4 +14,38 @@
     <string name="settings_fingerprint_format">Định dạng dấu vân tay</string>
     <string name="settings_fingerprint_format_colon_separated">Phân tách bằng dấu hai chấm</string>
     <string name="settings_fingerprint_format_continuous">Liền mạch</string>
+    <string name="settings_app_history">Lịch sử ứng dụng</string>
+    <string name="settings_app_history_on">Bật</string>
+    <string name="settings_app_history_off">Tắt</string>
+    <string name="app_history_settings_recording_section">Ghi nhận</string>
+    <string name="app_history_settings_recording_toggle">Ghi nhận thay đổi của ứng dụng</string>
+    <string name="app_history_settings_recording_description">Lưu thông tin chi tiết của từng ứng dụng khi bạn cài đặt hoặc cập nhật, để thẻ Thay đổi và Lịch sử của từng ứng dụng có thể cho thấy điểm khác biệt.</string>
+    <string name="app_history_settings_recording_off_title">Đã tắt ghi nhận</string>
+    <string name="app_history_settings_recording_off_body">Các lượt cài đặt và cập nhật mới không được ghi nhận. Thẻ Thay đổi và Lịch sử của từng ứng dụng sẽ giữ nguyên cho đến khi bạn bật lại tính năng ghi nhận.</string>
+    <string name="app_history_settings_turn_off_title">Tắt ghi nhận?</string>
+    <string name="app_history_settings_turn_off_message">Các lượt cài đặt và cập nhật trong thời gian tắt ghi nhận sẽ không hiện trong thẻ Thay đổi hay trong Lịch sử của ứng dụng. Khi bạn bật lại, một ứng dụng được cập nhật nhiều lần sẽ hiện thành một thay đổi, còn các ứng dụng bị gỡ trong thời gian đó sẽ không bao giờ được ghi nhận. Mọi dữ liệu đã ghi nhận vẫn được giữ lại.</string>
+    <string name="app_history_settings_turn_off_confirm">Tắt</string>
+    <string name="app_history_settings_turn_off_dismiss">Tiếp tục ghi nhận</string>
+    <string name="app_history_settings_privacy_title">Chỉ lưu trên điện thoại này</string>
+    <string name="app_history_settings_privacy_body">Apk Analyzer chỉ lưu lịch sử ứng dụng trên điện thoại này và không gửi đi bất kỳ đâu. Nếu bạn bật tính năng sao lưu trong phần cài đặt của điện thoại, Android sẽ đưa lịch sử này vào bản sao lưu trong Tài khoản Google của bạn, giống như các dữ liệu ứng dụng khác.</string>
+    <string name="app_history_settings_storage_section">Bộ nhớ</string>
+    <string name="app_history_settings_storage_used">Dung lượng đã dùng</string>
+    <plurals name="app_history_settings_storage_apps">
+        <item quantity="other">Lịch sử của %d ứng dụng</item>
+    </plurals>
+    <string name="app_history_settings_storage_empty">Chưa ghi nhận gì</string>
+    <string name="app_history_settings_storage_unavailable">Không thể xác định dung lượng mà lịch sử đang dùng</string>
+    <string name="app_history_settings_transfer_section">Xuất và nhập</string>
+    <string name="app_history_settings_export">Xuất lịch sử</string>
+    <string name="app_history_settings_export_description">Lưu một bản sao dưới dạng tệp trên điện thoại này hoặc trong dịch vụ lưu trữ đám mây như Google Drive.</string>
+    <string name="app_history_settings_import">Nhập lịch sử</string>
+    <string name="app_history_settings_import_description">Thêm lịch sử từ một tệp đã xuất. Dữ liệu đã ghi nhận sẽ không bị thay thế.</string>
+    <string name="app_history_settings_exported">Đã xuất lịch sử</string>
+    <string name="app_history_settings_export_failed">Không thể xuất lịch sử</string>
+    <plurals name="app_history_settings_imported">
+        <item quantity="other">Đã thêm lịch sử cho %d ứng dụng</item>
+    </plurals>
+    <string name="app_history_settings_nothing_new">Tệp này không có lịch sử mới</string>
+    <string name="app_history_settings_import_failed">Không thể nhập tệp này. Hãy chọn một tệp lịch sử được xuất từ Apk Analyzer.</string>
+    <string name="app_history_settings_picker_unavailable">Không có ứng dụng nào để chọn tệp</string>
 </resources>

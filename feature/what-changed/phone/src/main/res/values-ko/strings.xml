@@ -54,4 +54,8 @@
     <string name="what_changed_uncomparable_only">일부 정보를 비교할 수 없음</string>
     <string name="what_changed_locked_row">잠긴 앱 변경사항, Pro 기능</string>
     <string name="what_changed_locked_click_label">Pro로 잠금 해제</string>
+    <string name="what_changed_settings">기록 설정</string>
+    <string name="what_changed_recording_off_title">기록이 꺼져 있음</string>
+    <string name="what_changed_recording_off_body">새로운 설치 및 업데이트가 기록되지 않고 있습니다.</string>
+    <string name="what_changed_recording_turn_on">켜기</string>
 </resources>

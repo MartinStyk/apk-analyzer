@@ -36,12 +36,12 @@ internal interface AppHistoryWriteDao {
         snapshots: List<AppHistorySnapshotEntity>,
         blobs: List<AppHistoryBlobEntity>,
         devices: List<AppHistoryDeviceEntity>,
-    ) {
+    ): List<Long> {
         insertDevices(devices)
         insertBlobs(blobs)
-        insertSnapshotsIgnoringConflicts(snapshots)
+        return insertSnapshotsIgnoringConflicts(snapshots)
     }
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertSnapshotsIgnoringConflicts(snapshots: List<AppHistorySnapshotEntity>)
+    suspend fun insertSnapshotsIgnoringConflicts(snapshots: List<AppHistorySnapshotEntity>): List<Long>
 }

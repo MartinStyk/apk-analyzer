@@ -14,4 +14,38 @@
     <string name="settings_language_section">語言</string>
     <string name="settings_language_app_language">應用程式語言</string>
     <string name="settings_language_system_default">系統預設</string>
+    <string name="settings_app_history">應用程式歷史記錄</string>
+    <string name="settings_app_history_on">已開啟</string>
+    <string name="settings_app_history_off">已關閉</string>
+    <string name="app_history_settings_recording_section">記錄</string>
+    <string name="app_history_settings_recording_toggle">記錄應用程式變更</string>
+    <string name="app_history_settings_recording_description">在您安裝或更新應用程式時儲存其詳細資料，讓「變更」分頁和各應用程式的歷史記錄能顯示有哪些不同。</string>
+    <string name="app_history_settings_recording_off_title">記錄功能已關閉</string>
+    <string name="app_history_settings_recording_off_body">不會記錄新的安裝和更新。在您重新開啟記錄功能前，「變更」分頁和各應用程式的歷史記錄都會維持現狀。</string>
+    <string name="app_history_settings_turn_off_title">要關閉記錄功能嗎？</string>
+    <string name="app_history_settings_turn_off_message">記錄功能關閉期間的安裝和更新，不會顯示在「變更」分頁或應用程式的歷史記錄中。重新開啟後，更新多次的應用程式只會顯示為一項變更，期間解除安裝的應用程式也完全不會記錄。目前為止記錄的所有內容都會保留。</string>
+    <string name="app_history_settings_turn_off_confirm">關閉</string>
+    <string name="app_history_settings_turn_off_dismiss">保持開啟</string>
+    <string name="app_history_settings_privacy_title">只儲存在這支手機上</string>
+    <string name="app_history_settings_privacy_body">Apk Analyzer 只會將應用程式歷史記錄儲存在這支手機上，不會傳送到任何地方。如果您在手機設定中開啟了備份功能，Android 會將這些記錄納入您的 Google 帳戶備份，就像其他應用程式資料一樣。</string>
+    <string name="app_history_settings_storage_section">儲存空間</string>
+    <string name="app_history_settings_storage_used">已使用的空間</string>
+    <plurals name="app_history_settings_storage_apps">
+        <item quantity="other">%d 個應用程式的歷史記錄</item>
+    </plurals>
+    <string name="app_history_settings_storage_empty">尚無記錄</string>
+    <string name="app_history_settings_storage_unavailable">無法讀取歷史記錄使用的空間大小</string>
+    <string name="app_history_settings_transfer_section">匯出和匯入</string>
+    <string name="app_history_settings_export">匯出歷史記錄</string>
+    <string name="app_history_settings_export_description">將副本儲存為檔案，存放在這支手機或 Google 雲端硬碟等雲端儲存空間中。</string>
+    <string name="app_history_settings_import">匯入歷史記錄</string>
+    <string name="app_history_settings_import_description">從匯出的檔案新增歷史記錄。已記錄的內容不會遭到取代。</string>
+    <string name="app_history_settings_exported">已匯出歷史記錄</string>
+    <string name="app_history_settings_export_failed">無法匯出歷史記錄</string>
+    <plurals name="app_history_settings_imported">
+        <item quantity="other">已新增 %d 個應用程式的歷史記錄</item>
+    </plurals>
+    <string name="app_history_settings_nothing_new">這個檔案中沒有新的歷史記錄</string>
+    <string name="app_history_settings_import_failed">無法匯入這個檔案。請選擇從 Apk Analyzer 匯出的歷史記錄檔案。</string>
+    <string name="app_history_settings_picker_unavailable">沒有可選擇檔案的應用程式</string>
 </resources>

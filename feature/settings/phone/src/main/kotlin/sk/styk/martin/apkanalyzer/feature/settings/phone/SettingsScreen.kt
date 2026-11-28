@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import sk.styk.martin.apkanalyzer.core.apphistory.api.capture.AppHistoryRecording
 import sk.styk.martin.apkanalyzer.core.common.applanguage.AppLanguageSetting
 import sk.styk.martin.apkanalyzer.core.common.settings.ColorAppScheme
 import sk.styk.martin.apkanalyzer.core.common.settings.FingerprintFormat
@@ -48,6 +49,7 @@ private val SettingsRowMinHeight = 48.dp
 @Composable
 internal fun SettingsScreen(
     onBack: () -> Unit,
+    onAppHistorySettings: () -> Unit,
     modifier: Modifier = Modifier,
     onFeatureFlags: (() -> Unit)? = null,
     viewModel: SettingsViewModel = hiltViewModel(),
@@ -55,10 +57,11 @@ internal fun SettingsScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    LaunchedEffect(onBack, onFeatureFlags) {
+    LaunchedEffect(onBack, onAppHistorySettings, onFeatureFlags) {
         viewModel.events.collect { event ->
             when (event) {
                 is SettingsEvent.NavigateBack -> onBack()
+                SettingsEvent.OpenAppHistorySettings -> onAppHistorySettings()
                 is SettingsEvent.OpenAppLanguageSettings -> context.openAppLanguageSettings()
                 SettingsEvent.OpenFeatureFlags -> if (BuildConfig.DEBUG) onFeatureFlags?.invoke()
             }
@@ -114,7 +117,9 @@ private fun SettingsContent(
 
             AppsSection(
                 recentlyViewedAppsEnabled = state.recentlyViewedAppsEnabled,
+                appHistoryRecording = state.appHistoryRecording,
                 onRecentlyViewedAppsToggle = { onAction(SettingsAction.RecentlyViewedAppsToggled(it)) },
+                onOpenAppHistorySettings = { onAction(SettingsAction.OpenAppHistorySettings) },
             )
 
             if (state.appLanguageSetting is AppLanguageSetting.Available) {
@@ -217,7 +222,9 @@ private fun AppearanceSection(
 @Composable
 private fun AppsSection(
     recentlyViewedAppsEnabled: Boolean,
+    appHistoryRecording: AppHistoryRecording,
     onRecentlyViewedAppsToggle: (Boolean) -> Unit,
+    onOpenAppHistorySettings: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -227,25 +234,77 @@ private fun AppsSection(
             color = AppTheme.colors.onBackground,
         )
         Spacer(modifier = Modifier.height(8.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .card()
-                .padding(horizontal = 16.dp, vertical = 12.dp)
-                .heightIn(min = SettingsRowMinHeight),
+                .card(),
         ) {
-            val recentlyViewedLabel = stringResource(R.string.settings_recently_viewed_toggle)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                    .heightIn(min = SettingsRowMinHeight),
+            ) {
+                val recentlyViewedLabel = stringResource(R.string.settings_recently_viewed_toggle)
+                Text(
+                    text = recentlyViewedLabel,
+                    style = AppTheme.typography.bodyMedium,
+                    color = AppTheme.colors.onSurface,
+                )
+                Switch(
+                    checked = recentlyViewedAppsEnabled,
+                    onCheckedChange = onRecentlyViewedAppsToggle,
+                    modifier = Modifier.semantics { contentDescription = recentlyViewedLabel },
+                )
+            }
+            if (appHistoryRecording != AppHistoryRecording.Unavailable) {
+                NavigationRow(
+                    label = stringResource(R.string.settings_app_history),
+                    value = stringResource(
+                        if (appHistoryRecording == AppHistoryRecording.On) R.string.settings_app_history_on else R.string.settings_app_history_off,
+                    ),
+                    onClick = onOpenAppHistorySettings,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun NavigationRow(
+    label: String,
+    value: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .heightIn(min = SettingsRowMinHeight),
+    ) {
+        Text(
+            text = label,
+            style = AppTheme.typography.bodyMedium,
+            color = AppTheme.colors.onSurface,
+        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = recentlyViewedLabel,
+                text = value,
                 style = AppTheme.typography.bodyMedium,
-                color = AppTheme.colors.onSurface,
+                color = AppTheme.colors.onSurfaceVariant,
             )
-            Switch(
-                checked = recentlyViewedAppsEnabled,
-                onCheckedChange = onRecentlyViewedAppsToggle,
-                modifier = Modifier.semantics { contentDescription = recentlyViewedLabel },
+            Spacer(modifier = Modifier.width(4.dp))
+            Icon(
+                imageVector = ApkAnalyzerIcons.ChevronRight,
+                contentDescription = null,
+                tint = AppTheme.colors.onSurfaceVariant,
+                modifier = Modifier.size(20.dp),
             )
         }
     }
@@ -264,38 +323,12 @@ private fun LanguageSection(
             color = AppTheme.colors.onBackground,
         )
         Spacer(modifier = Modifier.height(8.dp))
-        val appLanguageLabel = stringResource(R.string.settings_language_app_language)
-        val appLanguageValue = appLanguageSetting.displayText()
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
-                .card()
-                .clickable(onClick = onOpenLanguageSettings)
-                .padding(horizontal = 16.dp, vertical = 12.dp)
-                .heightIn(min = SettingsRowMinHeight),
-        ) {
-            Text(
-                text = appLanguageLabel,
-                style = AppTheme.typography.bodyMedium,
-                color = AppTheme.colors.onSurface,
-            )
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = appLanguageValue,
-                    style = AppTheme.typography.bodyMedium,
-                    color = AppTheme.colors.onSurfaceVariant,
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Icon(
-                    imageVector = ApkAnalyzerIcons.ChevronRight,
-                    contentDescription = null,
-                    tint = AppTheme.colors.onSurfaceVariant,
-                    modifier = Modifier.size(20.dp),
-                )
-            }
-        }
+        NavigationRow(
+            label = stringResource(R.string.settings_language_app_language),
+            value = appLanguageSetting.displayText(),
+            onClick = onOpenLanguageSettings,
+            modifier = Modifier.card(),
+        )
     }
 }
 
@@ -326,6 +359,7 @@ private fun SettingsContentPreview() {
             state = SettingsState(
                 colorScheme = ColorAppScheme.FollowSystem,
                 recentlyViewedAppsEnabled = true,
+                appHistoryRecording = AppHistoryRecording.On,
                 appLanguageSetting = AppLanguageSetting.Available.SystemDefault,
             ),
             onAction = {},

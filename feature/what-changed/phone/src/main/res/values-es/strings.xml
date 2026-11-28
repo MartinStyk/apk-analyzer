@@ -62,4 +62,8 @@
     <string name="what_changed_uncomparable_only">No se pudieron comparar algunos datos</string>
     <string name="what_changed_locked_row">Cambio de app bloqueado, incluido en Pro</string>
     <string name="what_changed_locked_click_label">Desbloquear con Pro</string>
+    <string name="what_changed_settings">Configuración del historial</string>
+    <string name="what_changed_recording_off_title">El registro está desactivado</string>
+    <string name="what_changed_recording_off_body">Las nuevas instalaciones y actualizaciones no se están registrando.</string>
+    <string name="what_changed_recording_turn_on">Activar</string>
 </resources>

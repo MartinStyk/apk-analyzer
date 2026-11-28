@@ -66,4 +66,8 @@
     <string name="what_changed_uncomparable_only">Деякі дані не вдалося порівняти</string>
     <string name="what_changed_locked_row">Заблокована зміна застосунку, входить до Pro</string>
     <string name="what_changed_locked_click_label">Розблокувати з Pro</string>
+    <string name="what_changed_settings">Налаштування історії</string>
+    <string name="what_changed_recording_off_title">Фіксацію вимкнено</string>
+    <string name="what_changed_recording_off_body">Нові встановлення й оновлення не фіксуються.</string>
+    <string name="what_changed_recording_turn_on">Увімкнути</string>
 </resources>

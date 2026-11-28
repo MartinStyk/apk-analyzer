@@ -54,4 +54,8 @@
     <string name="what_changed_uncomparable_only">部分資訊無法比較</string>
     <string name="what_changed_locked_row">已鎖定的應用程式變更，Pro 版功能</string>
     <string name="what_changed_locked_click_label">使用 Pro 版解鎖</string>
+    <string name="what_changed_settings">歷史記錄設定</string>
+    <string name="what_changed_recording_off_title">記錄功能已關閉</string>
+    <string name="what_changed_recording_off_body">目前不會記錄新的安裝和更新。</string>
+    <string name="what_changed_recording_turn_on">開啟</string>
 </resources>

@@ -14,4 +14,40 @@
     <string name="settings_fingerprint_format">Fingerabdruckformat</string>
     <string name="settings_fingerprint_format_colon_separated">Mit Doppelpunkten</string>
     <string name="settings_fingerprint_format_continuous">Ohne Trennzeichen</string>
+    <string name="settings_app_history">App-Verlauf</string>
+    <string name="settings_app_history_on">An</string>
+    <string name="settings_app_history_off">Aus</string>
+    <string name="app_history_settings_recording_section">Erfassung</string>
+    <string name="app_history_settings_recording_toggle">App-Änderungen erfassen</string>
+    <string name="app_history_settings_recording_description">Speichert beim Installieren oder Aktualisieren einer App ihre Details, damit der Tab „Änderungen“ und der Verlauf jeder App zeigen können, was sich geändert hat.</string>
+    <string name="app_history_settings_recording_off_title">Die Erfassung ist deaktiviert</string>
+    <string name="app_history_settings_recording_off_body">Neue Installationen und Updates werden nicht erfasst. Der Tab „Änderungen“ und der Verlauf jeder App bleiben unverändert, bis du die Erfassung wieder aktivierst.</string>
+    <string name="app_history_settings_turn_off_title">Erfassung deaktivieren?</string>
+    <string name="app_history_settings_turn_off_message">Installationen und Updates bei deaktivierter Erfassung erscheinen weder im Tab „Änderungen“ noch im Verlauf einer App. Wenn du sie wieder aktivierst, erscheint eine mehrmals aktualisierte App als eine einzige Änderung, und zwischenzeitlich deinstallierte Apps werden nie erfasst. Alles bisher Erfasste bleibt erhalten.</string>
+    <string name="app_history_settings_turn_off_confirm">Deaktivieren</string>
+    <string name="app_history_settings_turn_off_dismiss">Aktiviert lassen</string>
+    <string name="app_history_settings_privacy_title">Bleibt auf diesem Smartphone</string>
+    <string name="app_history_settings_privacy_body">Apk Analyzer speichert den App-Verlauf nur auf diesem Smartphone und sendet ihn nirgendwohin. Wenn die Sicherung in den Einstellungen deines Smartphones aktiviert ist, nimmt Android ihn wie andere App-Daten in die Sicherung deines Google-Kontos auf.</string>
+    <string name="app_history_settings_storage_section">Speicher</string>
+    <string name="app_history_settings_storage_used">Belegter Speicherplatz</string>
+    <plurals name="app_history_settings_storage_apps">
+        <item quantity="one">Verlauf von %d App</item>
+        <item quantity="other">Verlauf von %d Apps</item>
+    </plurals>
+    <string name="app_history_settings_storage_empty">Noch nichts erfasst</string>
+    <string name="app_history_settings_storage_unavailable">Der vom Verlauf belegte Speicherplatz konnte nicht ermittelt werden</string>
+    <string name="app_history_settings_transfer_section">Export und Import</string>
+    <string name="app_history_settings_export">Verlauf exportieren</string>
+    <string name="app_history_settings_export_description">Speichert eine Kopie als Datei auf diesem Smartphone oder in einem Cloud-Speicher wie Google Drive.</string>
+    <string name="app_history_settings_import">Verlauf importieren</string>
+    <string name="app_history_settings_import_description">Fügt den Verlauf aus einer exportierten Datei hinzu. Bereits Erfasstes wird nicht ersetzt.</string>
+    <string name="app_history_settings_exported">Verlauf exportiert</string>
+    <string name="app_history_settings_export_failed">Verlauf konnte nicht exportiert werden</string>
+    <plurals name="app_history_settings_imported">
+        <item quantity="one">Verlauf für %d App hinzugefügt</item>
+        <item quantity="other">Verlauf für %d Apps hinzugefügt</item>
+    </plurals>
+    <string name="app_history_settings_nothing_new">Kein neuer Verlauf in dieser Datei</string>
+    <string name="app_history_settings_import_failed">Diese Datei konnte nicht importiert werden. Wähle eine aus Apk Analyzer exportierte Verlaufsdatei.</string>
+    <string name="app_history_settings_picker_unavailable">Keine App zum Auswählen der Datei verfügbar</string>
 </resources>

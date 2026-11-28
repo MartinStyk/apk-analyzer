@@ -14,4 +14,44 @@
     <string name="settings_fingerprint_format">Формат отпечатка</string>
     <string name="settings_fingerprint_format_colon_separated">С двоеточиями</string>
     <string name="settings_fingerprint_format_continuous">Без разделителей</string>
+    <string name="settings_app_history">История приложений</string>
+    <string name="settings_app_history_on">Включено</string>
+    <string name="settings_app_history_off">Выключено</string>
+    <string name="app_history_settings_recording_section">Фиксация</string>
+    <string name="app_history_settings_recording_toggle">Фиксировать изменения приложений</string>
+    <string name="app_history_settings_recording_description">Сохраняет сведения о приложении при каждой установке или обновлении, чтобы вкладка «Изменения» и история каждого приложения могли показать, что изменилось.</string>
+    <string name="app_history_settings_recording_off_title">Фиксация выключена</string>
+    <string name="app_history_settings_recording_off_body">Новые установки и обновления не фиксируются. Вкладка «Изменения» и история каждого приложения останутся в текущем виде, пока вы снова не включите фиксацию.</string>
+    <string name="app_history_settings_turn_off_title">Выключить фиксацию?</string>
+    <string name="app_history_settings_turn_off_message">Пока фиксация выключена, установки и обновления не появляются на вкладке «Изменения» и в истории приложения. Когда вы снова её включите, приложение, обновлённое несколько раз, будет показано как одно изменение, а приложения, удалённые за это время, не будут зафиксированы вовсе. Всё, что уже зафиксировано, сохранится.</string>
+    <string name="app_history_settings_turn_off_confirm">Выключить</string>
+    <string name="app_history_settings_turn_off_dismiss">Не выключать</string>
+    <string name="app_history_settings_privacy_title">Остаётся на этом телефоне</string>
+    <string name="app_history_settings_privacy_body">Apk Analyzer сохраняет историю приложений только на этом телефоне и никуда её не отправляет. Если в настройках телефона включено резервное копирование, Android добавляет её в резервную копию в вашем аккаунте Google, как и другие данные приложений.</string>
+    <string name="app_history_settings_storage_section">Хранилище</string>
+    <string name="app_history_settings_storage_used">Занятое место</string>
+    <plurals name="app_history_settings_storage_apps">
+        <item quantity="one">История %d приложения</item>
+        <item quantity="few">История %d приложений</item>
+        <item quantity="many">История %d приложений</item>
+        <item quantity="other">История %d приложения</item>
+    </plurals>
+    <string name="app_history_settings_storage_empty">Пока ничего не зафиксировано</string>
+    <string name="app_history_settings_storage_unavailable">Не удалось определить, сколько места занимает история</string>
+    <string name="app_history_settings_transfer_section">Экспорт и импорт</string>
+    <string name="app_history_settings_export">Экспорт истории</string>
+    <string name="app_history_settings_export_description">Сохраняет копию в виде файла на этом телефоне или в облачном хранилище, например на Google Диске.</string>
+    <string name="app_history_settings_import">Импорт истории</string>
+    <string name="app_history_settings_import_description">Добавляет историю из экспортированного файла. Уже зафиксированные данные не заменяются.</string>
+    <string name="app_history_settings_exported">История экспортирована</string>
+    <string name="app_history_settings_export_failed">Не удалось экспортировать историю</string>
+    <plurals name="app_history_settings_imported">
+        <item quantity="one">Добавлена история %d приложения</item>
+        <item quantity="few">Добавлена история %d приложений</item>
+        <item quantity="many">Добавлена история %d приложений</item>
+        <item quantity="other">Добавлена история %d приложения</item>
+    </plurals>
+    <string name="app_history_settings_nothing_new">В этом файле нет новой истории</string>
+    <string name="app_history_settings_import_failed">Не удалось импортировать этот файл. Выберите файл истории, экспортированный из Apk Analyzer.</string>
+    <string name="app_history_settings_picker_unavailable">Нет приложения для выбора файла</string>
 </resources>

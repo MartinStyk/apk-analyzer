@@ -66,4 +66,8 @@
     <string name="what_changed_uncomparable_only">Nie udało się porównać niektórych danych</string>
     <string name="what_changed_locked_row">Zablokowana zmiana aplikacji, część Pro</string>
     <string name="what_changed_locked_click_label">Odblokuj z Pro</string>
+    <string name="what_changed_settings">Ustawienia historii</string>
+    <string name="what_changed_recording_off_title">Zapisywanie jest wyłączone</string>
+    <string name="what_changed_recording_off_body">Nowe instalacje i aktualizacje nie są zapisywane.</string>
+    <string name="what_changed_recording_turn_on">Włącz</string>
 </resources>

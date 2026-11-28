@@ -14,4 +14,44 @@
     <string name="settings_fingerprint_format">Format odcisku palca</string>
     <string name="settings_fingerprint_format_colon_separated">Oddzielone dwukropkami</string>
     <string name="settings_fingerprint_format_continuous">Ciągły</string>
+    <string name="settings_app_history">Historia aplikacji</string>
+    <string name="settings_app_history_on">Włączone</string>
+    <string name="settings_app_history_off">Wyłączone</string>
+    <string name="app_history_settings_recording_section">Zapisywanie</string>
+    <string name="app_history_settings_recording_toggle">Zapisuj zmiany aplikacji</string>
+    <string name="app_history_settings_recording_description">Zapisuje szczegóły aplikacji przy każdej instalacji lub aktualizacji, aby karta „Zmiany” i historia każdej aplikacji mogły pokazać, co się zmieniło.</string>
+    <string name="app_history_settings_recording_off_title">Zapisywanie jest wyłączone</string>
+    <string name="app_history_settings_recording_off_body">Nowe instalacje i aktualizacje nie są zapisywane. Karta „Zmiany” i historia każdej aplikacji pozostaną w obecnym stanie, dopóki ponownie nie włączysz zapisywania.</string>
+    <string name="app_history_settings_turn_off_title">Wyłączyć zapisywanie?</string>
+    <string name="app_history_settings_turn_off_message">Gdy zapisywanie jest wyłączone, instalacje i aktualizacje nie pojawiają się na karcie „Zmiany” ani w historii aplikacji. Po ponownym włączeniu aplikacja zaktualizowana kilka razy pojawi się jako jedna zmiana, a aplikacje usunięte w międzyczasie w ogóle nie zostaną zapisane. Wszystko, co zostało już zapisane, pozostanie.</string>
+    <string name="app_history_settings_turn_off_confirm">Wyłącz</string>
+    <string name="app_history_settings_turn_off_dismiss">Nie wyłączaj</string>
+    <string name="app_history_settings_privacy_title">Zostaje na tym telefonie</string>
+    <string name="app_history_settings_privacy_body">Apk Analyzer zapisuje historię aplikacji tylko na tym telefonie i nigdzie jej nie wysyła. Jeśli w ustawieniach telefonu jest włączona kopia zapasowa, Android dołącza ją do kopii zapasowej na Twoim koncie Google, tak jak inne dane aplikacji.</string>
+    <string name="app_history_settings_storage_section">Pamięć</string>
+    <string name="app_history_settings_storage_used">Zajęte miejsce</string>
+    <plurals name="app_history_settings_storage_apps">
+        <item quantity="one">Historia %d aplikacji</item>
+        <item quantity="few">Historia %d aplikacji</item>
+        <item quantity="many">Historia %d aplikacji</item>
+        <item quantity="other">Historia %d aplikacji</item>
+    </plurals>
+    <string name="app_history_settings_storage_empty">Na razie brak zapisów</string>
+    <string name="app_history_settings_storage_unavailable">Nie udało się sprawdzić, ile miejsca zajmuje historia</string>
+    <string name="app_history_settings_transfer_section">Eksport i import</string>
+    <string name="app_history_settings_export">Eksportuj historię</string>
+    <string name="app_history_settings_export_description">Zapisuje kopię jako plik na tym telefonie lub na dysku w chmurze, np. na Dysku Google.</string>
+    <string name="app_history_settings_import">Importuj historię</string>
+    <string name="app_history_settings_import_description">Dodaje historię z wyeksportowanego pliku. Nic, co zostało już zapisane, nie zostanie zastąpione.</string>
+    <string name="app_history_settings_exported">Historia została wyeksportowana</string>
+    <string name="app_history_settings_export_failed">Nie udało się wyeksportować historii</string>
+    <plurals name="app_history_settings_imported">
+        <item quantity="one">Dodano historię %d aplikacji</item>
+        <item quantity="few">Dodano historię %d aplikacji</item>
+        <item quantity="many">Dodano historię %d aplikacji</item>
+        <item quantity="other">Dodano historię %d aplikacji</item>
+    </plurals>
+    <string name="app_history_settings_nothing_new">Ten plik nie zawiera nowej historii</string>
+    <string name="app_history_settings_import_failed">Nie udało się zaimportować tego pliku. Wybierz plik historii wyeksportowany z Apk Analyzer.</string>
+    <string name="app_history_settings_picker_unavailable">Brak aplikacji do wybrania pliku</string>
 </resources>

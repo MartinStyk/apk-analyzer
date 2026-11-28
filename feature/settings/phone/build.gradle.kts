@@ -11,6 +11,7 @@ android {
 
 dependencies {
     api(projects.feature.settings.api)
+    implementation(projects.core.appHistory.api)
     implementation(projects.core.common)
     implementation(projects.core.featureFlags.api)
 }

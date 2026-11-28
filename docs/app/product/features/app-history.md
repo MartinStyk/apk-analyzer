@@ -451,7 +451,14 @@ Off until opted into, with per-type and per-app control (`HI-13`).
 7. **Retention and pruning** — `HI-04`, capping whole generations per app. Deliberately late: the
    real growth curve is only observable once steps 1–3 have been running on real devices, and
    content addressing may well push the problem out far enough that the cap is generous.
-8. **Backup and restore** — `HI-16`, `HI-17`. Blocked on `OQ-08`.
+8. **Backup and restore** — `HI-16`, `HI-17`. Built in debug builds as Auto Backup restore merging
+   plus a user-triggered export and import of the whole store through the document picker, in App
+   history settings. Whether export is Pro is still `OQ-08`.
+
+**Recording is on by default and the user can turn it off** in App history settings, reachable from
+Settings and the Changes tab. Turning it off asks first and keeps everything recorded; the tab shows
+that recording is off rather than looking quiet. History never leaves the phone except through the
+user's own export or Android's backup, and the settings screen says so.
 
 Steps 1–3 are shippable in the free build before any of the Pro surface exists, and should be.
 

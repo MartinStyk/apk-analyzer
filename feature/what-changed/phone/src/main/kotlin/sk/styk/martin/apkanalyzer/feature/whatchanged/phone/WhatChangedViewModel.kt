@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import sk.styk.martin.apkanalyzer.core.apphistory.api.capture.AppHistoryRecording
+import sk.styk.martin.apkanalyzer.core.apphistory.api.capture.AppHistoryRecordingRepository
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.AppHistoryRepository
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryAppTimeline
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryChangedApp
@@ -44,6 +46,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class WhatChangedViewModel @Inject constructor(
     private val appHistoryRepository: AppHistoryRepository,
+    private val recordingRepository: AppHistoryRecordingRepository,
     private val installedAppsRepository: InstalledAppsRepository,
     private val persistenceRepository: PersistenceRepository,
     private val visitTracker: WhatChangedVisitTracker,
@@ -71,6 +74,10 @@ internal class WhatChangedViewModel @Inject constructor(
             WhatChangedAction.Retry -> load()
 
             WhatChangedAction.OpenFullHistory -> sendEvent(WhatChangedEvent.NavigateToFullHistory)
+
+            WhatChangedAction.OpenSettings -> sendEvent(WhatChangedEvent.NavigateToSettings)
+
+            WhatChangedAction.TurnOnRecording -> viewModelScope.launch { recordingRepository.setRecordingEnabled(true) }
 
             is WhatChangedAction.SelectRange -> {
                 pickedRange.value = action.range
@@ -109,9 +116,16 @@ internal class WhatChangedViewModel @Inject constructor(
                 installedAppsRepository.apps().map { apps -> apps.mapTo(HashSet()) { it.packageName } }.distinctUntilChanged(),
                 pickedRange,
                 accessPolicy.hasPro(),
-            ) { timeline, installed, picked, hasPro ->
+                recordingRepository.recording(),
+            ) { timeline, installed, picked, hasPro, recording ->
                 val range = picked ?: initialRange
-                timeline.toState(range = range, previousVisit = previousVisit, installed = installed, hasPro = hasPro)
+                timeline.toState(
+                    range = range,
+                    previousVisit = previousVisit,
+                    installed = installed,
+                    hasPro = hasPro,
+                    isRecordingOff = recording == AppHistoryRecording.Off,
+                )
             }.collect { state.value = it }
         }
     }
@@ -125,9 +139,12 @@ internal class WhatChangedViewModel @Inject constructor(
         previousVisit: Instant?,
         installed: Set<PackageName>,
         hasPro: Boolean,
+        isRecordingOff: Boolean,
     ): WhatChangedState = when (this) {
         AppHistoryDeviceTimeline.Unavailable -> WhatChangedState.Error
-        is AppHistoryDeviceTimeline.Available -> toLoadedState(range, previousVisit, installed, hasPro) ?: WhatChangedState.Empty
+
+        is AppHistoryDeviceTimeline.Available -> toLoadedState(range, previousVisit, installed, hasPro, isRecordingOff)
+            ?: WhatChangedState.Empty(isRecordingOff)
     }
 
     private fun AppHistoryDeviceTimeline.Available.toLoadedState(
@@ -135,6 +152,7 @@ internal class WhatChangedViewModel @Inject constructor(
         previousVisit: Instant?,
         installed: Set<PackageName>,
         hasPro: Boolean,
+        isRecordingOff: Boolean,
     ): WhatChangedState.Loaded? {
         val recordingSince = recordingSince ?: return null
         val since = range.since(now = Instant.now(), previousVisit = previousVisit, recordingSince = recordingSince)
@@ -170,6 +188,7 @@ internal class WhatChangedViewModel @Inject constructor(
             changedApps = changedApps,
             uninstalledApps = uninstalledApps,
             lockedAppCount = lockedApps.size,
+            isRecordingOff = isRecordingOff,
         )
     }
 

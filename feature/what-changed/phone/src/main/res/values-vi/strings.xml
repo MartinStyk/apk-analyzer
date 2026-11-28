@@ -54,4 +54,8 @@
     <string name="what_changed_uncomparable_only">Không thể so sánh một số chi tiết</string>
     <string name="what_changed_locked_row">Thay đổi ứng dụng bị khóa, thuộc gói Pro</string>
     <string name="what_changed_locked_click_label">Mở khóa bằng Pro</string>
+    <string name="what_changed_settings">Cài đặt lịch sử</string>
+    <string name="what_changed_recording_off_title">Đã tắt ghi nhận</string>
+    <string name="what_changed_recording_off_body">Các lượt cài đặt và cập nhật mới hiện không được ghi nhận.</string>
+    <string name="what_changed_recording_turn_on">Bật</string>
 </resources>

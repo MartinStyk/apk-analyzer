@@ -58,4 +58,8 @@
     <string name="what_changed_uncomparable_only">कुछ जानकारी की तुलना नहीं हो सकी</string>
     <string name="what_changed_locked_row">लॉक किया गया ऐप बदलाव, Pro का हिस्सा</string>
     <string name="what_changed_locked_click_label">Pro से अनलॉक करें</string>
+    <string name="what_changed_settings">इतिहास सेटिंग्स</string>
+    <string name="what_changed_recording_off_title">दर्ज करना बंद है</string>
+    <string name="what_changed_recording_off_body">नए इंस्टॉल और अपडेट दर्ज नहीं किए जा रहे हैं।</string>
+    <string name="what_changed_recording_turn_on">चालू करें</string>
 </resources>

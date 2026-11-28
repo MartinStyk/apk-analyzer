@@ -35,6 +35,8 @@ import sk.styk.martin.apkanalyzer.core.apps.api.signing.SigningSchemeRepositoryF
 import sk.styk.martin.apkanalyzer.core.common.coroutines.TestDispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.device.DeviceInfoProviderFake
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTrackerFake
+import sk.styk.martin.apkanalyzer.core.common.settings.Key
+import sk.styk.martin.apkanalyzer.core.common.settings.PersistenceRepositoryFake
 import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlag
 import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlagRepositoryFake
 import java.io.IOException
@@ -58,6 +60,7 @@ class AppHistoryCaptureRepositoryImplTest {
     private val details = AppDetailRepositoryFake(detail)
     private val persistence = AppHistoryPersistenceRepositoryFake()
     private val featureFlags = FeatureFlagRepositoryFake(FeatureFlag.AppHistoryRecording)
+    private val preferences = PersistenceRepositoryFake(Key.AppHistoryRecordingEnabled to true)
     private val appScope = CoroutineScope(SupervisorJob() + dispatcherProvider.default())
     private val repository = AppHistoryCaptureRepositoryImpl(
         installedAppsRepository = installedApps,
@@ -68,7 +71,7 @@ class AppHistoryCaptureRepositoryImplTest {
         deviceInfoProvider = DeviceInfoProviderFake(),
         dispatcherProvider = dispatcherProvider,
         performanceTracker = PerformanceTrackerFake(),
-        featureFlagRepository = featureFlags,
+        recordingRepository = AppHistoryRecordingRepositoryImpl(featureFlags, preferences),
         appScope = appScope,
     )
     private val history =
@@ -118,6 +121,16 @@ class AppHistoryCaptureRepositoryImplTest {
     @Test
     fun `Given recording is disabled When capture is requested Then no snapshot is saved`() = runTest {
         featureFlags[FeatureFlag.AppHistoryRecording] = false
+
+        repository.requestCapture(installedApp.packageName)
+        advanceUntilIdle()
+
+        persistence.observe(installedApp.packageName).first().getOrThrow() shouldBe emptyList()
+    }
+
+    @Test
+    fun `Given the user turned recording off When capture is requested Then no snapshot is saved`() = runTest {
+        preferences[Key.AppHistoryRecordingEnabled] = false
 
         repository.requestCapture(installedApp.packageName)
         advanceUntilIdle()

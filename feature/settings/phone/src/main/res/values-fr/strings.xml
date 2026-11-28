@@ -14,4 +14,42 @@
     <string name="settings_fingerprint_format">Format de l’empreinte</string>
     <string name="settings_fingerprint_format_colon_separated">Séparé par des deux-points</string>
     <string name="settings_fingerprint_format_continuous">Continu</string>
+    <string name="settings_app_history">Historique des applications</string>
+    <string name="settings_app_history_on">Activé</string>
+    <string name="settings_app_history_off">Désactivé</string>
+    <string name="app_history_settings_recording_section">Suivi</string>
+    <string name="app_history_settings_recording_toggle">Suivre les changements des applications</string>
+    <string name="app_history_settings_recording_description">Enregistre les détails de chaque application quand vous l\'installez ou la mettez à jour, pour que l\'onglet Changements et l\'historique de chaque application puissent montrer ce qui a changé.</string>
+    <string name="app_history_settings_recording_off_title">Le suivi est désactivé</string>
+    <string name="app_history_settings_recording_off_body">Les nouvelles installations et mises à jour ne sont pas suivies. L\'onglet Changements et l\'historique de chaque application restent tels quels jusqu\'à ce que vous réactiviez le suivi.</string>
+    <string name="app_history_settings_turn_off_title">Désactiver le suivi ?</string>
+    <string name="app_history_settings_turn_off_message">Les installations et mises à jour effectuées pendant que le suivi est désactivé n\'apparaissent ni dans l\'onglet Changements ni dans l\'historique d\'une application. Quand vous le réactiverez, une application mise à jour plusieurs fois apparaîtra comme un seul changement, et les applications désinstallées entre-temps ne seront jamais observées. Tout ce qui a déjà été observé est conservé.</string>
+    <string name="app_history_settings_turn_off_confirm">Désactiver</string>
+    <string name="app_history_settings_turn_off_dismiss">Laisser activé</string>
+    <string name="app_history_settings_privacy_title">Reste sur ce téléphone</string>
+    <string name="app_history_settings_privacy_body">Apk Analyzer conserve l\'historique des applications uniquement sur ce téléphone et ne l\'envoie nulle part. Si la sauvegarde est activée dans les paramètres de votre téléphone, Android l\'inclut dans la sauvegarde de votre compte Google, comme les autres données des applications.</string>
+    <string name="app_history_settings_storage_section">Stockage</string>
+    <string name="app_history_settings_storage_used">Espace utilisé</string>
+    <plurals name="app_history_settings_storage_apps">
+        <item quantity="one">Historique de %d application</item>
+        <item quantity="many">Historique de %d applications</item>
+        <item quantity="other">Historique de %d applications</item>
+    </plurals>
+    <string name="app_history_settings_storage_empty">Rien d\'observé pour l\'instant</string>
+    <string name="app_history_settings_storage_unavailable">Impossible de lire l\'espace occupé par l\'historique</string>
+    <string name="app_history_settings_transfer_section">Exporter et importer</string>
+    <string name="app_history_settings_export">Exporter l\'historique</string>
+    <string name="app_history_settings_export_description">Enregistre une copie sous forme de fichier sur ce téléphone ou dans un espace de stockage en ligne comme Google Drive.</string>
+    <string name="app_history_settings_import">Importer l\'historique</string>
+    <string name="app_history_settings_import_description">Ajoute l\'historique d\'un fichier exporté. Rien de ce qui a déjà été observé n\'est remplacé.</string>
+    <string name="app_history_settings_exported">Historique exporté</string>
+    <string name="app_history_settings_export_failed">Impossible d\'exporter l\'historique</string>
+    <plurals name="app_history_settings_imported">
+        <item quantity="one">Historique ajouté pour %d application</item>
+        <item quantity="many">Historique ajouté pour %d applications</item>
+        <item quantity="other">Historique ajouté pour %d applications</item>
+    </plurals>
+    <string name="app_history_settings_nothing_new">Aucun nouvel historique dans ce fichier</string>
+    <string name="app_history_settings_import_failed">Impossible d\'importer ce fichier. Choisissez un fichier d\'historique exporté depuis Apk Analyzer.</string>
+    <string name="app_history_settings_picker_unavailable">Aucune application disponible pour choisir le fichier</string>
 </resources>

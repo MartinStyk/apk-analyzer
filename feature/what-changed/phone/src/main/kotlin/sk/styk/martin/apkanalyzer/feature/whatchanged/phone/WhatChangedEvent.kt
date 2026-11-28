@@ -5,6 +5,8 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 internal sealed interface WhatChangedEvent {
     data object NavigateToFullHistory : WhatChangedEvent
 
+    data object NavigateToSettings : WhatChangedEvent
+
     data class NavigateToChange(
         val packageName: String,
         val snapshotId: Long,

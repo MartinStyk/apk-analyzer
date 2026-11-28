@@ -14,4 +14,38 @@
     <string name="settings_fingerprint_format">指纹格式</string>
     <string name="settings_fingerprint_format_colon_separated">冒号分隔</string>
     <string name="settings_fingerprint_format_continuous">连续</string>
+    <string name="settings_app_history">应用历史记录</string>
+    <string name="settings_app_history_on">已开启</string>
+    <string name="settings_app_history_off">已关闭</string>
+    <string name="app_history_settings_recording_section">记录</string>
+    <string name="app_history_settings_recording_toggle">记录应用变化</string>
+    <string name="app_history_settings_recording_description">在你安装或更新应用时保存其详细信息，以便“变化”标签页和各应用的历史记录显示具体有何不同。</string>
+    <string name="app_history_settings_recording_off_title">记录功能已关闭</string>
+    <string name="app_history_settings_recording_off_body">不会记录新的安装和更新。在你重新开启记录功能之前，“变化”标签页和各应用的历史记录将保持现状。</string>
+    <string name="app_history_settings_turn_off_title">要关闭记录功能吗？</string>
+    <string name="app_history_settings_turn_off_message">记录功能关闭期间的安装和更新不会显示在“变化”标签页或应用的历史记录中。重新开启后，多次更新的应用只会显示为一项变化，期间卸载的应用则完全不会被记录。已记录的所有内容都会保留。</string>
+    <string name="app_history_settings_turn_off_confirm">关闭</string>
+    <string name="app_history_settings_turn_off_dismiss">保持开启</string>
+    <string name="app_history_settings_privacy_title">仅保存在此手机上</string>
+    <string name="app_history_settings_privacy_body">Apk Analyzer 仅将应用历史记录保存在此手机上，不会发送到任何地方。如果你在手机设置中开启了备份，Android 会像对待其他应用数据一样，将其包含在你的 Google 账号备份中。</string>
+    <string name="app_history_settings_storage_section">存储空间</string>
+    <string name="app_history_settings_storage_used">已用空间</string>
+    <plurals name="app_history_settings_storage_apps">
+        <item quantity="other">%d 个应用的历史记录</item>
+    </plurals>
+    <string name="app_history_settings_storage_empty">尚无记录</string>
+    <string name="app_history_settings_storage_unavailable">无法读取历史记录占用的空间</string>
+    <string name="app_history_settings_transfer_section">导出和导入</string>
+    <string name="app_history_settings_export">导出历史记录</string>
+    <string name="app_history_settings_export_description">将副本保存为文件，存放在此手机上或 Google 云端硬盘等云存储中。</string>
+    <string name="app_history_settings_import">导入历史记录</string>
+    <string name="app_history_settings_import_description">从导出的文件中添加历史记录。不会替换任何已记录的内容。</string>
+    <string name="app_history_settings_exported">历史记录已导出</string>
+    <string name="app_history_settings_export_failed">无法导出历史记录</string>
+    <plurals name="app_history_settings_imported">
+        <item quantity="other">已添加 %d 个应用的历史记录</item>
+    </plurals>
+    <string name="app_history_settings_nothing_new">此文件中没有新的历史记录</string>
+    <string name="app_history_settings_import_failed">无法导入此文件。请选择从 Apk Analyzer 导出的历史记录文件。</string>
+    <string name="app_history_settings_picker_unavailable">没有可用于选择文件的应用</string>
 </resources>

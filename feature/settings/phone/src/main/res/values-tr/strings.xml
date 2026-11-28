@@ -14,4 +14,40 @@
     <string name="settings_fingerprint_format">Parmak izi biçimi</string>
     <string name="settings_fingerprint_format_colon_separated">İki nokta ile ayrılmış</string>
     <string name="settings_fingerprint_format_continuous">Kesintisiz</string>
+    <string name="settings_app_history">Uygulama geçmişi</string>
+    <string name="settings_app_history_on">Açık</string>
+    <string name="settings_app_history_off">Kapalı</string>
+    <string name="app_history_settings_recording_section">Kayıt</string>
+    <string name="app_history_settings_recording_toggle">Uygulama değişikliklerini kaydet</string>
+    <string name="app_history_settings_recording_description">Yüklediğiniz veya güncellediğiniz her uygulamanın ayrıntılarını kaydeder; böylece Değişiklikler sekmesi ve her uygulamanın geçmişi neyin değiştiğini gösterebilir.</string>
+    <string name="app_history_settings_recording_off_title">Kayıt kapalı</string>
+    <string name="app_history_settings_recording_off_body">Yeni yüklemeler ve güncellemeler kaydedilmiyor. Kaydı tekrar açana kadar Değişiklikler sekmesi ve her uygulamanın geçmişi olduğu gibi kalır.</string>
+    <string name="app_history_settings_turn_off_title">Kayıt kapatılsın mı?</string>
+    <string name="app_history_settings_turn_off_message">Kayıt kapalıyken yapılan yüklemeler ve güncellemeler Değişiklikler sekmesinde veya uygulamanın geçmişinde görünmez. Kaydı tekrar açtığınızda, birkaç kez güncellenen bir uygulama tek bir değişiklik olarak görünür ve bu sırada kaldırılan uygulamalar hiç kaydedilmez. Şimdiye kadar kaydedilen her şey korunur.</string>
+    <string name="app_history_settings_turn_off_confirm">Kapat</string>
+    <string name="app_history_settings_turn_off_dismiss">Açık kalsın</string>
+    <string name="app_history_settings_privacy_title">Bu telefonda kalır</string>
+    <string name="app_history_settings_privacy_body">Apk Analyzer uygulama geçmişini yalnızca bu telefonda saklar ve hiçbir yere göndermez. Telefonunuzun ayarlarında yedekleme açıksa Android, diğer uygulama verileri gibi bunu da Google hesabınızın yedeğine ekler.</string>
+    <string name="app_history_settings_storage_section">Depolama</string>
+    <string name="app_history_settings_storage_used">Kullanılan alan</string>
+    <plurals name="app_history_settings_storage_apps">
+        <item quantity="one">%d uygulamanın geçmişi</item>
+        <item quantity="other">%d uygulamanın geçmişi</item>
+    </plurals>
+    <string name="app_history_settings_storage_empty">Henüz kayıt yok</string>
+    <string name="app_history_settings_storage_unavailable">Geçmişin ne kadar alan kullandığı okunamadı</string>
+    <string name="app_history_settings_transfer_section">Dışa ve içe aktarma</string>
+    <string name="app_history_settings_export">Geçmişi dışa aktar</string>
+    <string name="app_history_settings_export_description">Bir kopyasını dosya olarak bu telefona veya Google Drive gibi bir bulut depolama alanına kaydeder.</string>
+    <string name="app_history_settings_import">Geçmişi içe aktar</string>
+    <string name="app_history_settings_import_description">Dışa aktarılmış bir dosyadaki geçmişi ekler. Daha önce kaydedilenlerin hiçbiri değiştirilmez.</string>
+    <string name="app_history_settings_exported">Geçmiş dışa aktarıldı</string>
+    <string name="app_history_settings_export_failed">Geçmiş dışa aktarılamadı</string>
+    <plurals name="app_history_settings_imported">
+        <item quantity="one">%d uygulamanın geçmişi eklendi</item>
+        <item quantity="other">%d uygulamanın geçmişi eklendi</item>
+    </plurals>
+    <string name="app_history_settings_nothing_new">Bu dosyada yeni geçmiş yok</string>
+    <string name="app_history_settings_import_failed">Bu dosya içe aktarılamadı. Apk Analyzer\'dan dışa aktarılmış bir geçmiş dosyası seçin.</string>
+    <string name="app_history_settings_picker_unavailable">Dosya seçebilecek uygulama yok</string>
 </resources>

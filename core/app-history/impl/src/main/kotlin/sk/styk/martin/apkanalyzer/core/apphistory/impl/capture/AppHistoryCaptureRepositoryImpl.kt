@@ -8,6 +8,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import sk.styk.martin.apkanalyzer.core.apphistory.api.capture.AppHistoryCaptureRepository
+import sk.styk.martin.apkanalyzer.core.apphistory.api.capture.AppHistoryRecording
+import sk.styk.martin.apkanalyzer.core.apphistory.api.capture.AppHistoryRecordingRepository
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.AppHistoryCaptureKey
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.AppHistoryDevice
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.AppHistoryPersistenceRepository
@@ -29,8 +31,6 @@ import sk.styk.martin.apkanalyzer.core.common.performance.TraceOutcome
 import sk.styk.martin.apkanalyzer.core.common.performance.appCount
 import sk.styk.martin.apkanalyzer.core.common.performance.outcome
 import sk.styk.martin.apkanalyzer.core.common.performance.startCancellableTrace
-import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlag
-import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlagRepository
 import java.time.Instant
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
@@ -48,7 +48,7 @@ internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
     private val deviceInfoProvider: DeviceInfoProvider,
     private val dispatcherProvider: DispatcherProvider,
     private val performanceTracker: PerformanceTracker,
-    private val featureFlagRepository: FeatureFlagRepository,
+    private val recordingRepository: AppHistoryRecordingRepository,
     private val appScope: CoroutineScope,
 ) : AppHistoryCaptureRepository {
 
@@ -114,7 +114,7 @@ internal class AppHistoryCaptureRepositoryImpl @Inject constructor(
     }
 
     private suspend fun ifRecordingEnabled(action: suspend () -> Unit) {
-        if (featureFlagRepository.get(FeatureFlag.AppHistoryRecording)) action()
+        if (recordingRepository.recording().first() == AppHistoryRecording.On) action()
     }
 
     private suspend fun captureIfGateOpen(app: InstalledApp): Boolean = perPackageMutexes.computeIfAbsent(app.packageName) { Mutex() }.withLock {

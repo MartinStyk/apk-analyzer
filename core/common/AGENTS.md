@@ -45,11 +45,11 @@ logic do not belong here.
 
 ## Durable Contracts
 
-* `file/`'s `DocumentFileManager` writes destination URIs and reads document display names on the IO
+* `file/`'s `DocumentFileManager` writes destination URIs, reads source URIs, and reads document display names on the IO
   dispatcher. `writeOrDeleteOnFailure` closes the stream, empties the incomplete output, and then deletes it on
   failure, including cancellation, because some document providers report a delete as successful without
   removing the file; use it only for disposable output, never edits to an existing document.
-  Write failures return `Result.failure`, cancellation propagates, and metadata lookup failures
+  `read` closes the input it opened. Read and write failures return `Result.failure`, cancellation propagates, and metadata lookup failures
   are logged before returning the caller's fallback name.
 
 * Inject `DispatcherProvider`; never hardcode a dispatcher.

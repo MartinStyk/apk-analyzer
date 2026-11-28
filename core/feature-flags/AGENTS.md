@@ -25,3 +25,6 @@ exceptions, like `PersistenceRepository`; they do not provide fallback values or
 Never emit a default before persisted storage finishes loading.
 Flag changes affect existing observers immediately; disabling recording must not delete history.
 The What changed tab and app-detail History card have independent flags, separate from recording.
+The recording flag says whether history recording exists in this build; the user's own on/off switch
+sits on top of it in `core:app-history`'s `AppHistoryRecordingRepository`, which is what capture and
+screens read.

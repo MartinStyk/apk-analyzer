@@ -44,8 +44,13 @@ import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryS
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryVersion
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.ValueChange
 import sk.styk.martin.apkanalyzer.core.common.model.megabytes
+import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Chip
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.IconButton
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.IconButtonStyle
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.InfoCard
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.InfoCardTone
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ListSectionHeader
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.SkeletonBox
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
@@ -73,6 +78,7 @@ import java.time.Instant
 @Composable
 internal fun WhatChangedScreen(
     onNavigateToFullHistory: () -> Unit,
+    onNavigateToSettings: () -> Unit,
     onNavigateToChange: (packageName: String, snapshotId: Long, appName: String) -> Unit,
     onNavigateToFullDetail: (AppDetailInput.Historical) -> Unit,
     onNavigateToAppHistory: (packageName: String, appName: String) -> Unit,
@@ -87,6 +93,7 @@ internal fun WhatChangedScreen(
         viewModel.events.collect { event ->
             when (event) {
                 WhatChangedEvent.NavigateToFullHistory -> onNavigateToFullHistory()
+                WhatChangedEvent.NavigateToSettings -> onNavigateToSettings()
                 is WhatChangedEvent.NavigateToChange -> onNavigateToChange(event.packageName, event.snapshotId, event.appName)
                 is WhatChangedEvent.NavigateToFullDetail -> onNavigateToFullDetail(event.input)
                 is WhatChangedEvent.NavigateToAppHistory -> onNavigateToAppHistory(event.packageName, event.appName)
@@ -110,15 +117,22 @@ private fun WhatChangedContent(
             .fillMaxSize()
             .background(AppTheme.colors.background),
     ) {
-        Header(onOpenFullHistory = { onAction(WhatChangedAction.OpenFullHistory) })
+        Header(
+            onOpenFullHistory = { onAction(WhatChangedAction.OpenFullHistory) },
+            onOpenSettings = { onAction(WhatChangedAction.OpenSettings) },
+        )
         when (state) {
             WhatChangedState.Loading -> LoadingContent()
 
             WhatChangedState.Error -> HistoryError(onRetry = { onAction(WhatChangedAction.Retry) })
 
-            WhatChangedState.Empty -> HistoryEmpty()
+            is WhatChangedState.Empty -> {
+                if (state.isRecordingOff) RecordingOffNotice(onTurnOn = { onAction(WhatChangedAction.TurnOnRecording) })
+                HistoryEmpty()
+            }
 
             is WhatChangedState.Loaded -> {
+                if (state.isRecordingOff) RecordingOffNotice(onTurnOn = { onAction(WhatChangedAction.TurnOnRecording) })
                 RangeChips(selected = state.range, onSelectRange = { onAction(WhatChangedAction.SelectRange(it)) })
                 LoadedContent(state = state, onAction = onAction)
             }
@@ -229,10 +243,14 @@ private fun LoadingText(style: TextStyle, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun Header(onOpenFullHistory: () -> Unit, modifier: Modifier = Modifier) {
+private fun Header(
+    onOpenFullHistory: () -> Unit,
+    onOpenSettings: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.padding(start = 20.dp, end = 8.dp, top = 12.dp, bottom = 4.dp),
+        modifier = modifier.padding(start = 20.dp, end = 4.dp, top = 12.dp, bottom = 4.dp),
     ) {
         Text(
             text = stringResource(R.string.what_changed_title),
@@ -244,7 +262,25 @@ private fun Header(onOpenFullHistory: () -> Unit, modifier: Modifier = Modifier)
             text = stringResource(R.string.what_changed_full_history),
             onClick = onOpenFullHistory,
         )
+        IconButton(
+            imageVector = ApkAnalyzerIcons.Settings,
+            onClick = onOpenSettings,
+            style = IconButtonStyle.StandardMuted,
+            contentDescription = stringResource(R.string.what_changed_settings),
+        )
     }
+}
+
+@Composable
+private fun RecordingOffNotice(onTurnOn: () -> Unit, modifier: Modifier = Modifier) {
+    InfoCard(
+        icon = ApkAnalyzerIcons.Warning,
+        title = stringResource(R.string.what_changed_recording_off_title),
+        body = stringResource(R.string.what_changed_recording_off_body),
+        tone = InfoCardTone.Attention,
+        action = { TextButton(text = stringResource(R.string.what_changed_recording_turn_on), onClick = onTurnOn) },
+        modifier = modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+    )
 }
 
 @Composable
@@ -497,6 +533,7 @@ private val PreviewLoaded = WhatChangedState.Loaded(
     ),
     uninstalledApps = listOf(LockableRow.Locked("com.torch.pro")),
     lockedAppCount = 3,
+    isRecordingOff = false,
 )
 
 private val PreviewPro = PreviewLoaded.copy(
@@ -546,7 +583,15 @@ private fun WhatChangedNothingInRangePreview() {
 @Composable
 private fun WhatChangedEmptyPreview() {
     ApkAnalyzerTheme {
-        WhatChangedContent(state = WhatChangedState.Empty, onAction = {})
+        WhatChangedContent(state = WhatChangedState.Empty(isRecordingOff = false), onAction = {})
+    }
+}
+
+@Preview
+@Composable
+private fun WhatChangedRecordingOffPreview() {
+    ApkAnalyzerTheme {
+        WhatChangedContent(state = PreviewPro.copy(isRecordingOff = true), onAction = {})
     }
 }
 

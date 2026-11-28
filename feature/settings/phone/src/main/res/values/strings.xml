@@ -14,4 +14,40 @@
     <string name="settings_language_section">Language</string>
     <string name="settings_language_app_language">App language</string>
     <string name="settings_language_system_default">System default</string>
+    <string name="settings_app_history">App history</string>
+    <string name="settings_app_history_on">On</string>
+    <string name="settings_app_history_off">Off</string>
+    <string name="app_history_settings_recording_section">Recording</string>
+    <string name="app_history_settings_recording_toggle">Record app changes</string>
+    <string name="app_history_settings_recording_description">Saves each app\'s details when you install or update it, so the Changes tab and each app\'s History can show what\'s different.</string>
+    <string name="app_history_settings_recording_off_title">Recording is off</string>
+    <string name="app_history_settings_recording_off_body">New installs and updates aren\'t recorded. The Changes tab and each app\'s History stay as they are until you turn recording back on.</string>
+    <string name="app_history_settings_turn_off_title">Turn off recording?</string>
+    <string name="app_history_settings_turn_off_message">Installs and updates while recording is off don\'t show up in the Changes tab or in an app\'s History. When you turn it back on, an app updated several times shows as one change, and apps removed in the meantime are never recorded. Everything recorded so far stays.</string>
+    <string name="app_history_settings_turn_off_confirm">Turn off</string>
+    <string name="app_history_settings_turn_off_dismiss">Keep recording</string>
+    <string name="app_history_settings_privacy_title">Stays on this phone</string>
+    <string name="app_history_settings_privacy_body">Apk Analyzer saves app history only on this phone and doesn\'t send it anywhere. If backup is on in your phone\'s settings, Android includes it in your Google account backup, like other app data.</string>
+    <string name="app_history_settings_storage_section">Storage</string>
+    <string name="app_history_settings_storage_used">Space used</string>
+    <plurals name="app_history_settings_storage_apps">
+        <item quantity="one">History of %d app</item>
+        <item quantity="other">History of %d apps</item>
+    </plurals>
+    <string name="app_history_settings_storage_empty">Nothing recorded yet</string>
+    <string name="app_history_settings_storage_unavailable">Couldn\'t read how much space history uses</string>
+    <string name="app_history_settings_transfer_section">Export and import</string>
+    <string name="app_history_settings_export">Export history</string>
+    <string name="app_history_settings_export_description">Saves a copy as a file on this phone or in a cloud drive like Google Drive.</string>
+    <string name="app_history_settings_import">Import history</string>
+    <string name="app_history_settings_import_description">Adds history from an exported file. Nothing already recorded is replaced.</string>
+    <string name="app_history_settings_exported">History exported</string>
+    <string name="app_history_settings_export_failed">Couldn\'t export history</string>
+    <plurals name="app_history_settings_imported">
+        <item quantity="one">Added history for %d app</item>
+        <item quantity="other">Added history for %d apps</item>
+    </plurals>
+    <string name="app_history_settings_nothing_new">No new history in this file</string>
+    <string name="app_history_settings_import_failed">Couldn\'t import this file. Choose a history file exported from Apk Analyzer.</string>
+    <string name="app_history_settings_picker_unavailable">No app is available to pick the file</string>
 </resources>

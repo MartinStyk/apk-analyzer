@@ -1,6 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.settings.phone
 
 import androidx.compose.runtime.Immutable
+import sk.styk.martin.apkanalyzer.core.apphistory.api.capture.AppHistoryRecording
 import sk.styk.martin.apkanalyzer.core.common.applanguage.AppLanguageSetting
 import sk.styk.martin.apkanalyzer.core.common.settings.ColorAppScheme
 import sk.styk.martin.apkanalyzer.core.common.settings.FingerprintFormat
@@ -10,5 +11,6 @@ data class SettingsState(
     val colorScheme: ColorAppScheme = ColorAppScheme.FollowSystem,
     val fingerprintFormat: FingerprintFormat = FingerprintFormat.ColonSeparated,
     val recentlyViewedAppsEnabled: Boolean = true,
+    val appHistoryRecording: AppHistoryRecording = AppHistoryRecording.Unavailable,
     val appLanguageSetting: AppLanguageSetting = AppLanguageSetting.Unavailable,
 )

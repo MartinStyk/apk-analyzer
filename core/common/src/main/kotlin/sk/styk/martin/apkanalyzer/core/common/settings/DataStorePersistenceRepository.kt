@@ -31,6 +31,7 @@ private val KEY_INVENTORY_EXPORT_FORMAT = stringPreferencesKey("inventory_export
 private val KEY_INVENTORY_EXPORT_INTRO_DISMISSED = booleanPreferencesKey("inventory_export_intro_dismissed")
 private val KEY_WHAT_CHANGED_LAST_VISIT_AT = longPreferencesKey("what_changed_last_visit_at")
 private val KEY_WHAT_CHANGED_RANGE = stringPreferencesKey("what_changed_range")
+private val KEY_APP_HISTORY_RECORDING_ENABLED = booleanPreferencesKey("app_history_recording_enabled")
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
     name = "app_settings",
@@ -73,43 +74,47 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
         }
 
         Key.OnboardingRequired -> {
-            prefs[KEY_ONBOARDING] ?: true
+            prefs.valueOr(KEY_ONBOARDING, true)
         }
 
         Key.AppStartNumber -> {
-            prefs[KEY_APP_START_NUMBER] ?: 0
+            prefs.valueOr(KEY_APP_START_NUMBER, 0)
         }
 
         Key.RecentlyViewedAppsEnabled -> {
-            prefs[KEY_RECENTLY_VIEWED_ENABLED] ?: true
+            prefs.valueOr(KEY_RECENTLY_VIEWED_ENABLED, true)
         }
 
         Key.AppDetailQualifiedSessionCount -> {
-            prefs[KEY_APP_DETAIL_QUALIFIED_SESSION_COUNT] ?: 0
+            prefs.valueOr(KEY_APP_DETAIL_QUALIFIED_SESSION_COUNT, 0)
         }
 
         Key.ReviewFlowRequested -> {
-            prefs[KEY_REVIEW_FLOW_REQUESTED] ?: false
+            prefs.valueOr(KEY_REVIEW_FLOW_REQUESTED, false)
         }
 
         Key.InventoryExportColumns -> {
-            prefs[KEY_INVENTORY_EXPORT_COLUMNS] ?: emptySet<String>()
+            prefs.valueOr(KEY_INVENTORY_EXPORT_COLUMNS, emptySet<String>())
         }
 
         Key.InventoryExportFormat -> {
-            prefs[KEY_INVENTORY_EXPORT_FORMAT] ?: ""
+            prefs.valueOr(KEY_INVENTORY_EXPORT_FORMAT, "")
         }
 
         Key.InventoryExportIntroDismissed -> {
-            prefs[KEY_INVENTORY_EXPORT_INTRO_DISMISSED] ?: false
+            prefs.valueOr(KEY_INVENTORY_EXPORT_INTRO_DISMISSED, false)
         }
 
         Key.WhatChangedLastVisitAt -> {
-            prefs[KEY_WHAT_CHANGED_LAST_VISIT_AT] ?: 0L
+            prefs.valueOr(KEY_WHAT_CHANGED_LAST_VISIT_AT, 0L)
         }
 
         Key.WhatChangedRange -> {
-            prefs[KEY_WHAT_CHANGED_RANGE] ?: ""
+            prefs.valueOr(KEY_WHAT_CHANGED_RANGE, "")
+        }
+
+        Key.AppHistoryRecordingEnabled -> {
+            prefs.valueOr(KEY_APP_HISTORY_RECORDING_ENABLED, true)
         }
     } as T
 
@@ -170,8 +175,14 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
         Key.WhatChangedRange -> {
             prefs[KEY_WHAT_CHANGED_RANGE] = value as String
         }
+
+        Key.AppHistoryRecordingEnabled -> {
+            prefs[KEY_APP_HISTORY_RECORDING_ENABLED] = value as Boolean
+        }
     }
 }
+
+private fun <T> Preferences.valueOr(key: Preferences.Key<T>, default: T): T = this[key] ?: default
 
 private fun String?.toColorAppScheme(): ColorAppScheme = when (this) {
     "light" -> ColorAppScheme.Day

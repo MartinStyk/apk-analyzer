@@ -14,4 +14,42 @@
     <string name="settings_fingerprint_format">Formato de huella digital</string>
     <string name="settings_fingerprint_format_colon_separated">Separado por dos puntos</string>
     <string name="settings_fingerprint_format_continuous">Continuo</string>
+    <string name="settings_app_history">Historial de apps</string>
+    <string name="settings_app_history_on">Activado</string>
+    <string name="settings_app_history_off">Desactivado</string>
+    <string name="app_history_settings_recording_section">Registro</string>
+    <string name="app_history_settings_recording_toggle">Registrar cambios de apps</string>
+    <string name="app_history_settings_recording_description">Guarda los detalles de cada app cuando la instalas o actualizas, para que la pestaña Cambios y el historial de cada app puedan mostrar qué cambió.</string>
+    <string name="app_history_settings_recording_off_title">El registro está desactivado</string>
+    <string name="app_history_settings_recording_off_body">Las nuevas instalaciones y actualizaciones no se registran. La pestaña Cambios y el historial de cada app se quedan como están hasta que vuelvas a activar el registro.</string>
+    <string name="app_history_settings_turn_off_title">¿Desactivar el registro?</string>
+    <string name="app_history_settings_turn_off_message">Las instalaciones y actualizaciones hechas mientras el registro está desactivado no aparecen en la pestaña Cambios ni en el historial de una app. Cuando lo vuelvas a activar, una app actualizada varias veces aparecerá como un solo cambio, y las apps desinstaladas mientras tanto nunca se registrarán. Todo lo registrado hasta ahora se conserva.</string>
+    <string name="app_history_settings_turn_off_confirm">Desactivar</string>
+    <string name="app_history_settings_turn_off_dismiss">Mantener activado</string>
+    <string name="app_history_settings_privacy_title">Se queda en este teléfono</string>
+    <string name="app_history_settings_privacy_body">Apk Analyzer guarda el historial de apps solo en este teléfono y no lo envía a ninguna parte. Si la copia de seguridad está activada en la configuración del teléfono, Android lo incluye en la copia de seguridad de tu cuenta de Google, como otros datos de apps.</string>
+    <string name="app_history_settings_storage_section">Almacenamiento</string>
+    <string name="app_history_settings_storage_used">Espacio usado</string>
+    <plurals name="app_history_settings_storage_apps">
+        <item quantity="one">Historial de %d app</item>
+        <item quantity="many">Historial de %d apps</item>
+        <item quantity="other">Historial de %d apps</item>
+    </plurals>
+    <string name="app_history_settings_storage_empty">Aún no hay nada registrado</string>
+    <string name="app_history_settings_storage_unavailable">No se pudo leer cuánto espacio ocupa el historial</string>
+    <string name="app_history_settings_transfer_section">Exportar e importar</string>
+    <string name="app_history_settings_export">Exportar historial</string>
+    <string name="app_history_settings_export_description">Guarda una copia como archivo en este teléfono o en un almacenamiento en la nube, como Google Drive.</string>
+    <string name="app_history_settings_import">Importar historial</string>
+    <string name="app_history_settings_import_description">Añade el historial de un archivo exportado. No se reemplaza nada de lo que ya está registrado.</string>
+    <string name="app_history_settings_exported">Historial exportado</string>
+    <string name="app_history_settings_export_failed">No se pudo exportar el historial</string>
+    <plurals name="app_history_settings_imported">
+        <item quantity="one">Se añadió el historial de %d app</item>
+        <item quantity="many">Se añadió el historial de %d apps</item>
+        <item quantity="other">Se añadió el historial de %d apps</item>
+    </plurals>
+    <string name="app_history_settings_nothing_new">No hay historial nuevo en este archivo</string>
+    <string name="app_history_settings_import_failed">No se pudo importar este archivo. Elige un archivo de historial exportado desde Apk Analyzer.</string>
+    <string name="app_history_settings_picker_unavailable">No hay ninguna app disponible para elegir el archivo</string>
 </resources>

@@ -7,6 +7,10 @@ internal sealed interface WhatChangedAction {
 
     data object OpenFullHistory : WhatChangedAction
 
+    data object OpenSettings : WhatChangedAction
+
+    data object TurnOnRecording : WhatChangedAction
+
     data class SelectRange(val range: WhatChangedRange) : WhatChangedAction
 
     data class OpenChange(val item: AppChangeItem) : WhatChangedAction

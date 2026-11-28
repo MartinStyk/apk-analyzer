@@ -54,4 +54,8 @@
     <string name="what_changed_uncomparable_only">Beberapa detail tidak dapat dibandingkan</string>
     <string name="what_changed_locked_row">Perubahan aplikasi terkunci, bagian dari Pro</string>
     <string name="what_changed_locked_click_label">Buka dengan Pro</string>
+    <string name="what_changed_settings">Pengaturan riwayat</string>
+    <string name="what_changed_recording_off_title">Pencatatan nonaktif</string>
+    <string name="what_changed_recording_off_body">Instalasi dan pembaruan baru tidak sedang dicatat.</string>
+    <string name="what_changed_recording_turn_on">Aktifkan</string>
 </resources>

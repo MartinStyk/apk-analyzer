@@ -24,6 +24,8 @@ sealed interface Key<T : Any> {
     data object WhatChangedLastVisitAt : Key<Long>
 
     data object WhatChangedRange : Key<String>
+
+    data object AppHistoryRecordingEnabled : Key<Boolean>
 }
 
 enum class ColorAppScheme {

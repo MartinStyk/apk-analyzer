@@ -12,7 +12,7 @@ internal sealed interface WhatChangedState {
 
     data object Error : WhatChangedState
 
-    data object Empty : WhatChangedState
+    data class Empty(val isRecordingOff: Boolean) : WhatChangedState
 
     @Immutable
     data class Loaded(
@@ -25,6 +25,7 @@ internal sealed interface WhatChangedState {
         val changedApps: List<LockableRow<ChangedAppItem>>,
         val uninstalledApps: List<LockableRow<UninstalledAppItem>>,
         val lockedAppCount: Int,
+        val isRecordingOff: Boolean,
     ) : WhatChangedState
 }
 

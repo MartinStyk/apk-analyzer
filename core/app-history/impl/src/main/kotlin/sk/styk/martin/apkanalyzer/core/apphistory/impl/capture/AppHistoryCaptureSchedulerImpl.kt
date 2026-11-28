@@ -17,6 +17,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import sk.styk.martin.apkanalyzer.core.apphistory.api.capture.AppHistoryCaptureRepository
+import sk.styk.martin.apkanalyzer.core.apphistory.api.capture.AppHistoryRecording
+import sk.styk.martin.apkanalyzer.core.apphistory.api.capture.AppHistoryRecordingRepository
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.restore.AppHistoryRestoreMerger
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.AppHistoryStorageCleanup
 import sk.styk.martin.apkanalyzer.core.apps.api.PackageChangeAction
@@ -24,8 +26,6 @@ import sk.styk.martin.apkanalyzer.core.apps.api.PackageChangesObserver
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
-import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlag
-import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlagRepository
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
@@ -41,7 +41,7 @@ internal class AppHistoryCaptureSchedulerImpl @Inject constructor(
     private val workManager: Lazy<WorkManager>,
     private val restoreMerger: AppHistoryRestoreMerger,
     private val storageCleanup: AppHistoryStorageCleanup,
-    private val featureFlagRepository: FeatureFlagRepository,
+    private val recordingRepository: AppHistoryRecordingRepository,
     private val appScope: CoroutineScope,
     private val dispatcherProvider: DispatcherProvider,
 ) : AppHistoryCaptureScheduler,
@@ -59,13 +59,18 @@ internal class AppHistoryCaptureSchedulerImpl @Inject constructor(
         appScope.launch(dispatcherProvider.io()) {
             storageCleanup.deleteUncompressedDatabases()
 
-            featureFlagRepository.observe(FeatureFlag.AppHistoryRecording)
+            recordingRepository.recording()
                 .distinctUntilChanged()
-                .collectLatest { enabled ->
-                    if (enabled) {
-                        recordHistory()
-                    } else {
-                        cancelPeriodicReconciliation()
+                .collectLatest { recording ->
+                    when (recording) {
+                        AppHistoryRecording.On -> recordHistory()
+
+                        AppHistoryRecording.Off -> {
+                            cancelPeriodicReconciliation()
+                            restoreMerger.mergeIfPending()
+                        }
+
+                        AppHistoryRecording.Unavailable -> cancelPeriodicReconciliation()
                     }
                 }
         }

@@ -9,6 +9,7 @@ import kotlinx.coroutines.withContext
 import sk.styk.martin.apkanalyzer.core.common.coroutines.DispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.coroutines.runCatchingCancellable
 import sk.styk.martin.apkanalyzer.core.common.logger.Logger
+import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject
 
@@ -33,6 +34,13 @@ internal class DocumentFileManagerImpl @Inject constructor(
             } finally {
                 if (!isComplete) discardIncomplete(destination)
             }
+        }
+    }
+
+    override suspend fun <T> read(source: Uri, read: suspend (InputStream) -> T): Result<T> = withContext(dispatcherProvider.io()) {
+        runCatchingCancellable {
+            val input = contentResolver.openInputStream(source) ?: error("The selected document can not be opened")
+            input.use { read(it) }
         }
     }
 

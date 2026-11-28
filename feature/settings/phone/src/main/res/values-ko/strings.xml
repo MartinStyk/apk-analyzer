@@ -14,4 +14,38 @@
     <string name="settings_fingerprint_format">지문 형식</string>
     <string name="settings_fingerprint_format_colon_separated">콜론으로 구분</string>
     <string name="settings_fingerprint_format_continuous">연속</string>
+    <string name="settings_app_history">앱 기록</string>
+    <string name="settings_app_history_on">켜짐</string>
+    <string name="settings_app_history_off">꺼짐</string>
+    <string name="app_history_settings_recording_section">기록</string>
+    <string name="app_history_settings_recording_toggle">앱 변경 사항 기록</string>
+    <string name="app_history_settings_recording_description">앱을 설치하거나 업데이트할 때마다 앱의 세부정보를 저장하므로 ‘변경 사항’ 탭과 각 앱의 기록에서 달라진 점을 볼 수 있습니다.</string>
+    <string name="app_history_settings_recording_off_title">기록이 꺼져 있음</string>
+    <string name="app_history_settings_recording_off_body">새로운 설치 및 업데이트는 기록되지 않습니다. 기록을 다시 켤 때까지 ‘변경 사항’ 탭과 각 앱의 기록은 현재 상태로 유지됩니다.</string>
+    <string name="app_history_settings_turn_off_title">기록을 끌까요?</string>
+    <string name="app_history_settings_turn_off_message">기록이 꺼져 있는 동안의 설치 및 업데이트는 ‘변경 사항’ 탭이나 앱의 기록에 표시되지 않습니다. 다시 켜면 여러 번 업데이트된 앱은 하나의 변경으로 표시되며, 그사이 제거된 앱은 기록되지 않습니다. 지금까지 기록된 내용은 모두 유지됩니다.</string>
+    <string name="app_history_settings_turn_off_confirm">끄기</string>
+    <string name="app_history_settings_turn_off_dismiss">켜 두기</string>
+    <string name="app_history_settings_privacy_title">이 휴대전화에만 저장됨</string>
+    <string name="app_history_settings_privacy_body">Apk Analyzer는 앱 기록을 이 휴대전화에만 저장하며 어디로도 전송하지 않습니다. 휴대전화 설정에서 백업이 켜져 있으면 Android가 다른 앱 데이터와 마찬가지로 이 기록을 Google 계정 백업에 포함합니다.</string>
+    <string name="app_history_settings_storage_section">저장 공간</string>
+    <string name="app_history_settings_storage_used">사용 중인 공간</string>
+    <plurals name="app_history_settings_storage_apps">
+        <item quantity="other">앱 %d개의 기록</item>
+    </plurals>
+    <string name="app_history_settings_storage_empty">아직 기록 없음</string>
+    <string name="app_history_settings_storage_unavailable">기록이 사용하는 공간을 확인할 수 없음</string>
+    <string name="app_history_settings_transfer_section">내보내기 및 가져오기</string>
+    <string name="app_history_settings_export">기록 내보내기</string>
+    <string name="app_history_settings_export_description">이 휴대전화나 Google 드라이브 같은 클라우드 드라이브에 사본을 파일로 저장합니다.</string>
+    <string name="app_history_settings_import">기록 가져오기</string>
+    <string name="app_history_settings_import_description">내보낸 파일에서 기록을 추가합니다. 이미 기록된 내용은 대체되지 않습니다.</string>
+    <string name="app_history_settings_exported">기록을 내보냈습니다</string>
+    <string name="app_history_settings_export_failed">기록을 내보내지 못했습니다</string>
+    <plurals name="app_history_settings_imported">
+        <item quantity="other">앱 %d개의 기록을 추가했습니다</item>
+    </plurals>
+    <string name="app_history_settings_nothing_new">이 파일에 새 기록이 없습니다</string>
+    <string name="app_history_settings_import_failed">이 파일을 가져올 수 없습니다. Apk Analyzer에서 내보낸 기록 파일을 선택하세요.</string>
+    <string name="app_history_settings_picker_unavailable">파일을 선택할 수 있는 앱이 없습니다</string>
 </resources>

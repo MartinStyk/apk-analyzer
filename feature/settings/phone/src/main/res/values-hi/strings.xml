@@ -14,4 +14,40 @@
     <string name="settings_fingerprint_format">फ़िंगरप्रिंट फ़ॉर्मैट</string>
     <string name="settings_fingerprint_format_colon_separated">कोलन से अलग</string>
     <string name="settings_fingerprint_format_continuous">बिना विभाजक के</string>
+    <string name="settings_app_history">ऐप इतिहास</string>
+    <string name="settings_app_history_on">चालू</string>
+    <string name="settings_app_history_off">बंद</string>
+    <string name="app_history_settings_recording_section">दर्ज करना</string>
+    <string name="app_history_settings_recording_toggle">ऐप में हुए बदलाव दर्ज करें</string>
+    <string name="app_history_settings_recording_description">जब आप कोई ऐप इंस्टॉल या अपडेट करते हैं, तो यह उसकी जानकारी सेव करता है, ताकि बदलाव टैब और हर ऐप का इतिहास दिखा सके कि क्या अलग है।</string>
+    <string name="app_history_settings_recording_off_title">दर्ज करना बंद है</string>
+    <string name="app_history_settings_recording_off_body">नए इंस्टॉल और अपडेट दर्ज नहीं होते। जब तक आप दर्ज करना फिर से चालू नहीं करते, बदलाव टैब और हर ऐप का इतिहास जैसे हैं वैसे ही रहते हैं।</string>
+    <string name="app_history_settings_turn_off_title">दर्ज करना बंद करें?</string>
+    <string name="app_history_settings_turn_off_message">दर्ज करना बंद रहने के दौरान हुए इंस्टॉल और अपडेट, बदलाव टैब या किसी ऐप के इतिहास में नहीं दिखते। जब आप इसे फिर से चालू करते हैं, तो कई बार अपडेट हुआ ऐप एक ही बदलाव के रूप में दिखता है, और इस बीच हटाए गए ऐप कभी दर्ज नहीं होते। अब तक दर्ज की गई सारी जानकारी बनी रहती है।</string>
+    <string name="app_history_settings_turn_off_confirm">बंद करें</string>
+    <string name="app_history_settings_turn_off_dismiss">दर्ज करना जारी रखें</string>
+    <string name="app_history_settings_privacy_title">इसी फ़ोन पर रहता है</string>
+    <string name="app_history_settings_privacy_body">Apk Analyzer ऐप इतिहास सिर्फ़ इसी फ़ोन पर सेव करता है और इसे कहीं नहीं भेजता। अगर आपके फ़ोन की सेटिंग में बैकअप चालू है, तो Android इसे दूसरे ऐप डेटा की तरह आपके Google खाते के बैकअप में शामिल करता है।</string>
+    <string name="app_history_settings_storage_section">स्टोरेज</string>
+    <string name="app_history_settings_storage_used">इस्तेमाल की गई जगह</string>
+    <plurals name="app_history_settings_storage_apps">
+        <item quantity="one">%d ऐप का इतिहास</item>
+        <item quantity="other">%d ऐप का इतिहास</item>
+    </plurals>
+    <string name="app_history_settings_storage_empty">अभी कुछ दर्ज नहीं हुआ</string>
+    <string name="app_history_settings_storage_unavailable">पता नहीं चल सका कि इतिहास कितनी जगह ले रहा है</string>
+    <string name="app_history_settings_transfer_section">एक्सपोर्ट और इंपोर्ट</string>
+    <string name="app_history_settings_export">इतिहास एक्सपोर्ट करें</string>
+    <string name="app_history_settings_export_description">इसकी कॉपी को फ़ाइल के रूप में इस फ़ोन पर या Google Drive जैसी क्लाउड ड्राइव में सेव करता है।</string>
+    <string name="app_history_settings_import">इतिहास इंपोर्ट करें</string>
+    <string name="app_history_settings_import_description">एक्सपोर्ट की गई फ़ाइल से इतिहास जोड़ता है। पहले से दर्ज कोई भी जानकारी बदली नहीं जाती।</string>
+    <string name="app_history_settings_exported">इतिहास एक्सपोर्ट हो गया</string>
+    <string name="app_history_settings_export_failed">इतिहास एक्सपोर्ट नहीं हो सका</string>
+    <plurals name="app_history_settings_imported">
+        <item quantity="one">%d ऐप का इतिहास जोड़ा गया</item>
+        <item quantity="other">%d ऐप का इतिहास जोड़ा गया</item>
+    </plurals>
+    <string name="app_history_settings_nothing_new">इस फ़ाइल में कोई नया इतिहास नहीं है</string>
+    <string name="app_history_settings_import_failed">यह फ़ाइल इंपोर्ट नहीं हो सकी। Apk Analyzer से एक्सपोर्ट की गई इतिहास फ़ाइल चुनें।</string>
+    <string name="app_history_settings_picker_unavailable">फ़ाइल चुनने के लिए कोई ऐप उपलब्ध नहीं है</string>
 </resources>

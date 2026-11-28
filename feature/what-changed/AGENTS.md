@@ -24,7 +24,8 @@ package `sk.styk.martin.apkanalyzer.feature.whatchanged.phone`. There is no TV m
   loading/error/empty content.
 * `navigation/` owns the entry provider and the internal log key. Rows open the per-app timeline,
   change detail, and historical app detail through the keys in `feature:app-detail:api`; locked rows
-  open `ProNavKey` from `feature:pro:api`.
+  open `ProNavKey` from `feature:pro:api`. The tab header's settings button opens
+  `AppHistorySettingsNavKey` from `feature:settings:api`.
 
 ## Rules
 
@@ -51,6 +52,9 @@ package `sk.styk.martin.apkanalyzer.feature.whatchanged.phone`. There is no TV m
   rows keep the same key as their readable form; the key is never rendered. Rows and section headers
   use lazy-item animations for insertion, removal, and movement as history arrives; never force
   scrolling to new entries or enable these animations globally in the shared list helper.
+* **Recording off is shown, not hidden.** When `AppHistoryRecordingRepository` reports `Off`, the
+  tab (loaded or empty) shows an attention card above its content with a Turn on action, so stale
+  history never reads as "nothing changed". `Unavailable` shows nothing; the full log has no card.
 
 ## Pro gate
 

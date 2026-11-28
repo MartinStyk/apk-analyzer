@@ -66,4 +66,8 @@
     <string name="what_changed_uncomparable_only">Некоторые данные не удалось сравнить</string>
     <string name="what_changed_locked_row">Заблокированное изменение приложения, входит в Pro</string>
     <string name="what_changed_locked_click_label">Разблокировать с Pro</string>
+    <string name="what_changed_settings">Настройки истории</string>
+    <string name="what_changed_recording_off_title">Фиксация выключена</string>
+    <string name="what_changed_recording_off_body">Новые установки и обновления не фиксируются.</string>
+    <string name="what_changed_recording_turn_on">Включить</string>
 </resources>
