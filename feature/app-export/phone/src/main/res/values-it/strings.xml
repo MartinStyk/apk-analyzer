@@ -15,6 +15,8 @@
     <string name="inventory_export_columns_selected">%1$d dettagli selezionati su %2$d</string>
     <string name="inventory_export_select_all">Seleziona tutto</string>
     <string name="inventory_export_clear">Deseleziona tutto</string>
+    <string name="inventory_export_select_all_details">Seleziona tutti i dettagli</string>
+    <string name="inventory_export_clear_all_details">Deseleziona tutti i dettagli</string>
     <string name="inventory_export_usage_access_hint">L\'ora dell\'ultimo utilizzo e le dimensioni dello spazio di archiviazione restano vuote finché non consenti l\'accesso ai dati di utilizzo.</string>
     <string name="inventory_export_grant_access">Consenti accesso</string>
     <string name="inventory_export_attribute_category">Categoria</string>

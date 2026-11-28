@@ -79,8 +79,9 @@ exception is `InactiveSearchBar`, which lives in `SearchBarInactive.kt`.
   the label "Pro", announced as "Part of Pro". Use it on Pro rows and actions; never on content
   that is free. A star identifies the tier; reserve lock icons for unavailable actions.
   Pro labels use `AppTheme.colors.pro` and `proContainer`, not action or warning colors.
-  Its `onClick` overload keeps the compact visual inside a full 48dp touch target when the badge
-  itself opens the purchase sheet. The badge grows with text scaling rather than fixing its height.
+  Its `onClick` overload drops the gold fill and keeps the star and label inside a full 48dp touch
+  target, because it repeats down long lists of rows where a filled pill on every row drowns out
+  the content. The badge grows with text scaling rather than fixing its height.
 * `navigation/BottomSheetSceneStrategy` shows a Navigation 3 entry as a `BottomSheet` over the
   screen below it. An entry opts in with `metadata = BottomSheetSceneStrategy.bottomSheet()`; the
   `app` shell passes the strategy to `NavDisplay`. Swipe, outside tap and Back pop the entry.

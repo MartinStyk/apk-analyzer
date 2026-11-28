@@ -13,6 +13,8 @@
     <string name="inventory_export_columns_selected">Đã chọn %1$d trên %2$d mục thông tin</string>
     <string name="inventory_export_select_all">Chọn tất cả</string>
     <string name="inventory_export_clear">Bỏ chọn</string>
+    <string name="inventory_export_select_all_details">Chọn tất cả thông tin</string>
+    <string name="inventory_export_clear_all_details">Bỏ chọn tất cả thông tin</string>
     <string name="inventory_export_usage_access_hint">Thời gian sử dụng lần cuối và dung lượng lưu trữ sẽ để trống cho đến khi bạn cho phép truy cập dữ liệu sử dụng.</string>
     <string name="inventory_export_grant_access">Cho phép truy cập</string>
     <string name="inventory_export_attribute_category">Danh mục</string>

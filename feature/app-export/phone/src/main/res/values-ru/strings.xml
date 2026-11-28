@@ -16,6 +16,8 @@
     <string name="inventory_export_columns_selected">Выбрано сведений: %1$d из %2$d</string>
     <string name="inventory_export_select_all">Выбрать всё</string>
     <string name="inventory_export_clear">Снять выделение</string>
+    <string name="inventory_export_select_all_details">Выбрать все сведения</string>
+    <string name="inventory_export_clear_all_details">Снять выбор со всех сведений</string>
     <string name="inventory_export_usage_access_hint">Время последнего использования и размер хранилища остаются пустыми, пока вы не разрешите доступ к данным об использовании.</string>
     <string name="inventory_export_grant_access">Разрешить доступ</string>
     <string name="inventory_export_attribute_category">Категория</string>

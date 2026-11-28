@@ -76,7 +76,9 @@ app, opened from the app detail summary sheet). Implementation code uses the pac
   the user taps Save or Share again.
 * The Export step's upgrade notice uses `InfoCardTone.Pro` and the shared star icon. Its Unlock Pro
   button uses the same icon with Pro foreground/container roles reversed for emphasis. Export Basics
-  stays a secondary text action, and Save/Share retain normal action colors.
+  stays a secondary text action, and Save/Share retain normal action colors. While `requiresPro`
+  holds, Save and Share also carry the star, so they say they lead to the purchase sheet; Pro owners
+  and Basics-only exports never see it.
 * For users without Pro, every attribute outside Basics has a tappable Pro badge that opens the
   purchase sheet independently of the current selection or file format. Selecting attributes
   remains free; no analysis-cost or "Slower" hints appear in the details step.

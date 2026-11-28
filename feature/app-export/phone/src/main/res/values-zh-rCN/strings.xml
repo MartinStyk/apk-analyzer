@@ -13,6 +13,8 @@
     <string name="inventory_export_columns_selected">已选择 %1$d 项信息，共 %2$d 项</string>
     <string name="inventory_export_select_all">全选</string>
     <string name="inventory_export_clear">取消选择</string>
+    <string name="inventory_export_select_all_details">选择全部信息</string>
+    <string name="inventory_export_clear_all_details">取消选择全部信息</string>
     <string name="inventory_export_usage_access_hint">在您允许访问使用情况数据之前，最后使用时间和存储大小将保持为空。</string>
     <string name="inventory_export_grant_access">允许访问</string>
     <string name="inventory_export_attribute_category">类别</string>

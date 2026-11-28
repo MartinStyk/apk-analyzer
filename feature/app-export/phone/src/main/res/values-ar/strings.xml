@@ -18,6 +18,8 @@
     <string name="inventory_export_columns_selected">تم اختيار %1$d من %2$d من التفاصيل</string>
     <string name="inventory_export_select_all">تحديد الكل</string>
     <string name="inventory_export_clear">إلغاء التحديد</string>
+    <string name="inventory_export_select_all_details">تحديد كل التفاصيل</string>
+    <string name="inventory_export_clear_all_details">إلغاء تحديد كل التفاصيل</string>
     <string name="inventory_export_usage_access_hint">يبقى وقت آخر استخدام وحجم التخزين فارغين حتى تسمح بالوصول إلى بيانات الاستخدام.</string>
     <string name="inventory_export_grant_access">السماح بالوصول</string>
     <string name="inventory_export_attribute_category">الفئة</string>

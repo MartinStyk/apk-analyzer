@@ -16,6 +16,8 @@
     <string name="inventory_export_columns_selected">Вибрано відомостей: %1$d із %2$d</string>
     <string name="inventory_export_select_all">Вибрати все</string>
     <string name="inventory_export_clear">Скасувати вибір</string>
+    <string name="inventory_export_select_all_details">Вибрати всі відомості</string>
+    <string name="inventory_export_clear_all_details">Скасувати вибір усіх відомостей</string>
     <string name="inventory_export_usage_access_hint">Час останнього використання та розмір сховища залишаються порожніми, доки ви не дозволите доступ до даних про використання.</string>
     <string name="inventory_export_grant_access">Дозволити доступ</string>
     <string name="inventory_export_attribute_category">Категорія</string>

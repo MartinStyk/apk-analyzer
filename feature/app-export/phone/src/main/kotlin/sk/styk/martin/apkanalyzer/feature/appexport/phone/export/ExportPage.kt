@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -18,6 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -56,6 +62,7 @@ import sk.styk.martin.apkanalyzer.feature.appexport.phone.components.description
 import sk.styk.martin.apkanalyzer.feature.appexport.phone.components.labelRes
 
 private const val VISIBLE_COLUMN_NAMES = 3
+private val PREVIEW_FADE_WIDTH = 32.dp
 
 @Composable
 internal fun ExportPage(
@@ -226,6 +233,7 @@ private fun FormatRow(
             text = stringResource(R.string.inventory_export_format_reference),
             onClick = onOpenReference,
             enabled = !state.isExporting,
+            modifier = Modifier.offset(x = (-12).dp),
         )
         if (state.omittedColumns.isNotEmpty()) {
             OmittedColumnsNotice(
@@ -342,11 +350,29 @@ private fun PreviewBox(
             preview is InventoryPreviewState.Unavailable -> PreviewMessage(stringResource(R.string.inventory_export_preview_unavailable))
 
             preview is InventoryPreviewState.Content -> {
+                val scrollState = rememberScrollState()
+                val fadeColor = AppTheme.colors.surfaceVariant
                 Text(
                     text = preview.text,
                     style = AppTheme.typography.monospace,
                     color = AppTheme.colors.onSurface,
-                    modifier = Modifier.horizontalScroll(rememberScrollState()),
+                    modifier = Modifier
+                        .drawWithContent {
+                            drawContent()
+                            if (scrollState.canScrollForward) {
+                                val fadeWidth = PREVIEW_FADE_WIDTH.toPx()
+                                drawRect(
+                                    brush = Brush.horizontalGradient(
+                                        colors = listOf(Color.Transparent, fadeColor),
+                                        startX = size.width - fadeWidth,
+                                        endX = size.width,
+                                    ),
+                                    topLeft = Offset(size.width - fadeWidth, 0f),
+                                    size = Size(fadeWidth, size.height),
+                                )
+                            }
+                        }
+                        .horizontalScroll(scrollState),
                 )
                 if (preview.isTruncated) {
                     Text(
@@ -410,16 +436,19 @@ internal fun ExportBottomBar(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             modifier = modifier.fillMaxWidth(),
         ) {
+            val proIcon = ApkAnalyzerIcons.Star.takeIf { state.requiresPro }
             OutlinedButton(
                 text = stringResource(R.string.inventory_export_share),
                 onClick = { onAction(InventoryExportAction.Share) },
                 enabled = state.canExport,
+                leadingIcon = proIcon,
                 modifier = Modifier.weight(1f),
             )
             Button(
                 text = stringResource(R.string.inventory_export_save),
                 onClick = { onAction(InventoryExportAction.Save) },
                 enabled = state.canExport,
+                leadingIcon = proIcon,
                 modifier = Modifier.weight(1f),
             )
         }
@@ -501,6 +530,23 @@ private fun ExportPageProRequiredPreview() {
                 apps = previewApps,
                 preview = previewContent,
                 columns = InventoryPreset.Basics.columns + InventoryColumn.Debuggable + InventoryColumn.RequestedPermissions,
+                format = InventoryFormat.Json,
+                proOwnership = ProOwnership.NotOwned,
+            ),
+            onAction = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ExportBottomBarProRequiredPreview() {
+    ApkAnalyzerTheme {
+        ExportBottomBar(
+            state = InventoryExportState(
+                step = InventoryExportStep.Export,
+                apps = previewApps,
+                columns = InventoryPreset.Basics.columns + InventoryColumn.Debuggable,
                 format = InventoryFormat.Json,
                 proOwnership = ProOwnership.NotOwned,
             ),

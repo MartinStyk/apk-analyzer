@@ -13,6 +13,8 @@
     <string name="inventory_export_columns_selected">%2$d개 정보 중 %1$d개 선택됨</string>
     <string name="inventory_export_select_all">모두 선택</string>
     <string name="inventory_export_clear">선택 해제</string>
+    <string name="inventory_export_select_all_details">모든 정보 선택</string>
+    <string name="inventory_export_clear_all_details">모든 정보 선택 해제</string>
     <string name="inventory_export_usage_access_hint">사용 정보 접근을 허용할 때까지 마지막 사용 시간과 저장 공간 크기는 비어 있습니다.</string>
     <string name="inventory_export_grant_access">접근 허용</string>
     <string name="inventory_export_attribute_category">카테고리</string>

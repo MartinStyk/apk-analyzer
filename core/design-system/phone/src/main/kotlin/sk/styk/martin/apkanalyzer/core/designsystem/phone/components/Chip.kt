@@ -45,6 +45,7 @@ fun Chip(
     trailingIcon: ImageVector? = null,
     leadingIcon: ImageVector? = null,
 ) {
+    val shownLeadingIcon = leadingIcon ?: ApkAnalyzerIcons.Check.takeIf { selected }
     FilterChip(
         selected = selected,
         onClick = onClick,
@@ -64,10 +65,10 @@ fun Chip(
                 )
             }
         },
-        leadingIcon = leadingIcon?.let {
+        leadingIcon = shownLeadingIcon?.let {
             {
                 Icon(
-                    imageVector = leadingIcon,
+                    imageVector = shownLeadingIcon,
                     contentDescription = null,
                     modifier = Modifier.size(16.dp),
                 )
@@ -305,6 +306,14 @@ private fun ChipClickableSelectedPreview() {
             selected = true,
             trailingIcon = ApkAnalyzerIcons.SortAscending,
         )
+    }
+}
+
+@Preview
+@Composable
+private fun ChipClickableSelectedWithoutIconPreview() {
+    ApkAnalyzerTheme {
+        Chip(label = "JSON", onClick = {}, selected = true)
     }
 }
 

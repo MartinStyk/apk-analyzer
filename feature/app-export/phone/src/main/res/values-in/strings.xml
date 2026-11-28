@@ -13,6 +13,8 @@
     <string name="inventory_export_columns_selected">%1$d dari %2$d detail dipilih</string>
     <string name="inventory_export_select_all">Pilih semua</string>
     <string name="inventory_export_clear">Batalkan pilihan</string>
+    <string name="inventory_export_select_all_details">Pilih semua detail</string>
+    <string name="inventory_export_clear_all_details">Batalkan semua detail</string>
     <string name="inventory_export_usage_access_hint">Waktu terakhir digunakan dan ukuran penyimpanan tetap kosong hingga Anda mengizinkan akses data penggunaan.</string>
     <string name="inventory_export_grant_access">Izinkan akses</string>
     <string name="inventory_export_attribute_category">Kategori</string>
