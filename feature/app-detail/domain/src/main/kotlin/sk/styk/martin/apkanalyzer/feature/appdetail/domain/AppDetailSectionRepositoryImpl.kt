@@ -1,6 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.domain
 
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.AppHistoryRepository
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryRecordedOn
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySection
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySnapshot
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySnapshotId
@@ -34,6 +35,11 @@ internal class AppDetailSectionRepositoryImpl @Inject constructor(
     override suspend fun detail(input: AppDetailInput): Result<AppDetail> = when (input) {
         is AppDetailInput.Historical -> snapshot(input).map { it.detail }
         is AppDetailInput.InstalledPackage, is AppDetailInput.ApkFile -> appDetailRepository.details(input.live())
+    }
+
+    override suspend fun recordedOn(input: AppDetailInput): Result<AppHistoryRecordedOn> = when (input) {
+        is AppDetailInput.Historical -> snapshot(input).map { it.recordedOn }
+        is AppDetailInput.InstalledPackage, is AppDetailInput.ApkFile -> Result.success(AppHistoryRecordedOn.ThisDevice)
     }
 
     override suspend fun nativeLibraries(input: AppDetailInput): Result<AppDetailSection<NativeLibraries>> = when (input) {

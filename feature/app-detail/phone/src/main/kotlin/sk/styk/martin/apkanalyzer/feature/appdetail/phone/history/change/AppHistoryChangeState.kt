@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryEntry
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryFieldChange
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryInstallSource
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryRecordedOn
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryVersion
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.SetChange
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.ValueChange
@@ -89,6 +90,7 @@ internal sealed interface HistoryChangeSection {
     @Immutable
     data class WorthKnowing(
         val hasCertificateChange: Boolean,
+        val isCertificateWarning: Boolean,
         val dangerousPermissions: List<HistoryChangeRow.Permission>,
         val addedInsights: List<AppDetailInsight>,
         val removedInsights: List<AppDetailInsight>,
@@ -144,6 +146,8 @@ internal sealed interface AppHistoryChangeState {
         val kind: AppHistoryEntry.Change.Kind,
         val timestamp: Instant,
         val capturedAt: Instant,
+        val recordedOn: AppHistoryRecordedOn,
+        val previousRecordedOn: AppHistoryRecordedOn,
         val version: AppHistoryVersion,
         val versionChange: ValueChange<AppHistoryVersion>?,
         val versionTag: HistoryVersionTag?,

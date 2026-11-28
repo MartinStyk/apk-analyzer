@@ -1,6 +1,7 @@
 package sk.styk.martin.apkanalyzer.feature.whatchanged.phone
 
 import androidx.compose.runtime.Immutable
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryRecordedOn
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySummaryPart
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.access.LockableRow
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppChangeItem
@@ -21,6 +22,7 @@ internal sealed interface WhatChangedState {
         val updateCount: Int,
         val newAppCount: Int,
         val lastChangeAt: Instant?,
+        val otherDevices: List<String>,
         val needsAttention: List<LockableRow<AppChangeItem>>,
         val changedApps: List<LockableRow<ChangedAppItem>>,
         val uninstalledApps: List<LockableRow<UninstalledAppItem>>,
@@ -36,6 +38,7 @@ internal data class ChangedAppItem(
     val updateCount: Int,
     val isNew: Boolean,
     val netChange: NetChange,
+    val otherDevices: List<String>,
 )
 
 @Immutable
@@ -44,7 +47,7 @@ internal sealed interface NetChange {
 
     data object None : NetChange
 
-    data class Changed(val parts: List<AppHistorySummaryPart>, val hasCertificateChange: Boolean) : NetChange
+    data class Changed(val parts: List<AppHistorySummaryPart>, val hasCertificateWarning: Boolean) : NetChange
 }
 
 @Immutable
@@ -52,4 +55,5 @@ internal data class UninstalledAppItem(
     val packageName: String,
     val appName: String,
     val changeCount: Int,
+    val lastSeenOn: AppHistoryRecordedOn,
 )

@@ -17,6 +17,8 @@
     <string name="what_changed_no_net_change">Rốt cuộc không thay đổi</string>
     <string name="what_changed_reverted">Đã hoàn tác ngày %1$s</string>
     <string name="what_changed_no_changes_recorded">Chưa ghi nhận thay đổi nào</string>
+    <string name="what_changed_last_seen_on">Lần cuối thấy trên %1$s</string>
+    <string name="what_changed_includes_device">Bao gồm lịch sử từ %1$s</string>
     <string name="what_changed_empty_title">Chưa ghi nhận gì</string>
     <string name="what_changed_empty_body">Apk Analyzer ghi nhận các ứng dụng của bạn ở chế độ nền. Khi một ứng dụng cập nhật, những gì thay đổi trong đó sẽ hiện ở đây.</string>
     <string name="what_changed_error">Không thể tải lịch sử thay đổi</string>
@@ -58,4 +60,7 @@
     <string name="what_changed_recording_off_title">Đã tắt ghi nhận</string>
     <string name="what_changed_recording_off_body">Các lượt cài đặt và cập nhật mới hiện không được ghi nhận.</string>
     <string name="what_changed_recording_turn_on">Bật</string>
+    <plurals name="what_changed_includes_devices">
+        <item quantity="other">Bao gồm lịch sử từ %d thiết bị khác</item>
+    </plurals>
 </resources>

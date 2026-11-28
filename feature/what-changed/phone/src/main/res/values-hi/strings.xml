@@ -17,6 +17,8 @@
     <string name="what_changed_no_net_change">आख़िर में कोई बदलाव नहीं</string>
     <string name="what_changed_reverted">%1$s को वापस लिया गया</string>
     <string name="what_changed_no_changes_recorded">कोई बदलाव दर्ज नहीं हुआ</string>
+    <string name="what_changed_last_seen_on">आखिरी बार %1$s पर देखा गया</string>
+    <string name="what_changed_includes_device">इसमें %1$s का इतिहास शामिल है</string>
     <string name="what_changed_empty_title">अभी कुछ दर्ज नहीं हुआ</string>
     <string name="what_changed_empty_body">Apk Analyzer आपके ऐप को बैकग्राउंड में दर्ज करता है। जब कोई ऐप अपडेट होता है, तो उसमें क्या बदला, यह यहाँ दिखता है।</string>
     <string name="what_changed_error">बदलावों का इतिहास लोड नहीं हो सका</string>
@@ -62,4 +64,8 @@
     <string name="what_changed_recording_off_title">दर्ज करना बंद है</string>
     <string name="what_changed_recording_off_body">नए इंस्टॉल और अपडेट दर्ज नहीं किए जा रहे हैं।</string>
     <string name="what_changed_recording_turn_on">चालू करें</string>
+    <plurals name="what_changed_includes_devices">
+        <item quantity="one">इसमें %d अन्य डिवाइस का इतिहास शामिल है</item>
+        <item quantity="other">इसमें %d अन्य डिवाइस का इतिहास शामिल है</item>
+    </plurals>
 </resources>

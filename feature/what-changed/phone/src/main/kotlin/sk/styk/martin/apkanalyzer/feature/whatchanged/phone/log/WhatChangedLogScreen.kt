@@ -25,6 +25,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryChangeCategory
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryEntry
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryRecordedOn
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySummaryPart
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryVersion
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.ValueChange
@@ -189,7 +190,8 @@ private val PreviewItem = AppChangeItem(
     snapshotId = 4,
     capturedAt = PreviewDate,
     date = PreviewDate,
-    kind = AppChangeKind.Change(AppHistoryEntry.Change.Kind.Updated),
+    kind = AppChangeKind.Change(AppHistoryEntry.Change.Kind.Updated, previousRecordedOn = AppHistoryRecordedOn.ThisDevice),
+    recordedOn = AppHistoryRecordedOn.ThisDevice,
     version = AppHistoryVersion(315, "315.0"),
     versionChange = ValueChange(AppHistoryVersion(312, "312.0"), AppHistoryVersion(315, "315.0")),
     parts = listOf(AppHistorySummaryPart.DangerousPermissionsAdded("Camera", 0), AppHistorySummaryPart.ComponentsAdded(2)),
@@ -203,7 +205,7 @@ private val PreviewLoaded = WhatChangedLogState.Loaded(
             YearMonth.of(2026, 11),
             listOf(
                 LockableRow.Readable(PreviewItem, PreviewItem.key),
-                PreviewItem.copy(packageName = "com.whatsapp", appName = "WhatsApp", snapshotId = 7, parts = emptyList(), hasCertificateChange = true)
+                PreviewItem.copy(packageName = "com.whatsapp", appName = "WhatsApp", snapshotId = 7, parts = emptyList(), hasCertificateWarning = true)
                     .let { LockableRow.Readable(it, it.key) },
                 LockableRow.Locked("com.android.chrome:5"),
             ),
@@ -218,6 +220,7 @@ private val PreviewLoaded = WhatChangedLogState.Loaded(
                     snapshotId = 1,
                     date = Instant.parse("2026-10-14T10:00:00Z"),
                     kind = AppChangeKind.FirstRecorded,
+                    recordedOn = AppHistoryRecordedOn.OtherDevice("Google Pixel 7"),
                     parts = emptyList(),
                 ).let { LockableRow.Readable(it, it.key) },
             ),

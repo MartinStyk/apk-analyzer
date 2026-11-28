@@ -185,6 +185,15 @@ are ordered by `capturedAt`, never by `lastUpdateTime`, which moves backwards on
 for the same reason an `Updated` change whose `lastUpdateTime` went backwards is dated by its
 `capturedAt` instead of the factory timestamp it rolled back to.
 
+Every `AppHistorySnapshotSummary` and `AppHistorySnapshot` carries `recordedOn`
+(`AppHistoryRecordedOn`): `ThisDevice` when its `deviceId` is `DeviceInfoProvider.deviceId`, otherwise
+`OtherDevice(name)`, named from the `app_history_device` row by `AppHistoryRecordedOnResolver`
+(manufacturer capitalized, dropped when the model already starts with it: "Google Pixel 7",
+"Samsung SM-S918B"). Snapshots carry only an opaque `deviceId`, so without this imported or restored
+history reads as local updates. Device rows are only inserted, with `IGNORE`, together with snapshots
+(capture, restore merge, import), so every read loads the device table once and every snapshot's
+device resolves. A `NewDevice` change names where history came from through `previous.recordedOn`.
+
 An `Updated` change with no changed and no uncomparable category is dropped from the timeline. The
 gate writes a row whenever the key moves — a same-APK reinstall or a Play re-delivery moves it
 without changing content — and skipping those at write time would need somewhere to record the
@@ -224,7 +233,11 @@ category, which also fires on a scheme change), `addedDangerousPermissions` and 
 `HI-18` rule, one predicate for what a timeline row highlights and what the tab lists under "Needs
 attention": a certificate change, a dangerous permission added, an install source change, debugging
 turned on, or the APK growing by 25% or by 20 MB — a dangerous permission added is its own
-`DangerousPermissionsAdded` part, never folded into `PermissionsAdded`), `direction` (a
+`DangerousPermissionsAdded` part, never folded into `PermissionsAdded`; an entry's `needsAttention` is
+always false for a `NewDevice` change, because a new phone routinely gets a differently signed or
+differently sourced copy), `hasCertificateWarning` (the one predicate for warning-highlighting an
+entry, its overview, and the tab's free certificate rows: a certificate change that is not a
+`NewDevice` move; screens still show the change itself neutrally), `direction` (a
 `core:common` `ChangeDirection`, shared with the design system's change token — an exhaustive
 `when`, so a new part must choose), `summaryParts` (on an entry or any `AppHistoryDiff`), `isQuiet`
 (never true for a change that needs attention), `changeCount`, `recordingSince`, `overview`, the
@@ -269,10 +282,13 @@ differ stays as a change: two observations of the same install that disagree are
 not something to hide. Component enabled state never causes one, because capture lists every
 declared component (see the schema doc's excluded data). `AppHistoryDeviceSummary.kt` holds the rules over it:
 `summarySince(since)` counts updates and new apps (by install date, never by first recording, which
-would call every app new when recording starts), lists changed apps with their net change, and lists
+would call every app new when recording starts), lists changed apps with their net change (`hasCertificateWarning` only when the net diff changes the
+certificate and some non-move change in range did, since the net diff can span a move; `otherDevices`
+names other phones that recorded an in-range change or the new install), names the other phones whose
+history falls in the range (`otherDevices`), and lists
 the newest attention-worthy change per app with the date a later update undid it, if all its reasons
-were undone. A certificate change or a size jump is never "undone". `latestChange` and `allEntries`
-ignore the range. Moves to a new device are never counted as app changes.
+were undone. A certificate change or a size jump is never "undone". `latestChange`, `allEntries` and
+`lastSeenOn` (where an app's newest snapshot was recorded) ignore the range. Moves to a new device are never counted as app changes.
 
 Install source is compared as `AppHistoryInstallSource`: the resolved `AppSource` plus the installing
 package. A move between two unrecognized stores resolves to Unknown on both sides, and must still read as

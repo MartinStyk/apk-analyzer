@@ -288,6 +288,7 @@
     <string name="app_history_when_updated">%1$s 업데이트됨</string>
     <string name="app_history_when_reinstalled">%1$s 다시 설치됨</string>
     <string name="app_history_when_recorded">%1$s 기록됨</string>
+    <string name="app_history_recorded_on_device">%1$s에서 기록됨</string>
     <string name="app_history_when_with_recorded">%1$s · %2$s 기록됨</string>
     <string name="app_history_changes_heading">이 버전 간의 변경 사항</string>
     <string name="app_history_device_note">일부 차이는 앱이 아니라 기기 때문일 수 있습니다.</string>

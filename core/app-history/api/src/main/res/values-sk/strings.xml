@@ -2,7 +2,9 @@
 <resources>
     <string name="app_history_signing_method_changed">Spôsob podpisu sa zmenil</string>
     <string name="app_history_reinstalled">Odstránené a znova nainštalované</string>
-    <string name="app_history_new_device">Pokračuje na novom zariadení</string>
+    <string name="app_history_moved_from">Presunuté zo zariadenia %1$s</string>
+    <string name="app_history_moved_from_this_device">Presunuté z tohto zariadenia</string>
+    <string name="app_history_on_device">Na zariadení %1$s</string>
     <string name="app_history_version">Verzia %1$s</string>
     <string name="app_history_version_with_code">%1$s (%2$d)</string>
     <string name="app_history_value_change">%1$s → %2$s</string>

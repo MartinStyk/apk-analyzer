@@ -21,6 +21,7 @@ import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryC
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryDeviceTimeline
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.changeCount
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.hasCertificateChange
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.lastSeenOn
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.latestChange
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.needsAttention
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.occurredAt
@@ -184,6 +185,7 @@ internal class WhatChangedViewModel @Inject constructor(
             updateCount = summary.updateCount,
             newAppCount = summary.newAppCount,
             lastChangeAt = latestChange?.change?.timestamp?.takeIf { summary.changedApps.isEmpty() && it < since },
+            otherDevices = summary.otherDevices,
             needsAttention = needsAttention,
             changedApps = changedApps,
             uninstalledApps = uninstalledApps,
@@ -202,15 +204,17 @@ internal class WhatChangedViewModel @Inject constructor(
 
             else -> {
                 val parts = diff.summaryParts(itemMapper::permissionLabel).sortedByDescending { it.needsAttention }
-                if (parts.isEmpty() && !diff.hasCertificateChange) NetChange.None else NetChange.Changed(parts, diff.hasCertificateChange)
+                if (parts.isEmpty() && !diff.hasCertificateChange) NetChange.None else NetChange.Changed(parts, hasCertificateWarning)
             }
         },
+        otherDevices = otherDevices,
     )
 
     private fun AppHistoryAppTimeline.toUninstalledItem() = UninstalledAppItem(
         packageName = packageName.value,
         appName = applicationName,
         changeCount = entries.changeCount,
+        lastSeenOn = lastSeenOn,
     )
 }
 

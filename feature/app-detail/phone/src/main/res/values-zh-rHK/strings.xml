@@ -288,6 +288,7 @@
     <string name="app_history_when_updated">於 %1$s 更新</string>
     <string name="app_history_when_reinstalled">於 %1$s 重新安裝</string>
     <string name="app_history_when_recorded">於 %1$s 記錄</string>
+    <string name="app_history_recorded_on_device">在 %1$s 上記錄</string>
     <string name="app_history_when_with_recorded">%1$s · 於 %2$s 記錄</string>
     <string name="app_history_changes_heading">這兩個版本之間的更改</string>
     <string name="app_history_device_note">部分差異可能由裝置造成，並非來自應用程式。</string>

@@ -17,6 +17,8 @@
     <string name="what_changed_no_net_change">결과적으로 변경 없음</string>
     <string name="what_changed_reverted">%1$s에 되돌려짐</string>
     <string name="what_changed_no_changes_recorded">기록된 변경 없음</string>
+    <string name="what_changed_last_seen_on">마지막 확인 기기: %1$s</string>
+    <string name="what_changed_includes_device">%1$s의 기록 포함</string>
     <string name="what_changed_empty_title">아직 기록 없음</string>
     <string name="what_changed_empty_body">Apk Analyzer는 앱을 백그라운드에서 기록합니다. 앱이 업데이트되면 변경된 내용이 여기에 표시됩니다.</string>
     <string name="what_changed_error">변경 기록을 불러올 수 없음</string>
@@ -58,4 +60,7 @@
     <string name="what_changed_recording_off_title">기록이 꺼져 있음</string>
     <string name="what_changed_recording_off_body">새로운 설치 및 업데이트가 기록되지 않고 있습니다.</string>
     <string name="what_changed_recording_turn_on">켜기</string>
+    <plurals name="what_changed_includes_devices">
+        <item quantity="other">다른 기기 %d대의 기록 포함</item>
+    </plurals>
 </resources>

@@ -17,6 +17,8 @@
     <string name="what_changed_no_net_change">Pada akhirnya tidak berubah</string>
     <string name="what_changed_reverted">Dibatalkan %1$s</string>
     <string name="what_changed_no_changes_recorded">Tidak ada perubahan tercatat</string>
+    <string name="what_changed_last_seen_on">Terakhir terlihat di %1$s</string>
+    <string name="what_changed_includes_device">Termasuk riwayat dari %1$s</string>
     <string name="what_changed_empty_title">Belum ada yang tercatat</string>
     <string name="what_changed_empty_body">Apk Analyzer mencatat aplikasi Anda di latar belakang. Saat aplikasi diperbarui, perubahan di dalamnya muncul di sini.</string>
     <string name="what_changed_error">Tidak dapat memuat riwayat perubahan</string>
@@ -58,4 +60,7 @@
     <string name="what_changed_recording_off_title">Pencatatan nonaktif</string>
     <string name="what_changed_recording_off_body">Instalasi dan pembaruan baru tidak sedang dicatat.</string>
     <string name="what_changed_recording_turn_on">Aktifkan</string>
+    <plurals name="what_changed_includes_devices">
+        <item quantity="other">Termasuk riwayat dari %d perangkat lain</item>
+    </plurals>
 </resources>

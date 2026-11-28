@@ -17,6 +17,8 @@
     <string name="what_changed_no_net_change">Nessuna differenza finale</string>
     <string name="what_changed_reverted">Annullato il %1$s</string>
     <string name="what_changed_no_changes_recorded">Nessuna modifica rilevata</string>
+    <string name="what_changed_last_seen_on">Vista l\'ultima volta su %1$s</string>
+    <string name="what_changed_includes_device">Include la cronologia di %1$s</string>
     <string name="what_changed_empty_title">Ancora nulla di rilevato</string>
     <string name="what_changed_empty_body">Apk Analyzer rileva le tue app in background. Quando un\'app si aggiorna, qui vedi cosa è cambiato.</string>
     <string name="what_changed_error">Impossibile caricare la cronologia delle modifiche</string>
@@ -66,4 +68,9 @@
     <string name="what_changed_recording_off_title">La rilevazione è disattivata</string>
     <string name="what_changed_recording_off_body">Le nuove installazioni e i nuovi aggiornamenti non vengono rilevati.</string>
     <string name="what_changed_recording_turn_on">Attiva</string>
+    <plurals name="what_changed_includes_devices">
+        <item quantity="one">Include la cronologia di %d altro dispositivo</item>
+        <item quantity="many">Include la cronologia di %d altri dispositivi</item>
+        <item quantity="other">Include la cronologia di %d altri dispositivi</item>
+    </plurals>
 </resources>

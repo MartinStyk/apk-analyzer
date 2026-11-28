@@ -14,13 +14,21 @@ import sk.styk.martin.apkanalyzer.core.apps.api.R as AppsR
 
 private const val VISIBLE_LINES = 2
 
-@get:StringRes
-val AppHistoryEntry.Change.Kind.breakHeadlineRes: Int?
-    get() = when (this) {
-        AppHistoryEntry.Change.Kind.Updated -> null
-        AppHistoryEntry.Change.Kind.Reinstalled -> R.string.app_history_reinstalled
-        AppHistoryEntry.Change.Kind.NewDevice -> R.string.app_history_new_device
+fun AppHistoryEntry.Change.Kind.breakHeadline(previousRecordedOn: AppHistoryRecordedOn, resources: Resources): String? = when (this) {
+    AppHistoryEntry.Change.Kind.Updated -> null
+
+    AppHistoryEntry.Change.Kind.Reinstalled -> resources.getString(R.string.app_history_reinstalled)
+
+    AppHistoryEntry.Change.Kind.NewDevice -> when (previousRecordedOn) {
+        AppHistoryRecordedOn.ThisDevice -> resources.getString(R.string.app_history_moved_from_this_device)
+        is AppHistoryRecordedOn.OtherDevice -> resources.getString(R.string.app_history_moved_from, previousRecordedOn.name)
     }
+}
+
+fun AppHistoryRecordedOn.deviceLabel(resources: Resources): String? = when (this) {
+    AppHistoryRecordedOn.ThisDevice -> null
+    is AppHistoryRecordedOn.OtherDevice -> resources.getString(R.string.app_history_on_device, name)
+}
 
 @get:StringRes
 val AppHistoryEntry.Change.Kind.certificateExplanationRes: Int

@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryEntry
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryRecordedOn
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySummaryPart
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryVersion
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.ValueChange
@@ -70,9 +71,11 @@ import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppChange
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppChangeKind
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppChangeRow
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.AppHistoryAppRow
+import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.DeviceTag
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.HistoryEmpty
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.HistoryError
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.LockedRow
+import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.components.includesHistoryLabel
 import java.time.Instant
 
 @Composable
@@ -342,6 +345,7 @@ private fun UninstalledAppRow(
         } else {
             pluralStringResource(R.plurals.what_changed_change_count, app.changeCount, app.changeCount)
         },
+        deviceLabel = (app.lastSeenOn as? AppHistoryRecordedOn.OtherDevice)?.let { stringResource(R.string.what_changed_last_seen_on, it.name) },
         position = position,
         onClick = { onAction(WhatChangedAction.OpenAppHistory(app.packageName, app.appName)) },
         modifier = modifier,
@@ -425,7 +429,8 @@ private fun ChangedAppRow(
         appName = app.appName,
         supportingText = app.supportingText(),
         parts = netChange?.parts.orEmpty(),
-        isWarning = netChange?.hasCertificateChange == true,
+        isWarning = netChange?.hasCertificateWarning == true,
+        deviceLabel = app.otherDevices.includesHistoryLabel(LocalResources.current),
         position = position,
         onClick = { onAction(WhatChangedAction.OpenAppHistory(app.packageName, app.appName)) },
         modifier = modifier,
@@ -440,7 +445,7 @@ private fun ChangedAppItem.supportingText(): String {
         if (isNew) add(resources.getString(R.string.what_changed_new_app))
         when (val change = netChange) {
             NetChange.None -> add(resources.getString(R.string.what_changed_no_net_change))
-            is NetChange.Changed -> if (change.hasCertificateChange) add(resources.getString(R.string.what_changed_certificate_changed))
+            is NetChange.Changed -> if (change.hasCertificateWarning) add(resources.getString(R.string.what_changed_certificate_changed))
             NetChange.NotCompared -> Unit
         }
     }
@@ -493,6 +498,9 @@ private fun Summary(state: WhatChangedState.Loaded, modifier: Modifier = Modifie
                 modifier = Modifier.padding(horizontal = 4.dp),
             )
         }
+        state.otherDevices.includesHistoryLabel(resources)?.let {
+            DeviceTag(text = it, modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = 6.dp))
+        }
     }
 }
 
@@ -504,7 +512,8 @@ private val PreviewChange = AppChangeItem(
     snapshotId = 4,
     capturedAt = PreviewNow,
     date = PreviewNow,
-    kind = AppChangeKind.Change(AppHistoryEntry.Change.Kind.Updated),
+    kind = AppChangeKind.Change(AppHistoryEntry.Change.Kind.Updated, previousRecordedOn = AppHistoryRecordedOn.ThisDevice),
+    recordedOn = AppHistoryRecordedOn.ThisDevice,
     version = AppHistoryVersion(315, "315.0"),
     versionChange = ValueChange(AppHistoryVersion(312, "312.0"), AppHistoryVersion(315, "315.0")),
     parts = listOf(AppHistorySummaryPart.DangerousPermissionsAdded("Camera", 0), AppHistorySummaryPart.SizeChanged(120.megabytes, 128.megabytes)),
@@ -517,15 +526,23 @@ private val PreviewLoaded = WhatChangedState.Loaded(
     updateCount = 6,
     newAppCount = 2,
     lastChangeAt = null,
+    otherDevices = listOf("Google Pixel 7"),
     needsAttention = listOf(
         LockableRow.Readable(PreviewChange, PreviewChange.key),
-        PreviewChange.copy(packageName = "com.whatsapp", appName = "WhatsApp", snapshotId = 9, parts = emptyList(), hasCertificateChange = true)
+        PreviewChange.copy(packageName = "com.whatsapp", appName = "WhatsApp", snapshotId = 9, parts = emptyList(), hasCertificateWarning = true)
             .let { LockableRow.Readable(it, it.key) },
         LockableRow.Locked("com.torch.pro:3"),
     ),
     changedApps = listOf(
         LockableRow.Readable(
-            ChangedAppItem("com.instagram.android", "Instagram", 2, false, NetChange.Changed(PreviewChange.parts, hasCertificateChange = false)),
+            ChangedAppItem(
+                "com.instagram.android",
+                "Instagram",
+                2,
+                false,
+                NetChange.Changed(PreviewChange.parts, hasCertificateWarning = false),
+                otherDevices = listOf("Google Pixel 7"),
+            ),
             "com.instagram.android",
         ),
         LockableRow.Locked("org.thoughtcrime.securesms"),
@@ -539,9 +556,18 @@ private val PreviewLoaded = WhatChangedState.Loaded(
 private val PreviewPro = PreviewLoaded.copy(
     needsAttention = PreviewLoaded.needsAttention.filterIsInstance<LockableRow.Readable<AppChangeItem>>(),
     changedApps = PreviewLoaded.changedApps.filterIsInstance<LockableRow.Readable<ChangedAppItem>>() +
-        LockableRow.Readable(ChangedAppItem("org.thoughtcrime.securesms", "Signal", 0, true, NetChange.NotCompared), "org.thoughtcrime.securesms") +
-        LockableRow.Readable(ChangedAppItem("com.android.chrome", "Chrome", 2, false, NetChange.None), "com.android.chrome"),
-    uninstalledApps = listOf(LockableRow.Readable(UninstalledAppItem("com.torch.pro", "Torch Pro", 5), "com.torch.pro")),
+        LockableRow.Readable(
+            ChangedAppItem("org.thoughtcrime.securesms", "Signal", 0, true, NetChange.NotCompared, otherDevices = emptyList()),
+            "org.thoughtcrime.securesms",
+        ) +
+        LockableRow.Readable(ChangedAppItem("com.android.chrome", "Chrome", 2, false, NetChange.None, otherDevices = emptyList()), "com.android.chrome"),
+    uninstalledApps = listOf(
+        LockableRow.Readable(UninstalledAppItem("com.torch.pro", "Torch Pro", 5, lastSeenOn = AppHistoryRecordedOn.ThisDevice), "com.torch.pro"),
+        LockableRow.Readable(
+            UninstalledAppItem("com.google.android.deskclock", "Clock", 0, lastSeenOn = AppHistoryRecordedOn.OtherDevice("Google Pixel 7")),
+            "com.google.android.deskclock",
+        ),
+    ),
     lockedAppCount = 0,
 )
 
@@ -570,6 +596,7 @@ private fun WhatChangedNothingInRangePreview() {
                 updateCount = 0,
                 newAppCount = 0,
                 lastChangeAt = PreviewNow.minusSeconds(16 * 86_400L),
+                otherDevices = emptyList(),
                 needsAttention = emptyList(),
                 changedApps = emptyList(),
                 uninstalledApps = emptyList(),

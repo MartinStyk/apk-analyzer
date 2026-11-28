@@ -2,7 +2,9 @@
 <resources>
     <string name="app_history_signing_method_changed">簽署方式已更改</string>
     <string name="app_history_reinstalled">移除後重新安裝</string>
-    <string name="app_history_new_device">在新裝置上繼續記錄</string>
+    <string name="app_history_moved_from">由 %1$s 轉移</string>
+    <string name="app_history_moved_from_this_device">由此裝置轉移</string>
+    <string name="app_history_on_device">在 %1$s 上</string>
     <string name="app_history_version">版本 %1$s</string>
     <string name="app_history_version_with_code">%1$s (%2$d)</string>
     <string name="app_history_value_change">%1$s → %2$s</string>

@@ -15,6 +15,7 @@ internal interface AppHistoryPersistenceRepository {
     fun observeHeaders(): Flow<Result<List<AppHistorySnapshotHeader>>>
     suspend fun records(packageName: PackageName): Result<List<StoredAppHistoryRecord>>
     suspend fun read(id: Long): Result<StoredAppHistoryRecord?>
+    suspend fun devices(): Result<Map<String, AppHistoryDevice>>
 }
 
 internal data class AppHistorySnapshotHeader(

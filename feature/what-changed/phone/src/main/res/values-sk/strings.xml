@@ -17,6 +17,8 @@
     <string name="what_changed_no_net_change">Celkovo bez zmeny</string>
     <string name="what_changed_reverted">Vrátené späť %1$s</string>
     <string name="what_changed_no_changes_recorded">Nezaznamenali sa žiadne zmeny</string>
+    <string name="what_changed_last_seen_on">Naposledy videné na zariadení %1$s</string>
+    <string name="what_changed_includes_device">Obsahuje históriu zo zariadenia %1$s</string>
     <string name="what_changed_empty_title">Zatiaľ nič nezaznamenané</string>
     <string name="what_changed_empty_body">Apk Analyzer zaznamenáva vaše aplikácie na pozadí. Keď sa aplikácia aktualizuje, tu sa zobrazí, čo sa v nej zmenilo.</string>
     <string name="what_changed_error">Históriu zmien sa nepodarilo načítať</string>
@@ -70,4 +72,10 @@
     <string name="what_changed_recording_off_title">Zaznamenávanie je vypnuté</string>
     <string name="what_changed_recording_off_body">Nové inštalácie a aktualizácie sa nezaznamenávajú.</string>
     <string name="what_changed_recording_turn_on">Zapnúť</string>
+    <plurals name="what_changed_includes_devices">
+        <item quantity="one">Obsahuje históriu z %d ďalšieho zariadenia</item>
+        <item quantity="few">Obsahuje históriu z %d ďalších zariadení</item>
+        <item quantity="many">Obsahuje históriu z %d ďalšieho zariadenia</item>
+        <item quantity="other">Obsahuje históriu z %d ďalších zariadení</item>
+    </plurals>
 </resources>

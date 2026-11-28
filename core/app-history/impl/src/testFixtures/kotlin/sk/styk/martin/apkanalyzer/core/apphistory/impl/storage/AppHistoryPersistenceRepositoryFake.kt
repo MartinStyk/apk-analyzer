@@ -12,6 +12,7 @@ import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 
 internal class AppHistoryPersistenceRepositoryFake(vararg records: StoredAppHistoryRecord) : AppHistoryPersistenceRepository {
     private val records = MutableStateFlow(records.toList())
+    private val devices = mutableMapOf<String, AppHistoryDevice>()
 
     var readFailure: Throwable? = null
     var headersFailure: Throwable? = null
@@ -27,6 +28,10 @@ internal class AppHistoryPersistenceRepositoryFake(vararg records: StoredAppHist
         records.update { existing -> existing.filterNot { it.id == record.id } + record }
     }
 
+    operator fun set(deviceId: String, device: AppHistoryDevice) {
+        devices[deviceId] = device
+    }
+
     override suspend fun latestCaptureKey(packageName: PackageName): Result<AppHistoryCaptureKey?> =
         Result.success(records.value.lastOrNull { it.record.packageName == packageName }?.record?.captureKey)
 
@@ -36,6 +41,7 @@ internal class AppHistoryPersistenceRepositoryFake(vararg records: StoredAppHist
     override suspend fun save(record: AppHistoryRecord, device: AppHistoryDevice): Result<Unit> {
         saveBarrier?.await()
         saveFailure?.let { return Result.failure(it) }
+        devices.putIfAbsent(record.captureKey.deviceId, device)
         this += StoredAppHistoryRecord(id = records.value.size + 1L, record = record)
         return Result.success(Unit)
     }
@@ -62,6 +68,8 @@ internal class AppHistoryPersistenceRepositoryFake(vararg records: StoredAppHist
 
     override suspend fun read(id: Long): Result<StoredAppHistoryRecord?> =
         readFailure?.let { Result.failure(it) } ?: Result.success(records.value.firstOrNull { it.id == id })
+
+    override suspend fun devices(): Result<Map<String, AppHistoryDevice>> = readFailure?.let { Result.failure(it) } ?: Result.success(devices.toMap())
 }
 
 private fun StoredAppHistoryRecord.toHeader() = AppHistorySnapshotHeader(

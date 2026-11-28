@@ -17,6 +17,7 @@ import org.junit.Test
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryDeviceTimeline
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryEntry
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryInstallSource
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryRecordedOn
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySection
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySnapshotId
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySnapshotRead
@@ -24,6 +25,7 @@ import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryT
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.ValueChange
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.changeCount
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.AppHistoryCaptureKey
+import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.AppHistoryDevice
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.AppHistoryPersistenceRepositoryFake
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.AppHistoryRecord
 import sk.styk.martin.apkanalyzer.core.apphistory.impl.storage.CapturedSection
@@ -34,6 +36,7 @@ import sk.styk.martin.apkanalyzer.core.apps.api.model.Detail.WhatsApp
 import sk.styk.martin.apkanalyzer.core.apps.api.packaging.NativeLibraries
 import sk.styk.martin.apkanalyzer.core.apps.api.signing.SigningSchemeVersion
 import sk.styk.martin.apkanalyzer.core.common.coroutines.TestDispatcherProvider
+import sk.styk.martin.apkanalyzer.core.common.device.DeviceInfoProviderFake
 import sk.styk.martin.apkanalyzer.core.common.model.AppSource
 import sk.styk.martin.apkanalyzer.core.common.model.PackageName
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTrackerFake
@@ -48,7 +51,13 @@ class AppHistoryRepositoryImplTest {
     private val persistence = AppHistoryPersistenceRepositoryFake()
     private val appScope = CoroutineScope(SupervisorJob() + dispatcherProvider.default())
     private val repository =
-        AppHistoryRepositoryImpl(persistence, AppHistoryTimelineBuilder(AppHistoryDiffer()), PerformanceTrackerFake(), dispatcherProvider, appScope)
+        AppHistoryRepositoryImpl(
+            persistence,
+            AppHistoryTimelineBuilder(AppHistoryDiffer(), AppHistoryRecordedOnResolver(DeviceInfoProviderFake())),
+            PerformanceTrackerFake(),
+            dispatcherProvider,
+            appScope,
+        )
 
     @After
     fun tearDown() {
@@ -126,6 +135,40 @@ class AppHistoryRepositoryImplTest {
             AppHistoryInstallSource(AppSource.Unknown, null),
             AppHistoryInstallSource(AppSource.Sideloaded, null),
         )
+    }
+
+    @Test
+    fun `Given history moved from another phone When reading the timeline Then each snapshot names where it was recorded`() = runTest {
+        persistence[OTHER_PHONE] = AppHistoryDevice(manufacturer = "Google", model = "Pixel 7")
+        persistence += aStoredRecord(id = 1, capturedAt = 1_000, deviceId = OTHER_PHONE)
+        persistence += aStoredRecord(id = 2, capturedAt = 2_000)
+
+        val timeline = repository.timeline(WhatsApp.info.packageName).first() as AppHistoryTimeline.Available
+
+        val move = timeline.entries.first() as AppHistoryEntry.Change
+        move.kind shouldBe AppHistoryEntry.Change.Kind.NewDevice
+        move.snapshot.recordedOn shouldBe AppHistoryRecordedOn.ThisDevice
+        move.previous.recordedOn shouldBe AppHistoryRecordedOn.OtherDevice("Google Pixel 7")
+    }
+
+    @Test
+    fun `Given an app recorded once on another phone When reading the device timeline Then it names that phone`() = runTest {
+        persistence[OTHER_PHONE] = AppHistoryDevice(manufacturer = "Google", model = "Pixel 7")
+        persistence += aStoredRecord(id = 1, deviceId = OTHER_PHONE)
+
+        val device = repository.deviceTimeline().first() as AppHistoryDeviceTimeline.Available
+
+        device.apps.single().entries.single().snapshot.recordedOn shouldBe AppHistoryRecordedOn.OtherDevice("Google Pixel 7")
+    }
+
+    @Test
+    fun `Given a snapshot from another phone When reading it Then it names that phone`() = runTest {
+        persistence[OTHER_PHONE] = AppHistoryDevice(manufacturer = "Google", model = "Pixel 7")
+        persistence += aStoredRecord(id = 7, deviceId = OTHER_PHONE)
+
+        val read = repository.snapshot(AppHistorySnapshotId(7)) as AppHistorySnapshotRead.Found
+
+        read.snapshot.recordedOn shouldBe AppHistoryRecordedOn.OtherDevice("Google Pixel 7")
     }
 
     @Test
@@ -311,6 +354,7 @@ class AppHistoryRepositoryImplTest {
     }
 }
 
+private const val OTHER_PHONE = "c0ffee0123456789"
 private val GooglePlay = PackageName("com.android.vending")
 private val Signal = PackageName("org.thoughtcrime.securesms")
 
@@ -325,6 +369,7 @@ private fun aStoredRecord(
     packageName: PackageName = WhatsApp.info.packageName,
     capturedAt: Long = 1_000,
     lastUpdateTime: Long = 1_000,
+    deviceId: String = "device",
     nativeLibraries: CapturedSection<NativeLibraries> = CapturedSection.Captured(NativeLibraries.Empty),
     signingScheme: CapturedSection<List<SigningSchemeVersion>?> = CapturedSection.Captured(emptyList()),
 ) = StoredAppHistoryRecord(
@@ -333,7 +378,7 @@ private fun aStoredRecord(
         packageName = packageName,
         capturedAt = Instant.ofEpochMilli(capturedAt),
         captureKey = AppHistoryCaptureKey(
-            deviceId = "device",
+            deviceId = deviceId,
             firstInstallTime = Instant.ofEpochMilli(1_000),
             lastUpdateTime = Instant.ofEpochMilli(lastUpdateTime),
             versionCode = detail.info.versionCode,

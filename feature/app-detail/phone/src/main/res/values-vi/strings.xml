@@ -288,6 +288,7 @@
     <string name="app_history_when_updated">Cập nhật ngày %1$s</string>
     <string name="app_history_when_reinstalled">Cài đặt lại ngày %1$s</string>
     <string name="app_history_when_recorded">Ghi nhận ngày %1$s</string>
+    <string name="app_history_recorded_on_device">Ghi nhận trên %1$s</string>
     <string name="app_history_when_with_recorded">%1$s · ghi nhận ngày %2$s</string>
     <string name="app_history_changes_heading">Thay đổi giữa các phiên bản này</string>
     <string name="app_history_device_note">Một số khác biệt có thể đến từ thiết bị, không phải ứng dụng.</string>

@@ -17,6 +17,8 @@
     <string name="what_changed_no_net_change">最终没有变化</string>
     <string name="what_changed_reverted">已于 %1$s 撤销</string>
     <string name="what_changed_no_changes_recorded">未记录到变化</string>
+    <string name="what_changed_last_seen_on">最后见于 %1$s</string>
+    <string name="what_changed_includes_device">包含 %1$s 的历史记录</string>
     <string name="what_changed_empty_title">尚无记录</string>
     <string name="what_changed_empty_body">Apk Analyzer 会在后台记录你的应用。应用更新后，其中的变化会显示在这里。</string>
     <string name="what_changed_error">无法加载变化历史记录</string>
@@ -58,4 +60,7 @@
     <string name="what_changed_recording_off_title">记录功能已关闭</string>
     <string name="what_changed_recording_off_body">目前不会记录新的安装和更新。</string>
     <string name="what_changed_recording_turn_on">开启</string>
+    <plurals name="what_changed_includes_devices">
+        <item quantity="other">包含另外 %d 台设备的历史记录</item>
+    </plurals>
 </resources>

@@ -288,6 +288,7 @@
     <string name="app_history_when_updated">%1$s に更新</string>
     <string name="app_history_when_reinstalled">%1$s に再インストール</string>
     <string name="app_history_when_recorded">%1$s に記録</string>
+    <string name="app_history_recorded_on_device">%1$s で記録</string>
     <string name="app_history_when_with_recorded">%1$s · %2$s に記録</string>
     <string name="app_history_changes_heading">これらのバージョン間の変更</string>
     <string name="app_history_device_note">一部の違いはアプリではなくデバイスによるものかもしれません。</string>

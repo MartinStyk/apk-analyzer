@@ -174,6 +174,18 @@ class AppHistoryEntrySummaryTest {
         overview shouldBe AppHistoryOverview.CertificateChanged(Instant.ofEpochMilli(2_000))
         entries.changeCount shouldBe 2
     }
+
+    @Test
+    fun `Given a move to a new device with another certificate When reading the overview Then it is not a certificate change`() {
+        val certificates = SetChange.Changed<Certificate>(added = listOf(WhatsAppCertificate), removed = emptyList(), modified = emptyList())
+        val moved = aChange(aDiff(certificates = certificates), kind = AppHistoryEntry.Change.Kind.NewDevice)
+        val entries = listOf(moved, AppHistoryEntry.FirstSeen(aSummary()))
+
+        val overview = entries.overview
+
+        overview shouldBe AppHistoryOverview.Changes(count = 1, latestAt = Instant.ofEpochMilli(1_000))
+        moved.hasCertificateWarning shouldBe false
+    }
 }
 
 private val FactoryDate = Instant.ofEpochMilli(1_230_768_000_000)
@@ -200,10 +212,15 @@ private fun aSummary(lastUpdateTime: Instant = Instant.ofEpochMilli(1_000), capt
     firstInstallTime = Instant.ofEpochMilli(1_000),
     lastUpdateTime = lastUpdateTime,
     capturedAt = capturedAt,
+    recordedOn = AppHistoryRecordedOn.ThisDevice,
 )
 
-private fun aChange(diff: AppHistoryDiff, lastUpdateTime: Instant = Instant.ofEpochMilli(2_000)) = AppHistoryEntry.Change(
-    kind = AppHistoryEntry.Change.Kind.Updated,
+private fun aChange(
+    diff: AppHistoryDiff,
+    lastUpdateTime: Instant = Instant.ofEpochMilli(2_000),
+    kind: AppHistoryEntry.Change.Kind = AppHistoryEntry.Change.Kind.Updated,
+) = AppHistoryEntry.Change(
+    kind = kind,
     snapshot = aSummary(lastUpdateTime = lastUpdateTime),
     previous = aSummary(),
     diff = diff,

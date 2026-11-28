@@ -1,5 +1,6 @@
 package sk.styk.martin.apkanalyzer.feature.appdetail.domain
 
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryRecordedOn
 import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilter
 import sk.styk.martin.apkanalyzer.core.apps.api.components.ComponentIntentFilterKey
 import sk.styk.martin.apkanalyzer.core.apps.api.model.AppDetail
@@ -9,6 +10,8 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppDetailInput
 
 interface AppDetailSectionRepository {
     suspend fun detail(input: AppDetailInput): Result<AppDetail>
+
+    suspend fun recordedOn(input: AppDetailInput): Result<AppHistoryRecordedOn>
 
     suspend fun nativeLibraries(input: AppDetailInput): Result<AppDetailSection<NativeLibraries>>
 

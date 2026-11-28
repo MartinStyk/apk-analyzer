@@ -17,6 +17,8 @@
     <string name="what_changed_no_net_change">Aucun changement au final</string>
     <string name="what_changed_reverted">Annulé le %1$s</string>
     <string name="what_changed_no_changes_recorded">Aucun changement observé</string>
+    <string name="what_changed_last_seen_on">Vue pour la dernière fois sur %1$s</string>
+    <string name="what_changed_includes_device">Inclut l\'historique de %1$s</string>
     <string name="what_changed_empty_title">Rien d\'observé pour l\'instant</string>
     <string name="what_changed_empty_body">Apk Analyzer suit vos applications en arrière-plan. Quand une application est mise à jour, ce qui a changé s\'affiche ici.</string>
     <string name="what_changed_error">Impossible de charger l\'historique des changements</string>
@@ -66,4 +68,9 @@
     <string name="what_changed_recording_off_title">Le suivi est désactivé</string>
     <string name="what_changed_recording_off_body">Les nouvelles installations et mises à jour ne sont pas suivies.</string>
     <string name="what_changed_recording_turn_on">Activer</string>
+    <plurals name="what_changed_includes_devices">
+        <item quantity="one">Inclut l\'historique de %d autre appareil</item>
+        <item quantity="many">Inclut l\'historique de %d autres appareils</item>
+        <item quantity="other">Inclut l\'historique de %d autres appareils</item>
+    </plurals>
 </resources>

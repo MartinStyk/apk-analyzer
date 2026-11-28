@@ -17,6 +17,8 @@
     <string name="what_changed_no_net_change">لا تغيير في المحصلة</string>
     <string name="what_changed_reverted">تم التراجع عنه في %1$s</string>
     <string name="what_changed_no_changes_recorded">لم تُرصد أي تغييرات</string>
+    <string name="what_changed_last_seen_on">آخر ظهور على %1$s</string>
+    <string name="what_changed_includes_device">يتضمن السجل من %1$s</string>
     <string name="what_changed_empty_title">لم يُرصد شيء بعد</string>
     <string name="what_changed_empty_body">يرصد Apk Analyzer تطبيقاتك في الخلفية. عند تحديث أي تطبيق، يظهر هنا ما تغيّر فيه.</string>
     <string name="what_changed_error">تعذّر تحميل سجل التغييرات</string>
@@ -78,4 +80,12 @@
     <string name="what_changed_recording_off_title">الرصد متوقف</string>
     <string name="what_changed_recording_off_body">لا تُرصد عمليات التثبيت والتحديثات الجديدة حاليًا.</string>
     <string name="what_changed_recording_turn_on">تشغيل</string>
+    <plurals name="what_changed_includes_devices">
+        <item quantity="zero">يتضمن السجل من %d جهاز آخر</item>
+        <item quantity="one">يتضمن السجل من %d جهاز آخر</item>
+        <item quantity="two">يتضمن السجل من %d جهازين آخرين</item>
+        <item quantity="few">يتضمن السجل من %d أجهزة أخرى</item>
+        <item quantity="many">يتضمن السجل من %d جهازًا آخر</item>
+        <item quantity="other">يتضمن السجل من %d جهاز آخر</item>
+    </plurals>
 </resources>

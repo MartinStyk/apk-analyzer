@@ -17,6 +17,8 @@
     <string name="what_changed_no_net_change">Sonuçta değişiklik yok</string>
     <string name="what_changed_reverted">%1$s tarihinde geri alındı</string>
     <string name="what_changed_no_changes_recorded">Kaydedilmiş değişiklik yok</string>
+    <string name="what_changed_last_seen_on">En son %1$s cihazında görüldü</string>
+    <string name="what_changed_includes_device">%1$s cihazının geçmişini içerir</string>
     <string name="what_changed_empty_title">Henüz kayıt yok</string>
     <string name="what_changed_empty_body">Apk Analyzer uygulamalarınızı arka planda kaydeder. Bir uygulama güncellendiğinde, içinde neyin değiştiği burada görünür.</string>
     <string name="what_changed_error">Değişiklik geçmişi yüklenemedi</string>
@@ -62,4 +64,8 @@
     <string name="what_changed_recording_off_title">Kayıt kapalı</string>
     <string name="what_changed_recording_off_body">Yeni yüklemeler ve güncellemeler kaydedilmiyor.</string>
     <string name="what_changed_recording_turn_on">Aç</string>
+    <plurals name="what_changed_includes_devices">
+        <item quantity="one">%d başka cihazın geçmişini içerir</item>
+        <item quantity="other">%d başka cihazın geçmişini içerir</item>
+    </plurals>
 </resources>

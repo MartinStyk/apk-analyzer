@@ -17,6 +17,8 @@
     <string name="what_changed_no_net_change">Зрештою без змін</string>
     <string name="what_changed_reverted">Скасовано %1$s</string>
     <string name="what_changed_no_changes_recorded">Зміни не зафіксовано</string>
+    <string name="what_changed_last_seen_on">Востаннє на пристрої %1$s</string>
+    <string name="what_changed_includes_device">Містить історію з пристрою %1$s</string>
     <string name="what_changed_empty_title">Поки нічого не зафіксовано</string>
     <string name="what_changed_empty_body">Apk Analyzer фіксує ваші застосунки у фоновому режимі. Коли застосунок оновлюється, тут з’являється те, що в ньому змінилося.</string>
     <string name="what_changed_error">Не вдалося завантажити історію змін</string>
@@ -70,4 +72,10 @@
     <string name="what_changed_recording_off_title">Фіксацію вимкнено</string>
     <string name="what_changed_recording_off_body">Нові встановлення й оновлення не фіксуються.</string>
     <string name="what_changed_recording_turn_on">Увімкнути</string>
+    <plurals name="what_changed_includes_devices">
+        <item quantity="one">Містить історію з %d іншого пристрою</item>
+        <item quantity="few">Містить історію з %d інших пристроїв</item>
+        <item quantity="many">Містить історію з %d інших пристроїв</item>
+        <item quantity="other">Містить історію з %d іншого пристрою</item>
+    </plurals>
 </resources>

@@ -381,6 +381,7 @@
     <string name="app_history_when_updated">Aktualizováno %1$s</string>
     <string name="app_history_when_reinstalled">Znovu nainstalováno %1$s</string>
     <string name="app_history_when_recorded">Zaznamenáno %1$s</string>
+    <string name="app_history_recorded_on_device">Zaznamenáno na zařízení %1$s</string>
     <string name="app_history_when_with_recorded">%1$s · zaznamenáno %2$s</string>
     <string name="app_history_changes_heading">Změny mezi těmito verzemi</string>
     <string name="app_history_device_note">Některé rozdíly mohou pocházet ze zařízení, ne z aplikace.</string>

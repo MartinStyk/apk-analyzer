@@ -288,6 +288,7 @@
     <string name="app_history_when_updated">Diperbarui %1$s</string>
     <string name="app_history_when_reinstalled">Dipasang lagi %1$s</string>
     <string name="app_history_when_recorded">Tercatat %1$s</string>
+    <string name="app_history_recorded_on_device">Tercatat di %1$s</string>
     <string name="app_history_when_with_recorded">%1$s · tercatat %2$s</string>
     <string name="app_history_changes_heading">Perubahan antara versi ini</string>
     <string name="app_history_device_note">Beberapa perbedaan bisa berasal dari perangkat, bukan aplikasi.</string>

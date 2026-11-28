@@ -39,9 +39,11 @@ import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryE
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryFieldChange
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryInstallSource
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryItemField
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryRecordedOn
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryVersion
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.SetChange
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.ValueChange
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.breakHeadline
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.certificateExplanationRes
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.collapsedToTwoLines
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.installSourceTexts
@@ -197,12 +199,15 @@ private fun AppHistoryChangeContent(
     }
 }
 
-private val AppHistoryChangeState.Loaded.eventTitleRes: Int
-    get() = when (kind) {
-        AppHistoryEntry.Change.Kind.Reinstalled -> HistoryR.string.app_history_reinstalled
-        AppHistoryEntry.Change.Kind.NewDevice -> HistoryR.string.app_history_new_device
-        AppHistoryEntry.Change.Kind.Updated -> versionTag?.labelRes ?: R.string.app_history_changes_heading
-    }
+@Composable
+private fun AppHistoryChangeState.Loaded.eventTitle(): String =
+    kind.breakHeadline(previousRecordedOn, LocalResources.current) ?: stringResource(versionTag?.labelRes ?: R.string.app_history_changes_heading)
+
+@Composable
+private fun AppHistoryChangeState.Loaded.contextBody(): String {
+    val recordedOnDevice = (recordedOn as? AppHistoryRecordedOn.OtherDevice)?.let { stringResource(R.string.app_history_recorded_on_device, it.name) }
+    return listOfNotNull(whenLine(), recordedOnDevice).joinToString(separator = "\n")
+}
 
 @Composable
 private fun AppHistoryChangeState.Loaded.whenLine(): String {
@@ -242,8 +247,8 @@ private fun LoadedContent(
         item(key = "context") {
             InfoCard(
                 icon = state.kind.icon(state.versionTag),
-                title = stringResource(state.eventTitleRes),
-                body = state.whenLine(),
+                title = state.eventTitle(),
+                body = state.contextBody(),
                 modifier = Modifier.padding(top = 4.dp),
             )
         }
@@ -438,10 +443,10 @@ private fun LazyListScope.worthKnowing(
     if (section.hasCertificateChange) {
         item(key = "worth-knowing-certificate") {
             InfoCard(
-                icon = ApkAnalyzerIcons.Warning,
+                icon = if (section.isCertificateWarning) ApkAnalyzerIcons.Warning else ApkAnalyzerIcons.Info,
                 title = stringResource(R.string.app_history_certificate_changed),
                 body = stringResource(kind.certificateExplanationRes),
-                tone = InfoCardTone.Warning,
+                tone = if (section.isCertificateWarning) InfoCardTone.Warning else InfoCardTone.Info,
                 modifier = Modifier.padding(bottom = 6.dp),
             )
         }
@@ -927,8 +932,12 @@ private fun sampleCertificate(hash: String) = Certificate(
     isSelfSigned = true,
 )
 
+private val PreviewPixel = AppHistoryRecordedOn.OtherDevice("Google Pixel 7")
+
 private fun loadedState(
     kind: AppHistoryEntry.Change.Kind = AppHistoryEntry.Change.Kind.Updated,
+    recordedOn: AppHistoryRecordedOn = AppHistoryRecordedOn.ThisDevice,
+    previousRecordedOn: AppHistoryRecordedOn = recordedOn,
     sections: List<HistoryChangeSection> = emptyList(),
     versionChange: ValueChange<AppHistoryVersion>? = ValueChange(AppHistoryVersion(31200, "312.0"), AppHistoryVersion(31500, "315.0")),
     isSigningMethodUncomparable: Boolean = false,
@@ -937,6 +946,8 @@ private fun loadedState(
     kind = kind,
     timestamp = sampleTimestamp,
     capturedAt = sampleCapturedAt,
+    recordedOn = recordedOn,
+    previousRecordedOn = previousRecordedOn,
     version = AppHistoryVersion(31500, "315.0"),
     versionChange = versionChange,
     versionTag = null,
@@ -1034,6 +1045,14 @@ private fun AppHistoryChangeNormalPreview() {
 
 @Preview(heightDp = 1100)
 @Composable
+private fun AppHistoryChangeOtherDevicePreview() {
+    ApkAnalyzerTheme(isDarkTheme = true) {
+        AppHistoryChangeContent(state = loadedState(recordedOn = PreviewPixel, sections = normalSections), fallbackAppName = "Spotify", onAction = {})
+    }
+}
+
+@Preview(heightDp = 1100)
+@Composable
 private fun AppHistoryChangeInsightsAndRequirementsPreview() {
     val camera = Feature.Hardware(name = "android.hardware.camera", isRequired = true).toRequirementItem(DeviceFeatures.Unknown)
     val nfc = Feature.Hardware(name = "android.hardware.nfc").toRequirementItem(DeviceFeatures.Unknown)
@@ -1043,6 +1062,7 @@ private fun AppHistoryChangeInsightsAndRequirementsPreview() {
                 sections = listOf(
                     HistoryChangeSection.WorthKnowing(
                         hasCertificateChange = false,
+                        isCertificateWarning = false,
                         dangerousPermissions = listOf(
                             HistoryChangeRow.Permission(
                                 key = "requested-added:android.permission.CAMERA",
@@ -1089,6 +1109,7 @@ private fun AppHistoryChangeCertificatePreview() {
                 sections = listOf(
                     HistoryChangeSection.WorthKnowing(
                         hasCertificateChange = true,
+                        isCertificateWarning = true,
                         dangerousPermissions = emptyList(),
                         addedInsights = emptyList(),
                         removedInsights = emptyList(),
@@ -1112,7 +1133,7 @@ private fun AppHistoryChangeCertificatePreview() {
 private fun AppHistoryChangeEmptyDiffPreview() {
     ApkAnalyzerTheme {
         AppHistoryChangeContent(
-            state = loadedState(kind = AppHistoryEntry.Change.Kind.NewDevice, versionChange = null),
+            state = loadedState(kind = AppHistoryEntry.Change.Kind.NewDevice, previousRecordedOn = PreviewPixel, versionChange = null),
             fallbackAppName = "Spotify",
             onAction = {},
         )
@@ -1126,8 +1147,16 @@ private fun AppHistoryChangeNewDevicePreview() {
         AppHistoryChangeContent(
             state = loadedState(
                 kind = AppHistoryEntry.Change.Kind.NewDevice,
+                previousRecordedOn = PreviewPixel,
                 versionChange = null,
                 sections = listOf(
+                    HistoryChangeSection.WorthKnowing(
+                        hasCertificateChange = true,
+                        isCertificateWarning = false,
+                        dangerousPermissions = emptyList(),
+                        addedInsights = emptyList(),
+                        removedInsights = emptyList(),
+                    ),
                     HistoryChangeSection.InstallSource(
                         ValueChange(
                             AppHistoryInstallSource(AppSource.GooglePlay, PackageName("com.android.vending")),

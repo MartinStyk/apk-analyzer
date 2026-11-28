@@ -16,7 +16,7 @@ import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.AppHistoryReposit
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryEntry
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryTimeline
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.changeCount
-import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.hasCertificateChange
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.hasCertificateWarning
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.hasOnlyUncomparableDetails
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.isQuiet
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.recordingSince
@@ -149,6 +149,7 @@ internal class AppHistoryTimelineViewModel @AssistedInject constructor(
             capturedAt = snapshot.capturedAt,
             date = snapshot.capturedAt,
             kind = AppHistoryRowKind.FirstRecorded,
+            recordedOn = snapshot.recordedOn,
             version = snapshot.version,
         )
 
@@ -156,11 +157,12 @@ internal class AppHistoryTimelineViewModel @AssistedInject constructor(
             snapshotId = snapshot.id.value,
             capturedAt = snapshot.capturedAt,
             date = timestamp,
-            kind = AppHistoryRowKind.Change(kind),
+            kind = AppHistoryRowKind.Change(kind, previousRecordedOn = previous.recordedOn),
+            recordedOn = snapshot.recordedOn,
             version = snapshot.version,
             versionChange = diff.version,
             summary = summaryParts(permissionLabelProvider::getLabel),
-            hasCertificateChange = diff.hasCertificateChange,
+            hasCertificateWarning = hasCertificateWarning,
             isQuiet = isQuiet,
             versionTag = versionTag,
             hasOnlyUncomparableDetails = hasOnlyUncomparableDetails,

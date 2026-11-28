@@ -16,6 +16,7 @@ sealed interface AppHistorySnapshotRead {
 data class AppHistorySnapshot(
     val id: AppHistorySnapshotId,
     val capturedAt: Instant,
+    val recordedOn: AppHistoryRecordedOn,
     val detail: AppDetail,
     val nativeLibraries: AppHistorySection<NativeLibraries>,
     val signingSchemes: AppHistorySection<List<SigningSchemeVersion>?>,

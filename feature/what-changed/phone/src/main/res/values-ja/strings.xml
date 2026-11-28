@@ -17,6 +17,8 @@
     <string name="what_changed_no_net_change">結果的に変更なし</string>
     <string name="what_changed_reverted">%1$s に元に戻りました</string>
     <string name="what_changed_no_changes_recorded">変更の記録なし</string>
+    <string name="what_changed_last_seen_on">最後の確認: %1$s</string>
+    <string name="what_changed_includes_device">%1$s の履歴を含む</string>
     <string name="what_changed_empty_title">まだ記録がありません</string>
     <string name="what_changed_empty_body">Apk Analyzer はアプリをバックグラウンドで記録します。アプリが更新されると、変更内容がここに表示されます。</string>
     <string name="what_changed_error">変更履歴を読み込めませんでした</string>
@@ -58,4 +60,7 @@
     <string name="what_changed_recording_off_title">記録はオフです</string>
     <string name="what_changed_recording_off_body">新しいインストールや更新は記録されていません。</string>
     <string name="what_changed_recording_turn_on">オンにする</string>
+    <plurals name="what_changed_includes_devices">
+        <item quantity="other">他の %d 台のデバイスの履歴を含む</item>
+    </plurals>
 </resources>

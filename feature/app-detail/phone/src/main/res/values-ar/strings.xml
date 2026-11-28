@@ -443,6 +443,7 @@
     <string name="app_history_when_updated">تم التحديث في %1$s</string>
     <string name="app_history_when_reinstalled">أُعيد التثبيت في %1$s</string>
     <string name="app_history_when_recorded">رُصد في %1$s</string>
+    <string name="app_history_recorded_on_device">رُصد على %1$s</string>
     <string name="app_history_when_with_recorded">%1$s · رُصد في %2$s</string>
     <string name="app_history_changes_heading">التغييرات بين هذين الإصدارين</string>
     <string name="app_history_device_note">قد تعود بعض الاختلافات إلى الجهاز لا إلى التطبيق.</string>

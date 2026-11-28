@@ -24,10 +24,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryEntry
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryRecordedOn
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySummaryPart
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryVersion
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.ValueChange
-import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.breakHeadlineRes
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.breakHeadline
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.deviceLabel
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.direction
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.label
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.needsAttention
@@ -39,6 +41,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.AppIcon
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ChangeToken
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Tag
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Text
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.format.historyDate
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.lazylist.ListItemPosition
@@ -61,10 +64,10 @@ internal fun AppChangeRow(
     onLongClick: ((copyText: String) -> Unit)? = null,
 ) {
     val resources = LocalResources.current
-    val secondaryColor = if (item.hasCertificateChange) AppTheme.colors.onSurface else AppTheme.colors.onSurfaceVariant
+    val secondaryColor = if (item.hasCertificateWarning) AppTheme.colors.onSurface else AppTheme.colors.onSurfaceVariant
     RowFrame(
         packageName = item.packageName,
-        isWarning = item.hasCertificateChange,
+        isWarning = item.hasCertificateWarning,
         position = position,
         clickLabel = stringResource(
             if (item.kind ==
@@ -88,16 +91,17 @@ internal fun AppChangeRow(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
-            if (item.hasCertificateChange) {
+            if (item.hasCertificateWarning) {
                 Text(
                     text = stringResource(R.string.what_changed_certificate_changed),
                     style = AppTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
                     color = AppTheme.colors.onSurface,
                 )
             }
-            (item.kind as? AppChangeKind.Change)?.kind?.breakHeadlineRes?.let {
-                Text(text = stringResource(it), style = AppTheme.typography.bodySmall, color = secondaryColor)
+            item.breakHeadline(resources)?.let {
+                Text(text = it, style = AppTheme.typography.bodySmall, color = secondaryColor)
             }
+            item.recordedOn.deviceLabel(resources)?.let { DeviceTag(text = it) }
             if (item.hasOnlyUncomparableDetails) {
                 Text(text = stringResource(R.string.what_changed_uncomparable_only), style = AppTheme.typography.bodySmall, color = secondaryColor)
             } else {
@@ -124,6 +128,7 @@ internal fun AppHistoryAppRow(
     modifier: Modifier = Modifier,
     parts: List<AppHistorySummaryPart> = emptyList(),
     isWarning: Boolean = false,
+    deviceLabel: String? = null,
 ) {
     val secondaryColor = if (isWarning) AppTheme.colors.onSurface else AppTheme.colors.onSurfaceVariant
     RowFrame(
@@ -144,6 +149,7 @@ internal fun AppHistoryAppRow(
                 overflow = TextOverflow.Ellipsis,
             )
             Text(text = supportingText, style = AppTheme.typography.bodySmall, color = secondaryColor)
+            deviceLabel?.let { DeviceTag(text = it) }
             ChangeTokens(parts = parts, textColor = secondaryColor)
         }
     }
@@ -192,6 +198,17 @@ private fun RowFrame(
                 .align(Alignment.CenterVertically),
         )
     }
+}
+
+@Composable
+internal fun DeviceTag(text: String, modifier: Modifier = Modifier) {
+    Tag(text = text, icon = ApkAnalyzerIcons.Screen, highlighted = true, modifier = modifier)
+}
+
+internal fun List<String>.includesHistoryLabel(resources: Resources): String? = when (size) {
+    0 -> null
+    1 -> resources.getString(R.string.what_changed_includes_device, single())
+    else -> resources.getQuantityString(R.plurals.what_changed_includes_devices, size, size)
 }
 
 @Composable
@@ -247,13 +264,20 @@ private fun AppChangeItem.versionLine(resources: Resources): String = when (kind
     is AppChangeKind.Change -> versionChange?.label(resources) ?: version.label(resources)
 }
 
+private fun AppChangeItem.breakHeadline(resources: Resources): String? =
+    (kind as? AppChangeKind.Change)?.let { it.kind.breakHeadline(it.previousRecordedOn, resources) }
+
 private fun AppChangeItem.copyText(resources: Resources): String = buildList {
     add(appName)
     add(date.historyDate())
     add(versionLine(resources))
-    if (hasCertificateChange) add(resources.getString(R.string.what_changed_certificate_changed))
+    if (hasCertificateWarning) add(resources.getString(R.string.what_changed_certificate_changed))
+    breakHeadline(resources)?.let(::add)
+    recordedOn.deviceLabel(resources)?.let(::add)
     addAll(parts.map { it.label(resources) })
 }.joinToString(separator = "\n")
+
+private val PreviewPixel = AppHistoryRecordedOn.OtherDevice("Google Pixel 7")
 
 private val PreviewChange = AppChangeItem(
     packageName = "com.instagram.android",
@@ -261,7 +285,8 @@ private val PreviewChange = AppChangeItem(
     snapshotId = 2,
     capturedAt = Instant.parse("2026-11-26T10:00:00Z"),
     date = Instant.parse("2026-11-26T09:00:00Z"),
-    kind = AppChangeKind.Change(AppHistoryEntry.Change.Kind.Updated),
+    kind = AppChangeKind.Change(AppHistoryEntry.Change.Kind.Updated, previousRecordedOn = AppHistoryRecordedOn.ThisDevice),
+    recordedOn = AppHistoryRecordedOn.ThisDevice,
     version = AppHistoryVersion(315, "315.0"),
     versionChange = ValueChange(AppHistoryVersion(312, "312.0"), AppHistoryVersion(315, "315.0")),
     parts = listOf(
@@ -283,8 +308,31 @@ private fun AppChangeRowPreview() {
                     packageName = "com.whatsapp",
                     appName = "WhatsApp",
                     parts = emptyList(),
-                    hasCertificateChange = true,
+                    hasCertificateWarning = true,
                     revertedAt = null,
+                ),
+                position = ListItemPosition.Middle,
+                onClick = {},
+            )
+            AppChangeRow(
+                item = PreviewChange.copy(
+                    packageName = "com.google.android.youtube",
+                    appName = "YouTube",
+                    kind = AppChangeKind.Change(AppHistoryEntry.Change.Kind.NewDevice, previousRecordedOn = PreviewPixel),
+                    versionChange = null,
+                    parts = listOf(AppHistorySummaryPart.TargetSdkChanged(before = 34, after = 35)),
+                    needsAttention = false,
+                ),
+                position = ListItemPosition.Middle,
+                onClick = {},
+            )
+            AppChangeRow(
+                item = PreviewChange.copy(
+                    packageName = "com.google.android.youtube",
+                    appName = "YouTube",
+                    recordedOn = PreviewPixel,
+                    parts = listOf(AppHistorySummaryPart.ComponentsAdded(3)),
+                    needsAttention = false,
                 ),
                 position = ListItemPosition.Middle,
                 onClick = {},
@@ -320,6 +368,14 @@ private fun AppHistoryAppRowPreview() {
                 packageName = "com.torch.pro",
                 appName = "Torch Pro",
                 supportingText = "5 changes",
+                position = ListItemPosition.Middle,
+                onClick = {},
+            )
+            AppHistoryAppRow(
+                packageName = "com.google.android.deskclock",
+                appName = "Clock",
+                supportingText = "No changes recorded",
+                deviceLabel = "Last seen on Google Pixel 7",
                 position = ListItemPosition.Last,
                 onClick = {},
             )

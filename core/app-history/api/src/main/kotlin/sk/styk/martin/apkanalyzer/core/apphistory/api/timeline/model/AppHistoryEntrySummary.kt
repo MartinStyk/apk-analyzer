@@ -54,7 +54,13 @@ val AppHistoryDiff.needsAttention: Boolean
     get() = hasCertificateChange || summaryParts { it }.any { it.needsAttention }
 
 val AppHistoryEntry.Change.needsAttention: Boolean
-    get() = diff.needsAttention
+    get() = !isDeviceMove && diff.needsAttention
+
+val AppHistoryEntry.Change.hasCertificateWarning: Boolean
+    get() = !isDeviceMove && diff.hasCertificateChange
+
+private val AppHistoryEntry.Change.isDeviceMove: Boolean
+    get() = kind == AppHistoryEntry.Change.Kind.NewDevice
 
 val AppHistorySummaryPart.direction: ChangeDirection
     get() = when (this) {
@@ -214,7 +220,7 @@ val List<AppHistoryEntry>.recordingSince: Instant?
 val List<AppHistoryEntry>.overview: AppHistoryOverview
     get() {
         val changes = filterIsInstance<AppHistoryEntry.Change>()
-        val latestCertificateChange = changes.firstOrNull { it.diff.hasCertificateChange }
+        val latestCertificateChange = changes.firstOrNull { it.hasCertificateWarning }
         val since = recordingSince
         return when {
             latestCertificateChange != null -> AppHistoryOverview.CertificateChanged(latestCertificateChange.timestamp)

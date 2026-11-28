@@ -33,7 +33,7 @@ class AppHistoryPreloaderTest {
     private val persistence = AppHistoryPersistenceRepositoryFake()
     private val repository = AppHistoryRepositoryImpl(
         persistence,
-        AppHistoryTimelineBuilder(AppHistoryDiffer()),
+        AppHistoryTimelineBuilder(AppHistoryDiffer(), AppHistoryRecordedOnResolver(DeviceInfoProviderFake())),
         PerformanceTrackerFake(),
         dispatcherProvider,
         appScope,
