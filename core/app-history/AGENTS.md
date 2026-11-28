@@ -155,7 +155,9 @@ that reason; per-hash caching already limits decoding to distinct section conten
 
 Blob content is Deflate-compressed JSON (`ByteArray`), compressed and decompressed only through
 `storage/database/util/BlobCompression.kt`; the hash is the first 64 bits of SHA-256 over the
-uncompressed JSON, stored as a `Long`. The database file is
+uncompressed JSON, stored as a `Long`. Decompression stops at 8 MB per blob and fails like a corrupt
+blob, so a crafted import file can't unpack a tiny blob into an out-of-memory crash on every history
+read. The database file is
 `app_history_v2.db` — the uncompressed `app_history.db` from 4.1.3–4.2.0 is deleted on startup rather
 than migrated, see the schema doc's
 [`app_history_blob`](../../docs/app/technical/app-history-capture-schema.md#app_history_blob) for why.

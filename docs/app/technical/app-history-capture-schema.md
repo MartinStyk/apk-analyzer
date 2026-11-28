@@ -260,7 +260,9 @@ uncompressed JSON, so content addressing never depends on compressor output. Mea
 the vacuumed database file from 16.7 MB to 3.6 MB. The trigger was Android Auto Backup's 25 MB
 per-app quota — exceeding it fails the whole app's backup, not just this file — which uncompressed
 history would have crossed within weeks on a heavy device. Decompression costs about the same as the
-JSON decode a reader already pays, and only for the blobs whose hashes differ.
+JSON decode a reader already pays, and only for the blobs whose hashes differ. Reading a blob stops
+at 8 MB of uncompressed JSON and treats it as unreadable; the largest section on a 500-app phone was
+0.17 MB, and import files are untrusted input.
 
 The uncompressed (`String`) format shipped from 4.1.3 under the file name `app_history.db`. It was
 abandoned rather than migrated: no UI read the history yet, Room's destructive fallback would drop
