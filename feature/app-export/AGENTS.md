@@ -74,6 +74,9 @@ app, opened from the app detail summary sheet). Implementation code uses the pac
   Basics instead" resets the columns to Basics; "Unlock Pro" opens the purchase sheet directly.
   Nothing resumes after a purchase: the notice disappears once `entitlements()` holds Pro and
   the user taps Save or Share again.
+* The Export step's upgrade notice uses `InfoCardTone.Pro` and the shared star icon. Its Unlock Pro
+  button uses the same icon with Pro foreground/container roles reversed for emphasis. Export Basics
+  stays a secondary text action, and Save/Share retain normal action colors.
 * For users without Pro, every attribute outside Basics has a tappable Pro badge that opens the
   purchase sheet independently of the current selection or file format. Selecting attributes
   remains free; no analysis-cost or "Slower" hints appear in the details step.

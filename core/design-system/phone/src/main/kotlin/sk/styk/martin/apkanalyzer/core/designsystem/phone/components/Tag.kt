@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
@@ -27,6 +28,7 @@ fun Tag(
     highlighted: Boolean = false,
     contentColor: Color = if (highlighted) AppTheme.colors.onSecondaryContainer else AppTheme.colors.onSurfaceVariant,
     containerColor: Color = if (highlighted) AppTheme.colors.secondaryContainer else AppTheme.colors.surfaceVariant,
+    textStyle: TextStyle = AppTheme.typography.labelSmall,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -46,7 +48,7 @@ fun Tag(
         }
         Text(
             text = text,
-            style = AppTheme.typography.labelSmall,
+            style = textStyle,
             color = contentColor,
         )
     }

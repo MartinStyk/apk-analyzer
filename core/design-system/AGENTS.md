@@ -54,7 +54,8 @@ exception is `InactiveSearchBar`, which lives in `SearchBarInactive.kt`.
 * `InfoCard` is the one tinted message card: an icon, an optional title, a body, an optional
   action below the body, and an optional inline `trailingAction` such as a dismiss button. Its
   `InfoCardTone` picks the meaning: `Info` introduces a screen or says what it shows, `Attention`
-  flags something worth a look, `Warning` flags a problem.
+  flags something worth a look, `Warning` flags a problem, and `Pro` identifies a paid-tier prompt
+  with the shared gold colors.
   Use it rather than a feature-local tinted card or banner; pass a clickable modifier when the card
   leads somewhere.
 * `SwipeDismiss` wraps content that can be dismissed by swiping in either direction. The caller
@@ -74,11 +75,12 @@ exception is `InactiveSearchBar`, which lives in `SearchBarInactive.kt`.
 * `format/HistoryDates.kt` formats app-history dates for display (short date this year, full date otherwise, month headers). It lives here, not in `core:app-history:api`, because it uses `android.text.format.DateFormat`.
 * `ListSectionHeader` is the small primary-colored list section title, with an optional explanation
   line, used above grouped list rows and as a sticky month header.
-* `ProBadge` is the one marker for content locked behind Pro: a gold `Tag` with a lock icon and
-  the label "Pro", announced as "Part of Pro". Use it on locked rows and actions; never on content
-  that is free. Pro labels use `AppTheme.colors.pro` and `proContainer`, not action or warning colors.
-  Its `onClick` overload uses the Pro `Chip` with a full touch target when the badge itself opens
-  the purchase sheet.
+* `ProBadge` is the one paid-tier marker: a compact gold `Tag` with a star icon and
+  the label "Pro", announced as "Part of Pro". Use it on Pro rows and actions; never on content
+  that is free. A star identifies the tier; reserve lock icons for unavailable actions.
+  Pro labels use `AppTheme.colors.pro` and `proContainer`, not action or warning colors.
+  Its `onClick` overload keeps the compact visual inside a full 48dp touch target when the badge
+  itself opens the purchase sheet. The badge grows with text scaling rather than fixing its height.
 * `navigation/BottomSheetSceneStrategy` shows a Navigation 3 entry as a `BottomSheet` over the
   screen below it. An entry opts in with `metadata = BottomSheetSceneStrategy.bottomSheet()`; the
   `app` shell passes the strategy to `NavDisplay`. Swipe, outside tap and Back pop the entry.

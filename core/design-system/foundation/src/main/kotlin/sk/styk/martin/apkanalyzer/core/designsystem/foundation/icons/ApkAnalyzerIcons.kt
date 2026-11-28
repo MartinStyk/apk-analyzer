@@ -65,6 +65,7 @@ import androidx.compose.material.icons.rounded.SettingsInputAntenna
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.Smartphone
 import androidx.compose.material.icons.rounded.Sms
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.Storage
 import androidx.compose.material.icons.rounded.SwapVert
 import androidx.compose.material.icons.rounded.Sync
@@ -136,6 +137,7 @@ data object ApkAnalyzerIcons {
     val PlayArrow = Icons.Rounded.PlayArrow
     val Statistics = Icons.Rounded.InsertChart
     val StatisticsBorder = Icons.Outlined.InsertChart
+    val Star = Icons.Rounded.Star
     val SortAscending = Icons.Rounded.ArrowUpward
     val SortDescending = Icons.Rounded.ArrowDownward
     val Clear = Icons.Rounded.Clear

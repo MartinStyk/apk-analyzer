@@ -4,4 +4,5 @@ enum class InfoCardTone {
     Info,
     Attention,
     Warning,
+    Pro,
 }
