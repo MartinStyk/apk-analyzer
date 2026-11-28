@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -22,17 +23,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.theme.Shapes
 
 @Composable
 fun ProBadge(modifier: Modifier = Modifier) {
-    val description = stringResource(R.string.content_description_pro)
-    Tag(
-        text = stringResource(R.string.pro_badge),
-        icon = ApkAnalyzerIcons.Star,
-        contentColor = AppTheme.colors.pro,
-        containerColor = AppTheme.colors.proContainer,
-        textStyle = AppTheme.typography.labelMedium,
-        modifier = modifier
-            .heightIn(min = 24.dp)
-            .clearAndSetSemantics { contentDescription = description },
-    )
+    ProBadgeLabel(containerColor = AppTheme.colors.proContainer, modifier = modifier)
 }
 
 @Composable
@@ -44,8 +35,23 @@ fun ProBadge(onClick: () -> Unit, modifier: Modifier = Modifier) {
             .clip(Shapes.CardShape)
             .clickable(role = Role.Button, onClick = onClick),
     ) {
-        ProBadge()
+        ProBadgeLabel(containerColor = Color.Transparent)
     }
+}
+
+@Composable
+private fun ProBadgeLabel(containerColor: Color, modifier: Modifier = Modifier) {
+    val description = stringResource(R.string.content_description_pro)
+    Tag(
+        text = stringResource(R.string.pro_badge),
+        icon = ApkAnalyzerIcons.Star,
+        contentColor = AppTheme.colors.pro,
+        containerColor = containerColor,
+        textStyle = AppTheme.typography.labelMedium,
+        modifier = modifier
+            .heightIn(min = 24.dp)
+            .clearAndSetSemantics { contentDescription = description },
+    )
 }
 
 @Preview(showBackground = true)

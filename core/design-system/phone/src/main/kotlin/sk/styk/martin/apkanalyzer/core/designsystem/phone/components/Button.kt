@@ -1,12 +1,14 @@
 package sk.styk.martin.apkanalyzer.core.designsystem.phone.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -38,15 +40,7 @@ fun Button(
             contentColor = contentColor,
         ),
     ) {
-        if (leadingIcon != null) {
-            Icon(
-                imageVector = leadingIcon,
-                contentDescription = null,
-                modifier = Modifier.size(ButtonDefaults.IconSize),
-            )
-            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
-        }
-        Text(text = text, style = AppTheme.typography.labelLarge)
+        ButtonLabel(text = text, leadingIcon = leadingIcon)
     }
 }
 
@@ -56,6 +50,7 @@ fun OutlinedButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    leadingIcon: ImageVector? = null,
 ) {
     MaterialOutlinedButton(
         onClick = onClick,
@@ -64,6 +59,21 @@ fun OutlinedButton(
         border = BorderStroke(width = 1.dp, color = AppTheme.colors.onSurfaceVariant),
         colors = ButtonDefaults.outlinedButtonColors(contentColor = AppTheme.colors.primary),
     ) {
+        ButtonLabel(text = text, leadingIcon = leadingIcon)
+    }
+}
+
+@Composable
+private fun ButtonLabel(text: String, leadingIcon: ImageVector?) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        if (leadingIcon != null) {
+            Icon(
+                imageVector = leadingIcon,
+                contentDescription = null,
+                modifier = Modifier.size(ButtonDefaults.IconSize),
+            )
+            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+        }
         Text(text = text, style = AppTheme.typography.labelLarge)
     }
 }
@@ -149,6 +159,14 @@ private fun ButtonProDisabledPreview() {
 private fun OutlinedButtonPreview() {
     ApkAnalyzerTheme {
         OutlinedButton(text = "Share", onClick = {})
+    }
+}
+
+@Preview
+@Composable
+private fun OutlinedButtonWithIconPreview() {
+    ApkAnalyzerTheme {
+        OutlinedButton(text = "Share", onClick = {}, leadingIcon = ApkAnalyzerIcons.Star)
     }
 }
 

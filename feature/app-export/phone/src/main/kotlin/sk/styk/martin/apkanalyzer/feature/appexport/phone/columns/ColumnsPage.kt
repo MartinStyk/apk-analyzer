@@ -102,6 +102,8 @@ internal fun ColumnsPage(
                 isAllSelected = selectedColumns.size == InventoryColumn.entries.size,
                 onToggle = { onAction(InventoryExportAction.AllColumnsToggled) },
                 titleStyle = TitleStyle.Screen,
+                selectAllLabel = stringResource(R.string.inventory_export_select_all_details),
+                clearLabel = stringResource(R.string.inventory_export_clear_all_details),
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
         }
@@ -160,13 +162,14 @@ private fun LazyListScope.columnGroupItems(
     onAction: (InventoryExportAction) -> Unit,
 ) {
     val columns = InventoryColumn.entries.filter { it.group == group }
+    val isFirstGroup = group == InventoryColumnGroup.entries.first()
     item(key = "group_${group.name}") {
         SelectionHeader(
             title = stringResource(group.labelRes()),
             isAllSelected = selectedColumns.containsAll(columns),
             onToggle = { onAction(InventoryExportAction.ColumnGroupToggled(group)) },
             titleStyle = TitleStyle.Section,
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = if (isFirstGroup) 0.dp else 16.dp),
         )
     }
     itemsPositioned(
@@ -194,6 +197,8 @@ private fun SelectionHeader(
     onToggle: () -> Unit,
     titleStyle: TitleStyle,
     modifier: Modifier = Modifier,
+    selectAllLabel: String = stringResource(R.string.inventory_export_select_all),
+    clearLabel: String = stringResource(R.string.inventory_export_clear),
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -209,7 +214,7 @@ private fun SelectionHeader(
             modifier = Modifier.weight(1f),
         )
         TextButton(
-            text = stringResource(if (isAllSelected) R.string.inventory_export_clear else R.string.inventory_export_select_all),
+            text = if (isAllSelected) clearLabel else selectAllLabel,
             onClick = onToggle,
         )
     }

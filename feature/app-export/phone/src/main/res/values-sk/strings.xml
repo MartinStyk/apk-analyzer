@@ -16,6 +16,8 @@
     <string name="inventory_export_columns_selected">Vybrané údaje: %1$d z %2$d</string>
     <string name="inventory_export_select_all">Vybrať všetko</string>
     <string name="inventory_export_clear">Zrušiť výber</string>
+    <string name="inventory_export_select_all_details">Vybrať všetky údaje</string>
+    <string name="inventory_export_clear_all_details">Zrušiť výber všetkých údajov</string>
     <string name="inventory_export_usage_access_hint">Čas posledného použitia a veľkosť úložiska zostanú prázdne, kým nepovolíte prístup k údajom o používaní.</string>
     <string name="inventory_export_grant_access">Povoliť prístup</string>
     <string name="inventory_export_attribute_category">Kategória</string>

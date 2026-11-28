@@ -16,6 +16,8 @@
     <string name="inventory_export_columns_selected">Wybrano %1$d z %2$d szczegółów</string>
     <string name="inventory_export_select_all">Wybierz wszystko</string>
     <string name="inventory_export_clear">Usuń zaznaczenie</string>
+    <string name="inventory_export_select_all_details">Wybierz wszystkie szczegóły</string>
+    <string name="inventory_export_clear_all_details">Odznacz wszystkie szczegóły</string>
     <string name="inventory_export_usage_access_hint">Czas ostatniego użycia i rozmiar pamięci pozostają puste, dopóki nie zezwolisz na dostęp do danych o użytkowaniu.</string>
     <string name="inventory_export_grant_access">Zezwól na dostęp</string>
     <string name="inventory_export_attribute_category">Kategoria</string>

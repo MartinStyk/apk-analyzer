@@ -14,6 +14,8 @@
     <string name="inventory_export_columns_selected">%2$d में से %1$d जानकारी के फ़ील्ड चुने गए</string>
     <string name="inventory_export_select_all">सभी चुनें</string>
     <string name="inventory_export_clear">चयन हटाएँ</string>
+    <string name="inventory_export_select_all_details">सारी जानकारी चुनें</string>
+    <string name="inventory_export_clear_all_details">सारी जानकारी का चयन हटाएँ</string>
     <string name="inventory_export_usage_access_hint">जब तक आप उपयोग के डेटा का ऐक्सेस नहीं देते, आखिरी बार इस्तेमाल करने का समय और स्टोरेज का आकार खाली रहते हैं।</string>
     <string name="inventory_export_grant_access">ऐक्सेस दें</string>
     <string name="inventory_export_attribute_category">श्रेणी</string>

@@ -28,6 +28,8 @@
     <string name="inventory_export_columns_selected">已選取 %1$d 項詳細資料，共 %2$d 項</string>
     <string name="inventory_export_select_all">全選</string>
     <string name="inventory_export_clear">取消全選</string>
+    <string name="inventory_export_select_all_details">選擇所有詳細資料</string>
+    <string name="inventory_export_clear_all_details">取消選擇所有詳細資料</string>
     <string name="inventory_export_no_columns_hint">請至少選擇一項要匯出的詳細資料。</string>
     <string name="inventory_export_usage_access_hint">允許存取使用情況資料後，才會填入上次使用時間和儲存空間大小。</string>
     <string name="inventory_export_grant_access">允許存取</string>

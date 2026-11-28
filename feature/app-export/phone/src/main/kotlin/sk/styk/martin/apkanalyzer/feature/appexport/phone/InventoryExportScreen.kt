@@ -179,7 +179,7 @@ private fun InventoryExportContent(
         actions = {
             if (state.step == InventoryExportStep.Apps && !state.showIntro) {
                 IconButton(
-                    imageVector = ApkAnalyzerIcons.Info,
+                    imageVector = ApkAnalyzerIcons.InfoBorder,
                     onClick = { onAction(InventoryExportAction.ShowIntro) },
                     contentDescription = stringResource(R.string.inventory_export_intro_about),
                 )

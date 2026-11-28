@@ -8,6 +8,7 @@ import androidx.compose.material.icons.automirrored.rounded.VolumeUp
 import androidx.compose.material.icons.outlined.Apps
 import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.History
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.InsertChart
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.rounded.Add
@@ -115,6 +116,7 @@ data object ApkAnalyzerIcons {
     val Widgets = Icons.Rounded.Widgets
     val HourglassEmpty = Icons.Rounded.HourglassEmpty
     val Info = Icons.Rounded.Info
+    val InfoBorder = Icons.Outlined.Info
     val Language = Icons.Rounded.Language
     val Location = Icons.Rounded.LocationOn
     val Memory = Icons.Rounded.Memory

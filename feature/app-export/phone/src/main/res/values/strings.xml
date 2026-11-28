@@ -29,6 +29,8 @@
     <string name="inventory_export_columns_selected" tools:ignore="PluralsCandidate">%1$d of %2$d details selected</string>
     <string name="inventory_export_select_all">Select all</string>
     <string name="inventory_export_clear">Clear</string>
+    <string name="inventory_export_select_all_details">Select all details</string>
+    <string name="inventory_export_clear_all_details">Clear all details</string>
     <string name="inventory_export_no_columns_hint">Choose at least one detail to export.</string>
     <string name="inventory_export_usage_access_hint">Last used time and storage size stay empty until you allow usage access.</string>
     <string name="inventory_export_grant_access">Allow access</string>

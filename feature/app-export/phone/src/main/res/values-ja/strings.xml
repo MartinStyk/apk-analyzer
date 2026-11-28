@@ -13,6 +13,8 @@
     <string name="inventory_export_columns_selected">%2$d項目中%1$d項目を選択</string>
     <string name="inventory_export_select_all">すべて選択</string>
     <string name="inventory_export_clear">選択を解除</string>
+    <string name="inventory_export_select_all_details">すべての情報を選択</string>
+    <string name="inventory_export_clear_all_details">すべての情報の選択を解除</string>
     <string name="inventory_export_usage_access_hint">使用状況へのアクセスを許可するまで、最終使用日時とストレージサイズは空欄になります。</string>
     <string name="inventory_export_grant_access">アクセスを許可</string>
     <string name="inventory_export_attribute_category">カテゴリ</string>
