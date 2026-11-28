@@ -80,6 +80,7 @@ private val InfoCardTone.containerColor: Color
         InfoCardTone.Info -> AppTheme.colors.secondaryContainer
         InfoCardTone.Attention -> AppTheme.colors.tertiaryContainer
         InfoCardTone.Warning -> AppTheme.colors.warningContainer
+        InfoCardTone.Pro -> AppTheme.colors.proContainer
     }
 
 private val InfoCardTone.contentColor: Color
@@ -88,13 +89,14 @@ private val InfoCardTone.contentColor: Color
         InfoCardTone.Info -> AppTheme.colors.onSecondaryContainer
         InfoCardTone.Attention -> AppTheme.colors.onTertiaryContainer
         InfoCardTone.Warning -> AppTheme.colors.onSurface
+        InfoCardTone.Pro -> AppTheme.colors.pro
     }
 
 private val InfoCardTone.iconColor: Color
     @Composable
     get() = when (this) {
         InfoCardTone.Warning -> AppTheme.colors.warning
-        InfoCardTone.Info, InfoCardTone.Attention -> contentColor
+        InfoCardTone.Info, InfoCardTone.Attention, InfoCardTone.Pro -> contentColor
     }
 
 @Preview

@@ -32,6 +32,7 @@ import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Button
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Chip
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.InfoCard
+import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.InfoCardTone
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.LoadingSpinner
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.OutlinedButton
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.ProgressBar
@@ -288,9 +289,10 @@ private fun ProColumnsNotice(
     modifier: Modifier = Modifier,
 ) {
     InfoCard(
-        icon = ApkAnalyzerIcons.Lock,
+        icon = ApkAnalyzerIcons.Star,
         title = null,
         body = stringResource(R.string.inventory_export_pro_columns),
+        tone = InfoCardTone.Pro,
         modifier = modifier,
         action = {
             Column(modifier = Modifier.fillMaxWidth().padding(start = 6.dp, end = 6.dp, top = 8.dp)) {
@@ -299,6 +301,9 @@ private fun ProColumnsNotice(
                     onClick = onUnlockPro,
                     enabled = enabled,
                     modifier = Modifier.fillMaxWidth(),
+                    leadingIcon = ApkAnalyzerIcons.Star,
+                    containerColor = AppTheme.colors.pro,
+                    contentColor = AppTheme.colors.proContainer,
                 )
                 TextButton(
                     text = stringResource(R.string.inventory_export_use_basics),
@@ -501,6 +506,30 @@ private fun ExportPageProRequiredPreview() {
             ),
             onAction = {},
         )
+    }
+}
+
+@Preview
+@Composable
+private fun ProColumnsNoticePreview() {
+    ApkAnalyzerTheme {
+        ProColumnsNotice(enabled = true, onUnlockPro = {}, onUseBasics = {})
+    }
+}
+
+@Preview
+@Composable
+private fun ProColumnsNoticeDarkPreview() {
+    ApkAnalyzerTheme(isDarkTheme = true) {
+        ProColumnsNotice(enabled = true, onUnlockPro = {}, onUseBasics = {})
+    }
+}
+
+@Preview(fontScale = 2f)
+@Composable
+private fun ProColumnsNoticeLargeTextPreview() {
+    ApkAnalyzerTheme {
+        ProColumnsNotice(enabled = true, onUnlockPro = {}, onUseBasics = {})
     }
 }
 
