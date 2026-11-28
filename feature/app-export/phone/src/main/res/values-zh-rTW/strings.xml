@@ -43,9 +43,9 @@
     </plurals>
     <string name="inventory_export_format_title">格式</string>
     <string name="inventory_export_format_csv">CSV 試算表</string>
-    <string name="inventory_export_format_csv_description">可用 Excel、Google 試算表和其他試算表應用程式開啟。</string>
+    <string name="inventory_export_format_csv_description">適用於 Excel 和 Google 試算表</string>
     <string name="inventory_export_format_json">JSON</string>
-    <string name="inventory_export_format_json_description">供指令碼和其他工具使用的結構化資料。</string>
+    <string name="inventory_export_format_json_description">適用於指令碼和工具</string>
     <string name="inventory_export_format_reference">檔案格式說明</string>
     <string name="inventory_export_preview_title">預覽</string>
     <plurals name="inventory_export_preview_caption">

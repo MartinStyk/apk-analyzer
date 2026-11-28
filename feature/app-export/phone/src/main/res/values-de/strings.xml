@@ -29,9 +29,9 @@
     </plurals>
     <string name="inventory_export_format_title">Format</string>
     <string name="inventory_export_format_csv">CSV-Tabelle</string>
-    <string name="inventory_export_format_csv_description">Lässt sich in Excel, Google Tabellen und anderen Tabellenkalkulations-Apps öffnen.</string>
+    <string name="inventory_export_format_csv_description">Für Excel und Google Tabellen</string>
     <string name="inventory_export_format_json">JSON</string>
-    <string name="inventory_export_format_json_description">Strukturierte Daten für Skripte und andere Werkzeuge.</string>
+    <string name="inventory_export_format_json_description">Für Skripte und Werkzeuge</string>
     <string name="inventory_export_format_reference">Referenz zum Dateiformat</string>
     <string name="inventory_export_preview_title">Vorschau</string>
     <plurals name="inventory_export_preview_caption">

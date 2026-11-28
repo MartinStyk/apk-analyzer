@@ -37,9 +37,9 @@
     </plurals>
     <string name="inventory_export_format_title">التنسيق</string>
     <string name="inventory_export_format_csv">جدول بيانات CSV</string>
-    <string name="inventory_export_format_csv_description">يمكن فتحه في Excel وجداول بيانات Google وتطبيقات جداول البيانات الأخرى.</string>
+    <string name="inventory_export_format_csv_description">لـ Excel وجداول بيانات Google</string>
     <string name="inventory_export_format_json">JSON</string>
-    <string name="inventory_export_format_json_description">بيانات منظّمة للبرامج النصية والأدوات الأخرى.</string>
+    <string name="inventory_export_format_json_description">للبرامج النصية والأدوات</string>
     <string name="inventory_export_format_reference">مرجع تنسيق الملف</string>
     <string name="inventory_export_preview_title">معاينة</string>
     <plurals name="inventory_export_preview_caption">

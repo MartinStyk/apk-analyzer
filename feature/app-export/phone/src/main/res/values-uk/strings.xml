@@ -33,9 +33,9 @@
     </plurals>
     <string name="inventory_export_format_title">Формат</string>
     <string name="inventory_export_format_csv">Таблиця CSV</string>
-    <string name="inventory_export_format_csv_description">Відкривається в Excel, Google Таблицях та інших програмах для роботи з таблицями.</string>
+    <string name="inventory_export_format_csv_description">Для Excel і Google Таблиць</string>
     <string name="inventory_export_format_json">JSON</string>
-    <string name="inventory_export_format_json_description">Структуровані дані для скриптів та інших інструментів.</string>
+    <string name="inventory_export_format_json_description">Для скриптів та інструментів</string>
     <string name="inventory_export_format_reference">Опис формату файлу</string>
     <string name="inventory_export_preview_title">Попередній перегляд</string>
     <plurals name="inventory_export_preview_caption">

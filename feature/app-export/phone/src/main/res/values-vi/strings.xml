@@ -27,9 +27,9 @@
     </plurals>
     <string name="inventory_export_format_title">Định dạng</string>
     <string name="inventory_export_format_csv">Bảng tính CSV</string>
-    <string name="inventory_export_format_csv_description">Mở được bằng Excel, Google Trang tính và các ứng dụng bảng tính khác.</string>
+    <string name="inventory_export_format_csv_description">Dành cho Excel và Google Trang tính</string>
     <string name="inventory_export_format_json">JSON</string>
-    <string name="inventory_export_format_json_description">Dữ liệu có cấu trúc dành cho tập lệnh và các công cụ khác.</string>
+    <string name="inventory_export_format_json_description">Dành cho tập lệnh và công cụ</string>
     <string name="inventory_export_format_reference">Tài liệu định dạng tệp</string>
     <string name="inventory_export_preview_title">Xem trước</string>
     <plurals name="inventory_export_preview_caption">

@@ -33,9 +33,9 @@
     </plurals>
     <string name="inventory_export_format_title">Formát</string>
     <string name="inventory_export_format_csv">Tabuľka CSV</string>
-    <string name="inventory_export_format_csv_description">Otvoríte ju v Exceli, Tabuľkách Google a iných tabuľkových aplikáciách.</string>
+    <string name="inventory_export_format_csv_description">Pre Excel a Tabuľky Google</string>
     <string name="inventory_export_format_json">JSON</string>
-    <string name="inventory_export_format_json_description">Štruktúrované údaje pre skripty a ďalšie nástroje.</string>
+    <string name="inventory_export_format_json_description">Pre skripty a nástroje</string>
     <string name="inventory_export_format_reference">Popis formátu súboru</string>
     <string name="inventory_export_preview_title">Ukážka</string>
     <plurals name="inventory_export_preview_caption">

@@ -27,9 +27,9 @@
     </plurals>
     <string name="inventory_export_format_title">格式</string>
     <string name="inventory_export_format_csv">CSV 电子表格</string>
-    <string name="inventory_export_format_csv_description">可在 Excel、Google 表格和其他电子表格应用中打开。</string>
+    <string name="inventory_export_format_csv_description">适用于 Excel 和 Google 表格</string>
     <string name="inventory_export_format_json">JSON</string>
-    <string name="inventory_export_format_json_description">适用于脚本和其他工具的结构化数据。</string>
+    <string name="inventory_export_format_json_description">适用于脚本和工具</string>
     <string name="inventory_export_format_reference">文件格式参考</string>
     <string name="inventory_export_preview_title">预览</string>
     <plurals name="inventory_export_preview_caption">
