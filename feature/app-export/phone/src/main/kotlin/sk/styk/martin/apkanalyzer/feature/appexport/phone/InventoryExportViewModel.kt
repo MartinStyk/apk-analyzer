@@ -172,7 +172,8 @@ internal class InventoryExportViewModel @AssistedInject constructor(
 
             is InventoryExportAction.DismissHint -> dismissedHints.value += action.hint
 
-            InventoryExportAction.OpenPro -> openPro()
+            InventoryExportAction.OpenPro ->
+                eventChannel.trySend(InventoryExportEvent.OpenPro(PaywallReason.Export(appCount = state.value.apps.summary.selectedCount)))
 
             InventoryExportAction.ShowIntro -> showIntro.value = true
 
@@ -204,13 +205,6 @@ internal class InventoryExportViewModel @AssistedInject constructor(
                     eventChannel.send(InventoryExportEvent.NavigateBack)
                 }
             }
-        }
-    }
-
-    private fun openPro() {
-        val current = state.value
-        if (current.proOwnership == ProOwnership.NotOwned) {
-            eventChannel.trySend(InventoryExportEvent.OpenPro(PaywallReason.Export(appCount = current.apps.summary.selectedCount)))
         }
     }
 
