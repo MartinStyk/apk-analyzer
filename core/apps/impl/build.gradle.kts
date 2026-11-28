@@ -11,4 +11,7 @@ dependencies {
     implementation(projects.core.apps.api)
     implementation(projects.core.common)
     implementation(libs.androidx.core.ktx)
+
+    testImplementation(testFixtures(projects.core.apps.api))
+    testImplementation(testFixtures(projects.core.common))
 }

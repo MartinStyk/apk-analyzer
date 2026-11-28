@@ -265,8 +265,9 @@ range's net change needs no second decode. A row that repeats the previous row's
 visible difference is dropped before the timeline is built: the gate never writes one, so it only
 comes from merging a restore or an import next to a capture made after app data was cleared, and
 keeping it would add a phantom update dated at the app's last real one. A repeat whose content does
-differ stays as a change: it is a real runtime difference, such as components an app enabled or
-disabled itself. `AppHistoryDeviceSummary.kt` holds the rules over it:
+differ stays as a change: two observations of the same install that disagree are a real difference,
+not something to hide. Component enabled state never causes one, because capture lists every
+declared component (see the schema doc's excluded data). `AppHistoryDeviceSummary.kt` holds the rules over it:
 `summarySince(since)` counts updates and new apps (by install date, never by first recording, which
 would call every app new when recording starts), lists changed apps with their net change, and lists
 the newest attention-worthy change per app with the date a later update undid it, if all its reasons

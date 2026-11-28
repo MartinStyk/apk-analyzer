@@ -45,6 +45,13 @@ device-dependent facts (`core/apps/AGENTS.md`):
 
 * Permission grant state. Originally scoped as an `HI-10` observation; dropped for R1 — see
   [Changes to the Product Design](#changes-to-the-product-design).
+* Component enabled state. Apps switch their own components on and off at runtime
+  (`setComponentEnabledSetting`) without an update — Chrome's incognito launcher, Docs' Trusted Web
+  Activity aliases. `AppDetailRepositoryImpl` queries with `MATCH_DISABLED_COMPONENTS`, for both the
+  component lists and launcher detection, so a snapshot holds every declared component whatever its
+  current state, and a toggle can neither appear as "component added/removed" nor leak into the
+  diff of the next real update. Before this, capture read only enabled components; that debug-only
+  history shows one round of "components added" on each affected app's next update.
 * Anything already excluded from live `AppDetail`: device-feature availability, usage stats,
   storage stats, last-used time. This specifically includes `AppInfo.totalSize` — despite living on
   `AppInfo` alongside genuine APK facts, it's populated from `StorageStatsRepository.queryTotalSize()`,
