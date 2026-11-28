@@ -74,47 +74,47 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
         }
 
         Key.OnboardingRequired -> {
-            prefs.valueOr(KEY_ONBOARDING, true)
+            prefs[KEY_ONBOARDING] ?: true
         }
 
         Key.AppStartNumber -> {
-            prefs.valueOr(KEY_APP_START_NUMBER, 0)
+            prefs[KEY_APP_START_NUMBER] ?: 0
         }
 
         Key.RecentlyViewedAppsEnabled -> {
-            prefs.valueOr(KEY_RECENTLY_VIEWED_ENABLED, true)
+            prefs[KEY_RECENTLY_VIEWED_ENABLED] ?: true
         }
 
         Key.AppDetailQualifiedSessionCount -> {
-            prefs.valueOr(KEY_APP_DETAIL_QUALIFIED_SESSION_COUNT, 0)
+            prefs[KEY_APP_DETAIL_QUALIFIED_SESSION_COUNT] ?: 0
         }
 
         Key.ReviewFlowRequested -> {
-            prefs.valueOr(KEY_REVIEW_FLOW_REQUESTED, false)
+            prefs[KEY_REVIEW_FLOW_REQUESTED] ?: false
         }
 
         Key.InventoryExportColumns -> {
-            prefs.valueOr(KEY_INVENTORY_EXPORT_COLUMNS, emptySet<String>())
+            prefs[KEY_INVENTORY_EXPORT_COLUMNS] ?: emptySet<String>()
         }
 
         Key.InventoryExportFormat -> {
-            prefs.valueOr(KEY_INVENTORY_EXPORT_FORMAT, "")
+            prefs[KEY_INVENTORY_EXPORT_FORMAT] ?: ""
         }
 
         Key.InventoryExportIntroDismissed -> {
-            prefs.valueOr(KEY_INVENTORY_EXPORT_INTRO_DISMISSED, false)
+            prefs[KEY_INVENTORY_EXPORT_INTRO_DISMISSED] ?: false
         }
 
         Key.WhatChangedLastVisitAt -> {
-            prefs.valueOr(KEY_WHAT_CHANGED_LAST_VISIT_AT, 0L)
+            prefs[KEY_WHAT_CHANGED_LAST_VISIT_AT] ?: 0L
         }
 
         Key.WhatChangedRange -> {
-            prefs.valueOr(KEY_WHAT_CHANGED_RANGE, "")
+            prefs[KEY_WHAT_CHANGED_RANGE] ?: ""
         }
 
         Key.AppHistoryRecordingEnabled -> {
-            prefs.valueOr(KEY_APP_HISTORY_RECORDING_ENABLED, true)
+            prefs[KEY_APP_HISTORY_RECORDING_ENABLED] != false
         }
     } as T
 
@@ -181,8 +181,6 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
         }
     }
 }
-
-private fun <T> Preferences.valueOr(key: Preferences.Key<T>, default: T): T = this[key] ?: default
 
 private fun String?.toColorAppScheme(): ColorAppScheme = when (this) {
     "light" -> ColorAppScheme.Day
