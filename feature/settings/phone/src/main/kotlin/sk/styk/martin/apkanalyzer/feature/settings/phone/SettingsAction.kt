@@ -7,6 +7,7 @@ sealed interface SettingsAction {
     data class ColorSchemeSelected(val colorScheme: ColorAppScheme) : SettingsAction
     data class FingerprintFormatSelected(val fingerprintFormat: FingerprintFormat) : SettingsAction
     data class RecentlyViewedAppsToggled(val enabled: Boolean) : SettingsAction
+    data object OpenAppHistorySettings : SettingsAction
     data object OpenLanguageSettings : SettingsAction
     data object OpenFeatureFlags : SettingsAction
     data object NavigateBack : SettingsAction

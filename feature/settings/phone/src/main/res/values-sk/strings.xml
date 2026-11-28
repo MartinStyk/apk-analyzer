@@ -14,4 +14,44 @@
     <string name="settings_language_section">Jazyk</string>
     <string name="settings_language_app_language">Jazyk aplikácie</string>
     <string name="settings_language_system_default">Predvolené systémové nastavenie</string>
+    <string name="settings_app_history">História aplikácií</string>
+    <string name="settings_app_history_on">Zapnuté</string>
+    <string name="settings_app_history_off">Vypnuté</string>
+    <string name="app_history_settings_recording_section">Zaznamenávanie</string>
+    <string name="app_history_settings_recording_toggle">Zaznamenávať zmeny aplikácií</string>
+    <string name="app_history_settings_recording_description">Pri inštalácii alebo aktualizácii aplikácie uloží jej podrobnosti, aby karta Zmeny a história každej aplikácie mohli ukázať, čo sa zmenilo.</string>
+    <string name="app_history_settings_recording_off_title">Zaznamenávanie je vypnuté</string>
+    <string name="app_history_settings_recording_off_body">Nové inštalácie a aktualizácie sa nezaznamenávajú. Karta Zmeny a história každej aplikácie zostanú také, aké sú, kým zaznamenávanie znova nezapnete.</string>
+    <string name="app_history_settings_turn_off_title">Vypnúť zaznamenávanie?</string>
+    <string name="app_history_settings_turn_off_message">Inštalácie a aktualizácie počas vypnutého zaznamenávania sa nezobrazia na karte Zmeny ani v histórii aplikácie. Keď ho znova zapnete, viacero aktualizácií jednej aplikácie sa zobrazí ako jedna zmena a aplikácie odstránené medzitým sa nezaznamenajú vôbec. Všetko, čo už je zaznamenané, zostane.</string>
+    <string name="app_history_settings_turn_off_confirm">Vypnúť</string>
+    <string name="app_history_settings_turn_off_dismiss">Ponechať zapnuté</string>
+    <string name="app_history_settings_privacy_title">Zostáva v tomto telefóne</string>
+    <string name="app_history_settings_privacy_body">Apk Analyzer ukladá históriu aplikácií iba v tomto telefóne a nikam ju neposiela. Ak máte v nastaveniach telefónu zapnuté zálohovanie, Android ju zahrnie do zálohy vo vašom účte Google spolu s ostatnými údajmi aplikácie.</string>
+    <string name="app_history_settings_storage_section">Úložisko</string>
+    <string name="app_history_settings_storage_used">Využité miesto</string>
+    <plurals name="app_history_settings_storage_apps">
+        <item quantity="one">História %d aplikácie</item>
+        <item quantity="few">História %d aplikácií</item>
+        <item quantity="many">História %d aplikácie</item>
+        <item quantity="other">História %d aplikácií</item>
+    </plurals>
+    <string name="app_history_settings_storage_empty">Zatiaľ nie je nič zaznamenané</string>
+    <string name="app_history_settings_storage_unavailable">Nepodarilo sa zistiť, koľko miesta história zaberá</string>
+    <string name="app_history_settings_transfer_section">Export a import</string>
+    <string name="app_history_settings_export">Exportovať históriu</string>
+    <string name="app_history_settings_export_description">Uloží kópiu ako súbor v tomto telefóne alebo na cloudovom disku, napríklad na Disku Google.</string>
+    <string name="app_history_settings_import">Importovať históriu</string>
+    <string name="app_history_settings_import_description">Pridá históriu z exportovaného súboru. Nič, čo už je zaznamenané, sa nenahradí.</string>
+    <string name="app_history_settings_exported">História bola exportovaná</string>
+    <string name="app_history_settings_export_failed">Históriu sa nepodarilo exportovať</string>
+    <plurals name="app_history_settings_imported">
+        <item quantity="one">Pridaná história %d aplikácie</item>
+        <item quantity="few">Pridaná história %d aplikácií</item>
+        <item quantity="many">Pridaná história %d aplikácie</item>
+        <item quantity="other">Pridaná história %d aplikácií</item>
+    </plurals>
+    <string name="app_history_settings_nothing_new">V tomto súbore nie je žiadna nová história</string>
+    <string name="app_history_settings_import_failed">Tento súbor sa nepodarilo importovať. Vyberte súbor histórie exportovaný z Apk Analyzer.</string>
+    <string name="app_history_settings_picker_unavailable">Nie je k dispozícii žiadna aplikácia na výber súboru</string>
 </resources>

@@ -175,6 +175,13 @@ by the screens that need it; compare it with `Build.SUPPORTED_ABIS` at that cons
 
 ## Manifest and Component Semantics
 
+Components are what the APK declares, not what is enabled right now. `AppDetailRepositoryImpl`
+passes `MATCH_DISABLED_COMPONENTS` to the package query and to launcher detection, so a component
+the manifest or the app itself disabled is still listed, and `isLauncher` means "declares a launcher
+intent filter". Enabled state is runtime device state, like grant state: apps toggle it without an
+update, and `core:app-history` must never see it change. If app detail ever shows whether a component
+is enabled, read it live at display time and keep it out of `AppDetail`.
+
 `PackageInfo` does not enumerate declared intent filters. Query APIs only return filters matching an
 intent the caller already knows, so manifest parsing is required.
 

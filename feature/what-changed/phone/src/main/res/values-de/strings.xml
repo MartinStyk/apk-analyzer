@@ -58,4 +58,8 @@
     <string name="what_changed_uncomparable_only">Einige Angaben ließen sich nicht vergleichen</string>
     <string name="what_changed_locked_row">Gesperrte App-Änderung, Teil von Pro</string>
     <string name="what_changed_locked_click_label">Mit Pro freischalten</string>
+    <string name="what_changed_settings">Verlaufseinstellungen</string>
+    <string name="what_changed_recording_off_title">Die Erfassung ist deaktiviert</string>
+    <string name="what_changed_recording_off_body">Neue Installationen und Updates werden nicht erfasst.</string>
+    <string name="what_changed_recording_turn_on">Aktivieren</string>
 </resources>

@@ -1,6 +1,7 @@
 package sk.styk.martin.apkanalyzer.core.apphistory.impl.timeline
 
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryAppTimeline
+import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryDiff
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistoryEntry
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySnapshotId
 import sk.styk.martin.apkanalyzer.core.apphistory.api.timeline.model.AppHistorySnapshotSummary
@@ -12,20 +13,22 @@ import javax.inject.Inject
 internal class AppHistoryTimelineBuilder @Inject constructor(private val differ: AppHistoryDiffer) {
 
     fun entries(records: List<StoredAppHistoryRecord>): List<AppHistoryEntry> {
-        val first = records.firstOrNull() ?: return emptyList()
-        return changes(records).filterNot { it.isUpdateWithoutVisibleChange }.asReversed() + AppHistoryEntry.FirstSeen(first.toSummary())
+        val observed = records.withoutRepeatedObservations()
+        val first = observed.firstOrNull() ?: return emptyList()
+        return changes(observed).filterNot { it.isUpdateWithoutVisibleChange }.asReversed() + AppHistoryEntry.FirstSeen(first.toSummary())
     }
 
     fun appTimeline(records: List<StoredAppHistoryRecord>): AppHistoryAppTimeline? {
-        val first = records.firstOrNull() ?: return null
-        val latest = records.last()
-        val (unchangedUpdates, visibleChanges) = changes(records).partition { it.isUpdateWithoutVisibleChange }
+        val observed = records.withoutRepeatedObservations()
+        val first = observed.firstOrNull() ?: return null
+        val latest = observed.last()
+        val (unchangedUpdates, visibleChanges) = changes(observed).partition { it.isUpdateWithoutVisibleChange }
         return AppHistoryAppTimeline(
             packageName = latest.record.packageName,
             applicationName = latest.record.detail.info.applicationName,
             entries = visibleChanges.asReversed() + AppHistoryEntry.FirstSeen(first.toSummary()),
             unchangedUpdates = unchangedUpdates.map { it.timestamp },
-            diffsToLatest = records.dropLast(1).associate { AppHistorySnapshotId(it.id) to differ(before = it.record, after = latest.record) },
+            diffsToLatest = observed.dropLast(1).associate { AppHistorySnapshotId(it.id) to differ(before = it.record, after = latest.record) },
         )
     }
 
@@ -36,6 +39,18 @@ internal class AppHistoryTimelineBuilder @Inject constructor(private val differ:
         unchangedUpdates = emptyList(),
         diffsToLatest = emptyMap(),
     )
+
+    private fun List<StoredAppHistoryRecord>.withoutRepeatedObservations(): List<StoredAppHistoryRecord> {
+        val kept = mutableListOf<StoredAppHistoryRecord>()
+        forEach { record ->
+            val previous = kept.lastOrNull()
+            val repeatsPrevious = previous != null &&
+                record.record.captureKey == previous.record.captureKey &&
+                !differ(before = previous.record, after = record.record).isVisible
+            if (!repeatsPrevious) kept += record
+        }
+        return kept
+    }
 
     private fun changes(records: List<StoredAppHistoryRecord>): List<AppHistoryEntry.Change> = records.zipWithNext { previous, current ->
         val kind = when {
@@ -53,7 +68,10 @@ internal class AppHistoryTimelineBuilder @Inject constructor(private val differ:
 }
 
 private val AppHistoryEntry.Change.isUpdateWithoutVisibleChange: Boolean
-    get() = kind == AppHistoryEntry.Change.Kind.Updated && diff.changedCategories.isEmpty() && diff.uncomparableCategories.isEmpty()
+    get() = kind == AppHistoryEntry.Change.Kind.Updated && !diff.isVisible
+
+private val AppHistoryDiff.isVisible: Boolean
+    get() = changedCategories.isNotEmpty() || uncomparableCategories.isNotEmpty()
 
 private infix fun StoredAppHistoryRecord.isOnNewDeviceAfter(previous: StoredAppHistoryRecord): Boolean =
     record.captureKey.deviceId != previous.record.captureKey.deviceId

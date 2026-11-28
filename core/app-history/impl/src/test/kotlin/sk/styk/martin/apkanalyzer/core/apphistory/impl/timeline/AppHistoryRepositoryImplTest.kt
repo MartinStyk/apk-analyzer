@@ -162,6 +162,18 @@ class AppHistoryRepositoryImplTest {
     }
 
     @Test
+    fun `Given a merge recorded the same install twice When reading the device timeline Then it is not an update`() = runTest {
+        persistence += aStoredRecord(id = 1, capturedAt = 1_000, lastUpdateTime = 1_000)
+        persistence += aStoredRecord(id = 2, capturedAt = 5_000, lastUpdateTime = 1_000)
+
+        val app = (repository.deviceTimeline().first() as AppHistoryDeviceTimeline.Available).apps.single()
+
+        app.entries.single().shouldBeInstanceOf<AppHistoryEntry.FirstSeen>()
+        app.unchangedUpdates shouldBe emptyList()
+        app.diffsToLatest shouldBe emptyMap()
+    }
+
+    @Test
     fun `Given another app was captured When reading the device timeline again Then unchanged apps are not decoded again`() = runTest {
         persistence += aStoredRecord(id = 1, capturedAt = 1_000)
         persistence += aStoredRecord(id = 2, detail = aVersion(2), capturedAt = 2_000)

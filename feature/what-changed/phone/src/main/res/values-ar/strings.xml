@@ -74,4 +74,8 @@
     <string name="what_changed_uncomparable_only">تعذّرت مقارنة بعض التفاصيل</string>
     <string name="what_changed_locked_row">تغيير تطبيق مقفل، جزء من Pro</string>
     <string name="what_changed_locked_click_label">فتح القفل باستخدام Pro</string>
+    <string name="what_changed_settings">إعدادات السجل</string>
+    <string name="what_changed_recording_off_title">الرصد متوقف</string>
+    <string name="what_changed_recording_off_body">لا تُرصد عمليات التثبيت والتحديثات الجديدة حاليًا.</string>
+    <string name="what_changed_recording_turn_on">تشغيل</string>
 </resources>

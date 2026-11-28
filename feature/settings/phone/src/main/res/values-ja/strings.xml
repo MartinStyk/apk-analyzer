@@ -14,4 +14,38 @@
     <string name="settings_fingerprint_format">フィンガープリント形式</string>
     <string name="settings_fingerprint_format_colon_separated">コロン区切り</string>
     <string name="settings_fingerprint_format_continuous">区切りなし</string>
+    <string name="settings_app_history">アプリの履歴</string>
+    <string name="settings_app_history_on">オン</string>
+    <string name="settings_app_history_off">オフ</string>
+    <string name="app_history_settings_recording_section">記録</string>
+    <string name="app_history_settings_recording_toggle">アプリの変更を記録</string>
+    <string name="app_history_settings_recording_description">アプリのインストール時や更新時にその詳細を保存し、「変更」タブや各アプリの履歴で変更点を確認できるようにします。</string>
+    <string name="app_history_settings_recording_off_title">記録はオフです</string>
+    <string name="app_history_settings_recording_off_body">新しいインストールや更新は記録されません。記録を再びオンにするまで、「変更」タブと各アプリの履歴は今の状態のままです。</string>
+    <string name="app_history_settings_turn_off_title">記録をオフにしますか？</string>
+    <string name="app_history_settings_turn_off_message">記録がオフの間に行われたインストールや更新は、「変更」タブにもアプリの履歴にも表示されません。再びオンにすると、何度か更新されたアプリは 1 件の変更として表示され、その間にアンインストールされたアプリは記録されません。これまでに記録された内容はすべて残ります。</string>
+    <string name="app_history_settings_turn_off_confirm">オフにする</string>
+    <string name="app_history_settings_turn_off_dismiss">オンのままにする</string>
+    <string name="app_history_settings_privacy_title">このスマートフォン内にのみ保存</string>
+    <string name="app_history_settings_privacy_body">Apk Analyzer はアプリの履歴をこのスマートフォンにのみ保存し、外部には送信しません。スマートフォンの設定でバックアップがオンになっている場合、Android は他のアプリデータと同様に、この履歴を Google アカウントのバックアップに含めます。</string>
+    <string name="app_history_settings_storage_section">ストレージ</string>
+    <string name="app_history_settings_storage_used">使用容量</string>
+    <plurals name="app_history_settings_storage_apps">
+        <item quantity="other">%d 個のアプリの履歴</item>
+    </plurals>
+    <string name="app_history_settings_storage_empty">まだ記録がありません</string>
+    <string name="app_history_settings_storage_unavailable">履歴の使用容量を取得できませんでした</string>
+    <string name="app_history_settings_transfer_section">エクスポートとインポート</string>
+    <string name="app_history_settings_export">履歴をエクスポート</string>
+    <string name="app_history_settings_export_description">このスマートフォン内、または Google ドライブなどのクラウドストレージに、コピーをファイルとして保存します。</string>
+    <string name="app_history_settings_import">履歴をインポート</string>
+    <string name="app_history_settings_import_description">エクスポートしたファイルから履歴を追加します。記録済みの内容は置き換えられません。</string>
+    <string name="app_history_settings_exported">履歴をエクスポートしました</string>
+    <string name="app_history_settings_export_failed">履歴をエクスポートできませんでした</string>
+    <plurals name="app_history_settings_imported">
+        <item quantity="other">%d 個のアプリの履歴を追加しました</item>
+    </plurals>
+    <string name="app_history_settings_nothing_new">このファイルに新しい履歴はありません</string>
+    <string name="app_history_settings_import_failed">このファイルをインポートできませんでした。Apk Analyzer からエクスポートした履歴ファイルを選択してください。</string>
+    <string name="app_history_settings_picker_unavailable">ファイルを選択できるアプリはありません</string>
 </resources>

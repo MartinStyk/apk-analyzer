@@ -41,6 +41,8 @@ import sk.styk.martin.apkanalyzer.core.apps.api.signing.SigningSchemeRepositoryF
 import sk.styk.martin.apkanalyzer.core.common.coroutines.TestDispatcherProvider
 import sk.styk.martin.apkanalyzer.core.common.device.DeviceInfoProviderFake
 import sk.styk.martin.apkanalyzer.core.common.performance.PerformanceTrackerFake
+import sk.styk.martin.apkanalyzer.core.common.settings.Key
+import sk.styk.martin.apkanalyzer.core.common.settings.PersistenceRepositoryFake
 import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlag
 import sk.styk.martin.apkanalyzer.core.featureflags.api.FeatureFlagRepositoryFake
 import java.io.IOException
@@ -57,6 +59,8 @@ class AppHistoryCaptureSchedulerImplTest {
     private val cleanup = AppHistoryStorageCleanup(context)
     private val appScope = CoroutineScope(SupervisorJob() + dispatcherProvider.default())
     private val featureFlags = FeatureFlagRepositoryFake(FeatureFlag.AppHistoryRecording)
+    private val preferences = PersistenceRepositoryFake(Key.AppHistoryRecordingEnabled to true)
+    private val recording = AppHistoryRecordingRepositoryImpl(featureFlags, preferences)
     private val packageChanges = PackageChangesObserverFake()
     private val installedApp = anApp(name = "WhatsApp", packageName = WhatsApp.info.packageName.value)
     private val persistence = AppHistoryPersistenceRepositoryFake()
@@ -69,7 +73,7 @@ class AppHistoryCaptureSchedulerImplTest {
         deviceInfoProvider = DeviceInfoProviderFake(),
         dispatcherProvider = dispatcherProvider,
         performanceTracker = PerformanceTrackerFake(),
-        featureFlagRepository = featureFlags,
+        recordingRepository = recording,
         appScope = appScope,
     )
     private val workManager = mockk<WorkManager>()
@@ -91,7 +95,7 @@ class AppHistoryCaptureSchedulerImplTest {
         workManager = Lazy { workManager },
         restoreMerger = AppHistoryRestoreMergerImpl(context, database.appHistoryWriteDao(), dispatcherProvider),
         storageCleanup = cleanup,
-        featureFlagRepository = featureFlags,
+        recordingRepository = recording,
         appScope = appScope,
         dispatcherProvider = dispatcherProvider,
     )
@@ -127,6 +131,22 @@ class AppHistoryCaptureSchedulerImplTest {
 
         persistence.observe(installedApp.packageName).first().getOrThrow() shouldBe emptyList()
         historyFile.readText() shouldBe "previous history"
+        packageChanges.subscriberCount shouldBe 0
+        verify(exactly = 1) { workManager.cancelUniqueWork(any()) }
+    }
+
+    @Test
+    fun `Given the user turns recording off When packages change Then nothing is captured and periodic work is cancelled`() = runTest {
+        scheduler.start()
+        runCurrent()
+
+        preferences[Key.AppHistoryRecordingEnabled] = false
+        runCurrent()
+        advanceTimeBy(60_001)
+        packageChanges.emit(PackageChangeEvent(installedApp.packageName, PackageChangeAction.Replaced))
+        runCurrent()
+
+        persistence.observe(installedApp.packageName).first().getOrThrow() shouldBe emptyList()
         packageChanges.subscriberCount shouldBe 0
         verify(exactly = 1) { workManager.cancelUniqueWork(any()) }
     }

@@ -45,6 +45,7 @@ internal class AppHistoryRestoreMergerImpl @Inject constructor(
         val (snapshots, blobs, devices) = staged.getOrElse { return@withContext Result.failure(it) }
 
         runCatchingCancellable { liveWriteDao.mergeRestoredData(snapshots, blobs, devices) }
+            .map { }
             .onSuccess {
                 Logger.i(APP_HISTORY, "Restore merge successful")
                 deleteStagingFiles()

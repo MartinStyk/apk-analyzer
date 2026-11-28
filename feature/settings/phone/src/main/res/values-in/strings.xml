@@ -14,4 +14,38 @@
     <string name="settings_fingerprint_format">Format sidik jari</string>
     <string name="settings_fingerprint_format_colon_separated">Dipisahkan titik dua</string>
     <string name="settings_fingerprint_format_continuous">Tanpa pemisah</string>
+    <string name="settings_app_history">Riwayat aplikasi</string>
+    <string name="settings_app_history_on">Aktif</string>
+    <string name="settings_app_history_off">Nonaktif</string>
+    <string name="app_history_settings_recording_section">Pencatatan</string>
+    <string name="app_history_settings_recording_toggle">Catat perubahan aplikasi</string>
+    <string name="app_history_settings_recording_description">Menyimpan detail setiap aplikasi saat Anda menginstal atau memperbaruinya, sehingga tab Perubahan dan Riwayat setiap aplikasi dapat menunjukkan apa yang berbeda.</string>
+    <string name="app_history_settings_recording_off_title">Pencatatan nonaktif</string>
+    <string name="app_history_settings_recording_off_body">Instalasi dan pembaruan baru tidak dicatat. Tab Perubahan dan Riwayat setiap aplikasi tetap seperti sekarang sampai Anda mengaktifkan pencatatan lagi.</string>
+    <string name="app_history_settings_turn_off_title">Nonaktifkan pencatatan?</string>
+    <string name="app_history_settings_turn_off_message">Instalasi dan pembaruan selama pencatatan nonaktif tidak muncul di tab Perubahan maupun di Riwayat aplikasi. Saat Anda mengaktifkannya lagi, aplikasi yang diperbarui beberapa kali muncul sebagai satu perubahan, dan aplikasi yang dihapus dalam waktu itu tidak akan pernah tercatat. Semua yang sudah tercatat tetap tersimpan.</string>
+    <string name="app_history_settings_turn_off_confirm">Nonaktifkan</string>
+    <string name="app_history_settings_turn_off_dismiss">Tetap mencatat</string>
+    <string name="app_history_settings_privacy_title">Tetap di ponsel ini</string>
+    <string name="app_history_settings_privacy_body">Apk Analyzer menyimpan riwayat aplikasi hanya di ponsel ini dan tidak mengirimkannya ke mana pun. Jika pencadangan diaktifkan di pengaturan ponsel Anda, Android menyertakannya dalam cadangan Akun Google Anda, seperti data aplikasi lainnya.</string>
+    <string name="app_history_settings_storage_section">Penyimpanan</string>
+    <string name="app_history_settings_storage_used">Ruang yang digunakan</string>
+    <plurals name="app_history_settings_storage_apps">
+        <item quantity="other">Riwayat %d aplikasi</item>
+    </plurals>
+    <string name="app_history_settings_storage_empty">Belum ada yang tercatat</string>
+    <string name="app_history_settings_storage_unavailable">Tidak dapat mengetahui berapa banyak ruang yang digunakan riwayat</string>
+    <string name="app_history_settings_transfer_section">Ekspor dan impor</string>
+    <string name="app_history_settings_export">Ekspor riwayat</string>
+    <string name="app_history_settings_export_description">Menyimpan salinan sebagai file di ponsel ini atau di penyimpanan cloud seperti Google Drive.</string>
+    <string name="app_history_settings_import">Impor riwayat</string>
+    <string name="app_history_settings_import_description">Menambahkan riwayat dari file yang diekspor. Riwayat yang sudah tercatat tidak akan diganti.</string>
+    <string name="app_history_settings_exported">Riwayat diekspor</string>
+    <string name="app_history_settings_export_failed">Tidak dapat mengekspor riwayat</string>
+    <plurals name="app_history_settings_imported">
+        <item quantity="other">Riwayat ditambahkan untuk %d aplikasi</item>
+    </plurals>
+    <string name="app_history_settings_nothing_new">Tidak ada riwayat baru di file ini</string>
+    <string name="app_history_settings_import_failed">Tidak dapat mengimpor file ini. Pilih file riwayat yang diekspor dari Apk Analyzer.</string>
+    <string name="app_history_settings_picker_unavailable">Tidak ada aplikasi yang dapat memilih file</string>
 </resources>

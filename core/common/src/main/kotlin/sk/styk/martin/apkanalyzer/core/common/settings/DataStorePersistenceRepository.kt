@@ -31,6 +31,7 @@ private val KEY_INVENTORY_EXPORT_FORMAT = stringPreferencesKey("inventory_export
 private val KEY_INVENTORY_EXPORT_INTRO_DISMISSED = booleanPreferencesKey("inventory_export_intro_dismissed")
 private val KEY_WHAT_CHANGED_LAST_VISIT_AT = longPreferencesKey("what_changed_last_visit_at")
 private val KEY_WHAT_CHANGED_RANGE = stringPreferencesKey("what_changed_range")
+private val KEY_APP_HISTORY_RECORDING_ENABLED = booleanPreferencesKey("app_history_recording_enabled")
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
     name = "app_settings",
@@ -63,6 +64,7 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
         context.dataStore.edit { prefs -> key.write(prefs, value) }
     }
 
+    @Suppress("CyclomaticComplexMethod")
     private fun <T : Any> Key<T>.read(prefs: Preferences): T = when (this) {
         Key.ColorScheme -> {
             prefs[KEY_COLOR_SCHEME].toColorAppScheme()
@@ -110,6 +112,10 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
 
         Key.WhatChangedRange -> {
             prefs[KEY_WHAT_CHANGED_RANGE] ?: ""
+        }
+
+        Key.AppHistoryRecordingEnabled -> {
+            prefs[KEY_APP_HISTORY_RECORDING_ENABLED] ?: true
         }
     } as T
 
@@ -169,6 +175,10 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
 
         Key.WhatChangedRange -> {
             prefs[KEY_WHAT_CHANGED_RANGE] = value as String
+        }
+
+        Key.AppHistoryRecordingEnabled -> {
+            prefs[KEY_APP_HISTORY_RECORDING_ENABLED] = value as Boolean
         }
     }
 }

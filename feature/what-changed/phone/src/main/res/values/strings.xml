@@ -59,4 +59,8 @@
     <string name="what_changed_uncomparable_only">Some details couldn\'t be compared</string>
     <string name="what_changed_locked_row">Locked app change, part of Pro</string>
     <string name="what_changed_locked_click_label">Unlock with Pro</string>
+    <string name="what_changed_settings">History settings</string>
+    <string name="what_changed_recording_off_title">Recording is off</string>
+    <string name="what_changed_recording_off_body">New installs and updates aren\'t being recorded.</string>
+    <string name="what_changed_recording_turn_on">Turn on</string>
 </resources>

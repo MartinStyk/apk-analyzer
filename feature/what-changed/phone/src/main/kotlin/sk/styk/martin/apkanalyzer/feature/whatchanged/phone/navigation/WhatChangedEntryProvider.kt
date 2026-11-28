@@ -9,6 +9,7 @@ import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppHistoryChangeNavKey
 import sk.styk.martin.apkanalyzer.feature.appdetail.api.AppHistoryTimelineNavKey
 import sk.styk.martin.apkanalyzer.feature.pro.api.PaywallReason
 import sk.styk.martin.apkanalyzer.feature.pro.api.ProNavKey
+import sk.styk.martin.apkanalyzer.feature.settings.api.AppHistorySettingsNavKey
 import sk.styk.martin.apkanalyzer.feature.whatchanged.api.WhatChangedNavKey
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.WhatChangedScreen
 import sk.styk.martin.apkanalyzer.feature.whatchanged.phone.log.WhatChangedLogScreen
@@ -17,6 +18,7 @@ fun EntryProviderScope<NavKey>.whatChangedEntries(navigator: Navigator) {
     entry<WhatChangedNavKey> {
         WhatChangedScreen(
             onNavigateToFullHistory = { navigator.navigate(WhatChangedLogNavKey) },
+            onNavigateToSettings = { navigator.navigate(AppHistorySettingsNavKey) },
             onNavigateToChange = { packageName, snapshotId, appName -> navigator.navigate(AppHistoryChangeNavKey(packageName, snapshotId, appName)) },
             onNavigateToFullDetail = { input -> navigator.navigate(AppDetailNavKey(input)) },
             onNavigateToAppHistory = { packageName, appName -> navigator.navigate(AppHistoryTimelineNavKey(packageName, appName)) },

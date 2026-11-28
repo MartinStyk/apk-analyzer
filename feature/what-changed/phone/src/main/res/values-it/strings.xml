@@ -62,4 +62,8 @@
     <string name="what_changed_uncomparable_only">Non è stato possibile confrontare alcuni dettagli</string>
     <string name="what_changed_locked_row">Modifica dell\'app bloccata, inclusa in Pro</string>
     <string name="what_changed_locked_click_label">Sblocca con Pro</string>
+    <string name="what_changed_settings">Impostazioni della cronologia</string>
+    <string name="what_changed_recording_off_title">La rilevazione è disattivata</string>
+    <string name="what_changed_recording_off_body">Le nuove installazioni e i nuovi aggiornamenti non vengono rilevati.</string>
+    <string name="what_changed_recording_turn_on">Attiva</string>
 </resources>

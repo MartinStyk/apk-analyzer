@@ -36,4 +36,7 @@ internal interface AppHistoryReadDao {
 
     @Query("SELECT * FROM app_history_device")
     suspend fun allDevices(): List<AppHistoryDeviceEntity>
+
+    @Query("SELECT COUNT(DISTINCT packageName) FROM app_history_snapshot")
+    fun observeRecordedAppCount(): Flow<Int>
 }

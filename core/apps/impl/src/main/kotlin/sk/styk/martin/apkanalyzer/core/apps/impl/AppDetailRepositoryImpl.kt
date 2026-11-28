@@ -79,7 +79,8 @@ internal class AppDetailRepositoryImpl @Inject constructor(
         PackageManager.GET_PROVIDERS or
         PackageManager.GET_RECEIVERS or
         PackageManager.GET_PERMISSIONS or
-        PackageManager.GET_CONFIGURATIONS
+        PackageManager.GET_CONFIGURATIONS or
+        PackageManager.MATCH_DISABLED_COMPONENTS
 
     init {
         packageChangesObserver.runBeforeNotifying {
@@ -305,7 +306,7 @@ internal class AppDetailRepositoryImpl @Inject constructor(
     private fun queryLauncherActivityNames(packageName: PackageName): Set<String> = launcherCategories
         .flatMap { category ->
             val intent = Intent(Intent.ACTION_MAIN).addCategory(category).setPackage(packageName.value)
-            runCatching { packageManager.queryIntentActivities(intent, 0) }
+            runCatching { packageManager.queryIntentActivities(intent, PackageManager.MATCH_DISABLED_COMPONENTS) }
                 .onFailure { Logger.w(TAG, it, "Can not resolve launcher activities of $packageName") }
                 .getOrDefault(emptyList())
                 .map { it.activityInfo.name }

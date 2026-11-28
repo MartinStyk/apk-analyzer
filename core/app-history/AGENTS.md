@@ -6,7 +6,8 @@ Room-backed storage for full-state app history snapshots — one row per capture
 enough to reconstruct the existing app-detail screens against a past point in time. It is split per
 [core API/impl split](../../docs/app/technical/core-api-impl-split.md): `api`
 (`sk.styk.martin.apkanalyzer.core.apphistory.api`) holds `AppHistoryCaptureRepository`,
-`AppHistoryRepository`, and `timeline/model/` with its strings; `impl`
+`AppHistoryRecordingRepository`, `AppHistoryStorageRepository`, `AppHistoryRepository`, and
+`timeline/model/` with its strings; `impl`
 (`sk.styk.martin.apkanalyzer.core.apphistory.impl`) holds everything else, the Room schemas included.
 
 **Status:** capture is implemented and running (schema, pipeline, four triggers — fast-path
@@ -15,13 +16,15 @@ broadcast, on-launch reconciliation, periodic `WorkManager` reconciliation, and 
 [Restore Merge](#restore-merge). The diff engine (`HI-03`) is implemented as the per-app timeline
 read API — see [Timeline and Diff](#timeline-and-diff). `feature:app-detail:phone` reads it for the
 per-app timeline, change detail, and historical detail (`HI-08`, `HI-15`), behind the debug-only
-`FeatureFlag.AppDetailHistory`; capture is gated separately by the debug-only
-`FeatureFlag.AppHistoryRecording`. The device-wide read (`deviceTimeline()`), the summary
+`FeatureFlag.AppDetailHistory`; capture is gated separately by
+[recording](#recording), the debug-only `FeatureFlag.AppHistoryRecording` plus the user's own
+switch. The device-wide read (`deviceTimeline()`), the summary
 rules behind it, and the `HI-18` significance rules are implemented and read by
 [`feature:what-changed`](../../feature/what-changed/AGENTS.md) (`HI-14`, `HI-07`), which also owns
-that tab's Pro gate. Not yet built:
+that tab's Pro gate. Storage size, export, and import of the whole history are implemented — see
+[Export and Import](#export-and-import). Not yet built:
 the stubs (`HI-19`), the first run (`HI-05`/`HI-21`),
-retention/pruning (`HI-04`), the Pro-gated Drive backup half of `HI-16`, and the `HI-10` runtime-state
+retention/pruning (`HI-04`), a Pro gate on export, and the `HI-10` runtime-state
 (enabled/install-source) tier. See
 [`docs/app/technical/app-history-capture-schema.md`](../../docs/app/technical/app-history-capture-schema.md)
 for the full design, including the entity/DAO schema — read it before touching this module; it is the
@@ -29,11 +32,12 @@ source of truth for schema and capture semantics, not this file.
 
 ## Package Map
 
-Four domain subpackages: `storage/` (`AppHistoryPersistenceRepository` at the root, its
+Four domain subpackages: `storage/` (`AppHistoryPersistenceRepository` and
+`AppHistoryStorageRepositoryImpl` at the root, its
 `AppHistoryRecordEncoder`/`AppHistoryRecordDecoder` in `storage/util/`, and everything that is the stored
 data in `storage/database/` — the Room database, DAOs, `entity/`, the serialized blob DTOs in
 `snapshot/`, and blob compression; see [Persistence Repository](#persistence-repository)),
-`capture/` (the pipeline, its triggers, and
+`capture/` (the pipeline, its triggers, the recording switch, and
 Hilt bindings in `capture/di/`), `restore/` (the `BackupAgent` and the restore-merge routine — see
 [Restore Merge](#restore-merge)), and `timeline/` (the public `AppHistoryRepository`, its
 implementation, and the internal differ, with its public read models — `AppHistoryTimeline`,
@@ -41,7 +45,8 @@ implementation, and the internal differ, with its public read models — `AppHis
 text a timeline screen reads; see [Timeline and Diff](#timeline-and-diff)). See
 [Reading a Snapshot](#reading-a-snapshot) for `storage/`'s read path and
 [Capture Pipeline](#capture-pipeline) / [Triggers](#triggers) for `capture/`'s. Only `capture/`'s
-`AppHistoryCaptureRepository`, `timeline/`'s repository interface, and `timeline/model/` are in `api`;
+`AppHistoryCaptureRepository` and `AppHistoryRecordingRepository`, `storage/`'s
+`AppHistoryStorageRepository`, `timeline/`'s repository interface, and `timeline/model/` are in `api`;
 everything in `impl` is `internal`, including `AppHistoryBackupAgent`, which the manifest still
 instantiates by name because Kotlin `internal` compiles to a public JVM class. Phone app detail
 requests capture through the capture repository; nothing outside this module reads Room or wire-format
@@ -150,7 +155,9 @@ that reason; per-hash caching already limits decoding to distinct section conten
 
 Blob content is Deflate-compressed JSON (`ByteArray`), compressed and decompressed only through
 `storage/database/util/BlobCompression.kt`; the hash is the first 64 bits of SHA-256 over the
-uncompressed JSON, stored as a `Long`. The database file is
+uncompressed JSON, stored as a `Long`. Decompression stops at 8 MB per blob and fails like a corrupt
+blob, so a crafted import file can't unpack a tiny blob into an out-of-memory crash on every history
+read. The database file is
 `app_history_v2.db` — the uncompressed `app_history.db` from 4.1.3–4.2.0 is deleted on startup rather
 than migrated, see the schema doc's
 [`app_history_blob`](../../docs/app/technical/app-history-capture-schema.md#app_history_blob) for why.
@@ -256,7 +263,13 @@ start, completion, and skip reasons; failures are explicit.
 
 Besides entries, each app carries the timestamps of updates the timeline hides as unchanged (they
 still count as updates) and `diffsToLatest`: a diff from every earlier snapshot to the latest, so a
-range's net change needs no second decode. `AppHistoryDeviceSummary.kt` holds the rules over it:
+range's net change needs no second decode. A row that repeats the previous row's capture key with no
+visible difference is dropped before the timeline is built: the gate never writes one, so it only
+comes from merging a restore or an import next to a capture made after app data was cleared, and
+keeping it would add a phantom update dated at the app's last real one. A repeat whose content does
+differ stays as a change: two observations of the same install that disagree are a real difference,
+not something to hide. Component enabled state never causes one, because capture lists every
+declared component (see the schema doc's excluded data). `AppHistoryDeviceSummary.kt` holds the rules over it:
 `summarySince(since)` counts updates and new apps (by install date, never by first recording, which
 would call every app new when recording starts), lists changed apps with their net change, and lists
 the newest attention-worthy change per app with the date a later update undid it, if all its reasons
@@ -299,8 +312,8 @@ the same size is not a visible change.
 `AppHistoryCaptureRepositoryImpl` implements the schema doc's
 [Capture Gate](../../docs/app/technical/app-history-capture-schema.md#capture-gate) and
 [Capture Pipeline](../../docs/app/technical/app-history-capture-schema.md#capture-pipeline) sections
-exactly — read there for the gate/write steps. Both capture entry points check the debug-only
-`FeatureFlag.AppHistoryRecording` before reading installed apps or history storage, so every
+exactly — read there for the gate/write steps. Both capture entry points check
+[recording](#recording) before reading installed apps or history storage, so every
 capture call from a trigger becomes a no-op when capture is disabled. Three invariants live only in
 this implementation, not in the design doc:
 
@@ -344,7 +357,9 @@ that registration forces Hilt to construct this singleton at app launch in the f
 else in the app injects `AppHistoryCaptureScheduler` directly, so without that forced construction
 background capture would never start.
 
-Startup observes `FeatureFlag.AppHistoryRecording` before starting any trigger or restore merge.
+Startup observes [recording](#recording) before starting any trigger or restore merge. Only `On`
+merges a pending restore and starts the triggers; `Off` and `Unavailable` cancel the periodic work. A
+backup restored while the user has recording off stays staged and merges once recording is back on.
 The phone variant records only in debug; TV never records. Disabled recording cancels the existing
 periodic reconciliation. `AppHistoryStorageCleanup` runs independently to delete only legacy uncompressed databases.
 Disabling history never deletes or closes the current compressed database or its restore staging file.
@@ -525,6 +540,51 @@ backup across an app uninstall, so `restoreAtInstall` finds nothing for it post-
 The one clean, real reproduction of the original bug (and thus the only way this fix's `onRestoreFile`
 path has been observed running end-to-end) came from a *naturally aged* backup the OS had already
 propagated days earlier — not from anything forced in the same session.
+
+## Recording
+
+`AppHistoryRecordingRepository.recording()` is the one answer to "is history being recorded", read by
+the capture repository, the scheduler, and every screen that shows the switch or its state. It is
+`Unavailable` when `FeatureFlag.AppHistoryRecording` is off (release and TV: the feature does not
+exist, so screens hide the switch), otherwise `On` or `Off` from the user's
+`Key.AppHistoryRecordingEnabled` preference, which defaults to on. Turning it off stops capture and
+the restore merge exactly like the flag does, and never deletes what is already recorded; a backup
+restored while it is off stays staged until recording is turned back on. Turning it back on
+resumes from the current state: the sweep captures each app that changed once, so several updates
+made while it was off collapse into one change, and apps installed and removed in between are never
+seen. Never read the flag or the preference alone for recording decisions.
+
+## Export and Import
+
+`AppHistoryStorageRepository` (`storage/AppHistoryStorageRepositoryImpl`) owns the history as a
+whole file. `usage()` re-emits on every snapshot-table change: the live database's on-disk size
+(database, `-wal`, and `-shm`) and the number of recorded apps.
+
+**The export is an ordinary history database of the current schema, not the live file.** Copying
+`app_history_v2.db` directly is unsafe while capture writes to it (WAL checkpoints rewrite the main file
+mid-copy). Export opens the user's document first and, inside `DocumentFileManager.writeOrDeleteOnFailure`,
+builds a fresh `AppHistoryDatabase` in `noBackupFilesDir`
+(`app_history_v2_export.db`, `TRUNCATE` journal so the result is one self-contained file), copies rows
+into it, then streams that file to the document. Building inside the write means a failed or
+cancelled copy also discards the document the picker already created, instead of leaving an empty
+file the user could later try to import. The copy
+reads all snapshot rows first, then devices, then blobs one package at a time: devices and blobs are
+written before their snapshot in one transaction and never deleted, so every snapshot read has its
+references, and memory holds one package's blobs at a time. Ids are reset to `0` as in the
+[restore merge](#restore-merge).
+
+**Import is the restore merge for a user-picked file.** The document is copied into
+`noBackupFilesDir` (`app_history_v2_import.db`, never the restore staging name, so a pending Auto
+Backup restore is not overwritten), checked for `room_master_table` before Room opens it (Room would
+otherwise create empty tables in any unrelated SQLite file and report "nothing new"), opened with
+Room (which rejects another identity hash or a newer schema version), and merged into the live
+database per package with the same IGNORE-on-conflict `mergeRestoredData`. The count of apps with at
+least one inserted snapshot is the user-facing result, so importing the same file twice reports zero.
+Unlike the Auto Backup restore, nothing is retried later: every failure deletes the copy, and
+packages merged before a failure stay, which is harmless because the merge is idempotent. Transfer
+files live outside the databases directory so Auto Backup never carries them. A `Mutex` serializes
+export and import. The same migration rule as the restore staging file applies: once the schema
+version moves past 1, import must open older files with the shared migrations.
 
 ## Module Wiring
 

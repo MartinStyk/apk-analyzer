@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import sk.styk.martin.apkanalyzer.core.apphistory.api.capture.AppHistoryRecordingRepository
 import sk.styk.martin.apkanalyzer.core.common.applanguage.AppLanguageRepository
 import sk.styk.martin.apkanalyzer.core.common.settings.Key
 import sk.styk.martin.apkanalyzer.core.common.settings.PersistenceRepository
@@ -18,6 +19,7 @@ import javax.inject.Inject
 internal class SettingsViewModel @Inject constructor(
     private val persistenceRepository: PersistenceRepository,
     private val appLanguageRepository: AppLanguageRepository,
+    appHistoryRecordingRepository: AppHistoryRecordingRepository,
 ) : ViewModel() {
 
     private val eventChannel = Channel<SettingsEvent>(Channel.BUFFERED)
@@ -27,11 +29,13 @@ internal class SettingsViewModel @Inject constructor(
         persistenceRepository.observe(Key.ColorScheme),
         persistenceRepository.observe(Key.HexFingerprintFormat),
         persistenceRepository.observe(Key.RecentlyViewedAppsEnabled),
-    ) { colorScheme, fingerprintFormat, recentlyViewedEnabled ->
+        appHistoryRecordingRepository.recording(),
+    ) { colorScheme, fingerprintFormat, recentlyViewedEnabled, appHistoryRecording ->
         SettingsState(
             colorScheme = colorScheme,
             fingerprintFormat = fingerprintFormat,
             recentlyViewedAppsEnabled = recentlyViewedEnabled,
+            appHistoryRecording = appHistoryRecording,
             appLanguageSetting = this.appLanguageRepository.getAppLanguageSetting(),
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), SettingsState())
@@ -48,6 +52,10 @@ internal class SettingsViewModel @Inject constructor(
 
             is SettingsAction.RecentlyViewedAppsToggled -> {
                 viewModelScope.launch { persistenceRepository.save(Key.RecentlyViewedAppsEnabled, action.enabled) }
+            }
+
+            SettingsAction.OpenAppHistorySettings -> {
+                eventChannel.trySend(SettingsEvent.OpenAppHistorySettings)
             }
 
             is SettingsAction.OpenLanguageSettings -> {

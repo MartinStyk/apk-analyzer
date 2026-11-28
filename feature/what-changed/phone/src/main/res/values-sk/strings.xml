@@ -66,4 +66,8 @@
     <string name="what_changed_uncomparable_only">Niektoré údaje sa nedali porovnať</string>
     <string name="what_changed_locked_row">Uzamknutá zmena aplikácie, súčasť Pro</string>
     <string name="what_changed_locked_click_label">Odomknúť s Pro</string>
+    <string name="what_changed_settings">Nastavenia histórie</string>
+    <string name="what_changed_recording_off_title">Zaznamenávanie je vypnuté</string>
+    <string name="what_changed_recording_off_body">Nové inštalácie a aktualizácie sa nezaznamenávajú.</string>
+    <string name="what_changed_recording_turn_on">Zapnúť</string>
 </resources>

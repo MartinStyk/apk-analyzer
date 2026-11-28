@@ -14,4 +14,42 @@
     <string name="settings_fingerprint_format">Formato dell’impronta</string>
     <string name="settings_fingerprint_format_colon_separated">Con i due punti</string>
     <string name="settings_fingerprint_format_continuous">Senza separatori</string>
+    <string name="settings_app_history">Cronologia delle app</string>
+    <string name="settings_app_history_on">Attivata</string>
+    <string name="settings_app_history_off">Disattivata</string>
+    <string name="app_history_settings_recording_section">Rilevazione</string>
+    <string name="app_history_settings_recording_toggle">Rileva le modifiche delle app</string>
+    <string name="app_history_settings_recording_description">Salva i dettagli di ogni app quando la installi o la aggiorni, così la scheda Modifiche e la cronologia di ogni app possono mostrare cosa è cambiato.</string>
+    <string name="app_history_settings_recording_off_title">La rilevazione è disattivata</string>
+    <string name="app_history_settings_recording_off_body">Le nuove installazioni e i nuovi aggiornamenti non vengono rilevati. La scheda Modifiche e la cronologia di ogni app restano invariate finché non riattivi la rilevazione.</string>
+    <string name="app_history_settings_turn_off_title">Disattivare la rilevazione?</string>
+    <string name="app_history_settings_turn_off_message">Le installazioni e gli aggiornamenti effettuati mentre la rilevazione è disattivata non compaiono nella scheda Modifiche né nella cronologia di un\'app. Quando la riattiverai, un\'app aggiornata più volte apparirà come un\'unica modifica e le app disinstallate nel frattempo non verranno mai rilevate. Tutto ciò che è già stato rilevato rimane.</string>
+    <string name="app_history_settings_turn_off_confirm">Disattiva</string>
+    <string name="app_history_settings_turn_off_dismiss">Mantieni attiva</string>
+    <string name="app_history_settings_privacy_title">Resta su questo telefono</string>
+    <string name="app_history_settings_privacy_body">Apk Analyzer salva la cronologia delle app solo su questo telefono e non la invia da nessuna parte. Se il backup è attivo nelle impostazioni del telefono, Android la include nel backup del tuo Account Google, come gli altri dati delle app.</string>
+    <string name="app_history_settings_storage_section">Spazio di archiviazione</string>
+    <string name="app_history_settings_storage_used">Spazio utilizzato</string>
+    <plurals name="app_history_settings_storage_apps">
+        <item quantity="one">Cronologia di %d app</item>
+        <item quantity="many">Cronologia di %d app</item>
+        <item quantity="other">Cronologia di %d app</item>
+    </plurals>
+    <string name="app_history_settings_storage_empty">Ancora nulla di rilevato</string>
+    <string name="app_history_settings_storage_unavailable">Impossibile leggere lo spazio occupato dalla cronologia</string>
+    <string name="app_history_settings_transfer_section">Esporta e importa</string>
+    <string name="app_history_settings_export">Esporta cronologia</string>
+    <string name="app_history_settings_export_description">Salva una copia come file su questo telefono o in uno spazio di archiviazione cloud come Google Drive.</string>
+    <string name="app_history_settings_import">Importa cronologia</string>
+    <string name="app_history_settings_import_description">Aggiunge la cronologia da un file esportato. Nulla di ciò che è già stato rilevato viene sostituito.</string>
+    <string name="app_history_settings_exported">Cronologia esportata</string>
+    <string name="app_history_settings_export_failed">Impossibile esportare la cronologia</string>
+    <plurals name="app_history_settings_imported">
+        <item quantity="one">Cronologia aggiunta per %d app</item>
+        <item quantity="many">Cronologia aggiunta per %d app</item>
+        <item quantity="other">Cronologia aggiunta per %d app</item>
+    </plurals>
+    <string name="app_history_settings_nothing_new">Nessuna nuova cronologia in questo file</string>
+    <string name="app_history_settings_import_failed">Impossibile importare questo file. Scegli un file di cronologia esportato da Apk Analyzer.</string>
+    <string name="app_history_settings_picker_unavailable">Nessuna app disponibile per scegliere il file</string>
 </resources>
