@@ -64,6 +64,7 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
         context.dataStore.edit { prefs -> key.write(prefs, value) }
     }
 
+    @Suppress("CyclomaticComplexMethod")
     private fun <T : Any> Key<T>.read(prefs: Preferences): T = when (this) {
         Key.ColorScheme -> {
             prefs[KEY_COLOR_SCHEME].toColorAppScheme()
@@ -114,7 +115,7 @@ constructor(@param:ApplicationContext private val context: Context) : Persistenc
         }
 
         Key.AppHistoryRecordingEnabled -> {
-            prefs[KEY_APP_HISTORY_RECORDING_ENABLED] != false
+            prefs[KEY_APP_HISTORY_RECORDING_ENABLED] ?: true
         }
     } as T
 
