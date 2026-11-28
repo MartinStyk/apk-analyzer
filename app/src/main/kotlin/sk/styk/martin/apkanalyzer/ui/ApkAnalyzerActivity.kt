@@ -44,7 +44,7 @@ class ApkAnalyzerActivity : ComponentActivity() {
                     isWhatChangedEnabled = (state as? ApkAnalyzerState.Data)?.isWhatChangedEnabled == true,
                     onBackAtRoot = ::finish,
                     isSupportPromptPending = isSupportPromptPending,
-                    onSupportPromptShown = { isSupportPromptPending = false },
+                    onShowSupportPrompt = { isSupportPromptPending = false },
                 )
             }
         }

@@ -19,13 +19,13 @@ private const val TAG = "SupportPrompt"
 private const val OFFER_TIMEOUT_MS = 10_000L
 
 class SupportPromptScheduler @Inject internal constructor(
-    private val sessionAccomplishments: SessionAccomplishments,
+    sessionAccomplishments: SessionAccomplishments,
     private val entitlementsRepository: EntitlementsRepository,
     private val persistenceRepository: PersistenceRepository,
     private val supportPromptSession: SupportPromptSession,
-    private val appInstallInfo: AppInstallInfo,
+    appInstallInfo: AppInstallInfo,
     private val policy: SupportPromptPolicy,
-    private val dispatcherProvider: DispatcherProvider,
+    dispatcherProvider: DispatcherProvider,
 ) {
 
     val promptRequests: Flow<Unit> = flow {

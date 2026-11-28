@@ -42,13 +42,16 @@ private val RestoreOutcome.analyticsValue: String
 private val PaywallReason.analyticsValue: String
     get() = when (this) {
         is PaywallReason.Export -> "export"
+
         is PaywallReason.WhatChanged -> when (placement) {
             WhatChangedPlacement.LockedRow -> "what_changed_row"
             WhatChangedPlacement.Card -> "what_changed_card"
             WhatChangedPlacement.Bar -> "what_changed_bar"
             WhatChangedPlacement.LogRow -> "what_changed_log"
         }
+
         PaywallReason.Settings -> "settings"
+
         PaywallReason.Launch -> "launch_prompt"
     }
 

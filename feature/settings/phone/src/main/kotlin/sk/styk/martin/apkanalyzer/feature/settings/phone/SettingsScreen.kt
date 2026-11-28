@@ -110,11 +110,13 @@ private fun SettingsContent(
         ) {
             when (state.pro) {
                 SettingsPro.Hidden -> Unit
+
                 SettingsPro.NotOwned -> ProRow(
                     title = stringResource(R.string.settings_pro_title),
                     body = stringResource(R.string.settings_pro_body),
                     onClick = { onAction(SettingsAction.OpenPro) },
                 )
+
                 SettingsPro.Owned -> ProRow(
                     title = stringResource(R.string.settings_pro_active),
                     body = stringResource(R.string.settings_pro_active_body),

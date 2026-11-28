@@ -85,7 +85,7 @@ class AppHistoryDeviceSummaryTest {
     }
 
     @Test
-    fun `Given seven changed apps and a late certificate change When summarizing for Pro Then the certificate change stays free and a device move is not a change`() {
+    fun `Given apps past the free rows When summarizing for Pro Then certificate changes stay free`() {
         val certificateChange = aVersionDiff().copy(certificates = SetChange.Changed(emptyList(), emptyList(), emptyList()))
         val apps = (1..7).map { index ->
             val diff = if (index == 7) certificateChange else aVersionDiff()

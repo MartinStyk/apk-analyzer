@@ -90,7 +90,11 @@ fun OutlinedButton(
 }
 
 @Composable
-private fun ButtonLabel(text: String, leadingIcon: ImageVector?, showProMark: Boolean) {
+private fun ButtonLabel(
+    text: String,
+    leadingIcon: ImageVector?,
+    showProMark: Boolean,
+) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         if (showProMark) {
             ProMark(size = ButtonDefaults.IconSize)

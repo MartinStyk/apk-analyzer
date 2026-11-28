@@ -41,7 +41,7 @@ internal fun ApkAnalyzerApp(
     isWhatChangedEnabled: Boolean,
     onBackAtRoot: () -> Unit,
     isSupportPromptPending: Boolean,
-    onSupportPromptShown: () -> Unit,
+    onShowSupportPrompt: () -> Unit,
 ) {
     val navigationState = rememberNavigationState(
         startKey = AppsNavKey,
@@ -57,7 +57,7 @@ internal fun ApkAnalyzerApp(
 
     LaunchedEffect(isSupportPromptPending, navigationState.currentKey) {
         if (isSupportPromptPending && navigationState.currentKey in navigationState.topLevelKeys) {
-            onSupportPromptShown()
+            onShowSupportPrompt()
             navigator.navigate(ProNavKey(PaywallReason.Launch))
         }
     }
