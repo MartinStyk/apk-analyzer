@@ -29,9 +29,9 @@
     </plurals>
     <string name="inventory_export_format_title">फ़ॉर्मैट</string>
     <string name="inventory_export_format_csv">CSV स्प्रेडशीट</string>
-    <string name="inventory_export_format_csv_description">Excel, Google Sheets और अन्य स्प्रेडशीट ऐप में खुलती है।</string>
+    <string name="inventory_export_format_csv_description">Excel और Google Sheets के लिए</string>
     <string name="inventory_export_format_json">JSON</string>
-    <string name="inventory_export_format_json_description">स्क्रिप्ट और अन्य टूल के लिए संरचित डेटा।</string>
+    <string name="inventory_export_format_json_description">स्क्रिप्ट और टूल के लिए</string>
     <string name="inventory_export_format_reference">फ़ाइल फ़ॉर्मैट संदर्भ</string>
     <string name="inventory_export_preview_title">झलक</string>
     <plurals name="inventory_export_preview_caption">

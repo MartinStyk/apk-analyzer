@@ -27,9 +27,9 @@
     </plurals>
     <string name="inventory_export_format_title">형식</string>
     <string name="inventory_export_format_csv">CSV 스프레드시트</string>
-    <string name="inventory_export_format_csv_description">Excel, Google 스프레드시트 및 다른 스프레드시트 앱에서 열 수 있습니다.</string>
+    <string name="inventory_export_format_csv_description">Excel 및 Google 스프레드시트용</string>
     <string name="inventory_export_format_json">JSON</string>
-    <string name="inventory_export_format_json_description">스크립트와 다른 도구에서 사용할 수 있는 구조화된 데이터입니다.</string>
+    <string name="inventory_export_format_json_description">스크립트 및 도구용</string>
     <string name="inventory_export_format_reference">파일 형식 참조</string>
     <string name="inventory_export_preview_title">미리보기</string>
     <plurals name="inventory_export_preview_caption">

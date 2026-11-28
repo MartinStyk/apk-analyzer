@@ -1,19 +1,26 @@
 package sk.styk.martin.apkanalyzer.feature.appexport.phone.export
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,6 +33,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -35,7 +43,6 @@ import sk.styk.martin.apkanalyzer.core.appexport.api.format.InventoryFormat
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.icons.ApkAnalyzerIcons
 import sk.styk.martin.apkanalyzer.core.designsystem.foundation.theme.AppTheme
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Button
-import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Chip
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.Icon
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.InfoCard
 import sk.styk.martin.apkanalyzer.core.designsystem.phone.components.InfoCardTone
@@ -214,21 +221,49 @@ private fun FormatRow(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Min)
+                .selectableGroup(),
+        ) {
             InventoryFormat.entries.forEach { format ->
-                Chip(
-                    label = stringResource(format.labelRes()),
-                    selected = format == state.format,
-                    onClick = { if (!state.isExporting) onSelect(format) },
-                )
+                val selected = format == state.format
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .heightIn(min = 48.dp)
+                        .clip(Shapes.CardShape)
+                        .background(AppTheme.colors.surface)
+                        .border(
+                            width = 2.dp,
+                            color = if (selected) AppTheme.colors.primary else Color.Transparent,
+                            shape = Shapes.CardShape,
+                        )
+                        .selectable(
+                            selected = selected,
+                            enabled = !state.isExporting,
+                            role = Role.RadioButton,
+                            onClick = { onSelect(format) },
+                        )
+                        .padding(12.dp),
+                ) {
+                    Text(
+                        text = stringResource(format.labelRes()),
+                        style = AppTheme.typography.titleSmall,
+                        color = AppTheme.colors.onSurface,
+                    )
+                    Text(
+                        text = stringResource(format.descriptionRes()),
+                        style = AppTheme.typography.bodySmall,
+                        color = AppTheme.colors.onSurfaceVariant,
+                    )
+                }
             }
         }
-        Text(
-            text = stringResource(state.format.descriptionRes()),
-            style = AppTheme.typography.bodySmall,
-            color = AppTheme.colors.onSurfaceVariant,
-            modifier = Modifier.padding(top = 8.dp),
-        )
         TextButton(
             text = stringResource(R.string.inventory_export_format_reference),
             onClick = onOpenReference,
@@ -488,6 +523,45 @@ private fun ExportPageDarkPreview() {
         ExportPage(
             state = InventoryExportState(apps = previewApps, preview = previewContent),
             onAction = {},
+        )
+    }
+}
+
+@Preview(widthDp = 360, showBackground = true)
+@Composable
+private fun FormatRowPreview() {
+    ApkAnalyzerTheme {
+        FormatRow(
+            state = InventoryExportState(),
+            onSelect = {},
+            onOpenReference = {},
+            modifier = Modifier.background(AppTheme.colors.background).padding(16.dp),
+        )
+    }
+}
+
+@Preview(widthDp = 360, showBackground = true)
+@Composable
+private fun FormatRowDarkPreview() {
+    ApkAnalyzerTheme(isDarkTheme = true) {
+        FormatRow(
+            state = InventoryExportState(format = InventoryFormat.Json),
+            onSelect = {},
+            onOpenReference = {},
+            modifier = Modifier.background(AppTheme.colors.background).padding(16.dp),
+        )
+    }
+}
+
+@Preview(widthDp = 320, fontScale = 2f, showBackground = true)
+@Composable
+private fun FormatRowLargeTextPreview() {
+    ApkAnalyzerTheme {
+        FormatRow(
+            state = InventoryExportState(),
+            onSelect = {},
+            onOpenReference = {},
+            modifier = Modifier.background(AppTheme.colors.background).padding(16.dp),
         )
     }
 }

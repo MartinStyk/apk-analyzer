@@ -45,9 +45,9 @@
     </plurals>
     <string name="inventory_export_format_title">Format</string>
     <string name="inventory_export_format_csv">CSV spreadsheet</string>
-    <string name="inventory_export_format_csv_description">Opens in Excel, Google Sheets, and other spreadsheet apps.</string>
+    <string name="inventory_export_format_csv_description">For Excel and Sheets</string>
     <string name="inventory_export_format_json">JSON</string>
-    <string name="inventory_export_format_json_description">Structured data for scripts and other tools.</string>
+    <string name="inventory_export_format_json_description">For scripts and tools</string>
     <string name="inventory_export_format_reference">File format reference</string>
     <string name="inventory_export_preview_title">Preview</string>
     <plurals name="inventory_export_preview_caption">

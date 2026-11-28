@@ -27,9 +27,9 @@
     </plurals>
     <string name="inventory_export_format_title">形式</string>
     <string name="inventory_export_format_csv">CSV スプレッドシート</string>
-    <string name="inventory_export_format_csv_description">Excel、Google スプレッドシートなどの表計算アプリで開けます。</string>
+    <string name="inventory_export_format_csv_description">Excel・Google スプレッドシート向け</string>
     <string name="inventory_export_format_json">JSON</string>
-    <string name="inventory_export_format_json_description">スクリプトやその他のツール向けの構造化データです。</string>
+    <string name="inventory_export_format_json_description">スクリプト・ツール向け</string>
     <string name="inventory_export_format_reference">ファイル形式リファレンス</string>
     <string name="inventory_export_preview_title">プレビュー</string>
     <plurals name="inventory_export_preview_caption">

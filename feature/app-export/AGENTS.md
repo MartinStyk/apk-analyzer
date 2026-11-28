@@ -57,6 +57,8 @@ app, opened from the app detail summary sheet). Implementation code uses the pac
   the feature leaves them out of the request and the Export step lists which details are left out,
   with a one-tap switch to JSON. The omission is always shown to the user, never silent; an export
   with no writable column left is disabled.
+* Format choices are equal-width selectable cards with a label and short description. The selected
+  card has a primary-colored outline; both cards grow together for larger text and translations.
 * The preview is computed only while the Export step is showing, so toggling apps or columns on
   earlier steps never loads app data.
 * Save carries the format of the document picker that returned it, and the export waits for the

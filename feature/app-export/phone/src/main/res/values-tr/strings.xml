@@ -29,9 +29,9 @@
     </plurals>
     <string name="inventory_export_format_title">Biçim</string>
     <string name="inventory_export_format_csv">CSV e-tablosu</string>
-    <string name="inventory_export_format_csv_description">Excel, Google E-Tablolar ve diğer e-tablo uygulamalarında açılır.</string>
+    <string name="inventory_export_format_csv_description">Excel ve Google E-Tablolar için</string>
     <string name="inventory_export_format_json">JSON</string>
-    <string name="inventory_export_format_json_description">Betikler ve diğer araçlar için yapılandırılmış veriler.</string>
+    <string name="inventory_export_format_json_description">Betikler ve araçlar için</string>
     <string name="inventory_export_format_reference">Dosya biçimi başvurusu</string>
     <string name="inventory_export_preview_title">Önizleme</string>
     <plurals name="inventory_export_preview_caption">

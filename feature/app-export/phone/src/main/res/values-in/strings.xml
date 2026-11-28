@@ -27,9 +27,9 @@
     </plurals>
     <string name="inventory_export_format_title">Format</string>
     <string name="inventory_export_format_csv">Spreadsheet CSV</string>
-    <string name="inventory_export_format_csv_description">Dapat dibuka di Excel, Google Spreadsheet, dan aplikasi spreadsheet lainnya.</string>
+    <string name="inventory_export_format_csv_description">Untuk Excel dan Google Spreadsheet</string>
     <string name="inventory_export_format_json">JSON</string>
-    <string name="inventory_export_format_json_description">Data terstruktur untuk skrip dan alat lainnya.</string>
+    <string name="inventory_export_format_json_description">Untuk skrip dan alat</string>
     <string name="inventory_export_format_reference">Referensi format file</string>
     <string name="inventory_export_preview_title">Pratinjau</string>
     <plurals name="inventory_export_preview_caption">
