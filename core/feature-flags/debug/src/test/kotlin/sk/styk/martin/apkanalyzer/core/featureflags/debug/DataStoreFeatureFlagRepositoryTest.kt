@@ -44,7 +44,7 @@ class DataStoreFeatureFlagRepositoryTest {
 
     @Test
     fun `Given no stored values When reading Then the build repository supplies defaults`() = runTest {
-        val statuses = overrides.observe().first().getOrThrow()
+        val statuses = overrides.observe().first()
 
         statuses shouldBe listOf(
             FeatureFlagStatus(FeatureFlag.InventoryExport, FeatureFlagOverride.Default, false),
@@ -56,7 +56,7 @@ class DataStoreFeatureFlagRepositoryTest {
 
     @Test
     fun `Given a saved false override When storage reopens Then the override survives`() = runTest {
-        overrides.set(FeatureFlag.AppHistoryRecording, FeatureFlagOverride.Disabled).getOrThrow()
+        overrides[FeatureFlag.AppHistoryRecording] = FeatureFlagOverride.Disabled
         scope.cancel()
         scope.coroutineContext.job.join()
 
@@ -64,8 +64,8 @@ class DataStoreFeatureFlagRepositoryTest {
             File(temporaryFolder.root, "flags.preferences_pb")
         }
         implementation = DataStoreFeatureFlagRepository(reopenedStore, defaults)
-        val enabled = repository.get(FeatureFlag.AppHistoryRecording).getOrThrow()
-        val status = overrides.observe().first().getOrThrow().first { it.flag == FeatureFlag.AppHistoryRecording }
+        val enabled = repository.get(FeatureFlag.AppHistoryRecording)
+        val status = overrides.observe().first().first { it.flag == FeatureFlag.AppHistoryRecording }
 
         enabled shouldBe false
         status shouldBe FeatureFlagStatus(FeatureFlag.AppHistoryRecording, FeatureFlagOverride.Disabled, true)
@@ -73,11 +73,11 @@ class DataStoreFeatureFlagRepositoryTest {
 
     @Test
     fun `Given two saved overrides When resetting one Then only its stored key is removed`() = runTest {
-        overrides.set(FeatureFlag.InventoryExport, FeatureFlagOverride.Enabled).getOrThrow()
-        overrides.set(FeatureFlag.AppHistoryRecording, FeatureFlagOverride.Disabled).getOrThrow()
+        overrides[FeatureFlag.InventoryExport] = FeatureFlagOverride.Enabled
+        overrides[FeatureFlag.AppHistoryRecording] = FeatureFlagOverride.Disabled
 
-        overrides.set(FeatureFlag.AppHistoryRecording, FeatureFlagOverride.Default).getOrThrow()
-        val statuses = overrides.observe().first().getOrThrow()
+        overrides[FeatureFlag.AppHistoryRecording] = FeatureFlagOverride.Default
+        val statuses = overrides.observe().first()
 
         statuses.map { it.override } shouldBe
             listOf(FeatureFlagOverride.Enabled, FeatureFlagOverride.Default, FeatureFlagOverride.Default, FeatureFlagOverride.Default)
@@ -86,11 +86,11 @@ class DataStoreFeatureFlagRepositoryTest {
 
     @Test
     fun `Given saved overrides When resetting all Then no override remains`() = runTest {
-        overrides.set(FeatureFlag.InventoryExport, FeatureFlagOverride.Enabled).getOrThrow()
-        overrides.set(FeatureFlag.AppHistoryRecording, FeatureFlagOverride.Disabled).getOrThrow()
+        overrides[FeatureFlag.InventoryExport] = FeatureFlagOverride.Enabled
+        overrides[FeatureFlag.AppHistoryRecording] = FeatureFlagOverride.Disabled
 
-        overrides.resetAll().getOrThrow()
-        val statuses = overrides.observe().first().getOrThrow()
+        overrides.resetAll()
+        val statuses = overrides.observe().first()
 
         statuses.map { it.override } shouldBe
             listOf(FeatureFlagOverride.Default, FeatureFlagOverride.Default, FeatureFlagOverride.Default, FeatureFlagOverride.Default)
@@ -99,11 +99,11 @@ class DataStoreFeatureFlagRepositoryTest {
 
     @Test
     fun `Given app detail history is disabled When reading flags Then the tab and recording stay enabled`() = runTest {
-        overrides.set(FeatureFlag.AppDetailHistory, FeatureFlagOverride.Disabled).getOrThrow()
+        overrides[FeatureFlag.AppDetailHistory] = FeatureFlagOverride.Disabled
 
-        val tab = repository.get(FeatureFlag.WhatChangedTab).getOrThrow()
-        val detail = repository.get(FeatureFlag.AppDetailHistory).getOrThrow()
-        val recording = repository.get(FeatureFlag.AppHistoryRecording).getOrThrow()
+        val tab = repository.get(FeatureFlag.WhatChangedTab)
+        val detail = repository.get(FeatureFlag.AppDetailHistory)
+        val recording = repository.get(FeatureFlag.AppHistoryRecording)
 
         tab shouldBe true
         detail shouldBe false
@@ -113,9 +113,9 @@ class DataStoreFeatureFlagRepositoryTest {
     @Test
     fun `Given a disabled default When an enabled override is saved Then the flag is enabled`() = runTest {
         defaults[FeatureFlag.InventoryExport] = false
-        overrides.set(FeatureFlag.InventoryExport, FeatureFlagOverride.Enabled).getOrThrow()
+        overrides[FeatureFlag.InventoryExport] = FeatureFlagOverride.Enabled
 
-        val enabled = repository.get(FeatureFlag.InventoryExport).getOrThrow()
+        val enabled = repository.get(FeatureFlag.InventoryExport)
 
         enabled shouldBe true
     }

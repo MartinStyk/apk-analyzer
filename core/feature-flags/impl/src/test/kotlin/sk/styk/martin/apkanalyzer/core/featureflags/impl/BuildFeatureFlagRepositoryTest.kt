@@ -12,7 +12,7 @@ class BuildFeatureFlagRepositoryTest {
 
     @Test
     fun `Given a debug phone build When reading flags Then all existing defaults are enabled`() = runTest {
-        val enabled = FeatureFlag.entries.map { repository[it].getOrThrow() }
+        val enabled = FeatureFlag.entries.map { repository[it] }
 
         enabled shouldBe listOf(true, true, true, true)
     }

@@ -13,7 +13,7 @@ class FeatureFlagRepositoryFake(vararg enabledFlags: FeatureFlag) : FeatureFlagR
         enabledFlags.update { if (enabled) it + flag else it - flag }
     }
 
-    override fun observe(flag: FeatureFlag): Flow<Result<Boolean>> = enabledFlags
-        .map { Result.success(flag in it) }
+    override fun observe(flag: FeatureFlag): Flow<Boolean> = enabledFlags
+        .map { flag in it }
         .distinctUntilChanged()
 }

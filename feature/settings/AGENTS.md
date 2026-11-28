@@ -27,8 +27,9 @@ preference state in the app module.
 The flag editor reads status metadata and writes through the optional override contract from
 `core:feature-flags:api`, never through the normal Boolean reader. Only the phone app links the storage
 implementation, and only in debug. Every flag can be overridden; there is no unsupported state.
-Writes are serialized by disabling controls until persistence finishes; failures retain the saved
-state and show feedback. Reset removes overrides rather than persisting the current defaults.
+Writes are serialized by disabling controls until persistence finishes; storage exceptions propagate
+without recovery UI, like normal preferences. Reset removes overrides rather than persisting the
+current defaults.
 
 Color scheme and recently viewed state are combined into one immutable screen state so both update
 reactively.

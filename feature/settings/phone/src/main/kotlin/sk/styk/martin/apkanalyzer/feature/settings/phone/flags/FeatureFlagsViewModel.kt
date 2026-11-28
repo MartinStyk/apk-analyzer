@@ -35,7 +35,7 @@ internal class FeatureFlagsViewModel @Inject constructor(private val overridesRe
             FeatureFlagsAction.NavigateBack -> eventChannel.trySend(FeatureFlagsEvent.NavigateBack)
             FeatureFlagsAction.Retry -> observe()
             FeatureFlagsAction.ResetAll -> save { overridesRepository.get().resetAll() }
-            is FeatureFlagsAction.SetOverride -> save { overridesRepository.get().set(action.flag, action.override) }
+            is FeatureFlagsAction.SetOverride -> save { overridesRepository.get()[action.flag] = action.override }
         }
     }
 
@@ -48,26 +48,20 @@ internal class FeatureFlagsViewModel @Inject constructor(private val overridesRe
         observation?.cancel()
         state.value = FeatureFlagsState.Loading
         observation = viewModelScope.launch {
-            overridesRepository.get().observe().collect { result ->
-                state.value = result.fold(
-                    onSuccess = { FeatureFlagsState.Content(it, isSaving) },
-                    onFailure = { FeatureFlagsState.Error },
-                )
+            overridesRepository.get().observe().collect { flags ->
+                state.value = FeatureFlagsState.Content(flags, isSaving)
             }
         }
     }
 
-    private fun save(operation: suspend () -> Result<Unit>) {
+    private fun save(operation: suspend () -> Unit) {
         val content = state.value as? FeatureFlagsState.Content ?: return
         if (isSaving) return
         isSaving = true
         state.value = content.copy(isSaving = true)
         viewModelScope.launch {
             try {
-                operation().onFailure {
-                    Logger.e(TAG, it, "Could not save feature flag overrides")
-                    eventChannel.send(FeatureFlagsEvent.SaveFailed)
-                }
+                operation()
             } finally {
                 isSaving = false
                 (state.value as? FeatureFlagsState.Content)?.let { state.value = it.copy(isSaving = false) }

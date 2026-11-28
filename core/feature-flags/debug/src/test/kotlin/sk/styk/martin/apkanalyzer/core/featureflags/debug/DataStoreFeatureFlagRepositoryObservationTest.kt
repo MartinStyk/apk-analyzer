@@ -5,7 +5,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.preferencesOf
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.CompletableDeferred
@@ -46,10 +48,10 @@ class DataStoreFeatureFlagRepositoryObservationTest {
         val emitted = mutableListOf<Boolean>()
         val editorEmitted = mutableListOf<FeatureFlagStatus>()
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-            repository.observe(FeatureFlag.AppHistoryRecording).collect { emitted += it.getOrThrow() }
+            repository.observe(FeatureFlag.AppHistoryRecording).collect { emitted += it }
         }
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-            overrides.observe().collect { editorEmitted += it.getOrThrow().first { status -> status.flag == FeatureFlag.AppHistoryRecording } }
+            overrides.observe().collect { editorEmitted += it.first { status -> status.flag == FeatureFlag.AppHistoryRecording } }
         }
         runCurrent()
         emitted shouldBe emptyList()
@@ -67,7 +69,7 @@ class DataStoreFeatureFlagRepositoryObservationTest {
         readBarrier.complete(Unit)
         val emitted = mutableListOf<Boolean>()
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-            repository.observe(FeatureFlag.AppHistoryRecording).collect { emitted += it.getOrThrow() }
+            repository.observe(FeatureFlag.AppHistoryRecording).collect { emitted += it }
         }
         runCurrent()
 
@@ -83,14 +85,26 @@ class DataStoreFeatureFlagRepositoryObservationTest {
     }
 
     @Test
-    fun `Given unreadable storage When reading a flag Then the failure is returned instead of a default`() = runTest {
+    fun `Given unreadable storage When reading flags Then the storage exception propagates`() = runTest {
         val failure = IOException("Cannot read feature flags")
         every { dataStore.data } returns flow { throw failure }
 
-        val result = repository.get(FeatureFlag.AppHistoryRecording)
-        val editorResult = overrides.observe().first()
+        val readFailure = shouldThrow<IOException> { repository.get(FeatureFlag.AppHistoryRecording) }
+        val editorFailure = shouldThrow<IOException> { overrides.observe().first() }
 
-        result.exceptionOrNull() shouldBe failure
-        editorResult.exceptionOrNull() shouldBe failure
+        readFailure shouldBe failure
+        editorFailure shouldBe failure
+    }
+
+    @Test
+    fun `Given unwritable storage When changing overrides Then the storage exception propagates`() = runTest {
+        val failure = IOException("Cannot write feature flags")
+        coEvery { dataStore.updateData(any()) } throws failure
+
+        val setFailure = shouldThrow<IOException> { overrides[FeatureFlag.AppHistoryRecording] = FeatureFlagOverride.Disabled }
+        val resetFailure = shouldThrow<IOException> { overrides.resetAll() }
+
+        setFailure shouldBe failure
+        resetFailure shouldBe failure
     }
 }

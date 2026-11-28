@@ -88,7 +88,7 @@ internal class AppsViewModel @Inject constructor(
             sortAscending = effectiveAscending,
             activeFilter = filter,
             sortPermissionRationale = rationale,
-            isInventoryExportEnabled = isInventoryExportEnabled.getOrDefault(false),
+            isInventoryExportEnabled = isInventoryExportEnabled,
         )
     }
         .flowOn(dispatcherProvider.default())

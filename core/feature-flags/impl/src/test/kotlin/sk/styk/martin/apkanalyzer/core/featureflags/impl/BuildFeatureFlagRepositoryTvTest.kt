@@ -12,7 +12,7 @@ class BuildFeatureFlagRepositoryTvTest {
 
     @Test
     fun `Given a debug TV build When reading flags Then history is unsupported and disabled`() = runTest {
-        val enabled = FeatureFlag.entries.map { repository[it].getOrThrow() }
+        val enabled = FeatureFlag.entries.map { repository[it] }
 
         enabled shouldBe listOf(true, false, false, false)
     }

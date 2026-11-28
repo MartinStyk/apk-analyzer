@@ -62,7 +62,7 @@ internal class AppHistoryCaptureSchedulerImpl @Inject constructor(
             featureFlagRepository.observe(FeatureFlag.AppHistoryRecording)
                 .distinctUntilChanged()
                 .collectLatest { enabled ->
-                    if (enabled.getOrDefault(false)) {
+                    if (enabled) {
                         recordHistory()
                     } else {
                         cancelPeriodicReconciliation()

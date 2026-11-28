@@ -4,11 +4,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.Serializable
 
 interface FeatureFlagOverridesRepository {
-    fun observe(): Flow<Result<List<FeatureFlagStatus>>>
+    fun observe(): Flow<List<FeatureFlagStatus>>
 
-    suspend fun set(flag: FeatureFlag, override: FeatureFlagOverride): Result<Unit>
+    suspend operator fun set(flag: FeatureFlag, override: FeatureFlagOverride)
 
-    suspend fun resetAll(): Result<Unit>
+    suspend fun resetAll()
 }
 
 @Serializable
